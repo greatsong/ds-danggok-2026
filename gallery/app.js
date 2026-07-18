@@ -217,18 +217,35 @@
     return !!email && String(email).toLowerCase().endsWith("@" + SCHOOL_DOMAIN);
   }
 
+
+  // 네이티브 alert 대신 쓰는 사이트 배너 (2026-07-18 사용성 점검 반영)
+  function showToast(text, type) {
+    let el = document.getElementById("siteToast");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "siteToast";
+      el.className = "site-toast";
+      el.setAttribute("role", "status");
+      document.body.appendChild(el);
+    }
+    el.textContent = text;
+    el.className = "site-toast show" + (type === "error" ? " error" : "");
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.className = "site-toast"; }, 3500);
+  }
+
   function requireLogin(actionPhrase) {
     // useSupabase가 아니면(데모 모드) 로그인 요구 자체를 하지 않는다.
     // actionPhrase는 "...수 있어요"로 끝나는 완전한 문구를 넘긴다.
     if (!useSupabase) return true;
     if (currentUser) return true;
-    alert("학교 계정(@" + SCHOOL_DOMAIN + ")으로 로그인해야 " + actionPhrase + ".");
+    showToast("학교 계정(@" + SCHOOL_DOMAIN + ")으로 로그인해야 " + actionPhrase + ".");
     return false;
   }
 
   async function signInWithGoogle() {
     if (!useSupabase) {
-      alert("데모 모드에서는 로그인 기능을 사용할 수 없어요.");
+      showToast("데모 모드에서는 로그인 기능을 사용할 수 없어요.");
       return;
     }
     const { error } = await supabaseClient.auth.signInWithOAuth({
@@ -242,7 +259,7 @@
     });
     if (error) {
       console.error("Google 로그인 시작 실패:", error);
-      alert("로그인을 시작하지 못했어요. 잠시 후 다시 시도해주세요.");
+      showToast("로그인을 시작하지 못했어요. 잠시 후 다시 시도해주세요.", "error");
     }
   }
 
@@ -302,7 +319,7 @@
     if (session && session.user && !isSchoolEmail(session.user.email)) {
       await supabaseClient.auth.signOut();
       applyAuthState(null);
-      alert("학교 계정(@" + SCHOOL_DOMAIN + ")으로만 참여할 수 있어요.");
+      showToast("학교 계정(@" + SCHOOL_DOMAIN + ")으로만 참여할 수 있어요.");
       return;
     }
     applyAuthState(session);
@@ -490,7 +507,7 @@
           likeBtn.setAttribute("aria-pressed", result.liked ? "true" : "false");
         } catch (e) {
           console.error(e);
-          alert("좋아요 처리 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.");
+          showToast("좋아요 처리 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.", "error");
         } finally {
           likeBtn.disabled = false;
         }
@@ -727,3 +744,28 @@
 
   document.addEventListener("DOMContentLoaded", init);
 })();
+
+// ── 사용성 보강 (2026-07-18 점검 반영) ──
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-go-submit]");
+  if (!btn) return;
+  const tab = [...document.querySelectorAll(".tab")].find(b => (b.dataset.view || "") === "submit");
+  if (tab) { tab.click(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+});
+// 닉네임/팀명이 최대 길이에 닿으면 조용히 잘리지 않게 안내
+document.addEventListener("input", (e) => {
+  const el = e.target;
+  if (!el.maxLength || el.maxLength < 0 || el.tagName !== "INPUT") return;
+  if (el.value.length >= el.maxLength) {
+    let hint = el.parentElement.querySelector(".len-hint");
+    if (!hint) {
+      hint = document.createElement("span");
+      hint.className = "len-hint";
+      el.parentElement.appendChild(hint);
+    }
+    hint.textContent = `최대 ${el.maxLength}자까지 쓸 수 있어요.`;
+  } else {
+    const hint = el.parentElement.querySelector(".len-hint");
+    if (hint) hint.remove();
+  }
+});

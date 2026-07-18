@@ -253,3 +253,19 @@ footer.foot { max-width: var(--maxw); margin: 0 auto; padding: 14px 20px 40px; c
 .gate-text { margin: 0; font-weight: 700; color: var(--text-soft); font-size: 0.92rem; }
 .gate-login-btn { margin-top: 4px; padding: 9px 18px; font-size: 0.86rem; }
 .form-card.is-locked { opacity: 0.5; pointer-events: none; }
+
+/* 사용성 보강 (2026-07-18) */
+.empty-cta { margin-top: 10px; }
+.len-hint { display: block; margin-top: 4px; font-size: .82rem; color: var(--accent, #e8930c); }
+.howto summary { padding: 4px 2px; }           /* 클릭 영역 확대 */
+.howto > summary { display: list-item; }
+
+
+/* 사이트 배너 토스트 (네이티브 alert 대체) */
+.site-toast { position: fixed; left: 50%; top: 16px; transform: translate(-50%, -140%);
+  background: #fff6e0; color: #3a2e1a; border: 1px solid #e8930c; border-radius: 12px;
+  padding: 12px 18px; box-shadow: 0 6px 24px rgba(0,0,0,.12); z-index: 9999;
+  transition: transform .25s ease; max-width: min(92vw, 520px); font-weight: 700; }
+.site-toast.show { transform: translate(-50%, 0); }
+.site-toast.error { background: #fdecec; border-color: #d03b3b; }
+.login-note { background:#fff6e0; border-left:4px solid #e8930c; border-radius:8px; padding:8px 12px; margin:10px 0; font-size:.92rem; }
