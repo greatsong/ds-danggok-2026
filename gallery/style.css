@@ -39,6 +39,9 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* display:flex 등을 지정한 요소라도 hidden 속성이 붙으면 항상 감춰지도록 강제
+   (author 규칙이 UA 기본 [hidden] 규칙보다 우선순위가 높아 그냥 두면 새어 보인다) */
+[hidden] { display: none !important; }
 
 body {
   margin: 0;
