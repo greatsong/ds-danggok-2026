@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10차시 · 정확도의 함정 · 데이터 과학</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">10차시 · 분류 트랙 ② (★핵심)</span>
+  <h1>정확도의 <span class="a">함정</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 밝히는 것</div>
+    <ul>
+      <li><b>혼동행렬 해석표</b> — 88.8%라는 숫자의 정체 세 겹을 벗겨 본다</li>
+    </ul>
+  </div>
+
+  <h2>1. 함정 하나 — 아무것도 안 배워도 75%</h2>
+  <ul>
+    <li>혼잡 단계 개수: 여유 2,706 · 보통 498 · 약간 붐빔 294 · 붐빔 110 (합 3,608)</li>
+    <li>여유가 전체의 <b>2,706 ÷ 3,608 = 75.0%</b></li>
+    <li>그러면 <b>무조건 '여유'로만 찍는</b> 바보 모델도 정확도 75%다</li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">⚠️ 88.8%를 다시 보자</div>
+    <ul>
+      <li>기준선(전부 여유)이 이미 75% · 내 모델 88.8%는 그 위 <b>13.8%p</b>일 뿐</li>
+      <li>정확도는 <b>가장 흔한 답만 찍어도 높게 나온다</b> — 불균형 데이터에선 착시</li>
+    </ul>
+  </div>
+  <div class="callout mini">
+    <div class="h">🔄 수치는 자란다</div>
+    <ul><li>혼잡도는 매시간 쌓임 · 개수·정확도·재현율은 <b>수업 당일 다시 확인</b>. 이 교재 숫자는 준비 시점(2026-07-17) 실측</li></ul>
+  </div>
+
+  <h2>2. 함정 둘 — 정작 '붐빔'을 놓친다 (①②③)</h2>
+  <ul>
+    <li>정확도 하나로는 <b>어느 단계를 못 맞히는지</b> 안 보인다 → <b>혼동행렬</b>과 <b>재현율</b>로 들여다본다</li>
+    <li>재현율 = 실제 '붐빔' 중에서 모델이 '붐빔'이라 맞힌 비율</li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>지난 시간에 만든 혼잡도 분류기를 이어서 분석해줘. 조건:
+
+- 네 단계를 서로 얼마나 헷갈리는지 혼동행렬을 표로 그려줘.
+- 단계마다 재현율을 계산해서, 특히 '붐빔'을 얼마나 잘 잡아내는지
+  알려줘.
+- 실제로는 '붐빔'인데 다른 단계로 잘못 맞힌 경우가 몇 건인지도
+  보여줘.</pre></div>
+  <ul>
+    <li>AI가 아래 <b>모습</b>의 코드를 줌 (똑같지 않아도 OK)</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv"
+df = pd.read_csv(url)
+
+df["시각"] = pd.to_datetime(df["시각"])
+df["요일"] = df["시각"].dt.dayofweek
+df["시간"] = df["시각"].dt.hour
+
+X = pd.get_dummies(df[["지역명", "요일", "시간"]], columns=["지역명"])
+y = df["혼잡도"]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42)
+
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+pred = model.predict(X_test)
+
+# 단계 순서 (표를 보기 좋게 고정)
+steps = ["여유", "보통", "약간 붐빔", "붐빔"]
+
+# 혼동행렬 — 어느 단계를 서로 헷갈리나
+st.subheader("혼동행렬 (세로=실제, 가로=예측)")
+cm = confusion_matrix(y_test, pred, labels=steps)
+st.dataframe(pd.DataFrame(cm, index=steps, columns=steps))
+
+# 단계별 정밀도·재현율
+st.subheader("단계별 성적표")
+st.text(classification_report(y_test, pred, labels=steps, zero_division=0))
+
+# 기준선: 무조건 '여유'로만 찍기
+baseline = (df["혼잡도"] == "여유").mean()
+st.metric("내 모델 정확도", f"{accuracy_score(y_test, pred):.1%}")
+st.metric("전부 '여유'로 찍기", f"{baseline:.1%}")</pre></div>
+  <div class="callout warn">
+    <div class="h">⚠️ '붐빔' 재현율 = 0.67</div>
+    <ul>
+      <li>정작 대비가 필요한 <b>'붐빔'</b>은 실제 3건 중 1건을 놓친다(재현율 0.67)</li>
+      <li>여유는 잘 맞히니 전체 정확도는 높다 — 그런데 <b>중요한 단계를 못 맞히면</b> 그 정확도가 무슨 소용인가</li>
+    </ul>
+  </div>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
+- '무조건 여유로만 찍는 모델'의 정확도를 따로 계산해서
+  내 모델 정확도와 나란히 비교해줘.
+- '붐빔' 재현율을 크게 강조해서 보여줘.</pre></div>
+
+  <h2>3. 함정 셋 — 정답을 미리 본 반칙 (레이블 누수)</h2>
+  <ul>
+    <li>데이터에 <b>인구min·인구max</b> 열이 있다 · 이걸 특징으로 넣으면 정확도가 <b>88.8% → 90.9%</b>로 오른다</li>
+    <li>하지만 이건 실력이 아니라 <b>반칙</b>이다</li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">⚠️ 왜 반칙인가 — 레이블 누수</div>
+    <ul>
+      <li>혼잡도는 <b>바로 그 인구 수에서 계산되어 나온 값</b> — 인구를 알려 주면 답을 미리 보여 주는 셈</li>
+      <li>"혼잡한 시간엔 원래 사람이 많다" → 인구를 넣는 건 시험 전에 답안지를 보는 것과 같다</li>
+      <li>배포 상황엔 그 시각의 실제 인구를 <b>알 수 없다</b> — 쓸 수 없는 특징으로 올린 점수는 허깨비</li>
+    </ul>
+  </div>
+
+  <h2>🔎 오늘의 발견 — 세 겹의 착시</h2>
+  <div class="callout check">
+    <div class="h">✔️ 88.8%가 숨기고 있던 것</div>
+    <ul>
+      <li><b>하나</b> — '여유'만 찍어도 75%. 기준선을 안 보면 88.8%가 대단해 보인다</li>
+      <li><b>둘</b> — 정작 중요한 '붐빔'은 3분의 1을 놓친다(재현율 0.67)</li>
+      <li><b>셋</b> — 인구 열로 90.9%까지 오르지만 그건 답을 미리 본 반칙(레이블 누수)</li>
+      <li>→ <b>정확도 한 숫자로 모델을 판단하지 않는다.</b> 무엇을 어떻게 틀리는지까지 본다</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 — 외울 필요 없어요 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">기준선(baseline)</td><td>가장 흔한 답만 찍었을 때의 정확도 — 비교의 출발선</td></tr>
+      <tr><td class="term">혼동행렬</td><td>실제 단계와 예측 단계를 맞대어 무엇을 헷갈리는지 보는 표</td></tr>
+      <tr><td class="term">재현율</td><td>실제 그 단계 중 모델이 맞게 잡아낸 비율</td></tr>
+      <tr><td class="term">정밀도</td><td>그 단계라고 예측한 것 중 실제로 맞은 비율</td></tr>
+      <tr><td class="term">불균형 데이터</td><td>한 단계가 유난히 많은 데이터 — 정확도가 부풀려짐</td></tr>
+      <tr><td class="term">레이블 누수</td><td>정답에서 파생된 정보를 특징에 넣어 점수를 부풀리는 반칙</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>기준선(전부 여유)이 75%임을 계산으로 확인했다</li>
+    <li>혼동행렬과 재현율로 '붐빔'을 3분의 1 놓친다는 걸 읽었다</li>
+    <li>인구 열이 왜 레이블 누수인지 설명할 수 있다</li>
+    <li>정확도 한 숫자만 믿으면 안 되는 이유를 안다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson09.html"><div class="dir">← 이전</div><div class="tt">9차시 · 첫 분류 모델</div></a>
+    <a class="next" href="lesson11.html"><div class="dir">다음 →</div><div class="tt">11차시 · 배포 + 백테스트</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

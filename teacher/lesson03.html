@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3차시 (교사용) · 시각화 · 그래프에서 구멍 발견 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson03.html">학생용 3차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">3차시 · 교사용</span>
+  <h1>시각화 · 그래프에서 구멍 발견 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson03.html">3차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 도입 멘트 — 숫자를 그림으로</div>
+    <p>“지난 시간엔 표의 첫 인상을 <b>숫자</b>로 잡았죠. 오늘은 그 숫자를 <b>그림</b>으로 바꿉니다. 4만 줄을 같은 해끼리 묶어 <b>연평균</b> 한 줄 그래프로 만들면, 100년 넘는 흐름이 한눈에 보여요. 그리고 오늘의 진짜 목표는 그 그래프에서 <b>이상한 곳을 찾는 것</b>입니다.”</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~7′</td><td>복습·도입</td><td>요약통계 복습 · "이제 그림으로 보자"</td></tr>
+    <tr><td>7~30′</td><td>①②③ 실습</td><td>연평균 추세 그래프 → AI 그래프 읽기 → 축·제목·이상지점 강조 개선</td></tr>
+    <tr><td>30~45′</td><td>구멍 관찰 (모둠)</td><td>끊긴 구간·튀는 점 함께 찾기 · "왜 여기가 이상한가" 토의</td></tr>
+    <tr><td>45~50′</td><td>정리 (이월 가능)</td><td>이상 지점 2곳 + 이유 추측 기록 (4차시 재료)</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 구멍을 못 찾으면</div>
+    <p>학생이 이상 지점을 못 찾으면 <b>1940~1960년 구간을 확대</b>해 보여 주세요. 끊긴 선(1951·1952)과 뚝 떨어진 점(1953)이 또렷해집니다. 오늘 반드시 남길 산출물은 <b>이상 지점 2곳 + 이유 추측</b> — 정답이 아니어도 됩니다. 추측 자체가 4차시 전처리의 재료입니다.</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>①②③ 실습 (7~30′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 왜 연평균으로 요약하나 · 시각화가 감식의 눈 (지도서 2장 참고)</div>
+    <p>일별 4만 점을 그대로 그리면 계절 진동에 묻혀 장기 흐름이 안 보입니다. <b>연 단위 집계(groupby 평균)</b>는 계절 잡음을 걷어 내고 추세만 남기는 요약입니다. 대신 이 집계가 <b>이상치를 숨기기도</b> 합니다 — 1953년처럼 관측일이 적은 해는 “연평균”이라는 이름 뒤에서 겨울 평균으로 둔갑합니다(4차시에서 해부). 시각화는 요약통계가 놓친 <b>위치</b> 정보를 되살리는 눈입니다. 지도서 2장은 상자그림·히스토그램의 구간 폭 선택이 “요약이 감추는 것”과 같은 딜레마임을 다룹니다.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (실측 기반)</div>
+    <p><b>그래프가 안 뜸</b> → requirements에 <code>plotly</code>가 있는지, 또는 실습 환경에 설치됐는지 확인. 안 뜨면 선생님 예비 화면으로 대체. · <b>날짜가 문자열이라 연도 추출 실패</b> → AI 코드가 날짜 열을 날짜형으로 바꾸는 단계를 빠뜨리면 연도 그룹이 안 됨. “날짜에서 연도를 뽑아 달라”를 프롬프트에 다시. · <b>결측 연도(1951·1952)에서 선이 이어져 버림</b> → 값이 없는 해를 <b>0으로 채우면</b> 바닥까지 선이 내려가 오해. 빈 해는 <b>비운 채</b> 두라고 안내(끊긴 게 정상). · <b>x축이 연도가 아니라 인덱스</b> → 가로축을 <b>연도</b>로 명시.</p>
+  </div>
+
+  <h3>구멍 관찰 (30~45′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 발견을 학생이 하게</div>
+    <p>“전체 흐름은 <b>우상향</b>이에요. 그런데 <b>두 곳</b>이 이상해요. 어디일까요?” 답을 바로 주지 말고 모둠이 찾게 합니다. 나오면 정리: <b>① 1950년대 초 선이 끊긴다(1951·1952 값 없음), ② 1953년 한 점이 0.6℃로 뚝 떨어진다.</b> “왜 이렇게 생겼지?”라는 물음이 다음 차시로 이어진다고 예고.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“1953년은 측정을 잘못한 거예요?”</b> → “좋은 추측이에요. 근데 <b>왜</b> 그렇게 됐는지는 다음 시간에 데이터로 밝힐 거예요. 오늘은 ‘이상하다’를 <b>발견하고 기록</b>하는 데까지.” · <b>“그냥 이상한 점 지우면 되잖아요?”</b> → “지우기 전에 <b>정체를 알아야</b> 해요. 이유도 모르고 지우는 건 조작이고, 이유를 밝히고 거르는 건 전처리예요(4차시).”</p>
+  </div>
+
+  <h3>정리 (45~50′ · 이월 가능)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 마무리 + 다음 차시 예고</div>
+    <p>“오늘 찾은 이상 지점 2곳과 <b>왜 그럴지 추측</b>을 적어 두세요. 다음 시간에 이 구멍들의 <b>정체</b>를 밝힙니다. 힌트: ‘데이터에도 역사가 있다’.”</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>데이터 감식</b> — 우상향 흐름 속에서 “유난히 다른” 지점(끊긴 구간·떨어진 점)을 스스로 찾아내고, 정답 이전에 나름의 이유를 추측해 근거를 적은 학생을 채집.</p>
+  </div>
+
+  <h2>✅ 3차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>전원 연평균 추세 그래프를 띄웠나? (안 뜨면 → 예비 화면)</li>
+    <li>1950년대 초 끊긴 구간과 1953년 떨어진 점을 찾았나?</li>
+    <li>이상 지점 2곳 + 이유 추측을 기록했나? (4차시 재료)</li>
+    <li>"지우기 전에 정체부터"를 확인해 4차시로 다리를 놓았나?</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson02.html"><div class="dir">← 이전</div><div class="tt">2차시 · 데이터 만나기 (교사용)</div></a>
+    <a class="next" href="lesson04.html"><div class="dir">다음 →</div><div class="tt">4차시 · 전처리 (교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

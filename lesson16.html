@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>16차시(선택) · 연관 분석 원리 체험 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">선택 · 16차시</span>
+  <h1>연관 분석 · <span class="a">우연보다 나은가</span></h1>
+  <div class="under"></div>
+
+  <div class="callout warn">
+    <div class="h">⏳ 선택 차시 — 시간이 되면 진행</div>
+    <p>이 차시는 수업 시간이 남을 때 한다. 데이터 파일도, 배포도 없다. 표 하나로 손계산만 해 본다.</p>
+  </div>
+
+  <p class="lead">"기저귀를 사는 사람은 맥주도 산다"는 이야기를 한 번쯤 들어 봤을지 모른다. 함께 자주 팔리는 물건을 찾는 것이 연관 분석이다. 오늘은 세 가지 숫자, <b>지지도·신뢰도·향상도</b>를 손으로 계산한다. 그리고 "함께 자주 나타남"과 "정말 관련 있음"이 다르다는 걸 확인한다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>손계산 워크시트</b> — 작은 표에서 지지도·신뢰도·향상도를 직접 구하기</li>
+      <li><b>반전 확인</b> — 신뢰도가 높아도 향상도가 1 이하일 수 있다는 것</li>
+    </ul>
+  </div>
+
+  <h2>1. 세 가지 숫자의 뜻</h2>
+  <p>어느 가게의 선택 기록 <b>100건</b>이 있다. 상품 A를 고른 사람이 40건, 상품 B를 고른 사람이 50건, A와 B를 <b>함께</b> 고른 사람이 30건이다.</p>
+
+  <table class="glossary-table">
+    <tr><th>항목</th><th>건수</th></tr>
+    <tr><td class="term">전체 기록</td><td>100건</td></tr>
+    <tr><td class="term">A를 고름</td><td>40건</td></tr>
+    <tr><td class="term">B를 고름</td><td>50건</td></tr>
+    <tr><td class="term">A와 B를 함께 고름</td><td>30건</td></tr>
+  </table>
+
+  <p>"A를 산 사람은 B도 살까"라는 규칙(A → B)을 세 가지 숫자로 잰다.</p>
+
+  <ol class="steps">
+    <li><span class="st">지지도 — 얼마나 자주 함께 나오나</span><br>
+      A와 B를 함께 고른 비율. <code>함께 고름 ÷ 전체 = 30 ÷ 100 = 0.30</code><br>
+      전체의 30%가 A·B를 같이 골랐다.</li>
+    <li><span class="st">신뢰도 — A를 산 사람 중 B도 산 비율</span><br>
+      <code>함께 고름 ÷ A를 고름 = 30 ÷ 40 = 0.75</code><br>
+      A를 산 사람 4명 중 3명은 B도 샀다.</li>
+    <li><span class="st">향상도 — 우연보다 나은가</span><br>
+      신뢰도를, B의 기본 인기(<code>B ÷ 전체 = 50 ÷ 100 = 0.50</code>)와 견준다.<br>
+      <code>향상도 = 신뢰도 ÷ B의 기본 인기 = 0.75 ÷ 0.50 = 1.5</code><br>
+      A를 산 사람은 B를 <b>1.5배</b> 더 많이 산다. 우연보다 낫다.</li>
+  </ol>
+
+  <div class="callout tip">
+    <div class="h">💡 향상도 읽는 법</div>
+    <ul>
+      <li><b>1보다 크다</b> → 함께 살 만한 관계 (A가 B를 끌어당김)</li>
+      <li><b>1이면</b> → 우연과 같음 (A가 있든 없든 B를 사는 비율이 그대로)</li>
+      <li><b>1보다 작으면</b> → 오히려 덜 산다 (우연보다 못함)</li>
+    </ul>
+  </div>
+
+  <h2>2. 반전 — 신뢰도가 높아도 향상도가 1 이하</h2>
+  <p>이번엔 B가 아주 인기 있는 상품이라고 하자. 100건 중 <b>B를 고른 사람이 90건</b>이다. A는 40건, A와 B를 함께 고른 사람은 34건이다.</p>
+
+  <table class="glossary-table">
+    <tr><th>항목</th><th>건수</th></tr>
+    <tr><td class="term">전체 기록</td><td>100건</td></tr>
+    <tr><td class="term">A를 고름</td><td>40건</td></tr>
+    <tr><td class="term">B를 고름 (인기 상품)</td><td>90건</td></tr>
+    <tr><td class="term">A와 B를 함께 고름</td><td>34건</td></tr>
+  </table>
+
+  <ol class="steps">
+    <li><span class="st">신뢰도는 높다</span><br>
+      <code>34 ÷ 40 = 0.85</code> → A를 산 사람의 85%가 B도 샀다. 언뜻 관계가 세 보인다.</li>
+    <li><span class="st">그런데 B의 기본 인기가 이미 높다</span><br>
+      <code>90 ÷ 100 = 0.90</code> → A와 상관없이 열에 아홉이 B를 산다.</li>
+    <li><span class="st">향상도로 진실이 드러난다</span><br>
+      <code>0.85 ÷ 0.90 = 0.94</code> → 1보다 작다. A를 산 사람은 오히려 B를 <b>조금 덜</b> 샀다.</li>
+  </ol>
+
+  <div class="callout warn">
+    <div class="h">⚠️ 인기 상품의 착시</div>
+    <p>신뢰도 85%는 커 보이지만, 원래 90%가 B를 사는 가게다. "A 때문에 B를 산다"고 말할 수 없다. <b>향상도 1 이하 = 우연보다 못함</b>. 신뢰도만 보면 속는다.</p>
+  </div>
+
+  <div class="callout check">
+    <div class="h">✔️ 스스로 풀어 보기</div>
+    <p>전체 200건, C 80건, D 60건, C·D 함께 48건일 때 지지도·신뢰도(C→D)·향상도를 구해 보자.<br>
+    (지지도 48÷200 = 0.24 · 신뢰도 48÷80 = 0.60 · D 기본 인기 60÷200 = 0.30 · 향상도 0.60÷0.30 = <b>2.0</b> → 우연보다 2배)</p>
+  </div>
+
+  <h2>3. 팀 프로젝트와 연관 분석</h2>
+  <p>연관 분석은 "무엇과 무엇이 함께 나타나는가"를 묻는 팀에 어울린다. 다만 장바구니처럼 <b>함께 고른 기록</b>이 있는 데이터가 필요하다. 우리 modudata에는 그런 데이터가 없어서, 이 틀을 택하는 팀은 데이터를 직접 찾아야 한다. 승인 절차에서 함께 살펴본다.</p>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>지지도·신뢰도·향상도를 각각 무슨 뜻인지 말할 수 있다.</li>
+    <li>100건·A 40·B 50·동시 30에서 0.30 · 0.75 · 1.5를 손으로 구했다.</li>
+    <li>신뢰도가 높아도 향상도가 1 이하일 수 있는 이유를 안다.</li>
+    <li>"향상도 1 이하 = 우연보다 못함"을 설명할 수 있다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">연관 분석</td><td>함께 자주 나타나는 항목을 찾는 분석 (장바구니 분석)</td></tr>
+    <tr><td class="term">지지도</td><td>전체 중 A·B를 함께 고른 비율. 얼마나 자주 함께 나오나</td></tr>
+    <tr><td class="term">신뢰도</td><td>A를 고른 사람 중 B도 고른 비율</td></tr>
+    <tr><td class="term">향상도</td><td>신뢰도 ÷ B의 기본 인기. 우연보다 나은지 재는 값</td></tr>
+  </table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="lesson15.html"><div class="dir">← 이전</div><div class="tt">15차시 · 이미지 데모 + 팀 구성</div></a>
+    <a class="next" href="index.html"><div class="dir">다음 →</div><div class="tt">목차로 돌아가기</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

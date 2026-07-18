@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5차시 · 모델링(직선을 긋다) · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">5차시</span>
+  <h1>모델링 — <span class="a">직선을 긋다</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>서울 기온 예측기 초안</b> — 연도를 슬라이더로 고르면 그해 예상 기온을 알려 주는 작은 AI</li>
+    </ul>
+  </div>
+
+  <h2>0. 지난 차시까지</h2>
+  <ul>
+    <li>4차시에서 데이터를 <b>믿을 수 있게</b> 골라 냈다.</li>
+    <li>관측일이 300일보다 적은 해(전쟁 시기·반쪽 관측)를 빼니 <b>1908~2025년 중 114개 연도</b>가 남았다.</li>
+    <li>이제 이 깨끗한 점들 위에 <b>직선</b>을 긋는다.</li>
+  </ul>
+
+  <h2>1. 회귀 = 점들에 가장 잘 맞는 직선 긋기</h2>
+  <ul>
+    <li>가로축 연도, 세로축 연평균기온으로 점을 찍으면 우상향하는 구름이 보인다.</li>
+    <li>그 구름 한가운데를 지나는 <b>한 줄기 직선</b>을 찾는 일이 <b>회귀</b>다.</li>
+    <li>직선의 <b>기울기</b>가 곧 "100년에 몇 도 오르는가"를 뜻한다.</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">💡 기울기를 읽는 법</div>
+    <ul>
+      <li>이 데이터로 직선을 그으면 기울기가 <b>+2.60℃/100년</b>이 나온다.</li>
+      <li>뜻: 지난 114년 동안 연평균기온이 <b>100년당 평균 2.60℃씩</b> 오르는 경향.</li>
+      <li>한 해 한 해의 오르내림이 아니라 <b>긴 흐름의 방향</b>을 요약한 숫자다.</li>
+    </ul>
+  </div>
+
+  <h2>2. "학습"이란 — model.fit 한 줄</h2>
+  <ul>
+    <li>가장 잘 맞는 직선을 <b>사람이 손으로</b> 찾지 않는다. 컴퓨터가 데이터를 보고 스스로 찾는다.</li>
+    <li>이 "스스로 규칙을 찾는 과정"이 <b>학습</b>이고, 코드로는 <code>model.fit()</code> 딱 한 줄이다.</li>
+    <li>학습이 끝난 직선에 새 연도를 넣으면 예측이 나온다 → <code>model.predict()</code>.</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>단계</th><th>하는 일</th></tr></thead>
+    <tbody>
+      <tr><td><b>학습</b></td><td>점들에 가장 잘 맞는 직선 찾기 (<code>model.fit</code>)</td></tr>
+      <tr><td><b>예측</b></td><td>학습한 직선에 연도를 넣어 기온 뽑기 (<code>model.predict</code>)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. 예측기 만들기 (①②③)</h2>
+  <ul>
+    <li>도구 = scikit-learn의 선형회귀. requirements.txt엔 <code>scikit-learn</code>·<code>plotly</code>만(스트림릿·판다스·넘파이는 기본 설치, 버전 없이).</li>
+    <li>데이터 = <code>seoul.csv</code> 주소 그대로 불러오기(다운로드 없음, 매일 아침 자동 갱신).</li>
+  </ul>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>scikit-learn
+plotly</pre></div>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>서울 기온으로 미래를 예측하는 스트림릿 앱(main.py) 하나를 만들어 줘. 스트림릿 클라우드에 올릴 거야. 조건:
+
+- 데이터는 이 주소에서 불러와(1907년부터 어제까지의 일별 기온이고,
+  열은 날짜, 지점, 평균기온, 최저기온, 최고기온이야):
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv
+- 날짜에서 연도를 뽑아 연평균기온으로 묶어 줘.
+- 아직 진행 중인 올해와, 관측일이 300일보다 적은 해는 평균을 믿기
+  어려우니 빼고 학습해 줘.
+- 연도로 연평균기온을 예측하는 회귀 직선을 학습시켜 줘.
+- 슬라이더로 1900~2100년 사이 연도를 고르면 예상 기온을 크게 보여 줘.
+- 실제 점들과 학습한 직선을 plotly 그래프로 함께 그려 줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만,
+  스트림릿·판다스·넘파이는 기본 설치라 빼고.
+- 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
+  <ul>
+    <li>AI가 아래 <b>모습</b>의 코드를 준다(똑같지 않아도 된다).</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre>import streamlit as st
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+st.title("🌡️ 서울 기온 예측기")
+
+# 수집 — CSV 불러오기 (1907년~어제, 일별 기온 · 매일 자동 갱신)
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+df = pd.read_csv(url)
+
+# 전처리 — 연도별 평균으로 묶고, 진행 중인 올해와
+#          관측일 300일 미만인 해는 빼기
+df["연도"] = pd.to_datetime(df["날짜"]).dt.year
+yearly = df.groupby("연도")["평균기온"].agg(["mean", "count"]).reset_index()
+yearly = yearly[(yearly["연도"] &lt; df["연도"].max()) &amp; (yearly["count"] &gt;= 300)]
+yearly = yearly.rename(columns={"mean": "평균기온"})
+
+X = yearly[["연도"]]   # 대괄호 두 개: 표 모양으로
+y = yearly["평균기온"]
+
+# 학습 — 이 한 줄이 '학습'! 가장 잘 맞는 직선을 찾는다
+model = LinearRegression()
+model.fit(X, y)
+
+# 예측 — 슬라이더로 연도를 넣으면 그해 기온을 예측
+year = st.slider("예측할 연도", 1900, 2100, 2050)
+pred = model.predict([[year]])[0]
+st.subheader(f"{year}년 예측 평균기온: {pred:.1f}℃")
+
+# (지면상 생략 — 실제 코드엔 plotly로 그린 '실제 점 + 학습 직선' 그래프가 함께 옵니다)</pre></div>
+  <ul>
+    <li>핵심은 <code>model.fit(X, y)</code> 한 줄 — 여기서 작은 AI가 태어난다.</li>
+    <li>슬라이더를 움직이면 예측값이 따라 바뀐다. 여러 연도를 넣어 보자.</li>
+  </ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 예시</span><pre>좋아, 이어서 고쳐 줘.
+- 직선의 기울기를 '100년에 몇 도 오르는가'로 바꿔서 화면에 크게 보여 줘.
+- 예측 기온 옆에, 가장 최근 해보다 몇 도 오르는지도 함께 보여 줘.
+- 실제 점은 회색, 학습한 직선은 주황색으로.</pre></div>
+
+  <div class="callout warn">
+    <div class="h">⚠️ 슬라이더를 2100년까지 밀면?</div>
+    <ul>
+      <li>직선이라 밀수록 예측값이 <b>끝없이</b> 올라간다.</li>
+      <li>데이터에 없는 먼 미래까지 직선을 늘이는 것을 <b>외삽</b>이라 한다.</li>
+      <li>정말 그렇게 오를까? 이 의심이 다음 차시(평가와 한계)의 중심이다.</li>
+    </ul>
+  </div>
+
+  <h2>🎒 오늘의 체크 & 링크</h2>
+  <ul class="checklist">
+    <li>회귀는 점들에 가장 잘 맞는 직선을 긋는 일이다</li>
+    <li><code>model.fit()</code> 한 줄이 '학습'이다</li>
+    <li>직선의 기울기(+2.60℃/100년)는 긴 흐름의 방향을 요약한 숫자다</li>
+    <li>슬라이더로 연도를 넣어 예측값을 확인했다</li>
+    <li>먼 미래로 직선을 늘이는 '외삽'은 의심할 거리다 (다음 차시)</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 6개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">회귀</td><td>점들 사이로 가장 잘 맞는 직선을 그어 숫자를 예측하는 방법</td></tr>
+      <tr><td class="term">선형회귀</td><td>직선 하나로 관계를 나타내는 가장 기본적인 회귀</td></tr>
+      <tr><td class="term">학습(model.fit)</td><td>데이터를 보고 가장 잘 맞는 직선을 컴퓨터가 스스로 찾는 과정</td></tr>
+      <tr><td class="term">기울기</td><td>직선이 얼마나 가파른지 — 여기선 '100년에 몇 도 오르는가'</td></tr>
+      <tr><td class="term">예측(model.predict)</td><td>학습한 직선에 새 연도를 넣어 기온을 뽑는 일</td></tr>
+      <tr><td class="term">외삽</td><td>데이터가 없는 범위(먼 미래)까지 직선을 늘여 예측하는 것 — 조심</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <div class="pager">
+    <a class="prev" href="lesson04.html"><div class="dir">← 이전</div><div class="tt">4차시 · 전처리(구멍의 정체)</div></a>
+    <a class="next" href="lesson06.html"><div class="dir">다음 →</div><div class="tt">6차시 · 평가와 한계</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

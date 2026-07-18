@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>14차시 (교사용) · 군집에 이름 붙이기와 배포 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson14.html">학생용 14차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">14차시 · 교사용 (군집 트랙 마무리)</span>
+  <h1>이름 붙이기와 배포 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson14.html">14차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 도입 멘트 — 컴퓨터는 묶기만 한다</div>
+    <p>“지난 두 시간, 컴퓨터가 역을 묶었어요. 그런데 컴퓨터가 준 건 <b>묶음 0·1·2라는 번호</b>뿐이에요. 그 번호엔 뜻이 없어요. 이 묶음이 ‘출근하는 동네’인지 ‘번화가’인지 읽어내는 건 <b>사람의 몫</b>이에요. 오늘 그 마지막 한 걸음을 하고, 검색 앱으로 배포까지 합니다.”</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~7′</td><td>도입</td><td>컴퓨터는 묶기만 한다 · 의미는 사람이 준다 · <b>묶음 번호는 실행마다 바뀜</b></td></tr>
+    <tr><td>7~25′</td><td>이름 붙이기</td><td>묶음별 평균 시간대 곡선 읽기 · 주거형/번화가형/혼합형 · <b>근거 말하기</b></td></tr>
+    <tr><td>25~43′</td><td>①②③ 실습 (배포)</td><td>역 이름 검색 앱 배포 · 갤러리 게시</td></tr>
+    <tr><td>43~50′</td><td>정리 (이월 가능)</td><td>상호 검증 · 군집 트랙 마무리(세 트랙 통합)</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 세 트랙을 한 문장으로 매듭</div>
+    <p>군집 트랙이 끝나는 시간이라 세 트랙을 묶어 주세요. “회귀는 직선을 그어도 <b>미래를 늘 의심</b>했고, 분류는 정확도가 높아도 <b>무엇을 놓쳤나</b>를 봤고, 군집은 정답이 없기에 <b>사람이 이름을 붙였어요.</b> 세 번 다 마지막 판단은 사람 몫이었죠.”</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>이름 붙이기 (7~25′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 이름은 사람이 붙인다 (지도서 7장 참고)</div>
+    <p>군집 해석은 데이터 과학의 마지막 한 걸음이자 <b>계산이 아니라 해석</b>입니다. 컴퓨터가 준 번호에는 뜻이 없고, 각 묶음의 <b>평균 시간대 승차 곡선</b> 모양(아침 봉우리냐 저녁 봉우리냐)을 근거로 사람이 성격 이름을 붙입니다. 이름은 정답이 아니라 해석이라, 근거만 또렷하면 다르게 불러도 됩니다. 실측: 강남·홍대입구는 저녁 몰림(번화가형), 신림·사당은 아침 몰림(주거형).</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (빈출)</div>
+    <p><b>묶음 번호로 이름을 고정</b> → k-means 번호(0·1·2)는 <b>실행마다 순서가 바뀝니다.</b> “0번은 주거형”이라 외우면 다음 실행에서 틀립니다. 반드시 <b>곡선 모양</b>을 보고 이름을 붙이라고 안내. · <b>plotly 모듈 없음</b> → 그래프를 그리므로 <code>requirements.txt</code>에 <code>plotly</code>가 있어야 함(scikit-learn·plotly 둘). · <b>한글 변수명 오타</b> → 학생용 ②는 <code>이름·평균·긴표</code> 같은 한글 변수를 씁니다(파이썬에서 허용). 학생이 직접 치다 오타 내면 NameError가 나니 <b>AI가 준 대로</b> 두게 하세요. · <b>없는 역 검색</b> → 오타나 미등록 역을 넣으면 “찾지 못했어요” 안내가 뜨는 게 정상(고장 아님). · <b>지도로 못 그림</b> → 이 데이터엔 역 좌표가 없어 지도 색칠은 불가. <b>검색 앱</b>이 오늘의 정식 과제이고, 지도는 좌표 확보 시 확장 과제로만 안내.</p>
+  </div>
+
+  <h3>①②③ 실습 · 배포 (25~43′)</h3>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“제가 붙인 이름이 옆 친구랑 달라요. 누가 맞아요?”</b> → “둘 다 맞을 수 있어요. 이름은 <b>정답이 아니라 해석</b>이에요. ‘강남은 저녁에 승차가 몰리니 번화가형’처럼 <b>근거가 또렷하면</b> 다르게 불러도 돼요.” · <b>“지도에 색칠하고 싶어요.”</b> → “좋은 욕심이에요. 다만 이 데이터엔 역 위치가 없어서 오늘은 <b>검색 앱</b>으로 해요. 좌표 파일을 따로 구하는 팀은 확장 과제로 지도까지 갈 수 있어요.”</p>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 배포 참고</div>
+    <p>배포는 <a href="https://share.streamlit.io" target="_blank" rel="noopener"><code>share.streamlit.io</code></a>에서 진행합니다(세 번째 배포라 익숙함). 화면 구성이 바뀌어 버튼을 못 찾으면 AI에게 지금 방법을 물어보라고 안내하세요.</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>결과 해석</b> — 묶음에 붙인 이름 각각에 대해 “아침 봉우리라 주거형” 같은 <b>리듬 곡선 모양을 근거로 든</b> 학생의 서술을 수행 과제(이름의 근거)에서 채집.</p>
+  </div>
+
+  <h2>✅ 14차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>전원 역 검색 앱 배포 · 갤러리 게시? (세 번째 갤러리 증빙)</li>
+    <li>묶음 세 개에 근거를 대며 이름을 붙였는가</li>
+    <li>번호가 아니라 곡선 모양으로 읽는다는 걸 이해했는가</li>
+    <li>세 트랙(회귀·분류·군집)을 한 문장으로 매듭지었는가</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson13.html"><div class="dir">← 이전</div><div class="tt">13차시 · k의 자의성과 이상치 (교사용)</div></a>
+    <a class="next" href="lesson15.html"><div class="dir">다음 →</div><div class="tt">15차시 · 이미지 데모 + 팀 구성 (교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

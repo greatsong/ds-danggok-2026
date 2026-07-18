@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2차시 · 데이터 만나기 · 표를 보는 눈 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">2차시</span>
+  <h1>데이터 만나기 · <span class="a">표를 보는 눈</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>요약표 읽기 메모</b> — 서울 기온 데이터의 첫 인상을 숫자로 적기</li>
+    </ul>
+  </div>
+
+  <h2>0. 지난 차시</h2>
+  <ul>
+    <li>내 질문 카드 1장 · 앵커 질문 = <b>"서울은 정말 더워지고 있는가"</b></li>
+    <li>오늘 → 그 질문의 데이터를 <b>처음 열어 본다</b></li>
+  </ul>
+
+  <div class="callout tip">
+    <div class="h">📦 잠깐 — 데이터의 두 갈래</div>
+    <ul>
+      <li><b>정형 데이터</b> = 행과 열이 있는 표 (오늘부터 다루는 것)</li>
+      <li><b>비정형 데이터</b> = 이미지·글·소리처럼 표가 아닌 것 · 15차시에서 잠깐 만나요</li>
+    </ul>
+  </div>
+
+  <h2>1. seoul.csv — 어떤 표인가</h2>
+  <div class="callout tip">
+    <div class="h">📦 오늘 쓸 데이터</div>
+    <ul>
+      <li>파일 = <code>seoul.csv</code> · 1907년부터 <b>어제까지</b>의 서울 일별 기온 · 매일 아침 자동 갱신</li>
+      <li>열 = <b>날짜 · 지점 · 평균기온 · 최저기온 · 최고기온</b></li>
+      <li>주소 = <a href="https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv" target="_blank" rel="noopener"><code>https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</code></a> · 다운로드 없이 주소로 바로 불러옴</li>
+    </ul>
+  </div>
+  <ul>
+    <li>큰 표는 <b>통째로 보지 않는다</b> · 두 가지만 눈에 익히기</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>보는 법</th><th>무엇을 보나</th></tr></thead>
+    <tbody>
+      <tr><td><b>앞부분 몇 줄</b></td><td>열 이름·값의 생김새 (표가 어떻게 생겼나)</td></tr>
+      <tr><td><b>요약통계</b></td><td>개수·평균·최소·최대 (표의 첫 인상)</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. 표의 첫 인상 뽑기 (①②③)</h2>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>서울 기온 데이터(seoul.csv)를 스트림릿으로 불러와서 표의 앞부분과 요약통계를 보여 줘.
+관측 개수, 평균, 최고, 최저기온이 한눈에 보이게 해 줘.
+주소는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</pre></div>
+  <ul>
+    <li>여러분 화면이 이런 모습이면 성공 · 글자까지 같을 필요 없음</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre>import streamlit as st
+import pandas as pd
+
+st.title("🌡️ 서울 기온 데이터 첫 인상")
+
+# 표 불러오기 (1907년~어제, 일별 기온)
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+df = pd.read_csv(url)
+
+# 앞부분 보기 — 표가 어떻게 생겼나
+st.subheader("표의 앞부분")
+st.dataframe(df.head())
+
+# 요약통계 — 개수·평균·최소·최대 한눈에
+st.subheader("숫자 요약")
+st.dataframe(df.describe())</pre></div>
+  <ul>
+    <li>결과를 보고 → 세 박자대로 <b>③ 개선</b>으로 한 걸음 더</li>
+  </ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 예시</span><pre>좋아! 여기에 하나 더 더해 줘.
+열마다 빠진 값(관측이 없는 날)이 몇 개인지도 함께 표로 보여 줘.</pre></div>
+
+  <div class="callout check">
+    <div class="h">✔️ 요약통계 읽는 법</div>
+    <ul>
+      <li><b>개수(count)</b> = 값이 몇 개 있나 (빈 칸은 안 셈)</li>
+      <li><b>평균(mean)</b> = 다 더해 개수로 나눈 값 · <b>최소·최대</b> = 가장 낮은/높은 값</li>
+      <li>서울 평균기온 = 약 <b>11.8℃</b> · 최저 <b>-19.2℃</b> · 최고 <b>33.7℃</b> · 폭이 50도가 넘음</li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <div class="h">🔎 오늘의 발견 — 관측 개수가 날짜 수보다 적다</div>
+    <ul>
+      <li>전체 행은 약 <b>42,958줄</b>인데, 평균기온 값은 <b>42,202개</b>뿐</li>
+      <li>차이 <b>756</b> = <b>빠진 값(결측)</b> · 어떤 날은 기온이 기록되지 않았다</li>
+      <li>"왜 어떤 날은 비어 있지?" → 이 물음이 다음 두 차시의 <b>구멍 이야기</b>로 이어진다</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 6개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">행 / 열</td><td>표의 가로 한 줄 / 세로 한 칸 (날짜가 행, 평균기온이 열)</td></tr>
+      <tr><td class="term">결측</td><td>값이 비어 있는 것 — 그날 관측이 없었다는 뜻</td></tr>
+      <tr><td class="term">요약통계</td><td>개수·평균·최소·최대로 표의 첫 인상을 잡는 숫자</td></tr>
+      <tr><td class="term">판다스(pandas)</td><td>파이썬에서 표 데이터를 다루는 대표 도구</td></tr>
+      <tr><td class="term">CSV</td><td>쉼표로 칸을 나눈 표 파일 — 엑셀의 사촌</td></tr>
+      <tr><td class="term">스트림릿(Streamlit)</td><td>파이썬으로 데이터 웹앱을 만드는 도구</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>표의 앞부분과 요약통계로 데이터의 첫 인상을 잡을 수 있다</li>
+    <li>개수·평균·최소·최대가 무엇인지 안다</li>
+    <li>결측(빠진 값)이 무엇인지 안다</li>
+    <li>관측 개수가 날짜 수보다 적다는 낌새를 발견해 메모했다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson01.html"><div class="dir">← 이전</div><div class="tt">1차시 · 데이터 과학이란 · 질문 세우기</div></a>
+    <a class="next" href="lesson03.html"><div class="dir">다음 →</div><div class="tt">3차시 · 시각화 · 그래프에서 구멍 발견</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

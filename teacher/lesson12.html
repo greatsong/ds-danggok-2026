@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12차시 (교사용) · 지도 vs 비지도 · 첫 군집 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson12.html">학생용 12차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">12차시 · 교사용</span>
+  <h1>지도 vs 비지도 · 첫 군집 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson12.html">12차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 도입 멘트 — 정답표가 사라진다</div>
+    <p>“회귀엔 기온이라는 정답이, 분류엔 혼잡 단계라는 정답이 있었어요. 오늘은 <b>정답표가 없어요.</b> 컴퓨터가 <b>스스로</b> 비슷한 역끼리 묶습니다. 이게 <b>비지도학습</b>이에요. 서울 지하철역을 하루 리듬이 닮은 것끼리 묶어 볼 거예요.”</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~8′</td><td>도입</td><td>지도학습(정답 있음) vs 비지도학습(정답 없음) · 오늘은 정답 없이 스스로 묶기</td></tr>
+    <tr><td>8~22′</td><td>데이터 만나기</td><td>subway_time.csv(약 8만 3천 줄) · 최신월 529역 · <b>왜 ‘비율’로 바꾸나</b>(크기 지우고 리듬만)</td></tr>
+    <tr><td>22~43′</td><td>①②③ 실습</td><td>k-means 3묶음 → 실루엣 점수(0.46 안팎) → 묶음별 역 수</td></tr>
+    <tr><td>43~50′</td><td>정리 (이월 가능)</td><td>저녁형·아침형은 수백 역인데 한 묶음엔 역이 딱 하나 → “왜?” 질문 남기기(13차시)</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 오늘 남길 두 질문</div>
+    <p>실습 결과가 나오면 두 질문을 <b>답하지 말고</b> 칠판에 적어 두세요. ① “왜 한 묶음엔 역이 하나뿐이지?” ② “왜 하필 3묶음이야, 4묶음이면 달라질까?” 이 둘이 13차시(★핵심)의 재료입니다.</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>데이터 만나기 — 왜 비율인가 (8~22′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 정규화가 먼저인 이유 (지도서 7장 참고)</div>
+    <p>k-means는 점들 사이 <b>거리</b>로 묶습니다. 승객 수를 그대로 쓰면 큰 역은 어느 시간대든 값이 크므로 <b>거리가 크기에 지배당해</b> 리듬이 아니라 규모로 묶입니다. 그래서 역마다 하루 총승차를 100%로 놓고 <b>시간대별 비율</b>로 바꿔 크기를 지웁니다. 이 판단이 오늘의 핵심이고, 안 바꾸면 어떻게 되는지는 13차시에서 직접 대조합니다. 원본 <code>subway_time.csv</code>는 <b>절대 승객 수</b>(비율 아님)라 전처리에서 반드시 정규화합니다.</p>
+  </div>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 크기를 지워야 리듬이 보인다</div>
+    <p>“큰 역은 아침이든 저녁이든 사람이 많아요. 그대로 재면 <b>비슷한 리듬이 아니라 비슷한 크기</b>로 묶여요. 그래서 역마다 하루 전체를 100%로 놓고, ‘몇 시에 몇 %가 탔나’로 바꿉니다. 크기를 지우면 <b>리듬만</b> 남아요.”</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (빈출)</div>
+    <p><b>31MB 파일 로딩 지연</b>(가장 흔함) → <code>subway_time.csv</code>는 8만 3천 줄이라 <b>캐시가 없으면 위젯을 누를 때마다 다시 내려받아</b> 매번 수 초씩 멈춥니다. 학생용 ②에 <code>@st.cache_data</code>가 들어 있는지 확인 — 한 번만 읽고 재사용합니다(실측 첫 로드 약 3초, 스트림릿 클라우드 첫 로드는 더 김). · <b>승차/하차 혼동</b> → 열 이름에 <b>‘승차’가 든 열만</b> 골라야 합니다. 하차까지 섞으면 리듬이 뭉개짐. · <b>정규화 빠뜨림</b> → 오늘은 비율로 묶는 게 정답. 학생이 비율 변환을 건너뛰면 큰 역끼리 묶여 결과가 이상해집니다(그 대조 자체는 13차시 소재). · <b>KMeans n_init 경고</b> → 구버전은 <code>n_init</code>을 안 주면 경고가 뜹니다. ②에 <code>n_init=10</code>이 있으면 조용히 지나감.</p>
+  </div>
+
+  <h3>①②③ 실습 (22~43′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 실루엣 점수 (지도서 7장 참고)</div>
+    <p><b>실루엣 계수</b>는 각 점이 제 묶음엔 얼마나 붙어 있고(같은 묶음 평균 거리) 이웃 묶음과는 얼마나 떨어져 있는지(가장 가까운 다른 묶음 평균 거리)를 함께 재, 0~1로 요약합니다(1에 가까울수록 촘촘하고 잘 분리됨). 이 수업의 최신월 실측은 k=3에서 <b>0.46 안팎</b> — 점들이 제 묶음에 어느 정도 붙어 있으나 완벽히 분리되진 않은 <b>중간 정도의 응집</b>입니다. 절대값은 매월 갱신으로 변하므로 페이지엔 고정 표기하지 않고 “0.46 근처면 성공”으로 안내합니다.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“정답이 없는데 잘 묶였는지 어떻게 알아요?”</b> → “<b>실루엣 점수</b>라는 참고 지표로 재요. 다만 이건 ‘잘 나뉜 정도’를 <b>참고</b>로 알려 줄 뿐, 정답을 주진 않아요. 무엇이 좋은 묶음인지는 결국 사람이 판단해요(14차시).” · <b>“왜 한 묶음엔 역이 하나예요? 고장이에요?”</b> → (여기서 답하지 말고) “좋은 눈이에요. 그 <b>외톨이 역</b>의 정체를 다음 시간에 밝혀요.”</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>데이터 감식</b> — 승객 수를 그대로 쓰면 크기로 묶인다는 걸 이해하고 “왜 비율로 바꿔야 리듬으로 묶이는지”를 <b>스스로 근거를 대며 설명한</b> 학생의 발화를 채집.</p>
+  </div>
+
+  <h2>✅ 12차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>전원 k-means 3묶음 실행 · 실루엣 점수(0.46 안팎) 확인?</li>
+    <li>지도학습/비지도학습을 정답표 유무로 구분 가능한가</li>
+    <li><code>@st.cache_data</code> 누락으로 로딩이 느린 사례 개별 점검</li>
+    <li>“외톨이 묶음”과 “왜 3묶음인가” 두 질문을 남기고 마쳤는가</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson11.html"><div class="dir">← 이전</div><div class="tt">11차시 · 배포 + 백테스트 (교사용)</div></a>
+    <a class="next" href="lesson13.html"><div class="dir">다음 →</div><div class="tt">13차시 · k의 자의성과 이상치 (교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

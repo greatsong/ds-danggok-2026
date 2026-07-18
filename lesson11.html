@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11차시 · 배포 + 백테스트 · 데이터 과학</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">11차시 · 분류 트랙 ③</span>
+  <h1>배포 + <span class="a">백테스트</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>혼잡 예측 앱(배포 URL)</b> — 역·요일·시간을 고르면 예상 혼잡 단계와 "얼마나 믿을지"를 보여 주는 앱</li>
+    </ul>
+  </div>
+
+  <h2>1. 정직한 시험 — 안 본 데이터로 재기 (백테스트)</h2>
+  <ul>
+    <li>9차시 88.8%는 <b>학습에도 쓴 데이터 근처</b>에서 잰 점수 — 시험 문제를 미리 본 셈일 수 있다</li>
+    <li>진짜 실력은 <b>학습에 안 쓴 데이터</b>로 재야 한다 = <b>백테스트</b></li>
+    <li>이 데이터엔 <b>시각</b>이 있으니, <b>최근 1주일을 '미래'처럼 떼어</b> 두고 나머지로만 학습한다</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">💡 왜 시간으로 자르나</div>
+    <ul>
+      <li>실제로 우리가 궁금한 건 <b>아직 오지 않은 시각</b>의 혼잡도 · 그래서 검증도 "미래"를 흉내 내 <b>뒤쪽 1주</b>로 한다</li>
+      <li>아무 데나 무작위로 떼면, 같은 시각의 다른 장소가 학습에 섞여 점수가 부풀 수 있다</li>
+    </ul>
+  </div>
+
+  <h2>2. 백테스트 + 배포 앱 (①②③)</h2>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>scikit-learn</pre></div>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 '서울 혼잡 예측 앱' 하나(main.py)를 만들어줘.
+스트림릿 클라우드에 올릴 거야. 조건:
+
+- 데이터는 이 주소에서 불러와(서울 23곳의 매시간 혼잡도 기록):
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv
+- 시각에서 요일과 시간을 뽑아 특징으로 써.
+- 가장 최근 1주일을 검증용으로 떼어 두고, 나머지로만 학습시켜줘.
+- 떼어 둔 1주일을 얼마나 잘 맞히는지 정확도로 보여줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
+  버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
+- 한국어 라벨, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
+  <ul>
+    <li>AI가 아래 <b>모습</b>의 코드를 줌 (똑같지 않아도 OK)</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+st.title("🚇 서울 혼잡 예측 — 안 본 1주로 검증")
+
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv"
+df = pd.read_csv(url)
+
+df["시각"] = pd.to_datetime(df["시각"])
+df["요일"] = df["시각"].dt.dayofweek
+df["시간"] = df["시각"].dt.hour
+
+# 가장 최근 1주일을 '미래'처럼 떼어 두기
+cut = df["시각"].max() - pd.Timedelta(days=7)
+train = df[df["시각"] &lt;= cut]
+test  = df[df["시각"] &gt; cut]
+
+# 장소·요일·시간을 특징으로
+X_all = pd.get_dummies(df[["지역명", "요일", "시간"]], columns=["지역명"])
+X_train = X_all.loc[train.index]
+X_test  = X_all.loc[test.index]
+
+# 나머지로만 학습
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, train["혼잡도"])
+
+# 떼어 둔 1주(안 본 데이터)로 정확도 재기
+acc = accuracy_score(test["혼잡도"], model.predict(X_test))
+st.metric("안 본 1주로 잰 정확도", f"{acc:.1%}")</pre></div>
+  <div class="callout warn">
+    <div class="h">⚠️ 두 정확도는 다르다</div>
+    <ul>
+      <li>학습 근처에서 잰 정확도와, 안 본 1주로 잰 정확도는 <b>같지 않다</b></li>
+      <li>남에게 보여 줄 점수는 <b>안 본 데이터로 잰 것</b>이어야 정직하다</li>
+    </ul>
+  </div>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 배포용으로 정리해줘.
+- 역과 요일, 시간대를 고르면 예상 혼잡 단계를 알려주는 화면으로 바꿔줘.
+- 예측 옆에 "이 예측은 안 본 1주 기준 정확도 ○○%짜리예요" 같은
+  '얼마나 믿을지' 문구를 함께 보여줘.
+- '붐빔'은 자주 놓칠 수 있으니 참고하라는 안내도 넣어줘.</pre></div>
+
+  <h2>3. 스트림릿에 배포하기</h2>
+  <ul>
+    <li>7차시 기온 예측기와 같은 방식 · 두 번째라 금방 됩니다</li>
+  </ul>
+  <ol class="steps">
+    <li><span class="st">파일 두 개 준비</span><br><code>main.py</code>와 <code>requirements.txt</code>를 내 GitHub 저장소에 올리기</li>
+    <li><span class="st">배포</span><br><a href="https://share.streamlit.io" target="_blank" rel="noopener"><code>share.streamlit.io</code></a> 접속 → <b>Create app</b> → 저장소·브랜치·<code>main.py</code> 선택 → <b>Deploy</b></li>
+    <li><span class="st">주소 공유</span><br>배포가 끝나면 생긴 주소(URL)를 복사 → <b>갤러리에 게시</b> · 짝의 앱을 눌러 좋아요와 한 줄 피드백("정말 그런가?" 질문 포함)</li>
+  </ol>
+  <div class="callout mini">
+    <div class="h">🖥️ 화면이 다르게 보이면</div>
+    <ul><li>스트림릿·GitHub 화면 구성은 조금씩 바뀔 수 있어요 — 버튼을 못 찾으면 <b>AI에게 물어보기</b>("스트림릿 클라우드에 배포하는 지금 방법 알려줘")</li></ul>
+  </div>
+
+  <h2>🔎 오늘의 발견</h2>
+  <div class="callout check">
+    <div class="h">✔️ 정직한 평가는 안 본 데이터로 한다</div>
+    <ul>
+      <li>학습에 쓴 데이터로 잰 점수는 부풀 수 있다 · 떼어 둔 미래 1주로 재야 진짜 실력</li>
+      <li>배포한 앱엔 정확도만이 아니라 <b>"얼마나 믿을지"</b>를 함께 적어 준다 — 특히 '붐빔'은 자주 놓친다는 것까지</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 — 외울 필요 없어요 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">백테스트</td><td>학습에 안 쓴 데이터(주로 뒤쪽 기간)로 성능을 재는 정직한 시험</td></tr>
+      <tr><td class="term">훈련·검증 분리</td><td>배울 데이터와 시험 볼 데이터를 나누는 일</td></tr>
+      <tr><td class="term">시간축 분할</td><td>시각이 있는 데이터를 뒤쪽 기간으로 떼어 미래를 흉내 내는 분리</td></tr>
+      <tr><td class="term">배포</td><td>내가 만든 앱을 인터넷 주소로 남이 쓸 수 있게 올리는 일</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>백테스트가 왜 최근 1주를 떼는지 설명할 수 있다</li>
+    <li>학습 근처 점수와 안 본 데이터 점수가 다르다는 걸 안다</li>
+    <li>혼잡 예측 앱을 배포하고 주소를 갤러리에 올렸다</li>
+    <li>앱에 "얼마나 믿을지" 문구를 넣었다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson10.html"><div class="dir">← 이전</div><div class="tt">10차시 · 정확도의 함정</div></a>
+    <a class="next" href="lesson12.html"><div class="dir">다음 →</div><div class="tt">12차시 · 정답표 없이 비슷한 것끼리 묶기</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

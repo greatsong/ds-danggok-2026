@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>8차시 · 정리(관측은 회귀, 미래는 물리 모델) · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">8차시</span>
+  <h1>정리 — <span class="a">관측은 회귀, 미래는 물리 모델</span></h1>
+  <div class="under"></div>
+  <div class="quote">
+    <div class="q">"직선을 그을 수 있다고 미래를 아는 건 아니다."</div>
+    <span class="by">회귀 8차시가 남긴 겸손</span>
+  </div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>상관·인과 메모 + 내 질문 확정</b> — 회귀 여정을 한 장으로 정리하고, 더 파 보고 싶은 질문을 정한다</li>
+    </ul>
+  </div>
+
+  <h2>0. 회귀 8차시 한눈에</h2>
+  <table class="daymap">
+    <thead><tr><th>차시</th><th>한 일</th><th>남긴 것</th></tr></thead>
+    <tbody>
+      <tr><td>1~2</td><td>질문 세우기 · 표 읽기</td><td>좋은 질문이 분석을 정한다</td></tr>
+      <tr><td>3~4</td><td>시각화 · 전처리</td><td>데이터에도 역사가 있다(전쟁 결측·반쪽 관측)</td></tr>
+      <tr><td>5~6</td><td>모델링 · 평가와 한계</td><td>세 번의 무너짐(R²·창 길이·외삽)</td></tr>
+      <tr><td>7</td><td>배포</td><td>내 예측기가 주소를 얻었다</td></tr>
+    </tbody>
+  </table>
+
+  <h2>1. 상관 ≠ 인과</h2>
+  <ul>
+    <li>여름엔 <b>기온</b>도 오르고 <b>아이스크림 판매</b>도 오른다. 둘은 함께 움직인다(상관).</li>
+    <li>그렇다고 <b>아이스크림이 기온을 올린다</b>고 말하면 안 된다. 반대도 아니다.</li>
+    <li>둘 다 <b>숨은 공통 원인(더위)</b> 때문에 함께 오른 셈이다.</li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">⚠️ 회귀는 관계를 볼 뿐, 원인을 증명하지 않는다</div>
+    <ul>
+      <li>회귀 직선은 "함께 움직인다"까지만 말한다.</li>
+      <li>"A가 B의 원인"이라는 결론은 회귀만으로 <b>못 내린다</b>.</li>
+      <li>서울 기온 상승도 마찬가지 — 도시화·온실가스 같은 원인은 회귀가 아니라 <b>따로 밝혀야</b> 한다.</li>
+    </ul>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 상관인데 인과로 착각한 문장 찾기</div>
+    <ul>
+      <li>"선풍기 판매가 늘면 물놀이 사고가 는다 → 선풍기를 줄이면 사고가 준다"</li>
+      <li>어디가 틀렸나? 둘의 공통 원인(<b>더운 날씨</b>)이 빠졌다. 이런 문장을 스스로 만들어 보자.</li>
+    </ul>
+  </div>
+
+  <h2>2. 회귀의 자리 — 관측은 회귀, 미래는 물리 모델</h2>
+  <ul>
+    <li>우리 예측기는 <b>과거 관측</b>에서 직선을 뽑아 미래를 <b>연장</b>했을 뿐이다.</li>
+    <li>진짜 미래 기후는 대기·바다·태양을 계산하는 <b>물리 모델</b>(기상청·기후 연구)이 맡는다.</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>도구</th><th>잘하는 것</th><th>못하는 것</th></tr></thead>
+    <tbody>
+      <tr><td><b>회귀(우리 예측기)</b></td><td>과거 추세를 요약, 가까운 미래 가늠</td><td>먼 미래 예측(외삽), 원인 규명</td></tr>
+      <tr><td><b>물리 기후 모델</b></td><td>물리 법칙으로 미래 시나리오</td><td>간단히 만들기(전문 영역)</td></tr>
+    </tbody>
+  </table>
+  <div class="callout tip">
+    <div class="h">💡 그래서 겸손하게</div>
+    <ul>
+      <li>회귀는 <b>과거의 추세를 요약</b>하는 도구다. 미래를 아는 도구가 아니다.</li>
+      <li>10~20년은 통계로 가늠하고, 25년 넘는 먼 미래는 <b>시나리오</b>의 영역이다(6차시 외삽).</li>
+      <li>도구의 자리를 아는 것이 데이터 과학의 성숙이다.</li>
+    </ul>
+  </div>
+
+  <h2>3. 내 질문 확정하기</h2>
+  <ul>
+    <li>1차시에 던진 "서울은 더워지는가"가 8차시를 끌고 왔다.</li>
+    <li>이제 <b>내가 더 파 보고 싶은 질문</b>을 하나 정한다 — 팀 프로젝트의 재료가 된다.</li>
+  </ul>
+  <div class="callout check">
+    <div class="h">✔️ 좋은 질문의 조건 (1차시 복습)</div>
+    <ul>
+      <li><b>측정 가능</b> — 숫자나 범주로 답이 나오는가</li>
+      <li><b>데이터로 답 가능</b> — 구할 수 있는 데이터가 있는가</li>
+      <li><b>범위 명확</b> — 언제·어디·무엇인지 분명한가</li>
+    </ul>
+  </div>
+  <div class="callout tip">
+    <div class="h">📝 오늘의 정리 메모</div>
+    <ul>
+      <li>상관·인과를 헷갈린 문장 <b>1개</b>를 만들고, 어디가 틀렸는지 한 줄로.</li>
+      <li>더 파 보고 싶은 <b>내 질문 1개</b>를 세 조건에 맞춰 적기.</li>
+    </ul>
+  </div>
+
+  <h2>🎒 오늘의 체크 & 링크</h2>
+  <ul class="checklist">
+    <li>상관(함께 움직임)과 인과(원인)는 다르다</li>
+    <li>회귀는 관계를 볼 뿐 원인을 증명하지 않는다</li>
+    <li>관측 추세는 회귀, 진짜 미래 기후는 물리 모델의 몫이다</li>
+    <li>상관을 인과로 착각한 문장을 만들고 틀린 곳을 짚었다</li>
+    <li>세 조건에 맞는 내 질문 1개를 확정했다</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 4개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">상관</td><td>두 값이 함께 오르내리는 관계 — 원인 여부는 알 수 없음</td></tr>
+      <tr><td class="term">인과</td><td>하나가 다른 하나의 원인이 되는 관계 — 따로 밝혀야 함</td></tr>
+      <tr><td class="term">공통 원인</td><td>두 값을 동시에 움직이는 숨은 원인(예: 더위)</td></tr>
+      <tr><td class="term">물리 모델</td><td>물리 법칙으로 미래를 계산하는 방식 — 기후 예측의 정식 도구</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <div class="pager">
+    <a class="prev" href="lesson07.html"><div class="dir">← 이전</div><div class="tt">7차시 · 배포(내 예측기를 인터넷에)</div></a>
+    <a class="next" href="lesson09.html"><div class="dir">다음 →</div><div class="tt">9차시 · 회귀 vs 분류(첫 분류 모델)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9차시 (교사용) · 회귀 vs 분류 · 첫 분류 모델 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson09.html">학생용 9차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">9차시 · 교사용</span>
+  <h1>회귀 vs 분류 · 첫 분류 모델 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson09.html">9차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 도입 멘트 — 숫자에서 단계로</div>
+    <p>“지난 8차시 동안 우리는 기온이라는 <b>숫자</b>를 맞혔어요. 오늘부터는 질문이 바뀝니다. ‘내일 강남역은 <b>붐빌까</b>?’ 이건 숫자가 아니라 <b>여유·보통·약간 붐빔·붐빔</b> 네 단계 중 하나를 맞히는 문제예요. 답이 숫자 하나면 회귀, 몇 개의 칸 중 하나면 분류입니다.”</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~8′</td><td>도입</td><td>회귀(숫자)와 분류(단계) 가르기 · “답이 숫자냐 칸이냐” 한 마디 · 합격/불합격도 분류</td></tr>
+    <tr><td>8~22′</td><td>데이터 만나기</td><td>seoul_congestion_log.csv 소개(23곳·매시간·4단계) · 단계별 개수 · <b>‘약간 붐빔’ 띄어쓰기</b> 강조</td></tr>
+    <tr><td>22~43′</td><td>①②③ 실습</td><td>랜덤 포레스트 첫 분류기 → 정확도(약 88.8%) 카드 · <code>model.fit()</code>은 회귀와 같은 한 줄</td></tr>
+    <tr><td>43~50′</td><td>정리 (이월 가능)</td><td>“88.8%면 정말 잘한 걸까?” 질문 남기기 → 10차시 복선</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 오늘의 발견을 만드는 한 문장</div>
+    <p>실습이 끝나 정확도 88.8%가 뜨고 다들 만족하는 <b>바로 그 순간</b>에 던지세요. “좋아요. 그런데 <b>‘여유’가 전체의 몇 퍼센트</b>인지 우리 아직 안 봤죠?” 이 한 문장이 10차시 전체를 끌고 갑니다. 답은 오늘 하지 말고 질문만 남깁니다.</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>도입 (0~8′)</h3>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“회귀랑 분류랑 뭐가 그렇게 달라요? 둘 다 예측이잖아요.”</b> → “맞아요, 둘 다 예측이에요. 딱 하나만 보면 됩니다. <b>답이 숫자 하나로 나오면 회귀</b>(내일 27.3℃), <b>정해진 칸 중 하나로 나오면 분류</b>(내일 붐빔). ‘역 승객 수 예측’은 회귀, ‘혼잡 단계 예측’은 분류예요.”</p>
+  </div>
+
+  <h3>데이터 만나기 (8~22′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 분류와 지도학습 (지도서 6장 참고)</div>
+    <p>분류는 연속값이 아니라 <b>범주</b>를 예측하는 지도학습입니다(회귀도 지도학습이었음 — 바뀐 건 정답이 숫자냐 단계냐뿐). 오늘 쓰는 정답 열은 <code>혼잡도</code>, 특징은 장소·요일·시간입니다. 클래스 분포가 <b>여유에 심하게 쏠려 있다</b>(여유가 4분의 3)는 사실을 교사는 미리 알고 있어야 합니다. 이 불균형이 다음 시간 ‘정확도의 함정’의 원인이라 오늘은 개수만 확인하고 지나갑니다.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (빈출)</div>
+    <p><b>‘약간 붐빔’ 띄어쓰기</b>(가장 조용한 함정) → 단계 이름은 <b>가운데 공백이 있는 ‘약간 붐빔’</b>입니다. 학생이 <code>약간붐빔</code>(붙여쓰기)으로 필터하거나 라벨 목록에 넣으면 <b>에러가 안 뜨고</b> 그 단계만 통째로 빠진 채 결과가 나옵니다(실측: 그 행이 조용히 0으로 사라짐). “왜 세 단계밖에 안 보이지?” 싶으면 띄어쓰기부터 확인. · <b>ModuleNotFoundError</b> → <code>requirements.txt</code>에 <code>scikit-learn</code>(설치명, import는 <code>sklearn</code>). · <b>KeyError: '시각'/'지역명'</b> → 열 이름이 한국어라 영어(time·region)를 가정한 코드면 프롬프트의 열 안내를 다시 붙여넣기. · <b>정확도 수치가 교재와 다름</b> → 88.8%는 준비 시점 값, 데이터가 매시간 자라 <b>당일엔 90% 안팎</b>으로 다를 수 있음(정상). 서사(“이게 정말 대단한가”)는 그대로 유효.</p>
+  </div>
+
+  <h3>①②③ 실습 (22~43′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 회귀 때와 똑같은 한 줄</div>
+    <p>“코드에서 <code>model.fit()</code> 이 한 줄, 어디서 봤죠? 맞아요, 5차시 기온 예측기예요. <b>학습시키는 한 줄은 회귀나 분류나 똑같아요.</b> 바뀐 건 ‘숫자’ 대신 ‘단계’를 맞힌다는 것뿐. 겁먹을 새 개념이 아니에요.”</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“랜덤 포레스트가 뭐예요?”</b> → “<b>여러 판단 나무의 다수결</b>이에요. 나무 한 그루가 ‘요일이 토요일이고 저녁이면 붐빔’ 식으로 갈래를 치고, 그런 나무 여럿이 투표해서 단계를 정해요. 원리는 뒤에 더 봐도 되고, 지금은 ‘돌아간다’는 체험이 먼저예요.” · <b>“정확도 88.8%면 잘한 거 아니에요?”</b> → (여기서 답하지 말고) “좋은 질문이에요. 그 88.8%의 정체를 <b>다음 시간에</b> 셋으로 벗겨 봅니다.”</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>결과 해석</b> — 정확도 88.8%가 떴을 때 그냥 만족하지 않고 “여유가 전체의 몇 %인가”처럼 <b>기준선을 스스로 되묻는</b> 학생의 반응을 채집(다음 차시 심화 연결).</p>
+  </div>
+
+  <h2>✅ 9차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>전원 첫 분류기 실행 · 정확도 카드 확인? (막힌 학생 → 짝 페어링)</li>
+    <li>‘약간 붐빔’ 띄어쓰기로 막힌 사례 개별 점검</li>
+    <li>회귀=숫자 / 분류=단계 구분을 전원 말로 설명 가능?</li>
+    <li>“88.8%가 정말 대단한가” 의심을 남기고 마쳤는가 (10차시 복선)</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson08.html"><div class="dir">← 이전</div><div class="tt">8차시 · 회귀 정리 (교사용)</div></a>
+    <a class="next" href="lesson10.html"><div class="dir">다음 →</div><div class="tt">10차시 · 정확도의 함정 (교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

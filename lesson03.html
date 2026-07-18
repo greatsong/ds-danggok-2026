@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3차시 · 시각화 · 그래프에서 구멍 발견 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">3차시</span>
+  <h1>시각화 · <span class="a">그래프에서 구멍 발견</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>연평균 추세 그래프</b> — 1907년부터 지금까지 서울 기온의 흐름</li>
+      <li><b>이상 지점 메모</b> — 그래프에서 이상해 보이는 곳 2군데 기록</li>
+    </ul>
+  </div>
+
+  <h2>0. 지난 차시</h2>
+  <ul>
+    <li>표의 첫 인상 · 관측 개수가 날짜 수보다 적다는 낌새(결측 약 756개)</li>
+    <li>오늘 → 숫자를 <b>그림</b>으로 바꿔 흐름을 본다</li>
+  </ul>
+
+  <h2>1. 일별을 연평균으로</h2>
+  <ul>
+    <li>매일 값은 <b>4만 줄</b> · 그대로는 흐름이 안 보임</li>
+    <li>같은 해끼리 묶어 <b>연평균</b>으로 요약 → 100년 넘는 추세가 한 줄 그래프로</li>
+  </ul>
+
+  <h2>2. 연평균 추세 그래프 (①②③)</h2>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>서울 일별 기온을 연평균으로 바꿔서 1907년부터 지금까지의 추세를 선 그래프로 그려 줘.
+가로축은 연도, 세로축은 연평균기온으로.
+데이터는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</pre></div>
+  <ul>
+    <li>여러분 화면이 이런 모습이면 성공 · 글자까지 같을 필요 없음</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre>import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+st.title("📈 서울 연평균기온 추세")
+
+# 일별 기온 불러오기
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+df = pd.read_csv(url)
+
+# 날짜에서 연도를 뽑아 같은 해끼리 평균 내기
+df["연도"] = pd.to_datetime(df["날짜"]).dt.year
+yearly = df.groupby("연도")["평균기온"].mean().reset_index()
+
+# 연도(가로) · 연평균기온(세로) 선 그래프
+fig = px.line(yearly, x="연도", y="평균기온", title="서울 연평균기온 (1907~현재)")
+st.plotly_chart(fig, use_container_width=True)</pre></div>
+  <ul>
+    <li>그래프가 뜨면 → 세 박자대로 <b>③ 개선</b>으로 이상한 곳을 드러내기</li>
+  </ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 예시</span><pre>좋아! 그래프에서 비어 있는 연도와 유난히 낮은 연도가 눈에 띄게
+색이나 표시를 넣어 줘. 어디가 이상한지 한눈에 보이게.</pre></div>
+
+  <h2>3. 구멍 찾기 — 모둠 관찰</h2>
+  <div class="callout warn">
+    <div class="h">🔎 오늘의 발견 (★) — 그래프에 구멍이 있다</div>
+    <ul>
+      <li>전체 흐름은 <b>우상향</b>(더워지는 쪽) · 그런데 두 곳이 이상하다</li>
+      <li><b>① 1950년대 초 = 선이 끊긴다</b> · 1951·1952년은 연평균 값이 <b>아예 없다</b></li>
+      <li><b>② 1953년 = 한 점이 뚝 떨어진다</b> · 다른 해는 11~12℃인데 <b>0.6℃</b></li>
+      <li>"데이터가 왜 이렇게 생겼지?" → 이 물음이 <b>다음 차시</b>의 정체 밝히기로 이어진다</li>
+    </ul>
+  </div>
+  <div class="callout check">
+    <div class="h">✔️ 모둠 토의 · 이상 지점 2곳 기록</div>
+    <ul>
+      <li>그래프에서 <b>이상해 보이는 곳 2군데</b>를 찾아 연도와 함께 적는다</li>
+      <li>각각 <b>왜 그럴지</b> 추측 한 줄씩 (정답 아니어도 됨 · 추측이 재료)</li>
+      <li>이 메모가 다음 차시 <b>전처리</b>의 출발점</li>
+    </ul>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">💡 구멍이 안 보이면</div>
+    <ul>
+      <li>1940~1960년 구간만 <b>확대</b>해 보면 끊긴 선과 떨어진 점이 또렷하다</li>
+      <li>정상과 이상을 나누는 눈 = "다른 값과 <b>유난히 다른가</b>"를 보는 것</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 5개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">연평균</td><td>같은 해의 값을 다 모아 평균 낸 값 — 일별을 연 단위로 요약</td></tr>
+      <tr><td class="term">추세</td><td>시간에 따라 값이 오르거나 내리는 큰 흐름</td></tr>
+      <tr><td class="term">선 그래프</td><td>점을 이어 흐름을 보여 주는 그래프</td></tr>
+      <tr><td class="term">plotly(플롯리)</td><td>마우스를 올리면 값이 뜨는 그래프를 그리는 도구</td></tr>
+      <tr><td class="term">이상치(예고)</td><td>다른 값과 유난히 동떨어진 값 — 정체는 다음 차시에</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>일별 데이터를 연평균으로 요약해 추세를 볼 수 있다</li>
+    <li>그래프에서 정상과 이상을 구분할 수 있다</li>
+    <li>1950년대 초의 끊긴 구간과 1953년의 떨어진 점을 찾았다</li>
+    <li>이상해 보이는 지점 2곳을 이유 추측과 함께 기록했다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson02.html"><div class="dir">← 이전</div><div class="tt">2차시 · 데이터 만나기 · 표를 보는 눈</div></a>
+    <a class="next" href="lesson04.html"><div class="dir">다음 →</div><div class="tt">4차시 · 전처리 · 데이터에도 역사가 있다</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

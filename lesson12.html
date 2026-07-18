@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12차시 · 지도 vs 비지도 · 첫 군집 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">12차시 · 군집 트랙</span>
+  <h1>정답표 없이 <span class="a">비슷한 것끼리 묶기</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>지하철역 군집 초안</b> — 서울 지하철역을 시간대 승차 리듬이 비슷한 묶음으로 나누는 앱</li>
+    </ul>
+  </div>
+
+  <h2>0. 회귀·분류엔 정답이 있었다</h2>
+  <ul>
+    <li>회귀: 연도 → 기온이라는 <b>정답</b>이 있었다. 분류: 시간·요일 → 혼잡 단계라는 <b>정답</b>이 있었다.</li>
+    <li>오늘은 정답표가 없다. 컴퓨터가 <b>스스로</b> 비슷한 것끼리 묶는다. 이것이 <b>비지도학습</b>이다.</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>종류</th><th>정답표</th><th>하는 일</th><th>예</th></tr></thead>
+    <tbody>
+      <tr><td><b>지도학습</b></td><td>있음</td><td>정답을 보고 규칙을 배움</td><td>기온 회귀 · 혼잡 분류</td></tr>
+      <tr><td><b>비지도학습</b></td><td>없음</td><td>스스로 비슷한 것끼리 묶음</td><td>오늘: 역 군집</td></tr>
+    </tbody>
+  </table>
+
+  <h2>1. 오늘의 데이터 — 지하철역의 하루 리듬</h2>
+  <ul>
+    <li>파일: <code>subway_time.csv</code> (2015년부터 매월, 역마다 24개 시간대 승하차 인원 · 약 8만 3천 줄)</li>
+    <li>역마다 하루 리듬이 다르다. 아침에 사람이 몰려 <b>타는</b> 역이 있고, 저녁에 몰려 타는 역이 있다.</li>
+    <li>승차 = 지하철을 <b>타는</b> 것. 주거지는 아침에 집을 나서며 타고, 업무·번화가는 저녁에 집으로 가며 탄다.</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">💡 왜 '비율'로 바꿀까</div>
+    <ul>
+      <li>큰 역은 어느 시간대든 사람이 많다. 승객 수 그대로 재면 <b>리듬이 아니라 크기</b>로 묶인다.</li>
+      <li>그래서 역마다 하루 총승차를 100%로 놓고 <b>시간대별 비율(정규화)</b>로 바꾼다. 이래야 크기를 지우고 리듬만 남는다.</li>
+      <li>비율로 바꾸는 이 판단이 오늘의 핵심이다. 다음 시간에 안 바꾸면 어떻게 되는지 직접 본다.</li>
+    </ul>
+  </div>
+
+  <h2>2. 첫 군집 만들기 (①②③)</h2>
+  <ul>
+    <li>도구 = <b>k-means</b>(케이민즈): 미리 정한 묶음 수 <b>k</b>개로 비슷한 것끼리 나누는 방법.</li>
+    <li>잘 나뉜 정도는 <b>실루엣 점수</b>로 잰다. 1에 가까울수록 안이 촘촘하고 묶음끼리 멀다.</li>
+    <li>requirements.txt에는 <code>scikit-learn</code>·<code>plotly</code>만 (스트림릿·판다스·넘파이는 기본 설치 · 버전 없이).</li>
+  </ul>
+
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 '지하철역 군집' 앱 하나(main.py)를 만들어줘. 스트림릿 클라우드에 올릴 거야. 조건:
+
+- 데이터는 이 주소에서 불러와. 역마다 24개 시간대의 승차·하차
+  인원이 매월 들어 있어. 31MB라 한 번 읽고 캐시에 저장해:
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/subway_time.csv
+- 가장 최근 달만 남겨. 같은 역이 여러 호선에 나오면 승차 인원을 합쳐 줘.
+- 시간대별 '승차 인원'만 골라서, 역마다 하루 총승차를 100%로 놓고
+  시간대별 비율로 바꿔 줘(크기 말고 리듬으로 묶기 위해).
+- k-means로 비슷한 리듬의 역끼리 3묶음으로 나눠 줘.
+- 얼마나 잘 나뉘었는지 실루엣 점수를 카드로 크게 보여주고,
+  이 점수가 뭔지 한 줄로 설명해 줘.
+- 묶음마다 역이 몇 개씩 들어갔는지도 보여 줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
+  버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
+- 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
+
+  <ul><li>AI가 아래 <b>모습</b>의 코드를 준다 (똑같지 않아도 된다).</li></ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre>import streamlit as st
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+st.title("🚇 지하철역 군집 나누기")
+
+# 31MB 파일이라 한 번만 읽고 캐시에 저장
+@st.cache_data
+def load():
+    url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/subway_time.csv"
+    return pd.read_csv(url)
+
+df = load()
+
+# 전처리 — 가장 최근 달만, 역별로 승차 합치고, 시간대 '비율'로
+latest = df[df["사용월"] == df["사용월"].max()]
+ride_cols = [c for c in df.columns if "승차" in c]
+station = latest.groupby("지하철역")[ride_cols].sum()
+ratio = station.div(station.sum(axis=1), axis=0).fillna(0)
+
+# k-means로 3묶음
+model = KMeans(n_clusters=3, random_state=42, n_init=10)
+labels = model.fit_predict(ratio)
+
+# 얼마나 잘 나뉘었나 — 실루엣 점수(1에 가까울수록 좋음)
+score = silhouette_score(ratio, labels)
+st.metric("실루엣 점수 (1에 가까울수록 잘 나뉨)", f"{score:.3f}")
+
+# 묶음별 역 수
+st.subheader("묶음별 역 수")
+st.write(pd.Series(labels, index=ratio.index).value_counts().sort_index())</pre></div>
+
+  <div class="callout check">
+    <div class="h">✔️ 실행하면 이렇게 나온다 (이 달 기준)</div>
+    <ul>
+      <li>최신월 <b>529개 역</b>, 실루엣 점수 <b>0.46 안팎</b></li>
+      <li>묶음 크기: 한 묶음 <b>172역</b>(저녁에 몰려 타는 역), 한 묶음 <b>356역</b>(아침에 몰려 타는 역), 그리고 <b>역이 딱 1개</b>뿐인 이상한 묶음</li>
+      <li>데이터가 매월 갱신돼 숫자는 조금씩 달라진다. 점수가 0.46 근처면 성공.</li>
+    </ul>
+  </div>
+
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 예시</span><pre>좋아! 이어서 고쳐줘.
+- 묶음마다 대표 역 몇 개(그 묶음에서 승객이 많은 역)를 함께 보여줘.
+- 아침(7~9시)에 몰려 타는 묶음인지, 저녁(18~20시)에 몰려 타는
+  묶음인지 한눈에 알게, 묶음별 아침·저녁 비율도 표로 보여줘.</pre></div>
+
+  <h2>3. 눈에 걸리는 것 하나</h2>
+  <ul>
+    <li>정답표가 없는데도 컴퓨터가 역을 묶었다. 신기한 순간이다.</li>
+    <li>그런데 <b>역이 하나뿐인 묶음</b>이 있다. 왜 한 묶음에 역이 딱 하나일까?</li>
+    <li>그리고 이런 질문도 남는다. <b>왜 하필 3묶음일까? 4묶음이면 달라질까?</b></li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">⚠️ 오늘은 답하지 않는다 (다음 시간 재료)</div>
+    <ul>
+      <li>이 두 질문, 즉 "외톨이 묶음"과 "묶음 수 k의 정답"은 <b>13차시</b>에서 자세히 다룬다.</li>
+      <li>지금은 "군집엔 정답이 없다"는 낌새만 챙긴다.</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 6개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">비지도학습</td><td>정답표 없이 데이터를 스스로 묶는 학습</td></tr>
+      <tr><td class="term">군집(클러스터)</td><td>비슷한 것끼리 모은 묶음</td></tr>
+      <tr><td class="term">k-means</td><td>미리 정한 k개 묶음으로 나누는 대표적인 군집 방법</td></tr>
+      <tr><td class="term">실루엣 점수</td><td>얼마나 잘 나뉘었는지 재는 0~1 점수 (1에 가까울수록 좋음)</td></tr>
+      <tr><td class="term">정규화(비율)</td><td>역마다 총승차를 100%로 놓고 시간대별 비율로 바꾸기 (크기 지우고 리듬 남기기)</td></tr>
+      <tr><td class="term">시간대 리듬</td><td>하루 중 언제 승객이 몰리는지의 모양</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크 & 링크</h2>
+  <ul class="checklist">
+    <li>지도학습(정답 있음)과 비지도학습(정답 없음)을 구분할 수 있다</li>
+    <li>승객 수 그대로가 아니라 <b>비율</b>로 바꿔야 리듬으로 묶인다는 걸 안다</li>
+    <li>k-means로 역을 3묶음으로 나누고 실루엣 점수를 봤다</li>
+    <li>"외톨이 묶음"과 "왜 3묶음인가"라는 질문을 남겨 뒀다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson11.html"><div class="dir">← 이전</div><div class="tt">11차시 · 분류 배포와 백테스트</div></a>
+    <a class="next" href="lesson13.html"><div class="dir">다음 →</div><div class="tt">13차시 · k의 자의성과 이상치</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

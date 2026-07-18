@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1차시 · 데이터 과학이란 · 질문 세우기 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">1차시</span>
+  <h1>데이터 과학이란 · <span class="a">질문 세우기</span></h1>
+  <div class="under"></div>
+  <div class="quote">
+    <div class="q">“좋은 질문이 좋은 분석을 만든다.”</div>
+    <span class="by">이 수업의 첫 원칙</span>
+  </div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>내 질문 카드 1장</b> — 데이터로 답할 수 있는 내 질문을 한 문장으로</li>
+    </ul>
+  </div>
+
+  <h2>0. 이 수업의 지도</h2>
+  <ul>
+    <li>한 학기 동안 <b>서울</b> 데이터 하나를 끝까지 다룬다 · 데이터를 바꿔 가며 얕게 훑지 않음</li>
+    <li>배우는 것은 코드가 아니라 <b>질문 세우기 · 데이터 감식 · 결과 해석 · 한계 인식</b></li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>트랙</th><th>차시</th><th>무엇을 하나</th></tr></thead>
+    <tbody>
+      <tr><td><b>회귀</b></td><td>1~8</td><td>서울 기온으로 "얼마나 더워지나" 숫자 예측</td></tr>
+      <tr><td><b>분류</b></td><td>9~11</td><td>강남역 "붐빌까 여유일까" 단계 맞히기</td></tr>
+      <tr><td><b>군집</b></td><td>12~14</td><td>지하철역을 성격이 비슷한 동네끼리 묶기</td></tr>
+      <tr><td><b>확장</b></td><td>15</td><td>이미지도 숫자 · 팀 프로젝트 주제 정하기</td></tr>
+    </tbody>
+  </table>
+  <div class="callout tip">
+    <div class="h">💡 평가는 코드가 아니라 판단</div>
+    <ul>
+      <li>코드는 AI가 짠다 · 여러분은 <b>주문하고, 읽고, 의심</b>한다</li>
+      <li>채점은 "왜 그 질문을 했나 · 데이터의 구멍을 알아챘나 · 결과를 어디까지 믿나"</li>
+    </ul>
+  </div>
+
+  <h2>1. 데이터 과학이란</h2>
+  <ul>
+    <li>한 줄 정의 = <b>데이터로 질문에 답하는 일</b></li>
+    <li>순환 = <b>데이터 → 질문 → 답 → 다시 질문</b></li>
+    <li>이번 학기를 끌고 갈 질문 하나 → <b>"서울은 정말 더워지고 있는가"</b></li>
+    <li>이 한 문장이 8차시(수집·시각화·전처리·모델·평가·배포·정리)를 <b>전부 정한다</b></li>
+  </ul>
+
+  <h2>2. 바이브 코딩 리듬 — ①②③</h2>
+  <ul>
+    <li>이 수업에서 코드는 <b>AI가 쓴다</b> · 여러분은 <b>자연어로 주문</b>한다</li>
+    <li>모든 실습은 세 박자 → <b>① 샘플 프롬프트 → ② AI가 준 코드 → ③ 프롬프트 개선</b></li>
+    <li>오늘은 리듬만 눈에 익힌다 · ②는 선생님 화면으로 함께 보고, ③는 다음 차시부터 직접</li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>서울 기온 데이터(seoul.csv)를 불러와서 표의 앞부분 다섯 줄만 보여 줘.
+이 주소에 있어: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</pre></div>
+  <ul>
+    <li>이렇게 <b>말로 주문</b>하면, AI가 코드로 답한다 · 여러분 화면이 이런 모습이면 성공(글자까지 같지 않아도 됨)</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre>import pandas as pd
+
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+df = pd.read_csv(url)   # 표를 불러오기
+df.head()               # 앞부분 다섯 줄 보기</pre></div>
+  <ul>
+    <li>표가 뜨면 → "여기에 요약도 더해 줘" 하고 <b>③ 개선</b>으로 이어 간다(다음 차시)</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">💡 프롬프트엔 코드 대신 정확한 낱말</div>
+    <ul>
+      <li>프롬프트에 <code>read_csv</code> 같은 코드 문법을 넣지 않는다 · 넣는 순간 이미 코드 아는 사람의 주문</li>
+      <li>대신 <b>파일 이름·주소·열 이름·도구 이름</b>은 정확히 적는다 (예: seoul.csv, 평균기온)</li>
+    </ul>
+  </div>
+
+  <h2>3. 좋은 질문 세우기</h2>
+  <ul>
+    <li>좋은 질문의 조건 세 가지</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>조건</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><b>측정 가능</b></td><td>숫자나 값으로 잴 수 있다</td></tr>
+      <tr><td><b>데이터로 답 가능</b></td><td>가진 데이터 안에서 답이 나온다</td></tr>
+      <tr><td><b>범위 명확</b></td><td>언제·어디·무엇인지 딱 정해졌다</td></tr>
+    </tbody>
+  </table>
+  <table class="daymap">
+    <thead><tr><th>나쁜 질문</th><th>고쳐 쓰면</th></tr></thead>
+    <tbody>
+      <tr><td>서울은 왜 아름다운가</td><td>답 불가(취향) → <b>서울 여름 평균기온은 30년간 몇 도 올랐나</b></td></tr>
+      <tr><td>날씨가 어떤가</td><td>범위 없음 → <b>서울 8월 평균기온은 10년 전보다 높은가</b></td></tr>
+    </tbody>
+  </table>
+  <div class="callout check">
+    <div class="h">✔️ 내 질문 카드 1장</div>
+    <ul>
+      <li>세 조건을 만족하는 <b>내 질문</b>을 한 문장으로 적는다</li>
+      <li>서울 기온이 아니어도 좋음 · 대신 "데이터로 답할 수 있는가"만 스스로 점검</li>
+      <li>이 카드가 학기 끝 <b>팀 프로젝트</b>의 첫 재료</li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <div class="h">🔎 오늘의 발견</div>
+    <ul>
+      <li>분석의 성패는 코드보다 <b>질문</b>에서 갈린다</li>
+      <li>"서울은 더워지고 있는가" 한 문장이 앞으로 8차시를 끌고 간다</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 5개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">데이터 과학</td><td>데이터로 질문에 답하는 일</td></tr>
+      <tr><td class="term">바이브 코딩</td><td>코드는 AI가 짜고, 사람은 자연어로 주문하고 결과를 판단하는 방식</td></tr>
+      <tr><td class="term">①②③ 리듬</td><td>샘플 프롬프트 → AI가 준 코드 → 프롬프트 개선의 세 박자</td></tr>
+      <tr><td class="term">프롬프트</td><td>AI에게 시키는 자연어 주문 문장</td></tr>
+      <tr><td class="term">seoul.csv</td><td>1907년부터 어제까지 서울의 일별 기온이 담긴 표 파일</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>데이터 과학을 "데이터로 질문에 답하는 일"이라고 내 말로 설명할 수 있다</li>
+    <li>답할 수 있는 질문과 없는 질문을 구분할 수 있다</li>
+    <li>①②③ 리듬이 무엇인지 안다</li>
+    <li>데이터로 답할 수 있는 내 질문 카드 1장을 적었다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="index.html"><div class="dir">← 이전</div><div class="tt">목차</div></a>
+    <a class="next" href="lesson02.html"><div class="dir">다음 →</div><div class="tt">2차시 · 데이터 만나기 · 표를 보는 눈</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

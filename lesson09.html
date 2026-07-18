@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9차시 · 회귀 vs 분류 · 첫 분류 모델 · 데이터 과학</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">9차시 · 분류 트랙 ①</span>
+  <h1>회귀 vs 분류 · <span class="a">첫 분류 모델</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>혼잡도 분류기 초안</b> — 장소·요일·시간을 보고 강남역이 붐빌지 4단계로 맞히는 첫 모델</li>
+    </ul>
+  </div>
+
+  <h2>0. 숫자를 맞히던 회귀에서, 단계를 맞히는 분류로</h2>
+  <ul>
+    <li>지난 8차시 회귀 = "2050년 서울은 <b>몇 도</b>일까" — <b>숫자</b>를 맞혔다</li>
+    <li>오늘부터 분류 = "내일 강남역은 <b>붐빌까</b>" — <b>단계</b>(여유·보통·약간 붐빔·붐빔)를 맞힌다</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th></th><th>회귀</th><th>분류</th></tr></thead>
+    <tbody>
+      <tr><td><b>맞히는 것</b></td><td>연속된 숫자</td><td>정해진 몇 개의 단계</td></tr>
+      <tr><td><b>예시</b></td><td>내일 기온 27.3℃</td><td>내일 혼잡: 붐빔</td></tr>
+      <tr><td><b>정답 이름</b></td><td>값(기온)</td><td>레이블(혼잡 단계)</td></tr>
+    </tbody>
+  </table>
+  <div class="callout tip">
+    <div class="h">💡 어느 쪽인지 가르는 한 마디</div>
+    <ul>
+      <li>답이 <b>숫자 하나</b>로 나오면 회귀, <b>몇 개의 칸 중 하나</b>로 나오면 분류</li>
+      <li>"역 승객 수 예측"은 회귀, "혼잡 단계 예측"은 분류 · "합격/불합격"도 분류</li>
+    </ul>
+  </div>
+
+  <h2>1. 데이터 만나기 — 서울 혼잡도 기록</h2>
+  <ul>
+    <li>파일 = <code>seoul_congestion_log.csv</code> · 서울 <b>23곳</b>(강남역·홍대·성수 등)의 혼잡도를 <b>매시간</b> 기록</li>
+    <li>혼잡도는 네 단계 = <b>여유 · 보통 · 약간 붐빔 · 붐빔</b> (단계 이름 '약간 붐빔'은 가운데 띄어쓰기 있음)</li>
+    <li>modudata 저장소에서 <b>매시간 자동 갱신</b> — 다운로드 없이 주소로 바로 불러오기</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>단계</th><th>개수(수업 준비 시점)</th></tr></thead>
+    <tbody>
+      <tr><td><b>여유</b></td><td>2,706</td></tr>
+      <tr><td><b>보통</b></td><td>498</td></tr>
+      <tr><td><b>약간 붐빔</b></td><td>294</td></tr>
+      <tr><td><b>붐빔</b></td><td>110</td></tr>
+      <tr><td><b>합계</b></td><td>3,608</td></tr>
+    </tbody>
+  </table>
+  <div class="callout mini">
+    <div class="h">🔄 수치는 자란다</div>
+    <ul><li>혼잡도는 매시간 쌓이므로 개수·정확도는 <b>수업 당일 다시 확인</b>. 이 교재의 숫자는 준비 시점(2026-07-17) 실측값</li></ul>
+  </div>
+
+  <h2>2. 첫 분류 모델 돌려 보기 (①②③)</h2>
+  <ul>
+    <li>도구 = scikit-learn의 <b>랜덤 포레스트</b>(여러 판단 나무의 다수결로 단계를 고름)</li>
+    <li>requirements.txt엔 <code>scikit-learn</code>만 — 스트림릿·판다스·넘파이는 기본 설치, 버전 없이</li>
+  </ul>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>scikit-learn</pre></div>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 '서울 혼잡도 분류기' 앱 하나(main.py)를 만들어줘. 조건:
+
+- 데이터는 이 주소에서 불러와(서울 23곳의 매시간 혼잡도 기록이야.
+  열은 시각, 코드, 지역명, 혼잡도, 인구min, 인구max, 위도, 경도):
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv
+- 시각에서 요일과 시간을 뽑아 특징으로 써.
+- 장소(지역명)·요일·시간을 보고 혼잡 단계(여유·보통·약간 붐빔·붐빔)를
+  맞히는 랜덤 포레스트 분류기를 만들어줘.
+- 데이터를 학습용과 시험용으로 나눈 뒤, 시험용에서 정확도를 재서
+  큰 숫자 카드로 보여줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
+  버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
+- 한국어 라벨, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
+  <ul>
+    <li>AI가 아래 <b>모습</b>의 코드를 줌 (똑같지 않아도 OK)</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+st.title("🚇 강남역, 내일 붐빌까?")
+
+# 데이터 불러오기 — 서울 23곳, 매시간 혼잡도
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv"
+df = pd.read_csv(url)
+
+# 시각에서 요일과 시간을 뽑기
+df["시각"] = pd.to_datetime(df["시각"])
+df["요일"] = df["시각"].dt.dayofweek   # 월=0 … 일=6
+df["시간"] = df["시각"].dt.hour
+
+# 입력(특징): 장소·요일·시간 / 정답(레이블): 혼잡도
+X = pd.get_dummies(df[["지역명", "요일", "시간"]], columns=["지역명"])
+y = df["혼잡도"]
+
+# 학습용·시험용으로 나누기 (4분의 1은 시험용)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42)
+
+# 랜덤 포레스트로 학습 — 이 한 줄이 '학습'
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# 시험용으로 정확도 재기
+acc = accuracy_score(y_test, model.predict(X_test))
+st.metric("정확도", f"{acc:.1%}")</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 방금 무슨 일이?</div>
+    <ul>
+      <li><b>정답이 있는</b> 데이터로 배웠다 = 지도학습 (회귀도 지도학습이었음)</li>
+      <li>회귀의 <code>model.fit()</code>과 똑같은 한 줄로 학습 — 바뀐 건 "숫자" 대신 "단계"를 맞힌다는 것뿐</li>
+      <li>첫 정확도는 <b>약 88.8%</b> — 열에 아홉은 맞힌 셈</li>
+    </ul>
+  </div>
+  <ul>
+    <li>단계별로 얼마나 맞혔는지 더 보고 싶으면 대화로 개선 ↓</li>
+  </ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
+- 네 단계(여유·보통·약간 붐빔·붐빔)를 각각 얼마나 맞혔는지
+  단계별로 표로 보여줘.
+- 어느 단계가 가장 안 맞는지도 한눈에 보이게 해줘.</pre></div>
+
+  <div class="callout warn">
+    <div class="h">⚠️ 잠깐 — 88.8%면 정말 잘한 걸까?</div>
+    <ul>
+      <li>숫자가 커 보이지만, <b>'여유'가 전체의 몇 %인지</b> 아직 안 봤다</li>
+      <li>여유만 2,706건(전체 3,608건 중) — 이 사실이 다음 시간 <b>정확도의 함정</b>으로 이어진다</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 — 외울 필요 없어요 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">분류</td><td>정해진 몇 개의 단계(범주) 중 하나로 맞히는 일</td></tr>
+      <tr><td class="term">레이블</td><td>분류에서 맞혀야 할 정답 — 여기선 혼잡 단계</td></tr>
+      <tr><td class="term">특징(feature)</td><td>모델이 판단에 쓰는 입력 — 여기선 장소·요일·시간</td></tr>
+      <tr><td class="term">랜덤 포레스트</td><td>여러 판단 나무의 다수결로 답을 고르는 분류·회귀 도구</td></tr>
+      <tr><td class="term">정확도</td><td>전체 중 맞힌 비율</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>숫자를 맞히면 회귀, 단계를 맞히면 분류라고 구분할 수 있다</li>
+    <li>혼잡도 데이터가 23곳·매시간·4단계임을 안다</li>
+    <li>랜덤 포레스트로 첫 분류기를 돌려 정확도(약 88.8%)를 봤다</li>
+    <li>"88.8%가 정말 대단한가?"라는 의심을 품었다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson08.html"><div class="dir">← 이전</div><div class="tt">8차시 · 회귀 정리</div></a>
+    <a class="next" href="lesson10.html"><div class="dir">다음 →</div><div class="tt">10차시 · 정확도의 함정</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

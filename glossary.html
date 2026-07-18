@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>용어사전 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">언제든 펼쳐 보는</span>
+  <h1>용어<span class="a">사전</span></h1>
+  <div class="under"></div>
+  <p class="lead">1~16차시 프롬프트와 수업에 나온 낱말 75개를 차시 순서로 모았습니다. <b>외울 필요는 없습니다</b> — 낯선 낱말이 나오면 그때 여기로 와서 찾으면 됩니다. 같은 낱말이 여러 차시에 나오면 처음 나온 차시에서만 정리합니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🔎 차시 인덱스</div>
+    <p>원하는 차시로 바로 이동합니다.</p>
+    <p>
+      <a href="#l01">1차시</a> · <a href="#l02">2차시</a> · <a href="#l03">3차시</a> · <a href="#l04">4차시</a> ·
+      <a href="#l05">5차시</a> · <a href="#l06">6차시</a> · <a href="#l07">7차시</a> · <a href="#l08">8차시</a> ·
+      <a href="#l09">9차시</a> · <a href="#l10">10차시</a> · <a href="#l11">11차시</a> · <a href="#l12">12차시</a> ·
+      <a href="#l13">13차시</a> · <a href="#l14">14차시</a> · <a href="#l15">15차시</a> · <a href="#l16">16차시(선택)</a>
+    </p>
+  </div>
+
+  <h2 id="l01"><a href="lesson01.html">1차시 · 데이터 과학이란 · 질문 세우기</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">데이터 과학</td><td>데이터로 질문에 답하는 일</td></tr>
+    <tr><td class="term">바이브 코딩</td><td>코드는 AI가 짜고, 사람은 자연어로 주문하고 결과를 판단하는 방식</td></tr>
+    <tr><td class="term">①②③ 리듬</td><td>샘플 프롬프트 → AI가 준 코드 → 프롬프트 개선의 세 박자</td></tr>
+    <tr><td class="term">프롬프트</td><td>AI에게 시키는 자연어 주문 문장</td></tr>
+    <tr><td class="term">seoul.csv</td><td>1907년부터 어제까지 서울의 일별 기온이 담긴 표 파일</td></tr>
+  </table>
+
+  <h2 id="l02"><a href="lesson02.html">2차시 · 데이터 만나기 · 표를 보는 눈</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">행 / 열</td><td>표의 가로 한 줄 / 세로 한 칸 (날짜가 행, 평균기온이 열)</td></tr>
+    <tr><td class="term">결측</td><td>값이 비어 있는 것 — 그날 관측이 없었다는 뜻</td></tr>
+    <tr><td class="term">요약통계</td><td>개수·평균·최소·최대로 표의 첫 인상을 잡는 숫자</td></tr>
+    <tr><td class="term">판다스(pandas)</td><td>파이썬에서 표 데이터를 다루는 대표 도구</td></tr>
+    <tr><td class="term">CSV</td><td>쉼표로 칸을 나눈 표 파일 — 엑셀의 사촌</td></tr>
+    <tr><td class="term">스트림릿(Streamlit)</td><td>파이썬으로 데이터 웹앱을 만드는 도구</td></tr>
+  </table>
+
+  <h2 id="l03"><a href="lesson03.html">3차시 · 시각화 · 그래프에서 구멍 발견</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">연평균</td><td>같은 해의 값을 다 모아 평균 낸 값 — 일별을 연 단위로 요약</td></tr>
+    <tr><td class="term">추세</td><td>시간에 따라 값이 오르거나 내리는 큰 흐름</td></tr>
+    <tr><td class="term">선 그래프</td><td>점을 이어 흐름을 보여 주는 그래프</td></tr>
+    <tr><td class="term">plotly(플롯리)</td><td>마우스를 올리면 값이 뜨는 그래프를 그리는 도구</td></tr>
+    <tr><td class="term">이상치(예고)</td><td>다른 값과 유난히 동떨어진 값 — 정체는 다음 차시에</td></tr>
+  </table>
+
+  <h2 id="l04"><a href="lesson04.html">4차시 · 전처리 · 데이터에도 역사가 있다</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">전처리</td><td>분석 전에 데이터를 믿을 수 있게 고르고 다듬는 일</td></tr>
+    <tr><td class="term">이상치</td><td>다른 값과 유난히 동떨어진 값 (1953년 0.6℃)</td></tr>
+    <tr><td class="term">관측일 수</td><td>그해에 실제로 기온을 잰 날의 수</td></tr>
+    <tr><td class="term">필터(거르기)</td><td>기준에 못 미치는 값을 빼는 일 (300일 미만 해 제외)</td></tr>
+    <tr><td class="term">완전 사례</td><td>빠진 부분 없이 충분히 관측된 해만 남긴 데이터</td></tr>
+  </table>
+
+  <h2 id="l05"><a href="lesson05.html">5차시 · 모델링 — 직선을 긋다</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">회귀</td><td>점들 사이로 가장 잘 맞는 직선을 그어 숫자를 예측하는 방법</td></tr>
+    <tr><td class="term">선형회귀</td><td>직선 하나로 관계를 나타내는 가장 기본적인 회귀</td></tr>
+    <tr><td class="term">학습(model.fit)</td><td>데이터를 보고 가장 잘 맞는 직선을 컴퓨터가 스스로 찾는 과정</td></tr>
+    <tr><td class="term">기울기</td><td>직선이 얼마나 가파른지 — 여기선 '100년에 몇 도 오르는가'</td></tr>
+    <tr><td class="term">예측(model.predict)</td><td>학습한 직선에 새 연도를 넣어 기온을 뽑는 일</td></tr>
+    <tr><td class="term">외삽</td><td>데이터가 없는 범위(먼 미래)까지 직선을 늘여 예측하는 것 — 조심</td></tr>
+  </table>
+
+  <h2 id="l06"><a href="lesson06.html">6차시 · 평가와 한계 — 세 번의 무너짐</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">R²(결정계수)</td><td>직선이 데이터를 얼마나 잘 설명하는지 나타내는 0~1 점수</td></tr>
+    <tr><td class="term">기울기(추세)</td><td>기간 동안 값이 오르내린 방향과 속도 — 여기선 100년당 상승 폭</td></tr>
+    <tr><td class="term">창 길이</td><td>추세를 잴 때 본 기간의 길이(전체/최근 50년/20년 등)</td></tr>
+    <tr><td class="term">백테스트</td><td>과거로 돌아가 그때 예측했다면 맞았을지 확인하는 검증</td></tr>
+  </table>
+
+  <h2 id="l07"><a href="lesson07.html">7차시 · 배포 — 내 예측기를 인터넷에</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">배포</td><td>내 앱을 인터넷에 올려 누구나 주소로 열 수 있게 하는 일</td></tr>
+    <tr><td class="term">깃허브(GitHub)</td><td>코드 파일을 올려 두고 관리하는 온라인 저장소</td></tr>
+    <tr><td class="term">저장소·브랜치</td><td>깃허브에서 프로젝트를 담는 공간과 그 안의 작업 갈래</td></tr>
+    <tr><td class="term">requirements.txt</td><td>앱에 필요한 라이브러리 이름을 적어 두는 목록 파일</td></tr>
+    <tr><td class="term">배포 URL</td><td>배포된 앱의 인터넷 주소(streamlit.app으로 끝남)</td></tr>
+  </table>
+
+  <h2 id="l08"><a href="lesson08.html">8차시 · 정리 — 관측은 회귀, 미래는 물리 모델</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">상관</td><td>두 값이 함께 오르내리는 관계 — 원인 여부는 알 수 없음</td></tr>
+    <tr><td class="term">인과</td><td>하나가 다른 하나의 원인이 되는 관계 — 따로 밝혀야 함</td></tr>
+    <tr><td class="term">공통 원인</td><td>두 값을 동시에 움직이는 숨은 원인(예: 더위)</td></tr>
+    <tr><td class="term">물리 모델</td><td>물리 법칙으로 미래를 계산하는 방식 — 기후 예측의 정식 도구</td></tr>
+  </table>
+
+  <h2 id="l09"><a href="lesson09.html">9차시 · 회귀 vs 분류 · 첫 분류 모델</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">분류</td><td>정해진 몇 개의 단계(범주) 중 하나로 맞히는 일</td></tr>
+    <tr><td class="term">레이블</td><td>분류에서 맞혀야 할 정답 — 여기선 혼잡 단계</td></tr>
+    <tr><td class="term">특징(feature)</td><td>모델이 판단에 쓰는 입력 — 여기선 장소·요일·시간</td></tr>
+    <tr><td class="term">랜덤 포레스트</td><td>여러 판단 나무의 다수결로 답을 고르는 분류·회귀 도구</td></tr>
+    <tr><td class="term">정확도</td><td>전체 중 맞힌 비율</td></tr>
+  </table>
+
+  <h2 id="l10"><a href="lesson10.html">10차시 · 정확도의 함정</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">기준선(baseline)</td><td>가장 흔한 답만 찍었을 때의 정확도 — 비교의 출발선</td></tr>
+    <tr><td class="term">혼동행렬</td><td>실제 단계와 예측 단계를 맞대어 무엇을 헷갈리는지 보는 표</td></tr>
+    <tr><td class="term">재현율</td><td>실제 그 단계 중 모델이 맞게 잡아낸 비율</td></tr>
+    <tr><td class="term">정밀도</td><td>그 단계라고 예측한 것 중 실제로 맞은 비율</td></tr>
+    <tr><td class="term">불균형 데이터</td><td>한 단계가 유난히 많은 데이터 — 정확도가 부풀려짐</td></tr>
+    <tr><td class="term">레이블 누수</td><td>정답에서 파생된 정보를 특징에 넣어 점수를 부풀리는 반칙</td></tr>
+  </table>
+
+  <h2 id="l11"><a href="lesson11.html">11차시 · 배포 + 백테스트</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">훈련·검증 분리</td><td>배울 데이터와 시험 볼 데이터를 나누는 일</td></tr>
+    <tr><td class="term">시간축 분할</td><td>시각이 있는 데이터를 뒤쪽 기간으로 떼어 미래를 흉내 내는 분리</td></tr>
+  </table>
+
+  <h2 id="l12"><a href="lesson12.html">12차시 · 정답표 없이 비슷한 것끼리 묶기</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">비지도학습</td><td>정답표 없이 데이터를 스스로 묶는 학습</td></tr>
+    <tr><td class="term">군집(클러스터)</td><td>비슷한 것끼리 모은 묶음</td></tr>
+    <tr><td class="term">k-means</td><td>미리 정한 k개 묶음으로 나누는 대표적인 군집 방법</td></tr>
+    <tr><td class="term">실루엣 점수</td><td>얼마나 잘 나뉘었는지 재는 0~1 점수 (1에 가까울수록 좋음)</td></tr>
+    <tr><td class="term">정규화(비율)</td><td>역마다 총승차를 100%로 놓고 시간대별 비율로 바꾸기 (크기 지우고 리듬 남기기)</td></tr>
+    <tr><td class="term">시간대 리듬</td><td>하루 중 언제 승객이 몰리는지의 모양</td></tr>
+  </table>
+
+  <h2 id="l13"><a href="lesson13.html">13차시 · 정답이 없다는 게 정답이다</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">k (묶음 수)</td><td>k-means에서 몇 묶음으로 나눌지 사람이 정하는 값. 절대 정답은 없음</td></tr>
+    <tr><td class="term">이상치(외톨이 묶음)</td><td>다른 것과 너무 달라 혼자 한 묶음을 차지하는 값</td></tr>
+    <tr><td class="term">정규화</td><td>기준을 맞춰 크기를 지우는 것. 여기선 승객 수를 시간대 비율로 바꾸기</td></tr>
+    <tr><td class="term">점수 vs 해석</td><td>점수가 좋은 답과 사람이 이해하는 답이 다를 수 있음</td></tr>
+    <tr><td class="term">상동역</td><td>이번 달 승차가 거의 없어 혼자 떨어져 나온 이상치 역</td></tr>
+  </table>
+
+  <h2 id="l14"><a href="lesson14.html">14차시 · 이름은 사람이 붙인다</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">군집 해석</td><td>컴퓨터가 나눈 묶음이 무슨 뜻인지 사람이 읽어내는 일</td></tr>
+    <tr><td class="term">시간대 곡선</td><td>묶음의 평균 승차 리듬을 시간 순서로 그린 선 그래프</td></tr>
+    <tr><td class="term">이름 붙이기</td><td>묶음의 리듬을 근거로 성격 이름(주거형 등)을 정하는 판단</td></tr>
+  </table>
+
+  <h2 id="l15"><a href="lesson15.html">15차시 · 이미지도 784개의 숫자다 · 팀 짜기</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">픽셀(pixel)</td><td>이미지를 이루는 한 칸. 칸마다 밝기 숫자가 하나 들어 있다</td></tr>
+    <tr><td class="term">28 × 28 = 784</td><td>손글씨 숫자 그림 한 장의 칸 수. 그림이 곧 784개의 숫자</td></tr>
+    <tr><td class="term">npz 파일</td><td>여러 개의 숫자 묶음(배열)을 한 파일에 담은 형식</td></tr>
+    <tr><td class="term">회귀 · 분류 · 군집</td><td>숫자 맞히기 · 단계 맞히기 · 정답 없이 묶기. 팀 틀 세 가지</td></tr>
+  </table>
+
+  <h2 id="l16"><a href="lesson16.html">16차시(선택) · 연관 분석 · 우연보다 나은가</a></h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">연관 분석</td><td>함께 자주 나타나는 항목을 찾는 분석 (장바구니 분석)</td></tr>
+    <tr><td class="term">지지도</td><td>전체 중 A·B를 함께 고른 비율. 얼마나 자주 함께 나오나</td></tr>
+    <tr><td class="term">신뢰도</td><td>A를 고른 사람 중 B도 고른 비율</td></tr>
+    <tr><td class="term">향상도</td><td>신뢰도 ÷ B의 기본 인기. 우연보다 나은지 재는 값</td></tr>
+  </table>
+
+  <div class="callout tip">
+    <div class="h">💡 이 낱말들이 왜 프롬프트에 있나요?</div>
+    <p>프롬프트는 자연어(우리말)로 쓰는 것이 원칙이지만, <b>재료 이름은 정확히 불러 주면</b> AI가 훨씬 잘 알아듣습니다. 파일 이름·주소·열 이름·도구 이름이 그런 재료입니다. 코드 문법은 몰라도 됩니다 — 재료 이름만 정확히 알면 주문할 수 있습니다.</p>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

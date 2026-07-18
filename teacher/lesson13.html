@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13차시 (교사용) · k의 자의성과 이상치 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson13.html">학생용 13차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">13차시 · 교사용 (★군집 트랙의 중심)</span>
+  <h1>k의 자의성과 이상치 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson13.html">13차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.
+  <b>생략 금지 차시</b>입니다 — 세 흔들림을 모두 보여 줍니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 도입 멘트 — 지난 시간 두 질문</div>
+    <p>“지난 시간에 두 질문을 남겼죠. ‘왜 한 묶음엔 역이 하나뿐이지?’ ‘왜 하필 3묶음이야?’ 오늘은 이 <b>흔들림 세 가지</b>를 직접 봅니다. 셋 다 결론이 같아요 — <b>정답이 없기에 사람의 판단이 필요하다.</b>”</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~6′</td><td>복습·도입</td><td>실루엣 0.46 안팎 복기 · 남긴 두 질문 다시 꺼내기</td></tr>
+    <tr><td>6~20′</td><td>흔들림 하나 — k의 자의성</td><td><b>점수는 k=3, 해석은 k=4</b> · 무엇을 따를 것인가</td></tr>
+    <tr><td>20~35′</td><td>흔들림 둘 — 이상치</td><td><b>상동역이 k=3부터 홀로 한 묶음</b> · 승차가 거의 없는 무정차 이상치</td></tr>
+    <tr><td>35~47′</td><td>흔들림 셋 — 정규화</td><td>비율 끄면 <b>큰 역끼리</b> 묶임 · 무엇으로 재느냐가 결과를 정함</td></tr>
+    <tr><td>47~50′</td><td>정리 (이월 가능)</td><td>k 비교표 정리 · 수행 과제 안내</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 허탈해하는 학생에게</div>
+    <p>“정답이 없다”에서 힘 빠지는 학생이 나옵니다. 곧바로 이어 주세요. “정답이 없다는 건 아무렇게나 해도 된다는 게 아니라, <b>사람의 판단이 반드시 필요하다</b>는 뜻이에요. 다음 시간, 그 판단으로 묶음에 <b>이름</b>을 붙입니다.”</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>흔들림 하나 — k의 자의성 (6~20′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 점수와 해석의 어긋남 (지도서 7장 참고)</div>
+    <p>실측: k=3 실루엣 <b>0.46 안팎</b>, k=4는 <b>0.33 안팎</b>으로 <b>점수가 오히려 낮습니다.</b> 그런데 3묶음은 아침형·저녁형 둘로만 뭉뚱그리고, 4묶음은 주거형이 순수 주거형과 혼합형으로 갈라져 <b>해석이 더 풍부</b>합니다. 숫자상 가장 잘 분리된 것과 사람이 의미를 부여하기 좋은 것이 갈립니다. 실루엣은 판단을 대신하는 정답이 아니라 판단을 돕는 참고 지표입니다. “정답이 없다는 것”을 정답으로 가르치는 자리입니다.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“점수가 높은 3묶음이 정답 아니에요?”</b> → “점수만 보면 그래요. 하지만 3묶음은 세상을 <b>아침·저녁 딱 둘</b>로만 나눠요. 4묶음이 점수는 낮아도 <b>이야기가 더 또렷</b>하죠. 그래서 점수와 해석을 <b>함께</b> 보고 사람이 골라요.” · <b>“그럼 몇 묶음이 진짜 답이에요?”</b> → “절대 정답은 없어요. 이유를 대며 고르면 그게 여러분의 답이에요.”</p>
+  </div>
+
+  <h3>흔들림 둘 — 이상치 (20~35′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 이상치의 위력 (지도서 7장 참고)</div>
+    <p>k-means는 제곱거리를 최소화하므로 <b>극단적으로 먼 한 점이 중심 하나를 통째로 끌고 갑니다.</b> 이번 달 <b>상동역</b>은 총 승차가 거의 없어(무정차급 이상치) 하루 리듬이 다른 역과 아예 다르게 생겼고, 그래서 <b>k=3부터</b> 혼자 한 묶음을 차지합니다. 4차시 회귀에서 지렛대·영향점이 직선을 흔들었듯, 이상치는 비지도학습에서도 결과를 왜곡합니다.</p>
+  </div>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — “이상해서”가 아니라 “못 믿어서”</div>
+    <p>“상동역은 리듬이 이상한 게 아니라 <b>잴 게 없어서</b> 이상해요. 이번 달 승차가 거의 없거든요. 그러면 지워도 될까요? 조건이 있어요. <b>‘이상하니까 뺐다’가 아니라 ‘데이터가 없어 못 믿으니 뺀다’</b>가 정당한 이유예요. 4차시 전처리와 똑같은 태도죠.”</p>
+  </div>
+
+  <h3>흔들림 셋 — 정규화 (35~47′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 무엇으로 재느냐 (지도서 7장 참고)</div>
+    <p>같은 데이터·같은 k인데 <b>재는 방법</b>만 바꿔도 묶음이 뒤집힙니다. 비율(정규화)로 재면 리듬으로, 절대 승객 수로 재면 크기로 묶입니다. 실측: 승객 수 그대로 3묶음으로 나누면 <b>서울역·잠실·홍대입구·고속터미널</b> 같은 큰 역이 리듬과 무관하게 한 묶음이 됩니다. “크기로 묶을까, 리듬으로 묶을까”는 사람이 던지는 질문이고, 컴퓨터는 시킨 대로 잴 뿐입니다.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (빈출)</div>
+    <p><b>상동역 외톨이를 버그로 오해</b> → 고장이 아니라 <b>데이터가 없어서</b>입니다(정상 현상). 매월 갱신이라 외톨이 역 이름이 상동이 아닐 수도 있으니, 수업 당일 <b>가장 작은 묶음에 어떤 역이 들었는지</b> 미리 한 번 돌려 확인하세요. · <b>정규화 껐다 켜기 변수 혼동</b> → 비율은 <code>ratio</code>, 승객 수 원본은 <code>station</code>. 어느 것을 k-means에 넣었는지 헷갈리면 결과가 뒤죽박죽. · <b>k=4 점수가 낮다고 “틀렸다”</b> → 점수↓ 해석↑는 <b>정상</b>이자 오늘의 핵심. · <b>실행마다 묶음 번호가 바뀜</b> → k-means 번호(0·1·2)는 순서가 매번 달라질 수 있음(고장 아님). 번호가 아니라 <b>묶음 크기·구성</b>으로 읽습니다.</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>결과 해석</b> — k 비교표에서 “점수는 3묶음, 해석은 4묶음”을 근거로 <b>자신이 고른 k와 그 이유</b>(점수 근거 + 해석 근거)를 두세 줄로 서술한 학생의 판단을 채집.</p>
+  </div>
+
+  <h2>✅ 13차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>k=3·k=4 비교표(점수·묶음 크기) 전원 작성?</li>
+    <li>상동역이 왜 외톨이인지(데이터 없음) 설명 가능한가</li>
+    <li>정규화를 빼면 크기로 묶인다는 걸 눈으로 확인했는가</li>
+    <li>“정답이 없다 → 사람의 판단”으로 마무리했는가(허탈감 방지)</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson12.html"><div class="dir">← 이전</div><div class="tt">12차시 · 지도 vs 비지도 · 첫 군집 (교사용)</div></a>
+    <a class="next" href="lesson14.html"><div class="dir">다음 →</div><div class="tt">14차시 · 이름 붙이기와 배포 (교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

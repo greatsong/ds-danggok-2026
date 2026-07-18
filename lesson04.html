@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4차시 · 전처리 · 데이터에도 역사가 있다 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">4차시</span>
+  <h1>전처리 · <span class="a">데이터에도 역사가 있다</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>깨끗해진 추세 그래프</b> — 믿기 어려운 해를 걸러 낸 뒤 다시 그리기</li>
+      <li><b>전처리 판단 기록</b> — 무엇을 왜 뺐는지 근거와 함께</li>
+    </ul>
+  </div>
+
+  <h2>0. 지난 차시 구멍 2개</h2>
+  <ul>
+    <li>① 1950년대 초 = 선이 끊김(1951·1952 값 없음) · ② 1953년 = 뚝 떨어진 점(0.6℃)</li>
+    <li>오늘 → 이 구멍들의 <b>정체</b>를 밝히고, 어떻게 다룰지 정한다</li>
+  </ul>
+
+  <h2>1. 구멍의 정체 ① — 한국전쟁 결측</h2>
+  <div class="callout warn">
+    <div class="h">🕵️ 1950~1953년이 비어 있는 까닭</div>
+    <ul>
+      <li>1950년 9월~1953년 11월, <b>한국전쟁으로 서울 관측이 중단</b>됐다</li>
+      <li>1951·1952년은 유효한 관측이 <b>0일</b> · 그래서 연평균이 아예 없다</li>
+      <li>기온이 안 변한 게 아니라 <b>기록하는 사람이 없었다</b> · "데이터에도 역사가 있다"</li>
+    </ul>
+  </div>
+
+  <h2>2. 구멍의 정체 ② — 1953년 반쪽 관측</h2>
+  <div class="callout warn">
+    <div class="h">🕵️ 1953년 연평균 0.6℃의 진짜 이유</div>
+    <ul>
+      <li>관측이 <b>그해 12월 31일치 하루만</b> 재개됨 · 1953년 관측일은 <b>31일</b>뿐(겨울만)</li>
+      <li>여름 값이 통째로 빠지니 <b>겨울 평균이 연평균으로 둔갑</b> → 0.6℃</li>
+      <li>지구가 추워진 게 아니라 <b>반쪽만 잰 데이터</b> · 평균이 왜곡된 것</li>
+    </ul>
+  </div>
+
+  <h2>3. 믿을 수 있는 해만 남기기 (①②③)</h2>
+  <ul>
+    <li>해결책 = <b>관측일이 부족한 해를 뺀다</b> · 기준은 <b>300일</b>(1년의 대부분)</li>
+    <li>진행 중인 올해도 아직 미완성이니 함께 뺀다</li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>관측일이 300일보다 적은 해는 평균을 믿기 어려우니, 그런 해를 빼고
+연평균 추세를 다시 그려 줘. 진행 중인 올해도 빼 줘.
+데이터는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</pre></div>
+  <ul>
+    <li>여러분 화면이 이런 모습이면 성공 · 글자까지 같을 필요 없음</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre>import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+st.title("🧹 관측일로 거른 연평균 추세")
+
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+df = pd.read_csv(url)
+df["연도"] = pd.to_datetime(df["날짜"]).dt.year
+
+# 연도별 평균과 '관측일 수'를 함께 구하기
+yearly = df.groupby("연도")["평균기온"].agg(["mean", "count"]).reset_index()
+
+# 진행 중인 올해 제외 + 관측일 300일 미만인 해 제외
+keep = (yearly["연도"] &lt; df["연도"].max()) &amp; (yearly["count"] &gt;= 300)
+clean = yearly[keep]
+
+st.write(f"거르기 전 {len(yearly)}개 해 → 거른 뒤 {len(clean)}개 해")
+fig = px.line(clean, x="연도", y="mean", title="관측일 300일 이상인 해만")
+st.plotly_chart(fig, use_container_width=True)</pre></div>
+  <ul>
+    <li>깨끗해진 그래프가 뜨면 → 세 박자대로 <b>③ 개선</b>으로 전후를 비교</li>
+  </ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 예시</span><pre>좋아! 빼기 전과 뺀 후 그래프를 나란히 놓아서
+어떻게 달라졌는지 한눈에 보이게 해 줘.</pre></div>
+
+  <div class="callout check">
+    <div class="h">✔️ 발견 (★) — 무엇이 달라졌나</div>
+    <ul>
+      <li>거르기 전 <b>118개</b> 해 → 거른 뒤 <b>114개</b> 해(1908~2025)</li>
+      <li>1953년의 <b>0.6℃ 점이 사라지고</b> 추세가 매끈해진다 · 이상치가 직선을 끌어내리던 게 빠짐</li>
+      <li>데이터를 <b>줄였는데</b> 오히려 더 믿을 만해진다</li>
+    </ul>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">💡 전처리는 조작이 아니다</div>
+    <ul>
+      <li>학생 질문 "데이터를 마음대로 빼도 되나요?"</li>
+      <li>핵심 = <b>"믿을 수 없는 값을 빼는 것"과 "불리한 값을 빼는 것"은 다르다</b></li>
+      <li>300일 기준은 <b>누구에게나 같은 잣대</b> · 결과가 마음에 안 든다고 빼는 게 아님 · 그래서 정당하다</li>
+    </ul>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">📝 수행평가 예고 — 전처리 판단 서술</div>
+    <ul>
+      <li>결측(한국전쟁)과 이상치(1953년 반쪽 관측)를 <b>구분</b>해 원인을 적기</li>
+      <li>관측일 300일 기준을 왜 정당하다고 보는지 <b>내 말로</b> 설명하기</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 6개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">전처리</td><td>분석 전에 데이터를 믿을 수 있게 고르고 다듬는 일</td></tr>
+      <tr><td class="term">결측</td><td>값이 비어 있는 것 (1951·1952년처럼 관측 자체가 없음)</td></tr>
+      <tr><td class="term">이상치</td><td>다른 값과 유난히 동떨어진 값 (1953년 0.6℃)</td></tr>
+      <tr><td class="term">관측일 수</td><td>그해에 실제로 기온을 잰 날의 수</td></tr>
+      <tr><td class="term">필터(거르기)</td><td>기준에 못 미치는 값을 빼는 일 (300일 미만 해 제외)</td></tr>
+      <tr><td class="term">완전 사례</td><td>빠진 부분 없이 충분히 관측된 해만 남긴 데이터</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>결측과 이상치를 구분하고 원인을 추적할 수 있다</li>
+    <li>1950~1953년 결측이 한국전쟁 때문임을 안다</li>
+    <li>1953년 0.6℃가 반쪽 관측(겨울만) 때문임을 관측일 수로 설명할 수 있다</li>
+    <li>관측일 300일 기준이 왜 정당한지 내 말로 말할 수 있다</li>
+    <li>거르기 전후 그래프의 차이를 기록했다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson03.html"><div class="dir">← 이전</div><div class="tt">3차시 · 시각화 · 그래프에서 구멍 발견</div></a>
+    <a class="next" href="lesson05.html"><div class="dir">다음 →</div><div class="tt">5차시 · 모델링 · 직선을 긋다</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

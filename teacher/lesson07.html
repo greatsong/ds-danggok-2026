@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7차시 (교사용) · 배포 · 내 예측기를 인터넷에 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson07.html">학생용 7차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">7차시 · 교사용</span>
+  <h1>배포 · 내 예측기를 인터넷에 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson07.html">7차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 개강 멘트 — 첫 배포, 첫 증빙</div>
+    <p>“6차시까지 우리 예측기는 <b>한계까지 아는</b> 앱이 됐어요. 오늘은 이걸 <b>인터넷에 올려</b> 주소 하나로 남과 나눕니다. 오늘 나온 <b>배포 주소가 수행평가와 갤러리의 첫 증빙</b>이에요.” 배포는 실패가 잦으니 <b>짝 페어링</b>과 <b>예비 배포본</b>을 미리 준비.</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~8′</td><td>복습·도입</td><td>파일 두 개(main.py·requirements.txt) · 배포 = 세상 어디서든 열기</td></tr>
+    <tr><td>8~30′</td><td>①②③ 실습 (배포)</td><td>배포용 정리 → 깃허브 업로드 → share.streamlit.io 배포 → 주소 생성</td></tr>
+    <tr><td>30~45′</td><td>상호 검증</td><td>갤러리에 URL 게시 · 짝의 앱 눌러 좋아요 + "정말 그런가?" 한 줄</td></tr>
+    <tr><td>45~50′</td><td>정리 (이월 가능)</td><td>배포 실패자 보충 안내</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 개강 전 확인 · 계정 정책</div>
+    <p>깃허브·스트림릿 <b>학생 계정 생성 허용 여부와 연령 정책</b>은 학교마다 다릅니다(설계문서 개강 전 확인 항목). 미확인이면 <b>선생님 계정으로 대표 배포</b>하거나 짝당 한 계정으로 운영. 갤러리 주소는 <b>선생님이 안내</b>(Supabase, 장애 시 패들렛 폴백).</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>①②③ 실습 — 배포 (8~30′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 외삽 경고를 왜 앱에 넣나 (지도서 5장 참고)</div>
+    <p>배포 화면에 ‘조심: 관측 밖 예측’ 문구를 넣는 건 미관이 아니라 통계입니다. 예측 분산 <code>Var(ŷ₀) = σ²[1/n + (x₀−x̄)²/S_xx]</code>는 <b>x₀가 관측 평균에서 멀수록 제곱으로 커집니다.</b> 관측 범위 밖(2100년 등)은 이 식이 경고하는 지대이고, 더구나 외삽은 <b>모델 형태가 범위 밖에서도 같다는 가정</b>에 전적으로 기댑니다. 직선과 2차곡선이 범위 안에선 겹치다 밖에선 갈라지는(2050년 14.0~15.0℃) 이유죠. 그래서 예측 옆의 딱지는 “이 숫자는 <b>가정</b>이며 불확실성이 급증한다”는 정직한 고지입니다. 지도서 5장 5.4가 근거.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (실측 기반 · 배포 빈출)</div>
+    <p><b>requirements.txt 누락/철자</b> → 설치명 <code>scikit-learn</code>·<code>plotly</code>. 스트림릿·판다스·넘파이는 기본 설치라 빼되, sklearn·plotly를 안 적으면 배포 서버에서 ModuleNotFound. · <b>파일 경로 불일치</b> → 배포 설정의 파일 경로가 실제 <code>main.py</code>와 같은지(대소문자·확장자). · <b>배포 첫 시도 실패</b> → <b>정상입니다.</b> 오류 메시지를 <b>그대로 복사해 AI에게</b> 붙이면 대개 해결. 학생이 겁먹지 않게 “처음엔 원래 실패한다” 미리 안내. · <b>버튼 이름이 교재와 다름</b> → 스트림릿이 UI를 종종 바꿈(New app→Create app 등). 못 찾으면 AI에 “스트림릿 클라우드 배포 방법”을 물어보게. · <b>데이터 URL 접근 차단</b> → 배포 서버에서 raw.githubusercontent.com이 되는지(사내망 아님이라 대개 됨).</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“돈 들어요?”</b> → “스트림릿 커뮤니티 클라우드는 <b>무료</b> 한도 안에서 해요.” · <b>“코드를 고치면 다시 배포해야 해요?”</b> → “깃허브에 <b>다시 올리면 앱이 자동으로 갱신</b>돼요. 배포는 한 번, 이후엔 코드만 고치면 끝.” · <b>“배포가 계속 실패해요”</b> → “오류 메시지를 <b>그대로 AI에게</b> 보여 주세요. 대부분 requirements나 파일 경로 문제라 금방 잡혀요.”</p>
+  </div>
+
+  <h3>상호 검증 (30~45′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 칭찬 말고 의심 한 줄</div>
+    <p>“짝의 앱을 눌러 보세요. 같은 서울 기온인데 <b>창을 다르게 잡아</b> 다른 결론을 낸 친구가 보일 거예요. 누가 맞고 틀린 게 아니라 <b>어떤 조건에서 어떤 답</b>인지가 다를 뿐이죠(6차시 두 번째 무너짐). 피드백엔 칭찬만이 아니라 <b>의심 한 줄</b>을 꼭 넣으세요 — ‘이 창으로 잡으면 답이 달라지지 않아?’처럼.”</p>
+  </div>
+
+  <h3>정리 (45~50′ · 이월 가능)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 마무리 — 못 끝낸 사람</div>
+    <p>“배포가 안 끝난 사람은 <b>짝과 함께</b> 마무리하거나 선생님 예비본으로 보충해요. 주소는 <b>꼭 갤러리에</b> 남기고요. 이건 수행평가 첫 증빙이에요.”</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>결과 해석 · 한계 인식</b> — 짝의 앱을 눌러 보고 “창을 다르게 잡으면 결론이 갈린다”는 비판적 의심 한 줄을 근거와 함께 남긴 학생, 또는 배포 실패를 오류 메시지로 진단해 해결한 학생을 채집.</p>
+  </div>
+
+  <h2>✅ 7차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>전원(또는 짝당 1개) 예측기가 streamlit.app 주소를 얻었나? (실패자 → 짝·예비본)</li>
+    <li>외삽 경고 문구가 배포 화면에 들어갔나?</li>
+    <li>주소를 갤러리에 게시하고 짝의 앱에 의심 한 줄을 남겼나?</li>
+    <li>배포 URL 과제를 클래스룸 + 갤러리에 수집했나?</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson06.html"><div class="dir">← 이전</div><div class="tt">6차시 · 평가와 한계 (교사용)</div></a>
+    <a class="next" href="lesson08.html"><div class="dir">다음 →</div><div class="tt">8차시 · 정리 (교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

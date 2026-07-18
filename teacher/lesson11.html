@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11차시 (교사용) · 배포 + 백테스트 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson11.html">학생용 11차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">11차시 · 교사용</span>
+  <h1>배포 + 백테스트 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson11.html">11차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 도입 멘트 — 정직한 시험</div>
+    <p>“9차시 88.8%, 사실 <b>시험 문제를 미리 본 점수</b>였을 수 있어요. 학습에 쓴 데이터 근처에서 쟀거든요. 오늘은 <b>안 본 데이터</b>로 다시 재 봅니다. 이 데이터엔 시각이 있으니, <b>가장 최근 1주일을 ‘미래’처럼 떼어</b> 두고 나머지로만 배우게 할 거예요. 그리고 두 번째 앱을 인터넷에 올립니다.”</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~7′</td><td>도입</td><td>“학습에 안 쓴 데이터로 시험해야 진짜 실력” · 왜 시간으로 자르나</td></tr>
+    <tr><td>7~22′</td><td>백테스트</td><td>최근 1주 떼기 → 나머지로 학습 → 떼어 둔 1주로 정확도 재기 · 두 점수가 다름</td></tr>
+    <tr><td>22~43′</td><td>①②③ 실습 (배포)</td><td>혼잡 예측 앱 배포 · “얼마나 믿을지” 문구 · 갤러리 게시</td></tr>
+    <tr><td>43~50′</td><td>정리 (이월 가능)</td><td>짝의 앱 상호 검증 · 한 줄 피드백</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 배포는 실패가 잦습니다</div>
+    <p>두 번째 배포라 7차시보다 빠릅니다. 그래도 막히는 학생이 나오면 <b>짝과 한 화면</b>으로 붙이고, <b>교사 예비 배포본</b>을 하나 띄워 두세요. 배포에 시간이 몰리면 상호 검증(43~50′)을 다음 차시 앞으로 이월합니다. 오늘 반드시 남길 산출물은 <b>배포 URL 하나</b>입니다.</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>백테스트 (7~22′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 시계열의 정직한 평가 (지도서 5장 참고)</div>
+    <p>백테스트는 <b>과거의 한 시점까지만 학습시키고 그 뒤를 예측해 실제와 대조</b>하는 방법입니다. 우리가 진짜 궁금한 건 <b>아직 오지 않은 시각</b>의 혼잡도라, 검증도 미래를 흉내 내 뒤쪽 1주로 떼야 합니다. 무작위로 떼면 같은 시각의 다른 장소가 학습에 섞여(정보가 새어) 점수가 부풀 수 있습니다. 학습 근처 점수와 안 본 점수가 다르다는 걸 눈으로 확인시키는 것이 이 블록의 목표입니다.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (빈출)</div>
+    <p><b>학습·검증 열이 어긋남</b> → 학생이 train과 test를 <b>각각 따로</b> get_dummies(원핫 인코딩)하면 장소 열 개수가 달라져 예측에서 “feature names mismatch”가 날 수 있습니다. 학생용 ②는 <b>전체를 한 번 인코딩한 뒤 index로 나누는</b> 안전한 방식이라 대개 정상(실측 정확도 약 0.87). 학생이 코드를 고쳐 막혔으면 이 지점을 봅니다. · <b>떼어 둔 1주에 ‘붐빔’이 거의 없음</b> → 최근 1주 test에는 소수 단계가 적게 들어와 재현율이 크게 흔들립니다(정상). “안 본 기간이라 그렇다”로 설명. · <b>HTML의 <code>&lt;=</code>·<code>&gt;</code></b> → 복사한 코드에 부등호가 깨졌으면 다시 붙여넣기. · <b>두 정확도가 다르다고 당황</b> → 그게 오늘의 핵심. 남에게 보여 줄 점수는 <b>안 본 데이터로 잰 것</b>이어야 정직합니다.</p>
+  </div>
+
+  <h3>①②③ 실습 · 배포 (22~43′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 점수에 ‘믿음 딱지’를 붙이자</div>
+    <p>“배포한 앱에 정확도만 크게 박으면 안 돼요. <b>‘이 예측은 안 본 1주 기준 정확도 ○○%짜리예요’</b>라고 함께 적어 주세요. 특히 <b>‘붐빔’은 자주 놓치니 참고하라</b>는 안내까지 넣으면, 쓰는 사람이 어디까지 믿을지 스스로 판단할 수 있어요.”</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“배포 화면이 교재랑 달라요.”</b> → “스트림릿·깃허브 화면은 조금씩 바뀌어요. 버튼을 못 찾으면 <b>AI에게 물어보세요</b> — ‘스트림릿 클라우드에 배포하는 지금 방법 알려줘’.” · <b>“정확도가 87%로 떨어졌는데 나빠진 거예요?”</b> → “아니에요, <b>정직해진</b> 거예요. 88.8%가 부풀었던 거고, 안 본 1주로 잰 87%가 진짜에 가까워요.”</p>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 배포 참고</div>
+    <p>배포는 <a href="https://share.streamlit.io" target="_blank" rel="noopener"><code>share.streamlit.io</code></a>에서 진행합니다. <code>main.py</code>와 <code>requirements.txt</code> 두 파일이 깃허브 저장소에 올라가 있는지 먼저 확인하세요.</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>한계 인식</b> — 배포 앱에 정확도만이 아니라 “안 본 1주 기준 ○○%”와 “붐빔은 자주 놓침” 같은 <b>믿음의 한계를 스스로 표기한</b> 학생의 문구를 갤러리 산출물에서 채집.</p>
+  </div>
+
+  <h2>✅ 11차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>전원 혼잡 예측 앱 1개 배포 · 갤러리 게시? (실패자 → 예비본·짝 페어링)</li>
+    <li>백테스트가 왜 최근 1주를 떼는지 설명 가능한가</li>
+    <li>학습 근처 점수 ≠ 안 본 점수를 눈으로 확인했는가</li>
+    <li>앱에 “얼마나 믿을지” 문구를 넣었는가</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson10.html"><div class="dir">← 이전</div><div class="tt">10차시 · 정확도의 함정 (교사용)</div></a>
+    <a class="next" href="lesson12.html"><div class="dir">다음 →</div><div class="tt">12차시 · 지도 vs 비지도 · 첫 군집 (교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

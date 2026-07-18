@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5차시 (교사용) · 모델링 · 직선을 긋다 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson05.html">학생용 5차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">5차시 · 교사용</span>
+  <h1>모델링 · 직선을 긋다 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson05.html">5차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 도입 멘트 — 작은 AI가 태어나는 순간</div>
+    <p>“이제 깨끗해진 점들 위에 <b>직선</b>을 긋습니다. 가장 잘 맞는 직선을 <b>사람이 손으로</b> 찾지 않아요. 컴퓨터가 데이터를 보고 스스로 찾죠. 이 과정이 <b>학습</b>이고, 코드로는 <code>model.fit()</code> 딱 한 줄. 이 한 줄에서 여러분의 <b>작은 AI가 태어납니다.</b>”</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~7′</td><td>복습·도입</td><td>깨끗해진 114개 연도 복기 · "이제 직선을 그어 미래를 물어보자"</td></tr>
+    <tr><td>7~25′</td><td>회귀 개념</td><td>점들에 직선 맞추기 · 기울기 = "100년에 몇 도" · model.fit=학습</td></tr>
+    <tr><td>25~43′</td><td>①②③ 실습</td><td>예측기 만들기 · 슬라이더 예측 · 기울기 표시 개선</td></tr>
+    <tr><td>43~50′</td><td>정리 (이월 가능)</td><td>여러 연도 예측 · 2100년까지 밀면? (외삽 복선)</td></tr>
+  </table>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>회귀 개념 (7~25′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 최소제곱과 R²의 정의 (지도서 4장 참고)</div>
+    <p>회귀는 잔차 제곱합 <code>Σ(yᵢ − β₀ − β₁xᵢ)²</code>을 최소로 하는 직선을 찾는 일입니다. 미분해 0으로 놓으면 기울기 <code>β̂₁ = S_xy / S_xx</code> — <b>x와 y의 공변동을 x의 변동으로 나눈 값</b>이라, “x가 한 단위 변할 때 y가 평균 몇 단위 변하나”가 곧 기울기입니다. 실측 전체 114년 기울기는 <b>+2.60℃/100년</b>. <b>R²</b>는 <code>1 − SS_res/SS_tot</code>로, 기온의 해마다 다른 변동 중 몇 %를 직선이 설명하는지의 비율(0.70 = 70%). 학생에겐 “기울기 = 100년에 몇 도, R² = 얼마나 잘 맞나”만 감각으로. 지도서 4장은 정규방정식 유도와 R² 세 가지 오해를 다룹니다.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“가장 잘 맞는 직선을 컴퓨터가 어떻게 찾아요?”</b> → “모든 점에서 직선까지의 <b>어긋난 정도(오차)를 제곱해 다 더한 값</b>이 가장 작아지는 직선을 계산으로 찾아요. 손으로 안 하고 공식이 있어요(그 공식이 <code>fit</code> 안에 들어 있죠).” · <b>“<code>model.fit</code>이 진짜 AI예요?”</b> → “아주 작은 AI 맞아요. 데이터를 보고 <b>스스로 규칙(직선)을 찾는</b> 게 학습이니까요. 큰 AI도 원리는 이걸 엄청 키운 거예요.”</p>
+  </div>
+
+  <h3>①②③ 실습 (25~43′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 결과가 똑같지 않아도 된다</div>
+    <p>“AI가 <b>이런 모습</b>의 코드를 줘요. 글자까지 같지 않아도 됩니다. 핵심은 <code>model.fit(X, y)</code> 한 줄 — 여기서 작은 AI가 태어나요. 슬라이더를 움직이면 예측값이 따라 바뀌죠. <b>여러 연도를 넣어 보세요.</b>”</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (실측 기반)</div>
+    <p><b>ModuleNotFoundError: sklearn</b> → requirements.txt엔 설치명 <code>scikit-learn</code>(import는 <code>sklearn</code>). 이름 혼동 잦음. · <b>X 모양 오류</b> → <code>yearly[["연도"]]</code> <b>대괄호 두 개</b>(표 모양, 2차원)여야 함. <code>yearly["연도"]</code>(1차원)면 에러. AI가 준 코드면 대개 정상. · <b>전처리 누락 재발</b> → 5차시 프롬프트에도 “진행 중인 올해와 관측일 300일 미만 해 제외”가 들어 있는지 확인. 빠지면 NaN·이상치로 학습이 깨짐(4차시와 동일 함정). · <b>한글 열 이름</b> → 실제 열 날짜·평균기온. 영어 열 가정 코드면 열 안내 다시. · <b>predict 경고</b> → <code>model.predict([[year]])</code> 형태 유지.</p>
+  </div>
+
+  <h3>정리 (43~50′ · 이월 가능)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 마무리 + 외삽 복선</div>
+    <p>“슬라이더를 <b>2100년까지</b> 밀어 보세요. 직선이라 밀수록 예측값이 <b>끝없이</b> 올라가죠? 데이터에 없는 먼 미래까지 직선을 늘이는 걸 <b>외삽</b>이라 해요. 정말 그렇게 오를까? 이 의심이 다음 시간(평가와 한계)의 중심입니다.” 슬라이더 범위를 관측 밖까지 열어 둔 채로 마무리해 6차시로 자연스럽게 연결.</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>결과 해석</b> — 기울기 +2.60℃/100년을 “100년당 평균 2.60도 상승 경향”처럼 자기 말로 옮기고, 한 해의 오르내림이 아니라 긴 흐름의 요약임을 설명한 학생을 채집.</p>
+  </div>
+
+  <h2>✅ 5차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>전원 <code>model.fit()</code> = 학습을 체험했나?</li>
+    <li>기울기(+2.60℃/100년)를 자기 말로 설명할 수 있나?</li>
+    <li>슬라이더로 여러 연도 예측값을 확인했나?</li>
+    <li>2100년까지 밀면 끝없이 오르는 걸 보고 '외삽' 의심을 남겼나? (6차시 복선)</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson04.html"><div class="dir">← 이전</div><div class="tt">4차시 · 전처리 (교사용)</div></a>
+    <a class="next" href="lesson06.html"><div class="dir">다음 →</div><div class="tt">6차시 · 평가와 한계 (교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

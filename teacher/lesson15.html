@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15차시 (교사용) · 이미지 데모 + 팀 구성 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson15.html">학생용 15차시 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">15차시 · 교사용 (버퍼)</span>
+  <h1>이미지 데모 + 팀 구성 — <span class="a">교사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../lesson15.html">15차시 페이지 ↗</a>를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.
+  이 차시는 <b>통짜 버퍼</b>입니다 — 앞이 밀렸으면 이미지 데모를 빼고 밀린 내용을 흡수합니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 도입 멘트 — 이미지도 결국 숫자</div>
+    <p>“지금까지 다룬 기온·혼잡도·지하철, 전부 <b>표 안의 숫자</b>였어요. 오늘은 손글씨 그림을 열어 봅니다. 그림 한 장이 사실은 <b>784개의 숫자</b>라는 걸 확인하고, 이어서 팀을 짜고 우리 프로젝트 주제를 정해요.”</p>
+  </div>
+
+  <h2>⏱️ 50분 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~20′</td><td>이미지 데모 (선택·교사 시연)</td><td>mnist_small.npz 한 장 열기 · <b>28×28 = 784</b> · 컴퓨터가 약 93% 맞힘 · 앞 데이터도 다 숫자였다는 통합</td></tr>
+    <tr><td>20~45′</td><td>팀 구성·주제 결정</td><td>진로·데이터 직업 3분 소개 · 2~3인 팀 · 회귀/분류/군집 틀 고르기 · 데이터 후보 3개 · <b>주제 카드</b></td></tr>
+    <tr><td>45~50′</td><td>정리</td><td>팀 프로젝트 단계 예고 · 평가 기준 안내</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 앞이 밀렸다면</div>
+    <p>이 차시는 버퍼입니다. 회귀·분류·군집 어느 트랙이 밀렸으면 <b>이미지 데모(0~20′)를 통째로 빼고</b> 그 내용을 먼저 흡수하세요. 이미지 데모는 “이미지도 숫자”라는 감을 주는 <b>선택 시연</b>이라, 없어도 팀 구성에는 지장이 없습니다. 밀리지 않았으면 온전히 팀 착수에 씁니다.</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>이미지 데모 (0~20′ · 교사 시연)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 이미지의 수치 표현</div>
+    <p>손글씨 그림 한 장은 가로 28칸 × 세로 28칸 = <b>784칸</b>이고, 칸마다 0(검정)~1(흰색)의 밝기 숫자가 하나씩 들어 있습니다. 그림을 한 줄로 펴면 784개의 숫자, 즉 표의 한 행과 같습니다. 컴퓨터는 이 숫자들만 보고 <b>약 93%</b>를 맞힙니다(kNN 실측 0.937). 회귀·분류·군집에서 다룬 표와 원리가 같아, “이미지도 숫자를 읽는 문제”라는 통합의 순간을 만듭니다. 이번 차시는 배포하지 않고 감만 잡습니다.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (시연 중)</div>
+    <p><b>npz 로딩 실패</b> → <code>mnist_small.npz</code>는 CSV가 아니라 넘파이 묶음 파일이라 <code>urllib</code>로 받아 <code>io.BytesIO</code>로 여는 방식입니다(학생용 ② 참고). 키 이름은 <code>X</code>(밝기 7000×784)·<code>y</code>(정답). 다른 키를 가정하면 KeyError. · <b>이미지가 새까맣게/이상하게 보임</b> → <code>st.image</code>에 <code>clamp=True</code>가 있어야 밝기 범위가 제대로 표시됩니다. · <b>시연이라 학생이 안 따라와도 됨</b> → 배포·제출물이 없는 블록이라 눈으로 보는 것으로 충분. 앞이 밀렸으면 이 블록부터 줄입니다.</p>
+  </div>
+
+  <h3>팀 구성·주제 결정 (20~45′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 답할 수 있는 질문으로</div>
+    <p>“팀 주제는 <b>데이터로 답할 수 있는 질문</b>이어야 해요. ‘우리 동네는 왜 살기 좋은가’는 취향이라 못 재요. ‘우리 동네 지하철역은 아침에 붐비는가’처럼 <b>잴 수 있고 범위가 분명한</b> 질문으로 바꿔요. 그리고 그 질문이 숫자 맞히기면 회귀, 단계 맞히기면 분류, 정답 없이 묶기면 군집이에요.”</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“어떤 틀을 골라야 할지 모르겠어요.”</b> → “질문을 먼저 정하고 <b>답의 모양</b>을 봐요. 답이 숫자 하나면 회귀, 몇 개의 칸이면 분류, 애초에 정답표가 없으면 군집이에요.” · <b>“데이터를 어디서 구해요?”</b> → “우리가 쓴 modudata(기온·혼잡도·지하철)로 시작해도 되고, 공공데이터포털처럼 열린 자료를 찾아도 돼요. 후보 3개를 적고, 각각 어디서 구할지도 함께 써요.” · <b>“연관 분석 하고 싶어요.”</b> → “가능해요. 다만 장바구니처럼 <b>함께 고른 기록</b>이 있는 데이터가 필요하고, 그건 modudata에 없어서 팀이 직접 찾아야 해요(16차시에서 원리를 봐요).”</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (운영)</div>
+    <p><b>답할 수 없는 질문 제출</b> → 취향·당위(“왜 좋은가”)를 잡은 팀은 “무엇을 숫자로 잴 수 있나”를 되물어 <b>측정 가능한 질문</b>으로 바꾸게 유도. · <b>범위가 너무 넓음</b> → 전국→우리 구, 1년→특정 달처럼 <b>범위를 좁히라</b>고 안내. · <b>팀 편성 지연</b> → 관심 주제가 통하는 학생끼리 묶되, 못 정한 학생은 교사가 임시 배정해 주제 카드 작성까지는 반드시 끝냅니다. · <b>예상 구멍 칸을 비움</b> → 이상치·결측·편향 중 하나만이라도 적게 해, 앞서 배운 ‘데이터 감식’을 팀 주제에 연결.</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🧾 생기부 관찰 지점</div>
+    <p><b>질문 설정</b> — 팀 주제 카드에서 자기 팀의 물음을 “측정 가능하고 범위가 분명한” 질문으로 다듬고, 회귀·분류·군집 중 <b>틀을 고른 이유를 답의 모양으로 설명한</b> 학생의 문장을 채집.</p>
+  </div>
+
+  <h2>✅ 15차시 마무리 체크 (교사)</h2>
+  <ul class="checklist">
+    <li>이미지=28×28=784 숫자임을 전원 설명 가능? (데모 진행 시)</li>
+    <li>전원 2~3인 팀 편성 완료? (미편성자 임시 배정)</li>
+    <li>팀마다 틀(회귀/분류/군집)과 이유를 정했는가</li>
+    <li>데이터 후보 3개 · 예상 구멍 1개 적어 주제 카드 제출?</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson14.html"><div class="dir">← 이전</div><div class="tt">14차시 · 이름 붙이기와 배포 (교사용)</div></a>
+    <a class="next" href="lesson16.html"><div class="dir">다음 →</div><div class="tt">16차시 · 연관 분석 (선택·교사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

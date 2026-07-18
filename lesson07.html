@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7차시 · 배포(내 예측기를 인터넷에) · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">7차시</span>
+  <h1>배포 — <span class="a">내 예측기를 인터넷에</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>기온 예측기(배포 URL)</b> — 내 앱이 인터넷 주소를 얻어 누구나 열어 볼 수 있게 된다</li>
+    </ul>
+  </div>
+
+  <h2>0. 오늘의 목표</h2>
+  <ul>
+    <li>6차시까지 우리 예측기는 <b>한계까지 아는</b> 앱이 됐다.</li>
+    <li>이제 이걸 <b>인터넷에 올려</b> 주소 하나로 남과 나눈다.</li>
+    <li>배포 = 내 컴퓨터 안에만 있던 앱을 <b>세상 어디서든</b> 열 수 있게 하는 일.</li>
+  </ul>
+
+  <h2>1. 배포 전 준비 — 파일 두 개</h2>
+  <ul>
+    <li>배포에 꼭 필요한 파일은 <b>두 개</b>뿐이다.</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>파일</th><th>역할</th></tr></thead>
+    <tbody>
+      <tr><td><code>main.py</code></td><td>앱 본체 — 지금까지 만든 예측기 코드</td></tr>
+      <tr><td><code>requirements.txt</code></td><td>필요한 라이브러리 목록(<code>scikit-learn</code>·<code>plotly</code>)</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>이 둘을 <b>깃허브(GitHub) 저장소</b>에 올려 두면, 스트림릿이 거기서 읽어 앱을 띄운다.</li>
+    <li>깃허브 계정·저장소 만들기는 선생님 안내를 따른다(계정 정책은 학교마다 다름).</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">💡 배포용으로 코드 다듬기 (①)</div>
+    <ul>
+      <li>먼저 앱을 한 화면에 깔끔히 정리하도록 AI에게 주문한다.</li>
+    </ul>
+  </div>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>지금까지 만든 서울 기온 예측기를 인터넷에 올릴 수 있게 한 화면으로 정리해 줘.
+- 제목, 연도 슬라이더, 예측값, R² 점수, 외삽 경고 문구가 한 화면에 보이게 해 줘.
+- 실제 점과 학습한 직선 그래프도 함께 넣어 줘.
+- requirements.txt도 같이 줘. 버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.</pre></div>
+  <ul>
+    <li>AI가 정리해 준 코드는 앞 차시들에서 이미 본 모습이라 여기선 다시 싣지 않는다. (5차시 ② 참고)</li>
+  </ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 예시</span><pre>좋아, 이어서 고쳐 줘.
+- 예측 연도가 관측 범위를 벗어나면 '조심: 관측 밖 예측' 문구가 크게 뜨게 해 줘.
+- 화면 맨 아래에 '이 예측을 어디까지 믿을지' 한 줄 안내를 넣어 줘.</pre></div>
+
+  <h2>2. 스트림릿 클라우드에 올리기 (클릭)</h2>
+  <ol class="steps">
+    <li><span class="st">배포 사이트 접속</span><br><a href="https://share.streamlit.io" target="_blank" rel="noopener"><code>share.streamlit.io</code></a>에 들어가 <b>깃허브 계정으로 로그인</b>. 처음이면 권한 허용을 눌러 준다</li>
+    <li><span class="st">새 앱 만들기</span><br>오른쪽 위 <b>Create app</b>(예전 이름: New app)을 누른다</li>
+    <li><span class="st">내 저장소 고르기</span><br>파일을 올려 둔 <b>저장소(Repository)</b>·<b>브랜치(Branch)</b>·<b>파일 경로</b>(<code>main.py</code>)를 고른다. 원하면 <b>App URL</b>에 기억하기 쉬운 주소를 정한다</li>
+    <li><span class="st">배포</span><br><b>Deploy</b>를 누르면 몇 분 안에 앱이 뜬다. 생긴 <b>주소(streamlit.app 으로 끝남)</b>가 곧 내 예측기 주소</li>
+  </ol>
+  <div class="callout warn">
+    <div class="h">⚠️ 화면 구성은 조금씩 바뀔 수 있어요</div>
+    <ul>
+      <li>버튼 이름·위치는 스트림릿이 종종 바꾼다. 못 찾으면 <b>AI에게 "스트림릿 클라우드 배포 방법 알려 줘"</b>라고 물어보자.</li>
+      <li>배포는 처음엔 자주 실패한다. 오류 메시지를 <b>그대로 복사해 AI에게</b> 보여 주면 대개 해결된다.</li>
+      <li>코드를 고쳐 깃허브에 다시 올리면 앱도 <b>자동으로 갱신</b>된다.</li>
+    </ul>
+  </div>
+
+  <h2>3. 갤러리에 올리고 서로 검증</h2>
+  <ol class="steps">
+    <li><span class="st">주소 게시</span><br>배포된 앱 주소를 <b>선생님이 안내하는 갤러리 주소</b>에 올린다</li>
+    <li><span class="st">짝의 앱 눌러 보기</span><br>다른 친구 앱을 열어 슬라이더를 움직여 본다. <b>좋아요</b>와 <b>한 줄 피드백</b>을 남긴다</li>
+    <li><span class="st">"정말 그런가?" 묻기</span><br>피드백엔 칭찬만이 아니라 <b>의심 한 줄</b>을 꼭 넣는다. 예: "이 창으로 잡으면 답이 달라지지 않아?"</li>
+  </ol>
+  <div class="callout tip">
+    <div class="h">💡 같은 데이터, 다른 결론</div>
+    <ul>
+      <li>남의 앱을 눌러 보면, 같은 서울 기온인데 <b>창을 다르게 잡아</b> 다른 결론을 낸 친구가 보인다.</li>
+      <li>누가 맞고 틀린 게 아니라, <b>어떤 조건에서 어떤 답</b>인지가 다를 뿐이다(6차시 두 번째 무너짐).</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <div class="h">⚠️ 오늘 산출물은 첫 증빙</div>
+    <ul>
+      <li>배포 주소는 <b>수행평가와 갤러리의 첫 증빙</b>이다. 주소를 꼭 갤러리에 남기자.</li>
+      <li>배포가 안 끝난 사람은 <b>짝과 함께</b> 마무리하거나 선생님 예비본으로 보충한다.</li>
+    </ul>
+  </div>
+
+  <h2>🎒 오늘의 체크 & 링크</h2>
+  <ul class="checklist">
+    <li>배포엔 <code>main.py</code>와 <code>requirements.txt</code> 두 파일이 필요하다</li>
+    <li>깃허브에 파일을 올리고 <a href="https://share.streamlit.io" target="_blank" rel="noopener"><code>share.streamlit.io</code></a>에서 앱을 배포했다</li>
+    <li>내 앱이 streamlit.app 주소를 얻었다</li>
+    <li>주소를 갤러리에 올리고 짝의 앱에 좋아요·한 줄 피드백을 남겼다</li>
+    <li>피드백에 '정말 그런가?' 의심 한 줄을 넣었다</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 5개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">배포</td><td>내 앱을 인터넷에 올려 누구나 주소로 열 수 있게 하는 일</td></tr>
+      <tr><td class="term">깃허브(GitHub)</td><td>코드 파일을 올려 두고 관리하는 온라인 저장소</td></tr>
+      <tr><td class="term">저장소·브랜치</td><td>깃허브에서 프로젝트를 담는 공간과 그 안의 작업 갈래</td></tr>
+      <tr><td class="term">requirements.txt</td><td>앱에 필요한 라이브러리 이름을 적어 두는 목록 파일</td></tr>
+      <tr><td class="term">배포 URL</td><td>배포된 앱의 인터넷 주소(streamlit.app으로 끝남)</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <div class="pager">
+    <a class="prev" href="lesson06.html"><div class="dir">← 이전</div><div class="tt">6차시 · 평가와 한계</div></a>
+    <a class="next" href="lesson08.html"><div class="dir">다음 →</div><div class="tt">8차시 · 정리(상관≠인과)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15차시 · 이미지 데모 + 팀 구성 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">버퍼 · 15차시</span>
+  <h1>이미지도 <span class="a">784개의 숫자</span>다 · 팀 짜기</h1>
+  <div class="under"></div>
+
+  <p class="lead">지금까지 다룬 기온·혼잡도·지하철은 모두 표 안의 숫자였다. 오늘은 손글씨 이미지를 열어 본다. 이미지마저 숫자의 묶음이라는 걸 확인하고, 이어서 팀을 짜고 우리 프로젝트 주제를 정한다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>이미지 데모</b> — 손글씨 숫자 한 장을 열어 784개의 숫자로 보기 (선생님 시연)</li>
+      <li><b>팀 주제 카드</b> — 2~3인 팀을 짜고 회귀·분류·군집 중 하나를 골라 주제를 적기</li>
+    </ul>
+  </div>
+
+  <h2>1. 이미지도 숫자다 (선생님 시연)</h2>
+  <ul>
+    <li>이미지 같은 <b>비정형 데이터</b>도 결국 숫자 표(<b>정형</b>)로 바꿔 다룬다 — 2차시에 본 두 갈래가 여기서 만남</li>
+  </ul>
+  <p>손글씨 숫자 데이터 <code>mnist_small.npz</code>는 숫자 그림 7,000장이 들어 있다. 그림 한 장은 가로 28칸 × 세로 28칸, 즉 <b>784칸</b>이다. 칸마다 0(검정)부터 1(흰색)까지의 밝기 숫자가 하나씩 들어 있다. 그림을 열어 보면 결국 784개의 숫자다.</p>
+
+  <div class="callout tip">
+    <div class="h">💡 왜 선생님 시연인가</div>
+    <ul>
+      <li>이번 차시는 "이미지도 숫자"라는 감을 잡는 게 목표. 코드는 선생님 화면으로 함께 본다.</li>
+      <li>아래 ①②③은 눈으로 따라오면 충분하다. 배포는 하지 않는다.</li>
+    </ul>
+  </div>
+
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>손글씨 숫자 이미지 데이터(mnist_small.npz)를 스트림릿으로 불러오는 앱을 만들어 줘. 이미지를 하나 골라서 그림으로 크게 보여 주고, 그 그림이 사실은 784개의 밝기 숫자로 이루어져 있다는 걸 나란히 보여 줘.
+
+- 데이터 주소: https://raw.githubusercontent.com/greatsong/modudata/main/data/mnist_small.npz
+- 슬라이더로 몇 번째 이미지를 볼지 고를 수 있게
+- 그림 한 장은 가로 28칸, 세로 28칸으로 되어 있음</pre></div>
+
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre>import io
+import urllib.request
+import numpy as np
+import streamlit as st
+
+st.title("이미지도 784개의 숫자다")
+
+URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/mnist_small.npz"
+
+@st.cache_data
+def load():
+    with urllib.request.urlopen(URL) as r:
+        d = np.load(io.BytesIO(r.read()))
+        return d["X"], d["y"]   # X: 밝기 숫자(7000, 784), y: 정답 숫자
+
+X, y = load()
+
+# 몇 번째 이미지를 볼지 고르기
+i = st.slider("몇 번째 이미지를 볼까요", 0, len(X) - 1, 0)
+
+one = X[i]                  # 숫자 784개가 한 줄로
+img = one.reshape(28, 28)   # 28 x 28 그림으로 되돌리기
+
+col1, col2 = st.columns(2)
+with col1:
+    st.write("이 그림은")
+    st.image(img, width=180, clamp=True)   # 밝기 숫자를 그림으로
+    st.write("정답:", int(y[i]))
+with col2:
+    st.write("사실은 이런 숫자 784개")
+    st.write("가로 28 x 세로 28 =", 28 * 28, "칸")
+    st.dataframe(img.round(2))             # 칸마다 밝기 숫자 하나씩</pre></div>
+
+  <div class="callout warn">
+    <div class="h">⚠️ 결과가 똑같지 않아도 괜찮아요</div>
+    <p>②는 "이런 모습이면 성공"이라는 안심용 예시다. AI가 준 코드가 조금 달라도, 그림 한 장이 784개의 숫자로 펼쳐지면 성공이다.</p>
+  </div>
+
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 예시</span><pre>고른 이미지를 컴퓨터가 어떤 숫자로 맞히는지도 보여 줘. 전체를 얼마나 잘 맞히는지 정확도도 함께 알려 줘.</pre></div>
+
+  <div class="callout check">
+    <div class="h">✔️ 시연에서 확인할 것</div>
+    <ul>
+      <li>그림 한 장 = <b>784개의 숫자</b>. 28 × 28 = 784.</li>
+      <li>컴퓨터는 이 숫자들만 보고 <b>약 93%</b>를 맞힌다. 우리가 앞서 다룬 표와 똑같이, 이미지도 숫자를 읽는 문제였다.</li>
+    </ul>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">💼 데이터로 일하는 사람들 (3분)</div>
+    <ul>
+      <li>데이터 분석가·기획자·마케터·연구자 — 오늘 배운 판단(질문·감식·해석·한계)이 그대로 일이 되는 직업들</li>
+      <li>관심 진로 분야에도 데이터가 있어요 · 팀 주제를 고를 때 <b>내 진로와 잇는 것</b>도 좋은 선택</li>
+    </ul>
+  </div>
+
+  <h2>2. 팀 짜고 주제 정하기</h2>
+  <p>공통 15차시가 끝나면 팀 프로젝트가 시작된다. 오늘 팀을 짜고 주제의 뼈대를 잡는다. 앞서 배운 세 트랙 중 우리 팀 질문에 맞는 틀을 하나 고른다.</p>
+
+  <ol class="steps">
+    <li><span class="st">팀 짜기</span><br>2~3인으로 팀을 만든다. 서로 관심 주제가 통하는 사람과 묶이면 좋다.</li>
+    <li><span class="st">틀 고르기</span><br>우리 질문이 숫자를 맞히는 문제면 <b>회귀</b>, 단계·종류를 맞히는 문제면 <b>분류</b>, 정답 없이 비슷한 것끼리 묶는 문제면 <b>군집</b>이다.</li>
+    <li><span class="st">데이터 후보 적기</span><br>답을 데이터로 확인할 수 있는 질문인지 따져 본다. 쓸 만한 데이터 후보를 <b>3개</b> 적는다.</li>
+    <li><span class="st">주제 카드 제출</span><br>아래 항목을 채워 클래스룸에 제출한다.</li>
+  </ol>
+
+  <div class="callout tip">
+    <div class="h">💡 우리 팀 주제 카드 (이 항목을 채워요)</div>
+    <ul>
+      <li><b>팀 이름 · 팀원</b> (2~3인)</li>
+      <li><b>우리 질문 한 문장</b> — 데이터로 답할 수 있고 범위가 명확하게</li>
+      <li><b>고른 틀</b> — 회귀 / 분류 / 군집 중 하나 + 고른 이유</li>
+      <li><b>데이터 후보 3개</b> — 어디서 구할지도 함께</li>
+      <li><b>예상되는 구멍</b> — 이 데이터에 있을 법한 이상치·결측·편향 하나</li>
+    </ul>
+  </div>
+
+  <div class="callout warn">
+    <div class="h">⚠️ 답할 수 없는 질문은 피하기</div>
+    <p>"우리 동네는 왜 살기 좋은가" 같은 질문은 데이터로 답하기 어렵다. "우리 동네 지하철역은 아침에 붐비는가"처럼 <b>측정할 수 있고 범위가 분명한</b> 질문으로 바꾼다.</p>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>이미지 한 장이 28 × 28 = 784개의 숫자라는 걸 설명할 수 있다.</li>
+    <li>기온·혼잡도·지하철·이미지가 모두 표 안의 숫자였음을 안다.</li>
+    <li>팀(2~3인)을 짰다.</li>
+    <li>회귀·분류·군집 중 우리 틀을 골랐고 이유를 말할 수 있다.</li>
+    <li>데이터 후보 3개를 적어 주제 카드를 제출했다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">픽셀(pixel)</td><td>이미지를 이루는 한 칸. 칸마다 밝기 숫자가 하나 들어 있다</td></tr>
+    <tr><td class="term">28 × 28 = 784</td><td>손글씨 숫자 그림 한 장의 칸 수. 그림이 곧 784개의 숫자</td></tr>
+    <tr><td class="term">npz 파일</td><td>여러 개의 숫자 묶음(배열)을 한 파일에 담은 형식</td></tr>
+    <tr><td class="term">회귀 · 분류 · 군집</td><td>숫자 맞히기 · 단계 맞히기 · 정답 없이 묶기. 팀 틀 세 가지</td></tr>
+  </table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="lesson14.html"><div class="dir">← 이전</div><div class="tt">14차시 · 이름 붙이기 + 배포</div></a>
+    <a class="next" href="lesson16.html"><div class="dir">다음 →</div><div class="tt">16차시 · 연관 분석 (선택)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

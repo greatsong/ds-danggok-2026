@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>14차시 · 군집에 이름 붙이기와 배포 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">14차시 · 군집 트랙 마무리</span>
+  <h1>이름은 <span class="a">사람이 붙인다</span></h1>
+  <div class="under"></div>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>동네 성격 찾기 앱</b> — 역 이름을 검색하면 소속 묶음과 그 묶음의 시간대 리듬, 내가 붙인 이름을 보여 주는 앱 (배포까지)</li>
+    </ul>
+  </div>
+
+  <h2>0. 컴퓨터는 묶기만 한다</h2>
+  <ul>
+    <li>지난 두 시간, 컴퓨터는 역을 리듬이 비슷한 묶음으로 나눴다.</li>
+    <li>그런데 컴퓨터가 준 건 <b>묶음 0, 묶음 1, 묶음 2</b>라는 번호뿐이다. 그 번호엔 <b>뜻이 없다</b>.</li>
+    <li>이 묶음이 "출근하는 동네"인지 "번화가"인지 읽어내는 건 <b>사람의 몫</b>이다. 오늘의 마지막 한 걸음.</li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">⚠️ 묶음 번호는 실행마다 바뀐다</div>
+    <ul>
+      <li>k-means의 묶음 번호(0·1·2)는 돌릴 때마다 순서가 달라질 수 있다.</li>
+      <li>그러니 번호를 외우지 말고, <b>리듬 그래프의 모양</b>을 보고 이름을 붙인다.</li>
+    </ul>
+  </div>
+
+  <h2>1. 묶음의 리듬 읽기</h2>
+  <ul>
+    <li>각 묶음의 <b>평균 시간대 승차 곡선</b>을 그리면 성격이 보인다.</li>
+    <li>아침에 봉우리가 솟으면 <b>집에서 나서는 동네</b>, 저녁에 솟으면 <b>일하고 노는 동네</b>다.</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>리듬 모양</th><th>무슨 동네일까</th><th>이름 후보</th></tr></thead>
+    <tbody>
+      <tr><td>아침(7~9시)에 승차 봉우리</td><td>아침에 집을 나서는 주거지</td><td><b>주거형</b></td></tr>
+      <tr><td>저녁(18~20시)에 승차 봉우리</td><td>일·놀이를 마치고 나오는 곳</td><td><b>출근형·번화가형</b></td></tr>
+      <tr><td>하루 종일 고른 편</td><td>사람이 계속 오가는 혼합 지역</td><td><b>혼합형</b></td></tr>
+    </tbody>
+  </table>
+  <div class="callout tip">
+    <div class="h">💡 이름의 근거를 말로</div>
+    <ul>
+      <li>"강남은 저녁에 승차가 몰리니 <b>번화가형</b>"처럼, 그래프의 모양을 근거로 붙인다.</li>
+      <li>이름은 정답이 아니라 <b>해석</b>이다. 근거만 또렷하면 다르게 불러도 된다.</li>
+    </ul>
+  </div>
+
+  <h2>2. 검색 앱 만들고 배포하기 (①②③)</h2>
+  <ul>
+    <li>만들 것 = 역 이름을 넣으면 <b>소속 묶음 + 묶음 리듬 곡선 + 내가 붙인 이름</b>이 뜨는 앱</li>
+    <li>requirements.txt에는 <code>scikit-learn</code>·<code>plotly</code>만 (기본 설치 제외 · 버전 없이).</li>
+  </ul>
+
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>지하철역 군집 앱을 배포용으로 정리해 줘. 스트림릿 클라우드에 올릴 거야. 조건:
+
+- 앞서처럼 최신월 데이터를 역별 시간대 '승차 비율'로 바꿔서
+  k-means 3묶음으로 나눠 줘.
+- 각 묶음의 '평균 시간대 승차 곡선'을 하나의 선 그래프로 겹쳐 그려 줘
+  (가로축 시간대, 세로축 평균 승차 비율).
+- 위에 역 이름을 입력하는 검색창을 둬. 역을 넣으면 그 역이
+  어느 묶음인지 알려 주고, 그 묶음 곡선을 강조해서 보여줘.
+- 묶음마다 이름을 붙일 수 있게 해줘. 예: 주거형, 번화가형, 혼합형.
+- 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.
+- 필요한 라이브러리 목록(requirements.txt)도 버전 없이 같이 줘.</pre></div>
+
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre>import streamlit as st
+import pandas as pd
+import plotly.express as px
+from sklearn.cluster import KMeans
+
+st.title("🚇 우리 동네 성격 찾기")
+
+@st.cache_data
+def load():
+    url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/subway_time.csv"
+    return pd.read_csv(url)
+
+df = load()
+
+# 전처리 — 최신월, 역별 승차, 시간대 비율
+latest = df[df["사용월"] == df["사용월"].max()]
+ride_cols = [c for c in df.columns if "승차" in c]
+station = latest.groupby("지하철역")[ride_cols].sum()
+ratio = station.div(station.sum(axis=1), axis=0).fillna(0)
+
+# 3묶음으로
+ratio["묶음"] = KMeans(n_clusters=3, random_state=42, n_init=10).fit_predict(ratio)
+
+# 내가 붙인 이름 — 리듬 곡선을 보고 정한다(번호는 실행마다 바뀔 수 있음)
+이름 = {0: "묶음 0", 1: "묶음 1", 2: "묶음 2"}
+
+# 역 검색
+q = st.text_input("역 이름을 입력하세요", "강남")
+if q in ratio.index:
+    cl = int(ratio.loc[q, "묶음"])
+    st.subheader(f"{q} → {이름[cl]}")
+else:
+    st.info("그 역을 찾지 못했어요. 이름을 다시 확인해 주세요.")
+
+# 묶음별 평균 시간대 곡선
+시간 = [c.replace(" 승차인원", "") for c in ride_cols]
+평균 = ratio.groupby("묶음")[ride_cols].mean().T
+평균.index = 시간
+긴표 = 평균.reset_index().melt(id_vars="index", var_name="묶음", value_name="평균승차비율")
+fig = px.line(긴표, x="index", y="평균승차비율", color="묶음",
+              labels={"index": "시간대"})
+st.plotly_chart(fig, use_container_width=True)</pre></div>
+
+  <div class="callout check">
+    <div class="h">✔️ 실행하면 이렇게 나온다 (이 달 기준)</div>
+    <ul>
+      <li>강남·홍대입구를 검색하면 <b>저녁에 승차가 몰리는 묶음</b>(번화가형)에 들어간다.</li>
+      <li>신림·사당을 검색하면 <b>아침에 승차가 몰리는 묶음</b>(주거형)에 들어간다.</li>
+      <li>곡선을 보고 <code>이름</code>을 <b>주거형·번화가형·혼합형</b>으로 바꿔 붙이면 완성.</li>
+    </ul>
+  </div>
+
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 예시</span><pre>좋아! 배포용으로 마무리해 줘.
+- 묶음 이름을 주거형·번화가형·혼합형으로 바꿔서 그래프 범례와
+  검색 결과에 그 이름이 나오게 해줘.
+- 검색한 역의 곡선만 굵게, 나머지 묶음 곡선은 연하게 보여줘.
+- 맨 위에 "이 묶음은 컴퓨터가 나눴고, 이름은 사람이 붙였습니다"
+  라는 한 줄 안내를 넣어줘.</pre></div>
+
+  <h3>2-1. 배포하기 (클릭)</h3>
+  <ol class="steps">
+    <li><span class="st">깃허브에 올리기</span><br><code>main.py</code>와 <code>requirements.txt</code>를 내 깃허브 저장소에 올린다.</li>
+    <li><span class="st">스트림릿 연결</span><br><a href="https://share.streamlit.io" target="_blank" rel="noopener"><code>share.streamlit.io</code></a>에서 <b>New app</b> → 저장소·<code>main.py</code> 선택 → <b>Deploy</b>. 준비에 1~2분. (화면 구성은 조금씩 바뀔 수 있어요 — 못 찾으면 AI에게 물어보기)</li>
+    <li><span class="st">주소 확인·게시</span><br>생긴 앱 주소(URL)를 갤러리에 올리고, 짝의 앱을 눌러 좋아요와 한 줄 피드백을 남긴다.</li>
+  </ol>
+  <div class="callout tip">
+    <div class="h">💡 지도로도 보고 싶다면 (확장 과제)</div>
+    <ul>
+      <li>지금 데이터엔 역의 <b>위치(위도·경도)</b>가 없어서 지도 색칠은 못 한다.</li>
+      <li>역 좌표 파일을 따로 구하면 묶음별 색으로 지도에 찍을 수 있다. 여유가 되는 팀의 확장 과제로 남겨 둔다.</li>
+    </ul>
+  </div>
+
+  <h2>3. 군집 트랙 마무리</h2>
+  <ul>
+    <li>비지도학습으로 역을 묶고(12차시), 그 묶음이 흔들리는 걸 보고(13차시), 오늘 <b>뜻을 붙였다</b>.</li>
+    <li>데이터 과학의 마지막 한 걸음은 계산이 아니라 <b>해석</b>이다.</li>
+  </ul>
+  <div class="callout check">
+    <div class="h">✔️ 세 트랙을 지나며 배운 것</div>
+    <ul>
+      <li>회귀: 직선을 그어도 <b>미래는 늘 의심</b>한다.</li>
+      <li>분류: 정확도가 높아도 <b>무엇을 놓쳤나</b>를 본다.</li>
+      <li>군집: 정답이 없기에 <b>사람이 이름을 붙인다</b>.</li>
+    </ul>
+  </div>
+
+  <div class="callout mini">
+    <div class="h">📝 수행 과제 — 이름의 근거</div>
+    <ul>
+      <li>내가 붙인 묶음 이름 세 개와, 각 이름을 붙인 <b>근거(리듬 그래프의 모양)</b>를 한 줄씩 적는다.</li>
+      <li>배포한 앱 주소를 갤러리에 올린다.</li>
+    </ul>
+  </div>
+
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 4개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">군집 해석</td><td>컴퓨터가 나눈 묶음이 무슨 뜻인지 사람이 읽어내는 일</td></tr>
+      <tr><td class="term">시간대 곡선</td><td>묶음의 평균 승차 리듬을 시간 순서로 그린 선 그래프</td></tr>
+      <tr><td class="term">이름 붙이기</td><td>묶음의 리듬을 근거로 성격 이름(주거형 등)을 정하는 판단</td></tr>
+      <tr><td class="term">배포</td><td>내가 만든 앱을 인터넷 주소로 남과 공유하는 것</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
+  <h2>🎒 오늘의 체크 & 링크</h2>
+  <ul class="checklist">
+    <li>묶음의 시간대 곡선을 보고 성격을 읽을 수 있다</li>
+    <li>묶음 세 개에 근거를 대며 이름을 붙였다</li>
+    <li>역 검색 앱을 배포하고 주소를 갤러리에 올렸다</li>
+    <li>"이름은 사람이 붙인다"가 무슨 뜻인지 말할 수 있다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson13.html"><div class="dir">← 이전</div><div class="tt">13차시 · k의 자의성과 이상치</div></a>
+    <a class="next" href="lesson15.html"><div class="dir">다음 →</div><div class="tt">15차시 · 이미지 데모와 팀 프로젝트</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>
