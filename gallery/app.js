@@ -416,7 +416,7 @@
         likeBtn.disabled = true;
       }
       likeBtn.addEventListener("click", async () => {
-        if (!requireLogin("좋아요를 누를 수")) return;
+        if (!requireLogin("좋아요를 누를 수 있어요")) return;
         if (likedSet.has(app.id)) return;
         likeBtn.disabled = true;
         try {
