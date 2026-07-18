@@ -239,8 +239,12 @@
   }
 
   function applyAuthState(session) {
-    const email = session && session.user ? session.user.email : null;
-    currentUser = email ? { email } : null;
+    const user = session && session.user ? session.user : null;
+    const email = user ? user.email : null;
+    // 피드백 닉네임으로 쓸 구글 계정 이름 (없으면 이메일 @ 앞부분)
+    const meta = (user && user.user_metadata) || {};
+    const name = meta.full_name || meta.name || (email ? email.split("@")[0] : null);
+    currentUser = email ? { email, name } : null;
     renderAuthUI();
     renderSubmitGate();
   }
@@ -439,11 +443,15 @@
 
       const fbForm = node.querySelector(".fb-form");
       const fbMsg = node.querySelector(".fb-msg");
+      // 실제 모드에서는 닉네임을 입력받지 않는다 — 로그인한 구글 계정 이름이 그대로 남는다.
+      const nickInput = fbForm.querySelector(".fb-nickname");
+      if (useSupabase && nickInput) {
+        nickInput.hidden = true;
+        nickInput.required = false;
+      }
       fbForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const nickInput = fbForm.querySelector(".fb-nickname");
         const contentInput = fbForm.querySelector(".fb-content");
-        const nickname = nickInput.value.trim();
         const content = contentInput.value.trim();
 
         fbMsg.hidden = true;
@@ -453,8 +461,11 @@
           showFbMsg(fbMsg, "학교 계정(@" + SCHOOL_DOMAIN + ")으로 로그인 후 피드백을 남길 수 있어요.", "error");
           return;
         }
+        const nickname = useSupabase
+          ? (currentUser.name || currentUser.email.split("@")[0])
+          : nickInput.value.trim();
         if (!nickname || !content) {
-          showFbMsg(fbMsg, "닉네임과 피드백을 모두 입력해주세요.", "error");
+          showFbMsg(fbMsg, useSupabase ? "피드백 내용을 입력해주세요." : "닉네임과 피드백을 모두 입력해주세요.", "error");
           return;
         }
         const banned = findBannedWord(nickname) || findBannedWord(content);

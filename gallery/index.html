@@ -13,6 +13,13 @@
     <span class="brand"><span class="chick">🐣</span>당곡고 <span class="a">데이터 과학</span> 팀 갤러리</span>
     <span class="spacer"></span>
     <span id="modeBadge" class="badge">모드 확인 중…</span>
+    <div id="authArea" class="auth-area">
+      <button id="authLoginBtn" class="btn-auth-login" type="button" hidden>학교 계정으로 로그인</button>
+      <span id="authUserBadge" class="auth-user-badge" hidden>
+        <span id="authUserEmail" class="auth-user-email"></span>
+        <button id="authLogoutBtn" class="btn-auth-logout" type="button">로그아웃</button>
+      </span>
+    </div>
   </div>
 </header>
 
@@ -68,6 +75,12 @@
       <h1>우리 팀 작품 <span class="a">제출하기</span></h1>
       <div class="under"></div>
       <p class="lead">배포 URL과 팀 정보를 입력하면 갤러리에 바로 게시됩니다. 제출 전, 팀원 모두의 작품 공개 동의를 확인하세요.</p>
+
+      <div id="submitGate" class="gate-card" hidden>
+        <p class="gate-icon">🔒</p>
+        <p class="gate-text">학교 계정(@danggok.hs.kr)으로 로그인해야 작품을 제출할 수 있어요.</p>
+        <button type="button" class="btn-auth-login gate-login-btn" id="gateLoginBtn">학교 계정으로 로그인</button>
+      </div>
 
       <form id="submitForm" class="form-card" novalidate>
         <div class="field">
