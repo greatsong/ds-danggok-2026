@@ -173,7 +173,7 @@
     return data;
   }
 
-  async function insertFeedback(appId, nickname, content) {
+  async function insertFeedback(appId, nickname, content, submittedBy) {
     if (!useSupabase) {
       const app = demoApps.find((a) => a.id === appId);
       if (!app) throw new Error("app not found");
@@ -182,11 +182,153 @@
     }
     const { error } = await supabaseClient
       .from("feedback")
-      .insert([{ app_id: appId, nickname, content }]);
+      .insert([{ app_id: appId, nickname, content, submitted_by: submittedBy || null }]);
     if (error) throw error;
     const app = appsCache.find((a) => a.id === appId);
     if (app) app.feedback.push({ nickname, content });
   }
+
+  // ---------------------------------------------------------
+  // 3.5 인증 (Google OAuth, 학교 계정(danggok.hs.kr)만 쓰기 허용)
+  //     읽기(카드 열람·필터·피드백 열람)는 로그인 없이 그대로 동작한다.
+  //     보안의 본체는 서버측 RLS/RPC 검증이며, 여기서 하는 건 UX용 게이트다.
+  // ---------------------------------------------------------
+  const SCHOOL_DOMAIN = "danggok.hs.kr";
+  let currentUser = null; // { email } | null
+
+  function isSchoolEmail(email) {
+    return !!email && String(email).toLowerCase().endsWith("@" + SCHOOL_DOMAIN);
+  }
+
+  function requireLogin(actionPhrase) {
+    // useSupabase가 아니면(데모 모드) 로그인 요구 자체를 하지 않는다.
+    // actionPhrase는 "...수 있어요"로 끝나는 완전한 문구를 넘긴다.
+    if (!useSupabase) return true;
+    if (currentUser) return true;
+    alert("학교 계정(@" + SCHOOL_DOMAIN + ")으로 로그인해야 " + actionPhrase + ".");
+    return false;
+  }
+
+  async function signInWithGoogle() {
+    if (!useSupabase) {
+      alert("데모 모드에서는 로그인 기능을 사용할 수 없어요.");
+      return;
+    }
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        // hd는 구글 로그인 화면에서 도메인을 힌트로 좁혀줄 뿐, 실제 검증은
+        // 로그인 후 세션 이메일을 다시 확인하는 로직(아래 evaluateSession)에서 한다.
+        queryParams: { hd: SCHOOL_DOMAIN, prompt: "select_account" },
+        redirectTo: window.location.href,
+      },
+    });
+    if (error) {
+      console.error("Google 로그인 시작 실패:", error);
+      alert("로그인을 시작하지 못했어요. 잠시 후 다시 시도해주세요.");
+    }
+  }
+
+  async function signOutUser() {
+    if (!useSupabase) return;
+    try {
+      await supabaseClient.auth.signOut();
+    } catch (e) {
+      console.error("로그아웃 중 오류:", e);
+    }
+  }
+
+  function applyAuthState(session) {
+    const email = session && session.user ? session.user.email : null;
+    currentUser = email ? { email } : null;
+    renderAuthUI();
+    renderSubmitGate();
+  }
+
+  // hd 파라미터는 힌트일 뿐이라 서버가 강제하지 않으므로, 로그인 직후
+  // 세션의 실제 이메일이 학교 도메인이 아니면 즉시 로그아웃시킨다.
+  async function evaluateSession(session) {
+    if (session && session.user && !isSchoolEmail(session.user.email)) {
+      await supabaseClient.auth.signOut();
+      applyAuthState(null);
+      alert("학교 계정(@" + SCHOOL_DOMAIN + ")으로만 참여할 수 있어요.");
+      return;
+    }
+    applyAuthState(session);
+  }
+
+  async function initAuth() {
+    if (!useSupabase) {
+      renderAuthUI();
+      renderSubmitGate();
+      return;
+    }
+    try {
+      const { data } = await supabaseClient.auth.getSession();
+      await evaluateSession(data && data.session);
+    } catch (e) {
+      console.error("세션 확인 실패:", e);
+      applyAuthState(null);
+    }
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      evaluateSession(session);
+    });
+  }
+
+  function renderAuthUI() {
+    const loginBtn = $("#authLoginBtn");
+    const userBadge = $("#authUserBadge");
+    const userEmailEl = $("#authUserEmail");
+    if (!loginBtn || !userBadge || !userEmailEl) return;
+    if (!useSupabase) {
+      loginBtn.hidden = true;
+      userBadge.hidden = true;
+      return;
+    }
+    if (currentUser) {
+      loginBtn.hidden = true;
+      userBadge.hidden = false;
+      userEmailEl.textContent = currentUser.email;
+    } else {
+      loginBtn.hidden = false;
+      userBadge.hidden = true;
+    }
+  }
+
+  function setFormDisabled(form, disabled) {
+    form.classList.toggle("is-locked", disabled);
+    $all("input, select, button", form).forEach((el) => { el.disabled = disabled; });
+  }
+
+  function renderSubmitGate() {
+    const gate = $("#submitGate");
+    const form = $("#submitForm");
+    if (!gate || !form) return;
+    if (!useSupabase || currentUser) {
+      gate.hidden = true;
+      setFormDisabled(form, false);
+    } else {
+      gate.hidden = false;
+      setFormDisabled(form, true);
+    }
+  }
+
+  function initAuthButtons() {
+    const loginBtn = $("#authLoginBtn");
+    const logoutBtn = $("#authLogoutBtn");
+    const gateLoginBtn = $("#gateLoginBtn");
+    if (loginBtn) loginBtn.addEventListener("click", signInWithGoogle);
+    if (logoutBtn) logoutBtn.addEventListener("click", signOutUser);
+    if (gateLoginBtn) gateLoginBtn.addEventListener("click", signInWithGoogle);
+  }
+
+  // 로컬 검증용 디버그 훅 — 실 OAuth 없이 로그인 상태 UI 전환을 확인하기 위함.
+  // 실제 쓰기 권한은 서버 RLS가 세션 토큰으로 검증하므로 이 훅은 화면 표시만
+  // 바꿀 뿐 보안에는 영향이 없다 (mock 세션으로는 insert/RPC가 통과되지 않는다).
+  window.__danggokGalleryDebug = {
+    applyAuthState,
+    getCurrentUser: () => currentUser,
+  };
 
   // ---------------------------------------------------------
   // 4. 좋아요 중복 방지 (같은 브라우저에서 같은 카드 재클릭 방지)
@@ -274,6 +416,7 @@
         likeBtn.disabled = true;
       }
       likeBtn.addEventListener("click", async () => {
+        if (!requireLogin("좋아요를 누를 수")) return;
         if (likedSet.has(app.id)) return;
         likeBtn.disabled = true;
         try {
@@ -306,6 +449,10 @@
         fbMsg.hidden = true;
         fbMsg.className = "fb-msg";
 
+        if (useSupabase && !currentUser) {
+          showFbMsg(fbMsg, "학교 계정(@" + SCHOOL_DOMAIN + ")으로 로그인 후 피드백을 남길 수 있어요.", "error");
+          return;
+        }
         if (!nickname || !content) {
           showFbMsg(fbMsg, "닉네임과 피드백을 모두 입력해주세요.", "error");
           return;
@@ -319,7 +466,7 @@
         const submitBtn = fbForm.querySelector("button[type=submit]");
         submitBtn.disabled = true;
         try {
-          await insertFeedback(app.id, nickname, content);
+          await insertFeedback(app.id, nickname, content, currentUser ? currentUser.email : null);
           // insertFeedback()이 이미 app.feedback에 반영하므로 여기서 다시 push하지 않는다.
           fbCountEl.textContent = `(${app.feedback.length})`;
           renderFeedbackList(fbListEl, app.feedback);
@@ -410,6 +557,10 @@
       msgEl.hidden = true;
       msgEl.className = "form-msg";
 
+      if (useSupabase && !currentUser) {
+        return showFormMsg("학교 계정(@" + SCHOOL_DOMAIN + ")으로 로그인 후 제출할 수 있어요.", "error");
+      }
+
       const classId = $("#f-class").value;
       const assignment = $("#f-assignment").value;
       const teamName = $("#f-team").value.trim();
@@ -446,6 +597,7 @@
           members,
           url,
           description,
+          submitted_by: currentUser ? currentUser.email : null,
         });
         form.reset();
         showFormMsg("게시 완료! 갤러리 탭에서 확인해보세요.", "ok");
@@ -486,7 +638,11 @@
     initTabs();
     initFilters();
     initSubmitForm();
+    initAuthButtons();
     renderModeBadge();
+    // 세션 확인이 끝나기 전까지는 기본적으로 잠긴 상태로 보여준다(깜빡임 방지).
+    renderAuthUI();
+    renderSubmitGate();
     try {
       await loadApps();
     } catch (e) {
@@ -494,6 +650,7 @@
       countEl.textContent = "데이터를 불러오지 못했어요. Supabase 설정(config.js)을 확인해주세요.";
     }
     renderGallery();
+    initAuth();
   }
 
   document.addEventListener("DOMContentLoaded", init);

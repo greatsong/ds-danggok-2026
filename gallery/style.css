@@ -70,6 +70,38 @@ body {
 .badge.demo { border-color: #cfe0ff; background: var(--blue-soft); color: #2f6bd6; }
 .badge.live { border-color: #d6ecd0; background: var(--green-soft); color: #3d7a37; }
 
+/* ---------- 인증(로그인) 영역 ---------- */
+.auth-area { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.btn-auth-login {
+  font-family: var(--font); font-size: 0.78rem; font-weight: 800; padding: 6px 13px;
+  border-radius: 999px; border: 1px solid var(--accent); background: #fff; color: var(--accent);
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.btn-auth-login:hover { background: var(--gold-soft); }
+.auth-user-badge { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 700; }
+.auth-user-email {
+  display: inline-block; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  background: var(--green-soft); color: #3d7a37; border: 1px solid #d6ecd0; border-radius: 999px;
+  padding: 4px 11px; font-weight: 800;
+}
+.btn-auth-logout {
+  font-family: var(--font); font-size: 0.74rem; font-weight: 700; padding: 5px 11px;
+  border-radius: 999px; border: 1px solid var(--border); background: #fff; color: var(--muted); cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-auth-logout:hover { border-color: var(--red); color: #c23b3a; }
+
+/* ---------- 로그인 안내 게이트 카드 (제출 폼 잠금) ---------- */
+.gate-card {
+  display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center;
+  padding: 30px 20px; margin-bottom: 20px; border: 1px dashed var(--accent);
+  border-radius: var(--radius-sm); background: var(--gold-soft);
+}
+.gate-icon { margin: 0; font-size: 1.7rem; }
+.gate-text { margin: 0; font-weight: 700; color: var(--text-soft); font-size: 0.92rem; }
+.gate-login-btn { margin-top: 4px; padding: 9px 18px; font-size: 0.86rem; }
+.form-card.is-locked { opacity: 0.5; pointer-events: none; }
+
 /* ---------- 레이아웃 ---------- */
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 26px 16px 80px; }
 main {
@@ -234,4 +266,11 @@ footer.foot { max-width: var(--maxw); margin: 0 auto; padding: 14px 20px 40px; c
   .grid { grid-template-columns: 1fr; }
   .fb-form { flex-direction: column; }
   .fb-form .fb-nickname { flex: 1; }
+}
+
+/* 모바일 헤더 깨짐 방지 (2026-07-18 테스트 결함 수정) */
+@media (max-width: 480px) {
+  .topbar .inner { flex-wrap: wrap; gap: 8px; padding: 10px 12px; }
+  .brand { white-space: nowrap; font-size: 0.95rem; min-width: 0; }
+  .brand .chick { font-size: 1rem; }
 }
