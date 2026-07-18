@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>당곡고 데이터 과학 · 팀 갤러리</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="inner">
+    <span class="brand"><span class="chick">🐣</span>당곡고 <span class="a">데이터 과학</span> 팀 갤러리</span>
+    <span class="spacer"></span>
+    <span id="modeBadge" class="badge">모드 확인 중…</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="tabs" id="mainTabs">
+    <button class="tab active" data-view="gallery" type="button">🖼️ 갤러리</button>
+    <button class="tab" data-view="submit" type="button">📮 작품 제출</button>
+  </nav>
+
+  <main>
+
+    <!-- ============ 갤러리 화면 ============ -->
+    <section id="view-gallery" class="view active">
+      <div class="eyebrow">GALLERY</div>
+      <h1>우리 반 팀 작품 <span class="a">한눈에 보기</span></h1>
+      <div class="under"></div>
+      <p class="lead">배포한 팀 앱을 둘러보고, 좋아요와 한 줄 피드백을 남겨보세요.</p>
+
+      <div class="filter-row">
+        <div class="chip-group" id="classFilter">
+          <button class="chip-btn active" data-class="all" type="button">전체</button>
+          <button class="chip-btn" data-class="B" type="button">B반</button>
+          <button class="chip-btn" data-class="E" type="button">E반</button>
+        </div>
+        <div class="chip-group" id="assignmentFilter">
+          <button class="chip-btn active" data-assignment="all" type="button">전체 과제</button>
+          <button class="chip-btn" data-assignment="회귀" type="button">회귀</button>
+          <button class="chip-btn" data-assignment="분류" type="button">분류</button>
+          <button class="chip-btn" data-assignment="군집" type="button">군집</button>
+          <button class="chip-btn" data-assignment="팀프로젝트" type="button">팀프로젝트</button>
+        </div>
+      </div>
+
+      <p id="galleryCount" class="count-line"></p>
+      <div id="galleryGrid" class="grid"></div>
+      <p id="galleryEmpty" class="empty-msg" hidden>조건에 맞는 작품이 아직 없어요.</p>
+    </section>
+
+    <!-- ============ 제출 화면 ============ -->
+    <section id="view-submit" class="view">
+      <div class="eyebrow">SUBMIT</div>
+      <h1>우리 팀 작품 <span class="a">제출하기</span></h1>
+      <div class="under"></div>
+      <p class="lead">배포 URL과 팀 정보를 입력하면 갤러리에 바로 게시됩니다. 제출 전, 팀원 모두의 작품 공개 동의를 확인하세요.</p>
+
+      <form id="submitForm" class="form-card" novalidate>
+        <div class="field">
+          <label for="f-class">학급 *</label>
+          <select id="f-class" required>
+            <option value="">선택하세요</option>
+            <option value="B">B반</option>
+            <option value="E">E반</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-assignment">과제 구분 *</label>
+          <select id="f-assignment" required>
+            <option value="">선택하세요</option>
+            <option value="회귀">회귀</option>
+            <option value="분류">분류</option>
+            <option value="군집">군집</option>
+            <option value="팀프로젝트">팀프로젝트</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-team">팀명 *</label>
+          <input id="f-team" type="text" maxlength="30" placeholder="예: 데이터탐정단" required>
+        </div>
+
+        <div class="field">
+          <label for="f-members">팀원 닉네임 * <span class="hint">(쉼표로 구분)</span></label>
+          <input id="f-members" type="text" maxlength="80" placeholder="예: 별사탕, 라면왕, 코딩요정" required>
+        </div>
+
+        <div class="field">
+          <label for="f-url">배포 URL * <span class="hint">(https:// 로 시작)</span></label>
+          <input id="f-url" type="text" maxlength="300" placeholder="https://your-app.streamlit.app" required>
+        </div>
+
+        <div class="field">
+          <label for="f-desc">한 줄 소개 *</label>
+          <input id="f-desc" type="text" maxlength="80" placeholder="어떤 문제를 어떻게 풀었는지 한 줄로 소개해주세요" required>
+        </div>
+
+        <label class="consent-row">
+          <input type="checkbox" id="f-consent" required>
+          팀원 모두 작품 공개(갤러리 게시)에 동의했습니다.
+        </label>
+
+        <div id="formMsg" class="form-msg" role="alert" hidden></div>
+
+        <button type="submit" class="btn-primary">갤러리에 게시하기</button>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    당곡고 2022 개정 『데이터 과학』 · 팀 갤러리 미니 앱 · 장애 시 클래스룸 과제 댓글에 URL을 남겨주세요.
+  </footer>
+</div>
+
+<template id="cardTemplate">
+  <article class="card">
+    <div class="card-top">
+      <span class="badge class-badge"></span>
+      <span class="badge assignment-badge"></span>
+    </div>
+    <h3 class="card-team"></h3>
+    <p class="card-members"></p>
+    <p class="card-desc"></p>
+    <div class="card-actions">
+      <a class="btn-go" target="_blank" rel="noopener noreferrer">바로가기 ↗</a>
+      <button type="button" class="btn-like">
+        <span class="like-icon">🩷</span> <span class="like-count">0</span>
+      </button>
+    </div>
+    <details class="feedback-block">
+      <summary>피드백 <span class="fb-count">(0)</span></summary>
+      <ul class="fb-list"></ul>
+      <form class="fb-form">
+        <input type="text" class="fb-nickname" maxlength="16" placeholder="닉네임" required>
+        <input type="text" class="fb-content" maxlength="60" placeholder="한 줄 피드백을 남겨주세요" required>
+        <button type="submit" class="btn-small">남기기</button>
+      </form>
+      <p class="fb-msg" hidden></p>
+    </details>
+  </article>
+</template>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
