@@ -159,18 +159,32 @@
     return data;
   }
 
-  async function likeApp(appId) {
+  // 좋아요 토글: 데모 모드는 localStorage로, 실제 모드는 toggle_like RPC로 처리한다.
+  // 반환값은 { count, liked } — liked는 "이 클릭 이후" 상태(true=눌린 상태).
+  async function toggleLike(appId) {
     if (!useSupabase) {
       const app = demoApps.find((a) => a.id === appId);
       if (!app) throw new Error("app not found");
-      app.likes += 1;
-      return app.likes;
+      const wasLiked = demoLikedSet.has(appId);
+      if (wasLiked) {
+        app.likes = Math.max(0, app.likes - 1);
+        demoLikedSet.delete(appId);
+        removeLikedLocal(appId);
+      } else {
+        app.likes += 1;
+        demoLikedSet.add(appId);
+        saveLikedLocal(appId);
+      }
+      return { count: app.likes, liked: !wasLiked };
     }
-    const { data, error } = await supabaseClient.rpc("increment_likes", { p_app_id: appId });
+    const { data, error } = await supabaseClient.rpc("toggle_like", { p_app_id: appId });
     if (error) throw error;
+    const wasLiked = serverLikedSet.has(appId);
+    if (wasLiked) serverLikedSet.delete(appId);
+    else serverLikedSet.add(appId);
     const app = appsCache.find((a) => a.id === appId);
     if (app) app.likes = data;
-    return data;
+    return { count: data, liked: !wasLiked };
   }
 
   async function insertFeedback(appId, nickname, content, submittedBy) {
@@ -195,6 +209,9 @@
   // ---------------------------------------------------------
   const SCHOOL_DOMAIN = "danggok.hs.kr";
   let currentUser = null; // { email } | null
+  let serverLikedSet = new Set(); // 실제 모드: 내가 좋아요 누른 app_id 목록(RLS가 본인 행만 돌려줌)
+  let lastAuthEmail = undefined; // 토큰 리프레시 등으로 같은 계정 재확인 시 재조회를 건너뛰기 위한 표식
+  let galleryReady = false; // 첫 renderGallery() 이후에만 인증 변화로 재렌더링한다
 
   function isSchoolEmail(email) {
     return !!email && String(email).toLowerCase().endsWith("@" + SCHOOL_DOMAIN);
@@ -247,6 +264,36 @@
     currentUser = email ? { email, name } : null;
     renderAuthUI();
     renderSubmitGate();
+
+    // 계정이 실제로 바뀐 경우(로그인/로그아웃/계정 전환)에만 내 좋아요 목록을 다시
+    // 조회한다. TOKEN_REFRESHED처럼 같은 계정으로 다시 오는 이벤트는 건너뛴다.
+    if (email !== lastAuthEmail) {
+      lastAuthEmail = email;
+      refreshMyLikes();
+    }
+  }
+
+  // 내가 좋아요 누른 app_id 목록을 서버에서 가져온다.
+  // RLS(app_likes select 정책)가 "본인 행만" 반환하므로 이 목록 자체가
+  // 곧 "내가 누른 카드" 집합이다. 비로그인/데모 모드에서는 호출하지 않는다.
+  async function loadMyLikes() {
+    if (!useSupabase || !currentUser) {
+      serverLikedSet = new Set();
+      return;
+    }
+    try {
+      const { data, error } = await supabaseClient.from("app_likes").select("app_id");
+      if (error) throw error;
+      serverLikedSet = new Set((data || []).map((row) => row.app_id));
+    } catch (e) {
+      console.error("내 좋아요 목록 조회 실패:", e);
+      serverLikedSet = new Set();
+    }
+  }
+
+  async function refreshMyLikes() {
+    await loadMyLikes();
+    if (galleryReady) renderGallery();
   }
 
   // hd 파라미터는 힌트일 뿐이라 서버가 강제하지 않으므로, 로그인 직후
@@ -335,7 +382,10 @@
   };
 
   // ---------------------------------------------------------
-  // 4. 좋아요 중복 방지 (같은 브라우저에서 같은 카드 재클릭 방지)
+  // 4. 데모 모드 좋아요 토글 (localStorage 기반 흉내)
+  //    실제 모드는 서버(app_likes 테이블 + RLS)가 진실이므로 여기를 쓰지 않는다.
+  //    좋아요 1개당 계정 1개 + 재클릭 취소(토글) 규칙은 실제 모드에서는
+  //    toggle_like RPC + app_likes.unique(app_id, user_email) 제약이 보장한다.
   // ---------------------------------------------------------
   const LIKED_KEY = "danggok_gallery_liked_ids";
   function getLikedSet() {
@@ -345,10 +395,21 @@
       return new Set();
     }
   }
-  function saveLiked(id) {
+  function saveLikedLocal(id) {
     const s = getLikedSet();
     s.add(id);
     try { localStorage.setItem(LIKED_KEY, JSON.stringify([...s])); } catch (e) { /* noop */ }
+  }
+  function removeLikedLocal(id) {
+    const s = getLikedSet();
+    s.delete(id);
+    try { localStorage.setItem(LIKED_KEY, JSON.stringify([...s])); } catch (e) { /* noop */ }
+  }
+  let demoLikedSet = getLikedSet(); // 데모 모드 전용
+
+  // 이 카드가 "내가 누른" 상태인지 — 데모는 localStorage, 실제는 서버 조회 결과 기준.
+  function isLiked(appId) {
+    return useSupabase ? serverLikedSet.has(appId) : demoLikedSet.has(appId);
   }
 
   // ---------------------------------------------------------
@@ -385,7 +446,6 @@
   const emptyEl = $("#galleryEmpty");
   const countEl = $("#galleryCount");
   const cardTemplate = $("#cardTemplate");
-  const likedSet = getLikedSet();
 
   function renderGallery() {
     const filtered = appsCache.filter((a) => {
@@ -415,24 +475,24 @@
       const likeBtn = node.querySelector(".btn-like");
       const likeCountEl = node.querySelector(".like-count");
       likeCountEl.textContent = app.likes;
-      if (likedSet.has(app.id)) {
-        likeBtn.classList.add("liked");
-        likeBtn.disabled = true;
-      }
+      const likedNow = isLiked(app.id);
+      likeBtn.classList.toggle("liked", likedNow);
+      likeBtn.setAttribute("aria-pressed", likedNow ? "true" : "false");
+      // 비활성화하지 않는다 — 계정당 1개 + 재클릭 시 취소(토글) 방식이라
+      // 이미 누른 카드도 다시 누르면 취소되어야 한다.
       likeBtn.addEventListener("click", async () => {
         if (!requireLogin("좋아요를 누를 수 있어요")) return;
-        if (likedSet.has(app.id)) return;
         likeBtn.disabled = true;
         try {
-          const newCount = await likeApp(app.id);
-          likeCountEl.textContent = newCount;
-          likeBtn.classList.add("liked");
-          likedSet.add(app.id);
-          saveLiked(app.id);
+          const result = await toggleLike(app.id);
+          likeCountEl.textContent = result.count;
+          likeBtn.classList.toggle("liked", result.liked);
+          likeBtn.setAttribute("aria-pressed", result.liked ? "true" : "false");
         } catch (e) {
           console.error(e);
-          likeBtn.disabled = false;
           alert("좋아요 처리 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.");
+        } finally {
+          likeBtn.disabled = false;
         }
       });
 
@@ -661,6 +721,7 @@
       countEl.textContent = "데이터를 불러오지 못했어요. Supabase 설정(config.js)을 확인해주세요.";
     }
     renderGallery();
+    galleryReady = true;
     initAuth();
   }
 
