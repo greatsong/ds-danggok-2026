@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개강 전 모의 리허설 가이드 (교사용) · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👩‍🏫</text></svg>">
+<style>
+  /* ---------- 이 페이지 전용: 단계별 색상 스텝 카드 ---------- */
+  .rehearsal-steps { list-style: none; padding: 0; margin: 20px 0 8px; display: flex; flex-direction: column; gap: 14px; }
+  .rehearsal-steps > li {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: #fff; border: 1px solid var(--border); border-left-width: 5px; border-radius: var(--radius);
+    padding: 16px 18px; box-shadow: var(--shadow);
+  }
+  .rehearsal-steps .step-num {
+    flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 1rem; box-shadow: var(--shadow);
+  }
+  .rehearsal-steps .step-body { flex: 1 1 auto; min-width: 0; }
+  .rehearsal-steps .step-title { font-weight: 800; margin-bottom: 4px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+  .rehearsal-steps .step-optional {
+    font-size: 0.72rem; font-weight: 800; padding: 1px 8px; border-radius: 999px;
+    background: var(--card); color: var(--text-soft); border: 1px solid var(--border);
+  }
+  .rehearsal-steps p { margin: 6px 0; }
+  .rehearsal-steps .step-note { font-size: 0.88rem; color: var(--text-soft); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-soft); }
+
+  .step-blue { border-left-color: var(--blue); }
+  .step-blue .step-num { background: var(--blue); }
+  .step-violet { border-left-color: var(--violet); }
+  .step-violet .step-num { background: var(--violet); }
+  .step-teal { border-left-color: var(--teal); }
+  .step-teal .step-num { background: var(--teal); }
+  .step-green { border-left-color: var(--green); }
+  .step-green .step-num { background: var(--green); }
+  .step-pink { border-left-color: var(--pink); }
+  .step-pink .step-num { background: var(--pink); }
+
+  /* 확인 지점 미니 리스트 (④ 카드 안) */
+  .checkpoints { list-style: none; padding: 0; margin: 8px 0 0; }
+  .checkpoints li { padding-left: 26px; position: relative; margin: 6px 0; }
+  .checkpoints li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--green); font-weight: 800; }
+
+  /* FAQ */
+  .faq { margin: 18px 0; }
+  .faq .q { font-weight: 800; margin: 22px 0 6px; display: flex; gap: 8px; align-items: baseline; }
+  .faq .q .qmark {
+    flex: 0 0 auto; font-size: 0.72rem; font-weight: 800; padding: 1px 8px; border-radius: 999px;
+    background: var(--blue-soft); color: #2f6bd6;
+  }
+  .faq .a { margin: 0 0 0 0; color: var(--text-soft); }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">교사 대시보드 ↗</a>
+  <span class="badge teacher">교사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">개강 전 준비 · 교사용</span>
+  <h1>개강 전 <span class="a">모의 리허설</span> 가이드</h1>
+  <div class="under"></div>
+  <p class="lead">B·E 두 학급의 실제 코스를 <b>전혀 건드리지 않고</b>, 별도의 &ldquo;모의 코스&rdquo; 하나에서 과제 생성 → 제출물 수집 → 채점 초안까지 파이프라인 전체를 미리 돌려볼 수 있습니다. 대상 파일은 <code>Mock.gs</code>이며, 교사가 직접 실행하는 함수는 <code>createMockCourse()</code> · <code>runMockDrill()</code> · <code>teardownMockCourse()</code> 세 가지입니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🔁 5단계 한눈 요약</div>
+    <ul>
+      <li><b>①</b> 모의 코스 생성 → <b>②</b> (선택) 학생 역할 계정 초대 → <b>③</b> 리허설 드릴 실행 → <b>④</b> 확인 지점 점검 → <b>⑤</b> 정리</li>
+    </ul>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">💡 DRY_RUN 리허설과 무엇이 다른가</div>
+    <p><code>testConnection()</code>과 <code>DRY_RUN=true</code> 상태의 <code>createAssignments()</code> 등은 &ldquo;무엇을 할 예정인지&rdquo;만 로그로 보여줄 뿐, 실제 Classroom API 호출(코스 생성·활성화·과제 생성·제출물 조회·채점 patch)이 우리 학교 Google Workspace 환경에서 정말 성공하는지는 확인해주지 않습니다. 이 모의 리허설은 그 실행 대상을 실코스가 아닌 &ldquo;모의 코스&rdquo; 하나로 국한해, API 호출을 실제로 실행하며 안전하게 검증합니다. <code>Code.gs</code>의 <code>DRY_RUN</code> 값과는 무관하게 항상 동작합니다 — 대상이 애초에 실코스가 아니기 때문입니다.</p>
+  </div>
+
+  <h2>🎬 5단계 절차</h2>
+
+  <ol class="rehearsal-steps">
+    <li class="step-blue">
+      <span class="step-num">1</span>
+      <div class="step-body">
+        <div class="step-title"><code>createMockCourse()</code></div>
+        <p><b>[모의] 데이터과학 리허설</b>이라는 이름의 코스를 새로 만들고 즉시 ACTIVE로 전환합니다. 이미 만든 모의 코스가 있으면 재사용해 중복 생성을 막습니다.</p>
+        <p>실행 후 로그에 뜨는 클래스룸 링크를 열어 코스가 실제로 생겼는지 확인합니다.</p>
+      </div>
+    </li>
+    <li class="step-violet">
+      <span class="step-num">2</span>
+      <div class="step-body">
+        <div class="step-title">클래스룸 화면에서 학생 역할 계정 초대 <span class="step-optional">선택</span></div>
+        <p>동료 교사 계정이나 테스트 계정을 학생으로 초대합니다. 초대해야 수집·채점 단계까지 실데이터로 검증됩니다 — 초대하지 않아도 다음 단계는 실행되지만 검증 범위가 제한됩니다. 자세한 조건은 아래 &ldquo;학생 역할 시뮬레이션 안내&rdquo;를 참고합니다.</p>
+      </div>
+    </li>
+    <li class="step-teal">
+      <span class="step-num">3</span>
+      <div class="step-body">
+        <div class="step-title"><code>runMockDrill()</code></div>
+        <p>모의 과제 2개(URL형 1개 + 서술형 1개)를 만들고, 제출물 수집(<code>studentSubmissions.list</code>)과 — 제출물이 있다면 — <code>draftGrade</code> 채점까지 한 번에 실행합니다.</p>
+        <p class="step-note">여러 번 실행해도 안전합니다. 과제 설명文 끝의 숨은 표시자(marker)로 중복 생성을 막기 때문입니다.</p>
+      </div>
+    </li>
+    <li class="step-green">
+      <span class="step-num">4</span>
+      <div class="step-body">
+        <div class="step-title">확인 지점</div>
+        <p>다음 세 곳을 직접 눈으로 확인합니다.</p>
+        <ul class="checkpoints">
+          <li>클래스룸 모의 코스 화면에 <b>[모의]</b> 접두 과제 2개가 보이는지</li>
+          <li>관리 스프레드시트의 <code>모의_리허설_로그</code> 시트에 단계별 기록이 쌓였는지</li>
+          <li>학생을 초대했다면 클래스룸에서 <code>draftGrade</code>(99점)가 반영되어 보이는지</li>
+        </ul>
+      </div>
+    </li>
+    <li class="step-pink">
+      <span class="step-num">5</span>
+      <div class="step-body">
+        <div class="step-title"><code>teardownMockCourse()</code></div>
+        <p>모의 코스를 ARCHIVED로 전환하고 저장된 모의 코스 속성을 지워 정리합니다.</p>
+        <p class="step-note">완전히 삭제하고 싶다면(되돌릴 수 없음) <code>deleteMockCourse()</code>를 별도로 실행합니다 — ARCHIVED 상태가 아니면 실패합니다.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h2>🎭 학생 역할 시뮬레이션 안내</h2>
+  <div class="callout ask">
+    <div class="h">🙋 누구를 학생으로 초대할까</div>
+    <ul>
+      <li><b>개인 Gmail 계정은 초대할 수 없습니다.</b> 학교 Education 도메인 코스에는 개인 Gmail 계정이 도메인 정책과 무관하게 초대 대상에서 배제됩니다.</li>
+      <li><b>권장: 같은 도메인의 별도 계정을 학생으로 초대합니다</b> — 예: 동료 교사 계정, 또는 관리자가 발급한 테스트 계정. 클래스룸 화면에서 수동으로 초대합니다(<code>Mock.gs</code>는 초대를 자동화하지 않습니다).</li>
+      <li><b>교사 본인 계정은 자신이 만든 코스에 학생으로 겸직할 수 없습니다</b>(<code>ALREADY_EXISTS</code> 오류). 반드시 별도 계정을 씁니다.</li>
+    </ul>
+  </div>
+
+  <h2>🔍 검증 범위 — 정직하게</h2>
+  <div class="callout warn">
+    <div class="h">⚠️ 학생 0명이면 채점·반환은 미검증으로 남습니다</div>
+    <p><b>학생 없이도 되는 것</b>: 코스 생성·PROVISIONED→ACTIVE 전환, 과제 생성(중복 방지 포함), <code>studentSubmissions.list</code> 조회(학생 0명이면 빈 배열이 정상 — 오류가 아닙니다), 코스 정리(ARCHIVED).</p>
+    <p><b>학생을 초대해야 되는 것</b>: 제출물이 실제로 채워진 <code>studentSubmissions.list</code> 결과, <code>draftGrade</code> patch 검증(제출물이 있어야 patch 대상이 생깁니다).</p>
+    <p><b><code>runMockDrill()</code>이 자동 실행하지 않는 것</b>: 학생 반환(<code>return</code>). <code>draftGrade</code> patch까지만 자동 검증하고, 반환은 클래스룸 화면에서 직접 확인하거나 별도로 실행해야 합니다 — 되돌릴 수 없는 동작이므로 리허설이라도 자동화하지 않습니다.</p>
+  </div>
+
+  <h2>🛡️ 안전장치 — 실코스 오염 방지</h2>
+  <div class="callout check">
+    <div class="h">✅ 실코스는 절대 건드리지 않습니다</div>
+    <ul>
+      <li><code>Mock.gs</code>는 실코스 저장 속성을 절대 읽거나 쓰지 않습니다 — 별도의 <code>PROP_KEY_MOCK_COURSE_ID</code>만 사용합니다.</li>
+      <li>모든 진입점 함수(<code>createMockCourse()</code> · <code>runMockDrill()</code> · <code>teardownMockCourse()</code> · <code>deleteMockCourse()</code>)는 Classroom에 쓰기 요청을 보내기 전에 <code>assertNotRealCourse_()</code>로 대상이 실코스 저장 속성과 겹치는지 확인하고, 겹치면 즉시 중단합니다.</li>
+      <li><code>Code.gs</code> · <code>Collect.gs</code> · <code>Grades.gs</code>의 기존 함수는 전혀 수정하지 않습니다. <code>Mock.gs</code>는 그 함수들을 호출만 합니다.</li>
+    </ul>
+  </div>
+
+  <h2>❓ 자주 묻는 것</h2>
+  <div class="faq">
+    <div class="q"><span class="qmark">Q</span> 모의 코스를 완전히 지우고 싶어요.</div>
+    <p class="a"><code>teardownMockCourse()</code>는 ARCHIVED 전환과 속성 삭제까지만 합니다. 완전 삭제(되돌릴 수 없음)를 원하면 <code>deleteMockCourse()</code>를 별도로 실행해야 하며, 코스가 ARCHIVED 상태가 아니면 실패합니다 — 반드시 <code>teardownMockCourse()</code>를 먼저 실행한 뒤 시도합니다.</p>
+
+    <div class="q"><span class="qmark">Q</span> <code>runMockDrill()</code>을 여러 번 실행해도 괜찮나요?</div>
+    <p class="a">네. 과제 설명文 끝에 숨겨 둔 표시자(marker)로 중복 생성을 막기 때문에, 여러 번 실행해도 모의 과제가 두 번 생기지 않습니다.</p>
+
+    <div class="q"><span class="qmark">Q</span> <code>DRY_RUN=true</code>인 상태에서도 모의 리허설을 실행할 수 있나요?</div>
+    <p class="a">네. <code>Mock.gs</code>의 함수들은 <code>Code.gs</code>의 <code>DRY_RUN</code> 값과 무관하게 항상 실제로 씁니다. 대상이 실코스가 아닌 별도의 모의 코스로 한정되어 있고 <code>assertNotRealCourse_()</code>가 이를 재확인하므로, 실코스 쓰기를 막아 둔 <code>DRY_RUN=true</code> 상태에서도 모의 코스 리허설은 지장 없이 진행할 수 있습니다.</p>
+  </div>
+
+  <div class="pager">
+    <a class="prev" href="index.html"><div class="dir">← 이동</div><div class="tt">교사 대시보드</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 교사용 자료</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 /* ============================================================
    당곡고 데이터 과학 · 팀 갤러리 미니 앱
-   디자인 계열: 따뜻한 크림·골드 (2026-snui 참고)
+   디자인 계열: 따뜻한 크림·골드 + 교재 시맨틱 컬러 변주
+   (web/assets/style.css 와 같은 토큰 체계를 공유한다)
    ============================================================ */
 
 :root {
@@ -24,6 +25,9 @@
   --teal-soft: #e9f6f5;
   --blue-soft: #eef3ff;
   --violet: #b279a2;
+  --violet-soft: #f8f0f5;
+  --pink-soft: #fdeef2;
+  --gold-soft: #fff3d6;
 
   --radius: 0.9rem;
   --radius-sm: 0.7rem;
@@ -80,7 +84,7 @@ main {
   padding: 13px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border);
   background: #fff; color: var(--text-soft); cursor: pointer; transition: all 0.15s;
 }
-.tab:hover { border-color: var(--accent); }
+.tab:hover { border-color: var(--accent); color: var(--accent); }
 .tab.active { background: linear-gradient(135deg, var(--gold), #ffca3a); color: #3a2e1a; border-color: var(--accent); box-shadow: var(--shadow); }
 
 /* ---------- 타이포 ---------- */
@@ -105,21 +109,45 @@ h1 .a { color: var(--accent); }
 .chip-btn:hover { border-color: var(--accent); color: var(--accent); }
 .chip-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+/* 학급 필터: B/E 를 배지 색과 통일 */
+#classFilter .chip-btn[data-class="B"]:hover { border-color: var(--blue); color: #2f6bd6; }
+#classFilter .chip-btn[data-class="B"].active { background: var(--blue); border-color: var(--blue); color: #fff; }
+#classFilter .chip-btn[data-class="E"]:hover { border-color: var(--violet); color: #8a5578; }
+#classFilter .chip-btn[data-class="E"].active { background: var(--violet); border-color: var(--violet); color: #fff; }
+
+/* 과제 구분 필터: 회귀=골드 · 분류=teal · 군집=violet · 팀프로젝트=핑크 */
+#assignmentFilter .chip-btn[data-assignment="회귀"]:hover { border-color: var(--accent); color: var(--accent); }
+#assignmentFilter .chip-btn[data-assignment="회귀"].active { background: linear-gradient(135deg, var(--gold), #ffca3a); border-color: var(--accent); color: #3a2e1a; }
+#assignmentFilter .chip-btn[data-assignment="분류"]:hover { border-color: var(--teal); color: var(--teal); }
+#assignmentFilter .chip-btn[data-assignment="분류"].active { background: var(--teal); border-color: var(--teal); color: #fff; }
+#assignmentFilter .chip-btn[data-assignment="군집"]:hover { border-color: var(--violet); color: #8a5578; }
+#assignmentFilter .chip-btn[data-assignment="군집"].active { background: var(--violet); border-color: var(--violet); color: #fff; }
+#assignmentFilter .chip-btn[data-assignment="팀프로젝트"]:hover { border-color: var(--pink); color: #c23a63; }
+#assignmentFilter .chip-btn[data-assignment="팀프로젝트"].active { background: var(--pink); border-color: var(--pink); color: #fff; }
+
 .count-line { font-size: 0.85rem; color: var(--muted); margin: 0 0 12px; }
 .empty-msg { text-align: center; color: var(--muted); padding: 40px 0; font-weight: 600; }
 
 /* ---------- 카드 그리드 ---------- */
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 16px; }
 .card {
+  position: relative; overflow: hidden;
   border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card);
-  padding: 18px; display: flex; flex-direction: column; gap: 8px;
-  box-shadow: var(--shadow); transition: transform 0.15s, box-shadow 0.15s;
+  padding: 20px 18px 18px; display: flex; flex-direction: column; gap: 8px;
+  box-shadow: var(--shadow); transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  --tint: var(--gold);
 }
-.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-.card-top { display: flex; gap: 6px; flex-wrap: wrap; }
+/* 학급(B/E) 기준 카드 상단 액센트 띠 — class-badge 에 app.js 가 이미 부여하는
+   B/E 클래스를 :has() 로 읽어와 카드 전체 톤을 다르게 준다 (app.js 수정 없음) */
+.card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--tint); }
+.card:has(.class-badge.B) { --tint: var(--blue); }
+.card:has(.class-badge.E) { --tint: var(--violet); }
+.card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--tint); }
+
+.card-top { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
 .class-badge.B { background: var(--blue-soft); color: #2f6bd6; border-color: #cfe0ff; }
-.class-badge.E { background: #f8f0f5; color: #8a5578; border-color: #e9d6e2; }
-.assignment-badge { background: var(--teal-soft); color: var(--teal); border-color: #cfe9e6; }
+.class-badge.E { background: var(--violet-soft); color: #8a5578; border-color: #e9d6e2; }
+.assignment-badge { background: var(--teal-soft); color: #2b7a75; border-color: #cfe9e6; }
 .card-team { margin: 2px 0 0; font-size: 1.08rem; font-weight: 800; }
 .card-members { margin: 0; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
 .card-desc { margin: 0; font-size: 0.92rem; color: var(--text-soft); flex: 1; }
@@ -137,20 +165,20 @@ h1 .a { color: var(--accent); }
   background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 9px 12px; cursor: pointer; color: var(--text); transition: all 0.15s;
 }
-.btn-like:hover { border-color: var(--pink); }
-.btn-like.liked { background: #fdeef2; border-color: var(--pink); color: #c23a63; }
+.btn-like:hover { border-color: var(--pink); color: #c23a63; }
+.btn-like.liked { background: var(--pink-soft); border-color: var(--pink); color: #c23a63; }
 .btn-like:disabled { opacity: 0.7; cursor: default; }
 .like-icon { font-size: 0.95rem; }
 
-/* ---------- 피드백 ---------- */
+/* ---------- 피드백 (teal 계열로 구분되는 상호작용 영역) ---------- */
 .feedback-block { border-top: 1px solid var(--border-soft); padding-top: 8px; margin-top: 2px; }
 .feedback-block summary { cursor: pointer; font-size: 0.85rem; font-weight: 800; color: var(--text-soft); list-style: none; }
 .feedback-block summary::-webkit-details-marker { display: none; }
-.feedback-block summary::before { content: "▸ "; color: var(--accent); }
+.feedback-block summary::before { content: "▸ "; color: var(--teal); }
 .feedback-block[open] summary::before { content: "▾ "; }
 .fb-list { list-style: none; padding: 0; margin: 8px 0; display: flex; flex-direction: column; gap: 6px; max-height: 160px; overflow-y: auto; }
 .fb-list li { font-size: 0.83rem; background: #fff; border: 1px solid var(--border-soft); border-radius: 8px; padding: 6px 10px; }
-.fb-list li .fb-nick { font-weight: 800; color: var(--accent); margin-right: 5px; }
+.fb-list li .fb-nick { font-weight: 800; color: var(--teal); margin-right: 5px; }
 .fb-list .fb-empty { color: var(--muted); font-style: italic; border: none; background: none; padding: 2px 0; }
 .fb-form { display: flex; gap: 6px; margin-top: 6px; }
 .fb-form .fb-nickname { flex: 0 0 78px; min-width: 0; }
@@ -159,11 +187,13 @@ h1 .a { color: var(--accent); }
   font-family: var(--font); font-size: 0.82rem; padding: 7px 9px; border-radius: 8px;
   border: 1px solid var(--border); background: #fff;
 }
+.fb-form input:focus { outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(59,166,160,0.15); }
 .btn-small {
   font-family: var(--font); font-size: 0.82rem; font-weight: 800; padding: 7px 12px;
-  border-radius: 8px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer;
+  border-radius: 8px; border: 1px solid var(--teal); background: var(--teal); color: #fff; cursor: pointer;
+  transition: background 0.15s;
 }
-.btn-small:hover { background: #cf7d09; }
+.btn-small:hover { background: #2b7a75; }
 .fb-msg { font-size: 0.78rem; margin: 6px 0 0; font-weight: 700; }
 .fb-msg.error { color: var(--red); }
 .fb-msg.ok { color: var(--green); }
@@ -180,7 +210,7 @@ h1 .a { color: var(--accent); }
 .field input:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,147,12,0.15); }
 
 .consent-row { display: flex; align-items: flex-start; gap: 8px; font-size: 0.86rem; color: var(--text-soft); font-weight: 600; }
-.consent-row input { margin-top: 3px; }
+.consent-row input { margin-top: 3px; accent-color: var(--accent); }
 
 .form-msg { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.86rem; font-weight: 700; }
 .form-msg.error { background: var(--red-soft); color: #c23b3a; border: 1px solid #f6c9c9; }
@@ -189,7 +219,7 @@ h1 .a { color: var(--accent); }
 .btn-primary {
   font-family: var(--font); font-size: 1rem; font-weight: 800; padding: 13px 18px;
   border-radius: var(--radius-sm); border: none; background: linear-gradient(135deg, var(--gold), #ffca3a);
-  color: #3a2e1a; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.15s;
+  color: #3a2e1a; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.15s, box-shadow 0.15s;
 }
 .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
 .btn-primary:disabled { opacity: 0.6; cursor: default; transform: none; }
@@ -197,6 +227,8 @@ h1 .a { color: var(--accent); }
 footer.foot { max-width: var(--maxw); margin: 0 auto; padding: 14px 20px 40px; color: var(--muted); font-size: 0.82rem; text-align: center; }
 
 @media (max-width: 640px) {
+  .topbar .inner { flex-wrap: wrap; row-gap: 6px; }
+  .spacer { flex-basis: 100%; height: 0; flex-grow: 0; }
   main { padding: 22px 16px; }
   h1 { font-size: 1.4rem; }
   .grid { grid-template-columns: 1fr; }
