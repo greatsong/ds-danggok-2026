@@ -709,7 +709,9 @@
   // 10. 모드 배지
   // ---------------------------------------------------------
   function renderModeBadge() {
+    // 학생 화면에는 기술 용어 배지를 표시하지 않는다 — 요소가 없으면 건너뜀.
     const badge = $("#modeBadge");
+    if (!badge) return;
     if (useSupabase) {
       badge.textContent = "실제 모드 (Supabase 연동)";
       badge.classList.add("live");
