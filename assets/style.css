@@ -116,6 +116,17 @@ hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
 .callout.check { border-left-color: var(--green); background: var(--green-soft); }
 .callout.check .h { color: #3d7a37; }
 
+/* 도입 활동 — 우리 반 데이터 */
+.callout.data { border-left-color: var(--violet); background: linear-gradient(180deg, #fbf4f8 0%, var(--card) 100%); }
+.callout.data .h { color: #8a5578; }
+.callout.data .steps3 { list-style: none; margin: 8px 0 0; padding: 0; }
+.callout.data .steps3 li { display: flex; gap: 9px; align-items: baseline; margin: 7px 0; }
+.callout.data .steps3 .k {
+  flex: none; font-size: 0.72rem; font-weight: 800; color: #8a5578;
+  background: #f3e3ec; border-radius: 999px; padding: 2px 9px; letter-spacing: 0.02em;
+}
+.callout.data .fallback { font-size: 0.85rem; color: var(--muted); margin: 10px 0 0; }
+
 /* 강사 전용 */
 .callout.say { border-left-color: var(--blue); background: var(--blue-soft); }
 .callout.say .h { color: #2f6bd6; }
