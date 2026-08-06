@@ -44,7 +44,7 @@
     <li>묶음 수 <b>k</b>를 바꾸면 점수도 결과도 바뀐다. 3묶음, 4묶음을 나란히 견줘 보자.</li>
   </ul>
 
-  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>지난번 지하철역 군집 앱을 이어서 고쳐줘.
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>지난번 지하철역 군집 앱을 이어서 고쳐 줘.
 - 같은 데이터를 3묶음과 4묶음으로 각각 나눠서, 실루엣 점수와
   묶음별 역 수를 나란히 비교해 줘.
 - 각 경우에서 역이 아주 적게 들어간 '혼자 떨어진 묶음'이 있으면
@@ -109,9 +109,9 @@ for k in [3, 4]:
 
   <div class="codewrap prompt"><span class="label">③ 프롬프트 개선 예시</span><pre>이번엔 정규화를 껐다 켜서 비교해 줘.
 - 시간대 '비율' 대신 원래 '승객 수' 그대로 3묶음으로 나눠 봐.
-- 그리고 묶음마다 대표 역(승객 많은 역)을 보여줘.
+- 그리고 묶음마다 대표 역(승객 많은 역)을 보여 줘.
 - 비율로 묶었을 때와 승객 수로 묶었을 때, 어떤 역끼리 묶이는지
-  어떻게 달라지는지 나란히 보여줘.</pre></div>
+  어떻게 달라지는지 나란히 보여 줘.</pre></div>
 
   <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><pre># station = 역 × 24시간대 '승객 수'(비율로 바꾸기 전)
 st.subheader("정규화 없이 — 승객 수 그대로 묶으면?")
