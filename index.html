@@ -6,6 +6,8 @@
 <title>데이터 과학 · 당곡고 · 학생용 교재</title>
 <link rel="stylesheet" href="assets/style.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<script src="assets/release.js"></script>
+<script src="assets/gate.js"></script>
 </head>
 <body>
 <div class="topbar"><div class="inner">
@@ -109,10 +111,12 @@
 </div>
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
-<script src="assets/release.js"></script>
+
 <script>
 // 순차 공개 — release.js의 RELEASED_LESSON 이하 차시만 열고, 그 위는 잠근다.
+// (gate.js가 교사 열람 모드를 켜 두었으면 전 차시를 그대로 연다.)
 (function () {
+  if (window.__TEACHER_MODE__) return;
   var released = (typeof window.RELEASED_LESSON === 'number') ? window.RELEASED_LESSON : 1;
   document.querySelectorAll('.linkcard[data-lesson]').forEach(function (c) {
     if (+c.getAttribute('data-lesson') > released) {
