@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2차시 · 데이터 만나기 · 표를 보는 눈 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -44,6 +44,11 @@
   <p>성적표를 받으면 과목별 점수를 한 줄씩 읽기 전에 평균부터 봅니다. 수십 개 숫자를 하나로 줄인 요약이 첫인상을 만들어 주기 때문입니다. 그런데 "평균 82점"이라는 한 줄은 전 과목이 골고루 82점인지, 수학 100점에 영어 60점인지 알려 주지 않습니다. 요약은 빠르지만, 반드시 무언가를 감춥니다. 오늘 처음 여는 4만 줄짜리 서울 기온 표도 마찬가지입니다. 요약으로 첫인상을 잡되, 그 요약이 무엇을 감추는지 눈치채는 눈까지 함께 연습합니다. 요약을 읽는 눈과 요약을 의심하는 눈은 한 쌍입니다.</p>
 
   <h2>1. 개념 이해 — 요약을 읽는 눈</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 19·25쪽</span></div>
+    <p class="q">"정형 데이터(structured data)는 데이터의 속성이나 구조가 명확하고 체계화된 데이터를 말한다." <span class="src">(19쪽)</span></p><p class="q">"데이터셋(dataset)이란 하나의 주제에 대한 여러 데이터들이 모인 집합(set)을 말한다." <span class="src">(25쪽)</span></p>
+    <p class="t">→ seoul.csv는 "서울 기온"이라는 주제의 <b>정형 데이터셋</b>이다 — 행 하나가 하루, 열 하나가 속성.</p>
+  </div>
 
   <h3>중심이 두 개나 필요한 이유 — 평균과 중앙값</h3>
   <p>표를 한 숫자로 줄일 때 가장 흔한 값이 <b>평균</b>입니다. 다 더해 개수로 나눈 값이라 모든 값의 크기를 반영하지만, 바로 그래서 동떨어진 값 하나에 크게 끌려갑니다. 또 하나의 중심이 <b>중앙값</b>입니다. 값을 작은 순서로 줄 세웠을 때 한가운데에 오는 값이라, 끝에 있는 값이 아무리 이상해도 순서 하나만 바뀔 뿐 중심은 거의 움직이지 않습니다.</p>

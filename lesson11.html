@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>11차시 · 배포 + 백테스트 · 데이터 과학</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -34,6 +34,11 @@
   <p>모의고사를 풀고 나서 똑같은 문제로 다시 시험을 보면 점수가 잘 나올 수밖에 없습니다. 실력을 정직하게 재려면 처음 보는 문제로 시험을 봐야 합니다. 모델도 같습니다. 학습에 쓴 데이터 근처에서 잰 점수는 후하게 나옵니다. 오늘은 우리 분류기에게 처음 보는 문제, 즉 학습에 쓰지 않은 가장 최근 1주일을 시험지로 내밉니다. 이렇게 시간을 되감아 확인하는 검증이 6차시에 만난 백테스트입니다. 그리고 그렇게 정직하게 잰 점수를 달아, 두 번째 앱을 인터넷에 올립니다. 오늘 반드시 남길 것은 배포 주소 하나입니다.</p>
 
   <h2>1. 개념 이해 — 정직한 시험의 조건</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 115쪽</span></div>
+    <p class="q">"모델 학습의 목적은 훈련 데이터의 규칙을 학습하여 새로운 데이터에서도 좋은 성능을 내는 일반화된 모델을 만드는 것이다."</p>
+    <p class="t">→ 백테스트는 <b>일반화</b>의 검증이다. 안 본 달의 데이터에서 성적이 떨어지면, 모델이 아니라 우리의 믿음이 과했던 것이다.</p>
+  </div>
 
   <h3>잘 맞춤과 잘 맞힘은 다르다</h3>
   <p>좋은 모델은 학습 데이터를 잘 설명하는 모델이 아니라, 본 적 없는 데이터를 잘 맞히는 모델입니다. 이 둘은 다른 능력입니다. 학습에 쓴 데이터로 잰 점수는 언제나 후한 쪽으로 기웁니다. 시험 문제를 미리 보고 푼 점수이기 때문입니다. 9차시의 88.8%도 학습에 쓴 데이터 근처에서 잰 값이라 부풀었을 수 있습니다. 부풀림을 걷어 내는 정직한 방법은 하나뿐입니다. 데이터의 일부를 학습에 쓰지 않고 남겨 두었다가, 그것으로만 시험을 보는 것입니다.</p>

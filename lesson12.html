@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>12차시 · 지도 vs 비지도 · 첫 군집 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -34,6 +34,11 @@
   <p>새 학기 첫날, 서로를 아직 모르는 반에서 모둠을 짜야 한다고 해 봅시다. 시험이라면 정답표를 놓고 채점하면 되지만, 자리 배치에는 채점표가 없습니다. 누구와 누구를 묶는 게 좋은지, 몇 모둠으로 나누는 게 좋은지 미리 정해진 답이 없습니다. 오늘 배우는 군집이 바로 이런 일입니다. 서울 지하철 500여 개 역을 정답표 없이, 하루 리듬이 닮은 것끼리 묶습니다. 정답이 없는데도 컴퓨터는 잘만 묶어 냅니다. 그 묶음을 어떻게 읽고 어디까지 믿을지가 오늘부터 세 시간의 주제입니다.</p>
 
   <h2>1. 개념 이해 — 정답표가 없는 학습</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 145쪽</span></div>
+    <p class="q">"유사한 데이터끼리 그룹으로 묶는 작업을 군집화(clustering)라고 하며, 이때 구성된 그룹을 군집(cluster)이라고 한다."</p>
+    <p class="t">→ 정답표(라벨) 없이, 역들을 시간대 승하차 패턴만으로 묶는다 — 오늘이 비지도학습의 첫날이다.</p>
+  </div>
 
   <h3>채점할 수 있는 시험, 채점표가 없는 자리 배치</h3>
   <p>회귀 트랙에서는 연도마다 실제 기온이라는 정답이 있었고, 분류 트랙에서는 시간대마다 실제 혼잡 단계라는 정답이 있었습니다. 모델이 내놓은 답을 정답과 맞춰 보면 몇 점짜리인지 바로 알 수 있었습니다. 이렇게 정답을 보고 규칙을 배우는 방식을 <b>지도학습</b>이라 부릅니다. 오늘은 사정이 다릅니다. "이 역은 무슨 형"이라는 정답 열이 데이터 어디에도 없습니다. 컴퓨터는 정답 없이 비슷한 것끼리 스스로 묶어야 합니다. 이것이 <b>비지도학습</b>입니다. 채점 가능한 시험과 채점표 없는 자리 배치의 차이라고 생각하면 됩니다.</p>

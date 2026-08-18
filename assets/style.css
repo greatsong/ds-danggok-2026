@@ -244,3 +244,10 @@ table.glossary-table th { background: #fff3d6; color: #b45309; font-weight: 800;
 table.glossary-table td.term { white-space: nowrap; font-weight: 700; }
 table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var(--muted); font-size: 0.82rem; }
 .glossary-more { font-size: 0.9rem; margin: 8px 0 0; }
+
+/* 교과서 인용 박스 — 정의·핵심 명제만 짧게 인용(출처 쪽수 필수), 이어서 우리말 풀이 */
+.tbquote { border: 1px solid var(--border); border-left: 4px solid var(--accent); background: #fffdf6; border-radius: var(--radius-sm); padding: 14px 16px; margin: 18px 0; }
+.tbquote .h { font-weight: 800; font-size: 0.9rem; margin-bottom: 6px; }
+.tbquote .h .src { font-weight: 600; color: var(--muted); font-size: 0.8rem; margin-left: 8px; }
+.tbquote .q { margin: 4px 0; line-height: 1.7; }
+.tbquote .t { margin: 6px 0 0; color: #6b5d3f; }

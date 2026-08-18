@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>개념 정리 · 중간고사 대비 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<script src="assets/release.js"></script>
+<script src="assets/gate.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">중간고사 대비</span>
+  <h1>개념 <span class="a">정리</span></h1>
+  <div class="under"></div>
+  <p class="lead">교과서 『데이터 과학』의 핵심 정의를 <b>원문 그대로</b>(쪽수 표기) 모으고, 우리 수업(서울 데이터 실습)의 말로 풀었습니다. 시험 공부 순서: <b>①정의를 소리 내어 읽고 ②우리 실습의 어느 장면인지 떠올리고 ③교과서 해당 쪽을 펴서 앞뒤를 읽는다.</b> 상세한 낱말 풀이는 <a href="glossary.html">용어사전</a>에 있습니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🔎 단원 인덱스</div>
+    <p><a href="#u1">Ⅰ. 데이터 과학의 이해</a> · <a href="#u2">Ⅱ. 데이터 준비와 분석</a> · <a href="#u3">Ⅲ. 데이터 모델링과 평가</a></p>
+  </div>
+
+  <h2 id="u1">Ⅰ. 데이터 과학의 이해</h2>
+
+  <div class="tbquote">
+    <div class="h">데이터 과학 <span class="src">『데이터 과학』 11쪽 · <a href="lesson01.html">1차시</a></span></div>
+    <p class="q">"데이터 과학은 데이터를 기반으로 실제 현상을 이해하고 분석하기 위해 통계, 데이터 분석, 기계학습 및 관련 방법을 통합하는 학문 분야다."</p>
+    <p class="t">→ 우리 수업의 한 줄 정의: <b>데이터로 질문에 답하는 일</b>. "서울은 정말 더워지고 있는가" 한 질문이 한 학기를 끌고 갔다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">정형 데이터 <span class="src">『데이터 과학』 19쪽 · <a href="lesson02.html">2차시</a></span></div>
+    <p class="q">"정형 데이터(structured data)는 데이터의 속성이나 구조가 명확하고 체계화된 데이터를 말한다."</p>
+    <p class="t">→ 행과 열이 있는 표. seoul.csv가 정형 데이터다 — 행 하나가 하루, 열 하나가 속성(날짜·평균기온…).</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">비정형 데이터 <span class="src">『데이터 과학』 20쪽 · <a href="lesson15.html">15차시</a></span></div>
+    <p class="q">"비정형 데이터(unstructured data)는 구조를 명확하게 정의하기 어려운 데이터를 말한다."</p>
+    <p class="q">"비정형 데이터는 정형 데이터처럼 명확한 속성이 정의되어 있지 않지만, 데이터를 가공하여 속성을 추출할 수 있다."</p>
+    <p class="t">→ 이미지·글·소리. 15차시에서 본 것처럼 이미지도 784개의 숫자로 가공하면 표가 된다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">데이터셋 <span class="src">『데이터 과학』 25쪽 · <a href="lesson02.html">2차시</a></span></div>
+    <p class="q">"데이터셋(dataset)이란 하나의 주제에 대한 여러 데이터들이 모인 집합(set)을 말한다."</p>
+    <p class="t">→ seoul.csv는 "서울 기온"이라는 주제의 데이터셋이다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">데이터베이스 <span class="src">『데이터 과학』 26쪽 · <a href="lesson02.html">2차시</a></span></div>
+    <p class="q">"데이터베이스(database)는 여러 사람이 공유하여 사용하기 위해 통합 관리되는 데이터의 집합"</p>
+    <p class="t">→ 데이터셋이 표 한 장이라면, 데이터베이스는 여러 표(테이블)를 함께 관리하는 서랍장이다.</p>
+  </div>
+
+  <h2 id="u2">Ⅱ. 데이터 준비와 분석</h2>
+
+  <div class="tbquote">
+    <div class="h">데이터 전처리 · 결측치 · 이상치 <span class="src">『데이터 과학』 57쪽 · <a href="lesson04.html">4차시</a></span></div>
+    <p class="q">"데이터 분석을 위해 수집된 데이터를 변환하고, 결측치나 이상치를 처리하여 최종적으로 분석에 사용할 수 있는 형태로 가공하는 과정을 데이터 전처리(preprocessing)라고 한다."</p>
+    <p class="t">→ 우리 실습의 장면: 한국전쟁 관측 중단(1951~52)이 <b>결측치</b>, 1953년 반쪽 관측이 <b>이상치</b>. 이상치를 걸러내자 R²가 0.39에서 0.70으로 변했다 — 전처리가 결론을 바꾼다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">데이터 시각화 <span class="src">『데이터 과학』 66쪽 · <a href="lesson03.html">3차시</a></span></div>
+    <p class="q">"데이터 시각화란 데이터 속성을 도형, 선, 색 등의 시각적 요소로 표현하는 것으로, 데이터 분석에 유용하게 활용된다."</p>
+    <p class="t">→ 요약통계에서 안 보이던 1950년대의 구멍이 연평균 그래프에서 한눈에 보였다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">상관관계 vs 인과관계 <span class="src">『데이터 과학』 72쪽 · <a href="lesson08.html">8차시</a></span></div>
+    <p class="q">"상관관계는 한 데이터 속성이 변화하면 다른 데이터 속성이 변화하는 관계다."</p>
+    <p class="q">"상관관계가 있는 데이터 속성 중에서 원인과 결과의 관계가 있는 데이터 속성 간 관계를 인과관계라고 한다."</p>
+    <p class="t">→ 연도와 기온이 함께 오르는 건 상관의 관측이다. "왜 오르는가"(원인)는 직선이 답하지 못한다 — 함께 변한다고 원인은 아니다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">상관계수 <span class="src">『데이터 과학』 76쪽 · <a href="lesson08.html">8차시</a></span></div>
+    <p class="q">"상관관계의 강도를 수치로 표현한 것이다."</p>
+    <p class="t">→ −1에서 +1 사이. 절댓값이 클수록 강한 상관, 0에 가까우면 무상관.</p>
+  </div>
+
+  <h2 id="u3">Ⅲ. 데이터 모델링과 평가</h2>
+
+  <div class="tbquote">
+    <div class="h">모델링 <span class="src">『데이터 과학』 115쪽 · <a href="lesson05.html">5차시</a></span></div>
+    <p class="q">"모델링은 데이터 모델을 만드는 과정으로 데이터 모델을 구축하기 위한 데이터의 구조화 및 처리 과정을 의미한다."</p>
+    <p class="t">→ 우리에겐 "연도를 넣으면 기온을 내놓는 직선"을 만드는 일이었다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">회귀 분석 · 오차 <span class="src">『데이터 과학』 119·120쪽 · <a href="lesson05.html">5차시</a></span></div>
+    <p class="q">"회귀 분석은 하나의 변수가 다른 변수에 미치는 영향을 확인해 변수들 사이의 관계를 알아내는 분석 방법이다." <span class="src">(119쪽)</span></p>
+    <p class="q">"실젯값과 예측값의 차이를 오차라고 하는데, 두 직선을 비교하여 오차가 더 작은 것을 선택해야 한다." <span class="src">(120쪽)</span></p>
+    <p class="t">→ 좋은 직선의 기준 = 오차. 수많은 직선 중 오차가 가장 작은 선이 회귀선이다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">훈련 데이터와 테스트 데이터 <span class="src">『데이터 과학』 112쪽 · <a href="lesson06.html">6차시</a></span></div>
+    <p class="q">"데이터 전처리의 마지막 과정은 모델에 입력할 데이터를 훈련 데이터(training data)와 테스트 데이터(test data)로 나누는 것이다."</p>
+    <p class="t">→ 학습에 쓴 문제로 시험을 보면 실력을 알 수 없다. 백테스트(11차시)도 같은 원리다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">일반화 · 과소적합 <span class="src">『데이터 과학』 115쪽 · <a href="lesson11.html">11차시</a></span></div>
+    <p class="q">"모델 학습의 목적은 훈련 데이터의 규칙을 학습하여 새로운 데이터에서도 좋은 성능을 내는 일반화된 모델을 만드는 것이다."</p>
+    <p class="q">"모델이 훈련 데이터를 충분히 학습하지 못했을 경우를 과소적합(underfit)이라고 한다."</p>
+    <p class="t">→ 안 본 데이터에서의 성적이 진짜 성적이다. 인구 열을 넣어 0.909가 된 모델이 좋은 모델이 아니었던 이유(정답 베끼기)도 여기서 나온다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">분류 모델의 성능 지표 <span class="src">『데이터 과학』 138·139쪽 · <a href="lesson09.html">9차시</a>·<a href="lesson10.html">10차시</a></span></div>
+    <p class="q">"대표적인 성능 지표로는 정확도(accuracy), 정밀도(precision), 재현율(recall), F1-score가 있다." <span class="src">(138쪽)</span></p>
+    <p class="q">"재현율은 실제 양성인 데이터 중 모델이 정확하게 예측한 데이터의 비율을 나타낸다." <span class="src">(139쪽)</span></p>
+    <p class="t">→ 우리 실습의 수치로: 첫 모델 정확도 88.8% — 그런데 전부 "여유"로 찍어도 75.0%(기준선). "붐빔" 재현율 0.67 — 정작 알고 싶은 단계를 제일 못 맞혔다. <b>정확도 하나만 보면 놓친다.</b></p>
+  </div>
+  <div class="tbquote">
+    <div class="h">군집화 <span class="src">『데이터 과학』 145쪽 · <a href="lesson12.html">12차시</a></span></div>
+    <p class="q">"유사한 데이터끼리 그룹으로 묶는 작업을 군집화(clustering)라고 하며, 이때 구성된 그룹을 군집(cluster)이라고 한다."</p>
+    <p class="t">→ 정답표(라벨) 없이 묶는다 — 지도학습(회귀·분류)과의 결정적 차이. 지하철역을 시간대 패턴으로 묶어 "저녁형 업무지구 vs 아침형 주거지"를 발견했다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">k-평균 알고리즘 <span class="src">『데이터 과학』 146쪽 · <a href="lesson13.html">13차시</a></span></div>
+    <p class="q">"k-평균 알고리즘은 k개의 군집을 구성하는 기계학습 알고리즘이다."</p>
+    <p class="t">→ k(군집 개수)는 데이터에 적혀 있지 않고 사람이 정한다. k를 바꾸면 묶음이 달라진다 — 상동역이 홀로 한 군집이 된 장면을 기억할 것.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">연관 분석 — 지지도·신뢰도·향상도 <span class="src">『데이터 과학』 159·160쪽 · <a href="lesson16.html">16차시(선택)</a></span></div>
+    <p class="q">"지지도는 두 개의 사건이 동시에 발생하는 비율이며 …" <span class="src">(159쪽)</span></p>
+    <p class="q">"신뢰도는 규칙의 결과 부분이 발생할 가능성을 측정한다." <span class="src">(159쪽)</span></p>
+    <p class="q">"향상도는 규칙의 두 사건이 독립일 때와 비교하여 규칙이 얼마나 영향력이 있는지 측정하는 지표이다." <span class="src">(160쪽)</span></p>
+    <p class="t">→ 얼마나 <b>자주</b>(지지도) · 얼마나 <b>믿을 만하게</b>(신뢰도) · <b>우연 이상으로</b>(향상도). 향상도가 1보다 커야 우연이 아니라고 말할 수 있다.</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">💡 시험 대비 마지막 점검</div>
+    <ul>
+      <li>지필 문항은 <b>수업에서 함께 본 실측 수치</b>로 출제된다 — R² 0.70→0.39 · 기준선 75.0% · 정확도 88.8% · 재현율 0.67이 어떤 장면의 숫자였는지 말로 설명할 수 있으면 준비 끝.</li>
+      <li>정의는 교과서 원문으로, 장면은 우리 실습으로 — 둘을 짝지어 외우면 오래 간다.</li>
+    </ul>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재 · 인용문의 출처는 『데이터 과학』(광주광역시교육감 인정)</footer>
+<script src="assets/copy.js"></script>
+</body>
+</html>

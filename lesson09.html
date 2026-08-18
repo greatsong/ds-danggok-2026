@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>9차시 · 회귀 vs 분류 · 첫 분류 모델 · 데이터 과학</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -34,6 +34,11 @@
   <p>내일 아침 집을 나서기 전에 우리가 던지는 질문은 두 갈래입니다. "오늘 몇 도지?"는 숫자를 묻고, "우산 챙겨야 하나?"는 챙긴다와 안 챙긴다, 두 칸 중 하나를 묻습니다. 지난 8차시 동안 우리는 앞의 질문처럼 숫자를 맞히는 회귀를 다뤘습니다. 오늘부터는 뒤의 질문처럼 정해진 칸 중 하나를 맞히는 분류를 시작합니다. "내일 강남역은 붐빌까?" 붐비는 정도를 네 단계로 나눠 놓고 그중 하나를 골라 맞히는 문제입니다. 오늘 첫 분류기를 돌리면 정확도라는 점수가 나옵니다. 꽤 높아 보이는 숫자가 나올 텐데, 그 첫인상을 어디까지 믿을지는 다음 차시에 다시 따져 봅니다.</p>
 
   <h2>1. 개념 이해 — 답의 모양이 문제를 가른다</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 138쪽</span></div>
+    <p class="q">"대표적인 성능 지표로는 정확도(accuracy), 정밀도(precision), 재현율(recall), F1-score가 있다."</p>
+    <p class="t">→ 오늘 만난 88.8%는 이 중 <b>정확도</b>다. 나머지 지표가 왜 필요한지는 다음 차시에서 알게 된다.</p>
+  </div>
 
   <h3>숫자 하나냐, 칸 하나냐</h3>
   <p>"어제 서울의 평균기온은?"의 답은 12.3℃처럼 어떤 값이든 나올 수 있는 연속된 숫자입니다. 반면 "내일 저녁 강남역은 붐빌까?"의 답은 여유·보통·약간 붐빔·붐빔, 미리 정해진 네 칸 중 하나입니다. 이 차이가 두 문제를 가릅니다. 답이 연속된 숫자 하나로 나오면 회귀, 정해진 칸 중 하나로 나오면 분류입니다. 두 문제는 물음이 비슷해 보여도 답의 모양이 다르고, 답의 모양이 다르면 쓰는 도구와 점수를 매기는 방법까지 달라집니다. 그래서 새로운 예측 문제를 만나면 방법을 고르기 전에 답의 모양부터 확인합니다.</p>

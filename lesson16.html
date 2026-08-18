@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>16차시(선택) · 연관 분석 원리 체험 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -47,6 +47,11 @@
   <p>온라인 서점은 "이 책을 산 사람들이 함께 산 책"을 보여 주고, 편의점은 같이 팔리는 과자와 음료를 나란히 진열합니다. 이런 추천의 밑바닥에는 "무엇과 무엇이 함께 나타나는가"를 세는 계산이 있습니다. 이것이 <b>연관 분석</b>입니다. 그런데 여기에 물음이 하나 붙습니다. 함께 자주 팔린다는 사실만으로 두 상품이 관련 있다고 말해도 될까요? 인기 상품은 무엇과 묶어도 함께 자주 팔립니다. 그 겉보기를 걷어 내고 진짜 관련만 남기는 것이 오늘의 목표입니다. 필요한 계산은 나눗셈 세 번이 전부입니다.</p>
 
   <h2>1. 개념 이해 — 매점 계산대의 세 숫자</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 159·160쪽</span></div>
+    <p class="q">"지지도는 두 개의 사건이 동시에 발생하는 비율이며 …" <span class="src">(159쪽)</span></p><p class="q">"신뢰도는 규칙의 결과 부분이 발생할 가능성을 측정한다." <span class="src">(159쪽)</span></p><p class="q">"향상도는 규칙의 두 사건이 독립일 때와 비교하여 규칙이 얼마나 영향력이 있는지 측정하는 지표이다." <span class="src">(160쪽)</span></p>
+    <p class="t">→ 얼마나 <b>자주</b>(지지도) · 얼마나 <b>믿을 만하게</b>(신뢰도) · <b>우연 이상으로</b>(향상도) — 세 잣대를 통과해야 규칙이다.</p>
+  </div>
   <p>학교 매점의 계산 기록 <b>50건</b>이 있다고 합시다. 삼각김밥이 든 기록이 20건, 바나나우유가 든 기록이 25건, 두 개를 함께 산 기록이 10건입니다. "삼각김밥을 산 사람은 바나나우유도 산다"는 규칙이 쓸 만한지, 세 숫자로 차례차례 재 봅니다.</p>
 
   <h3>지지도 — 함께 산 비율</h3>

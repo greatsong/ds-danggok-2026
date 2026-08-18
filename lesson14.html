@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>14차시 · 군집에 이름 붙이기와 배포 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -34,6 +34,10 @@
   <p>밤하늘의 별은 그저 흩어진 점입니다. 그 점들을 이어 국자 모양을 알아보고 북두칠성이라는 이름을 붙인 것은 사람입니다. 이름이 붙고 나서야 별들은 방향을 찾는 길잡이가 됐습니다. 지난 두 시간 동안 컴퓨터는 지하철역을 리듬이 닮은 묶음으로 나눠 줬습니다. 그런데 컴퓨터가 건넨 것은 묶음 0·1·2라는 번호뿐입니다. 이 번호에 "주거형", "번화가형" 같은 이름을 붙여야 비로소 쓸모 있는 발견이 됩니다. 오늘은 그 이름을 근거와 함께 붙이고, 누구나 써 볼 수 있는 검색 앱으로 만들어 배포합니다.</p>
 
   <h2>1. 개념 이해 — 이름을 붙이는 책임</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서와 이어 보기 <span class="src">『데이터 과학』 145쪽</span></div>
+    <p class="t">교과서 145쪽의 <b>군집 내 유사성 · 군집 간 상이성</b> 그림과 함께 보자. 묶음은 알고리즘이 만들지만, 묶음에 이름을 붙이는 건 사람의 해석이다.</p>
+  </div>
 
   <h3>컴퓨터가 주는 것과 주지 않는 것</h3>
   <p>k-means가 끝나고 우리 손에 들어오는 것은 "이 역은 묶음 0, 저 역은 묶음 2"라는 번호표가 전부입니다. 번호는 순서일 뿐 뜻이 없습니다. 컴퓨터는 점 사이의 가깝고 먼 구조만 다룰 뿐, 그 구조가 세상에서 무엇을 의미하는지는 알지 못합니다. 아침에 봉우리가 솟는 리듬이 "출근길에 나서는 주거지"라는 사실은 데이터 안이 아니라 우리의 생활 지식에서 나옵니다. 그래서 일이 나뉩니다. 패턴을 찾는 일은 기계가 하고, 의미를 주는 일은 사람이 합니다.</p>

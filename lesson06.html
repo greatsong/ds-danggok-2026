@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>6차시 · 평가와 한계 — 언제 믿을 수 있나 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -49,6 +49,11 @@
   <p>일기예보가 "내일 비 올 확률 80%"라고 말하면, 우리는 우산을 챙기면서도 속으로 묻습니다. 이 80%는 어디까지 믿어도 될까? 지난 차시에 만든 예측기도 마찬가지입니다. 물어보면 "2050년은 몇 도"라고 숫자를 시원하게 내놓지만, 그 숫자를 얼마나 믿을지는 알려 주지 않습니다. 오늘은 그 물음 하나를 다룹니다. 답부터 말하면, 믿음에는 조건이 붙습니다. 그리고 그 조건을 바꾸면 답이 달라집니다.</p>
 
   <h2>1. 개념 이해 — 점수를 읽는 눈</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 112쪽</span></div>
+    <p class="q">"데이터 전처리의 마지막 과정은 모델에 입력할 데이터를 훈련 데이터(training data)와 테스트 데이터(test data)로 나누는 것이다."</p>
+    <p class="t">→ 학습에 쓴 문제로 시험을 보면 안 되기 때문이다. 오늘 R²를 믿을 수 있는지 따질 때 이 구분이 등장한다.</p>
+  </div>
 
   <h3>R², "얼마나 설명했나"의 점수</h3>
   <p>아무 정보 없이 내년 연평균기온을 맞혀야 한다면, 가장 무난한 답은 지금까지의 평균을 그대로 대는 것입니다. 이때 생기는 오차가 출발점입니다. 우리 예측기는 여기에 "연도"라는 정보 하나를 더해 직선을 그었습니다. <b>R²(결정계수)</b>는 이 직선이 "평균으로만 찍었을 때"의 오차를 얼마나 줄였는지 나타내는 0~1 사이 점수입니다.</p>

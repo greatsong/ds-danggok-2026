@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>5차시 · 모델링(직선을 긋다) · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -45,6 +45,11 @@
   <p>키가 크는 아이의 성장 기록을 떠올려 봅니다. 지금까지 잰 키를 점으로 찍으면 오르내림이 있어도 큰 흐름이 보이고, 우리는 그 흐름을 따라 "내년엔 이쯤 크겠다"라고 어림합니다. 데이터로 미래를 내다보는 일도 같은 원리입니다. 지난 차시까지 손질해 둔 114개 연도의 기온 점들 위에, 흐름을 요약하는 직선 한 개를 긋고, 그 직선에 아직 오지 않은 연도를 넣어 보는 것입니다. 오늘은 이 직선을 컴퓨터가 스스로 찾게 만듭니다. 코드로는 한 줄이지만, 그 한 줄에서 우리의 첫 예측 모델이 만들어집니다.</p>
 
   <h2>1. 개념 이해 — 직선 한 개를 찾는 일</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 119·120쪽</span></div>
+    <p class="q">"회귀 분석은 하나의 변수가 다른 변수에 미치는 영향을 확인해 변수들 사이의 관계를 알아내는 분석 방법이다." <span class="src">(119쪽)</span></p><p class="q">"실젯값과 예측값의 차이를 오차라고 하는데, 두 직선을 비교하여 오차가 더 작은 것을 선택해야 한다." <span class="src">(120쪽)</span></p>
+    <p class="t">→ 연도(x)로 기온(y)을 설명하는 직선 긋기 — "좋은 직선"의 기준이 바로 오차다.</p>
+  </div>
 
   <h3>'가장 잘 맞는 직선'의 기준</h3>
   <p>점 구름 사이로 그을 수 있는 직선은 무수히 많습니다. 조금 가파르게, 조금 완만하게, 위로 조금 올려서. 그중 하나를 고르려면 기준이 필요합니다. 기준은 이렇습니다. 각 점에서 직선까지의 <b>세로 거리</b>, 즉 실제 값과 직선이 말하는 값 사이의 어긋남을 재고, 이 어긋남들을 모두 모았을 때 가장 작아지는 직선 한 개를 고릅니다(어긋남은 부호가 사라지도록 제곱해서 더합니다). 그래서 이 직선은 어느 한 점에 완벽히 붙는 대신, <b>모든 점과 두루 가까운 타협안</b>이 됩니다. 눈대중으로 "이쯤인가?" 하고 긋는 것과 달리, 이 기준을 만족하는 직선은 딱 하나로 정해집니다.</p>

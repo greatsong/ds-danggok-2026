@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>15차시 · 이미지 데모 + 팀 구성 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -42,6 +42,11 @@
   <p>오늘의 두 번째 일은 더 큽니다. 공통 수업이 오늘로 마무리되고, 다음 시간부터는 5주 동안 15차시의 팀 프로젝트가 이어집니다. 어떤 팀과 어떤 질문으로 그 5주를 보낼지 오늘 정합니다. 프로젝트의 절반은 질문에서 정해지므로, 오늘의 30분이 앞으로의 15차시를 좌우합니다.</p>
 
   <h2>1. 개념 이해 — 이미지도 숫자다</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 20쪽</span></div>
+    <p class="q">"비정형 데이터(unstructured data)는 구조를 명확하게 정의하기 어려운 데이터를 말한다."</p><p class="q">"비정형 데이터는 정형 데이터처럼 명확한 속성이 정의되어 있지 않지만, 데이터를 가공하여 속성을 추출할 수 있다."</p>
+    <p class="t">→ 이미지도 784개의 숫자로 가공하면 표가 된다 — 오늘의 손글씨 데모가 바로 "가공하여 속성을 추출"하는 장면이다.</p>
+  </div>
 
   <h3>흑백 사진 한 장은 784칸의 표다</h3>
   <p>흑백 사진을 계속 확대하면 어느 순간 작은 정사각형 칸이 드러납니다. 이 칸이 <b>픽셀</b>입니다. 칸 하나에는 모양도 선도 없고, 오직 밝기 하나만 있습니다. 완전한 검정을 0, 완전한 흰색을 1로 정하면 칸 하나는 숫자 하나가 됩니다. 오늘 볼 손글씨 그림은 가로 28칸, 세로 28칸이므로, 그림 한 장이 곧 28 × 28 = <b>784개의 밝기 숫자</b>입니다.</p>

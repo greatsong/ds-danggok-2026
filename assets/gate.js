@@ -47,7 +47,7 @@
   var locked = false;
   if (!teacher) {
     if (path.indexOf('/teacher/') !== -1) locked = true;
-    else if (/glossary\.html$/.test(path)) locked = true;
+    else if (/(glossary|concepts)\.html$/.test(path)) locked = released < 15; // 시험 대비 시점(15차시)에 공개
     else if (m && parseInt(m[1], 10) > released) locked = true;
   }
 
@@ -82,7 +82,7 @@
         var lm = href.match(/lesson(\d{2})\.html/);
         var blocked =
           (lm && parseInt(lm[1], 10) > released) ||
-          /glossary\.html/.test(href) ||
+          (/(glossary|concepts)\.html/.test(href) && released < 15) ||
           /(^|\/)teacher\//.test(href);
         if (!blocked) return;
         if (a.classList.contains('linkcard')) return; // 목록 카드는 index.html이 따로 처리
