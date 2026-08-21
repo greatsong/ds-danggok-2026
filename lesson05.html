@@ -42,8 +42,136 @@
   <h2>0. 왜 배우나</h2>
   <p>버스 도착 알림, 날씨 앱, 실시간 환율 — 이런 앱들은 데이터 파일을 미리 내려받아 두지 않습니다. 여러분이 화면을 여는 순간, 앱이 데이터를 가진 서버에 <b>요청을 보내고 응답을 받아</b> 보여 줍니다. 이 창구가 API입니다. 2차시에 공공데이터포털에서 CSV 파일을 내려받아 봤다면, 오늘은 데이터를 받는 두 번째 방법을 배웁니다. 한 번 익혀 두면 급식·영화·날씨·대중교통 등 세상의 수많은 실시간 데이터가 여러분 앱의 재료가 됩니다. 팀 프로젝트에서 "항상 최신인 데이터"를 다루고 싶다면 오늘이 그 출발점입니다.</p>
 
-  <h2>1. 개념 이해 — API는 데이터를 주문하는 창구</h2>
-  <p>API를 식당에 비유하면 이렇습니다. 식당에는 <b>메뉴판</b>이 있고(무엇을 주문할 수 있는지 알려 주는 문서), 손님은 정해진 형식의 <b>주문서</b>를 내며(요청), 주방은 음식을 <b>서빙</b>합니다(응답). 데이터의 세계에서 메뉴판은 API 안내 문서, 주문서는 주소 형태의 요청, 서빙되는 음식이 바로 JSON 형식의 응답입니다. 손님이 주방에 직접 들어가지 않아도 음식을 받듯, 우리는 나이스(NEIS) 서버 내부를 몰라도 정해진 창구로 급식 데이터를 받을 수 있습니다.</p>
+  <h2>1. 개념 이해 — API는 관공서 민원창구</h2>
+  <p>API는 관공서의 민원창구와 같습니다. 정해진 창구(주소)에 정해진 양식의 서류(요청)를 내면, 정해진 양식의 결과물(응답)이 돌아옵니다. 동사무소에서 등본을 떼는 일과, 내 앱이 오늘 급식을 받아 오는 일은 정확히 같은 흐름 — <b>요청 → 응답</b> — 입니다. 우리는 나이스(NEIS) 서버 내부를 몰라도, 창구의 규칙만 알면 급식 데이터를 받을 수 있습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>민원창구</th><th>API</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>창구 주소</td><td>요청 URL</td><td>어디에 물어볼지 정해진 인터넷 주소</td></tr>
+      <tr><td>제출 서류</td><td>요청(request)</td><td>"무엇을 알려줘"라는 우리의 물음 — 학교·날짜 같은 조건</td></tr>
+      <tr><td>돌려받는 서류</td><td>응답(response)</td><td>정해진 양식(JSON)으로 오는 답</td></tr>
+      <tr><td>신분증</td><td>API 키(인증키)</td><td>"나 이 서비스 쓰는 사람"임을 증명하는 열쇠</td></tr>
+    </tbody>
+  </table>
+
+  <details class="glossary">
+    <summary>🔬 더 알아보기 — API가 뭐예요? 관공서에서 등본 떼기로 이해하기 (클릭해서 움직여 보세요)</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">API는 <b>"정해진 양식을 채워 보내면, 원하는 결과물을 정해진 형식으로 돌려주는 창구"</b>입니다. 아래 두 줄은 <b>클릭할 때마다 한 단계씩</b> 움직입니다 — ①신청서 쓰기 → ②보내기 → ③결과물 만들기 → ④받기. 동사무소 등본 떼기와 내 앱의 급식 받기가 똑같이 <b>요청 → 응답</b>으로 흐릅니다.</p>
+<svg class="api-svg" viewBox="0 0 800 445" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="클릭할 때마다 한 단계씩 진행되는 API 요청과 응답 그림">
+  <defs>
+    <marker id="arR" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#7d93ef"/></marker>
+    <marker id="arL" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#e98bb6"/></marker>
+    <filter id="ds2" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2a3568" flood-opacity="0.14"/></filter>
+  </defs>
+  <g class="lane" data-lane="A" data-req-y="98" data-res-y="146" style="cursor:pointer">
+    <rect x="6" y="14" width="788" height="190" fill="transparent" pointer-events="all"/>
+    <text class="hint" x="400" y="42" text-anchor="middle" font-size="16" font-weight="800" fill="#3b47c2">👆 클릭 ① — 신청서 쓰기</text>
+    <g filter="url(#ds2)" pointer-events="none"><rect x="28" y="64" width="180" height="100" rx="18" fill="#ffffff" stroke="#e6e8f2"/></g>
+    <text x="118" y="114" text-anchor="middle" font-size="36" pointer-events="none">🙋</text>
+    <text x="118" y="148" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a" pointer-events="none">나 = 민원인</text>
+    <g filter="url(#ds2)" pointer-events="none"><rect x="592" y="64" width="180" height="100" rx="18" fill="#eef0ff" stroke="#c3c9f5"/></g>
+    <text x="682" y="110" text-anchor="middle" font-size="33" pointer-events="none">🏛️</text>
+    <text x="682" y="140" text-anchor="middle" font-size="15" font-weight="800" fill="#3b47c2" pointer-events="none">관공서 창구</text>
+    <text x="682" y="157" text-anchor="middle" font-size="11.5" fill="#8a8fb0" pointer-events="none">데이터 보관</text>
+    <line x1="216" y1="98" x2="584" y2="98" stroke="#9fb0f5" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arR)" pointer-events="none"/>
+    <text x="400" y="86" text-anchor="middle" font-size="13" fill="#5B6CF0" font-weight="800" pointer-events="none">요청(신청서) →</text>
+    <line x1="584" y1="146" x2="216" y2="146" stroke="#f0b9d2" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arL)" pointer-events="none"/>
+    <text x="400" y="170" text-anchor="middle" font-size="13" fill="#E0568A" font-weight="800" pointer-events="none">← 응답(결과물)</text>
+    <g class="doc-req" opacity="0" pointer-events="none">
+      <rect x="-62" y="-38" width="124" height="76" rx="8" fill="#ffffff" stroke="#b9c0f5"/>
+      <rect x="-62" y="-38" width="124" height="22" rx="8" fill="#5B6CF0"/><rect x="-62" y="-27" width="124" height="11" fill="#5B6CF0"/>
+      <text x="0" y="-22" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📝 등본 신청서</text>
+      <text x="0" y="4" text-anchor="middle" font-size="13" font-weight="800" fill="#3b47c2">이름: 홍길동</text>
+      <text x="0" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="#3b47c2">주소: 서울 ○○구</text>
+    </g>
+    <g class="doc-res" opacity="0" pointer-events="none">
+      <rect x="-66" y="-44" width="132" height="88" rx="8" fill="#ffffff" stroke="#f0c6da"/>
+      <rect x="-66" y="-44" width="132" height="22" rx="8" fill="#E0568A"/><rect x="-66" y="-33" width="132" height="11" fill="#E0568A"/>
+      <text x="0" y="-28" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📄 주민등록등본</text>
+      <text x="0" y="-2" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">홍길동</text>
+      <text x="0" y="16" text-anchor="middle" font-size="12" fill="#55524c">서울 ○○구</text>
+      <circle cx="0" cy="31" r="8" fill="none" stroke="#e0392f" stroke-width="1.4"/><text x="0" y="34.5" text-anchor="middle" font-size="8" font-weight="800" fill="#e0392f">印</text>
+    </g>
+  </g>
+  <line x1="40" y1="205" x2="760" y2="205" stroke="#eceef5" stroke-width="1"/>
+  <g class="lane" data-lane="B" data-req-y="298" data-res-y="342" style="cursor:pointer">
+    <rect x="6" y="212" width="788" height="192" fill="transparent" pointer-events="all"/>
+    <text class="hint" x="400" y="240" text-anchor="middle" font-size="16" font-weight="800" fill="#0e9488">👆 클릭 ① — 요청 만들기</text>
+    <g filter="url(#ds2)" pointer-events="none"><rect x="28" y="264" width="180" height="100" rx="18" fill="#ffffff" stroke="#e6e8f2"/></g>
+    <text x="118" y="314" text-anchor="middle" font-size="36" pointer-events="none">💻</text>
+    <text x="118" y="348" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a" pointer-events="none">내 앱 · 브라우저</text>
+    <g filter="url(#ds2)" pointer-events="none"><rect x="592" y="264" width="180" height="100" rx="18" fill="#eef0ff" stroke="#c3c9f5"/></g>
+    <text x="682" y="308" text-anchor="middle" font-size="33" pointer-events="none">🏫</text>
+    <text x="682" y="338" text-anchor="middle" font-size="15" font-weight="800" fill="#3b47c2" pointer-events="none">나이스(NEIS)</text>
+    <text x="682" y="355" text-anchor="middle" font-size="11.5" fill="#8a8fb0" pointer-events="none">= 관공서(API)</text>
+    <line x1="216" y1="298" x2="584" y2="298" stroke="#9fb0f5" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arR)" pointer-events="none"/>
+    <text x="400" y="286" text-anchor="middle" font-size="13" fill="#5B6CF0" font-weight="800" pointer-events="none">요청(신청서) →</text>
+    <line x1="584" y1="342" x2="216" y2="342" stroke="#f0b9d2" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arL)" pointer-events="none"/>
+    <text x="400" y="366" text-anchor="middle" font-size="13" fill="#E0568A" font-weight="800" pointer-events="none">← 응답(결과물)</text>
+    <g class="doc-req" opacity="0" pointer-events="none">
+      <rect x="-66" y="-44" width="132" height="88" rx="8" fill="#ffffff" stroke="#b9c0f5"/>
+      <rect x="-66" y="-44" width="132" height="22" rx="8" fill="#0e9488"/><rect x="-66" y="-33" width="132" height="11" fill="#0e9488"/>
+      <text x="0" y="-28" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📝 요청 (URL)</text>
+      <text x="0" y="-4" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">학교: 당곡고</text>
+      <text x="0" y="14" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">날짜: 오늘</text>
+      <text x="0" y="32" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">🔑 인증키</text>
+    </g>
+    <g class="doc-res" opacity="0" pointer-events="none">
+      <rect x="-82" y="-52" width="164" height="104" rx="8" fill="#ffffff" stroke="#a7d8d4"/>
+      <rect x="-82" y="-52" width="164" height="22" rx="8" fill="#0e9488"/><rect x="-82" y="-41" width="164" height="11" fill="#0e9488"/>
+      <text x="0" y="-36" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📦 응답 (JSON)</text>
+      <text x="0" y="-6" text-anchor="middle" font-size="20" font-weight="800" fill="#2b2d3a">🍚 오늘의 급식</text>
+      <text x="0" y="13" text-anchor="middle" font-size="11" fill="#8a8fa6">식단·칼로리·원산지</text>
+      <text x="0" y="36" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0e9488" font-family="monospace">{"DDISH_NM": "…"}</text>
+    </g>
+  </g>
+  <text x="400" y="432" text-anchor="middle" font-size="12.5" fill="#7a7f95" pointer-events="none">이름·주소 = 학교·날짜(신청) · 주민등록등본 = 오늘의 식단(결과) · 관공서 = API 서버 · 🔑 신분증 = 인증키</text>
+</svg>
+<script>
+(function () {
+  var STEPS = {
+    A: ["👆 클릭 ① — 신청서 쓰기", "👆 클릭 ② — 창구로 보내기", "👆 클릭 ③ — 등본 만들기", "👆 클릭 ④ — 등본 받기", "✅ 한 바퀴 끝! 클릭하면 처음부터"],
+    B: ["👆 클릭 ① — 요청 만들기", "👆 클릭 ② — 창구로 보내기", "👆 클릭 ③ — 응답(JSON) 만들기", "👆 클릭 ④ — 응답 받기", "✅ 한 바퀴 끝! 클릭하면 처음부터"]
+  };
+  var START_X = 275, END_X = 525;
+  var MOVE = "transform 2.8s ease-in-out, opacity 0.7s ease";
+  document.querySelectorAll(".api-svg .lane").forEach(function (lane) {
+    var id = lane.getAttribute("data-lane");
+    var req = lane.querySelector(".doc-req");
+    var res = lane.querySelector(".doc-res");
+    var hint = lane.querySelector(".hint");
+    var reqY = +lane.getAttribute("data-req-y");
+    var resY = +lane.getAttribute("data-res-y");
+    var s = 0;
+    function reset() {
+      req.style.transition = "none";
+      res.style.transition = "none";
+      req.style.transform = "translate(" + START_X + "px," + reqY + "px)";
+      res.style.transform = "translate(" + END_X + "px," + resY + "px)";
+      req.style.opacity = 0;
+      res.style.opacity = 0;
+      req.getBoundingClientRect();
+      req.style.transition = MOVE;
+      res.style.transition = MOVE;
+      hint.textContent = STEPS[id][0];
+    }
+    reset();
+    lane.addEventListener("click", function () {
+      s = (s + 1) % 5;
+      if (s === 1) { req.style.opacity = 1; }
+      else if (s === 2) { req.style.transform = "translate(" + END_X + "px," + reqY + "px)"; }
+      else if (s === 3) { req.style.opacity = 0; res.style.opacity = 1; }
+      else if (s === 4) { res.style.transform = "translate(" + START_X + "px," + resY + "px)"; }
+      else { s = 0; reset(); return; }
+      hint.textContent = STEPS[id][s];
+    });
+  });
+})();
+</script>
+    </div>
+  </details>
+  <p>응답에는 <b>상태코드</b>라는 번호표가 함께 옵니다. 셋만 기억하면 됩니다 — <b>200</b> 성공 · <b>404</b> 없음(주소 오류) · <b>429</b> 과다 요청(잠깐 쉬기).</p>
   <p>내려받기와 API는 무엇이 다를까요? 내려받은 CSV는 <b>그 시점의 복사본</b>입니다. 내일 식단이 바뀌어도 내 파일은 모릅니다. API는 호출할 때마다 서버가 지금 가진 데이터를 보내 주므로 <b>항상 최신</b>이고, 날짜나 학교를 지정해 <b>필요한 만큼만</b> 받을 수 있습니다.</p>
 
   <div class="tbquote">
@@ -63,6 +191,28 @@
       <tr><td><b>형태</b></td><td>정형(표)</td><td>반정형(JSON) — 표로 변환해서 사용</td></tr>
     </tbody>
   </table>
+
+  <h3>JSON — 라벨 붙은 상자</h3>
+  <p>API가 돌려주는 JSON은 <b>{"라벨": 값} 짝으로 이루어진 상자</b>입니다. 상자 안에 상자를 넣을 수 있어서, 복잡한 데이터도 층층이 담을 수 있습니다. 오늘 쓸 급식 API의 실제 응답 일부를 봅니다.</p>
+  <div class="codewrap code"><span class="label">실제 응답 (일부 발췌)</span><pre>{
+  "mealServiceDietInfo": [
+    { "head": [ { "list_total_count": 1 } ] },
+    { "row": [
+        {
+          "SCHUL_NM": "당곡고등학교",
+          "MLSV_YMD": "20260821",
+          "DDISH_NM": "친환경현미밥 &lt;br/&gt;근대된장국 &lt;br/&gt;제육볶음 (5.6.10.13)...",
+          "CAL_INFO": "796.4 Kcal",
+          "ORPLC_INFO": "쌀 : 국내산 ..."
+        }
+    ] }
+  ]
+}</pre></div>
+  <ul>
+    <li><b>값 꺼내기 = 라벨을 따라 들어가기</b> — 겉상자 <code>mealServiceDietInfo</code> 안의 목록에서 <code>row</code>를 꺼내고, 그 안의 <code>DDISH_NM</code>(식단)을 꺼내는 식입니다. "상자에서 상자를 꺼내라"고 말할 수 있으면 JSON을 읽을 수 있습니다.</li>
+    <li><b>👀 눈여겨볼 것 — 숫자가 따옴표에 싸여 있다.</b> <code>"CAL_INFO": "796.4 Kcal"</code> — 칼로리가 숫자가 아니라 <b>따옴표 친 글자</b>로 옵니다. 글자인 채로는 크기 비교·정렬·그래프가 되지 않으므로, 숫자로 바꾸는 한 단계가 꼭 필요합니다. 3차시에 배운 전처리가 API 데이터에서도 반복되는 것입니다.</li>
+    <li><b>표로 바꾸면 정형이 된다</b> — 교과서 20쪽의 "필요한 경우 표 형태로도 쉽게 변환할 수 있다"가 바로 이 작업입니다. <code>row</code> 목록의 상자 하나가 표의 행 하나가 됩니다.</li>
+  </ul>
 
   <h2>2. 주소창 실험 — 반정형 데이터의 실물</h2>
   <p>코드를 쓰기 전에, API가 정말 "주소로 주문하는 창구"인지 브라우저로 확인합니다. 선생님이 나눠 준 요청 주소를 주소창에 붙여 넣으면, 꾸며지지 않은 JSON 원문이 화면에 그대로 나타납니다. 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
@@ -164,6 +314,7 @@
     <tr><td class="term">요청/응답</td><td>주소 형태로 보내는 주문서 / 서버가 돌려주는 데이터(주로 JSON)</td></tr>
     <tr><td class="term">JSON</td><td>이름표와 값의 쌍으로 데이터를 담는 대표적인 반정형 형식</td></tr>
     <tr><td class="term">반정형 데이터</td><td>구조가 존재하지만 바꿀 수도 있는 유연한 형태의 데이터 (XML, JSON)</td></tr>
+    <tr><td class="term">상태코드</td><td>응답과 함께 오는 번호표 — 200 성공 · 404 없음 · 429 과다 요청</td></tr>
     <tr><td class="term">인증키</td><td>API 사용자를 증명하는 값 — 사용량 관리·책임 소재의 장치</td></tr>
     <tr><td class="term">비밀값 보관함(secrets)</td><td>키 같은 비밀값을 코드 밖에 안전하게 두는 스트림릿의 저장 공간</td></tr>
   </table>
