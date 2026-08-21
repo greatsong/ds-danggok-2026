@@ -28,7 +28,7 @@
     <span class="by">7차시에서 상관과 인과를 구분했다면, 오늘은 변수가 어디서 왔는지를 따집니다</span>
   </div>
 
-  <p class="lead">7차시의 직선은 독립 변수가 연도 하나였습니다. 그런데 영화 관객 수는 하나의 요인으로 정해지지 않습니다. 오늘은 6차시에 모아 둔 박스오피스 데이터로 <b>변수 여러 개짜리 회귀</b>를 만들고, 변수를 넣고 빼며 예측 점수가 어떻게 달라지는지 관찰합니다. 그 과정에서 이 수업 전체를 관통할 중요한 사건 하나를 만나게 됩니다.</p>
+  <p class="lead">7차시의 직선은 독립 변수가 연도 하나였습니다. 그런데 영화 관객 수는 하나의 요인으로 정해지지 않습니다. 오늘은 6차시에 모아 둔 박스오피스 데이터로 <b>변수 여러 개짜리 회귀</b>를 만들고, 변수를 넣고 빼며 예측 점수가 어떻게 달라지는지 관찰합니다. 그 과정에서 수업 후반에 다시 만나게 될 중요한 사건 하나를 목격합니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
@@ -40,7 +40,7 @@
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>영화사는 개봉 전에 상영관 수를 정해야 하고, 투자사는 제작 단계에서 흥행을 가늠해야 합니다. 배달 앱은 주문량을, 편의점은 발주량을 여러 요인으로 예측합니다. 현실의 예측 문제는 대부분 "요인이 여러 개"이고, 그래서 실무에서 쓰이는 회귀는 대부분 오늘 배우는 다중 회귀입니다. 동시에, 변수를 더할수록 점수가 오르는 이 도구에는 함정이 하나 숨어 있습니다. <b>점수를 올려 주는 변수가 반칙일 수 있다</b>는 것 — 오늘 그 장면을 직접 목격합니다.</p>
+  <p>영화사는 개봉 전에 상영관 수를 정해야 하고, 투자사는 제작 단계에서 흥행을 가늠해야 합니다. 배달 앱은 시간대별 수요를, 편의점은 발주량을 여러 요인으로 예측합니다. 현실의 예측 문제는 대부분 "요인이 여러 개"이고, 그래서 실무에서 쓰이는 회귀는 대부분 오늘 배우는 다중 회귀입니다. 동시에, 변수를 더할수록 점수가 오르는 이 도구에는 함정이 하나 숨어 있습니다. <b>점수를 올려 주는 변수가 반칙일 수 있다</b>는 것 — 오늘 그 장면을 직접 목격합니다.</p>
 
   <h2>1. 개념 이해 — 직선에서 평면으로</h2>
   <div class="tbquote">
@@ -52,6 +52,37 @@
   <p>단순 회귀가 "쪽수 → 독서 시간"처럼 독립 변수 하나로 직선을 그었다면, 다중 회귀는 독립 변수마다 가중치를 하나씩 두고 이를 모두 더해 예측합니다. 변수가 둘이면 직선 대신 평면이 되고, 셋 이상이면 그림으로 그릴 수는 없지만 원리는 같습니다. <b>각 변수의 가중치</b>를 보면 어느 요인이 예측에 크게 기여하는지도 읽을 수 있습니다.</p>
   <h3>점수는 처음 보는 문제로 매긴다</h3>
   <p>변수가 늘어난 만큼, 점수를 매기는 규칙도 분명히 해 둡니다. 학습에 쓴 영화로 점수를 재면, 모델이 규칙을 이해한 것인지 답을 외운 것인지 구분할 수 없습니다. 시험 범위의 기출문제를 그대로 시험에 내는 것과 같습니다. 그래서 데이터의 일부를 <b>테스트 데이터</b>로 미리 떼어 두고, 학습이 끝난 뒤 이 "처음 보는 영화들"로 점수를 잽니다. 오늘 화면에 뜨는 점수는 전부 이 방식으로 계산된 값입니다.</p>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="216편을 영화 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 학습 150편으로 가중치를 학습한 뒤 테스트 66편으로 점수를 재는 구조">
+      <defs>
+        <marker id="arGold8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+        <marker id="arTeal8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+        <g id="blk8">
+          <rect x="0" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="10" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="20" y="0" width="9" height="24" fill="#3ba6a0"/>
+          <rect x="30" y="0" width="9" height="24" fill="#f4b400"/><rect x="40" y="0" width="9" height="24" fill="#f4b400"/><rect x="50" y="0" width="9" height="24" fill="#f4b400"/><rect x="60" y="0" width="9" height="24" fill="#f4b400"/><rect x="70" y="0" width="9" height="24" fill="#f4b400"/><rect x="80" y="0" width="9" height="24" fill="#f4b400"/><rect x="90" y="0" width="9" height="24" fill="#f4b400"/>
+        </g>
+      </defs>
+      <text x="20" y="20" font-size="12.5" font-weight="800" fill="#2b2d3a">분석 대상 216편 · 영화 코드 순 정렬</text>
+      <use href="#blk8" x="20" y="30"/><use href="#blk8" x="128" y="30"/><use href="#blk8" x="236" y="30"/><use href="#blk8" x="344" y="30"/><use href="#blk8" x="452" y="30"/><use href="#blk8" x="560" y="30"/>
+      <text x="674" y="48" font-size="15" font-weight="800" fill="#7a7f95">…</text>
+      <rect x="20" y="72" width="13" height="13" fill="#3ba6a0"/>
+      <text x="40" y="83" font-size="12" fill="#2b2d3a">테스트 66편 — 학습에 쓰지 않음</text>
+      <rect x="256" y="72" width="13" height="13" fill="#f4b400"/>
+      <text x="276" y="83" font-size="12" fill="#2b2d3a">학습 150편</text>
+      <text x="20" y="123" font-size="12.5" font-weight="800" fill="#2b2d3a">학습 150편</text>
+      <line x1="112" y1="118" x2="180" y2="118" stroke="#f4b400" stroke-width="2.5" marker-end="url(#arGold8)"/>
+      <rect x="188" y="102" width="168" height="32" rx="8" fill="#fff8e6" stroke="#f4b400"/>
+      <text x="272" y="123" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">모델 — 가중치 학습</text>
+      <text x="20" y="163" font-size="12.5" font-weight="800" fill="#2b2d3a">테스트 66편</text>
+      <line x1="112" y1="158" x2="180" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
+      <rect x="188" y="142" width="190" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
+      <text x="283" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">처음 보는 영화로 예측</text>
+      <line x1="384" y1="158" x2="414" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
+      <rect x="420" y="142" width="104" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
+      <text x="472" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">점수(R²)</text>
+      <text x="360" y="196" text-anchor="middle" font-size="12" fill="#7a7f95">학습에 쓴 문제로 점수를 재면 이해인지 암기인지 알 수 없다 — 『데이터 과학』 112쪽</text>
+    </svg>
+  </div>
   <p>우리 데이터에는 지난 1년 극장가를 지나간 영화들이 담겨 있고, 그중 분석 기간 안에 개봉한 <b>216편</b>이 오늘의 학습 재료입니다. 변수 후보는 "언제 알 수 있는 값인가"를 기준으로 이렇게 갈립니다.</p>
   <table class="daymap">
     <thead><tr><th>구분</th><th>변수 예</th><th>알 수 있는 시점</th></tr></thead>
@@ -97,10 +128,10 @@
 
   <div class="callout tip">
     <div class="h">💡 프롬프트가 하는 일과 내가 하는 일</div>
-    <p>모델을 만드는 계산 — 표 합치기, 가중치 찾기, 테스트 데이터 떼어 두기 — 는 전부 AI의 몫입니다. 우리가 한 일은 파일 이름을 지정하고, <b>변수를 고르는 권한</b>과 <b>점수를 재는 조건</b>을 주문한 것입니다. 어떤 변수를 켜고 끌지, 나온 점수를 어떻게 읽을지는 도구가 대신해 주지 않습니다. 그것이 오늘 수업의 본론입니다.</p>
+    <p>모델을 만드는 계산 — 표 합치기, 가중치 찾기, 테스트 데이터 떼어 두기 — 는 전부 AI의 몫입니다. 우리가 한 일은 파일 이름을 지정하고, <b>변수를 고르는 권한</b>과 <b>점수를 재는 조건</b>을 요구한 것입니다. 어떤 변수를 켜고 끌지, 나온 점수를 어떻게 읽을지는 도구가 대신해 주지 않습니다. 그것이 오늘 수업의 본론입니다.</p>
   </div>
 
-  <h2>3. 발견 사건 — 내려가는 점수, 치솟는 점수 (전량 실측)</h2>
+  <h2>3. 발견 사건 — 내려가는 점수, 치솟는 점수</h2>
   <p>③을 실행하면 다음과 같은 결과가 나타납니다. 분석 대상 216편을 영화 코드 순으로 정렬해 10편 중 3편(66편)을 테스트로 떼어 두고, 나머지 150편으로 학습한 뒤 <b>떼어 둔 66편으로</b> 잰 점수입니다.</p>
   <table class="daymap">
     <thead><tr><th>사용한 변수</th><th>알 수 있는 시점</th><th>테스트 점수(R²)</th></tr></thead>
@@ -110,6 +141,39 @@
       <tr><td>위 3종 + <b>첫 주 관객 수</b></td><td><b>개봉 후 1주</b></td><td><b>0.90</b></td></tr>
     </tbody>
   </table>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 680 264" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="변수 조합별 테스트 점수 막대 그림 — 첫날 스크린 수만 0.31, 개봉 전 변수 3종 0.24로 하락, 첫 주 관객 수를 더하면 0.90으로 급등하며 데이터 누수 경계선을 넘는다">
+      <defs>
+        <pattern id="hatch8" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+          <rect width="8" height="8" fill="#e45756"/>
+          <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="2" stroke-opacity="0.45"/>
+        </pattern>
+      </defs>
+      <text x="440" y="22" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">테스트 점수(R²) — 떼어 둔 66편으로 잰 값</text>
+      <line x1="240" y1="34" x2="240" y2="210" stroke="#f0e2bc"/>
+      <line x1="440" y1="34" x2="440" y2="210" stroke="#f0e2bc"/>
+      <line x1="640" y1="34" x2="640" y2="210" stroke="#f0e2bc"/>
+      <line x1="240" y1="210" x2="640" y2="210" stroke="#f0e2bc"/>
+      <text x="240" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0</text>
+      <text x="440" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0.5</text>
+      <text x="640" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">1.0</text>
+      <text x="228" y="61" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">첫날 스크린 수만</text>
+      <rect x="240" y="44" width="124" height="26" fill="#f4b400"/>
+      <text x="372" y="61" font-size="12.5" font-weight="800" fill="#2b2d3a">0.31</text>
+      <text x="228" y="97" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">개봉 전 변수 3종</text>
+      <text x="228" y="112" text-anchor="end" font-size="10.5" fill="#7a7f95">(스크린+상영횟수+성수기)</text>
+      <rect x="240" y="86" width="96" height="26" fill="#f4b400"/>
+      <text x="344" y="103" font-size="12.5" font-weight="800" fill="#2b2d3a">0.24</text>
+      <text x="384" y="103" font-size="12.5" font-weight="800" fill="#e8930c">↓ 더 넣었는데 하락</text>
+      <line x1="16" y1="128" x2="664" y2="128" stroke="#e45756" stroke-width="1.5" stroke-dasharray="7 5"/>
+      <text x="340" y="144" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">여기부터 개봉 후 정보 — 예측 시점에 알 수 있는가?</text>
+      <text x="228" y="171" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">3종 + 첫 주 관객 수</text>
+      <rect x="240" y="154" width="360" height="26" fill="url(#hatch8)" stroke="#e45756"/>
+      <text x="608" y="171" font-size="12.5" font-weight="800" fill="#e45756">0.90</text>
+      <text x="240" y="197" font-size="12" font-weight="800" fill="#e45756">⚠ 개봉 후에야 아는 값 — 데이터 누수</text>
+      <text x="340" y="252" text-anchor="middle" font-size="12.5" fill="#7a7f95">216편 중 150편으로 학습, 처음 보는 66편으로 채점한 실측값</text>
+    </svg>
+  </div>
   <div class="callout warn">
     <div class="h">⚠️ 두 장면을 나눠서 읽어야 한다</div>
     <ul>
@@ -124,26 +188,42 @@
   </div>
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>폼 Ⅲ-01a(예측에 필요한 데이터 발상 — 교과서 106쪽 해 보기 ①)를 수업 중 제출합니다. 수업을 마친 뒤, 처음 적었던 변수 후보 중 "개봉 후에야 알 수 있는 것"이 섞여 있었는지 스스로 표시해 보면 오늘 발견이 더 선명해집니다.</p>
+    <p><b>Ⅲ-01a</b>(예측에 필요한 데이터 발상) — 수업 중 제출</p>
   </div>
 
   <h2>4. 개념 정리 — 좋은 점수가 좋은 모델인가</h2>
-  <p>오늘 배운 것을 정리합니다. 다중 회귀는 여러 독립 변수에 가중치를 매겨 종속 변수를 예측하는 도구이고, 점수는 학습에 쓰지 않은 데이터로 매겨야 믿을 수 있습니다. 그리고 실측 데이터가 보여 준 두 숫자 — 0.24와 0.90 — 는 서로 다른 교훈을 남겼습니다. 낮은 점수는 "흥행은 원래 미리 알기 어렵다"는 세계의 정직한 모습이고, 급등한 점수는 "성적이 갑자기 오르면 반칙을 의심하라"는 경고입니다.</p>
+  <p>오늘 배운 것을 정리합니다. 다중 회귀는 여러 독립 변수에 가중치를 매겨 종속 변수를 예측하는 도구이고, 점수는 학습에 쓰지 않은 데이터로 매겨야 믿을 수 있습니다. 그리고 실측 데이터가 보여 준 두 숫자 — 0.24와 0.90 — 는 서로 다른 교훈을 남겼습니다. 낮은 점수는 "흥행은 원래 미리 알기 어렵다"는 세계의 정직한 모습이고, 급등한 점수는 "성적이 갑자기 오르면 반칙을 의심하라"는 경고입니다. 수업을 시작하며 폼 Ⅲ-01a에 적었던 변수 후보 중 "개봉 후에야 알 수 있는 것"이 섞여 있었는지 표시해 보면, 오늘의 발견이 더 선명해집니다.</p>
   <p>그런데 우리는 아직 이 점수의 정체를 모릅니다. 0.24는 무엇의 0.24이고, 1에 가깝다는 것은 정확히 무슨 뜻일까요. 7차시의 기온 직선은 얼마나 믿을 만한 걸까요. 다음 시간, 계산기 하나 들고 이 점수를 <b>손으로 직접</b> 계산합니다.</p>
 
   <h2>5. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 단순 선형회귀와 다중 선형회귀의 차이를 우리 수업의 두 예측기(기온·영화)를 들어 설명하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수·상영횟수·성수기 여부 등 여러 독립 변수에 각각 가중치를 두어 총 관객 수를 예측하는 다중 선형회귀다. 영향을 주는 요인이 여러 개일 때 다중 회귀를 쓴다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 개봉 전 변수 3종의 테스트 점수는 0.24, 첫 주 관객 수를 더하면 0.90이었다. 이 급등을 "모델이 좋아졌다"라고 결론지으면 안 되는 이유를 서술하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보다. 총 관객과 사실상 같은 정보를 담은 변수가 새어 들어와 점수를 부풀린 것이므로, 급등은 예측 실력의 향상이 아니라 데이터 누수의 신호다. 개봉 전 예측이라는 문제 설정에서는 이 모델을 쓸 수 없다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — "개봉 1주 후에 남은 흥행을 전망하는 서비스"를 만든다면 첫 주 관객 수를 변수로 써도 되는가? 판단 기준과 함께 답하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 써도 된다. 판단 기준은 "예측하는 시점에 그 변수의 값을 알 수 있는가"이다. 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아니다. 같은 변수라도 문제의 시점 설정에 따라 정당한 재료가 되기도, 누수가 되기도 한다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 단순 선형회귀와 다중 선형회귀의 차이를 우리 수업의 두 예측기(기온·영화)를 들어 설명해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수·상영횟수·성수기 여부 등 여러 독립 변수에 각각 가중치를 두어 총 관객 수를 예측하는 다중 선형회귀다. 영향을 주는 요인이 여러 개일 때 다중 회귀를 쓴다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 개봉 전 변수 3종의 테스트 점수는 0.24, 첫 주 관객 수를 더하면 0.90이었습니다. 이 급등을 "모델이 좋아졌다"라고 결론지으면 안 되는 이유는 무엇일까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">테스트 영화가 66편뿐이라 어떤 점수도 신뢰할 수 없기 때문이다</button>
+        <button class="opt" data-ok="1">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보이므로 — 점수 급등은 실력이 아니라 데이터 누수의 신호다</button>
+        <button class="opt">R²가 0.5를 넘으면 항상 과대적합으로 판정하기 때문이다</button>
+      </div>
+      <div class="fb">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보입니다. 총 관객과 사실상 같은 정보를 담은 변수가 새어 들어와 점수를 부풀린 것이므로, 급등은 예측 실력의 향상이 아니라 데이터 누수의 신호이고, 개봉 전 예측이라는 문제 설정에서는 이 모델을 쓸 수 없습니다. 66편 채점 방식 자체는 0.24를 잴 때도 똑같이 쓰였으므로 문제는 표본 수가 아니고, R²에 절대 문턱도 없습니다 — 판단 기준은 점수의 크기가 아니라 변수의 시점입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> "개봉 1주 후에 남은 흥행을 전망하는 서비스"를 만든다면 첫 주 관객 수를 변수로 써도 될까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">안 된다 — 한 번 누수로 판정된 변수는 어떤 문제 설정에서도 쓸 수 없다</button>
+        <button class="opt">안 된다 — 점수를 0.90까지 끌어올리는 변수는 그 자체로 의심 대상이므로 빼야 한다</button>
+        <button class="opt" data-ok="1">써도 된다 — 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아니다</button>
+      </div>
+      <div class="fb">판단 기준은 "예측하는 시점에 그 변수의 값을 알 수 있는가" 한 가지입니다. 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아닙니다. 변수의 좋고 나쁨은 변수 자체가 아니라 문제의 시점 설정이 정하며, 높은 점수가 곧 반칙인 것도 아닙니다.</div>
+    </div>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -173,5 +253,6 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

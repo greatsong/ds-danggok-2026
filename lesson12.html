@@ -50,7 +50,7 @@
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>쇼핑몰은 고객을 몇 개의 유형으로 나눠 유형별로 다른 전략을 세우고, 음악 서비스는 청취 기록이 비슷한 사람끼리 묶어 추천을 만듭니다. 이런 일에는 미리 정해진 정답표가 없습니다. 데이터 스스로가 드러내는 비슷함을 찾아 묶는 것 — 이것이 <b>군집화</b>이고, 정답 없이 배우는 <b>비지도학습</b>의 대표 사례입니다. 오늘의 재료는 지난 시즌 KBO 타자들의 실제 기록입니다. 우리가 아는 선수들이 홈런·도루·타율 같은 숫자만으로 어떻게 나뉘는지, 그 묶음이 우리가 아는 선수의 모습과 얼마나 닮았는지 비교하는 것이 오늘의 재미입니다.</p>
+  <p>쇼핑몰은 고객을 몇 개의 유형으로 나눠 유형별로 다른 전략을 세우고, 음악 서비스는 청취 기록이 비슷한 사람끼리 묶어 추천을 만듭니다. 이런 일에는 미리 정해진 정답표가 없습니다. 데이터 스스로가 드러내는 비슷함을 찾아 묶는 것 — 이것이 <b>군집화</b>이고, 정답 없이 배우는 <b>비지도학습</b>의 대표 사례입니다. 오늘의 재료는 지난 시즌 KBO 타자들의 실제 기록입니다. 우리가 아는 선수들이 홈런·도루·타율 같은 숫자만으로 어떻게 나뉘는지, 그 묶음이 우리가 아는 선수의 모습과 얼마나 닮았는지 비교하는 것이 오늘의 관찰 과제입니다.</p>
 
   <h2>1. 개념 이해 — 정답 없이 묶는다는 것</h2>
   <div class="tbquote">
@@ -60,6 +60,110 @@
     <p class="t">→ 군집의 개수 k는 사람이 직접 정한다(146쪽). 정답이 없으므로, 몇 묶음이 적절한지도 판단의 대상이다.</p>
   </div>
   <p>교과서 148쪽의 군집화 과정 그림처럼, k-평균 알고리즘은 네 단계를 반복합니다. ①묶음의 개수 k를 정하고 ②임의의 중심점 k개를 놓은 뒤 ③각 데이터를 가장 가까운 중심점의 묶음에 넣고 ④묶음의 평균 지점으로 중심점을 옮깁니다. 중심점이 더 움직이지 않을 때까지 ③④를 반복하면 묶음이 완성됩니다. "가깝다"는 두 점 사이의 거리(유클리디안 거리, 148쪽)로 잽니다.</p>
+
+  <details class="glossary">
+    <summary>🔬 움직여 보기 — k-평균, 클릭으로 한 단계씩</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">묶기 전의 데이터에서 시작합니다. 그림을 <b>클릭할 때마다 한 단계씩</b> 진행됩니다 — ①중심점 놓기 → ②가까운 묶음에 넣기 → ③중심점 옮기기 → ④반복·수렴.</p>
+<svg id="km12" class="km12-svg" viewBox="0 0 700 275" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="k-평균 알고리즘이 네 단계를 반복하며 점들을 두 묶음으로 나누는 과정을 클릭으로 진행하는 그림" style="cursor:pointer">
+  <rect x="0" y="0" width="700" height="275" fill="transparent" pointer-events="all"/>
+  <text class="km12-hint" x="350" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#e8930c" pointer-events="none">👆 클릭 ① — 중심점 k=2개를 임의로 놓는다</text>
+  <g class="km12-stage" pointer-events="none">
+    <circle class="km12-dot" cx="150" cy="110" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="190" cy="90" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="230" cy="150" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="170" cy="165" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="255" cy="100" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="365" cy="170" r="9" fill="#b6b0a2" data-a1="t" data-a2="g"/>
+    <circle class="km12-dot" cx="410" cy="70" r="9" fill="#b6b0a2" data-a1="g" data-a2="t"/>
+    <circle class="km12-dot" cx="520" cy="95" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="565" cy="120" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="610" cy="85" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="585" cy="165" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="540" cy="155" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <g class="km12-cg" data-k="g" data-x0="310" data-y0="55" data-x1="225" data-y1="130" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#f4b400" stroke="#c28f00" stroke-width="0.8">★</text></g>
+    <g class="km12-cg" data-k="t" data-x0="445" data-y0="195" data-x1="540" data-y1="115" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#3ba6a0" stroke="#2b7a75" stroke-width="0.8">★</text></g>
+  </g>
+  <text x="350" y="243" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">"가깝다"는 두 점 사이의 거리(유클리디안 거리, 교과서 148쪽)로 잰다.</text>
+  <text x="350" y="261" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">점의 위치는 과정을 보이기 위한 모식도이며 실제 선수 기록의 좌표가 아니다.</text>
+</svg>
+<script>
+(function () {
+  var root = document.getElementById("km12");
+  if (!root) return;
+  var STEPS = [
+    "👆 클릭 ① — 중심점 k=2개를 임의로 놓는다",
+    "👆 클릭 ② — 각 점을 가장 가까운 중심점의 묶음에 넣는다",
+    "👆 클릭 ③ — 묶음의 평균 지점으로 중심점을 옮긴다",
+    "👆 클릭 ④ — ③④를 반복, 중심점이 더 움직이지 않으면 완성",
+    "✅ 완성! 클릭하면 처음부터"
+  ];
+  var COLORS = { g: "#f4b400", t: "#3ba6a0" };
+  var GRAY = "#b6b0a2";
+  var hint = root.querySelector(".km12-hint");
+  var stage = root.querySelector(".km12-stage");
+  var dots = [].slice.call(root.querySelectorAll(".km12-dot"));
+  var stars = {};
+  [].slice.call(root.querySelectorAll(".km12-cg")).forEach(function (g) {
+    stars[g.getAttribute("data-k")] = g;
+    g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
+  });
+  var links = dots.map(function (d) {
+    var k = d.getAttribute("data-a1");
+    var ln = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    ln.setAttribute("x1", d.getAttribute("cx"));
+    ln.setAttribute("y1", d.getAttribute("cy"));
+    ln.setAttribute("x2", stars[k].getAttribute("data-x0"));
+    ln.setAttribute("y2", stars[k].getAttribute("data-y0"));
+    ln.setAttribute("stroke", COLORS[k]);
+    ln.setAttribute("stroke-width", "1.3");
+    ln.setAttribute("opacity", "0");
+    ln.style.transition = "opacity 0.6s ease";
+    stage.insertBefore(ln, stage.firstChild);
+    return ln;
+  });
+  dots.forEach(function (d) { d.style.transition = "fill 0.6s ease"; });
+  function place(g, x, y) { g.style.transform = "translate(" + x + "px," + y + "px)"; }
+  function reset() {
+    Object.keys(stars).forEach(function (k) {
+      var g = stars[k];
+      g.style.transition = "none";
+      place(g, g.getAttribute("data-x0"), g.getAttribute("data-y0"));
+      g.style.opacity = 0;
+      g.getBoundingClientRect();
+      g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
+    });
+    dots.forEach(function (d) { d.style.fill = GRAY; });
+    links.forEach(function (ln) { ln.style.opacity = 0; });
+    hint.textContent = STEPS[0];
+  }
+  var s = 0;
+  reset();
+  root.addEventListener("click", function () {
+    s = (s + 1) % 5;
+    if (s === 1) {
+      stars.g.style.opacity = 1; stars.t.style.opacity = 1;
+    } else if (s === 2) {
+      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a1")]; });
+      links.forEach(function (ln) { ln.style.opacity = 1; });
+    } else if (s === 3) {
+      links.forEach(function (ln) { ln.style.opacity = 0; });
+      Object.keys(stars).forEach(function (k) {
+        var g = stars[k];
+        place(g, g.getAttribute("data-x1"), g.getAttribute("data-y1"));
+      });
+    } else if (s === 4) {
+      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a2")]; });
+    } else {
+      s = 0; reset(); return;
+    }
+    hint.textContent = STEPS[s];
+  });
+})();
+</script>
+    </div>
+  </details>
+
   <table class="daymap">
     <thead><tr><th>구분</th><th>정답(라벨)</th><th>모델이 하는 일</th><th>우리 수업의 예</th></tr></thead>
     <tbody>
@@ -88,11 +192,68 @@
   </ol>
 
   <div class="callout warn">
-    <div class="h">⚠️ 발견 사건 — 기준이 결과를 정한다 (실측)</div>
+    <div class="h">⚠️ 발견 사건 — 기준이 결과를 정한다</div>
     <ul>
-      <li><b>정규화를 끄면 삼진과 홈런이 지배합니다.</b> 삼진(수십~백 단위)과 홈런처럼 값이 큰 항목이 거리 계산을 잡아먹어, 타율·출루율(0.3 안팎)의 차이는 사실상 무시됩니다. 실측으로도 스케일링 없는 군집은 삼진 개수가 갈라놓은 것과 다름없었습니다.</li>
+      <li><b>정규화를 끄면 삼진과 홈런이 지배합니다.</b> 삼진(수십~백 단위)과 홈런처럼 값이 큰 항목이 거리 계산을 지배해, 타율·출루율(0.3 안팎)의 차이는 사실상 무시됩니다. 실측으로도 스케일링 없는 군집은 삼진 개수가 갈라놓은 것과 다름없었습니다.</li>
       <li><b>점수는 k=2, 해석은 k=3.</b> 잘 나뉜 정도 점수(실루엣)는 k=2(0.268)가 k=3(0.262)보다 근소하게 높습니다. 그런데 두 묶음(강타자 10명 vs 나머지 33명)보다 세 묶음의 이야기가 훨씬 선명합니다. 숫자가 시키는 답과 사람이 이해하는 답이 다를 때, 어느 쪽을 따를지는 판단의 문제입니다.</li>
     </ul>
+  </div>
+
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 700 352" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="정규화 전에는 삼진과 장타율의 눈금자 단위가 달라 큰 숫자가 거리 계산을 지배하고, 정규화 후에는 두 항목이 0에서 1 사이의 같은 자로 재배치되는 것을 나타낸 그림">
+      <!-- 상단 — 정규화 전 -->
+      <text x="24" y="30" font-size="15" font-weight="800" fill="#3a2e1a">정규화 전 — 원래 단위의 자</text>
+      <text x="100" y="67" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">삼진</text>
+      <line x1="110" y1="62" x2="630" y2="62" stroke="#c9b990" stroke-width="2"/>
+      <line x1="110" y1="56" x2="110" y2="68" stroke="#c9b990" stroke-width="2"/>
+      <line x1="630" y1="56" x2="630" y2="68" stroke="#c9b990" stroke-width="2"/>
+      <text x="110" y="84" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
+      <text x="630" y="84" text-anchor="middle" font-size="11" fill="#9a8b6a">120</text>
+      <circle cx="425" cy="62" r="7" fill="#54a24b"/>
+      <circle cx="503" cy="62" r="7" fill="#f4b400"/>
+      <circle cx="581" cy="62" r="7" fill="#3ba6a0"/>
+      <text x="425" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯ 72.7</text>
+      <text x="503" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮ 90.6</text>
+      <text x="581" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰ 108.6</text>
+      <text x="100" y="121" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">장타율</text>
+      <line x1="110" y1="116" x2="420" y2="116" stroke="#c9b990" stroke-width="2"/>
+      <line x1="110" y1="110" x2="110" y2="122" stroke="#c9b990" stroke-width="2"/>
+      <line x1="420" y1="110" x2="420" y2="122" stroke="#c9b990" stroke-width="2"/>
+      <text x="110" y="138" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
+      <text x="420" y="138" text-anchor="middle" font-size="11" fill="#9a8b6a">0.6</text>
+      <circle cx="313" cy="116" r="7" fill="#54a24b"/>
+      <circle cx="332" cy="116" r="7" fill="#3ba6a0"/>
+      <circle cx="390" cy="116" r="7" fill="#f4b400"/>
+      <text x="299" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯ 0.393</text>
+      <text x="341" y="138" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰ 0.429</text>
+      <text x="397" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮ 0.542</text>
+      <text x="350" y="168" text-anchor="middle" font-size="12.5" fill="#6b5836">삼진의 차이는 수십 단위, 장타율의 차이는 0.1 안팎 — 거리 계산은 큰 숫자가 지배한다.</text>
+      <line x1="24" y1="186" x2="676" y2="186" stroke="#f0e2bc" stroke-width="1.5"/>
+      <!-- 하단 — 정규화 후 -->
+      <text x="24" y="214" font-size="15" font-weight="800" fill="#3a2e1a">정규화 후 — 같은 자(0~1)</text>
+      <text x="100" y="251" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">삼진</text>
+      <line x1="110" y1="246" x2="630" y2="246" stroke="#c9b990" stroke-width="2"/>
+      <line x1="110" y1="240" x2="110" y2="252" stroke="#c9b990" stroke-width="2"/>
+      <line x1="630" y1="240" x2="630" y2="252" stroke="#c9b990" stroke-width="2"/>
+      <circle cx="110" cy="246" r="7" fill="#54a24b"/>
+      <circle cx="369" cy="246" r="7" fill="#f4b400"/>
+      <circle cx="630" cy="246" r="7" fill="#3ba6a0"/>
+      <text x="110" y="231" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯</text>
+      <text x="369" y="231" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮</text>
+      <text x="630" y="231" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰</text>
+      <text x="100" y="295" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">장타율</text>
+      <line x1="110" y1="290" x2="630" y2="290" stroke="#c9b990" stroke-width="2"/>
+      <line x1="110" y1="284" x2="110" y2="296" stroke="#c9b990" stroke-width="2"/>
+      <line x1="630" y1="284" x2="630" y2="296" stroke="#c9b990" stroke-width="2"/>
+      <circle cx="110" cy="290" r="7" fill="#54a24b"/>
+      <circle cx="236" cy="290" r="7" fill="#3ba6a0"/>
+      <circle cx="630" cy="290" r="7" fill="#f4b400"/>
+      <text x="110" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯</text>
+      <text x="236" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰</text>
+      <text x="630" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮</text>
+      <text x="350" y="322" text-anchor="middle" font-size="12.5" fill="#6b5836">단위 차이를 없애면 두 항목이 같은 무게로 거리를 나눈다.</text>
+      <text x="350" y="344" text-anchor="middle" font-size="12" fill="#9a8b6a">실측 — 스케일링 없는 군집은 삼진이 갈라놓은 것과 다름없었다.</text>
+    </svg>
   </div>
 
   <h2>3. 활동 — 묶음에 이름 붙이기</h2>
@@ -105,6 +266,39 @@
       <tr><td>㉰</td><td>16</td><td>16.8</td><td>5.4</td><td><b>108.6</b></td><td>0.429</td><td>오지환 · 박동원</td><td>______</td></tr>
     </tbody>
   </table>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 700 420" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="홈런 평균과 도루 평균 두 축 위에 세 묶음의 평균 위치를 나타낸 산점도. 세 묶음이 서로 다른 방향으로 갈라져 있다">
+      <!-- 축 -->
+      <line x1="90" y1="40" x2="90" y2="340" stroke="#c9b990" stroke-width="2"/>
+      <line x1="90" y1="340" x2="640" y2="340" stroke="#c9b990" stroke-width="2"/>
+      <line x1="273" y1="340" x2="273" y2="346" stroke="#c9b990" stroke-width="2"/>
+      <line x1="457" y1="340" x2="457" y2="346" stroke="#c9b990" stroke-width="2"/>
+      <line x1="640" y1="340" x2="640" y2="346" stroke="#c9b990" stroke-width="2"/>
+      <line x1="84" y1="190" x2="90" y2="190" stroke="#c9b990" stroke-width="2"/>
+      <line x1="84" y1="40" x2="90" y2="40" stroke="#c9b990" stroke-width="2"/>
+      <text x="90" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
+      <text x="273" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">10</text>
+      <text x="457" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">20</text>
+      <text x="640" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">30</text>
+      <text x="78" y="344" text-anchor="end" font-size="11" fill="#9a8b6a">0</text>
+      <text x="78" y="194" text-anchor="end" font-size="11" fill="#9a8b6a">10</text>
+      <text x="78" y="44" text-anchor="end" font-size="11" fill="#9a8b6a">20</text>
+      <text x="365" y="386" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5836">홈런(평균)</text>
+      <text x="34" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5836" transform="rotate(-90 34 190)">도루(평균)</text>
+      <!-- 묶음 평균 점 3개 (크기는 인원에 비례) -->
+      <circle cx="207" cy="84" r="25" fill="#54a24b" fill-opacity="0.8" stroke="#3e7d38" stroke-width="1.5"/>
+      <circle cx="398" cy="259" r="24" fill="#3ba6a0" fill-opacity="0.8" stroke="#2b7a75" stroke-width="1.5"/>
+      <circle cx="596" cy="237" r="18" fill="#f4b400" fill-opacity="0.85" stroke="#c28f00" stroke-width="1.5"/>
+      <!-- 라벨 -->
+      <text x="242" y="80" font-size="12.5" font-weight="700" fill="#3e7d38">㉯ 18명 — 박해민 · 정수빈 · 신민재</text>
+      <text x="242" y="98" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
+      <text x="432" y="255" font-size="12.5" font-weight="700" fill="#2b7a75">㉰ 16명 — 오지환 · 박동원</text>
+      <text x="432" y="273" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
+      <text x="570" y="209" text-anchor="end" font-size="12.5" font-weight="700" fill="#c28f00">㉮ 9명 — 양의지 · 구자욱 · 디아즈</text>
+      <text x="570" y="227" text-anchor="end" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
+      <text x="365" y="412" text-anchor="middle" font-size="12" fill="#9a8b6a">홈런과 도루 두 축만으로도 세 묶음의 방향이 갈린다 — 이름 칸은 여러분의 몫이다.</text>
+    </svg>
+  </div>
   <div class="tbquote">
     <div class="h">📖 교과서의 한 줄 <span class="src">『데이터 과학』 154쪽</span></div>
     <p class="q">"군집 분석 결과를 해석하기 위해서는 데이터에 대한 깊은 이해가 필요하다." <span class="src">(154쪽)</span></p>
@@ -124,25 +318,32 @@
 
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>교과서 폼 Ⅲ-03a(유사한 데이터끼리 그룹 짓기 — 147쪽) · Ⅲ-03b(군집의 유사성·상이성 — 155쪽). 내가 붙인 유형 이름 세 개와 각 이름의 근거(기록 항목)를 폼에 기록합니다.</p>
+    <p><b>Ⅲ-03a</b> · <b>Ⅲ-03b</b> — 내가 붙인 유형 이름 세 개와 그 근거(기록 항목)를 기록합니다.</p>
   </div>
 
   <h2>4. 개념 정리 — 정답이 없다는 것의 뜻</h2>
   <p>회귀와 분류에서는 모델의 점수를 정답과 비교해 계산했습니다. 군집에는 정답이 없으므로, 묶음이 얼마나 조밀하고 서로 얼마나 떨어져 있는지를 재는 실루엣 분석(교과서 153쪽)으로 살펴봅니다. 그러나 오늘 확인했듯 점수가 좋은 묶음이 곧 의미 있는 묶음은 아닙니다. k의 선택, 정규화 여부, 그리고 이름 붙이기까지 — 군집 분석은 처음부터 끝까지 사람의 판단이 개입하는 분석입니다. 그 판단의 근거를 말할 수 있는 것이 이 차시의 목표입니다.</p>
 
   <h2>5. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 기온 예측(7차시), 흥행 분류(10차시), 선수 유형 묶기(오늘) 중 비지도학습은 무엇이고, 그렇게 판단한 근거는 무엇인가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 선수 유형 묶기. 기온 예측에는 실제 기온, 흥행 분류에는 성공/실패 라벨이라는 정답이 있어 지도학습이지만, 선수 묶기에는 정답표가 없고 데이터 속 유사성만으로 구조를 찾으므로 비지도학습이다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 정규화 없이 타자 기록을 군집했더니 삼진이 많은 선수끼리 묶였다. 왜 이런 일이 생기며, 어떻게 해결하는가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 삼진은 수십~백 단위로 값의 범위가 커서 거리 계산을 지배한다. 타율·출루율(0.3 안팎)의 차이는 상대적으로 무시되어 사실상 삼진 순 정렬이 된다. 항목들의 단위 차이를 없애는 정규화를 한 뒤 다시 군집하면, 기록의 유형이 기준이 된 묶음을 얻을 수 있다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 실루엣 점수는 k=2가 더 높은데 해석은 k=3이 자연스러웠다. 이 상황이 군집 분석에 대해 말해 주는 바를 서술하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 점수는 묶음의 기하학적 조밀함만 잴 뿐 의미를 재지 못한다. k에는 정답이 없으므로 점수와 해석이 다를 수 있고, 최종 선택은 분석 목적에 비추어 사람이 판단해야 한다. 어느 k를 골랐든 그 근거를 말할 수 있어야 한다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 기온 예측(7차시), 흥행 분류(10차시), 선수 유형 묶기(오늘) 중 비지도학습은 무엇일까요? 답을 눌러 확인합니다.</div>
+    <div class="qitem">
+      <div class="qopts"><button class="opt">기온 예측(7차시)</button><button class="opt">흥행 분류(10차시)</button><button class="opt" data-ok="1">선수 유형 묶기(오늘)</button></div>
+      <div class="fb">선수 묶기에는 정답표가 없고 데이터 속 유사성만으로 구조를 찾으므로 <b>비지도학습</b>입니다. 기온 예측에는 실제 기온이라는 정답이 있고, 흥행 분류의 성공/실패는 사람이 정해 붙인 라벨이지만 붙인 뒤에는 정답이 있는 지도학습이 됩니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 정규화 없이 타자 기록을 군집했더니 삼진이 많은 선수끼리 묶였습니다. §2 그림의 두 자를 떠올리며, 왜 이런 일이 생기고 어떻게 해결하는지 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>삼진은 수십~백 단위로 값의 범위가 커서 거리 계산을 지배한다. 타율·출루율(0.3 안팎)의 차이는 상대적으로 무시되어 사실상 삼진 순 정렬이 된다. 항목들의 단위 차이를 없애는 정규화를 한 뒤 다시 군집하면, 기록의 유형이 기준이 된 묶음을 얻을 수 있다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 실루엣 점수는 k=2가 더 높은데 해석은 k=3이 자연스러웠습니다. 이 상황이 군집 분석에 대해 말해 주는 바를 서술해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>점수는 묶음의 기하학적 조밀함만 잴 뿐 의미를 재지 못한다. k에는 정답이 없으므로 점수와 해석이 다를 수 있고, 최종 선택은 분석 목적에 비추어 사람이 판단해야 한다. 어느 k를 골랐든 그 근거를 말할 수 있어야 한다.</p>
+    </details>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -172,5 +373,6 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

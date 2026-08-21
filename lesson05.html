@@ -139,7 +139,7 @@
 </script>
     </div>
   </details>
-  <p>응답에는 <b>상태코드</b>라는 번호표가 함께 옵니다. 셋만 기억하면 됩니다 — <b>200</b> 성공 · <b>404</b> 없음(주소가 틀렸거나 없는 자료) · <b>429</b> 과다 요청(호출이 너무 잦음 — 잠깐 쉬기).</p>
+  <p>응답에는 <b>상태코드</b>라는 세 자리 숫자 코드가 함께 옵니다. 셋만 기억하면 됩니다 — <b>200</b> 성공 · <b>404</b> 없음(주소가 틀렸거나 없는 자료) · <b>429</b> 과다 요청(호출이 너무 잦음 — 잠깐 쉬기).</p>
   <p>내려받기와 API는 무엇이 다를까요? 내려받은 CSV는 <b>그 시점의 복사본</b>입니다. 내일 식단이 바뀌어도 내 파일은 모릅니다. API는 호출할 때마다 서버가 지금 가진 데이터를 보내 주므로 <b>항상 최신</b>이고, 날짜나 학교를 지정해 <b>필요한 만큼만</b> 받을 수 있습니다.</p>
 
   <div class="tbquote">
@@ -147,7 +147,7 @@
     <p class="q">"반정형 데이터는 일부분이 정형화된 데이터로, 구조가 존재하지만 구조를 바꿀 수도 있는 유연한 형태의 데이터를 말한다." <span class="src">(20쪽)</span></p>
     <p class="q">"대표적인 반정형 데이터로는 XML(eXtensible Markup Language)과 JSON(JavaScript Object Notation)이 있다." <span class="src">(20쪽)</span></p>
     <p class="q">"이러한 반정형 데이터는 데이터 구조를 쉽게 변경할 수 있고, 필요한 경우 표 형태로도 쉽게 변환할 수 있어 데이터 공유에 많이 활용된다." <span class="src">(20쪽)</span></p>
-    <p class="t">→ API가 서빙하는 응답이 바로 이 JSON이다. "표로 쉽게 변환할 수 있다"는 문장을 오늘 실습에서 직접 확인한다.</p>
+    <p class="t">→ API가 돌려주는 응답이 바로 이 JSON이다. "표로 쉽게 변환할 수 있다"는 문장을 오늘 실습에서 직접 확인한다.</p>
   </div>
 
   <table class="daymap">
@@ -176,6 +176,52 @@
     ] }
   ]
 }</pre></div>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 860 400" style="min-width:720px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="JSON의 중첩 구조에서 값을 꺼내 표의 행 하나로 변환하는 과정을 나타낸 그림">
+      <defs>
+        <marker id="arGoldL5" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+      </defs>
+      <!-- 경로 주석: ① 겉상자 → ② row 목록 → ③ 값 -->
+      <circle cx="30" cy="22" r="10" fill="#b279a2"/><text x="30" y="26.5" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">1</text>
+      <text x="46" y="27" font-size="13" font-weight="800" fill="#b279a2">겉상자</text>
+      <text x="100" y="27" font-size="13" fill="#7a7f95">→</text>
+      <circle cx="130" cy="22" r="10" fill="#3ba6a0"/><text x="130" y="26.5" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">2</text>
+      <text x="146" y="27" font-size="13" font-weight="800" fill="#3ba6a0">row 목록</text>
+      <text x="222" y="27" font-size="13" fill="#7a7f95">→</text>
+      <circle cx="252" cy="22" r="10" fill="#e8930c"/><text x="252" y="26.5" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">3</text>
+      <text x="268" y="27" font-size="13" font-weight="800" fill="#e8930c">값</text>
+      <!-- 좌측: 중첩 상자 -->
+      <rect x="16" y="44" width="364" height="304" rx="14" fill="#fdf8ef" stroke="#b279a2" stroke-width="2"/>
+      <text x="32" y="68" font-size="13" font-weight="800" fill="#b279a2" font-family="monospace">mealServiceDietInfo</text>
+      <rect x="34" y="82" width="328" height="248" rx="12" fill="#ffffff" stroke="#3ba6a0" stroke-width="2"/>
+      <text x="50" y="104" font-size="13" font-weight="800" fill="#3ba6a0" font-family="monospace">row</text>
+      <rect x="52" y="118" width="292" height="158" rx="10" fill="#fffdf6" stroke="#f0e2bc"/>
+      <text x="66" y="146" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"SCHUL_NM"</tspan><tspan fill="#2b2d3a">: 당곡고등학교</tspan></text>
+      <text x="66" y="174" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"MLSV_YMD"</tspan><tspan fill="#2b2d3a">: 20260821</tspan></text>
+      <text x="66" y="202" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"DDISH_NM"</tspan><tspan fill="#2b2d3a">: 친환경현미밥 …</tspan></text>
+      <text x="66" y="230" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"CAL_INFO"</tspan><tspan fill="#2b2d3a">: "796.4 Kcal"</tspan></text>
+      <text x="80" y="256" font-size="10.5" fill="#e45756">↑ 따옴표 친 글자 — 숫자로 바꿔야 계산된다</text>
+      <!-- 라벨 → 열 머리글 화살표 -->
+      <path d="M348,170 C430,140 500,130 568,164" fill="none" stroke="#f4b400" stroke-width="2" marker-end="url(#arGoldL5)"/>
+      <path d="M348,198 C470,130 590,110 690,162" fill="none" stroke="#f4b400" stroke-width="2" marker-end="url(#arGoldL5)"/>
+      <path d="M348,226 C500,120 690,95 800,160" fill="none" stroke="#f4b400" stroke-width="2" marker-end="url(#arGoldL5)"/>
+      <!-- 우측: 표 (1행) -->
+      <rect x="520" y="170" width="110" height="30" fill="#eef6e8" stroke="#f0e2bc"/>
+      <rect x="630" y="170" width="130" height="30" fill="#eef6e8" stroke="#f0e2bc"/>
+      <rect x="760" y="170" width="90" height="30" fill="#eef6e8" stroke="#f0e2bc"/>
+      <text x="575" y="189" text-anchor="middle" font-size="12" font-weight="800" fill="#3d7a37" font-family="monospace">MLSV_YMD</text>
+      <text x="695" y="189" text-anchor="middle" font-size="12" font-weight="800" fill="#3d7a37" font-family="monospace">DDISH_NM</text>
+      <text x="805" y="189" text-anchor="middle" font-size="12" font-weight="800" fill="#3d7a37" font-family="monospace">CAL_INFO</text>
+      <rect x="520" y="200" width="110" height="34" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="630" y="200" width="130" height="34" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="760" y="200" width="90" height="34" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="575" y="221" text-anchor="middle" font-size="11.5" fill="#2b2d3a" font-family="monospace">20260821</text>
+      <text x="695" y="221" text-anchor="middle" font-size="11.5" fill="#2b2d3a" font-family="monospace">친환경현미밥 …</text>
+      <text x="805" y="221" text-anchor="middle" font-size="11.5" fill="#2b2d3a" font-family="monospace">"796.4 Kcal"</text>
+      <!-- 하단 캡션 -->
+      <text x="430" y="384" text-anchor="middle" font-size="12.5" fill="#7a7f95">row의 상자 하나가 표의 행 하나가 된다 — "필요한 경우 표 형태로도 쉽게 변환할 수 있다"(교과서 20쪽)의 실제 모습.</text>
+    </svg>
+  </div>
   <ul>
     <li><b>값 꺼내기 = 라벨을 따라 들어가기</b> — 겉상자 <code>mealServiceDietInfo</code> 안의 목록에서 <code>row</code>를 꺼내고, 그 안의 <code>DDISH_NM</code>(식단)을 꺼내는 식입니다. "상자에서 상자를 꺼내라"고 말할 수 있으면 JSON을 읽을 수 있습니다.</li>
     <li><b>👀 눈여겨볼 것 — 숫자가 따옴표에 싸여 있다.</b> <code>"CAL_INFO": "796.4 Kcal"</code> — 칼로리가 숫자가 아니라 <b>따옴표 친 글자</b>로 옵니다. 글자인 채로는 크기 비교·정렬·그래프가 되지 않으므로, 숫자로 바꾸는 한 단계가 꼭 필요합니다. 3차시에 배운 전처리가 API 데이터에서도 반복되는 것입니다.</li>
@@ -183,7 +229,17 @@
   </ul>
 
   <h2>2. 주소창 실험 — 반정형 데이터의 실물</h2>
-  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 선생님이 나눠 준 요청 주소를 주소창에 붙여 넣으면, 꾸며지지 않은 JSON 원문이 화면에 그대로 나타납니다. 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
+  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 선생님이 나눠 준 요청 주소를 주소창에 붙여 넣으면, 꾸며지지 않은 JSON 원문이 화면에 그대로 나타납니다. 붙여 넣기 전에, 요청 주소 자체를 해부해 봅니다.</p>
+  <div class="specimen semi" style="margin:18px 0">
+    <div class="tag">요청 주소의 해부 — 한 줄에 실려 가는 네 구성 요소</div>
+    <div class="body"><pre class="mini"><span style="color:#3ba6a0;text-decoration:underline">https://open.neis.go.kr/hub/mealServiceDietInfo</span>   <span style="color:#9b8c66">← 어디에 — 요청 URL</span>
+<span style="color:#f4b400">?KEY=발급받은 인증키</span>                              <span style="color:#9b8c66">← 누가 — 🔑 인증키 (5절)</span>
+<span style="color:#54a24b">&amp;ATPT_OFCDC_SC_CODE=B10</span>                           <span style="color:#9b8c66">← 조건 — 교육청(서울)</span>
+<span style="color:#54a24b">&amp;SD_SCHUL_CODE=7010073</span>                            <span style="color:#9b8c66">← 조건 — 학교(당곡고)</span>
+<span style="color:#e8930c">&amp;MLSV_YMD=20260821</span>                                <span style="color:#9b8c66">← 조건 — 날짜. 이 값을 바꾸면 응답이 그날 것으로 바뀐다</span></pre></div>
+    <div class="note">§1 표의 네 구성 요소(요청 URL·요청 조건·인증키)가 주소 한 줄에 모두 실려 간다. 응답만 §1 그림처럼 JSON으로 돌아온다.</div>
+  </div>
+  <p>주소창에 붙여 넣은 뒤에는, 화면의 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
   <ul>
     <li><b>학교를 가리키는 조건</b> — 교육청 코드 <code>B10</code>(서울), 학교 코드 <code>7010073</code>(당곡고). 주소 속 이 두 값이 "우리 학교 것"이라는 요청 조건입니다.</li>
     <li><b>이름표와 값의 쌍</b> — 메뉴가 담긴 항목, 칼로리가 담긴 <code>CAL_INFO</code>, 원산지가 담긴 <code>ORPLC_INFO</code>. 열 이름이 표 머리글이 아니라 <b>데이터 안에 이름표로</b> 붙어 있습니다. 이것이 반정형의 생김새입니다.</li>
@@ -246,7 +302,7 @@
 
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>클래스룸 과제로 <b>내 앱의 급식 페이지 스크린샷 + 한 줄 관찰</b>(식단표에 없는데 API에는 있는 정보 하나)을 제출합니다. 오늘은 별도 폼이 없습니다 — 2차시 폼 Ⅰ-02c에서 다룬 반정형 개념을 실전으로 회수하는 날입니다.</p>
+    <p>급식 페이지 스크린샷 + 한 줄 관찰을 클래스룸에 제출합니다 (오늘은 별도 폼 없음).</p>
   </div>
 
   <h2>5. API 키 — 요청에 실어 보내는 나의 증명</h2>
@@ -266,19 +322,29 @@
   <h2>6. 개념 정리</h2>
   <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>API는 정해진 주소로 조건을 보내면 정해진 양식(JSON)으로 답하는 약속이고, 그 요청에는 나를 증명하는 키가 실려 간다.</b> 내려받은 CSV가 "그 시점의 복사본"이라면 API 호출은 "지금의 데이터"이며, 조건을 지정해 필요한 만큼만 받습니다. 2차시에 머리로 구분했던 정형·반정형이 오늘 손끝에서 구분되었습니다.</p>
 
-  <h2>6. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 내려받은 CSV 파일과 API 호출의 차이를 두 가지 쓰시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — ① 최신성: CSV는 내려받은 시점의 복사본이라 이후 변경이 반영되지 않지만, API는 호출할 때마다 서버의 최신 데이터를 받는다. ② 선택 조회: CSV는 제공자가 묶어 둔 파일 전체를 받지만, API는 날짜·학교 같은 조건을 지정해 필요한 부분만 받을 수 있다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 급식 API의 JSON 응답은 정형·반정형·비정형 중 무엇이며, 그 근거는 무엇인가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 반정형 데이터다. 이름표와 값의 쌍으로 구조가 존재하지만, 표처럼 행과 열이 고정되어 있지는 않고 구조를 바꿀 수도 있는 유연한 형태이기 때문이다. 교과서의 정의대로 "일부분이 정형화된 데이터"이며, 필요하면 표 형태로 변환해 분석에 쓸 수 있다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 인증키를 코드에 직접 쓰지 않고 비밀값 보관함(secrets)에 넣는 이유는 무엇인가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 인증키는 사용량 관리와 책임 소재를 위해 나에게 발급된 값이다. 코드에 쓴 채 공개 저장소에 올리면 누구나 내 키로 API를 호출할 수 있어, 사용량 한도를 잃거나 내 이름으로 문제가 생길 수 있다. 비밀값 보관함에 넣으면 코드는 공개해도 키는 공개되지 않는다.</p></div>
-  </details>
+  <h2>7. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 내려받은 CSV 파일과 API 호출의 차이를 두 가지 써 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>① 최신성: CSV는 내려받은 시점의 복사본이라 이후 변경이 반영되지 않지만, API는 호출할 때마다 서버의 최신 데이터를 받는다. ② 선택 조회: CSV는 제공자가 묶어 둔 파일 전체를 받지만, API는 날짜·학교 같은 조건을 지정해 필요한 부분만 받을 수 있다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 급식 API의 JSON 응답은 정형·반정형·비정형 중 무엇일까요? 고른 뒤, 근거를 자기 말로 말해 보세요.</div>
+    <div class="qitem">
+      <div class="qopts"><button class="opt">정형</button><button class="opt" data-ok="1">반정형</button><button class="opt">비정형</button></div>
+      <div class="fb">구조는 있지만 표처럼 고정되지 않고 바꿀 수 있는 유연한 형태 — <b>반정형</b>입니다. 정형이 아닌 까닭: 표로 변환해 쓸 수 있다고 해서 정형은 아닙니다 — 변환하기 전의 JSON은 행과 열이 고정된 표가 아닙니다. 비정형이 아닌 까닭: 구조가 없지는 않습니다 — 이름표와 값의 쌍이라는 구조가 분명히 있습니다.</div>
+    </div>
+    <details class="reveal"><summary>근거 예시 답 펼쳐 보기</summary>
+      <p>이름표와 값의 쌍으로 구조가 존재하지만, 표처럼 행과 열이 고정되어 있지는 않고 구조를 바꿀 수도 있는 유연한 형태이기 때문이다. 교과서의 정의대로 "일부분이 정형화된 데이터"이며, 필요하면 표 형태로 변환해 분석에 쓸 수 있다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 인증키를 코드에 직접 쓰지 않고 비밀값 보관함(secrets)에 넣는 이유는 무엇일까요?</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>인증키는 사용량 관리와 책임 소재를 위해 나에게 발급된 값이다. 코드에 쓴 채 공개 저장소에 올리면 누구나 내 키로 API를 호출할 수 있어, 사용량 한도를 잃거나 내 이름으로 문제가 생길 수 있다. 비밀값 보관함에 넣으면 코드는 공개해도 키는 공개되지 않는다.</p>
+    </details>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -295,7 +361,7 @@
     <tr><td class="term">요청/응답</td><td>조건을 담아 보내는 주소 / 서버가 돌려주는 데이터(주로 JSON)</td></tr>
     <tr><td class="term">JSON</td><td>이름표와 값의 쌍으로 데이터를 담는 대표적인 반정형 형식</td></tr>
     <tr><td class="term">반정형 데이터</td><td>구조가 존재하지만 바꿀 수도 있는 유연한 형태의 데이터 (XML, JSON)</td></tr>
-    <tr><td class="term">상태코드</td><td>응답과 함께 오는 번호표 — 200 성공 · 404 없음 · 429 과다 요청</td></tr>
+    <tr><td class="term">상태코드</td><td>응답과 함께 오는 세 자리 숫자 코드 — 200 성공 · 404 없음 · 429 과다 요청</td></tr>
     <tr><td class="term">인증키</td><td>API 사용자를 증명하는 값 — 사용량 관리·책임 소재의 장치</td></tr>
     <tr><td class="term">비밀값 보관함(secrets)</td><td>키 같은 비밀값을 코드 밖에 안전하게 두는 스트림릿의 저장 공간</td></tr>
   </table>
@@ -310,5 +376,6 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

@@ -69,9 +69,97 @@
 
   <h3>장면 2 — 급식 데이터는 되고, 위치 데이터는 왜 조심스러운가</h3>
   <p>우리가 분석한 급식 식단은 <b>학교 단위</b>의 공개 정보였습니다. 어느 학생이 무엇을 먹었는지는 어디에도 없으므로, 전량을 내려받아 공개 앱으로 만들어도 누구의 사생활도 다치지 않습니다. 그런데 같은 공공데이터라도 개인의 위치나 이동 기록이 담긴 데이터라면 이야기가 다릅니다. 한 건 한 건은 익명이라도, 시간대별로 이어 붙이면 특정 개인이나 집단의 동선이 드러날 수 있습니다. <b>같은 "공개 데이터"라도 민감도는 같지 않다</b> — 팀 프로젝트에서 데이터를 고를 때 가장 먼저 확인할 항목입니다.</p>
+  <div style="overflow-x:auto;margin:18px 0 6px">
+    <svg viewBox="0 0 800 300" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학교 단위 급식 식단과, 이어 붙이면 동선이 드러나는 개인 위치 기록의 대조">
+      <defs>
+        <marker id="arRed14b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e45756"/></marker>
+      </defs>
+      <!-- 왼쪽 패널: 급식 식단 -->
+      <text x="200" y="34" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">급식 식단 — 학교 단위</text>
+      <rect x="70" y="54" width="100" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
+      <rect x="170" y="54" width="70" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
+      <rect x="240" y="54" width="120" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
+      <text x="120" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">날짜</text>
+      <text x="205" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">식사</text>
+      <text x="300" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">메뉴</text>
+      <rect x="70" y="84" width="100" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="170" y="84" width="70" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="240" y="84" width="120" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="70" y="114" width="100" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="170" y="114" width="70" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="240" y="114" width="120" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="70" y="144" width="100" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="170" y="144" width="70" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="240" y="144" width="120" height="30" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="120" y="104" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="205" y="104" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="300" y="104" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="120" y="134" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="205" y="134" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="300" y="134" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="120" y="164" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="205" y="164" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="300" y="164" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
+      <text x="215" y="214" text-anchor="middle" font-size="12.5" font-weight="700" fill="#54a24b">어느 학생이 먹었는지에 대한 정보가 없다</text>
+      <!-- 패널 구분선 -->
+      <line x1="400" y1="24" x2="400" y2="280" stroke="#f0e2bc" stroke-width="2"/>
+      <!-- 오른쪽 패널: 개인 위치 기록 -->
+      <text x="605" y="34" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">개인 위치 기록 — 이어 붙이면 동선</text>
+      <line x1="478" y1="107" x2="574" y2="80" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
+      <line x1="592" y1="81" x2="670" y2="142" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
+      <line x1="672" y1="158" x2="610" y2="216" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
+      <circle cx="470" cy="110" r="7" fill="#3ba6a0"/>
+      <circle cx="585" cy="75" r="7" fill="#3ba6a0"/>
+      <circle cx="678" cy="150" r="7" fill="#3ba6a0"/>
+      <circle cx="600" cy="224" r="7" fill="#3ba6a0"/>
+      <text x="470" y="92" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ① (익명)</text>
+      <text x="585" y="57" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ② (익명)</text>
+      <text x="700" y="133" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ③ (익명)</text>
+      <text x="558" y="230" text-anchor="end" font-size="11.5" fill="#7a7f95">기록 ④ (익명)</text>
+      <text x="612" y="262" text-anchor="middle" font-size="13" font-weight="800" fill="#e45756">한 사람의 동선이 드러남</text>
+    </svg>
+  </div>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">민감도는 "공개되어 있는가"가 아니라 "개인을 추적할 수 있는가"로 판단합니다.</p>
 
   <h3>장면 3 — 모델이 사회의 편향을 학습한다</h3>
   <p>8차시에서 영화 흥행 예측에 첫날 스크린 수 변수를 넣었습니다. 스크린을 많이 받은 영화가 관객도 많이 모으는 것은 사실이지만, 스크린 배정은 대형 배급사에 유리하게 이루어지는 <b>사람의 결정</b>입니다. 이 변수로 학습한 모델은 "스크린을 많이 받을 영화가 성공한다"고 예측하게 되고, 그 예측이 다시 스크린 배정의 근거가 되면 작은 영화는 더 밀려납니다. 교과서 38쪽의 정의 그대로 — 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동합니다. 모델은 세상을 비추기만 하는 것이 아니라, 세상의 치우침을 <b>되풀이하게 만들 수도</b> 있습니다.</p>
+  <div style="overflow-x:auto;margin:18px 0 6px">
+    <svg viewBox="0 0 780 470" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="치우친 스크린 배정이 데이터와 모델을 거쳐 다시 배정의 근거가 되는 순환 구조">
+      <defs>
+        <marker id="arAcc14" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+        <marker id="arRed14" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e45756"/></marker>
+      </defs>
+      <!-- ① 스크린 배정 (상단) -->
+      <rect x="240" y="18" width="300" height="66" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="390" y="45" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">① 스크린 배정</text>
+      <text x="390" y="68" text-anchor="middle" font-size="12" fill="#7a7f95">대형 배급사에 유리한 사람의 결정</text>
+      <!-- ② 데이터 (오른쪽) -->
+      <rect x="528" y="188" width="238" height="88" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="647" y="216" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">② 데이터</text>
+      <text x="647" y="239" text-anchor="middle" font-size="12" fill="#7a7f95">스크린을 많이 받은</text>
+      <text x="647" y="257" text-anchor="middle" font-size="12" fill="#7a7f95">영화의 흥행 기록</text>
+      <!-- ③ 모델 (하단) -->
+      <rect x="230" y="372" width="320" height="86" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="390" y="400" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">③ 모델</text>
+      <text x="390" y="423" text-anchor="middle" font-size="12" fill="#7a7f95">"스크린을 많이 받을 영화가</text>
+      <text x="390" y="441" text-anchor="middle" font-size="12" fill="#7a7f95">성공한다"고 학습</text>
+      <!-- ④ 예측 (왼쪽) -->
+      <rect x="14" y="188" width="226" height="88" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="127" y="221" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">④ 예측</text>
+      <text x="127" y="247" text-anchor="middle" font-size="12" fill="#7a7f95">다음 배정의 근거가 됨</text>
+      <!-- 중앙 -->
+      <text x="390" y="230" text-anchor="middle" font-size="14" font-weight="800" fill="#e8930c">치우침이</text>
+      <text x="390" y="252" text-anchor="middle" font-size="14" font-weight="800" fill="#e8930c">되풀이된다</text>
+      <!-- 화살표: ①→②→③→④는 주황, 고리를 닫는 ④→①만 빨강 -->
+      <path d="M505,90 C570,112 610,145 638,180" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
+      <path d="M655,284 C640,322 600,352 552,378" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
+      <path d="M225,412 C165,392 135,345 122,286" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
+      <path d="M118,180 C132,115 175,72 232,55" fill="none" stroke="#e45756" stroke-width="3" marker-end="url(#arRed14)"/>
+      <text x="68" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e45756">작은 영화는</text>
+      <text x="68" y="118" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e45756">더 밀려난다</text>
+    </svg>
+  </div>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동한다(교과서 38쪽) — 모델은 세상을 비추기만 하지 않고, 치우침을 되풀이하게 만들 수도 있습니다.</p>
 
   <h3>장면 4 — AI가 짠 코드의 책임은 누구에게</h3>
   <p>우리는 ①프롬프트를 쓰고 ②AI가 준 코드를 실행해 왔습니다. 그 코드가 잘못된 수치를 화면에 표시했다면 책임은 누구에게 있을까요? 이 수업의 답은 분명합니다. 앱에 이름을 걸고 공개한 사람, 곧 <b>나</b>입니다. 그래서 우리는 9·11·13차시에 손계산으로 AI의 결과를 검산하는 연습을 해 왔습니다. 검증할 수 있는 사람만이 책임질 수 있고, 책임질 수 있는 사람만이 도구를 믿고 쓸 수 있습니다.</p>
@@ -98,26 +186,45 @@
   <p>교과서 37쪽 해 보기 ②는 지속 가능한 미래를 위해 데이터 과학이 활용되는 사례를 조사합니다. 오늘 수업이 "데이터는 위험하다"로 끝나지 않도록 — 같은 도구가 문제를 만들기도 하고 풀기도 한다는 양면을 모둠 발표로 확인합니다.</p>
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>교과서 폼 Ⅰ-04b(39쪽 해 보기 ③ 윤리 사례 — 수업 중 모둠 토론) · Ⅰ-04a(37쪽 해 보기 ② 지속가능 사례 — 과제 후 발표). 더 깊이 파고 싶은 사람은 Ⅱ-04d(99쪽 응급실 분석 — 선택 심화 과제)에 도전합니다.</p>
+    <p>폼 <b>Ⅰ-04b</b>(윤리 사례) · <b>Ⅰ-04a</b>(지속가능 사례) — 심화 도전은 <b>Ⅱ-04d</b></p>
   </div>
 
   <h2>5. 개념 정리 — 윤리는 별도 단원이 아니다</h2>
   <p>오늘 확인한 것을 한 줄로 줄이면 이렇습니다. <b>데이터 윤리는 교과서 속 남의 이야기가 아니라, 내 앱의 인증키 한 줄과 출처 표기 한 줄에 이미 들어와 있었다.</b> 데이터가 치우치면 모델이 치우치고(편향), 데이터를 다루는 권한에는 책임이 따르고(키·소유권), AI가 짠 코드라도 공개한 사람이 책임진다 — 이것은 우리가 배워 온 판단 습관의 연장입니다. 좋은 질문을 세우고, 데이터를 감식하고, 결과를 해석하고, 한계를 아는 사람이 곧 윤리적으로 데이터를 다루는 사람입니다.</p>
-  <p>다음 시간에 팀 프로젝트의 도구인 데이터베이스를 만난 뒤, 팀이 데이터를 고를 때는 오늘의 눈으로 네 가지 — <b>개인정보 · 출처 · 이용 약관 · 편향</b> — 를 점검하게 됩니다.</p>
+  <p>다음 시간에 팀 프로젝트의 도구인 데이터베이스를 만난 뒤, 팀이 데이터를 고를 때는 오늘 세운 기준으로 네 가지 — <b>개인정보 · 출처 · 이용 약관 · 편향</b> — 를 점검하게 됩니다.</p>
 
   <h2>6. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 급식 식단 데이터는 전량 내려받아 공개 앱으로 만들었지만, 개인 위치 데이터라면 같은 방식이 위험하다. 두 데이터의 민감도 차이를 설명하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 급식 식단은 학교 단위의 공개 정보로, 어떤 개인이 무엇을 했는지에 대한 정보가 전혀 들어 있지 않다. 반면 개인 위치 데이터는 한 건 한 건이 익명이라도 시간 순서로 이어 붙이면 특정 개인이나 집단의 동선·생활 패턴이 드러날 수 있어, 수집·공개 시 사생활 침해 위험이 있다. 데이터의 민감도는 "공개되어 있는가"가 아니라 "개인을 추적할 수 있는가"로 판단해야 한다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — API 인증키를 코드에 적은 채 공개 저장소에 올리면 안 되는 이유를 두 가지 서술하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — ① 인증키는 요청을 보낸 사람을 식별하는 값이므로, 공개되면 다른 사람이 내 이름으로 API를 호출할 수 있다. ② 호출 한도(예: 영화 API 일 3,000회)가 키 단위로 관리되므로, 남이 내 키를 쓰면 한도가 소진되고 오·남용의 책임도 키 주인에게 돌아온다. 따라서 키는 코드와 분리해 비밀값 보관함에 두어야 한다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 영화 흥행 예측 모델에 첫날 스크린 수 변수를 넣으면 예측에 도움이 된다. 그런데 이 모델을 "좋은 영화를 가려내는 모델"이라고 소개하면 왜 문제가 되는지 서술하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 스크린 수는 영화의 완성도가 아니라 배급사의 결정, 곧 사람이 만든 배정 구조를 담은 변수다. 이 변수로 학습한 모델은 "스크린을 많이 받는 영화가 성공한다"는 기존의 치우침을 그대로 학습하며, 그 예측이 다시 스크린 배정의 근거로 쓰이면 작은 영화에 불리한 구조가 강화된다. 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동할 수 있다는 데이터 편향성 문제에 해당한다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 급식 식단 데이터는 전량 내려받아 공개 앱으로 만들었지만, 개인 위치 데이터라면 같은 방식이 위험합니다. 두 데이터의 민감도를 가르는 기준은 무엇일까요? 고른 뒤, 차이를 자기 말로 설명해 보고 펼쳐 봅니다.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">공개된 데이터인가 아닌가</button>
+        <button class="opt">데이터의 양이 많은가 적은가</button>
+        <button class="opt" data-ok="1">기록을 이어 붙였을 때 특정 개인을 추적할 수 있는가</button>
+      </div>
+      <div class="fb">급식 식단은 학교 단위 정보라 개인이 없고, 위치 기록은 한 건씩 익명이라도 이으면 동선이 드러납니다. 둘 다 공개 데이터라 "공개 여부"로는 구분되지 않고, 양과 민감도는 무관합니다.</div>
+    </div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>급식 식단은 학교 단위의 공개 정보로, 어떤 개인이 무엇을 했는지에 대한 정보가 전혀 들어 있지 않다. 반면 개인 위치 데이터는 한 건 한 건이 익명이라도 시간 순서로 이어 붙이면 특정 개인이나 집단의 동선·생활 패턴이 드러날 수 있어, 수집·공개 시 사생활 침해 위험이 있다. 데이터의 민감도는 "공개되어 있는가"가 아니라 "개인을 추적할 수 있는가"로 판단해야 한다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> API 인증키를 코드에 적은 채 공개 저장소에 올리면 안 되는 이유를 두 가지 서술해 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>① 인증키는 요청을 보낸 사람을 식별하는 값이므로, 공개되면 다른 사람이 내 이름으로 API를 호출할 수 있다. ② 호출 한도(예: 영화 API 일 3,000회)가 키 단위로 관리되므로, 남이 내 키를 쓰면 한도가 소진되고 오·남용의 책임도 키 주인에게 돌아온다. 따라서 키는 코드와 분리해 비밀값 보관함에 두어야 한다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 영화 흥행 예측 모델에 첫날 스크린 수 변수를 넣으면 예측에 도움이 됩니다. 그런데 이 모델을 "좋은 영화를 가려내는 모델"이라고 소개하면 왜 문제가 될까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">스크린 수는 흥행 예측에 도움이 되지 않는 변수이기 때문</button>
+        <button class="opt">변수가 하나 늘면 모델의 정확도가 낮아지기 때문</button>
+        <button class="opt" data-ok="1">스크린 배정이라는 사람의 결정에 담긴 치우침을 학습해, 예측이 다시 배정의 근거가 되면 작은 영화에 불리한 구조가 강화되기 때문</button>
+      </div>
+      <div class="fb">흥행을 잘 맞히는 것과 "좋은 영화를 가려내는 것"은 다릅니다. 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동할 수 있다는 편향성 문제(교과서 38쪽)입니다.</div>
+    </div>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -147,5 +254,6 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

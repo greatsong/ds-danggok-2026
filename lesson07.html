@@ -64,7 +64,7 @@
   <p>같은 점들 위에도 직선은 무수히 그을 수 있습니다. 교과서 120쪽은 두 후보 직선을 놓고 "실젯값과 예측값의 차이", 곧 <b>오차</b>가 작은 쪽을 고르라고 말합니다. AI가 하는 학습도 원리는 같습니다 — 수많은 직선 가운데 오차가 가장 작은 기울기·편향 조합을 찾아내는 계산입니다. 이 "오차로 판정한다"는 원리는 9차시에 활동지로 직접 손계산합니다. 오늘은 AI에게 계산을 맡기고, 나온 직선을 읽는 데 집중합니다.</p>
   <div class="callout mini">
     <div class="h">📝 상관 사례 먼저 모으기</div>
-    <p>본격 실습 전에 생활 속 상관 사례를 폼으로 모읍니다. 양의 상관과 음의 상관 사례 찾기는 교과서 71쪽 해 보기 ①(폼 Ⅱ-03a), 상관을 인과로 오해한 사례 찾기는 72쪽 해 보기 ②(폼 Ⅱ-03b)에서 다룹니다.</p>
+    <p>실습 전에 생활 속 상관 사례를 폼 Ⅱ-03a·Ⅱ-03b로 모읍니다.</p>
   </div>
 
   <h2>2. 실습 — 기온 예측기 만들기 (바이브 코딩)</h2>
@@ -91,7 +91,7 @@
 
   <div class="callout tip">
     <div class="h">💡 프롬프트에 조건이 붙는 이유</div>
-    <p>"올해 제외 · 관측일 300일 미만 제외"라는 두 조건은 3차시에 데이터를 직접 살펴본 사람만 쓸 수 있는 주문입니다. 같은 도구를 쓰더라도, 데이터의 사정을 아는 사람과 모르는 사람의 프롬프트는 이렇게 달라집니다.</p>
+    <p>"올해 제외 · 관측일 300일 미만 제외"라는 두 조건은 3차시에 데이터를 직접 살펴본 사람만 쓸 수 있습니다. 같은 도구를 쓰더라도, 데이터의 사정을 아는 사람과 모르는 사람의 프롬프트는 이렇게 달라집니다.</p>
   </div>
 
   <h2>3. 발견 사건 — 창을 바꾸면 답이 3배 벌어진다</h2>
@@ -105,6 +105,58 @@
       <tr><td><b>최근 20년</b></td><td><b>+8.14</b></td><td>전체 기간의 3배가 넘는 가파름</td></tr>
     </tbody>
   </table>
+  <svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 산점도 위에서 학습 창이 다른 회귀 직선 두 개가 2045년 예측값 13.9도와 15.7도로 갈라지는 그림">
+    <defs>
+      <marker id="l7w-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto-start-reverse"><path d="M0,0 L9,4.5 L0,9 z" fill="#6b6350"/></marker>
+    </defs>
+    <!-- 배경 — 학습 범위 안/밖 -->
+    <rect x="60" y="40" width="390" height="290" fill="#faf3dd"/>
+    <rect x="450" y="40" width="250" height="290" fill="#ffffff"/>
+    <rect x="60" y="40" width="640" height="290" fill="none" stroke="#f0e2bc" stroke-width="1.5"/>
+    <text x="255" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#a08c5a">학습에 쓴 범위 (1908~2025)</text>
+    <text x="575" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#b0a78f">학습 범위 밖 — 9차시에서 다시</text>
+    <!-- 축 제목 -->
+    <text x="60" y="28" text-anchor="start" font-size="11" fill="#8a8069">연평균기온(℃)</text>
+    <text x="700" y="368" text-anchor="end" font-size="11" fill="#8a8069">연도</text>
+    <!-- 산점도 (모식 표기) -->
+    <g fill="#c4bba6">
+      <circle cx="65" cy="326" r="3.5"/><circle cx="79" cy="308" r="3.5"/><circle cx="93" cy="320" r="3.5"/><circle cx="107" cy="302" r="3.5"/>
+      <circle cx="121" cy="314" r="3.5"/><circle cx="135" cy="296" r="3.5"/><circle cx="149" cy="309" r="3.5"/><circle cx="163" cy="291" r="3.5"/>
+      <circle cx="177" cy="305" r="3.5"/><circle cx="191" cy="285" r="3.5"/><circle cx="205" cy="298" r="3.5"/><circle cx="219" cy="280" r="3.5"/>
+      <circle cx="233" cy="292" r="3.5"/><circle cx="247" cy="271" r="3.5"/><circle cx="261" cy="287" r="3.5"/><circle cx="275" cy="266" r="3.5"/>
+      <circle cx="289" cy="281" r="3.5"/><circle cx="303" cy="261" r="3.5"/><circle cx="317" cy="274" r="3.5"/><circle cx="331" cy="255" r="3.5"/>
+      <circle cx="345" cy="270" r="3.5"/><circle cx="359" cy="248" r="3.5"/><circle cx="373" cy="263" r="3.5"/><circle cx="387" cy="250" r="3.5"/>
+      <circle cx="401" cy="244" r="3.5"/><circle cx="415" cy="236" r="3.5"/><circle cx="429" cy="228" r="3.5"/><circle cx="443" cy="220" r="3.5"/>
+    </g>
+    <!-- y 눈금 안내선 (13.9 · 15.7) -->
+    <line x1="60" y1="227" x2="517" y2="227" stroke="#f4b400" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
+    <line x1="60" y1="179" x2="517" y2="179" stroke="#e8930c" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
+    <text x="54" y="231" text-anchor="end" font-size="11" fill="#a97f00">13.9</text>
+    <text x="54" y="183" text-anchor="end" font-size="11" fill="#b25f00">15.7</text>
+    <!-- 회귀 직선 2개 -->
+    <line x1="60" y1="321" x2="700" y2="189" stroke="#f4b400" stroke-width="3"/>
+    <line x1="383" y1="266" x2="700" y2="61" stroke="#e8930c" stroke-width="3"/>
+    <text x="605" y="258" text-anchor="middle" font-size="12.5" font-weight="800" fill="#a97f00">전체 114년 · +2.60℃/100년</text>
+    <text x="585" y="88" text-anchor="middle" font-size="12.5" font-weight="800" fill="#b25f00">최근 20년 · +8.14℃/100년</text>
+    <!-- 2045년 세로 점선과 두 교점 -->
+    <line x1="517" y1="70" x2="517" y2="330" stroke="#8a8069" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <circle cx="517" cy="227" r="5" fill="#f4b400" stroke="#ffffff" stroke-width="1.5"/>
+    <circle cx="517" cy="179" r="5" fill="#e8930c" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="538" y1="187" x2="538" y2="219" stroke="#6b6350" stroke-width="1.8" marker-start="url(#l7w-ar)" marker-end="url(#l7w-ar)"/>
+    <text x="548" y="183" text-anchor="start" font-size="12" font-weight="800" fill="#b25f00">15.7℃</text>
+    <text x="548" y="234" text-anchor="start" font-size="12" font-weight="800" fill="#a97f00">13.9℃</text>
+    <text x="548" y="208" text-anchor="start" font-size="12" font-weight="700" fill="#6b6350">같은 2045년, 두 답</text>
+    <!-- x 눈금 -->
+    <g stroke="#c9c0a8" stroke-width="1.5">
+      <line x1="60" y1="330" x2="60" y2="336"/><line x1="200" y1="330" x2="200" y2="336"/><line x1="367" y1="330" x2="367" y2="336"/>
+      <line x1="450" y1="330" x2="450" y2="336"/><line x1="517" y1="330" x2="517" y2="336"/><line x1="700" y1="330" x2="700" y2="336"/>
+    </g>
+    <g font-size="11" fill="#8a8069" text-anchor="middle">
+      <text x="60" y="350">1908</text><text x="200" y="350">1950</text><text x="367" y="350">2000</text>
+      <text x="450" y="350">2025</text><text x="517" y="350" font-weight="800" fill="#6b6350">2045</text><text x="692" y="350">2100</text>
+    </g>
+  </svg>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">점의 위치는 추세를 나타낸 모식 표기입니다. 같은 점들 위에서 학습 창이 다른 두 직선이, 같은 2045년에 13.9℃와 15.7℃로 갈라집니다.</p>
   <div class="callout warn">
     <div class="h">⚠️ 어느 직선이 진짜인가</div>
     <p>둘 다 계산은 정확합니다. 다만 <b>다른 질문에 답하는 직선</b>입니다. 전체 114년의 직선은 "지난 한 세기의 평균 추세"를, 최근 20년의 직선은 "요즘의 가파름"을 요약합니다. 같은 2045년을 물어도 예상 기온이 13.9℃와 15.7℃로 갈라집니다. 직선이 내놓는 숫자를 만나면, 그 직선이 <b>어느 창에서 학습되었는지</b>부터 물어야 하는 이유입니다.</p>
@@ -122,9 +174,30 @@
     <p class="t">→ 상관은 넓고 인과는 그 안의 좁은 영역이다. 함께 변한다고 해서 한쪽이 다른 쪽의 원인인 것은 아니다.</p>
   </div>
   <p>아이스크림 판매량과 물놀이 사고 건수는 함께 오르내립니다. 그렇다고 아이스크림이 사고의 원인일까요. 둘 뒤에는 <b>여름철 기온</b>이라는 공통 요인이 있을 뿐입니다. 이런 사례에서 상관을 인과로 잘못 읽으면 "아이스크림을 금지하자" 같은 엉뚱한 결론이 나옵니다. 우리 직선도 마찬가지입니다. 연도-기온의 상관이 강하다는 것이 "시간이 흘러서 더워졌다"는 인과 설명은 아닙니다. 원인 후보(온실가스, 도시화 등)를 밝히는 일은 별도의 검증이 필요한, 회귀 바깥의 작업입니다.</p>
+  <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="여름철 기온이라는 공통 요인이 아이스크림 판매량과 물놀이 사고 건수에 각각 영향을 주어 상관이 생기지만 둘 사이에 원인 관계는 없다는 구조 그림" style="max-width:560px;display:block;margin:14px auto 0">
+    <defs>
+      <marker id="l7c-gr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#54a24b"/></marker>
+    </defs>
+    <rect x="185" y="16" width="190" height="52" rx="12" fill="#fdf3d8" stroke="#f4b400" stroke-width="2"/>
+    <text x="280" y="38" text-anchor="middle" font-size="15" font-weight="800" fill="#5a4300">여름철 기온</text>
+    <text x="280" y="57" text-anchor="middle" font-size="11.5" fill="#a08c5a">공통 요인</text>
+    <line x1="238" y1="70" x2="152" y2="124" stroke="#54a24b" stroke-width="2.5" marker-end="url(#l7c-gr)"/>
+    <line x1="322" y1="70" x2="408" y2="124" stroke="#54a24b" stroke-width="2.5" marker-end="url(#l7c-gr)"/>
+    <text x="172" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3d7a36">영향</text>
+    <text x="388" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3d7a36">영향</text>
+    <rect x="30" y="130" width="190" height="48" rx="12" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+    <text x="125" y="159" text-anchor="middle" font-size="14" font-weight="800" fill="#4a4434">아이스크림 판매량</text>
+    <rect x="340" y="130" width="190" height="48" rx="12" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+    <text x="435" y="159" text-anchor="middle" font-size="14" font-weight="800" fill="#4a4434">물놀이 사고 건수</text>
+    <line x1="226" y1="154" x2="334" y2="154" stroke="#9b937e" stroke-width="2" stroke-dasharray="5 5"/>
+    <text x="280" y="140" text-anchor="middle" font-size="11.5" fill="#6b6350">함께 오르내림 — 상관</text>
+    <path d="M271 145 L289 163 M289 145 L271 163" stroke="#e45756" stroke-width="3.5" stroke-linecap="round"/>
+    <text x="280" y="202" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">원인 관계는 아님</text>
+  </svg>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">함께 변한다(상관)와 원인이다(인과)는 다른 말이다 — 『데이터 과학』 72쪽.</p>
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>폼 Ⅱ-03a(상관 생활 사례)·Ⅱ-03b(상관≠인과 오인 사례)는 수업 중 제출합니다. 폼 Ⅱ-03c(관계 분석 방법 조사 — 교과서 77쪽 해 보기 ③)는 과제입니다.</p>
+    <p><b>Ⅱ-03a</b>·<b>Ⅱ-03b</b>(수업 중) · <b>Ⅱ-03c</b>(과제)</p>
   </div>
 
   <h2>5. 개념 정리 — 직선 하나가 가진 힘과 함정</h2>
@@ -132,18 +205,44 @@
   <p>마지막 질문이 남았습니다. 슬라이더가 내놓은 2045년 예상 기온 — 이 직선을 도대체 <b>얼마나 믿어야 할까요.</b> 다음 시간에 영화 데이터로 변수 여러 개짜리 회귀를 만들어 본 뒤, 9차시에 그 "믿음의 점수"를 손으로 직접 계산합니다.</p>
 
   <h2>6. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 우리 기온 예측기의 전체 기간 기울기는 +2.60℃/100년이다. 이 숫자가 뜻하는 바를 한 문장으로 설명하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 필터를 통과한 114개 연도의 추세를 직선으로 요약하면, 연평균기온이 100년마다 약 2.60℃씩 오르는 속도로 상승해 왔다는 뜻이다. 매년 똑같이 올랐다는 뜻이 아니라 전체 기간을 관통하는 평균 추세라는 점에 주의한다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 전체 기간으로 구한 기울기는 +2.60, 최근 20년으로 구한 기울기는 +8.14였다. 한쪽이 계산을 틀린 것인가? "서울은 더워지고 있는가"라는 질문에 어떻게 답해야 하는가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 둘 다 계산은 옳다. 학습에 쓴 창이 달라 다른 질문에 답하고 있을 뿐이다. 전체 기간 직선은 한 세기의 평균 추세를, 최근 20년 직선은 최근의 가파름을 요약한다. 따라서 "더워지고 있다"는 방향은 같지만 속도를 말할 때는 반드시 어느 기간에서 잰 기울기인지 밝혀야 한다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — "아이스크림 판매량과 물놀이 사고 건수의 상관이 강하므로, 사고를 줄이려면 아이스크림 판매를 규제해야 한다." 이 주장의 오류를 지적하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 상관관계를 인과관계로 오인했다. 두 속성은 여름철 기온이라는 공통 요인의 영향을 함께 받아 나란히 움직일 뿐, 아이스크림이 사고의 원인이라는 근거는 없다. 아이스크림을 규제해도 사고는 줄지 않는다. 인과를 주장하려면 상관과 별도로 원인-결과의 검증이 필요하다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 우리 기온 예측기의 전체 기간 기울기는 +2.60℃/100년입니다. 이 숫자의 뜻으로 옳은 것을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">연평균기온이 매년 빠짐없이 2.60℃의 100분의 1씩 똑같이 올랐다는 관측 사실이다</button>
+        <button class="opt" data-ok="1">필터를 통과한 114개 연도의 추세를 직선으로 요약한 것으로, 100년마다 약 2.60℃씩 오르는 평균 속도라는 뜻이다</button>
+        <button class="opt">2100년의 서울 기온이 지금보다 2.60℃ 높아진다는 보장이다</button>
+      </div>
+      <div class="fb">직선은 매년 균일한 상승이라는 관측 사실이 아니라, 전체 기간을 관통하는 평균 추세의 요약입니다. 또한 직선은 학습 범위(1908~2025) 안의 추세를 요약할 뿐, 범위 밖의 미래를 보장하지 않습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 전체 기간으로 구한 기울기는 +2.60, 최근 20년으로 구한 기울기는 +8.14였습니다.</div>
+    <div class="qitem">
+      <div class="qs">(가) 한쪽이 계산을 틀린 것일까요?</div>
+      <div class="qopts qopts-col">
+        <button class="opt">최근 20년 쪽이 틀렸다 — 데이터가 적으면 기울기 계산 자체가 성립하지 않는다</button>
+        <button class="opt">전체 기간 쪽이 틀렸다 — 100년 전 데이터는 지금의 추세와 무관하므로 섞으면 안 된다</button>
+        <button class="opt" data-ok="1">둘 다 옳다 — 학습에 쓴 창이 달라 서로 다른 질문에 답하는 직선이다</button>
+      </div>
+      <div class="fb">데이터가 적으면 값이 출렁일 뿐 계산이 틀리는 것은 아니고(위 표의 "최근 30년" 행), 전체 창의 직선도 "한 세기의 평균 추세"라는 다른 질문에 답하는 정당한 계산입니다. 두 직선은 둘 다 정확하며, 답하는 질문이 다를 뿐입니다.</div>
+    </div>
+    <div class="qq">(나) 그렇다면 "서울은 더워지고 있는가"라는 질문에는 어떻게 답해야 할까요? 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>"더워지고 있다"는 방향은 두 직선이 같습니다. 다만 속도를 말할 때는 반드시 어느 기간에서 잰 기울기인지 밝혀야 합니다 — 전체 기간 직선은 한 세기의 평균 추세를, 최근 20년 직선은 최근의 가파름을 요약합니다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> "아이스크림 판매량과 물놀이 사고 건수의 상관이 강하므로, 사고를 줄이려면 아이스크림 판매를 규제해야 한다." 이 주장에 대한 판단으로 옳은 것을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">표본이 부족해서 상관계수 계산이 잘못되었다</button>
+        <button class="opt" data-ok="1">여름철 기온이라는 공통 요인이 만든 상관을 인과로 오인했다 — 아이스크림을 규제해도 사고는 줄지 않는다</button>
+        <button class="opt">규제 대상을 바꿔 물놀이를 규제하면 논리가 성립한다</button>
+      </div>
+      <div class="fb">오류는 계산이 아니라 해석에 있습니다 — 상관이 강하다는 관찰 자체는 사실일 수 있습니다. 그리고 어느 쪽을 규제하든 상관을 인과로 읽는 오류는 그대로입니다. 두 속성은 여름철 기온이라는 공통 요인의 영향을 함께 받아 나란히 움직일 뿐이며, 인과를 주장하려면 상관과 별도로 원인-결과의 검증이 필요합니다.</div>
+    </div>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -174,5 +273,6 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

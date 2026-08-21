@@ -61,6 +61,68 @@
     </tbody>
   </table>
   <p>세 지표는 이 네 칸의 나눗셈입니다 (공식은 교과서 140쪽). 분자는 셋 다 "맞힌 것"에서 출발하고, <b>분모가 무엇이냐</b>가 셋을 가릅니다. 손계산에서 가장 자주 틀리는 곳도 분모입니다.</p>
+  <div style="overflow-x:auto;margin:16px 0">
+  <svg viewBox="0 0 720 500" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="혼동행렬 네 칸의 2×2 배치와, 정확도·정밀도·재현율이 분모로 삼는 범위를 나타낸 그림">
+    <!-- 큰 행렬: 실제 × 예측 -->
+    <text x="265" y="44" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a">예측: 성공</text>
+    <text x="515" y="44" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a">예측: 실패</text>
+    <text x="128" y="109" text-anchor="end" font-size="15" font-weight="800" fill="#2b2d3a">실제: 성공</text>
+    <text x="128" y="201" text-anchor="end" font-size="15" font-weight="800" fill="#2b2d3a">실제: 실패</text>
+    <rect x="140" y="58" width="250" height="92" fill="#54a24b" fill-opacity="0.16" stroke="#f0e2bc"/>
+    <rect x="390" y="58" width="250" height="92" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"/>
+    <rect x="140" y="150" width="250" height="92" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"/>
+    <rect x="390" y="150" width="250" height="92" fill="#3ba6a0" fill-opacity="0.15" stroke="#f0e2bc"/>
+    <text x="265" y="95" text-anchor="middle" font-size="16" font-weight="800" fill="#2f6d2a">TP</text>
+    <text x="265" y="120" text-anchor="middle" font-size="13" fill="#2b2d3a">맞다고 했는데 정말 맞음</text>
+    <text x="515" y="88" text-anchor="middle" font-size="16" font-weight="800" fill="#b23c3c">FN</text>
+    <text x="515" y="110" text-anchor="middle" font-size="13" fill="#2b2d3a">아니라고 했는데 사실 맞음</text>
+    <text x="515" y="130" text-anchor="middle" font-size="13" fill="#2b2d3a">(놓친 성공작)</text>
+    <text x="265" y="187" text-anchor="middle" font-size="16" font-weight="800" fill="#b23c3c">FP</text>
+    <text x="265" y="212" text-anchor="middle" font-size="13" fill="#2b2d3a">맞다고 했는데 틀림</text>
+    <text x="515" y="187" text-anchor="middle" font-size="16" font-weight="800" fill="#23706b">TN</text>
+    <text x="515" y="212" text-anchor="middle" font-size="13" fill="#2b2d3a">아니라고 했는데 정말 아님</text>
+    <!-- 미니 행렬 ① 정확도 -->
+    <text x="140" y="302" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">① 정확도</text>
+    <text x="140" y="322" text-anchor="middle" font-size="12.5" fill="#2b2d3a">(TP+TN) ÷ 전체</text>
+    <rect x="85" y="334" width="55" height="32" fill="#54a24b" fill-opacity="0.35" stroke="#f0e2bc"/>
+    <rect x="140" y="334" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
+    <rect x="85" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
+    <rect x="140" y="366" width="55" height="32" fill="#3ba6a0" fill-opacity="0.35" stroke="#f0e2bc"/>
+    <text x="112.5" y="354" text-anchor="middle" font-size="9.5" font-weight="800" fill="#2f6d2a">TP</text>
+    <text x="167.5" y="354" text-anchor="middle" font-size="9.5" fill="#7a7f95">FN</text>
+    <text x="112.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">FP</text>
+    <text x="167.5" y="386" text-anchor="middle" font-size="9.5" font-weight="800" fill="#23706b">TN</text>
+    <rect x="85" y="334" width="110" height="64" fill="none" stroke="#e8930c" stroke-width="3"/>
+    <!-- 미니 행렬 ② 정밀도 -->
+    <text x="360" y="302" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">② 정밀도</text>
+    <text x="360" y="322" text-anchor="middle" font-size="12.5" fill="#2b2d3a">TP ÷ (TP+FP)</text>
+    <rect x="305" y="334" width="55" height="32" fill="#54a24b" fill-opacity="0.35" stroke="#f0e2bc"/>
+    <rect x="360" y="334" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
+    <rect x="305" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
+    <rect x="360" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
+    <text x="332.5" y="354" text-anchor="middle" font-size="9.5" font-weight="800" fill="#2f6d2a">TP</text>
+    <text x="387.5" y="354" text-anchor="middle" font-size="9.5" fill="#7a7f95">FN</text>
+    <text x="332.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">FP</text>
+    <text x="387.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">TN</text>
+    <rect x="305" y="334" width="55" height="64" fill="none" stroke="#e8930c" stroke-width="3"/>
+    <text x="360" y="422" text-anchor="middle" font-size="12" fill="#7a7f95">"성공이라 말한 것" 중에서</text>
+    <!-- 미니 행렬 ③ 재현율 -->
+    <text x="580" y="302" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">③ 재현율</text>
+    <text x="580" y="322" text-anchor="middle" font-size="12.5" fill="#2b2d3a">TP ÷ (TP+FN)</text>
+    <rect x="525" y="334" width="55" height="32" fill="#54a24b" fill-opacity="0.35" stroke="#f0e2bc"/>
+    <rect x="580" y="334" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
+    <rect x="525" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
+    <rect x="580" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
+    <text x="552.5" y="354" text-anchor="middle" font-size="9.5" font-weight="800" fill="#2f6d2a">TP</text>
+    <text x="607.5" y="354" text-anchor="middle" font-size="9.5" fill="#7a7f95">FN</text>
+    <text x="552.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">FP</text>
+    <text x="607.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">TN</text>
+    <rect x="525" y="334" width="110" height="32" fill="none" stroke="#e8930c" stroke-width="3"/>
+    <text x="580" y="422" text-anchor="middle" font-size="12" fill="#7a7f95">"실제 성공작" 중에서</text>
+    <!-- 캡션 -->
+    <text x="360" y="470" text-anchor="middle" font-size="13.5" fill="#7a7f95">세 지표의 분자는 같은 칸에서 출발한다 — 셋을 가르는 것은 분모가 가리키는 범위다.</text>
+  </svg>
+  </div>
   <table class="daymap">
     <thead><tr><th>지표</th><th>계산 (140쪽 공식)</th><th>묻는 말</th></tr></thead>
     <tbody>
@@ -78,7 +140,7 @@
   <p>이어지는 문제 2~5는 무대가 영화와 스팸 필터로 바뀝니다. 작은 표로 내 흥행 분류기의 혼동행렬을 채우고, 아무 계산도 하지 않는 게으른 모델과 겨루고, 정확도는 같아도 정밀도와 재현율이 갈리는 두 모델을 놓고 <b>투자자와 발굴팀 중 누가 어느 모델을 골라야 하는지</b> 판정합니다. 교과서 140쪽도 같은 원리를 말합니다 — 스팸 필터처럼 멀쩡한 메일을 잘못 거르면 안 되는 문제는 정밀도가, 감염병 검사처럼 한 명도 놓치면 안 되는 문제는 재현율이 적절한 지표라고.</p>
   <div class="callout tip">
     <div class="h">💡 지표 선택은 계산이 아니라 판단이다</div>
-    <p>정밀도와 재현율 중 무엇을 볼 것인가는 "어느 쪽 틀림의 비용이 더 큰가"에 대한 판단입니다. 도전 문제(문제 7)에서는 문턱값을 0.5에서 움직여 봅니다 — 문턱을 내리면 재현율이 오르는 대신 정밀도가 내려갑니다. 두 지표는 시소의 양 끝에 앉아 있습니다.</p>
+    <p>정밀도와 재현율 중 무엇을 볼 것인가는 "어느 쪽 틀림의 비용이 더 큰가"에 대한 판단입니다. 도전 문제(문제 7)에서는 문턱값을 0.5에서 움직여 봅니다 — 문턱을 내리면 재현율이 오르는 대신 정밀도가 내려갑니다. 두 지표는 맞바꿈 관계입니다 — 한쪽을 올리면 다른 쪽이 내려갑니다.</p>
   </div>
 
   <div class="callout check">
@@ -86,7 +148,7 @@
     <p>오늘 활동지의 계산 — 혼동행렬 채우기, 세 지표 구하기, 기준선과 견주기, 누수 판정 — 은 중간 지필평가 계산 문항의 원천입니다. 시험에는 수업에서 함께 본 실측 수치만 나옵니다. 오늘 손으로 한 번 끝까지 계산해 둔 사람은 시험장에서 같은 길을 다시 걸으면 됩니다.</p>
   </div>
 
-  <h2>3. 발견 사건 — 게으른 모델이 이긴다 (전량 실측)</h2>
+  <h2>3. 발견 사건 — 게으른 모델이 이긴다</h2>
   <p>이제 지난 시간의 숫자로 돌아갑니다. 우리 분석 대상 216편 중, 기준 100만 명을 넘긴 성공작은 <b>23편(11%)</b>뿐입니다. 그렇다면 아무 계산도 하지 않고 <b>전부 "실패"로만 찍는 모델</b>의 정확도는 얼마일까요? 216편 중 193편을 맞히므로 <b>89%</b>입니다. 지난 시간의 성적표 옆에 이 게으른 모델을 세워 봅니다.</p>
   <table class="daymap">
     <thead><tr><th>모델</th><th>정확도</th><th>성공 재현율</th><th>판정</th></tr></thead>
@@ -116,7 +178,7 @@
 
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>활동지 2(분류 평가 손계산, 문제 1~7) + 폼 <b>Ⅲ-02d</b>(교과서 140쪽 해 보기 ④ — 정밀도·재현율 계산). 수행 과제: "첫 주 관객 수를 넣으면 반칙인 이유"를 두 문장으로 서술.</p>
+    <p>활동지 2 · 폼 <b>Ⅲ-02d</b>(정밀도·재현율 계산) — 수행 과제: "첫 주 관객 수가 반칙인 이유" 두 문장.</p>
   </div>
 
   <h2>5. 개념 정리 — 기준선이라는 습관</h2>
@@ -124,18 +186,41 @@
   <p>그리고 하나 더. 성능이 급등하면 실력이 아니라 누수를 의심한다는 것 — 8차시의 회귀와 오늘의 분류에서 두 번 확인했습니다. 좋은 성적표보다 <b>공정한 시험</b>이 먼저입니다.</p>
 
   <h2>6. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 영화 216편 중 성공작이 23편이다. 전부 "실패"로만 찍는 모델의 정확도와 성공 재현율을 구하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 정확도 = 193 ÷ 216 ≈ <b>0.89</b> (실패 193편을 전부 맞힘). 성공 재현율 = 0 ÷ 23 = <b>0.00</b> (성공작을 한 편도 잡지 못함). 정확도 89%와 재현율 0이 공존한다는 것이 "정확도만 보면 안 되는" 이유의 첫 증거다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 로지스틱 회귀는 정확도 0.877을 받았다. 이 모델을 "꽤 좋은 모델"이라고 말할 수 있는가? 두 가지 근거로 판정하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 말할 수 없다. ①기준선과 견주면: 아무 계산 없이 전부 실패로 찍어도 0.89인데 그보다 낮다. ②재현율을 보면: 성공 재현율 0.00으로, 정작 찾고 싶은 성공작을 한 편도 예측하지 못했다. 치우친 데이터에서 정확도는 다수를 따라 찍기만 해도 높게 나오므로, 기준선과 재현율을 함께 확인해야 한다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — "개봉 전 흥행 예측 모델"에 첫 주 관객 수를 넣자 정확도가 0.908에서 0.985로 올랐다. 이 변화를 성능 개선이라 부를 수 있는가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 부를 수 없다. 첫 주 관객 수는 개봉 전에는 알 수 없는 미래 정보이며 정답(총 관객 기반 라벨)과 직결된 변수다. 정답을 미리 본 레이블 누수이므로, 시험 성적은 올라도 실전(미개봉 영화)에서는 쓸 수 없다. 성능의 급등은 개선이 아니라 반칙의 신호로 먼저 의심해야 한다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 영화 216편 중 성공작이 23편입니다. 전부 "실패"로만 찍는 모델의 성적을 구해 보세요.</div>
+    <div class="qitem">
+      <div class="qs">(a) 이 모델의 정확도는?</div>
+      <div class="qopts"><button class="opt">0.11</button><button class="opt" data-ok="1">0.89</button><button class="opt">0.877</button></div>
+      <div class="fb">실패 193편을 전부 맞히므로 193÷216 ≈ <b>0.89</b>입니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(b) 이 모델의 성공 재현율은?</div>
+      <div class="qopts"><button class="opt">0.89</button><button class="opt">1.00</button><button class="opt" data-ok="1">0.00</button></div>
+      <div class="fb">실제 성공작 23편 중 잡아낸 것이 0편 — 0÷23 = <b>0.00</b>. 정확도 0.89와 재현율 0.00의 공존이 "정확도만 보면 안 되는" 첫 증거입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 로지스틱 회귀는 정확도 0.877을 받았습니다. 이 모델을 "꽤 좋은 모델"이라고 말할 수 있을까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">그렇다 — 100점 만점의 88점에 해당하는 높은 성적이므로</button>
+        <button class="opt" data-ok="1">아니다 — 전부 실패로 찍는 기준선 0.89보다 낮고, 성공 재현율이 0.00이므로</button>
+        <button class="opt">그렇다 — 재현율이 낮아도 정확도가 높으면 좋은 모델이므로</button>
+      </div>
+      <div class="fb">라벨이 11 대 89로 치우친 데이터에서는 다수만 따라 찍어도 정확도가 후하게 나옵니다. 기준선과 재현율을 함께 세워야 판정이 됩니다 — 교과서 139쪽의 경고 그대로입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> "개봉 전 흥행 예측 모델"에 첫 주 관객 수를 넣자 정확도가 0.908에서 0.985로 올랐습니다. 이 변화를 성능 개선이라 부를 수 있을까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">부를 수 있다 — 정확도가 실제로 0.077만큼 올랐으므로</button>
+        <button class="opt" data-ok="1">부를 수 없다 — 개봉 전에는 알 수 없는 미래 정보가 입력에 섞인 레이블 누수이므로</button>
+        <button class="opt">부를 수 있다 — 변수를 많이 넣을수록 모델은 언제나 좋아지므로</button>
+      </div>
+      <div class="fb">첫 주 관객 수는 라벨(총 관객)과 사실상 한 몸인 미래 정보입니다. 시험 성적은 올라도 미개봉 영화에는 쓸 수 없습니다 — 성능 급등은 개선이 아니라 반칙 신호로 먼저 의심합니다.</div>
+    </div>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -165,5 +250,6 @@
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

@@ -28,7 +28,7 @@
     <span class="by">1차시에서 본 6단계의 마지막인 공유를, 오늘 실제로 해 봅니다</span>
   </div>
 
-  <p class="lead">지난 차시의 기온 탐색은 아직 내 컴퓨터 화면 안에만 있습니다. 오늘 그 분석을 정리해 인터넷에 올리고, 세상 어디서나 열리는 <b>나의 주소</b>를 얻습니다. 오늘 만드는 앱은 일회용이 아닙니다. 학기 내내 페이지가 하나씩 붙으며 자라날, 나의 데이터 포트폴리오의 개장입니다.</p>
+  <p class="lead">지난 차시의 기온 탐색은 아직 내 컴퓨터 화면 안에만 있습니다. 오늘 그 분석을 정리해 인터넷에 올리고, 세상 어디서나 열리는 <b>나의 주소</b>를 얻습니다. 오늘 만드는 앱은 일회용이 아닙니다. 학기 내내 페이지가 하나씩 붙으며 자라날, 나의 데이터 포트폴리오의 시작입니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
@@ -43,15 +43,60 @@
   <p>"데이터 분석을 할 줄 압니다"라는 말과, 눌러 볼 수 있는 링크 하나 — 어느 쪽이 더 믿음직할까요? 대학의 면접장에서도, 회사의 채용에서도, 말보다 강한 것은 직접 확인할 수 있는 결과물입니다. 개발자와 데이터 분석가들이 저마다 포트폴리오 주소를 가꾸는 이유입니다. 오늘 얻는 주소는 그 첫 조각입니다. 그리고 배포는 겉치레가 아니라 분석의 마지막 단계입니다. 1차시에 배운 6단계의 끝이 공유였던 것을 기억합니까? 남이 볼 수 있게 여는 순간, 분석은 검증받기 시작합니다.</p>
 
   <h2>1. 개념 이해 — 배포, 분석을 여는 일</h2>
-  <p><b>배포</b>는 내 컴퓨터에서만 돌던 프로그램을 인터넷의 서버에 올려, 주소만 알면 누구나 쓸 수 있게 만드는 일입니다. 오늘의 배포에는 세 곳이 등장합니다. 각각의 역할을 구분해 두면 실습에서 길을 잃지 않습니다.</p>
-  <table class="daymap">
-    <thead><tr><th>장소</th><th>역할</th><th>비유하면</th></tr></thead>
-    <tbody>
-      <tr><td><b>내 컴퓨터</b></td><td>코드를 만들고 고치는 작업실</td><td>주방</td></tr>
-      <tr><td><b>깃허브(GitHub)</b></td><td>코드를 보관하고 이력을 남기는 저장소</td><td>요리책 보관함</td></tr>
-      <tr><td><b>스트림릿 커뮤니티 클라우드</b></td><td>저장소의 코드를 읽어 앱으로 실행해 주는 서버</td><td>손님을 받는 식당</td></tr>
-    </tbody>
-  </table>
+  <p><b>배포</b>는 내 컴퓨터에서만 돌던 프로그램을 인터넷의 서버에 올려, 주소만 알면 누구나 쓸 수 있게 만드는 일입니다. 오늘의 배포에서 내 코드는 네 지점을 지납니다. 각 지점의 역할을 구분해 두면 실습에서 길을 잃지 않습니다.</p>
+  <div style="overflow-x:auto">
+  <svg viewBox="0 0 800 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="배포의 네 지점 — 내 컴퓨터에서 깃허브 저장소, 스트림릿 커뮤니티 클라우드를 거쳐 보는 사람의 브라우저까지 이어지는 흐름" style="min-width:640px;display:block">
+    <defs>
+      <marker id="dep-ar-gold" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+      <marker id="dep-ar-teal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+      <marker id="dep-ar-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+      <marker id="dep-ar-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#54a24b"/></marker>
+    </defs>
+    <!-- 지점 ① 내 컴퓨터 -->
+    <rect x="10" y="14" width="140" height="118" rx="12" fill="#fffdf7" stroke="#f0e2bc" stroke-width="1.5"/>
+    <text x="80" y="44" text-anchor="middle" font-size="24">💻</text>
+    <text x="80" y="68" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3a2e1a">내 컴퓨터</text>
+    <text x="80" y="86" text-anchor="middle" font-size="10.5" fill="#6b5836">코드를 만들고</text>
+    <text x="80" y="100" text-anchor="middle" font-size="10.5" fill="#6b5836">고치는 곳</text>
+    <text x="80" y="120" text-anchor="middle" font-size="9.5" fill="#9a8b6a" font-family="monospace">app.py · requirements.txt</text>
+    <!-- 화살표 ①→② 올리기(push) -->
+    <line x1="154" y1="73" x2="215" y2="73" stroke="#f4b400" stroke-width="2.5" marker-end="url(#dep-ar-gold)"/>
+    <text x="186" y="54" text-anchor="middle" font-size="10.5" font-weight="800" fill="#e8930c">올리기</text>
+    <text x="186" y="67" text-anchor="middle" font-size="10.5" font-weight="800" fill="#e8930c">(push)</text>
+    <!-- 지점 ② 깃허브 저장소 -->
+    <rect x="223" y="14" width="140" height="118" rx="12" fill="#fffdf7" stroke="#f0e2bc" stroke-width="1.5"/>
+    <text x="293" y="44" text-anchor="middle" font-size="24">📦</text>
+    <text x="293" y="68" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3a2e1a">깃허브 저장소</text>
+    <text x="293" y="86" text-anchor="middle" font-size="10.5" fill="#6b5836">코드 보관·이력</text>
+    <text x="293" y="104" text-anchor="middle" font-size="9.5" fill="#9a8b6a">클라우드가 읽어 갈 원본</text>
+    <!-- 화살표 ②→③ 코드를 읽어 실행 -->
+    <line x1="367" y1="73" x2="428" y2="73" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#dep-ar-teal)"/>
+    <text x="399" y="54" text-anchor="middle" font-size="10.5" font-weight="800" fill="#3ba6a0">코드를 읽어</text>
+    <text x="399" y="67" text-anchor="middle" font-size="10.5" font-weight="800" fill="#3ba6a0">실행</text>
+    <!-- 지점 ③ 스트림릿 커뮤니티 클라우드 -->
+    <rect x="436" y="14" width="140" height="118" rx="12" fill="#fffdf7" stroke="#f0e2bc" stroke-width="1.5"/>
+    <text x="506" y="40" text-anchor="middle" font-size="22">☁️</text>
+    <text x="506" y="62" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3a2e1a">스트림릿 커뮤니티</text>
+    <text x="506" y="77" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3a2e1a">클라우드</text>
+    <text x="506" y="95" text-anchor="middle" font-size="10.5" fill="#6b5836">저장소의 코드를</text>
+    <text x="506" y="109" text-anchor="middle" font-size="10.5" fill="#6b5836">앱으로 실행하는 서버</text>
+    <!-- 화살표 ③→④ 주소(URL) -->
+    <line x1="580" y1="73" x2="641" y2="73" stroke="#e8930c" stroke-width="2.5" marker-end="url(#dep-ar-accent)"/>
+    <text x="612" y="54" text-anchor="middle" font-size="10.5" font-weight="800" fill="#e8930c">주소</text>
+    <text x="612" y="67" text-anchor="middle" font-size="10.5" font-weight="800" fill="#e8930c">(URL)</text>
+    <!-- 지점 ④ 보는 사람의 브라우저 -->
+    <rect x="649" y="14" width="140" height="118" rx="12" fill="#fffdf7" stroke="#f0e2bc" stroke-width="1.5"/>
+    <text x="719" y="44" text-anchor="middle" font-size="24">📱</text>
+    <text x="719" y="68" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">보는 사람의 브라우저</text>
+    <text x="719" y="86" text-anchor="middle" font-size="10.5" fill="#6b5836">내 컴퓨터가 꺼져</text>
+    <text x="719" y="100" text-anchor="middle" font-size="10.5" fill="#6b5836">있어도 열림</text>
+    <!-- 회귀 점선 — 코드를 고치면 앱도 갱신 -->
+    <path d="M 80 136 V 158 H 289 V 140" fill="none" stroke="#54a24b" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#dep-ar-green)"/>
+    <text x="312" y="162" text-anchor="start" font-size="10.5" font-weight="800" fill="#54a24b">코드를 고치면 배포된 앱도 갱신 — 오늘의 배포는 첫 연결</text>
+    <!-- 캡션 -->
+    <text x="400" y="196" text-anchor="middle" font-size="11.5" fill="#9a8b6a">배포 = 저장소를 거쳐 서버에서 실행되고, 주소 하나로 열리는 일.</text>
+  </svg>
+  </div>
   <p>오늘 앱에 꼭 담을 화면이 하나 있습니다. <b>전처리 전과 후의 그래프를 나란히 놓은 비교</b>입니다. 지난 차시에 관측일 300일 기준으로 걸러 114개 연도(1908~2025)를 남겼습니다. 그 판단을 화면에서 감추지 않고 전후를 함께 보여 주는 것이 분석의 투명성입니다. 보는 사람이 "무엇을 왜 뺐는지"를 직접 확인하고 판단할 수 있기 때문입니다.</p>
   <div class="tbquote">
     <div class="h">📖 교과서와 잇기 <span class="src">『데이터 과학』 91쪽</span></div>
@@ -82,7 +127,7 @@
     <div class="h">🎒 시작 전 준비물</div>
     <ul>
       <li><b>깃허브 계정</b>과 <b>스트림릿 커뮤니티 클라우드 계정</b>이 필요합니다. 계정 만들기는 선생님이 나누어 준 안내에 따릅니다.</li>
-      <li>앱이 쓰는 도구 목록 파일(예: requirements.txt)이 저장소에 함께 있어야 서버가 같은 환경을 갖춥니다. ① 프롬프트로 만든 앱이라면 AI에게 "배포에 필요한 파일도 만들어 줘"라고 이어서 주문합니다.</li>
+      <li>앱이 쓰는 도구 목록 파일(예: requirements.txt)이 저장소에 함께 있어야 서버가 같은 환경을 갖춥니다. ① 프롬프트로 만든 앱이라면 AI에게 "배포에 필요한 파일도 만들어 줘"라고 이어서 요청합니다.</li>
     </ul>
   </div>
   <ol class="steps">
@@ -122,10 +167,10 @@
   </div>
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p><b>배포 URL을 갤러리에 게시</b>합니다(학기 전체 증빙의 뿌리). 지난 차시에 시작한 폼 <b>Ⅱ-04c</b>(전처리 결과 비교)는 오늘 만든 전후 비교 화면을 근거로 완성해 제출합니다.</p>
+    <p><b>배포 URL 갤러리 게시</b> · <b>Ⅱ-04c</b>(전처리 결과 비교) 완성 제출</p>
   </div>
 
-  <h2>5. 개념 정리 — 포트폴리오의 개장</h2>
+  <h2>5. 개념 정리 — 포트폴리오의 시작</h2>
   <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>배포는 분석의 마지막 단계이고, 전처리 전후를 나란히 보이는 것은 내 판단을 검증 가능하게 여는 일이다.</b> 내 컴퓨터의 코드가 깃허브 저장소를 거쳐 클라우드에서 실행되고, 주소 하나로 누구에게나 열렸습니다. 6단계의 수집·준비·탐색(2~3차시)을 지나 공유까지, 작은 한 바퀴를 완주한 셈입니다.</p>
   <table class="daymap">
     <thead><tr><th>6단계에서</th><th>어느 차시에</th><th>무엇으로</th></tr></thead>
@@ -135,21 +180,27 @@
       <tr><td><b>공유</b></td><td><b>4차시(오늘)</b></td><td><b>배포 — 나의 주소</b></td></tr>
     </tbody>
   </table>
-  <p>이 앱은 오늘로 끝나지 않습니다. 다음 차시에는 내려받지 않아도 흘러들어 오는 데이터 — 우리 학교 급식 — 가 새 페이지로 붙습니다. 이어서 영화, 예측, 분류, 군집의 페이지가 차례로 늘어나, 학기말에는 "나의 데이터 포트폴리오 앱" 한 채가 완성됩니다. 오늘의 주소를 소중히 보관하세요.</p>
+  <p>이 앱은 오늘로 끝나지 않습니다. 다음 차시에는 내려받지 않아도 흘러들어 오는 데이터 — 우리 학교 급식 — 가 새 페이지로 붙습니다. 이어서 영화, 예측, 분류, 군집의 페이지가 차례로 늘어나, 학기말에는 "나의 데이터 포트폴리오 앱" 하나가 완성됩니다. 오늘의 주소를 소중히 보관하세요.</p>
 
   <h2>6. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 전처리 전과 후의 그래프를 앱에 나란히 두는 이유를 서술하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 결측치와 이상치가 있는 상태로 분석하면 전혀 다른 결과가 나올 수 있으므로, 처리 전후에 결과가 어떻게 달라졌는지를 보는 사람이 직접 확인할 수 있어야 한다. 전후를 나란히 보이면 무엇을 어떤 기준으로 뺐는지 드러나므로, 전처리가 조작이 아니라 정당한 감식이었음을 검증할 수 있다. 분석의 투명성을 위한 장치다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — "내 컴퓨터에서 실행되는 앱"과 "배포된 앱"의 차이를 서술하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 내 컴퓨터에서 실행되는 앱은 그 컴퓨터 앞에 있는 사람만 볼 수 있고 컴퓨터를 끄면 사라진다. 배포된 앱은 인터넷의 서버에서 실행되므로 내 컴퓨터가 꺼져 있어도 주소만 알면 누구나 접속할 수 있다. 배포를 거쳐야 분석이 공유되고 남의 검증을 받을 수 있다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 배포에서 깃허브 저장소가 맡는 역할을 서술하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 깃허브 저장소는 앱 코드를 보관하는 원본 창고다. 스트림릿 커뮤니티 클라우드는 저장소에 있는 코드를 읽어 와 서버에서 실행하므로, 저장소의 코드를 고치면 배포된 앱도 그에 따라 갱신된다. 내 컴퓨터(작업실)와 클라우드(실행 서버)를 잇는 다리 역할이다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 전처리 전과 후의 그래프를 앱에 나란히 두는 이유를 서술해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>결측치와 이상치가 있는 상태로 분석하면 전혀 다른 결과가 나올 수 있으므로, 처리 전후에 결과가 어떻게 달라졌는지를 보는 사람이 직접 확인할 수 있어야 한다. 전후를 나란히 보이면 무엇을 어떤 기준으로 뺐는지 드러나므로, 전처리가 조작이 아니라 정당한 감식이었음을 검증할 수 있다. 분석의 투명성을 위한 장치다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> "내 컴퓨터에서 실행되는 앱"과 "배포된 앱"의 차이를 서술해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>내 컴퓨터에서 실행되는 앱은 그 컴퓨터 앞에 있는 사람만 볼 수 있고 컴퓨터를 끄면 사라진다. 배포된 앱은 인터넷의 서버에서 실행되므로 내 컴퓨터가 꺼져 있어도 주소만 알면 누구나 접속할 수 있다. 배포를 거쳐야 분석이 공유되고 남의 검증을 받을 수 있다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 배포에서 깃허브 저장소가 맡는 역할을 서술해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>깃허브 저장소는 앱 코드를 보관하는 원본 창고다. 스트림릿 커뮤니티 클라우드는 저장소에 있는 코드를 읽어 와 서버에서 실행하므로, 저장소의 코드를 고치면 배포된 앱도 그에 따라 갱신된다. 내 컴퓨터(작업실)와 클라우드(실행 서버)를 잇는 다리 역할이다.</p>
+    </details>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -180,5 +231,6 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

@@ -40,7 +40,7 @@
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>스팸 메일 필터, 감염병 검사의 양성·음성 판정, 카드사의 이상 거래 탐지, 대출 심사 — 세상의 많은 예측은 숫자가 아니라 <b>"인가, 아닌가"</b>를 답합니다. 회귀가 "얼마나"를 묻는 도구였다면, 분류는 "어느 쪽"을 묻는 도구입니다. 두 질문은 모델의 구조부터 평가 방법까지 전부 다르게 만듭니다. 문제를 받았을 때 이것이 회귀 문제인지 분류 문제인지 가려내는 눈이, 오늘부터 여러분의 것이 됩니다.</p>
+  <p>스팸 메일 필터, 감염병 검사의 양성·음성 판정, 카드사의 이상 거래 탐지, 대출 심사 — 세상의 많은 예측은 숫자가 아니라 <b>"인가, 아닌가"</b>를 답합니다. 회귀가 "얼마나"를 묻는 도구였다면, 분류는 "어느 쪽"을 묻는 도구입니다. 두 질문은 모델의 구조부터 평가 방법까지 전부 다르게 만듭니다. 문제를 받았을 때 회귀 문제인지 분류 문제인지 가려내는 눈을 오늘 기릅니다.</p>
 
   <h2>1. 개념 이해 — 회귀에서 분류로</h2>
   <div class="tbquote">
@@ -60,6 +60,49 @@
   <p>범주가 둘이면 이진 분류, 교과서 135쪽의 책 장르("소설", "에세이", "자기 계발")처럼 셋 이상이면 다중 분류입니다. 오늘 우리의 문제 — 성공인가 아닌가 — 는 이진 분류입니다.</p>
   <p>이름에 "회귀"가 들어 있지만 로지스틱 회귀는 분류 모델입니다. 선형 회귀가 그은 직선을 로지스틱 함수(시그모이드 함수)에 통과시켜, 어떤 값이든 0과 1 사이의 확률로 눌러 담기 때문입니다. 교과서 135쪽은 분류 모델에 로지스틱 회귀 외에도 k-최근접 이웃, 의사결정트리 등이 있다고 안내합니다. 오늘은 이 중 성격이 가장 다른 두 가지 — <b>확률을 내는 로지스틱 회귀</b>와 <b>질문을 던지는 의사결정트리</b> — 를 같은 문제에 적용해 봅니다.</p>
 
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 760 285" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="선형 회귀의 직선이 로지스틱 함수를 통과해 0과 1 사이의 확률 곡선이 되고, 문턱 0.5에서 성공과 실패로 갈리는 그림">
+      <defs>
+        <marker id="arGold10" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+        <marker id="arGold10s" markerWidth="10" markerHeight="10" refX="2" refY="5" orient="auto"><path d="M10,0 L0,5 L10,10 z" fill="#f4b400"/></marker>
+        <marker id="arAcc10" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+      </defs>
+
+      <!-- 왼쪽 패널: 선형 회귀의 직선 -->
+      <text x="170" y="30" text-anchor="middle" font-size="14" font-weight="800" fill="#5c4a1e">선형 회귀의 직선</text>
+      <line x1="50" y1="55" x2="50" y2="230" stroke="#f0e2bc" stroke-width="1.5"/>
+      <line x1="50" y1="230" x2="295" y2="230" stroke="#f0e2bc" stroke-width="1.5"/>
+      <line x1="50" y1="95" x2="295" y2="95" stroke="#f0e2bc" stroke-width="1" stroke-dasharray="4 4"/>
+      <line x1="50" y1="185" x2="295" y2="185" stroke="#f0e2bc" stroke-width="1" stroke-dasharray="4 4"/>
+      <text x="42" y="99" text-anchor="end" font-size="12" fill="#8a7f5c">1</text>
+      <text x="42" y="189" text-anchor="end" font-size="12" fill="#8a7f5c">0</text>
+      <line x1="68" y1="243" x2="278" y2="62" stroke="#f4b400" stroke-width="3" marker-start="url(#arGold10s)" marker-end="url(#arGold10)"/>
+      <text x="58" y="74" text-anchor="start" font-size="12" fill="#a15c00">직선의 값은 0과 1을 벗어난다</text>
+      <text x="172" y="252" text-anchor="middle" font-size="12" fill="#8a7f5c">입력(개봉 전 변수의 조합)</text>
+
+      <!-- 가운데 화살표 -->
+      <text x="370" y="118" text-anchor="middle" font-size="12.5" font-weight="800" fill="#e8930c">로지스틱 함수에</text>
+      <text x="370" y="135" text-anchor="middle" font-size="12.5" font-weight="800" fill="#e8930c">통과</text>
+      <line x1="318" y1="152" x2="420" y2="152" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc10)"/>
+
+      <!-- 오른쪽 패널: 통과한 뒤 — 확률 -->
+      <text x="600" y="30" text-anchor="middle" font-size="14" font-weight="800" fill="#5c4a1e">통과한 뒤 — 확률</text>
+      <rect x="480" y="75" width="240" height="75" fill="#54a24b" opacity="0.12"/>
+      <rect x="480" y="150" width="240" height="75" fill="#e45756" opacity="0.10"/>
+      <line x1="480" y1="55" x2="480" y2="230" stroke="#f0e2bc" stroke-width="1.5"/>
+      <line x1="480" y1="230" x2="725" y2="230" stroke="#f0e2bc" stroke-width="1.5"/>
+      <text x="472" y="79" text-anchor="end" font-size="12" fill="#8a7f5c">1</text>
+      <text x="472" y="154" text-anchor="end" font-size="12" fill="#8a7f5c">0.5</text>
+      <text x="472" y="229" text-anchor="end" font-size="12" fill="#8a7f5c">0</text>
+      <path d="M 488 220 C 560 218, 566 150, 600 150 C 634 150, 640 82, 712 80" fill="none" stroke="#3ba6a0" stroke-width="3"/>
+      <line x1="480" y1="150" x2="720" y2="150" stroke="#e45756" stroke-width="2" stroke-dasharray="6 5"/>
+      <text x="716" y="168" text-anchor="end" font-size="11.5" font-weight="800" fill="#e45756">문턱 0.5 (교과서 136쪽)</text>
+      <text x="490" y="97" text-anchor="start" font-size="11.5" font-weight="800" fill="#3c7a36">0.5보다 크면 → 성공(양성)</text>
+      <text x="716" y="207" text-anchor="end" font-size="11.5" font-weight="800" fill="#b93b3c">0.5보다 작으면 → 실패(음성)</text>
+      <text x="380" y="276" text-anchor="middle" font-size="12" fill="#8a7f5c">선형 회귀의 출력은 어떤 값이든 될 수 있지만, 로지스틱 함수를 통과하면 0과 1 사이의 확률에 갇힌다.</text>
+    </svg>
+  </div>
+
   <h2>2. 성공의 기준선 — 라벨은 사람이 정한다</h2>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 138쪽</span></div>
@@ -67,6 +110,37 @@
     <p class="t">→ 분류 모델을 만들려면 각 데이터에 정답(레이블)이 먼저 붙어 있어야 한다. 그런데 우리 영화 표에는 "성공/실패" 열이 없다.</p>
   </div>
   <p>우리가 모은 박스오피스 표에는 관객 수라는 <b>숫자</b>만 있습니다. "성공"이라는 라벨은 데이터 어디에도 없습니다. 그래서 분류를 시작하기 전에 결정이 하나 필요합니다. <b>관객 몇 명부터 흥행 성공인가?</b> 50만 명? 100만 명? 300만 명? 어느 것도 자연법칙이 아닙니다. 수업에서는 후보를 놓고 토의한 뒤 학급의 기준선을 정합니다. 이 교재의 이후 수치는 <b>기준 100만 명</b>을 채택한 경우입니다.</p>
+
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 760 268" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 216편에 성공 기준선을 50만, 100만, 300만 명으로 다르게 그었을 때 성공 라벨이 붙는 영화 수가 30편, 23편, 7편으로 달라지는 것을 나타낸 가로 막대 세 개">
+      <text x="450" y="18" text-anchor="middle" font-size="12" fill="#8a7f5c">막대 전체 = 분석 대상 216편</text>
+
+      <!-- 기준 50만 명 -->
+      <text x="160" y="55" text-anchor="end" font-size="12.5" font-weight="800" fill="#5c4a1e">기준 50만 명</text>
+      <rect x="170" y="32" width="560" height="36" fill="#fdf8ea" stroke="#f0e2bc" stroke-width="1.5"/>
+      <rect x="170" y="32" width="78" height="36" fill="#f4b400"/>
+      <text x="256" y="55" text-anchor="start" font-size="11.5" font-weight="800" fill="#a15c00">성공 30편</text>
+      <text x="722" y="55" text-anchor="end" font-size="11.5" fill="#8a7f5c">실패 186편</text>
+
+      <!-- 기준 100만 명 (채택) -->
+      <text x="160" y="121" text-anchor="end" font-size="12.5" font-weight="800" fill="#e8930c">기준 100만 명 (채택)</text>
+      <rect x="170" y="98" width="560" height="36" fill="#fdf8ea" stroke="#e8930c" stroke-width="2.5"/>
+      <rect x="170" y="98" width="60" height="36" fill="#f4b400"/>
+      <text x="238" y="121" text-anchor="start" font-size="11.5" font-weight="800" fill="#a15c00">성공 23편</text>
+      <text x="722" y="121" text-anchor="end" font-size="11.5" fill="#8a7f5c">실패 193편</text>
+
+      <!-- 기준 300만 명 -->
+      <text x="160" y="187" text-anchor="end" font-size="12.5" font-weight="800" fill="#5c4a1e">기준 300만 명</text>
+      <rect x="170" y="164" width="560" height="36" fill="#fdf8ea" stroke="#f0e2bc" stroke-width="1.5"/>
+      <rect x="170" y="164" width="18" height="36" fill="#f4b400"/>
+      <text x="196" y="187" text-anchor="start" font-size="11.5" font-weight="800" fill="#a15c00">성공 7편</text>
+      <text x="722" y="187" text-anchor="end" font-size="11.5" fill="#8a7f5c">실패 209편</text>
+
+      <text x="380" y="232" text-anchor="middle" font-size="12" fill="#8a7f5c">같은 216편인데 기준선이 움직이면 성공작이 30 → 23 → 7편으로 달라진다.</text>
+      <text x="380" y="252" text-anchor="middle" font-size="12" fill="#8a7f5c">라벨은 데이터에 있던 사실이 아니라 사람의 판단이다.</text>
+    </svg>
+  </div>
+
   <div class="callout tip">
     <div class="h">💡 첫 번째 판단은 모델보다 먼저 온다</div>
     <p>모델이 학습하는 정답 자체가 사람의 결정으로 만들어집니다. 기준선이 달라지면 같은 영화가 성공작이 되기도, 실패작이 되기도 합니다. 이 수업이 평가하는 판단 4축 중 <b>질문 설정</b>이 바로 이 자리에 있습니다.</p>
@@ -119,7 +193,7 @@
 
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>폼 <b>Ⅲ-01b</b>(교과서 116쪽 탐구활동 — 스팸 예측 모델의 단계) · 폼 <b>Ⅲ-02e</b>(교과서 142쪽 탐구활동 — 예측 속성 선택→모델 유형→평가→개선). 분류기 페이지는 배포 후 갤러리에 게시합니다.</p>
+    <p><b>Ⅲ-01b</b>(스팸 예측 단계) · <b>Ⅲ-02e</b>(모델 개선 과정) — 분류기 페이지는 갤러리에 게시합니다.</p>
   </div>
 
   <h2>5. 개념 정리 — 질문이 모델을 고른다</h2>
@@ -130,18 +204,36 @@
   </div>
 
   <h2>6. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 다음 물음이 회귀 문제인지 분류 문제인지 가르고 이유를 쓰시오. (가) 이 영화의 총 관객 수는 몇 명이 될까 (나) 이 영화는 관객 100만 명을 넘길까 (다) 이 메일은 스팸인가</summary>
-    <div class="gin"><p><b>예시 답안</b> — (가) 회귀: 연속적인 숫자를 예측한다. (나) 분류(이진 분류): "넘긴다/못 넘긴다" 두 범주 중 하나를 예측한다. (다) 분류(이진 분류): "스팸이다/아니다"를 예측한다. 같은 영화 데이터라도 (가)처럼 물으면 회귀, (나)처럼 물으면 분류가 된다 — 질문의 형태가 모델의 종류를 정한다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 흥행 성공 기준선을 100만 명에서 300만 명으로 올리면 무엇이 달라지는지 두 가지 이상 쓰시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — ①성공 라벨이 붙는 영화 수가 줄어든다(정답 자체가 바뀐다). ②모델이 새 라벨로 다시 학습되므로 예측 결과와 정확도가 달라진다. 즉 라벨 기준은 데이터에 원래 있던 사실이 아니라 사람의 판단이고, 그 판단이 모델의 성능 수치까지 바꾼다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 로지스틱 회귀는 이름에 "회귀"가 들어 있는데 왜 분류 모델인가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 선형 회귀가 만든 값을 로지스틱 함수(시그모이드)에 통과시켜 0과 1 사이의 확률로 바꾸고, 그 확률이 문턱(0.5)보다 크면 양성, 작으면 음성으로 범주를 답하기 때문이다. 회귀의 도구를 빌리지만 최종 답은 숫자가 아니라 범주다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 다음 물음이 회귀 문제인지 분류 문제인지 골라 보세요. 답을 눌러 확인합니다.</div>
+    <div class="qitem">
+      <div class="qs">(가) 이 영화의 총 관객 수는 몇 명이 될까</div>
+      <div class="qopts"><button class="opt" data-ok="1">회귀</button><button class="opt">이진 분류</button><button class="opt">다중 분류</button></div>
+      <div class="fb">연속적인 숫자를 예측한다 — <b>회귀</b>입니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(나) 이 영화는 관객 100만 명을 넘길까</div>
+      <div class="qopts"><button class="opt">회귀</button><button class="opt" data-ok="1">이진 분류</button><button class="opt">다중 분류</button></div>
+      <div class="fb">"넘긴다/못 넘긴다" 두 범주 중 하나 — <b>이진 분류</b>입니다. 같은 영화 데이터라도 묻는 형태가 모델을 정합니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(다) 이 메일은 스팸인가</div>
+      <div class="qopts"><button class="opt">회귀</button><button class="opt" data-ok="1">이진 분류</button><button class="opt">다중 분류</button></div>
+      <div class="fb">"스팸이다/아니다" 두 범주 — <b>이진 분류</b>입니다. 다중 분류는 교과서 135쪽의 책 장르처럼 범주가 셋 이상일 때입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 흥행 성공 기준선을 100만 명에서 300만 명으로 올리면 무엇이 달라지는지 두 가지 이상 쓰시오. 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>①성공 라벨이 붙는 영화 수가 줄어든다(정답 자체가 바뀐다). ②모델이 새 라벨로 다시 학습되므로 예측 결과와 정확도가 달라진다. 즉 라벨 기준은 데이터에 원래 있던 사실이 아니라 사람의 판단이고, 그 판단이 모델의 성능 수치까지 바꾼다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 로지스틱 회귀는 이름에 "회귀"가 들어 있는데 왜 분류 모델인가? 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>선형 회귀가 만든 값을 로지스틱 함수(시그모이드)에 통과시켜 0과 1 사이의 확률로 바꾸고, 그 확률이 문턱(0.5)보다 크면 양성, 작으면 음성으로 범주를 답하기 때문이다. 회귀의 도구를 빌리지만 최종 답은 숫자가 아니라 범주다.</p>
+    </details>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -171,5 +263,6 @@
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

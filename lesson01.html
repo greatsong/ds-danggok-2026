@@ -25,7 +25,7 @@
 
   <div class="quote">
     <div class="q">"코드는 AI가 짜고, 우리는 데이터를 의심하고 판단한다."</div>
-    <span class="by">앞으로 열다섯 번의 수업을 꿰는, 이 수업의 한 줄 정의입니다</span>
+    <span class="by">이 수업 전체의 한 줄 정의입니다</span>
   </div>
 
   <p class="lead">데이터 과학 수업의 첫 시간입니다. 오늘은 데이터 분석이 어떤 단계로 흘러가는지 전체 지도를 살펴보고, 그 지도의 출발점인 <b>질문 던지기</b>를 직접 해 봅니다. 학기가 끝날 때, 여러분 각자의 데이터 앱 하나가 인터넷에 떠 있게 됩니다. 그 앱의 첫 번째 재료가 오늘 만드는 질문 한 개입니다.</p>
@@ -63,6 +63,65 @@
     <p class="q">"데이터 과학의 문제 해결 과정은 크게 문제 정의하기, 데이터 수집하기, 전처리 및 탐색하기, 모델링하기, 모델 평가하기, 모델 활용하기의 6단계로 구분할 수 있다. 그러나 6개의 단계를 순서대로 모두 거쳐야 하는 것은 아니다." <span class="src">(14쪽)</span></p>
     <p class="t">→ 데이터 과학은 여러 방법을 <b>합쳐 쓰는 학문</b>이고, 문제 해결은 <b>6단계의 흐름</b>으로 진행되되 상황에 따라 되돌아가거나 건너뛸 수 있다.</p>
   </div>
+  <div style="overflow-x:auto">
+  <svg viewBox="0 0 800 228" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이터 과학 문제 해결 6단계의 진행 방향과, 평가 단계에서 되돌아가는 두 갈래 길" style="min-width:640px;max-width:100%;display:block">
+    <defs>
+      <marker id="l1s6-fwd" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+      <marker id="l1s6-back" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+    </defs>
+    <!-- 단계 상자 6개 -->
+    <g>
+      <rect x="15" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="70" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">문제 정의하기</text>
+      <circle cx="70" cy="30" r="11" fill="#f4b400"/>
+      <text x="70" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">1</text>
+    </g>
+    <g>
+      <rect x="147" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="202" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">데이터 수집하기</text>
+      <circle cx="202" cy="30" r="11" fill="#f4b400"/>
+      <text x="202" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">2</text>
+    </g>
+    <g>
+      <rect x="279" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="334" y="56" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">전처리 및</text>
+      <text x="334" y="72" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">탐색하기</text>
+      <circle cx="334" cy="30" r="11" fill="#f4b400"/>
+      <text x="334" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">3</text>
+    </g>
+    <g>
+      <rect x="411" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="466" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">모델링하기</text>
+      <circle cx="466" cy="30" r="11" fill="#f4b400"/>
+      <text x="466" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">4</text>
+    </g>
+    <g>
+      <rect x="543" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="598" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">모델 평가하기</text>
+      <circle cx="598" cy="30" r="11" fill="#f4b400"/>
+      <text x="598" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">5</text>
+    </g>
+    <g>
+      <rect x="675" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="730" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">모델 활용하기</text>
+      <circle cx="730" cy="30" r="11" fill="#f4b400"/>
+      <text x="730" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">6</text>
+    </g>
+    <!-- 진행 방향 실선 화살표 -->
+    <line x1="127" y1="57" x2="143" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <line x1="259" y1="57" x2="275" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <line x1="391" y1="57" x2="407" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <line x1="523" y1="57" x2="539" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <line x1="655" y1="57" x2="671" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <!-- 되돌아가는 점선 화살표 ⑤→② · ⑤→① -->
+    <path d="M590,84 C 552,135 240,135 204,90" fill="none" stroke="#3ba6a0" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#l1s6-back)"/>
+    <text x="400" y="140" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">평가가 만족스럽지 않으면 데이터부터 다시</text>
+    <path d="M606,84 C 566,185 116,185 72,90" fill="none" stroke="#3ba6a0" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#l1s6-back)"/>
+    <text x="340" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">문제 정의로 되돌아갈 수도 있다</text>
+    <!-- 캡션 -->
+    <text x="400" y="214" text-anchor="middle" font-size="12.5" fill="#7a7f95">여섯 단계는 순서대로 모두 거쳐야 하는 것은 아니다 — 상황에 따라 되돌아가거나 건너뛴다 (『데이터 과학』 14쪽).</text>
+  </svg>
+  </div>
   <p>6단계가 낯설게 들리면, 우리에게 가장 가까운 데이터인 <b>급식 한 끼</b>로 바꿔 읽어 봅니다. "요즘 급식 만족도가 낮다"는 말을 데이터로 다뤄 본다면 다음과 같이 흘러갑니다.</p>
   <table class="daymap">
     <thead><tr><th>단계</th><th>급식 한 끼라면</th><th>끼어드는 판단</th></tr></thead>
@@ -90,16 +149,48 @@
 
   <h2>2. 우리 수업의 방식 — 바이브 코딩 ①②③</h2>
   <p>이 수업에서는 코드 문법을 배우지 않습니다. 대신 세 박자의 리듬으로 실습합니다. <b>① 샘플 프롬프트를 AI에게 준다 → ② AI가 준 코드를 실행하고 결과를 읽는다 → ③ 프롬프트를 고쳐 더 나은 결과를 얻는다.</b> 오늘은 이 리듬이 실제로 어떻게 흘러가는지 선생님 화면으로만 확인합니다. 직접 하는 것은 3차시부터입니다.</p>
+  <div style="overflow-x:auto">
+  <svg viewBox="0 0 720 178" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="바이브 코딩 세 박자 — 샘플 프롬프트, AI가 준 코드, 개선이 반복되는 흐름" style="min-width:560px;max-width:100%;display:block">
+    <defs>
+      <marker id="l1vc-fwd" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+      <marker id="l1vc-back" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+    </defs>
+    <!-- ③→② 반복 곡선 화살표 -->
+    <path d="M610,54 C 610,18 375,18 362,50" fill="none" stroke="#3ba6a0" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#l1vc-back)"/>
+    <text x="487" y="13" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">고친 프롬프트로 다시 실행 — 이 반복이 실습의 리듬</text>
+    <!-- 상자 3개 -->
+    <g>
+      <rect x="20" y="58" width="210" height="62" rx="12" fill="#ffffff" stroke="#f4b400" stroke-width="2"/>
+      <text x="125" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2d3a">① 샘플 프롬프트</text>
+      <text x="125" y="104" text-anchor="middle" font-size="11.5" fill="#7a7f95">우리말로 요청한다</text>
+    </g>
+    <g>
+      <rect x="255" y="58" width="210" height="62" rx="12" fill="#ffffff" stroke="#e8930c" stroke-width="2"/>
+      <text x="360" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2d3a">② AI가 준 코드</text>
+      <text x="360" y="104" text-anchor="middle" font-size="11.5" fill="#7a7f95">실행하고 결과를 읽는다</text>
+    </g>
+    <g>
+      <rect x="490" y="58" width="210" height="62" rx="12" fill="#ffffff" stroke="#54a24b" stroke-width="2"/>
+      <text x="595" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2d3a">③ 개선</text>
+      <text x="595" y="104" text-anchor="middle" font-size="11.5" fill="#7a7f95">프롬프트를 고쳐 다시 요청한다</text>
+    </g>
+    <!-- 진행 실선 화살표 -->
+    <line x1="232" y1="89" x2="251" y2="89" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1vc-fwd)"/>
+    <line x1="467" y1="89" x2="486" y2="89" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1vc-fwd)"/>
+    <!-- 캡션 -->
+    <text x="360" y="160" text-anchor="middle" font-size="12.5" fill="#7a7f95">코드를 읽는 것이 아니라 결과를 읽고, 프롬프트를 고친다.</text>
+  </svg>
+  </div>
   <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 자연어로 주문한다</span>
+    <li><span class="st">① 샘플 프롬프트 — 자연어로 요청한다</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>서울의 기온 데이터(seoul.csv)를 읽어서,
 100년 동안 연평균 기온이 어떻게 변해 왔는지 한눈에 보이는 그래프로 그려 줘.
 데이터는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</pre></div>
       프롬프트에 코드 문법이 한 줄도 없다는 점을 확인하세요. 파일 이름과 원하는 결과만 우리말로 적었습니다.</li>
     <li><span class="st">② AI가 준 코드 — 실행하고 결과를 읽는다</span><br>
       AI가 코드를 만들어 응답하고, 실행하면 100년 치 기온 그래프가 나타납니다. 코드를 읽는 것이 아니라 <b>결과 그래프를 읽는 것</b>이 우리의 일입니다. 이 그래프에 무엇이 보이는지, 이상한 곳은 없는지는 3차시에 각자 직접 확인합니다.</li>
-    <li><span class="st">③ 개선 — 프롬프트를 고쳐 다시 주문한다</span><br>
-      "제목을 붙여 줘", "특정 기간만 보여 줘"처럼 주문을 고치면 결과가 달라집니다. 이 세 번째 박자가 이 수업의 핵심이고, 3차시부터 학생의 몫입니다.</li>
+    <li><span class="st">③ 개선 — 프롬프트를 고쳐 다시 요청한다</span><br>
+      "제목을 붙여 줘", "특정 기간만 보여 줘"처럼 프롬프트를 고치면 결과가 달라집니다. 이 세 번째 박자가 이 수업의 핵심이고, 3차시부터 학생의 몫입니다.</li>
   </ol>
   <div class="callout tip">
     <div class="h">💡 그래서 무엇을 배우나</div>
@@ -132,25 +223,41 @@
   </div>
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>교과서 폼 <b>Ⅰ-01a</b>(12쪽 해 보기 ① — 교과목과 데이터의 연계) · <b>Ⅰ-01b</b>(13쪽 해 보기 ② — 하루 동안 접하는 데이터 찾기), 그리고 <b>질문 카드 1장</b>. 교과서 문항은 폼에서 원문 그대로 만납니다.</p>
+    <p><b>Ⅰ-01a</b> · <b>Ⅰ-01b</b> · <b>질문 카드 1장</b></p>
   </div>
 
   <h2>4. 개념 정리 — 지도와 출발점</h2>
   <p>오늘 우리는 학기 전체의 지도를 폈습니다. 데이터 과학은 여러 방법을 통합해 실제 현상을 이해하는 학문이고, 그 문제 해결은 문제 정의에서 모델 활용까지 6단계로 흐르며, 모든 단계에 사람의 판단이 끼어 있습니다. 그리고 그 지도의 출발점에서 각자 질문 하나를 만들었습니다. 다음 시간에는 이 질문을 들고 데이터의 세계로 갑니다 — 데이터에는 어떤 종류가 있고, 내 질문에 맞는 데이터는 어디서 구하는지부터입니다.</p>
 
   <h2>5. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 다음을 데이터 과학의 문제 해결 6단계 순서대로 배열하시오: 모델 평가하기 · 문제 정의하기 · 모델 활용하기 · 데이터 수집하기 · 모델링하기 · 전처리 및 탐색하기</summary>
-    <div class="gin"><p><b>예시 답안</b> — 문제 정의하기 → 데이터 수집하기 → 전처리 및 탐색하기 → 모델링하기 → 모델 평가하기 → 모델 활용하기. 단, 여섯 단계를 항상 순서대로 모두 거치는 것은 아니며, 상황에 따라 일부를 건너뛰거나 이전 단계로 되돌아갈 수 있다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 다음 중 데이터로 답하기 가장 어려운 질문을 고르고 이유를 말하시오. (가) 최근 5년 우리 학교 도서관 대출 권수는 어떻게 변했는가 (나) 우리 반에서 가장 인기 있는 급식 메뉴는 무엇인가 (다) 우정은 성적보다 소중한가</summary>
-    <div class="gin"><p><b>예시 답안</b> — (다). 가치 판단을 묻는 질문이라 잴 수 있는 대상이 없고, 근거가 될 데이터를 정의할 수 없다. (가)는 대출 기록, (나)는 선호 설문이나 잔반량처럼 측정할 데이터를 정할 수 있다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 친구가 "이번 학기 선택 과목은 그냥 친한 친구를 따라 정했다"라고 말한다. 데이터 기반 의사 결정의 관점에서 이 결정 방식과 대안을 설명하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 이 결정은 데이터가 아니라 관계와 주관에 기댄 결정이다. 데이터 기반 의사 결정은 이전 학기 성적, 과목에 대한 흥미, 진로 분야와의 관련성 같은 데이터를 수집·분석해 결정하는 방식으로, 기억·경험·주관에만 기대는 방식보다 객관적이고 합리적인 선택을 할 수 있다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 데이터 과학의 문제 해결 6단계를 순서대로 배열한 것을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">데이터 수집하기 → 문제 정의하기 → 전처리 및 탐색하기 → 모델링하기 → 모델 평가하기 → 모델 활용하기</button>
+        <button class="opt" data-ok="1">문제 정의하기 → 데이터 수집하기 → 전처리 및 탐색하기 → 모델링하기 → 모델 평가하기 → 모델 활용하기</button>
+        <button class="opt">문제 정의하기 → 데이터 수집하기 → 모델링하기 → 전처리 및 탐색하기 → 모델 평가하기 → 모델 활용하기</button>
+      </div>
+      <div class="fb">첫 단계는 문제 정의이고, 수집한 데이터는 전처리·탐색을 거친 뒤에 모델링에 들어갑니다. 단, 여섯 단계를 항상 순서대로 모두 거치는 것은 아니며 되돌아가거나 건너뛸 수 있습니다(14쪽).</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 다음 중 데이터로 답하기 가장 어려운 질문을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">(가) 최근 5년 우리 학교 도서관 대출 권수는 어떻게 변했는가</button>
+        <button class="opt">(나) 우리 반에서 가장 인기 있는 급식 메뉴는 무엇인가</button>
+        <button class="opt" data-ok="1">(다) 우정은 성적보다 소중한가</button>
+      </div>
+      <div class="fb">(다)는 가치 판단을 묻는 질문이라 잴 수 있는 대상이 없고 근거가 될 데이터를 정의할 수 없습니다. (가)는 대출 기록, (나)는 선호 설문이나 잔반량처럼 측정할 데이터를 정할 수 있습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 친구가 "이번 학기 선택 과목은 그냥 친한 친구를 따라 정했다"라고 말합니다. 데이터 기반 의사 결정의 관점에서 이 결정 방식과 대안을 설명해 보세요. 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>이 결정은 데이터가 아니라 관계와 주관에 기댄 결정이다. 데이터 기반 의사 결정은 이전 학기 성적, 과목에 대한 흥미, 진로 분야와의 관련성 같은 데이터를 수집·분석해 결정하는 방식으로, 기억·경험·주관에만 기대는 방식보다 객관적이고 합리적인 선택을 할 수 있다.</p>
+    </details>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -180,5 +287,6 @@
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

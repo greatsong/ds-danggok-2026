@@ -40,7 +40,7 @@
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>데이터 분석의 두 번째 단계는 수집입니다. 그런데 수집은 "많이 모으기"가 아닙니다. 교과서 48쪽의 페트병 사례가 이것을 보여 줍니다 — 비닐이 있는 페트병과 없는 페트병을 구분하는 인공지능을 만들려면, 페트병에 남은 음료의 양 같은 특성이 아니라 <b>비닐 제거 유무</b>를 담은 데이터가 필요합니다. 문제와 맞지 않는 데이터는 아무리 모아도 소용이 없습니다.</p>
+  <p>데이터 분석의 두 번째 단계는 수집입니다. 그런데 수집은 "많이 모으기"가 아닙니다. 교과서 48쪽의 페트병 사례가 이것을 보여 줍니다 — 비닐이 있는 페트병과 없는 페트병을 구분하는 인공지능을 만들려면, 페트병에 남은 내용물의 양 같은 특성이 아니라 <b>비닐 제거 유무</b>를 담은 데이터가 필요합니다. 문제와 맞지 않는 데이터는 아무리 모아도 소용이 없습니다.</p>
   <p>세상의 데이터는 생김새도 제각각이어서, 내 질문에 맞는 것을 <b>골라내는 눈</b>이 먼저 필요합니다. 다행히 정부와 공공 기관은 교통·환경·건강·문화 등 수많은 분야의 데이터를 무료로 공개하고 있습니다. 그 문을 오늘 처음 열어 봅니다. 진로가 어느 쪽이든, 그 분야의 공공 데이터가 이미 어딘가에 쌓여 있을 가능성이 큽니다.</p>
 
   <h2>1. 개념 이해 — 데이터의 세 가지 형태</h2>
@@ -115,6 +115,51 @@
 
   <h3>속성 — 데이터의 가치를 정하는 열</h3>
   <p>정형 데이터에서 표의 각 열이 가지는 특성과 성질을 <b>속성</b>이라고 부릅니다. 교과서 21쪽의 도서관 표가 보여 주듯, 같은 데이터라도 "가장 가까운 도서관은 어디인가"를 물으면 위도·경도 속성이 중요해지고, "언제 가면 열려 있나"를 물으면 휴관일·시작 시각 속성이 중요해집니다. 어떤 속성이 가치 있는지는 데이터가 아니라 <b>질문이 정합니다</b>. 문제 해결에 필요한 새로운 속성이 더해지면 데이터의 가치가 높아질 수도 있습니다 — 1차시의 결론("질문이 뒤 단계의 모양을 정한다")이 여기서 한 번 더 확인됩니다.</p>
+  <div class="specimen-row" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+    <div class="specimen">
+      <div class="tag" style="background:#f4b400;color:#5a4300">질문 ① 가장 가까운 도서관은 어디인가</div>
+      <div class="body">
+        <div style="overflow-x:auto;width:100%">
+          <table class="minitable">
+            <thead><tr>
+              <th style="background:#f6f1e3;color:#a9a08c">도서관명</th>
+              <th style="background:#f4b400;color:#5a4300">위도</th>
+              <th style="background:#f4b400;color:#5a4300">경도</th>
+              <th style="background:#f6f1e3;color:#a9a08c">휴관일</th>
+              <th style="background:#f6f1e3;color:#a9a08c">운영 시작 시각</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="color:#c0b8a4">…</td><td style="background:#fdeeba">…</td><td style="background:#fdeeba">…</td><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td></tr>
+              <tr><td style="color:#c0b8a4">…</td><td style="background:#fdeeba">…</td><td style="background:#fdeeba">…</td><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="note">거리를 재려면 <b>위도·경도</b> 열이 가치 있는 속성이 됩니다.</div>
+    </div>
+    <div class="specimen">
+      <div class="tag" style="background:#3ba6a0">질문 ② 언제 가면 열려 있나</div>
+      <div class="body">
+        <div style="overflow-x:auto;width:100%">
+          <table class="minitable">
+            <thead><tr>
+              <th style="background:#f6f1e3;color:#a9a08c">도서관명</th>
+              <th style="background:#f6f1e3;color:#a9a08c">위도</th>
+              <th style="background:#f6f1e3;color:#a9a08c">경도</th>
+              <th style="background:#3ba6a0;color:#ffffff">휴관일</th>
+              <th style="background:#3ba6a0;color:#ffffff">운영 시작 시각</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td><td style="background:#d8edec">…</td><td style="background:#d8edec">…</td></tr>
+              <tr><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td><td style="background:#d8edec">…</td><td style="background:#d8edec">…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="note">같은 표인데 질문이 바뀌자 가치 있는 열이 바뀌었습니다.</div>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">속성의 가치는 데이터가 아니라 질문이 정한다 (『데이터 과학』 21쪽).</p>
 
   <h2>2. 수집 실습 — 공공데이터포털에서 내 데이터 찾기</h2>
   <div class="tbquote">
@@ -140,7 +185,7 @@
     <li><span class="st">내려받기 — CSV 1개</span><br>
       정형 데이터(CSV) 1개를 내려받아 엽니다. 행이 몇 개인지, 열(속성)에는 무엇이 있는지, 어느 기간의 데이터인지 훑어봅니다.</li>
     <li><span class="st">기록 — 첫인상과 질문</span><br>
-      "이 데이터로 답할 수 있는 질문 1개"를 기록합니다. 처음 질문 그대로일 수도, 데이터를 보고 나서 더 좋은 질문으로 바뀔 수도 있습니다. 이 기록이 교과서 폼 Ⅱ-01c(55쪽 탐구활동)의 재료가 됩니다.</li>
+      "이 데이터로 답할 수 있는 질문 1개"를 기록합니다. 처음 질문 그대로일 수도, 데이터를 보고 나서 더 좋은 질문으로 바뀔 수도 있습니다. 이 기록이 폼 Ⅱ-01c의 재료가 됩니다.</li>
   </ol>
   <div class="callout warn">
     <div class="h">⚠️ 오늘의 발견 — 같은 주제, 다른 생김새</div>
@@ -148,7 +193,7 @@
     </div>
   <div class="callout mini">
     <div class="h">🔭 수집 방법은 내려받기만이 아니다</div>
-    <p>파일을 내려받는 것 말고도 데이터를 모으는 길은 여럿입니다 — 설문으로 직접 묻기, 휴대폰 카메라로 직접 찍기, 그리고 5차시에 만날 API로 받기. 방법마다 걸리는 시간과 얻는 형태가 다릅니다. 이 비교는 교과서 폼 Ⅱ-04b에서 모둠으로 정리합니다.</p>
+    <p>파일을 내려받는 것 말고도 데이터를 모으는 길은 여럿입니다 — 설문으로 직접 묻기, 휴대폰 카메라로 직접 찍기, 그리고 5차시에 만날 API로 받기. 방법마다 걸리는 시간과 얻는 형태가 다릅니다. 이 비교는 폼 Ⅱ-04b에서 정리합니다.</p>
   </div>
   <div class="callout tip">
     <div class="h">💡 한글이 깨져 보인다면</div>
@@ -156,7 +201,7 @@
   </div>
 
   <h2>3. 실습 — 내려받은 파일을 AI에게 요약시키기 (①③)</h2>
-  <p>내려받은 파일이 무엇을 담고 있는지, 오늘은 AI에게 물어봅니다. 지난 시간 선생님 시연으로만 본 리듬을 처음으로 직접 밟는 순간입니다. 배포도 코딩도 없습니다 — 파일을 주고, 우리말로 주문하고, 결과를 읽습니다.</p>
+  <p>내려받은 파일이 무엇을 담고 있는지, 오늘은 AI에게 물어봅니다. 지난 시간 선생님 시연으로만 본 리듬을 처음으로 직접 밟는 순간입니다. 배포도 코딩도 없습니다 — 파일을 주고, 우리말로 요청하고, 결과를 읽습니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>방금 내려받은 파일을 읽어서 행이 몇 개인지, 어떤 열이 있는지,

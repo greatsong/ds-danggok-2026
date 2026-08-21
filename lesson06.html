@@ -50,14 +50,143 @@
     <p class="t">→ 통합은 분석의 전처리 단계다. 교과서의 스마트팜 예시는 환경 데이터와 생육 데이터를 <b>공통 속성인 날짜</b>로 묶었다 — 오늘 우리도 날짜를 열쇠로 하루치 응답들을 묶는다.</p>
   </div>
   <p>통합에는 두 방향이 있습니다. 교과서의 스마트팜처럼 <b>서로 다른 종류의 표</b>를 공통 속성으로 옆으로 잇는 경우가 있고, 오늘처럼 <b>같은 구조의 조각</b>(9월 1일 응답, 9월 2일 응답, …)을 아래로 쌓아 긴 표를 만드는 경우가 있습니다.</p>
-  <table class="daymap">
-    <thead><tr><th>방향</th><th>무엇을 합치나</th><th>예</th><th>열쇠</th></tr></thead>
-    <tbody>
-      <tr><td><b>옆으로 잇기</b></td><td>종류가 다른 표들</td><td>스마트팜 환경 데이터 + 토마토 생육 데이터 (교과서 85쪽)</td><td>공통 속성 — 날짜</td></tr>
-      <tr><td><b>아래로 쌓기</b></td><td>같은 구조의 조각들</td><td>9월 1일 응답 + 9월 2일 응답 + … (오늘)</td><td>각 조각을 구분할 속성 — 날짜</td></tr>
-    </tbody>
-  </table>
-  <p>어느 쪽이든 열쇠는 같습니다 — 어떤 속성이 조각들을 이어 주는가. 오늘의 열쇠는 <b>날짜</b>입니다. 하루치 응답에는 날짜 정보를 붙일 필요가 없었지만(전부 같은 날이므로), 여러 날을 쌓는 순간 각 행이 어느 날 것인지 표시하는 날짜 열이 반드시 필요해집니다. 통합이 새 속성을 요구하는 셈입니다.</p>
+  <div style="display:flex;flex-wrap:wrap;gap:14px;margin:16px 0 4px">
+    <div style="flex:1 1 300px;min-width:280px">
+<svg viewBox="0 0 380 415" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="아래로 쌓기 — 같은 구조의 하루치 응답들이 날짜 열이 붙은 긴 표로 합쳐지는 그림">
+  <defs>
+    <marker id="l6arG" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+  </defs>
+  <text x="190" y="18" text-anchor="middle" font-size="14" font-weight="800" fill="#3d3425">아래로 쌓기 — 같은 구조의 조각(오늘)</text>
+
+  <text x="30" y="42" font-size="11.5" font-weight="700" fill="#8a7a55">9월 1일 응답</text>
+  <rect x="30" y="48" width="190" height="20" fill="#fbf3dd" stroke="#f0e2bc"/>
+  <rect x="30" y="68" width="190" height="18" fill="#ffffff" stroke="#f0e2bc"/>
+  <line x1="75" y1="48" x2="75" y2="86" stroke="#f0e2bc"/><line x1="155" y1="48" x2="155" y2="86" stroke="#f0e2bc"/>
+  <text x="52" y="62" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">순위</text>
+  <text x="115" y="62" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">영화명</text>
+  <text x="187" y="62" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">관객 수</text>
+  <text x="52" y="81" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="115" y="81" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="187" y="81" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+
+  <text x="30" y="112" font-size="11.5" font-weight="700" fill="#8a7a55">9월 2일 응답</text>
+  <rect x="30" y="118" width="190" height="20" fill="#fbf3dd" stroke="#f0e2bc"/>
+  <rect x="30" y="138" width="190" height="18" fill="#ffffff" stroke="#f0e2bc"/>
+  <line x1="75" y1="118" x2="75" y2="156" stroke="#f0e2bc"/><line x1="155" y1="118" x2="155" y2="156" stroke="#f0e2bc"/>
+  <text x="52" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">순위</text>
+  <text x="115" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">영화명</text>
+  <text x="187" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">관객 수</text>
+  <text x="52" y="151" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="115" y="151" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="187" y="151" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+
+  <text x="30" y="182" font-size="11.5" font-weight="700" fill="#8a7a55">…</text>
+  <rect x="30" y="188" width="190" height="20" fill="#fbf3dd" stroke="#f0e2bc"/>
+  <rect x="30" y="208" width="190" height="18" fill="#ffffff" stroke="#f0e2bc"/>
+  <line x1="75" y1="188" x2="75" y2="226" stroke="#f0e2bc"/><line x1="155" y1="188" x2="155" y2="226" stroke="#f0e2bc"/>
+  <text x="52" y="202" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">순위</text>
+  <text x="115" y="202" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">영화명</text>
+  <text x="187" y="202" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">관객 수</text>
+  <text x="52" y="221" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="115" y="221" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="187" y="221" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+
+  <path d="M226,67 C310,70 322,180 290,262" fill="none" stroke="#f4b400" stroke-width="2.5" marker-end="url(#l6arG)"/>
+  <path d="M226,137 C302,142 310,200 286,262" fill="none" stroke="#f4b400" stroke-width="2.5" marker-end="url(#l6arG)"/>
+  <path d="M226,207 C278,210 284,236 278,262" fill="none" stroke="#f4b400" stroke-width="2.5" marker-end="url(#l6arG)"/>
+
+  <text x="15" y="266" font-size="11.5" font-weight="700" fill="#8a7a55">통합된 긴 표</text>
+  <rect x="15" y="272" width="80" height="20" fill="#f4b400" stroke="#f0e2bc"/>
+  <rect x="95" y="272" width="270" height="20" fill="#fbf3dd" stroke="#f0e2bc"/>
+  <rect x="15" y="292" width="80" height="18" fill="#f4b400" fill-opacity="0.25" stroke="#f0e2bc"/>
+  <rect x="95" y="292" width="270" height="18" fill="#ffffff" stroke="#f0e2bc"/>
+  <rect x="15" y="310" width="80" height="18" fill="#f4b400" fill-opacity="0.25" stroke="#f0e2bc"/>
+  <rect x="95" y="310" width="270" height="18" fill="#ffffff" stroke="#f0e2bc"/>
+  <line x1="140" y1="272" x2="140" y2="328" stroke="#f0e2bc"/><line x1="260" y1="272" x2="260" y2="328" stroke="#f0e2bc"/>
+  <text x="55" y="286" text-anchor="middle" font-size="11" font-weight="800" fill="#3d3425">날짜</text>
+  <text x="117" y="286" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">순위</text>
+  <text x="200" y="286" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">영화명</text>
+  <text x="312" y="286" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">관객 수</text>
+  <text x="55" y="305" text-anchor="middle" font-size="11" fill="#3d3425">9월 1일</text>
+  <text x="117" y="305" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="200" y="305" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="312" y="305" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="55" y="323" text-anchor="middle" font-size="11" fill="#3d3425">9월 2일</text>
+  <text x="117" y="323" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="200" y="323" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="312" y="323" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+
+  <line x1="55" y1="345" x2="55" y2="331" stroke="#e8930c" stroke-width="1.5"/>
+  <text x="15" y="360" font-size="11.5" font-weight="700" fill="#e8930c">통합하는 순간 새로 필요해진 열</text>
+  <text x="15" y="376" font-size="11.5" fill="#e8930c">— 각 행이 어느 날 것인지</text>
+  <text x="190" y="402" text-anchor="middle" font-size="12" fill="#8a7a55">354일 × 톱10 = 3,540행 · 296편</text>
+</svg>
+    </div>
+    <div style="flex:1 1 300px;min-width:280px">
+<svg viewBox="0 0 380 415" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="옆으로 잇기 — 박스오피스 표와 영화 상세 표가 공통 속성인 영화 코드로 한 표가 되는 그림">
+  <defs>
+    <marker id="l6arG2" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+  </defs>
+  <text x="190" y="18" text-anchor="middle" font-size="14" font-weight="800" fill="#3d3425">옆으로 잇기 — 종류가 다른 표(도전)</text>
+
+  <text x="10" y="44" font-size="11.5" font-weight="700" fill="#8a7a55">박스오피스 표</text>
+  <rect x="10" y="50" width="62" height="20" fill="#3ba6a0" stroke="#f0e2bc"/>
+  <rect x="72" y="50" width="118" height="20" fill="#fbf3dd" stroke="#f0e2bc"/>
+  <rect x="10" y="70" width="62" height="18" fill="#3ba6a0" fill-opacity="0.2" stroke="#f0e2bc"/>
+  <rect x="72" y="70" width="118" height="18" fill="#ffffff" stroke="#f0e2bc"/>
+  <line x1="132" y1="50" x2="132" y2="88" stroke="#f0e2bc"/>
+  <text x="41" y="64" text-anchor="middle" font-size="10.5" font-weight="800" fill="#ffffff">영화 코드</text>
+  <text x="102" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">영화명</text>
+  <text x="161" y="64" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">관객 수</text>
+  <text x="41" y="83" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="102" y="83" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="161" y="83" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+
+  <text x="190" y="124" font-size="11.5" font-weight="700" fill="#8a7a55">영화 상세 표</text>
+  <rect x="190" y="130" width="62" height="20" fill="#3ba6a0" stroke="#f0e2bc"/>
+  <rect x="252" y="130" width="118" height="20" fill="#fbf3dd" stroke="#f0e2bc"/>
+  <rect x="190" y="150" width="62" height="18" fill="#3ba6a0" fill-opacity="0.2" stroke="#f0e2bc"/>
+  <rect x="252" y="150" width="118" height="18" fill="#ffffff" stroke="#f0e2bc"/>
+  <line x1="308" y1="130" x2="308" y2="168" stroke="#f0e2bc"/>
+  <text x="221" y="144" text-anchor="middle" font-size="10.5" font-weight="800" fill="#ffffff">영화 코드</text>
+  <text x="280" y="144" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">장르</text>
+  <text x="339" y="144" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">개봉일</text>
+  <text x="221" y="163" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="280" y="163" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="339" y="163" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+
+  <path d="M41,90 C41,120 160,124 214,128" fill="none" stroke="#3ba6a0" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <text x="30" y="115" font-size="11.5" font-weight="800" fill="#3ba6a0">공통 속성 — 영화 코드</text>
+
+  <path d="M95,90 C90,170 90,220 100,262" fill="none" stroke="#f4b400" stroke-width="2.5" marker-end="url(#l6arG2)"/>
+  <path d="M290,170 C292,205 290,235 284,262" fill="none" stroke="#f4b400" stroke-width="2.5" marker-end="url(#l6arG2)"/>
+
+  <text x="10" y="266" font-size="11.5" font-weight="700" fill="#8a7a55">병합된 넓은 표</text>
+  <rect x="10" y="272" width="70" height="20" fill="#3ba6a0" stroke="#f0e2bc"/>
+  <rect x="80" y="272" width="290" height="20" fill="#fbf3dd" stroke="#f0e2bc"/>
+  <rect x="10" y="292" width="70" height="18" fill="#3ba6a0" fill-opacity="0.2" stroke="#f0e2bc"/>
+  <rect x="80" y="292" width="290" height="18" fill="#ffffff" stroke="#f0e2bc"/>
+  <line x1="155" y1="272" x2="155" y2="310" stroke="#f0e2bc"/>
+  <line x1="225" y1="272" x2="225" y2="310" stroke="#f0e2bc"/>
+  <line x1="295" y1="272" x2="295" y2="310" stroke="#f0e2bc"/>
+  <text x="45" y="286" text-anchor="middle" font-size="10.5" font-weight="800" fill="#ffffff">영화 코드</text>
+  <text x="117" y="286" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">영화명</text>
+  <text x="190" y="286" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">관객 수</text>
+  <text x="260" y="286" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">장르</text>
+  <text x="332" y="286" text-anchor="middle" font-size="11" font-weight="700" fill="#3d3425">개봉일</text>
+  <text x="45" y="305" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="117" y="305" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="190" y="305" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="260" y="305" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+  <text x="332" y="305" text-anchor="middle" font-size="11" fill="#8a7a55">…</text>
+
+  <text x="190" y="340" text-anchor="middle" font-size="11.5" fill="#8a7a55">어느 표 하나만으로는 답할 수 없던 질문이</text>
+  <text x="190" y="356" text-anchor="middle" font-size="11.5" fill="#8a7a55">이 넓은 표에서 열립니다.</text>
+</svg>
+    </div>
+  </div>
+  <p style="font-size:0.92rem;color:var(--text-soft);text-align:center;margin:0 0 14px">어느 쪽이든 열쇠는 공통 속성이다 — 오늘의 쌓기는 날짜, 도전의 잇기는 영화 코드.</p>
+  <p>그림의 왼쪽에서 눈여겨볼 것은 새로 생긴 <b>날짜</b> 열입니다. 하루치 응답에는 날짜 정보를 붙일 필요가 없었지만(전부 같은 날이므로), 여러 날을 쌓는 순간 각 행이 어느 날 것인지 표시하는 날짜 열이 반드시 필요해집니다. 통합이 새 속성을 요구하는 셈입니다.</p>
 
   <h2>2. 실습 — 영화 페이지를 내 앱에 추가한다 (바이브 코딩)</h2>
   <p>5차시의 급식 페이지에 이어 세 번째 페이지입니다. KOBIS 인증키도 지난 시간과 같은 습관으로 — 코드가 아니라 <b>비밀값 보관함(secrets)</b>에 넣습니다.</p>
@@ -71,7 +200,7 @@
 인증키는 스트림릿의 비밀값 보관함에 넣어 줘.</pre></div>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 관찰한다</span><br>
-      어제 날짜를 고르면 어제의 1위부터 10위가 나타납니다. 지난 주말과 평일을 번갈아 골라 보세요 — 순위표의 얼굴이 날마다 달라집니다. 그런데 이 화면으로 "1위 영화는 뜨는 중인가, 지는 중인가"에 답할 수 있는지 생각해 봅니다. 하루치 표에는 <b>변화</b>가 없습니다.</li>
+      어제 날짜를 고르면 어제의 1위부터 10위가 나타납니다. 지난 주말과 평일을 번갈아 골라 보세요 — 순위표가 날마다 달라집니다. 그런데 이 화면으로 "1위 영화는 뜨는 중인가, 지는 중인가"에 답할 수 있는지 생각해 봅니다. 하루치 표에는 <b>변화</b>가 없습니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 기간을 통합한다</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>시작일과 끝일을 고르면 그 기간의 일별 데이터를 모두 모아
 하나의 표로 합쳐 줘. 그리고 영화를 하나 고르면
@@ -108,10 +237,43 @@
     <li><b>기울기</b> — 첫 주가 지난 뒤 얼마나 빠르게 줄어드는가. 줄어드는 속도도 영화마다 다릅니다.</li>
     <li><b>톱니</b> — 주말마다 반복해서 솟는 자리. 관객 수에 요일의 리듬이 새겨져 있습니다.</li>
   </ul>
+<svg viewBox="0 0 760 365" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="개봉일부터 30일의 관객 수 곡선에서 시작점·기울기·톱니를 찾는 안내 그림" style="max-width:100%;height:auto;display:block;margin:8px 0 14px">
+  <defs>
+    <marker id="l6arA" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#54a24b"/></marker>
+  </defs>
+  <rect x="174" y="60" width="42" height="230" fill="#f4b400" fill-opacity="0.16"/>
+  <rect x="321" y="60" width="42" height="230" fill="#f4b400" fill-opacity="0.16"/>
+  <rect x="468" y="60" width="42" height="230" fill="#f4b400" fill-opacity="0.16"/>
+  <rect x="615" y="60" width="42" height="230" fill="#f4b400" fill-opacity="0.16"/>
+  <text x="195" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#e8930c">토·일</text>
+  <text x="342" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#e8930c">토·일</text>
+  <text x="489" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#e8930c">토·일</text>
+  <text x="636" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#e8930c">토·일</text>
+
+  <line x1="70" y1="290" x2="730" y2="290" stroke="#8a7a55" stroke-width="1.5"/>
+  <line x1="70" y1="60" x2="70" y2="290" stroke="#8a7a55" stroke-width="1.5"/>
+  <text x="400" y="312" text-anchor="middle" font-size="12.5" fill="#3d3425">개봉일부터의 날짜(30일)</text>
+  <text x="40" y="175" text-anchor="middle" font-size="12.5" fill="#3d3425" transform="rotate(-90 40 175)">일별 관객 수</text>
+
+  <polyline fill="none" stroke="#e8930c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points="80,90 101,108 122,126 143,140 164,152 185,138 206,132 227,158 248,170 269,179 290,186 311,192 332,178 353,174 374,200 395,207 416,212 437,216 458,220 479,208 500,205 521,228 542,232 563,235 584,238 605,240 626,230 647,228 668,246 689,248 710,250"/>
+
+  <circle cx="80" cy="90" r="5" fill="#e8930c"/>
+  <line x1="94" y1="84" x2="86" y2="89" stroke="#8a7a55" stroke-width="1.5"/>
+  <text x="98" y="82" font-size="12.5" font-weight="700" fill="#3d3425">① 시작점 — 개봉일의 관객 수</text>
+
+  <line x1="238" y1="156" x2="458" y2="212" stroke="#b279a2" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="252" y="136" font-size="12.5" font-weight="700" fill="#b279a2">② 기울기 — 첫 주 뒤 줄어드는 속도</text>
+
+  <text x="500" y="110" font-size="12.5" font-weight="700" fill="#54a24b">③ 톱니 — 주말마다 솟는 자리</text>
+  <path d="M495,112 C440,110 380,140 352,166" fill="none" stroke="#54a24b" stroke-width="2" marker-end="url(#l6arA)"/>
+
+  <text x="400" y="336" text-anchor="middle" font-size="12" fill="#8a7a55">모양을 읽는 순서 ①→②→③ — 축 눈금 숫자가 없는, 모양 읽기 안내 전용 그림입니다.</text>
+  <text x="400" y="354" text-anchor="middle" font-size="12" fill="#8a7a55">내 앱의 선 그래프에서 같은 자리를 찾아봅니다 — 출발 높이와 줄어드는 속도는 영화마다 다릅니다.</text>
+</svg>
 
   <div class="callout warn">
     <div class="h">⚠️ 발견 — 데이터를 합치면 질문이 생긴다</div>
-    <p>하루치 응답은 "오늘 무엇이 1위인가"에만 답합니다. 30일을 합친 순간, 같은 데이터가 새 질문들을 만들어 냅니다. <b>개봉 첫 주에 전체 관객의 몇 할이 몰리는가? 감소 속도는 영화마다 다른가? 주말 효과는 얼마나 되는가?</b> — 전부 통합된 표에서만 던질 수 있는 질문입니다. 1차시에 "분석은 질문에서 출발한다"고 했지만, 오늘은 그 역방향도 성립함을 확인합니다. 데이터의 모양이 바뀌면 질문이 새로 태어납니다.</p>
+    <p>하루치 응답은 "오늘 무엇이 1위인가"에만 답합니다. 30일을 합친 순간, 같은 데이터가 새 질문들을 만들어 냅니다. <b>개봉 첫 주에 전체 관객의 몇 할이 몰리는가? 감소 속도는 영화마다 다른가? 주말 효과는 얼마나 되는가?</b> — 전부 통합된 표에서만 던질 수 있는 질문입니다. 1차시에 "분석은 질문에서 출발한다"고 했지만, 오늘은 그 역방향도 성립함을 확인합니다. 데이터의 모양이 바뀌면 질문이 새로 생겨납니다.</p>
   </div>
   <p>이렇게 모은 데이터의 규모를 미리 밝혀 둡니다. 2025-09-01부터 2026-08-20까지 <b>354일</b>치 일별 톱10을 통합한 스냅샷이 <b>3,540행</b>, 등장한 영화는 <b>296편</b>입니다. 이 표가 8차시(영화 흥행 예측)와 10·11차시(분류)의 재료가 됩니다 — "다음 주 관객 수를 맞힐 수 있을까?"라는 오늘 마지막 질문의 답은 거기서 찾습니다.</p>
 
@@ -134,7 +296,7 @@ KOBIS 영화 상세 API에서 장르와 개봉일을 가져와서
   <p>폼 Ⅱ-04a에서 이 틀에 맞춰 오늘의 작업을 기록합니다. 특히 "통합해야 답할 수 있는 질문"과 "하루치로도 답할 수 있는 질문"을 스스로 갈라 보는 것이 핵심입니다.</p>
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>폼 <b>Ⅱ-04a</b>(교과서 83쪽 탐구활동 — 데이터 선정→질문 생성→통합→분석)를 수업 중 제출합니다. 내 앱의 영화 페이지(기간 조회 선 그래프)는 클래스룸에 스크린샷으로 남깁니다.</p>
+    <p><b>Ⅱ-04a</b> 수업 중 제출 · 영화 페이지 스크린샷은 클래스룸에</p>
   </div>
 
   <h2>5. 개념 정리 — 두 개의 API, 하나의 습관</h2>
@@ -142,18 +304,24 @@ KOBIS 영화 상세 API에서 장르와 개봉일을 가져와서
   <p>그리고 오늘의 한 문장. <b>데이터를 합치면 질문이 생긴다.</b> 하루치 순위표가 30일 곡선이 되자 "다음 주 관객 수를 맞힐 수 있을까?"라는 질문이 저절로 나왔습니다. 이 질문이 다음 주에 시작하는 예측 — 회귀(7차시)와 영화 흥행 예측(8차시) — 의 출발점입니다.</p>
 
   <h2>6. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 일별 박스오피스 응답을 기간 표로 통합해야만 답할 수 있는 질문의 예를 두 가지 들라.</summary>
-    <div class="gin"><p><b>예시 답안</b> — ① "이 영화의 관객 수는 개봉일부터 어떻게 변했는가"(여러 날의 값을 이어야 변화가 보인다). ② "개봉 첫 주 관객이 전체에서 차지하는 비중은 얼마인가"(여러 날의 합이 필요하다). 반면 "오늘 1위는 무엇인가"는 하루치 응답만으로 답할 수 있다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 하루치 응답에는 없어도 되던 날짜 열이, 여러 날을 통합한 표에는 반드시 필요해지는 이유는 무엇인가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 하루치 응답은 모든 행이 같은 날의 것이므로 날짜를 따로 적지 않아도 구분에 문제가 없다. 그러나 여러 날을 한 표로 쌓으면 각 행이 어느 날의 기록인지 구분할 정보가 없어진다. 날짜 열은 통합된 표에서 행들을 구분하고 조각들을 이어 주는 공통 속성이다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 실시간 API가 있는데도 수업 분석에는 고정 스냅샷 파일(kobis_daily.csv)을 쓰는 이유를 설명하라.</summary>
-    <div class="gin"><p><b>예시 답안</b> — ① 호출 한도: 학급 전체가 긴 기간을 반복 조회하면 하루 한도(3,000회)를 넘기 쉽다. ② 재현성: API는 호출 시점마다 데이터가 달라질 수 있지만, 고정 스냅샷은 모두가 같은 데이터로 같은 결과를 재현할 수 있어 결과를 비교하고 검증하기에 알맞다. 최신 값이 필요한 조회에는 API를, 함께 분석하고 검증하는 수업에는 스냅샷을 쓴다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 일별 박스오피스 응답을 기간 표로 통합해야만 답할 수 있는 질문의 예를 두 가지 들어 보세요. 자기 말로 답해 본 뒤 펼쳐 봅니다.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>① "이 영화의 관객 수는 개봉일부터 어떻게 변했는가"(여러 날의 값을 이어야 변화가 보인다). ② "개봉 첫 주 관객이 전체에서 차지하는 비중은 얼마인가"(여러 날의 합이 필요하다). 반면 "오늘 1위는 무엇인가"는 하루치 응답만으로 답할 수 있다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 하루치 응답에는 없어도 되던 날짜 열이, 여러 날을 통합한 표에는 반드시 필요해지는 이유는 무엇일까요?</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>하루치 응답은 모든 행이 같은 날의 것이므로 날짜를 따로 적지 않아도 구분에 문제가 없다. 그러나 여러 날을 한 표로 쌓으면 각 행이 어느 날의 기록인지 구분할 정보가 없어진다. 날짜 열은 통합된 표에서 행들을 구분하고 조각들을 이어 주는 공통 속성이다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 실시간 API가 있는데도 수업 분석에는 고정 스냅샷 파일(kobis_daily.csv)을 쓰는 이유를 설명해 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>① 호출 한도: 학급 전체가 긴 기간을 반복 조회하면 하루 한도(3,000회)를 넘기 쉽다. ② 재현성: API는 호출 시점마다 데이터가 달라질 수 있지만, 고정 스냅샷은 모두가 같은 데이터로 같은 결과를 재현할 수 있어 결과를 비교하고 검증하기에 알맞다. 최신 값이 필요한 조회에는 API를, 함께 분석하고 검증하는 수업에는 스냅샷을 쓴다.</p>
+    </details>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -184,5 +352,6 @@ KOBIS 영화 상세 API에서 장르와 개봉일을 가져와서
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>

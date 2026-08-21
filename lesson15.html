@@ -50,6 +50,68 @@
     <p class="q">"데이터베이스에는 여러 종류의 데이터셋이 들어가는데, 이때 각각의 데이터셋은 표 형태로 저장되며 이를 테이블(table)이라고 한다." <span class="src">(27쪽)</span></p>
     <p class="t">→ 우리가 쓰던 CSV 파일 하나가 데이터셋. 그것을 <b>여러 사람이 공유</b>하도록 통합 관리하는 것이 데이터베이스이고, 그 안의 표 하나하나가 테이블이다.</p>
   </div>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 880 300" style="min-width:720px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이터셋과 데이터베이스와 테이블의 포함 관계를 나타낸 그림">
+      <defs>
+        <marker id="ar15gold" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+      </defs>
+      <!-- 왼쪽: 데이터셋 — 파일 하나 -->
+      <path d="M60 80 h72 l28 28 v104 h-100 z" fill="#ffffff" stroke="#d8cbb8" stroke-width="2"/>
+      <path d="M132 80 v28 h28 z" fill="#f3ece2" stroke="#d8cbb8" stroke-width="2"/>
+      <text x="106" y="132" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a" font-family="monospace">CSV</text>
+      <text x="110" y="156" text-anchor="middle" font-size="11" fill="#c0b8a4">… , … , …</text>
+      <text x="110" y="172" text-anchor="middle" font-size="11" fill="#c0b8a4">… , … , …</text>
+      <text x="110" y="238" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">데이터셋</text>
+      <text x="110" y="257" text-anchor="middle" font-size="11.5" fill="#7a7f95">급식 CSV 파일 하나</text>
+      <text x="110" y="273" text-anchor="middle" font-size="11" fill="#7a7f95">(혼자 분석할 때)</text>
+      <!-- 화살표: 데이터셋 → 데이터베이스 -->
+      <line x1="176" y1="150" x2="342" y2="150" stroke="#e8930c" stroke-width="2.5" marker-end="url(#ar15gold)"/>
+      <text x="258" y="176" text-anchor="middle" font-size="10.5" fill="#a05f06">여러 사람이 공유하도록</text>
+      <text x="258" y="192" text-anchor="middle" font-size="10.5" fill="#a05f06">통합 관리되면, 데이터셋은</text>
+      <text x="258" y="208" text-anchor="middle" font-size="10.5" fill="#a05f06">표 형태의 테이블로 저장된다</text>
+      <text x="258" y="224" text-anchor="middle" font-size="10.5" fill="#a05f06">(교과서 27쪽)</text>
+      <!-- 오른쪽: 데이터베이스 -->
+      <rect x="360" y="26" width="500" height="214" rx="16" fill="#fffdf6" stroke="#f4b400" stroke-width="2.5"/>
+      <text x="382" y="56" font-size="14" font-weight="800" fill="#5a4300">데이터베이스 — 우리 학급 수파베이스 프로젝트</text>
+      <!-- 방명록 테이블 -->
+      <text x="388" y="90" font-size="12.5" font-weight="800" fill="#16635e">방명록 테이블</text>
+      <rect x="388" y="98" width="60" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <rect x="448" y="98" width="90" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <rect x="538" y="98" width="80" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <text x="418" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">이름</text>
+      <text x="493" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">소감</text>
+      <text x="578" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">작성 시각</text>
+      <rect x="388" y="122" width="60" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="448" y="122" width="90" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="538" y="122" width="80" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="418" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="493" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="578" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <rect x="388" y="144" width="60" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="448" y="144" width="90" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="538" y="144" width="80" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="418" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="493" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="578" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="503" y="188" text-anchor="middle" font-size="10.5" fill="#7a7f95">오늘 만드는 것</text>
+      <!-- 갤러리 테이블 -->
+      <text x="650" y="90" font-size="12.5" font-weight="800" fill="#16635e">갤러리 테이블</text>
+      <rect x="650" y="98" width="85" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <rect x="735" y="98" width="85" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <text x="692" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">작품</text>
+      <text x="777" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">피드백</text>
+      <rect x="650" y="122" width="85" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="735" y="122" width="85" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="692" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="777" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <rect x="650" y="144" width="85" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="735" y="144" width="85" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="692" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="777" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="735" y="188" text-anchor="middle" font-size="10.5" fill="#7a7f95">한 학기 내내 쓴 것</text>
+    </svg>
+  </div>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">CSV 파일 하나가 데이터셋, 그것을 여럿이 공유하도록 모아 관리하는 것이 데이터베이스, 그 안의 표 하나하나가 테이블입니다.</p>
   <p>정의의 핵심은 "여러 사람이 공유하여"입니다. 혼자 쓸 때는 파일이면 충분한데, 여럿이 함께 쓰는 순간 파일은 세 가지 벽에 부딪힙니다.</p>
   <table class="daymap">
     <thead><tr><th>부족해지는 순간</th><th>CSV 파일이라면</th><th>데이터베이스라면</th></tr></thead>
@@ -59,6 +121,108 @@
       <tr><td><b>골라 읽기</b></td><td>전체를 내려받아 눈으로 찾아야 한다</td><td>조건에 맞는 것만 즉시 검색해 가져온다</td></tr>
     </tbody>
   </table>
+  <details class="glossary">
+    <summary>🔬 움직여 보기 — "동시에 쓰기", 파일과 테이블에서 각각 벌어지는 일</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">그림을 <b>클릭할 때마다 한 단계씩</b> 움직입니다 — ① A가 적는다 → ② 그 사이 B도 적는다 → ③ 저장 — 두 결과를 비교합니다.</p>
+<svg class="csvdb-svg" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg" role="img" style="cursor:pointer" aria-label="두 사람이 동시에 쓸 때 CSV 파일과 데이터베이스 테이블에서 벌어지는 일을 클릭할 때마다 한 단계씩 보여 주는 그림">
+  <text class="csvdb-hint" x="400" y="26" text-anchor="middle" font-size="15" font-weight="800" fill="#e8930c">지금 보이는 것은 저장이 끝난 뒤의 결과입니다 — 👆 클릭하면 처음부터 한 단계씩</text>
+  <!-- 위 레인: CSV 파일 한 개 -->
+  <rect x="10" y="44" width="780" height="196" rx="14" fill="#fffdf6" stroke="#f0e2bc" stroke-width="1.5"/>
+  <text x="26" y="70" font-size="14" font-weight="800" fill="#e8930c">CSV 파일 한 개</text>
+  <text x="70" y="122" text-anchor="middle" font-size="26">🙋</text>
+  <text x="70" y="146" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a">학생 A</text>
+  <text x="70" y="196" text-anchor="middle" font-size="26">🙋</text>
+  <text x="70" y="220" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a">학생 B</text>
+  <line x1="248" y1="112" x2="306" y2="128" stroke="#d8cbb8" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <line x1="248" y1="188" x2="306" y2="170" stroke="#d8cbb8" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <g class="csvdb-a-side" opacity="0">
+    <rect x="112" y="98" width="130" height="24" rx="5" fill="#fdeeba" stroke="#e8c96a"/>
+    <text x="177" y="114" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5a4300">A의 글 · …</text>
+  </g>
+  <g class="csvdb-b-side" opacity="0">
+    <rect x="112" y="174" width="130" height="24" rx="5" fill="#d8edec" stroke="#8fc7c3"/>
+    <text x="177" y="190" text-anchor="middle" font-size="11.5" font-weight="700" fill="#16635e">B의 글 · …</text>
+  </g>
+  <rect x="310" y="76" width="240" height="146" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="1.5"/>
+  <text x="430" y="98" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a" font-family="monospace">방명록.csv</text>
+  <rect x="322" y="108" width="216" height="22" fill="#faf6ea" stroke="#f0e2bc"/>
+  <text x="430" y="123" text-anchor="middle" font-size="11.5" fill="#c0b8a4">…</text>
+  <g class="csvdb-file-a" opacity="0.3">
+    <rect x="322" y="134" width="216" height="22" fill="#fdeeba" stroke="#e8c96a"/>
+    <text x="430" y="149" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5a4300">A의 글 · …</text>
+    <line x1="330" y1="145" x2="530" y2="145" stroke="#e45756" stroke-width="2"/>
+  </g>
+  <g class="csvdb-file-b" opacity="1">
+    <rect x="322" y="160" width="216" height="22" fill="#d8edec" stroke="#8fc7c3"/>
+    <text x="430" y="175" text-anchor="middle" font-size="11.5" font-weight="700" fill="#16635e">B의 글 · …</text>
+  </g>
+  <text class="csvdb-red" opacity="1" x="672" y="150" text-anchor="middle" font-size="13" font-weight="800" fill="#e45756">A의 글이 사라졌다</text>
+  <!-- 아래 레인: 데이터베이스 테이블 -->
+  <rect x="10" y="250" width="780" height="196" rx="14" fill="#fffdf6" stroke="#f0e2bc" stroke-width="1.5"/>
+  <text x="26" y="276" font-size="14" font-weight="800" fill="#3ba6a0">데이터베이스 테이블</text>
+  <text x="70" y="328" text-anchor="middle" font-size="26">🙋</text>
+  <text x="70" y="352" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a">학생 A</text>
+  <text x="70" y="402" text-anchor="middle" font-size="26">🙋</text>
+  <text x="70" y="426" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a">학생 B</text>
+  <line x1="248" y1="318" x2="306" y2="334" stroke="#d8cbb8" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <line x1="248" y1="394" x2="306" y2="376" stroke="#d8cbb8" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <rect x="310" y="282" width="240" height="146" rx="10" fill="#ffffff" stroke="#a7d8d4" stroke-width="1.5"/>
+  <text x="430" y="304" text-anchor="middle" font-size="13" font-weight="800" fill="#16635e">방명록 테이블</text>
+  <rect x="322" y="314" width="216" height="22" fill="#f2f9f8" stroke="#d8edec"/>
+  <text x="430" y="329" text-anchor="middle" font-size="11.5" fill="#c0b8a4">…</text>
+  <g class="csvdb-db-a" opacity="1">
+    <rect x="322" y="340" width="216" height="22" fill="#fdeeba" stroke="#e8c96a"/>
+    <text x="430" y="355" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5a4300">A의 글 · …</text>
+  </g>
+  <g class="csvdb-db-b" opacity="1">
+    <rect x="322" y="366" width="216" height="22" fill="#d8edec" stroke="#8fc7c3"/>
+    <text x="430" y="381" text-anchor="middle" font-size="11.5" font-weight="700" fill="#16635e">B의 글 · …</text>
+  </g>
+  <text class="csvdb-green" opacity="1" text-anchor="middle" font-size="13" font-weight="800" fill="#54a24b"><tspan x="672" y="348">기록이 각각</tspan><tspan x="672" y="366">한 행으로 쌓인다</tspan></text>
+</svg>
+<script>
+(function () {
+  var svg = document.querySelector(".csvdb-svg");
+  if (!svg) return;
+  var hint = svg.querySelector(".csvdb-hint");
+  function pick(c) { return svg.querySelector("." + c); }
+  var aSide = pick("csvdb-a-side"), bSide = pick("csvdb-b-side"),
+      fileA = pick("csvdb-file-a"), fileB = pick("csvdb-file-b"), red = pick("csvdb-red"),
+      dbA = pick("csvdb-db-a"), dbB = pick("csvdb-db-b"), green = pick("csvdb-green");
+  var all = [aSide, bSide, fileA, fileB, red, dbA, dbB, green];
+  var HINTS = [
+    "① A가 파일에 자기 글을 적는다 — 👆 계속 클릭",
+    "② 그 사이 B도 같은 파일에 자기 글을 적는다 — 👆 계속 클릭",
+    "③ A 저장 → B 저장 — 나중에 저장한 쪽이 파일을 통째로 덮는다 (클릭하면 처음부터)"
+  ];
+  var s = 0;
+  function apply(state) {
+    all.forEach(function (g) { g.style.transition = "opacity 0.6s ease"; });
+    if (state === 1) {
+      aSide.style.opacity = 1; bSide.style.opacity = 0;
+      fileA.style.opacity = 0; fileB.style.opacity = 0; red.style.opacity = 0;
+      dbA.style.opacity = 1; dbB.style.opacity = 0; green.style.opacity = 0;
+      hint.textContent = HINTS[0];
+    } else if (state === 2) {
+      bSide.style.opacity = 1; dbB.style.opacity = 1;
+      hint.textContent = HINTS[1];
+    } else {
+      aSide.style.opacity = 0; bSide.style.opacity = 0;
+      fileA.style.opacity = 0.3; fileB.style.opacity = 1; red.style.opacity = 1;
+      green.style.opacity = 1;
+      hint.textContent = HINTS[2];
+    }
+  }
+  svg.addEventListener("click", function () {
+    s = (s === 0 || s === 3) ? 1 : s + 1;
+    apply(s);
+  });
+})();
+</script>
+      <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">위 표의 첫 줄 "동시에 쓰기"가 일어나는 실제 순서입니다. 오늘 실습 ②에서 옆자리 친구와 직접 재현합니다.</p>
+    </div>
+  </details>
   <p>교과서 26쪽은 데이터베이스의 이점을 네 가지로 정리합니다 — 편리한 버전 관리, 데이터 무결성 유지, 데이터 보안 강화, 체계적인 데이터 관리. 누가 언제 고쳤는지 기록이 남고, 이상한 값의 입력을 막고, 사용자별로 권한을 나누고, 조건 검색이 된다는 뜻입니다. 그리고 데이터베이스가 하는 일은 결국 네 동작 — 데이터를 <b>생성하고, 읽고, 갱신하고, 삭제</b>하는 것(29쪽) — 으로 요약됩니다. 오늘 기본 실습에서 "생성"과 "읽기"를 직접 하고, 이어지는 도전에서 "갱신"과 "삭제"까지 네 동작을 모두 채웁니다.</p>
   <div class="callout tip">
     <div class="h">💡 수파베이스 — 우리가 쓸 데이터베이스</div>
@@ -112,26 +276,46 @@
   </ul>
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>교과서 폼 Ⅰ-03a(27쪽 해 보기 ① — 모둠 경험에서 DB의 필요성) · Ⅰ-03b(31쪽 쇼핑몰 DB 설계 — 수업 중, 심화는 과제) · Ⅳ-01a(173쪽 해 보기 ① — 데이터로 해결한 문제) · Ⅳ-01b(176쪽 탐구활동 — 우리 팀 주제의 적합성 판단) + <b>팀 주제 카드</b>. 마무리로 갤러리에서 서로의 포트폴리오를 최종 관람합니다.</p>
+    <p>폼 <b>Ⅰ-03a</b> · <b>Ⅰ-03b</b> · <b>Ⅳ-01a</b> · <b>Ⅳ-01b</b> + <b>팀 주제 카드</b>. 마무리로 갤러리에서 서로의 포트폴리오를 관람합니다.</p>
   </div>
 
-  <h2>4. 개념 정리 — 한 학기의 도구 상자가 닫히는 자리</h2>
+  <h2>4. 개념 정리 — 파일에서 공동 저장소로</h2>
   <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>혼자 읽는 데이터는 파일이면 되지만, 여럿이 동시에 쌓는 데이터에는 데이터베이스가 필요하다.</b> 그리고 그 필요는 팀 프로젝트가 시작되는 순간 현실이 됩니다.</p>
-  <p>1차시에 질문 던지기로 시작한 공통 수업이 오늘 닫힙니다. 질문을 세우고(1차시), 데이터를 구해 오고(2·5·6차시), 구멍을 살피고(3차시), 앱으로 배포하고(4차시), 회귀·분류·군집·연관의 네 가지 틀로 모델을 만들고 평가했으며(7~13차시), 그 전 과정의 윤리를 점검했고(14차시), 오늘 여럿이 함께 쓰는 저장소까지 갖췄습니다. 이제 이 도구 상자 전부가 팀 프로젝트에서 여러분의 것입니다.</p>
+  <p>1차시에 질문 던지기로 시작한 공통 수업이 오늘 닫힙니다. 질문을 세우고(1차시), 데이터를 구해 오고(2·5·6차시), 구멍을 살피고(3차시), 앱으로 배포하고(4차시), 회귀·분류·군집·연관의 네 가지 틀로 모델을 만들고 평가했으며(7~13차시), 그 전 과정의 윤리를 점검했고(14차시), 오늘 여럿이 함께 쓰는 저장소까지 갖췄습니다. 이제 이 도구 전부가 팀 프로젝트에서 여러분의 것입니다.</p>
 
   <h2>5. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 모둠 과제 자료를 CSV 파일로 만들어 메신저로 주고받는 방식과 견주어, 데이터베이스를 쓸 때의 이점을 두 가지 서술하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — ① 여러 사람이 동시에 데이터를 입력해도 서로의 작업을 덮어쓰지 않고 각각의 기록이 안전하게 쌓인다(파일은 마지막에 저장한 사람이 이전 내용을 덮을 수 있다). ② 데이터가 한곳에 계속 누적되고, 필요한 것만 조건으로 검색해 읽을 수 있다(파일은 최신본이 무엇인지 헷갈리고 전체를 열어 찾아야 한다). 이 밖에 수정 기록이 남는 버전 관리, 잘못된 값을 막는 무결성 유지, 사용자별 접근 권한 설정도 이점이다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 데이터셋, 데이터베이스, 테이블 세 용어의 관계를 우리 실습의 예를 들어 설명하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 데이터셋은 하나의 주제에 대한 데이터의 집합으로, 우리가 쓰던 급식 CSV 파일 하나가 데이터셋이다. 데이터베이스는 여러 사람이 공유하도록 데이터를 통합 관리하는 집합으로, 우리 학급의 수파베이스 프로젝트가 그것이다. 데이터베이스 안에서 각 데이터셋은 표 형태로 저장되는데 이것이 테이블이며, 오늘 만든 방명록 표가 테이블 하나에 해당한다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 어느 팀이 "우리 학교 학생들의 등하교 위치 기록을 모아 시간대별 이동 패턴을 분석하겠다"는 주제를 제안했다. 주제 판단의 세 가지 물음에 비추어 이 주제의 문제점을 지적하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 데이터를 모을 수 있고 분석 틀에도 맞을 수 있으나, 세 번째 물음인 "법적·윤리적으로 올바른가"에서 통과하기 어렵다. 개인의 위치 기록은 이어 붙이면 특정 학생의 동선과 생활 패턴이 드러나는 민감한 개인정보이므로, 동의 없이 수집·분석하면 사생활을 침해한다. 데이터가 있다는 것과 그 데이터를 써도 된다는 것은 다른 문제이며, 이런 주제는 개인을 추적할 수 없는 형태의 데이터로 바꾸어 다시 설계해야 한다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 모둠 과제 자료를 CSV 파일로 만들어 메신저로 주고받는 방식과 견주어, 데이터베이스를 쓸 때의 이점을 두 가지 서술해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>① 여러 사람이 동시에 데이터를 입력해도 서로의 작업을 덮어쓰지 않고 각각의 기록이 안전하게 쌓인다(파일은 마지막에 저장한 사람이 이전 내용을 덮을 수 있다). ② 데이터가 한곳에 계속 누적되고, 필요한 것만 조건으로 검색해 읽을 수 있다(파일은 최신본이 무엇인지 헷갈리고 전체를 열어 찾아야 한다). 이 밖에 수정 기록이 남는 버전 관리, 잘못된 값을 막는 무결성 유지, 사용자별 접근 권한 설정도 이점이다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 데이터셋, 데이터베이스, 테이블 — 세 용어를 우리 실습의 예에 대응해 봅니다.</div>
+    <div class="qitem">
+      <div class="qs">우리 실습에서 테이블에 해당하는 것은?</div>
+      <div class="qopts qopts-col">
+        <button class="opt">급식 CSV 파일</button>
+        <button class="opt">우리 학급의 수파베이스 프로젝트</button>
+        <button class="opt" data-ok="1">오늘 만든 방명록 표</button>
+      </div>
+      <div class="fb">데이터베이스(수파베이스 프로젝트) 안에 표 형태로 저장된 데이터셋 하나가 테이블입니다. 급식 CSV 파일은 데이터베이스 밖의 파일 하나 — 데이터셋이고, 수파베이스 프로젝트는 테이블들을 담는 쪽 — 데이터베이스입니다.</div>
+    </div>
+    <details class="reveal"><summary>세 용어의 관계 펼쳐 보기</summary>
+      <p>데이터셋은 하나의 주제에 대한 데이터의 집합으로, 우리가 쓰던 급식 CSV 파일 하나가 데이터셋이다. 데이터베이스는 여러 사람이 공유하도록 데이터를 통합 관리하는 집합으로, 우리 학급의 수파베이스 프로젝트가 그것이다. 데이터베이스 안에서 각 데이터셋은 표 형태로 저장되는데 이것이 테이블이며, 오늘 만든 방명록 표가 테이블 하나에 해당한다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 어느 팀이 "우리 학교 학생들의 등하교 위치 기록을 모아 시간대별 이동 패턴을 분석하겠다"는 주제를 제안했습니다. 주제 판단의 세 물음 중 이 주제가 걸리는 곳은?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">첫째 물음 — 등하교 위치 데이터는 모을 방법이 없기 때문</button>
+        <button class="opt">둘째 물음 — 이동 패턴은 우리가 배운 분석 틀에 맞지 않기 때문</button>
+        <button class="opt" data-ok="1">셋째 물음 — 위치 기록은 이어 붙이면 특정 학생의 동선이 드러나는 민감한 개인정보라, 동의 없는 수집·분석이 사생활을 침해하기 때문</button>
+      </div>
+      <div class="fb">데이터가 있다는 것과 써도 된다는 것은 다릅니다. 개인을 추적할 수 없는 형태로 바꾸어 다시 설계해야 합니다.</div>
+    </div>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -162,5 +346,6 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>
