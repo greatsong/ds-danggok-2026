@@ -245,6 +245,50 @@ table.glossary-table td.term { white-space: nowrap; font-weight: 700; }
 table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var(--muted); font-size: 0.82rem; }
 .glossary-more { font-size: 0.9rem; margin: 8px 0 0; }
 
+/* ---------- 실물 표본(specimen) — 같은 데이터의 여러 모습을 실물로 나란히 ---------- */
+.specimen-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(226px, 1fr)); gap: 14px; margin: 18px 0; }
+.specimen { border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow); }
+.specimen .tag { font-size: 0.74rem; font-weight: 800; padding: 6px 12px; color: #fff; letter-spacing: 0.01em; }
+.specimen.st .tag { background: var(--green); }
+.specimen.semi .tag { background: var(--teal); }
+.specimen.un .tag { background: var(--violet); }
+.specimen .body { padding: 12px; flex: 1; display: flex; align-items: center; justify-content: center; }
+.specimen .note { font-size: 0.8rem; line-height: 1.55; color: var(--text-soft); padding: 9px 12px; border-top: 1px dashed var(--border); background: #fffdf6; }
+.specimen pre.mini { margin: 0; width: 100%; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 12px; overflow-x: auto; font-family: var(--mono); font-size: 0.7rem; line-height: 1.6; }
+.specimen pre.mini .k { color: #ffd766; }
+.minitable { width: 100%; border-collapse: collapse; font-size: 0.72rem; font-family: var(--mono); }
+.minitable th, .minitable td { border: 1px solid var(--border); padding: 5px 7px; text-align: left; white-space: nowrap; }
+.minitable td:last-child { white-space: normal; }
+.minitable th { background: var(--green-soft); color: #3d7a37; font-weight: 800; }
+.minitable tr.hl td { background: #fff3d6; }
+.specimen svg { max-width: 100%; height: auto; display: block; }
+
+/* ---------- 인터랙티브 확인 문제(quiz) ---------- */
+.quiz { border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; padding: 16px 18px; margin: 16px 0; box-shadow: var(--shadow); }
+.quiz .qq { font-weight: 700; margin-bottom: 4px; }
+.quiz .qn { display: inline-block; font-size: 0.74rem; font-weight: 800; color: var(--accent); background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 1px 10px; margin-right: 7px; vertical-align: 2px; }
+.quiz .qitem { margin: 12px 0 0; }
+.quiz .qs { font-size: 0.95rem; margin-bottom: 6px; }
+.quiz .qopts { display: flex; flex-wrap: wrap; gap: 8px; }
+.quiz .qopts-col { flex-direction: column; align-items: stretch; }
+.quiz .opt { font-family: var(--font); font-size: 0.88rem; font-weight: 700; text-align: left; color: var(--text); background: #fffdf6; border: 1.5px solid var(--border); border-radius: 999px; padding: 7px 16px; cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.12s; }
+.quiz .qopts-col .opt { border-radius: var(--radius-sm); }
+.quiz .opt:hover:not(:disabled) { border-color: var(--accent); }
+.quiz .opt:disabled { cursor: default; opacity: 0.55; }
+.quiz .opt.right { background: var(--green-soft); border-color: var(--green); color: #3d7a37; opacity: 1; }
+.quiz .opt.right::after { content: " ✓"; font-weight: 800; }
+.quiz .opt.wrong { background: var(--red-soft); border-color: var(--red); color: #c23b3a; animation: quiz-shake 0.35s; }
+@keyframes quiz-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.quiz .fb { display: none; margin-top: 10px; font-size: 0.88rem; line-height: 1.6; color: var(--text-soft); background: var(--green-soft); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 8px 12px; }
+.quiz .fb.show { display: block; }
+.quiz details.reveal { margin-top: 8px; border: 1px dashed var(--border); border-radius: var(--radius-sm); background: #fffdf6; }
+.quiz details.reveal summary { cursor: pointer; padding: 9px 14px; font-size: 0.86rem; font-weight: 800; color: var(--accent); list-style: none; }
+.quiz details.reveal summary::-webkit-details-marker { display: none; }
+.quiz details.reveal summary::before { content: "▸ "; }
+.quiz details.reveal[open] summary::before { content: "▾ "; }
+.quiz details.reveal p { margin: 0; padding: 0 14px 12px; font-size: 0.9rem; }
+@media print { .quiz .fb { display: block; } .quiz details.reveal { display: block; } }
+
 /* 교과서 인용 박스 — 정의·핵심 명제만 짧게 인용(출처 쪽수 필수), 이어서 우리말 풀이 */
 .tbquote { border: 1px solid var(--border); border-left: 4px solid var(--accent); background: #fffdf6; border-radius: var(--radius-sm); padding: 14px 16px; margin: 18px 0; }
 .tbquote .h { font-weight: 800; font-size: 0.9rem; margin-bottom: 6px; }

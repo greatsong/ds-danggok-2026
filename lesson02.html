@@ -25,7 +25,7 @@
 
   <div class="quote">
     <div class="q">"질문이 데이터를 결정한다 — 데이터를 고르는 것부터가 분석이다."</div>
-    <span class="by">이 수업의 관통 습관 — 1차시(질문 던지기)에 이어, 오늘은 그 질문에 맞는 데이터 고르기</span>
+    <span class="by">1차시에서 질문을 던졌다면, 오늘은 그 질문에 맞는 데이터를 고릅니다</span>
   </div>
 
   <p class="lead">지난 시간에 만든 질문 카드를 다시 꺼냅니다. 그 질문에 답하려면 데이터가 필요합니다. 오늘은 데이터에 어떤 <b>형태</b>가 있는지 구분하는 눈을 갖추고, 누구에게나 열려 있는 <b>공공데이터포털</b>에서 관심 분야의 데이터를 직접 내려받아 첫인상을 기록합니다. 내려받은 파일은 AI에게 요약을 맡겨 봅니다.</p>
@@ -54,13 +54,62 @@
   <p>정형 데이터의 대표는 행과 열로 이루어진 표입니다. 각 <b>열</b>은 데이터의 특정 속성을 나타내고, 각 <b>행</b>은 구체적인 값 하나하나입니다. 교과서 19쪽의 일별 박스 오피스 표가 좋은 예입니다 — 영화명·개봉일·매출액이 열이고, 영화 한 편이 행 하나입니다(이 표의 친척을 6차시에 API로 직접 받게 됩니다). 속성이 명확해 수집·관리가 쉬워서 기업과 공공 기관에서 널리 쓰입니다.</p>
   <p>비정형 데이터는 이미지·텍스트·음성·영상처럼 구조의 제약 없이 자유롭게 표현된 데이터입니다. 명확한 속성이 정의되어 있지 않지만 버려지는 것은 아닙니다 — 교과서 20쪽은 영화 댓글 리뷰를 숫자로 변환해 영화의 새로운 속성으로 쓰는 예를 듭니다. 가공하면 속성을 추출할 수 있습니다.</p>
   <p>그 사이에 반정형 데이터가 있습니다. XML과 JSON이 대표적으로, 구조를 쉽게 바꿀 수 있고 필요하면 표 형태로 변환할 수 있어 데이터 공유에 많이 쓰입니다. 공공데이터포털에도 XML·JSON 형태의 파일이 많이 올라와 있습니다.</p>
-  <p>세 형태를 가장 가까운 예, 급식으로 구분해 봅니다.</p>
+  <p>말보다 실물이 빠릅니다. <b>2025년 9월 2일의 당곡고 급식 하나</b>가 세 가지 모습으로 기록된 것을 나란히 놓고 봅니다. 셋 다 같은 급식입니다.</p>
+  <div class="specimen-row">
+    <div class="specimen st">
+      <div class="tag">정형 — 표 (CSV 파일)</div>
+      <div class="body">
+        <table class="minitable">
+          <thead><tr><th>날짜</th><th>식사</th><th>메뉴</th></tr></thead>
+          <tbody>
+            <tr><td>20250901</td><td>중식</td><td>칼슘강화기장밥|쇠고기미역국|…</td></tr>
+            <tr class="hl"><td>20250902</td><td>중식</td><td>친환경현미밥|근대된장국|제육볶음|…</td></tr>
+            <tr><td>20250903</td><td>중식</td><td>⋮</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">행과 열이 반듯한 표. <b>열이 속성, 행이 하루</b>입니다. 표 그대로 분석에 들어갑니다.</div>
+    </div>
+    <div class="specimen semi">
+      <div class="tag">반정형 — JSON (급식 API 응답)</div>
+      <div class="body"><pre class="mini">{
+  <span class="k">"MLSV_YMD"</span>: "20250902",
+  <span class="k">"MMEAL_SC_NM"</span>: "중식",
+  <span class="k">"DDISH_NM"</span>: "친환경현미밥
+    &lt;br/&gt;근대된장국
+    &lt;br/&gt;제육볶음 …",
+  <span class="k">"CAL_INFO"</span>: "… Kcal"
+}</pre></div>
+      <div class="note">표는 아니지만 <b>"라벨": 값</b>의 구조가 있음. 표로 변환해 씁니다 — 5차시에 직접 받습니다.</div>
+    </div>
+    <div class="specimen un">
+      <div class="tag">비정형 — 사진 (급식 사진)</div>
+      <div class="body">
+        <svg viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="급식 식판 사진을 나타낸 그림">
+          <path d="M8 8 h26 M8 8 v26 M212 8 h-26 M212 8 v26 M8 142 h26 M8 142 v-26 M212 142 h-26 M212 142 v-26" stroke="#b279a2" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <rect x="30" y="26" width="160" height="98" rx="12" fill="#f3ece2" stroke="#d8cbb8"/>
+          <rect x="40" y="34" width="44" height="38" rx="8" fill="#fff" stroke="#e3d8c6"/>
+          <rect x="90" y="34" width="44" height="38" rx="8" fill="#fff" stroke="#e3d8c6"/>
+          <rect x="140" y="34" width="40" height="38" rx="8" fill="#fff" stroke="#e3d8c6"/>
+          <rect x="40" y="78" width="66" height="38" rx="8" fill="#fff" stroke="#e3d8c6"/>
+          <rect x="112" y="78" width="68" height="38" rx="8" fill="#fff" stroke="#e3d8c6"/>
+          <text x="62" y="60" text-anchor="middle" font-size="20">🥬</text>
+          <text x="112" y="60" text-anchor="middle" font-size="20">🥩</text>
+          <text x="160" y="60" text-anchor="middle" font-size="20">🥝</text>
+          <text x="73" y="104" text-anchor="middle" font-size="20">🍚</text>
+          <text x="146" y="104" text-anchor="middle" font-size="20">🍲</text>
+        </svg>
+      </div>
+      <div class="note">행도 라벨도 없는 이미지. 그대로는 분석할 수 없고, <b>가공해야</b> 속성(메뉴·양)을 꺼낼 수 있습니다.</div>
+    </div>
+  </div>
+  <p>같은 하루인데 담긴 그릇이 다릅니다. 수업에서 만나는 때와 함께 정리하면 이렇습니다.</p>
   <table class="daymap">
-    <thead><tr><th>형태</th><th>급식으로 예를 들면</th><th>생김새</th><th>우리 수업에서 만나는 때</th></tr></thead>
+    <thead><tr><th>형태</th><th>위의 실물</th><th>다루는 법</th><th>우리 수업에서 만나는 때</th></tr></thead>
     <tbody>
-      <tr><td><b>정형</b></td><td>급식 식단표</td><td>행과 열이 있는 표 (CSV 파일)</td><td>오늘부터 — 내려받는 파일 대부분</td></tr>
-      <tr><td><b>반정형</b></td><td>급식 API 응답</td><td>이름표가 붙은 문서 (JSON 등)</td><td>5·6차시 — API로 데이터를 받을 때</td></tr>
-      <tr><td><b>비정형</b></td><td>급식 사진</td><td>이미지·자유 텍스트·음성·영상</td><td>팀 프로젝트에서 만날 수 있음</td></tr>
+      <tr><td><b>정형</b></td><td>CSV 식단표</td><td>표 그대로 분석</td><td>오늘부터 — 내려받는 파일 대부분</td></tr>
+      <tr><td><b>반정형</b></td><td>JSON 응답</td><td>표로 변환해 분석</td><td>5·6차시 — API로 데이터를 받을 때</td></tr>
+      <tr><td><b>비정형</b></td><td>급식 사진</td><td>가공해 속성 추출</td><td>팀 프로젝트에서 만날 수 있음</td></tr>
     </tbody>
   </table>
 
@@ -125,28 +174,51 @@
   </div>
 
   <h2>4. 정리 — 진로 분야의 데이터 씨앗</h2>
-  <p>마지막으로 시야를 학기말까지 늘립니다. 내 진로·관심 분야에는 어떤 데이터가 쌓이고 있을까요? 오늘 포털을 검색하며 스친 데이터 중 진로와 닿는 것이 있었다면 교과서 폼 Ⅰ-04c(진로 분야와 데이터)에 첫 기록을 남깁니다. 이 기록은 학기말 팀 프로젝트 주제를 정할 때 다시 꺼내 대조하게 됩니다.</p>
+  <p>오늘 포털에서 스친 데이터 중 진로와 닿는 것이 있었다면 폼 Ⅰ-04c에 기록해 둡니다. 학기말 팀 프로젝트 주제를 정할 때 다시 꺼내게 됩니다.</p>
   <div class="callout mini">
     <div class="h">📮 오늘의 제출</div>
-    <p>수업 중 제출은 <b>Ⅰ-02c</b>(23쪽 탐구활동 — 형태 구분과 직접 수집) · <b>Ⅱ-01c</b>(55쪽 탐구활동 — 관심 분야 수집) 2종입니다. Ⅰ-02a(19쪽 해 보기 ①)·Ⅰ-02b(22쪽 해 보기 ②)·Ⅰ-04c는 과제로, Ⅱ-01a(50쪽 해 보기 ② — 모둠)·Ⅱ-04b(수집 방법 비교)는 모둠 활동으로 이어집니다.</p>
+    <p><b>Ⅰ-02c</b>(형태 구분과 직접 수집) · <b>Ⅱ-01c</b>(관심 분야 수집)</p>
   </div>
 
   <h2>5. 개념 정리 — 질문에서 데이터로</h2>
   <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>데이터에는 정형·반정형·비정형의 형태가 있고, 그중 무엇을 고를지는 내 질문이 정한다.</b> 같은 주제라도 기관마다 형식·기간·속성이 다르다는 것을 직접 확인했고, 내려받은 파일의 정체를 AI에게 요약시키는 첫 ①③을 밟았습니다. 다음 시간에는 100년 치 서울 기온 데이터(정형)를 그래프로 펼칩니다 — 그래프 한가운데에서 이상한 구멍 하나를 만나게 됩니다.</p>
 
   <h2>6. 확인 문제</h2>
-  <details class="glossary">
-    <summary>문제 1 — 다음을 정형·반정형·비정형으로 구분하시오. (가) 학급 설문 응답을 정리한 표 (나) 학교 축제 영상 (다) 급식 API가 보내 준 JSON 응답</summary>
-    <div class="gin"><p><b>예시 답안</b> — (가) 정형: 행과 열로 속성과 구조가 명확하다. (나) 비정형: 구조를 명확하게 정의하기 어렵다. (다) 반정형: 일부분이 정형화되어 구조가 있지만 표 형태는 아니며 구조를 바꿀 수 있다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 2 — 같은 도서관 데이터인데, 어떤 사람에게는 위도·경도 속성이 중요하고 어떤 사람에게는 휴관일 속성이 중요하다. 이런 일이 생기는 이유를 설명하시오.</summary>
-    <div class="gin"><p><b>예시 답안</b> — 속성의 중요성은 문제 상황(질문)에 따라 달라지기 때문이다. 가까운 도서관을 찾는 질문에는 위치를 알려 주는 위도·경도가, 언제 갈지 정하는 질문에는 휴관일·운영 시각이 가치 있는 속성이 된다. 속성의 가치는 데이터가 아니라 질문이 정한다.</p></div>
-  </details>
-  <details class="glossary">
-    <summary>문제 3 — 공공데이터포털에서 같은 주제를 검색했더니 서로 다른 기관의 파일 여러 개가 나왔다. 무엇을 기준으로 하나를 골라야 하는가?</summary>
-    <div class="gin"><p><b>예시 답안</b> — 내가 해결하려는 문제(질문)와의 일치가 기준이다. 데이터 수집은 문제 해결의 목적과 일치해야 하므로, 질문이 요구하는 기간을 담고 있는지, 필요한 속성이 들어 있는지, 다룰 수 있는 형식인지를 견주어 고른다. 크기나 최신 여부만으로 고르지 않는다.</p></div>
-  </details>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 다음을 정형·반정형·비정형으로 구분해 보세요. 답을 눌러 확인합니다.</div>
+    <div class="qitem">
+      <div class="qs">(가) 학급 설문 응답을 정리한 표</div>
+      <div class="qopts"><button class="opt" data-ok="1">정형</button><button class="opt">반정형</button><button class="opt">비정형</button></div>
+      <div class="fb">행과 열로 속성과 구조가 명확한 표 — <b>정형</b>입니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(나) 학교 축제 영상</div>
+      <div class="qopts"><button class="opt">정형</button><button class="opt">반정형</button><button class="opt" data-ok="1">비정형</button></div>
+      <div class="fb">구조를 명확하게 정의하기 어려운 영상 — <b>비정형</b>입니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(다) 급식 API가 보내 준 JSON 응답</div>
+      <div class="qopts"><button class="opt">정형</button><button class="opt" data-ok="1">반정형</button><button class="opt">비정형</button></div>
+      <div class="fb">"라벨": 값의 구조는 있지만 표는 아니고 구조를 바꿀 수 있음 — <b>반정형</b>입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 같은 도서관 데이터인데, 어떤 사람에게는 위도·경도 속성이 중요하고 어떤 사람에게는 휴관일 속성이 중요합니다. 이런 일이 생기는 이유는 무엇일까요? 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>속성의 중요성은 문제 상황(질문)에 따라 달라지기 때문입니다. 가까운 도서관을 찾는 질문에는 위도·경도가, 언제 갈지 정하는 질문에는 휴관일·운영 시각이 가치 있는 속성이 됩니다. <b>속성의 가치는 데이터가 아니라 질문이 정합니다.</b></p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 공공데이터포털에서 같은 주제를 검색했더니 서로 다른 기관의 파일 여러 개가 나왔습니다. 무엇을 기준으로 하나를 골라야 할까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">파일 크기가 가장 큰 것 — 데이터가 많을수록 좋으므로</button>
+        <button class="opt">내려받기 횟수가 가장 많은 것 — 남들이 많이 쓴 것이므로</button>
+        <button class="opt" data-ok="1">내 질문이 요구하는 기간·속성·형식을 갖춘 것</button>
+      </div>
+      <div class="fb">수집은 문제 해결의 목적과 일치해야 합니다. 질문이 요구하는 기간을 담았는지, 필요한 속성이 있는지, 다룰 수 있는 형식인지를 견주어 고릅니다. 크기나 인기만으로 고르지 않습니다.</div>
+    </div>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -176,5 +248,6 @@
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/quiz.js"></script>
 </body>
 </html>
