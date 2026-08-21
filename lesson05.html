@@ -40,81 +40,51 @@
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>버스 도착 알림, 날씨 앱, 실시간 환율 — 이런 앱들은 데이터 파일을 미리 내려받아 두지 않습니다. 여러분이 화면을 여는 순간, 앱이 데이터를 가진 서버에 <b>요청을 보내고 응답을 받아</b> 보여 줍니다. 이 창구가 API입니다. 2차시에 공공데이터포털에서 CSV 파일을 내려받아 봤다면, 오늘은 데이터를 받는 두 번째 방법을 배웁니다. 한 번 익혀 두면 급식·영화·날씨·대중교통 등 세상의 수많은 실시간 데이터가 여러분 앱의 재료가 됩니다. 팀 프로젝트에서 "항상 최신인 데이터"를 다루고 싶다면 오늘이 그 출발점입니다.</p>
+  <p>버스 도착 알림, 날씨 앱, 실시간 환율 — 이런 앱들은 데이터 파일을 미리 내려받아 두지 않습니다. 여러분이 화면을 여는 순간, 앱이 데이터를 가진 서버에 <b>요청을 보내고 응답을 받아</b> 보여 줍니다. 이때 요청을 받아 응답을 돌려주는 통로가 API입니다. 2차시에 공공데이터포털에서 CSV 파일을 내려받아 봤다면, 오늘은 데이터를 받는 두 번째 방법을 배웁니다. 한 번 익혀 두면 급식·영화·날씨·대중교통 등 세상의 수많은 실시간 데이터가 여러분 앱의 재료가 됩니다. 팀 프로젝트에서 "항상 최신인 데이터"를 다루고 싶다면 오늘이 그 출발점입니다.</p>
 
-  <h2>1. 개념 이해 — API는 키오스크 주문 창구</h2>
-  <p>API는 카페나 매점의 키오스크와 같습니다. 정해진 기계(창구)에서 정해진 화면의 양식대로 주문(요청)을 넣으면, 정해진 결과물(응답)이 돌아옵니다. 키오스크에서 음료를 주문하는 일과, 내 앱이 오늘 급식을 받아 오는 일은 정확히 같은 흐름 — <b>요청 → 응답</b> — 입니다. 우리는 주방 안에서 무슨 일이 일어나는지 몰라도 음료를 받고, 나이스(NEIS) 서버 내부를 몰라도 급식 데이터를 받습니다.</p>
+  <h2>1. 개념 이해 — API는 요청과 응답의 약속</h2>
+  <p>API는 <b>정해진 주소로 조건을 담은 요청을 보내면, 정해진 양식(JSON)의 응답을 돌려주기로 한 약속</b>입니다. 내 앱이 나이스 서버에 "당곡고의 오늘 급식"을 요청하면, 서버는 약속된 형식으로 식단 데이터를 돌려줍니다. 우리는 서버 내부에서 무슨 일이 일어나는지 몰라도 됩니다 — 약속(요청 형식과 응답 형식)만 알면 데이터를 받을 수 있습니다. API를 이루는 네 가지는 다음과 같습니다.</p>
   <table class="daymap">
-    <thead><tr><th>키오스크 주문</th><th>API</th><th>설명</th></tr></thead>
+    <thead><tr><th>구성 요소</th><th>무엇인가</th><th>급식 API에서는</th></tr></thead>
     <tbody>
-      <tr><td>키오스크의 위치와 화면</td><td>요청 URL</td><td>어디에 어떤 양식으로 주문할지 정해진 인터넷 주소</td></tr>
-      <tr><td>주문 내역(메뉴·옵션)</td><td>요청(request)</td><td>"무엇을 알려줘"라는 우리의 물음 — 학교·날짜 같은 조건</td></tr>
-      <tr><td>진동벨과 나온 음료</td><td>응답(response)</td><td>정해진 양식(JSON)으로 오는 답</td></tr>
-      <tr><td>멤버십 바코드</td><td>API 키(인증키)</td><td>"나 이 서비스 쓰는 사람"임을 증명하는 열쇠</td></tr>
+      <tr><td><b>요청 URL</b></td><td>어디에 물어볼지 정해진 인터넷 주소</td><td>open.neis.go.kr의 급식식단 API 주소</td></tr>
+      <tr><td><b>요청(request)</b></td><td>"무엇을 알려줘"라는 물음 — 주소 뒤에 붙는 조건들</td><td>교육청·학교 코드, 날짜</td></tr>
+      <tr><td><b>응답(response)</b></td><td>정해진 양식(JSON)으로 오는 답</td><td>식단·칼로리·원산지가 담긴 JSON</td></tr>
+      <tr><td><b>API 키(인증키)</b></td><td>요청에 함께 실어 보내는, 사용자를 증명하는 문자열</td><td>주소 속 KEY= 자리에 들어감 — 아래 5절에서 자세히</td></tr>
     </tbody>
   </table>
 
   <details class="glossary">
-    <summary>🔬 더 알아보기 — API가 뭐예요? 키오스크에서 음료 주문하기로 이해하기 (클릭해서 움직여 보세요)</summary>
+    <summary>🔬 움직여 보기 — 요청과 응답, 클릭으로 한 단계씩</summary>
     <div class="gin">
-      <p style="margin:10px 0 12px">API는 <b>"정해진 양식을 채워 보내면, 원하는 결과물을 정해진 형식으로 돌려주는 창구"</b>입니다. 아래 두 줄은 <b>클릭할 때마다 한 단계씩</b> 움직입니다 — ①주문 입력 → ②전송 → ③만들기 → ④받기. 키오스크 음료 주문과 내 앱의 급식 받기가 똑같이 <b>요청 → 응답</b>으로 흐릅니다.</p>
-<svg class="api-svg" viewBox="0 0 800 445" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="클릭할 때마다 한 단계씩 진행되는 API 요청과 응답 그림">
+      <p style="margin:10px 0 12px">내 앱이 급식 데이터를 받아 오는 과정입니다. 그림을 <b>클릭할 때마다 한 단계씩</b> 움직입니다 — ①요청 만들기 → ②서버로 보내기 → ③응답(JSON) 만들기 → ④응답 받기.</p>
+<svg class="api-svg" viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="클릭할 때마다 한 단계씩 진행되는 API 요청과 응답 그림">
   <defs>
     <marker id="arR" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#7d93ef"/></marker>
     <marker id="arL" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#e98bb6"/></marker>
     <filter id="ds2" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2a3568" flood-opacity="0.14"/></filter>
   </defs>
-  <g class="lane" data-lane="A" data-req-y="98" data-res-y="146" style="cursor:pointer">
-    <rect x="6" y="14" width="788" height="190" fill="transparent" pointer-events="all"/>
-    <text class="hint" x="400" y="42" text-anchor="middle" font-size="16" font-weight="800" fill="#3b47c2">👆 클릭 ① — 주문 입력</text>
+  <g class="lane" data-lane="B" data-req-y="98" data-res-y="142" style="cursor:pointer">
+    <rect x="6" y="12" width="788" height="192" fill="transparent" pointer-events="all"/>
+    <text class="hint" x="400" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#0e9488">👆 클릭 ① — 요청 만들기</text>
     <g filter="url(#ds2)" pointer-events="none"><rect x="28" y="64" width="180" height="100" rx="18" fill="#ffffff" stroke="#e6e8f2"/></g>
-    <text x="118" y="114" text-anchor="middle" font-size="36" pointer-events="none">🙋</text>
-    <text x="118" y="148" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a" pointer-events="none">나 = 손님</text>
+    <text x="118" y="114" text-anchor="middle" font-size="36" pointer-events="none">💻</text>
+    <text x="118" y="148" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a" pointer-events="none">내 앱 · 브라우저</text>
     <g filter="url(#ds2)" pointer-events="none"><rect x="592" y="64" width="180" height="100" rx="18" fill="#eef0ff" stroke="#c3c9f5"/></g>
-    <text x="682" y="110" text-anchor="middle" font-size="33" pointer-events="none">🧋</text>
-    <text x="682" y="140" text-anchor="middle" font-size="15" font-weight="800" fill="#3b47c2" pointer-events="none">카페 키오스크</text>
-    <text x="682" y="157" text-anchor="middle" font-size="11.5" fill="#8a8fb0" pointer-events="none">주방으로 전달</text>
+    <text x="682" y="108" text-anchor="middle" font-size="33" pointer-events="none">🏫</text>
+    <text x="682" y="138" text-anchor="middle" font-size="15" font-weight="800" fill="#3b47c2" pointer-events="none">나이스(NEIS)</text>
+    <text x="682" y="155" text-anchor="middle" font-size="11.5" fill="#8a8fb0" pointer-events="none">API 서버 · 데이터 보관</text>
     <line x1="216" y1="98" x2="584" y2="98" stroke="#9fb0f5" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arR)" pointer-events="none"/>
-    <text x="400" y="86" text-anchor="middle" font-size="13" fill="#5B6CF0" font-weight="800" pointer-events="none">요청(신청서) →</text>
-    <line x1="584" y1="146" x2="216" y2="146" stroke="#f0b9d2" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arL)" pointer-events="none"/>
-    <text x="400" y="170" text-anchor="middle" font-size="13" fill="#E0568A" font-weight="800" pointer-events="none">← 응답(결과물)</text>
-    <g class="doc-req" opacity="0" pointer-events="none">
-      <rect x="-62" y="-38" width="124" height="76" rx="8" fill="#ffffff" stroke="#b9c0f5"/>
-      <rect x="-62" y="-38" width="124" height="22" rx="8" fill="#5B6CF0"/><rect x="-62" y="-27" width="124" height="11" fill="#5B6CF0"/>
-      <text x="0" y="-22" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📝 주문 내역</text>
-      <text x="0" y="4" text-anchor="middle" font-size="13" font-weight="800" fill="#3b47c2">음료: 아이스티</text>
-      <text x="0" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="#3b47c2">사이즈: 라지</text>
-    </g>
-    <g class="doc-res" opacity="0" pointer-events="none">
-      <rect x="-66" y="-44" width="132" height="88" rx="8" fill="#ffffff" stroke="#f0c6da"/>
-      <rect x="-66" y="-44" width="132" height="22" rx="8" fill="#E0568A"/><rect x="-66" y="-33" width="132" height="11" fill="#E0568A"/>
-      <text x="0" y="-28" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">🛎️ 진동벨이 울림</text>
-      <text x="0" y="0" text-anchor="middle" font-size="20" font-weight="800" fill="#2b2d3a">🧋 아이스티</text>
-      <text x="0" y="22" text-anchor="middle" font-size="12" fill="#55524c">라지 · 주문한 그대로</text>
-    </g>
-  </g>
-  <line x1="40" y1="205" x2="760" y2="205" stroke="#eceef5" stroke-width="1"/>
-  <g class="lane" data-lane="B" data-req-y="298" data-res-y="342" style="cursor:pointer">
-    <rect x="6" y="212" width="788" height="192" fill="transparent" pointer-events="all"/>
-    <text class="hint" x="400" y="240" text-anchor="middle" font-size="16" font-weight="800" fill="#0e9488">👆 클릭 ① — 요청 만들기</text>
-    <g filter="url(#ds2)" pointer-events="none"><rect x="28" y="264" width="180" height="100" rx="18" fill="#ffffff" stroke="#e6e8f2"/></g>
-    <text x="118" y="314" text-anchor="middle" font-size="36" pointer-events="none">💻</text>
-    <text x="118" y="348" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a" pointer-events="none">내 앱 · 브라우저</text>
-    <g filter="url(#ds2)" pointer-events="none"><rect x="592" y="264" width="180" height="100" rx="18" fill="#eef0ff" stroke="#c3c9f5"/></g>
-    <text x="682" y="308" text-anchor="middle" font-size="33" pointer-events="none">🏫</text>
-    <text x="682" y="338" text-anchor="middle" font-size="15" font-weight="800" fill="#3b47c2" pointer-events="none">나이스(NEIS)</text>
-    <text x="682" y="355" text-anchor="middle" font-size="11.5" fill="#8a8fb0" pointer-events="none">= 키오스크(API)</text>
-    <line x1="216" y1="298" x2="584" y2="298" stroke="#9fb0f5" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arR)" pointer-events="none"/>
-    <text x="400" y="286" text-anchor="middle" font-size="13" fill="#5B6CF0" font-weight="800" pointer-events="none">요청(신청서) →</text>
-    <line x1="584" y1="342" x2="216" y2="342" stroke="#f0b9d2" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arL)" pointer-events="none"/>
-    <text x="400" y="366" text-anchor="middle" font-size="13" fill="#E0568A" font-weight="800" pointer-events="none">← 응답(결과물)</text>
+    <text x="400" y="86" text-anchor="middle" font-size="13" fill="#5B6CF0" font-weight="800" pointer-events="none">요청 →</text>
+    <line x1="584" y1="142" x2="216" y2="142" stroke="#f0b9d2" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arL)" pointer-events="none"/>
+    <text x="400" y="166" text-anchor="middle" font-size="13" fill="#E0568A" font-weight="800" pointer-events="none">← 응답</text>
     <g class="doc-req" opacity="0" pointer-events="none">
       <rect x="-66" y="-44" width="132" height="88" rx="8" fill="#ffffff" stroke="#b9c0f5"/>
       <rect x="-66" y="-44" width="132" height="22" rx="8" fill="#0e9488"/><rect x="-66" y="-33" width="132" height="11" fill="#0e9488"/>
       <text x="0" y="-28" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📝 요청 (URL)</text>
       <text x="0" y="-4" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">학교: 당곡고</text>
       <text x="0" y="14" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">날짜: 오늘</text>
-      <text x="0" y="32" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">🔑 인증키</text>
+      <text x="0" y="32" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">🔑 KEY=인증키</text>
     </g>
     <g class="doc-res" opacity="0" pointer-events="none">
       <rect x="-82" y="-52" width="164" height="104" rx="8" fill="#ffffff" stroke="#a7d8d4"/>
@@ -125,13 +95,12 @@
       <text x="0" y="36" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0e9488" font-family="monospace">{"DDISH_NM": "…"}</text>
     </g>
   </g>
-  <text x="400" y="432" text-anchor="middle" font-size="12.5" fill="#7a7f95" pointer-events="none">음료·사이즈 = 학교·날짜(주문 조건) · 나온 음료 = 오늘의 식단(결과) · 주방 = API 서버 · 🔑 멤버십 = 인증키</text>
+  <text x="400" y="232" text-anchor="middle" font-size="12.5" fill="#7a7f95" pointer-events="none">요청 = 주소 + 조건(학교·날짜) + 🔑 인증키 · 응답 = 정해진 양식(JSON) · 상태코드 200이면 성공</text>
 </svg>
 <script>
 (function () {
   var STEPS = {
-    A: ["👆 클릭 ① — 주문 입력", "👆 클릭 ② — 주방으로 전송", "👆 클릭 ③ — 음료 만들기", "👆 클릭 ④ — 진동벨·음료 받기", "✅ 한 바퀴 끝! 클릭하면 처음부터"],
-    B: ["👆 클릭 ① — 요청 만들기", "👆 클릭 ② — 창구로 보내기", "👆 클릭 ③ — 응답(JSON) 만들기", "👆 클릭 ④ — 응답 받기", "✅ 한 바퀴 끝! 클릭하면 처음부터"]
+    B: ["👆 클릭 ① — 요청 만들기", "👆 클릭 ② — 서버로 보내기", "👆 클릭 ③ — 응답(JSON) 만들기", "👆 클릭 ④ — 응답 받기", "✅ 한 바퀴 끝! 클릭하면 처음부터"]
   };
   var START_X = 275, END_X = 525;
   var MOVE = "transform 2.8s ease-in-out, opacity 0.7s ease";
@@ -170,7 +139,7 @@
 </script>
     </div>
   </details>
-  <p>응답에는 <b>상태코드</b>라는 번호표가 함께 옵니다. 셋만 기억하면 됩니다 — <b>200</b> 성공 · <b>404</b> 없음(없는 메뉴를 주문한 것, 주소 오류) · <b>429</b> 과다 요청(주문 폭주 — 잠깐 쉬기).</p>
+  <p>응답에는 <b>상태코드</b>라는 번호표가 함께 옵니다. 셋만 기억하면 됩니다 — <b>200</b> 성공 · <b>404</b> 없음(주소가 틀렸거나 없는 자료) · <b>429</b> 과다 요청(호출이 너무 잦음 — 잠깐 쉬기).</p>
   <p>내려받기와 API는 무엇이 다를까요? 내려받은 CSV는 <b>그 시점의 복사본</b>입니다. 내일 식단이 바뀌어도 내 파일은 모릅니다. API는 호출할 때마다 서버가 지금 가진 데이터를 보내 주므로 <b>항상 최신</b>이고, 날짜나 학교를 지정해 <b>필요한 만큼만</b> 받을 수 있습니다.</p>
 
   <div class="tbquote">
@@ -214,11 +183,11 @@
   </ul>
 
   <h2>2. 주소창 실험 — 반정형 데이터의 실물</h2>
-  <p>코드를 쓰기 전에, API가 정말 "주소로 주문하는 창구"인지 브라우저로 확인합니다. 선생님이 나눠 준 요청 주소를 주소창에 붙여 넣으면, 꾸며지지 않은 JSON 원문이 화면에 그대로 나타납니다. 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
+  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 선생님이 나눠 준 요청 주소를 주소창에 붙여 넣으면, 꾸며지지 않은 JSON 원문이 화면에 그대로 나타납니다. 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
   <ul>
-    <li><b>학교를 가리키는 조건</b> — 교육청 코드 <code>B10</code>(서울), 학교 코드 <code>7010073</code>(당곡고). 주소 속 이 두 값이 "우리 학교 것으로 주세요"라는 주문입니다.</li>
+    <li><b>학교를 가리키는 조건</b> — 교육청 코드 <code>B10</code>(서울), 학교 코드 <code>7010073</code>(당곡고). 주소 속 이 두 값이 "우리 학교 것"이라는 요청 조건입니다.</li>
     <li><b>이름표와 값의 쌍</b> — 메뉴가 담긴 항목, 칼로리가 담긴 <code>CAL_INFO</code>, 원산지가 담긴 <code>ORPLC_INFO</code>. 열 이름이 표 머리글이 아니라 <b>데이터 안에 이름표로</b> 붙어 있습니다. 이것이 반정형의 생김새입니다.</li>
-    <li><b>날짜 조건을 바꾸면</b> — 주소 속 날짜를 다른 날로 고쳐 다시 접속하면 응답이 그날 것으로 바뀝니다. 같은 창구, 다른 주문서입니다.</li>
+    <li><b>날짜 조건을 바꾸면</b> — 주소 속 날짜를 다른 날로 고쳐 다시 접속하면 응답이 그날 것으로 바뀝니다. 같은 주소, 다른 조건입니다.</li>
   </ul>
   <table class="daymap">
     <thead><tr><th>응답 속 이름표</th><th>담긴 것</th><th>급식실 식단표에는?</th></tr></thead>
@@ -262,16 +231,16 @@
 
   <div class="callout warn">
     <div class="h">⚠️ 발견 — 내려받지 않았는데 점심이 뜬다</div>
-    <p>화면에 나타난 오늘 식단은 내 컴퓨터 어디에도 파일로 존재하지 않습니다. 앱이 실행될 때마다 나이스 서버에 주문서를 보내고 응답을 받아 표시한 것입니다. 데이터가 "가져다 두는 것"에서 <b>"흘러오는 것"</b>으로 바뀌는 순간입니다. 내일 이 페이지를 열면, 아무것도 고치지 않아도 내일 식단이 나옵니다.</p>
+    <p>화면에 나타난 오늘 식단은 내 컴퓨터 어디에도 파일로 존재하지 않습니다. 앱이 실행될 때마다 나이스 서버에 요청을 보내고 응답을 받아 표시한 것입니다. 데이터가 "가져다 두는 것"에서 <b>"흘러오는 것"</b>으로 바뀌는 순간입니다. 내일 이 페이지를 열면, 아무것도 고치지 않아도 내일 식단이 나옵니다.</p>
   </div>
 
   <h2>4. 관찰 — 표에 없던 것이 API엔 있다</h2>
-  <p>급식실 앞에 붙은 식단표에는 메뉴 이름이 전부입니다. 그런데 API 응답에는 메뉴마다 <b>알레르기 유발 식품 번호</b>가 붙어 있고, 한 끼의 <b>칼로리</b>와 재료의 <b>원산지</b>까지 들어 있습니다. 같은 급식인데, 어떤 창구로 받느냐에 따라 손에 들어오는 속성이 다릅니다. 교과서 21~22쪽에서 "문제 상황에 따라 중요한 속성이 달라진다"고 배웠습니다 — 알레르기가 있는 학생에게는 식단표에 없던 이 번호들이 가장 중요한 속성일 수 있습니다.</p>
+  <p>급식실 앞에 붙은 식단표에는 메뉴 이름이 전부입니다. 그런데 API 응답에는 메뉴마다 <b>알레르기 유발 식품 번호</b>가 붙어 있고, 한 끼의 <b>칼로리</b>와 재료의 <b>원산지</b>까지 들어 있습니다. 같은 급식인데, 어떤 경로로 받느냐에 따라 손에 들어오는 속성이 다릅니다. 교과서 21~22쪽에서 "문제 상황에 따라 중요한 속성이 달라진다"고 배웠습니다 — 알레르기가 있는 학생에게는 식단표에 없던 이 번호들이 가장 중요한 속성일 수 있습니다.</p>
   <p>규모도 가늠해 봅시다. 최근 1년치(2025-09-01~2026-07-15)를 모으면 총 <b>199건</b> — 중식 154일과 석식 45일 — 이고, 등장한 고유 메뉴는 <b>453종</b>, 하루 평균 <b>6.8품</b>입니다. 이렇게 모은 한 학기치 데이터는 13차시에 "제육볶음이 나오는 날, 국은 무엇이 나올까"라는 질문으로 다시 만납니다.</p>
   <p>제출할 "한 줄 관찰"은 다음 중 하나를 골라 자기 말로 쓰면 됩니다.</p>
   <ul>
     <li>식단표에는 없는데 API 응답에는 있는 정보 하나와, 그 정보가 유용한 사람은 누구인가.</li>
-    <li>같은 급식 데이터인데 창구(식단표/API)에 따라 속성이 달라지는 까닭은 무엇이라 생각하는가.</li>
+    <li>같은 급식 데이터인데 경로(식단표/API)에 따라 속성이 달라지는 까닭은 무엇이라 생각하는가.</li>
     <li>급식이 없는 날의 응답을 보고 알게 된 것 한 가지.</li>
   </ul>
 
@@ -280,9 +249,22 @@
     <p>클래스룸 과제로 <b>내 앱의 급식 페이지 스크린샷 + 한 줄 관찰</b>(식단표에 없는데 API에는 있는 정보 하나)을 제출합니다. 오늘은 별도 폼이 없습니다 — 2차시 폼 Ⅰ-02c에서 다룬 반정형 개념을 실전으로 회수하는 날입니다.</p>
   </div>
 
-  <h2>5. 개념 정리 — 인증키는 왜 필요한가</h2>
-  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>API는 데이터를 주문하는 창구이고, 응답으로 오는 JSON은 표로 변환해 쓰는 반정형 데이터다.</b> 내려받은 CSV가 "그 시점의 복사본"이라면 API 호출은 "지금의 데이터"이며, 조건을 지정해 필요한 만큼만 받습니다. 2차시에 머리로 구분했던 정형·반정형이 오늘 손끝에서 구분되었습니다.</p>
-  <p>마지막으로 인증키입니다. 창구가 아무에게나 무제한으로 열려 있으면 서버는 감당할 수 없고, 문제가 생겨도 누구의 호출인지 알 수 없습니다. 인증키는 <b>사용량을 관리하고 책임 소재를 밝히는 장치</b>입니다. 그래서 키는 나를 증명하는 값이고, 코드에 적어 공개 저장소에 올리는 순간 남이 내 이름으로 주문할 수 있게 됩니다. 키를 코드가 아니라 비밀값 보관함에 넣는 오늘의 습관은, 14차시 데이터 윤리에서 다시 이야기할 주제의 첫 연습입니다.</p>
+  <h2>5. API 키 — 요청에 실어 보내는 나의 증명</h2>
+  <p>API 키(인증키)는 서비스가 발급해 주는 <b>긴 무작위 문자열</b>입니다. 생김새는 <code>a1b2c3d4e5f6...</code> 같은 32자 안팎의 글자·숫자 조합이고, 요청 주소의 <code>KEY=</code> 자리에 넣어 함께 보냅니다. 2절의 주소창 실험에서 쓴 요청 주소를 다시 보면 그 자리를 찾을 수 있습니다.</p>
+  <p><b>왜 필요할까요.</b> API가 아무에게나 무제한으로 열려 있으면 서버는 감당할 수 없고, 문제가 생겨도 누구의 호출인지 알 수 없습니다. 키가 있으면 서비스는 <b>누가, 얼마나 쓰는지</b>를 셀 수 있고, 과도한 호출을 막고(한도를 넘으면 상태코드 <b>429</b>), 문제가 생긴 사용자에게 연락하거나 키를 정지할 수 있습니다. 무료 공공 API가 굳이 키를 요구하는 이유가 이것입니다 — 요금이 아니라 <b>관리와 책임</b>의 장치입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>물음</th><th>답</th></tr></thead>
+    <tbody>
+      <tr><td><b>어떻게 받나</b></td><td>나이스 교육정보 개방 포털(open.neis.go.kr)에 가입해 활용 신청을 하면 즉시 발급된다. 오늘 수업에서는 선생님이 발급한 공용 키를 나눠 쓴다</td></tr>
+      <tr><td><b>어디에 쓰나</b></td><td>요청 주소의 <code>KEY=</code> 자리. 키가 요청에 실려 가야 "정식 사용자"의 호출이 된다</td></tr>
+      <tr><td><b>없으면 어떻게 되나</b></td><td>이 API는 맛보기 응답만 준다 — 긴 기간을 조회하면 첫 5행만 반복된다 (2절 실험에서 확인)</td></tr>
+      <tr><td><b>어디에 보관하나</b></td><td>코드가 아니라 <b>비밀값 보관함(secrets)</b>. 코드에 적어 공개 저장소에 올리는 순간 남이 내 이름으로 호출하고, 그 사용량과 책임은 내 몫이 된다</td></tr>
+    </tbody>
+  </table>
+  <p>키를 코드가 아니라 비밀값 보관함에 넣는 오늘의 습관은, 14차시 데이터 윤리에서 다시 이야기할 주제의 첫 연습입니다.</p>
+
+  <h2>6. 개념 정리</h2>
+  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>API는 정해진 주소로 조건을 보내면 정해진 양식(JSON)으로 답하는 약속이고, 그 요청에는 나를 증명하는 키가 실려 간다.</b> 내려받은 CSV가 "그 시점의 복사본"이라면 API 호출은 "지금의 데이터"이며, 조건을 지정해 필요한 만큼만 받습니다. 2차시에 머리로 구분했던 정형·반정형이 오늘 손끝에서 구분되었습니다.</p>
 
   <h2>6. 확인 문제</h2>
   <details class="glossary">
@@ -300,7 +282,7 @@
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>API를 식당의 메뉴판·주문서·서빙에 비유해 설명할 수 있다.</li>
+    <li>API를 요청 주소·조건·응답(JSON)의 구성으로 설명할 수 있다.</li>
     <li>주소창에서 급식 API의 JSON 원문을 확인하고, 이름표-값 구조를 찾았다.</li>
     <li>날짜를 고르면 그날 식단이 나오는 급식 페이지를 내 앱에 추가했다.</li>
     <li>인증키를 비밀값 보관함에 넣었고, 그 이유를 말할 수 있다.</li>
@@ -309,8 +291,8 @@
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">API</td><td>데이터를 주문하는 창구 — 정해진 형식으로 요청하면 응답을 돌려주는 약속</td></tr>
-    <tr><td class="term">요청/응답</td><td>주소 형태로 보내는 주문서 / 서버가 돌려주는 데이터(주로 JSON)</td></tr>
+    <tr><td class="term">API</td><td>정해진 주소로 요청하면 정해진 양식(JSON)으로 응답하는 약속</td></tr>
+    <tr><td class="term">요청/응답</td><td>조건을 담아 보내는 주소 / 서버가 돌려주는 데이터(주로 JSON)</td></tr>
     <tr><td class="term">JSON</td><td>이름표와 값의 쌍으로 데이터를 담는 대표적인 반정형 형식</td></tr>
     <tr><td class="term">반정형 데이터</td><td>구조가 존재하지만 바꿀 수도 있는 유연한 형태의 데이터 (XML, JSON)</td></tr>
     <tr><td class="term">상태코드</td><td>응답과 함께 오는 번호표 — 200 성공 · 404 없음 · 429 과다 요청</td></tr>
