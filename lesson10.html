@@ -191,6 +191,21 @@
     </tbody>
   </table>
 
+  <h2>5. 개념 정리 — 질문이 모델을 고른다</h2>
+  <p>7~9차시의 회귀는 "얼마나"에 숫자로 답했고, 오늘의 분류는 "어느 쪽"에 범주로 답했습니다. 데이터는 같아도 질문이 바뀌면 모델의 종류가 바뀌고, 답의 형태가 바뀌고, 곧 배우게 될 평가 방법까지 바뀝니다. 그리고 분류에는 회귀에 없던 단계가 하나 앞서 있었습니다 — <b>정답(라벨)을 사람이 정의하는 단계</b>입니다. 성공 기준선을 어디에 긋는가는 계산이 아니라 판단이었고, 그 판단이 모델의 성적표까지 흔들었습니다.</p>
+  <div class="callout warn">
+    <div class="h">⚠️ 이 숫자, 믿어도 되나?</div>
+    <p>오늘 우리 분류기는 정확도 0.877과 0.908을 받았습니다. 꽤 높아 보입니다. 그런데 9차시에서 우리는 습관 하나를 익혔습니다 — <b>큰 숫자를 만나면, 무엇과 견주어진 값인지부터 묻는다.</b> 이 정확도는 무엇과 견주어야 할까요? 다음 시간, 이 숫자를 손으로 해부합니다.</p>
+  </div>
+
+  <h2>6. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 다음 물음이 회귀 문제인지 분류 문제인지 골라 보세요. 답을 눌러 확인합니다.</div>
+    <div class="qitem">
+      <div class="qs">(가) 이 영화의 총 관객 수는 몇 명이 될까</div>
+      <div class="qopts"><button class="opt" data-ok="1">회귀</button><button class="opt">이진 분류</button><button class="opt">다중 분류</button></div>
+      <div class="fb">연속적인 숫자를 예측한다 — <b>회귀</b>입니다.</div>
+    </div>
     <div class="qitem">
       <div class="qs">(나) 이 영화는 관객 100만 명을 넘길까</div>
       <div class="qopts"><button class="opt">회귀</button><button class="opt" data-ok="1">이진 분류</button><button class="opt">다중 분류</button></div>
