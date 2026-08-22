@@ -190,12 +190,12 @@
 <!-- 8 수집 + 막힘 -->
 <section class="slide">
   <div class="kicker">② 데이터 수집하기</div>
-  <h2>서울의 기온 기록 <b style="color:var(--accent)">seoul.csv</b></h2>
+  <h2>서울의 기온 기록 <a href="https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline;text-underline-offset:4px">seoul.csv</a></h2>
   <ul class="facts">
     <li>100년 치 일별 기록이 공개되어 있다 — 주소는 아래 한 줄</li>
     <li>이때의 판단 — <b>이 데이터가 우리 질문과 맞는가</b>, 양은 충분한가</li>
   </ul>
-  <div class="prompt" style="font-size:clamp(13px,1.5vw,21px)">https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</div>
+  <div class="prompt" style="font-size:clamp(13px,1.5vw,21px)"><a href="https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv" target="_blank" rel="noopener" style="color:#8fd8c8">https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</a></div>
   <p class="point">데이터는 구했다. 그런데 —<br>100년 치 숫자를 <b>누가 그래프로 바꾸나?</b></p>
 </section>
 
@@ -427,7 +427,7 @@
     if (e.key === 'Home') show(0);
     if (e.key === 't' || e.key === 'T') { tick ? stopTimer() : startTimer(); }
   });
-  addEventListener('click', e => show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  addEventListener('click', e => { if (e.target.closest('a')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
   show(0);
 </script>
 </body>
