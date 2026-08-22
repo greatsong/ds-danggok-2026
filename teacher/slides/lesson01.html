@@ -80,40 +80,53 @@
 <!-- 1 표지 -->
 <section class="slide chapter on">
   <div class="kicker">데이터 과학 · 1차시</div>
-  <h1>질문에서 시작한다</h1>
+  <h1>질문 하나에서 시작한다</h1>
   <p class="sub">코드는 AI가 짜고, 우리는 데이터를 의심하고 판단한다</p>
 </section>
 
 <!-- 2 Q1 -->
 <section class="slide qslide">
   <div class="kicker blue">🤔 생각해 봅시다</div>
-  <p class="qbig">이번 학기 선택 과목,<br>여러분은 <em>무엇을 보고</em> 정했나요?</p>
+  <p class="qbig">서울은 100년 전보다<br>정말 <em>더워졌을까요?</em></p>
+  <p class="sub">그렇다 · 아니다 — 여러분의 근거는 무엇인가요?</p>
 </section>
 
 <!-- 3 A1 -->
 <section class="slide aslide">
   <div class="kicker">✔ 짚고 갑니다</div>
-  <h2>기억·경험·주관으로도 정하고,<br><b style="color:var(--accent)">데이터</b>로도 정할 수 있다</h2>
-  <blockquote style="margin-top:3.5vh">데이터를 수집·분석하여 의사 결정을 내리는 것을 ‘데이터 기반 의사 결정’이라고 한다</blockquote>
-  <p class="small">『데이터 과학』 11쪽 — 성적·흥미·진로 관련성을 함께 보는 것이 그 예</p>
+  <h2>방금 우리가 댄 근거는<br>대부분 <b style="color:var(--accent)">기억·경험·주관</b>이다</h2>
+  <p class="point">같은 질문에, <b>데이터로 답하는 길</b>이 있다</p>
+  <blockquote style="margin-top:3vh">데이터를 수집·분석하여 의사 결정을 내리는 것을 ‘데이터 기반 의사 결정’이라고 한다</blockquote>
+  <p class="small">『데이터 과학』 11쪽</p>
 </section>
 
 <!-- 4 데이터 과학 -->
 <section class="slide">
-  <div class="kicker">개념</div>
+  <div class="kicker">개념 · 이 방식을 다루는 학문</div>
   <h2>데이터 과학</h2>
-  <p class="point">여러 방법을 통합해, 데이터로 실제 현상을 이해하는 학문</p>
-  <ul class="facts">
-    <li>컴퓨터 과학 · 수학 · 통계 · 분야 지식이 결합된 <b>융합적 학문</b></li>
-    <li>도구는 계속 바뀐다 — 남는 것은 <b>데이터를 다루는 판단</b></li>
-  </ul>
+  <blockquote style="margin-top:3vh">데이터를 기반으로 실제 현상을 이해하고 분석하기 위해 통계, 데이터 분석, 기계학습 및 관련 방법을 통합하는 학문 분야</blockquote>
+  <p class="point" style="margin-top:3.5vh">오늘, 이 방식을 <b>우리 질문 하나</b>에 처음부터 끝까지 적용해 본다</p>
 </section>
 
-<!-- 5 6단계 -->
+<!-- 5 Q2 -->
+<section class="slide qslide">
+  <div class="kicker blue">🤔 생각해 봅시다</div>
+  <p class="qbig">데이터로 답하기로 했다.<br><br>가장 먼저 할 일은 무엇일까요?<br><em>기온 데이터부터 구하면 될까요?</em></p>
+</section>
+
+<!-- 6 A2 -->
+<section class="slide aslide">
+  <div class="kicker">✔ 짚고 갑니다</div>
+  <h2>첫걸음은 수집이 아니라 <b style="color:var(--accent)">문제 정의</b></h2>
+  <p class="point">‘더워졌다’는 그대로는 잴 수 없다 —<br>"<b>100년 동안 연평균 기온이 어떻게 변해 왔는가</b>"로 바꿔 정의한다</p>
+  <p class="small">문제를 어떻게 정의하느냐에 따라 그 뒤의 모든 단계가 달라진다 (14쪽)</p>
+</section>
+
+<!-- 7 6단계 -->
 <section class="slide">
-  <div class="kicker">개념 · 문제 해결의 6단계</div>
+  <div class="kicker">개념 · 문제 해결의 6단계 — 필요가 꼬리를 문다</div>
   <div class="diagram">
-  <svg viewBox="0 0 800 228" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이터 과학 문제 해결 6단계의 진행 방향과, 평가 단계에서 되돌아가는 두 갈래 길" style="min-width:640px;max-width:100%;display:block">
+<svg viewBox="0 0 800 228" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이터 과학 문제 해결 6단계의 진행 방향과, 평가 단계에서 되돌아가는 두 갈래 길" style="min-width:640px;max-width:100%;display:block">
     <defs>
       <marker id="l1s6-fwd" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
       <marker id="l1s6-back" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
@@ -170,42 +183,26 @@
     <!-- 캡션 -->
     <text x="400" y="214" text-anchor="middle" font-size="12.5" fill="#7a7f95">여섯 단계는 순서대로 모두 거쳐야 하는 것은 아니다 — 상황에 따라 되돌아가거나 건너뛴다 (『데이터 과학』 14쪽).</text>
   </svg>
-
   </div>
+  <p class="small">방금 한 일이 ① — 필요가 꼬리를 물고 이어진다. 순서대로 모두 거쳐야 하는 것은 아니다 (14쪽).</p>
 </section>
 
-<!-- 6 Q2 -->
-<section class="slide qslide">
-  <div class="kicker blue">🤔 생각해 봅시다</div>
-  <p class="qbig">여섯 단계 중,<br><em>컴퓨터가 대신 못 하는 일</em>은<br>어디에 있을까요?</p>
-</section>
-
-<!-- 7 A2 -->
-<section class="slide aslide">
-  <div class="kicker">✔ 짚고 갑니다</div>
-  <h2>여섯 단계 <b style="color:var(--accent)">전부</b>에 있다</h2>
-  <table class="mini">
-    <tr><th>단계</th><th>사람이 정하는 것</th></tr>
-    <tr><td>① 문제 정의</td><td>무엇을 ‘만족’으로 잴 것인가 — 잔반량인가, 설문인가</td></tr>
-    <tr><td>③ 전처리</td><td>무엇을 버리고 무엇을 남길 것인가</td></tr>
-    <tr><td>⑤ 평가</td><td>이 결과를 어디까지 믿을 것인가</td></tr>
-  </table>
-  <p class="small">계산은 도구가 한다. 무엇을 재고, 버리고, 믿을지는 사람이 정한다.</p>
-</section>
-
-<!-- 8 되돌아감 -->
+<!-- 8 수집 + 막힘 -->
 <section class="slide">
-  <div class="kicker">개념</div>
-  <h2>순서대로만 흐르지 않는다</h2>
-  <p class="point">평가가 만족스럽지 않으면 <b>수집으로, 문제 정의로</b> 되돌아간다</p>
-  <p class="small">"6개의 단계를 순서대로 모두 거쳐야 하는 것은 아니다" — 『데이터 과학』 14쪽</p>
+  <div class="kicker">② 데이터 수집하기</div>
+  <h2>서울의 기온 기록 <b style="color:var(--accent)">seoul.csv</b></h2>
+  <ul class="facts">
+    <li>100년 치 일별 기록이 공개되어 있다</li>
+    <li>이때의 판단 — <b>이 데이터가 우리 질문과 맞는가</b>, 양은 충분한가</li>
+  </ul>
+  <p class="point">데이터는 구했다. 그런데 —<br>100년 치 숫자를 <b>누가 그래프로 바꾸나?</b></p>
 </section>
 
 <!-- 9 바이브 코딩 -->
 <section class="slide">
-  <div class="kicker">우리 수업의 방식 · 바이브 코딩</div>
+  <div class="kicker">그 막힘의 답 · 우리 수업의 방식 — 바이브 코딩</div>
   <div class="diagram">
-  <svg viewBox="0 0 720 178" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="바이브 코딩 세 단계 — 샘플 프롬프트, AI가 준 코드, 개선이 반복되는 흐름" style="min-width:560px;max-width:100%;display:block">
+<svg viewBox="0 0 720 178" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="바이브 코딩 세 단계 — 샘플 프롬프트, AI가 준 코드, 개선이 반복되는 흐름" style="min-width:560px;max-width:100%;display:block">
     <defs>
       <marker id="l1vc-fwd" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
       <marker id="l1vc-back" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
@@ -235,7 +232,6 @@
     <!-- 캡션 -->
     <text x="360" y="160" text-anchor="middle" font-size="12.5" fill="#7a7f95">코드를 읽는 것이 아니라 결과를 읽고, 프롬프트를 고친다.</text>
   </svg>
-
   </div>
 </section>
 
@@ -243,31 +239,39 @@
 <section class="slide">
   <div class="kicker">① 샘플 프롬프트 — 실물</div>
   <div class="prompt">서울의 기온 데이터(seoul.csv)를 읽어서,<br>100년 동안 연평균 기온이 어떻게 변해 왔는지<br>한눈에 보이는 그래프로 그려 줘.</div>
-  <p class="point" style="margin-top:4vh">코드 문법 <b>0줄</b> — 파일 이름과 원하는 결과만 우리말로</p>
+  <p class="point" style="margin-top:4vh">코드 문법 <b>0줄</b> — 방금 정의한 문제를 우리말로 옮긴 것이 곧 프롬프트다</p>
 </section>
 
 <!-- 11 시연 전환 1 -->
 <section class="slide chapter">
   <div class="kicker">🖥 화면 전환 — 시연 ①</div>
   <h2>선 그래프 · 100년의 흐름</h2>
-  <p class="sub">해마다 오르내리지만, 오른쪽으로 갈수록 조금씩 높아진다</p>
+  <p class="sub">프롬프트를 실제로 던지고, 결과를 함께 읽는다</p>
 </section>
 
-<!-- 12 Q3 -->
+<!-- 12 A3 -->
+<section class="slide aslide">
+  <div class="kicker">✔ 짚고 갑니다</div>
+  <h2>들쭉날쭉하지만,<br>오른쪽으로 갈수록 <b style="color:var(--accent)">조금씩 높아지는 흐름</b></h2>
+  <p class="point">수업을 연 질문에 대한 <b>데이터의 첫 답</b> —<br>느낌이 아니라 100년의 기록이 보여 준 것</p>
+</section>
+
+<!-- 13 Q3 -->
 <section class="slide qslide">
   <div class="kicker blue">🤔 생각해 봅시다</div>
-  <p class="qbig">하루하루의 기온을<br><em>히스토그램</em>으로 그리면<br>무슨 모양일까요?</p>
+  <p class="qbig">연평균은 1년 치를 숫자 하나로 요약한 값.<br><br>하루하루의 기온을 <em>히스토그램</em>으로 그리면<br>무슨 모양일까요?</p>
   <div class="choices"><span>산 하나</span><span>봉우리 둘</span><span>평평</span></div>
 </section>
 
-<!-- 13 시연 전환 2 -->
+<!-- 14 시연 전환 2 -->
 <section class="slide chapter">
   <div class="kicker">🖥 화면 전환 — 시연 ②</div>
   <h2>히스토그램 · 분포의 모양</h2>
-  <p class="sub">③ 개선 — "일별 평균기온이 어느 구간에 얼마나 몰려 있는지 히스토그램으로 그려 줘"</p>
+  <p class="sub">③ 개선 — "이번에는 일별 평균기온이 어느 구간에 얼마나 몰려 있는지 히스토그램으로 그려 줘"</p>
+  <p class="small">①②는 거쳤다 — 남아 있던 ③이 지금 처음 쓰인다.</p>
 </section>
 
-<!-- 14 A3 -->
+<!-- 15 A4 -->
 <section class="slide aslide">
   <div class="kicker">✔ 짚고 갑니다</div>
   <h2>봉우리가 <b style="color:var(--accent)">둘</b> — 겨울과 여름</h2>
@@ -278,21 +282,21 @@
   <p class="point">요약 숫자로는 안 보이던 것이, <b>그래프에서 보인다</b></p>
 </section>
 
-<!-- 15 그래프 용도 -->
+<!-- 16 이름 붙이기 ① -->
 <section class="slide">
-  <div class="kicker">개념 · 그래프는 용도가 다르다</div>
+  <div class="kicker">방금 한 일에 이름 붙이기 ① — 그래프 고르기</div>
   <table class="mini">
     <tr><th>그래프</th><th>보여 주는 것</th></tr>
     <tr><td>선 그래프</td><td>시간에 따른 변화</td></tr>
     <tr><td>히스토그램</td><td>값이 어디에 얼마나 몰려 있나 (분포)</td></tr>
     <tr><td>산점도</td><td>두 값 사이의 관계</td></tr>
   </table>
-  <p class="small">무엇이 궁금한지에 따라 고르는 그래프가 달라진다 — 산점도 시연은 시간이 되면</p>
+  <p class="small">같은 데이터에 두 번 물었는데 다른 것이 보인 까닭이다.</p>
 </section>
 
-<!-- 16 세 물음 -->
+<!-- 17 이름 붙이기 ② -->
 <section class="slide">
-  <div class="kicker">개념 · 그래프에서 인사이트를 찾는 세 물음</div>
+  <div class="kicker">방금 한 일에 이름 붙이기 ② — 그래프 읽기, 세 물음</div>
   <ul class="facts">
     <li><b>① 무엇이 보이는가</b> — 모양을 말로 옮긴다</li>
     <li><b>② 예상과 다른 곳은 어디인가</b> — 거기가 발견의 입구</li>
@@ -301,46 +305,61 @@
   <p class="small">"그래프의 가장 큰 가치는 미처 예상하지 못했던 것을 보게 만들 때" — 존 튜키</p>
 </section>
 
-<!-- 17 Q4 -->
+<!-- 18 Q4 -->
 <section class="slide qslide">
   <div class="kicker blue">🤔 생각해 봅시다</div>
-  <p class="qbig">“우리 학교 급식은 <em>맛있는가?</em>”<br><br>이 질문으로 분석을<br>시작할 수 있을까요?</p>
+  <p class="qbig">오늘 코드는 전부 AI가 짰습니다.<br><br>그럼 지금까지 우리는<br><em>무엇을 한 걸까요?</em></p>
 </section>
 
-<!-- 18 A4 -->
+<!-- 19 A5 -->
 <section class="slide aslide">
   <div class="kicker">✔ 짚고 갑니다</div>
-  <h2>‘맛있다’는 잴 수 없다</h2>
-  <p class="point">좋은 질문의 세 조건 — <b>측정 가능 · 데이터로 답 가능 · 범위 명확</b></p>
-  <p class="small">"요일별로 잔반량은 얼마나 다른가?"로 바꾸는 순간, 잴 것과 모을 것이 줄줄이 정해진다</p>
+  <h2>판단은 전부 <b style="color:var(--accent)">사람</b>이 했다</h2>
+  <ul class="facts">
+    <li>무엇으로 잴지 정했다 — <b>① 문제 정의</b></li>
+    <li>데이터가 질문과 맞는지 봤다 — <b>② 수집</b></li>
+    <li>그래프에서 무엇을 볼지 정했다 — <b>③ 탐색</b></li>
+  </ul>
+  <p class="small">계산은 도구가 하고, 무엇을 재고 버리고 믿을지는 사람이 정한다 — 여섯 단계 전부에 사람의 판단이 있다</p>
 </section>
 
-<!-- 19 Q5 -->
+<!-- 20 세 조건 -->
+<section class="slide">
+  <div class="kicker">개념 · 여정을 굴린 첫 판단 — 좋은 질문</div>
+  <ul class="facts">
+    <li><b>측정 가능</b> — ‘연평균 기온’으로 잴 수 있었다</li>
+    <li><b>데이터로 답 가능</b> — 100년 치 기록이 있었다</li>
+    <li><b>범위 명확</b> — 서울, 100년</li>
+  </ul>
+  <p class="point">오늘의 여정이 끝까지 굴러간 것은,<br>출발 질문이 이 <b>세 조건</b>을 갖췄기 때문이다</p>
+</section>
+
+<!-- 21 Q5 -->
 <section class="slide qslide">
-  <div class="kicker blue">🤔 생각해 봅시다 · 고쳐 쓰기</div>
-  <p class="qbig">“요즘 사람들은 책을 안 읽는가?”<br><br>세 조건 중 <em>무엇이 걸리나요?</em><br>어떻게 고칠까요?</p>
+  <div class="kicker blue">🤔 생각해 봅시다</div>
+  <p class="qbig">“우리 학교 급식은 <em>맛있는가?</em>”<br><br>이 질문으로 오늘 같은 여정을<br>시작할 수 있을까요? 무엇이 걸리나요?</p>
 </section>
 
-<!-- 20 A5 -->
+<!-- 22 A6 -->
 <section class="slide aslide">
   <div class="kicker">✔ 짚고 갑니다</div>
-  <h2>‘요즘’과 ‘사람들’의 범위가 없다</h2>
-  <blockquote style="margin-top:3.5vh">최근 10년, 우리나라 청소년의 독서율은 어떻게 변했는가?</blockquote>
-  <p class="point">조건에 안 맞는 질문은 버리지 말고 <b>고쳐 쓴다</b></p>
+  <h2>‘맛있다’는 잴 수 없다 — <b style="color:var(--accent)">측정 가능</b>에서 걸린다</h2>
+  <blockquote style="margin-top:3vh">요일별로 잔반량은 얼마나 다른가?</blockquote>
+  <p class="point">조건에 안 맞는 질문은 버리지 말고 <b>고쳐 쓴다</b> —<br>고치는 순간, 멈췄던 여정이 다시 출발한다</p>
 </section>
 
-<!-- 21 활동 -->
+<!-- 23 활동 -->
 <section class="slide chapter">
-  <div class="kicker">✍️ 활동 · 질문 카드</div>
+  <div class="kicker">✍️ 활동 · 질문 카드 — 이제 너의 질문</div>
   <h2>내 질문 1개를 만든다</h2>
   <ul class="facts">
     <li>내 생활·관심 분야에서 궁금한 것 하나</li>
     <li>세 조건에 맞게 다듬는다 — <b>측정 가능 · 데이터로 답 가능 · 범위 명확</b></li>
-    <li>이 질문을 들고 <b>2차시에 데이터를 찾으러</b> 간다</li>
+    <li>2차시에 <b>이 질문에 맞는 데이터를 찾으러</b> 간다</li>
   </ul>
 </section>
 
-<!-- 22 정리 -->
+<!-- 24 정리 -->
 <section class="slide chapter">
   <div class="kicker">오늘의 한 줄</div>
   <p class="qbig">코드는 AI가 짜고,<br>우리는 데이터를 <em>의심하고 판단한다</em></p>
