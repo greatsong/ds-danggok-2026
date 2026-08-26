@@ -295,3 +295,17 @@ table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var
 .tbquote .h .src { font-weight: 600; color: var(--muted); font-size: 0.8rem; margin-left: 8px; }
 .tbquote .q { margin: 4px 0; line-height: 1.7; }
 .tbquote .t { margin: 6px 0 0; color: #6b5d3f; }
+
+/* ---- 주소 만들기 위젯 (2차시 KOBIS — 키 붙여넣기 → 완성 주소·Secrets 동기화) ---- */
+.urlmaker{border:1.5px dashed var(--accent);background:#fffdf6;border-radius:var(--radius-sm);padding:14px 16px;margin:18px 0}
+.urlmaker .um-label{display:block;font-weight:800;color:#b45309;font-size:.92rem;margin-bottom:8px}
+.urlmaker input{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:.9rem;background:#fff;color:var(--text)}
+.urlmaker input:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.urlmaker .made{margin-top:10px;padding:10px 12px;background:var(--code-bg);color:var(--code-text);border-radius:8px;font-family:var(--mono);font-size:.8rem;word-break:break-all;line-height:1.55;min-height:1.2em}
+.urlmaker .btns{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.urlmaker .copybtn,.urlmaker .openbtn{display:inline-block;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:.85rem;font-weight:800;cursor:pointer;text-decoration:none;font-family:var(--font)}
+.urlmaker .copybtn{background:var(--accent);border-color:var(--accent);color:#fff}
+.urlmaker .copybtn:disabled{background:var(--card);border-color:var(--border);color:var(--muted);cursor:default}
+.urlmaker .copybtn.done{background:var(--green);border-color:var(--green)}
+.urlmaker .openbtn{background:#fff;color:#b45309}
+.urlmaker .um-note{margin-top:9px;font-size:.8rem;color:var(--text-soft);line-height:1.6}

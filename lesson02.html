@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2차시 · 반정형 데이터 · API와 JSON · 어제의 박스오피스 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb3">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -253,7 +253,7 @@
   </table>
 
   <h2>4. 주소창 맨눈 보기 — 약속의 실물 확인</h2>
-  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 선생님이 나눠 준 <b>완성 주소</b>를 주소창에 붙여 넣으면, 꾸며지지 않은 JSON 원문이 화면에 그대로 나타납니다. 붙여 넣기 전에, 요청 주소 자체를 해부해 봅니다.</p>
+  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 클래스룸에서 받은 <b>키</b>를 아래 상자에 붙여 넣으면 어제 날짜가 채워진 <b>완성 주소</b>가 만들어집니다. 그 전에, 요청 주소 자체를 해부해 봅니다.</p>
   <div class="specimen semi" style="margin:18px 0">
     <div class="tag">요청 주소의 해부 — 한 줄에 실려 가는 구성 요소</div>
     <div class="body"><pre class="mini"><span style="color:#3ba6a0;text-decoration:underline">https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json</span>
@@ -262,7 +262,17 @@
 <span style="color:#e8930c">&amp;targetDt=20260825</span>                                <span style="color:#9b8c66">← 조건 — 날짜. 이 값을 바꾸면 응답이 그날 것으로 바뀐다</span></pre></div>
     <div class="note">§3 표의 구성 요소(요청 URL·조건·인증키)가 주소 한 줄에 모두 실려 간다. 응답만 JSON으로 돌아온다.</div>
   </div>
-  <p>주소창에 붙여 넣은 뒤에는, 화면의 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
+  <div class="urlmaker" id="km-box">
+    <span class="um-label">🔗 주소 만들기 — 클래스룸에서 받은 키를 붙여 넣기만 하세요</span>
+    <input type="text" id="km-key" placeholder="여기에 키 붙여넣기" autocomplete="off" spellcheck="false">
+    <div class="made" id="km-url">키를 붙여 넣으면, 어제 날짜가 채워진 완성 주소가 여기 나타납니다</div>
+    <div class="btns">
+      <button class="copybtn" id="km-copy" type="button" disabled>📋 주소 복사</button>
+      <a class="openbtn" id="km-open" target="_blank" rel="noopener" style="display:none">↗ 새 탭에서 열어 보기</a>
+    </div>
+    <div class="um-note">키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다 · 날짜는 한국 시간 기준 어제로 자동 계산 · 아래 5절의 비밀 금고(Secrets) 예시에도 이 키가 자동으로 채워집니다</div>
+  </div>
+  <p>새 탭에 화면 가득 글자 덩어리(JSON)가 뜨면 성공입니다. 한 줄로 뭉쳐 보여도 정상입니다. 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
   <ul>
     <li><b>겉상자와 목록</b> — <code>boxOfficeResult</code> 안의 <code>dailyBoxOfficeList</code>. 영화 한 편이 상자 하나입니다. 2절에서 본 구조 그대로인지 확인합니다.</li>
     <li><b>따옴표 친 숫자</b> — <code>audiCnt</code>(그날 관객수)의 값이 따옴표에 싸여 있습니다. 실습에서 이 함정을 프롬프트로 미리 막습니다.</li>
@@ -285,7 +295,7 @@
       배포된 내 앱 오른쪽 아래의 <b>Manage app</b>을 누르고, 메뉴(⋮)에서 <b>Settings</b>를 엽니다.</li>
     <li><span class="st">Secrets에 키 저장</span><br>
       <b>Secrets</b> 칸에 다음 한 줄을 적고 저장합니다. 등호 왼쪽이 이름, 오른쪽 따옴표 안이 선생님이 준 키입니다.
-      <div class="codewrap code"><span class="label">Secrets에 넣을 한 줄</span><pre>KOBIS_KEY = "선생님이 준 키를 여기에"</pre></div></li>
+      <div class="codewrap code"><span class="label">Secrets에 넣을 한 줄 (4절 상자에 키를 붙여 넣었다면 이미 채워져 있음)</span><pre class="secrets-sync">KOBIS_KEY = "선생님이 준 키를 여기에"</pre></div></li>
     <li><span class="st">저장 — 앱이 스스로 다시 시작</span><br>
       저장하면 앱이 자동으로 다시 시작됩니다. 화면이 잠깐 깜빡여도 고장이 아닙니다.</li>
   </ol>
@@ -514,5 +524,67 @@ requests</pre></div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
 <script src="assets/quiz.js"></script>
+<script>
+// 주소 만들기 위젯 — 키를 붙여 넣으면 어제(KST) 날짜의 완성 주소를 만들고,
+// 5절 Secrets 예시(pre.secrets-sync)에도 같은 키를 채운다. 키는 화면 밖으로 나가지 않는다.
+(function () {
+  var input = document.getElementById("km-key");
+  if (!input) return;
+  var urlBox = document.getElementById("km-url");
+  var copyBtn = document.getElementById("km-copy");
+  var openA = document.getElementById("km-open");
+  var BASE = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json";
+  function yesterdayKST() {
+    var d = new Date(Date.now() + 9 * 3600 * 1000 - 24 * 3600 * 1000);
+    var m = String(d.getUTCMonth() + 1).padStart(2, "0");
+    var day = String(d.getUTCDate()).padStart(2, "0");
+    return "" + d.getUTCFullYear() + m + day;
+  }
+  var secretsPres = document.querySelectorAll("pre.secrets-sync");
+  secretsPres.forEach(function (pre) { pre.dataset.original = pre.textContent; });
+  function syncSecrets(val) {
+    secretsPres.forEach(function (pre) {
+      var text = pre.dataset.original;
+      if (val) {
+        text = text.replace(/KOBIS_KEY = "[^"]*"/, 'KOBIS_KEY = "' + val + '"');
+      }
+      pre.textContent = text;
+    });
+  }
+  function update() {
+    var key = input.value.trim();
+    syncSecrets(key);
+    if (!key) {
+      urlBox.textContent = "키를 붙여 넣으면, 어제 날짜가 채워진 완성 주소가 여기 나타납니다";
+      copyBtn.disabled = true;
+      openA.style.display = "none";
+      return;
+    }
+    var url = BASE + "?key=" + encodeURIComponent(key) + "&targetDt=" + yesterdayKST();
+    urlBox.textContent = url;
+    copyBtn.disabled = false;
+    openA.href = url;
+    openA.style.display = "inline-block";
+  }
+  input.addEventListener("input", update);
+  copyBtn.addEventListener("click", function () {
+    var url = urlBox.textContent;
+    function done() {
+      copyBtn.textContent = "✅ 복사됐습니다!";
+      copyBtn.classList.add("done");
+      setTimeout(function () { copyBtn.textContent = "📋 주소 복사"; copyBtn.classList.remove("done"); }, 1600);
+    }
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = url; document.body.appendChild(ta);
+      ta.select(); document.execCommand("copy");
+      document.body.removeChild(ta); done();
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done).catch(fallback);
+    } else { fallback(); }
+  });
+})();
+</script>
 </body>
 </html>
