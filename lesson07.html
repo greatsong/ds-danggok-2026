@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>7차시 · 회귀 — 직선을 긋다 · 데이터 과학 당곡고</title>
+<title>7차시 · 다중 선형회귀 — 영화 흥행 예측 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -20,248 +20,228 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 7차시</span>
-  <h1>회귀 · <span class="a">직선을 긋다</span></h1>
+  <h1>다중 선형회귀 · <span class="a">영화 흥행을 예측할 수 있을까</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"함께 변한다"와 "원인이다"는 다른 말이다.</div>
-    <span class="by">3차시에서 이상한 값을 의심했다면, 오늘은 상관과 인과를 구분합니다</span>
+    <div class="q">점수가 갑자기 급등하면, 실력보다 먼저 반칙을 의심한다.</div>
+    <span class="by">6차시에서 상관과 인과를 구분했다면, 오늘은 변수가 어디서 왔는지를 따집니다</span>
   </div>
 
-  <p class="lead">3차시에 정리해 둔 서울 기온 데이터로 돌아옵니다. 그때는 과거를 <b>보는</b> 그래프를 만들었다면, 오늘은 미래를 <b>내다보는</b> 직선을 긋습니다. 산점도 위에 가장 잘 맞는 직선 하나를 얹는 것 — 이것이 회귀이고, 우리가 만드는 첫 예측 모델입니다.</p>
+  <p class="lead">6차시의 직선은 독립 변수가 연도 하나였습니다. 그런데 영화 관객 수는 하나의 요인으로 정해지지 않습니다. 오늘은 2~4차시에 다뤄 온 박스오피스 데이터로 <b>변수 여러 개짜리 회귀</b>를 만들고, 변수를 넣고 빼며 예측 점수가 어떻게 달라지는지 관찰합니다. 그 과정에서 수업 후반에 다시 만나게 될 중요한 사건 하나를 목격합니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>상관에서 회귀로</b> — 함께 변하는 관계를 수치로 재고, 직선으로 요약한다</li>
-      <li><b>바이브 코딩</b> — 연도 슬라이더로 예상 기온이 나오는 예측기 페이지를 내 앱에 추가</li>
-      <li><b>판단</b> — 창을 바꾸면 "서울은 얼마나 더워지는가"의 답이 3배 벌어진다</li>
+      <li><b>변수 발상</b> — 관객 수를 미리 맞히려면 무엇을 알아야 하는가 (폼 Ⅲ-01a)</li>
+      <li><b>바이브 코딩</b> — 변수를 골라 끼우는 총 관객 수 예측 페이지를 내 앱에 추가</li>
+      <li><b>발견</b> — 변수를 더했는데 점수가 내려가고, 어떤 변수 하나에 0.90으로 급등하는 두 사건</li>
     </ul>
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>내일 기온, 다음 달 전기 요금, 개봉 영화의 관객 수 — 세상은 끊임없이 미래의 숫자를 궁금해합니다. 그리고 그 예측의 가장 오래되고 단단한 도구가 <b>과거 데이터에 직선을 긋는 것</b>입니다. 부동산 시세 전망, 성적 추이 분석, 기후 보고서의 "100년에 몇 도" 같은 문장이 전부 오늘 배우는 회귀에서 나옵니다. 다만 직선은 강력한 만큼 오해도 쉽게 만듭니다. 어떤 데이터로, 어느 구간에서 그은 직선인지를 따지는 눈까지 갖춰야 오늘 수업이 완성됩니다.</p>
+  <p>영화사는 개봉 전에 상영관 수를 정해야 하고, 투자사는 제작 단계에서 흥행을 가늠해야 합니다. 배달 앱은 시간대별 수요를, 편의점은 발주량을 여러 요인으로 예측합니다. 현실의 예측 문제는 대부분 "요인이 여러 개"이고, 그래서 실무에서 쓰이는 회귀는 대부분 오늘 배우는 다중 회귀입니다. 동시에, 변수를 더할수록 점수가 오르는 이 도구에는 함정이 하나 숨어 있습니다. <b>점수를 올려 주는 변수가 반칙일 수 있다</b>는 것 — 오늘 그 장면을 직접 목격합니다.</p>
 
-  <h2>1. 개념 이해 — 상관에서 회귀로</h2>
+  <h2>1. 개념 이해 — 직선에서 평면으로</h2>
   <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 70·119쪽</span></div>
-    <p class="q">"상관계수는 상관관계의 강도와 방향을 나타내는 정량적인 단위로, 값의 범위는 −1부터 +1 까지이다." <span class="src">(70쪽)</span></p>
-    <p class="q">"선형 회귀는 두 가지 이상의 속성 사이에 선 모양의 관계가 있다고 가정하고 데이터를 가장 잘 대표하는 선을 찾는 분석 방법이다." <span class="src">(119쪽)</span></p>
-    <p class="t">→ 상관은 두 속성이 함께 변하는 <b>정도</b>를 재고, 회귀는 그 관계를 <b>직선 하나로 요약</b>해 예측에 쓴다.</p>
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 128·112쪽</span></div>
+    <p class="q">"다중 선형 회귀(multiple linear regression)는 영향을 미치는 요인이 여러 개인 경우에 종속 변수를 설명하기 위해 여러 개의 독립 변수를 이용하는 회귀 분석이다." <span class="src">(128쪽)</span></p>
+    <p class="q">"학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다." <span class="src">(112쪽)</span></p>
+    <p class="t">→ 독립 변수가 여러 개면 다중 회귀. 그리고 모델의 점수는 학습에 쓰지 않은 문제(테스트 데이터)로 매겨야 믿을 수 있다.</p>
   </div>
-  <p>순서가 있습니다. 먼저 산점도를 그려 두 속성이 함께 움직이는지 <b>눈으로</b> 확인하고, 상관계수로 그 강도를 <b>수치로</b> 잽니다. 관계가 선 모양이라는 판단이 서면, 그제서야 데이터를 가장 잘 대표하는 직선을 긋습니다. 교과서는 예측하려는 값을 <b>종속 변수</b>, 예측에 사용하는 값을 <b>독립 변수</b>, 둘의 관계를 가장 잘 대표하는 선을 <b>회귀선</b>이라고 부릅니다(119쪽). 우리 문제에서는 연도가 독립 변수, 연평균기온이 종속 변수입니다.</p>
+  <p>단순 회귀가 "쪽수 → 독서 시간"처럼 독립 변수 하나로 직선을 그었다면, 다중 회귀는 독립 변수마다 가중치를 하나씩 두고 이를 모두 더해 예측합니다. 변수가 둘이면 직선 대신 평면이 되고, 셋 이상이면 그림으로 그릴 수는 없지만 원리는 같습니다. <b>각 변수의 가중치</b>를 보면 어느 요인이 예측에 크게 기여하는지도 읽을 수 있습니다.</p>
+  <h3>점수는 처음 보는 문제로 매긴다</h3>
+  <p>변수가 늘어난 만큼, 점수를 매기는 규칙도 분명히 해 둡니다. 학습에 쓴 영화로 점수를 재면, 모델이 규칙을 이해한 것인지 답을 외운 것인지 구분할 수 없습니다. 시험 범위의 기출문제를 그대로 시험에 내는 것과 같습니다. 그래서 데이터의 일부를 <b>테스트 데이터</b>로 미리 떼어 두고, 학습이 끝난 뒤 이 "처음 보는 영화들"로 점수를 잽니다. 오늘 화면에 뜨는 점수는 전부 이 방식으로 계산된 값입니다.</p>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="216편을 영화 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 학습 150편으로 가중치를 학습한 뒤 테스트 66편으로 점수를 재는 구조">
+      <defs>
+        <marker id="arGold8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+        <marker id="arTeal8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+        <g id="blk8">
+          <rect x="0" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="10" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="20" y="0" width="9" height="24" fill="#3ba6a0"/>
+          <rect x="30" y="0" width="9" height="24" fill="#f4b400"/><rect x="40" y="0" width="9" height="24" fill="#f4b400"/><rect x="50" y="0" width="9" height="24" fill="#f4b400"/><rect x="60" y="0" width="9" height="24" fill="#f4b400"/><rect x="70" y="0" width="9" height="24" fill="#f4b400"/><rect x="80" y="0" width="9" height="24" fill="#f4b400"/><rect x="90" y="0" width="9" height="24" fill="#f4b400"/>
+        </g>
+      </defs>
+      <text x="20" y="20" font-size="12.5" font-weight="800" fill="#2b2d3a">분석 대상 216편 · 영화 코드 순 정렬</text>
+      <use href="#blk8" x="20" y="30"/><use href="#blk8" x="128" y="30"/><use href="#blk8" x="236" y="30"/><use href="#blk8" x="344" y="30"/><use href="#blk8" x="452" y="30"/><use href="#blk8" x="560" y="30"/>
+      <text x="674" y="48" font-size="15" font-weight="800" fill="#7a7f95">…</text>
+      <rect x="20" y="72" width="13" height="13" fill="#3ba6a0"/>
+      <text x="40" y="83" font-size="12" fill="#2b2d3a">테스트 66편 — 학습에 쓰지 않음</text>
+      <rect x="256" y="72" width="13" height="13" fill="#f4b400"/>
+      <text x="276" y="83" font-size="12" fill="#2b2d3a">학습 150편</text>
+      <text x="20" y="123" font-size="12.5" font-weight="800" fill="#2b2d3a">학습 150편</text>
+      <line x1="112" y1="118" x2="180" y2="118" stroke="#f4b400" stroke-width="2.5" marker-end="url(#arGold8)"/>
+      <rect x="188" y="102" width="168" height="32" rx="8" fill="#fff8e6" stroke="#f4b400"/>
+      <text x="272" y="123" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">모델 — 가중치 학습</text>
+      <text x="20" y="163" font-size="12.5" font-weight="800" fill="#2b2d3a">테스트 66편</text>
+      <line x1="112" y1="158" x2="180" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
+      <rect x="188" y="142" width="190" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
+      <text x="283" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">처음 보는 영화로 예측</text>
+      <line x1="384" y1="158" x2="414" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
+      <rect x="420" y="142" width="104" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
+      <text x="472" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">점수(R²)</text>
+      <text x="360" y="196" text-anchor="middle" font-size="12" fill="#7a7f95">학습에 쓴 문제로 점수를 재면 이해인지 암기인지 알 수 없다 — 『데이터 과학』 112쪽</text>
+    </svg>
+  </div>
+  <p>우리 데이터에는 지난 1년 극장가를 지나간 영화들이 담겨 있고, 그중 분석 기간 안에 개봉한 <b>216편</b>이 오늘의 학습 재료입니다. 변수 후보는 "언제 알 수 있는 값인가"를 기준으로 이렇게 갈립니다.</p>
   <table class="daymap">
-    <thead><tr><th>단계</th><th>도구</th><th>묻는 말</th></tr></thead>
+    <thead><tr><th>구분</th><th>변수 예</th><th>알 수 있는 시점</th></tr></thead>
     <tbody>
-      <tr><td><b>① 산점도</b></td><td>점 그래프</td><td>두 속성이 함께 움직이는 모양이 보이는가</td></tr>
-      <tr><td><b>② 상관계수</b></td><td>−1 ~ +1의 수치</td><td>그 관계가 얼마나 강한가, 방향은 어느 쪽인가</td></tr>
-      <tr><td><b>③ 회귀선</b></td><td>가장 잘 맞는 직선</td><td>이 관계로 새 값을 예측하면 얼마가 나오는가</td></tr>
+      <tr><td><b>개봉 전 변수</b></td><td>첫날 스크린 수 · 상영횟수 · 성수기 여부 · 장르 · 국적</td><td>개봉일에 이미 확정</td></tr>
+      <tr><td><b>개봉 후 변수</b></td><td>첫 주 관객 수 · 누적 관객 수</td><td>개봉하고 시간이 지나야 확정</td></tr>
     </tbody>
   </table>
-  <h3>직선을 읽는 두 숫자 — 기울기와 편향</h3>
-  <p>직선 하나는 숫자 두 개로 정해집니다. <b>기울기</b>는 "독립 변수가 1 커질 때 종속 변수가 얼마나 변하는가"입니다. 연도-기온 직선이라면 기울기가 곧 "1년에 몇 도씩 오르는가"이고, 100을 곱하면 뉴스에서 보던 "100년에 몇 도"가 됩니다. 교과서는 기울기를 <b>가중치</b>, 직선의 출발 높이를 <b>편향</b>이라고 부릅니다(119쪽). 숫자 두 개가 데이터 100여 년을 요약하는 셈입니다.</p>
-  <h3>어느 직선이 "가장 잘 맞는" 직선인가</h3>
-  <p>같은 점들 위에도 직선은 무수히 그을 수 있습니다. 교과서 120쪽은 두 후보 직선을 놓고 "실젯값과 예측값의 차이", 곧 <b>오차</b>가 작은 쪽을 고르라고 말합니다. AI가 하는 학습도 원리는 같습니다 — 수많은 직선 가운데 오차가 가장 작은 기울기·편향 조합을 찾아내는 계산입니다. 이 "오차로 판정한다"는 원리는 9차시에 활동지로 직접 손계산합니다. 오늘은 AI에게 계산을 맡기고, 나온 직선을 읽는 데 집중합니다.</p>
+  <p>이 구분이 오늘 수업의 복선입니다. 지금은 당연해 보이지만, 실습 후반에 이 경계선이 점수를 가르는 결정적인 선이 됩니다.</p>
   <div class="callout mini">
-    <div class="h">📝 상관 사례 먼저 모으기</div>
-    <p>실습 전에 생활 속 상관 사례를 폼 Ⅱ-03a·Ⅱ-03b로 모읍니다.</p>
+    <div class="h">📝 변수 발상부터 — 폼 Ⅲ-01a</div>
+    <p>교과서 106쪽 해 보기 ①은 태풍의 진로를 예측하려면 어떤 데이터가 필요한지 묻습니다. 같은 발상을 영화로 옮겨 봅니다. "총 관객 수를 미리 맞히려면 무엇을 알아야 하는가" — 개봉 시기, 장르, 상영관 수, 전작의 성적, 출연 배우… 떠오르는 후보를 폼 Ⅲ-01a에 적고 시작합니다.</p>
   </div>
 
-  <h2>2. 실습 — 기온 예측기 만들기 (바이브 코딩)</h2>
-  <p>순서를 지킵니다. 직선부터 긋는 것이 아니라, 연도-연평균기온 산점도에서 점들이 선 모양의 추세를 보이는지 먼저 확인합니다. 관계가 보인다는 판단이 서야 직선을 얹을 자격이 생깁니다.</p>
-  <p>그리고 3차시의 발견을 기억합니까. 한국전쟁 구간의 결측 때문에, 관측일이 적은 해의 연평균은 반쪽짜리 값이었습니다. 직선을 긋기 전에 그 해들을 걸러 내는 것이 오늘 프롬프트의 첫 조건입니다. 필터를 통과한 <b>114개 연도(1908~2025)</b>가 학습 재료가 됩니다.</p>
+  <h2>2. 실습 — 총 관객 수 예측기 (바이브 코딩)</h2>
+  <p>4차시 산점도에서 질문 하나를 남겨 두었습니다 — 스크린을 많이 받은 영화가 관객도 많다면, <b>이 점들 위에 직선을 긋고 새 영화의 관객 수를 미리 맞힐 수 있지 않을까?</b> 오늘 그 질문에 답합니다. 실습은 모두가 같은 공통 스냅샷으로 진행합니다.</p>
+  <div class="callout mini">
+    <div class="h">📦 오늘의 데이터</div>
+    <ul>
+      <li><b>kobis_daily.csv</b> — 지난 1년(354일)의 일별 박스오피스 톱10 기록 3,540행, 영화 296편</li>
+      <li><b>kobis_movies.csv</b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 기간 안에 개봉한 216편</li>
+    </ul>
+    <p>3·4차시 그래프 도감에서 쓰던 바로 그 두 표입니다 — 오늘은 읽는 데서 나아가 예측의 재료로 씁니다.</p>
+  </div>
 
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 스트림릿 앱에 "기온 예측기" 페이지를 추가해 줘.
-서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv)로
-연도별 평균기온을 구하되, 아직 진행 중인 올해와 관측일이 300일이 안 되는 해는 빼 줘.
-남은 연평균기온에 가장 잘 맞는 회귀 직선을 구해서 산점도 위에 그려 주고,
-연도를 슬라이더로 고르면 그 해의 예상 기온이 크게 표시되게 해 줘.
-슬라이더 범위는 1900년부터 2100년까지.</pre></div>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 스트림릿 앱에 "영화 흥행 예측" 페이지를 추가해 줘.
+박스오피스 데이터(kobis_daily.csv)와 영화 정보 표(kobis_movies.csv)를 합쳐서
+영화의 총 관객 수를 예측하는 다중 회귀 모델을 만들어 줘.
+어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,
+학습에 쓰지 않은 영화들로 잰 예측 점수와
+예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.</pre></div>
     </li>
-    <li><span class="st">② AI가 준 코드 — 실행하고 직선을 읽는다</span><br>
-      산점도 위에 직선이 나타납니다. 슬라이더를 내년으로, 2045년으로 옮겨 봅니다. 내가 만든 작은 AI가 미래의 숫자를 내놓습니다. 이 값을 얼마나 믿어야 하는지는 잠시 미뤄 두고, 먼저 직선이 데이터의 추세와 어울리는지 눈으로 확인합니다.</li>
-    <li><span class="st">③ 개선 프롬프트 — 기울기를 읽을 수 있는 숫자로</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>직선의 기울기를 "100년에 몇 도 오르는가"로 바꿔 화면에 크게 보여 줘.
-그리고 전체 기간으로 구한 기울기와 최근 20년만으로 구한 기울기를
-나란히 비교해서 보여 줘.</pre></div>
+    <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
+      화면에 예측 점수가 표시됩니다. 이 점수는 결정계수라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 8차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 변수의 출처를 나눠서 비교한다</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>변수를 "개봉 전에 알 수 있는 것"과 "개봉 후에야 알 수 있는 것"으로 나눠 줘.
+개봉 전 변수만 쓴 경우와 개봉 후 정보까지 넣은 경우의 예측 점수를
+나란히 비교해서, 차이가 한눈에 보이게 해 줘.</pre></div>
     </li>
   </ol>
 
   <div class="callout tip">
-    <div class="h">💡 프롬프트에 조건이 붙는 이유</div>
-    <p>"올해 제외 · 관측일 300일 미만 제외"라는 두 조건은 3차시에 데이터를 직접 살펴본 사람만 쓸 수 있습니다. 같은 도구를 쓰더라도, 데이터의 사정을 아는 사람과 모르는 사람의 프롬프트는 이렇게 달라집니다.</p>
+    <div class="h">💡 프롬프트가 하는 일과 내가 하는 일</div>
+    <p>모델을 만드는 계산 — 표 합치기, 가중치 찾기, 테스트 데이터 떼어 두기 — 는 전부 AI의 몫입니다. 우리가 한 일은 파일 이름을 지정하고, <b>변수를 고르는 권한</b>과 <b>점수를 재는 조건</b>을 요구한 것입니다. 어떤 변수를 켜고 끌지, 나온 점수를 어떻게 읽을지는 도구가 대신해 주지 않습니다. 그것이 오늘 수업의 본론입니다.</p>
   </div>
 
-  <h2>3. 발견 사건 — 창을 바꾸면 답이 3배 벌어진다</h2>
-  <p>③을 실행하면 화면에 기울기 두 개가 나란히 표시됩니다. 학습에 쓰는 기간(창)을 바꿔 가며 재면 다음과 같습니다. 아래 수치는 필터를 적용한 서울 기온 실측값입니다.</p>
+  <h2>3. 발견 사건 — 내려가는 점수, 치솟는 점수</h2>
+  <p>③을 실행하면 다음과 같은 결과가 나타납니다. 분석 대상 216편을 영화 코드 순으로 정렬해 10편 중 3편(66편)을 테스트로 떼어 두고, 나머지 150편으로 학습한 뒤 <b>떼어 둔 66편으로</b> 잰 점수입니다.</p>
   <table class="daymap">
-    <thead><tr><th>학습 창</th><th>기울기 (℃/100년)</th><th>읽기</th></tr></thead>
+    <thead><tr><th>사용한 변수</th><th>알 수 있는 시점</th><th>테스트 점수(R²)</th></tr></thead>
     <tbody>
-      <tr><td><b>전체 114년</b></td><td><b>+2.60</b></td><td>한 세기를 관통하는 완만한 상승</td></tr>
-      <tr><td>최근 50년</td><td>+3.96</td><td>상승이 빨라지고 있다</td></tr>
-      <tr><td>최근 30년</td><td>+3.82</td><td>데이터가 줄수록 값이 출렁인다</td></tr>
-      <tr><td><b>최근 20년</b></td><td><b>+8.14</b></td><td>전체 기간의 3배가 넘는 가파름</td></tr>
+      <tr><td>첫날 스크린 수만</td><td>개봉 전</td><td><b>0.31</b></td></tr>
+      <tr><td>개봉 전 변수 3종 (스크린 + 상영횟수 + 성수기)</td><td>개봉 전</td><td><b>0.24</b> — 더 넣었는데 내려감</td></tr>
+      <tr><td>위 3종 + <b>첫 주 관객 수</b></td><td><b>개봉 후 1주</b></td><td><b>0.90</b></td></tr>
     </tbody>
   </table>
-  <svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 산점도 위에서 학습 창이 다른 회귀 직선 두 개가 2045년 예측값 13.9도와 15.7도로 갈라지는 그림">
-    <defs>
-      <marker id="l7w-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto-start-reverse"><path d="M0,0 L9,4.5 L0,9 z" fill="#6b6350"/></marker>
-    </defs>
-    <!-- 배경 — 학습 범위 안/밖 -->
-    <rect x="60" y="40" width="390" height="290" fill="#faf3dd"/>
-    <rect x="450" y="40" width="250" height="290" fill="#ffffff"/>
-    <rect x="60" y="40" width="640" height="290" fill="none" stroke="#f0e2bc" stroke-width="1.5"/>
-    <text x="255" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#a08c5a">학습에 쓴 범위 (1908~2025)</text>
-    <text x="575" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#b0a78f">학습 범위 밖 — 9차시에서 다시</text>
-    <!-- 축 제목 -->
-    <text x="60" y="28" text-anchor="start" font-size="11" fill="#8a8069">연평균기온(℃)</text>
-    <text x="700" y="368" text-anchor="end" font-size="11" fill="#8a8069">연도</text>
-    <!-- 산점도 (모식 표기) -->
-    <g fill="#c4bba6">
-      <circle cx="65" cy="326" r="3.5"/><circle cx="79" cy="308" r="3.5"/><circle cx="93" cy="320" r="3.5"/><circle cx="107" cy="302" r="3.5"/>
-      <circle cx="121" cy="314" r="3.5"/><circle cx="135" cy="296" r="3.5"/><circle cx="149" cy="309" r="3.5"/><circle cx="163" cy="291" r="3.5"/>
-      <circle cx="177" cy="305" r="3.5"/><circle cx="191" cy="285" r="3.5"/><circle cx="205" cy="298" r="3.5"/><circle cx="219" cy="280" r="3.5"/>
-      <circle cx="233" cy="292" r="3.5"/><circle cx="247" cy="271" r="3.5"/><circle cx="261" cy="287" r="3.5"/><circle cx="275" cy="266" r="3.5"/>
-      <circle cx="289" cy="281" r="3.5"/><circle cx="303" cy="261" r="3.5"/><circle cx="317" cy="274" r="3.5"/><circle cx="331" cy="255" r="3.5"/>
-      <circle cx="345" cy="270" r="3.5"/><circle cx="359" cy="248" r="3.5"/><circle cx="373" cy="263" r="3.5"/><circle cx="387" cy="250" r="3.5"/>
-      <circle cx="401" cy="244" r="3.5"/><circle cx="415" cy="236" r="3.5"/><circle cx="429" cy="228" r="3.5"/><circle cx="443" cy="220" r="3.5"/>
-    </g>
-    <!-- y 눈금 안내선 (13.9 · 15.7) -->
-    <line x1="60" y1="227" x2="517" y2="227" stroke="#f4b400" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
-    <line x1="60" y1="179" x2="517" y2="179" stroke="#e8930c" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
-    <text x="54" y="231" text-anchor="end" font-size="11" fill="#a97f00">13.9</text>
-    <text x="54" y="183" text-anchor="end" font-size="11" fill="#b25f00">15.7</text>
-    <!-- 회귀 직선 2개 -->
-    <line x1="60" y1="321" x2="700" y2="189" stroke="#f4b400" stroke-width="3"/>
-    <line x1="383" y1="266" x2="700" y2="61" stroke="#e8930c" stroke-width="3"/>
-    <text x="605" y="258" text-anchor="middle" font-size="12.5" font-weight="800" fill="#a97f00">전체 114년 · +2.60℃/100년</text>
-    <text x="585" y="88" text-anchor="middle" font-size="12.5" font-weight="800" fill="#b25f00">최근 20년 · +8.14℃/100년</text>
-    <!-- 2045년 세로 점선과 두 교점 -->
-    <line x1="517" y1="70" x2="517" y2="330" stroke="#8a8069" stroke-width="1.5" stroke-dasharray="4 4"/>
-    <circle cx="517" cy="227" r="5" fill="#f4b400" stroke="#ffffff" stroke-width="1.5"/>
-    <circle cx="517" cy="179" r="5" fill="#e8930c" stroke="#ffffff" stroke-width="1.5"/>
-    <line x1="538" y1="187" x2="538" y2="219" stroke="#6b6350" stroke-width="1.8" marker-start="url(#l7w-ar)" marker-end="url(#l7w-ar)"/>
-    <text x="548" y="183" text-anchor="start" font-size="12" font-weight="800" fill="#b25f00">15.7℃</text>
-    <text x="548" y="234" text-anchor="start" font-size="12" font-weight="800" fill="#a97f00">13.9℃</text>
-    <text x="548" y="208" text-anchor="start" font-size="12" font-weight="700" fill="#6b6350">같은 2045년, 두 답</text>
-    <!-- x 눈금 -->
-    <g stroke="#c9c0a8" stroke-width="1.5">
-      <line x1="60" y1="330" x2="60" y2="336"/><line x1="200" y1="330" x2="200" y2="336"/><line x1="367" y1="330" x2="367" y2="336"/>
-      <line x1="450" y1="330" x2="450" y2="336"/><line x1="517" y1="330" x2="517" y2="336"/><line x1="700" y1="330" x2="700" y2="336"/>
-    </g>
-    <g font-size="11" fill="#8a8069" text-anchor="middle">
-      <text x="60" y="350">1908</text><text x="200" y="350">1950</text><text x="367" y="350">2000</text>
-      <text x="450" y="350">2025</text><text x="517" y="350" font-weight="800" fill="#6b6350">2045</text><text x="692" y="350">2100</text>
-    </g>
-  </svg>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">점의 위치는 추세를 나타낸 모식 표기입니다. 같은 점들 위에서 학습 창이 다른 두 직선이, 같은 2045년에 13.9℃와 15.7℃로 갈라집니다.</p>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 680 264" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="변수 조합별 테스트 점수 막대 그림 — 첫날 스크린 수만 0.31, 개봉 전 변수 3종 0.24로 하락, 첫 주 관객 수를 더하면 0.90으로 급등하며 데이터 누수 경계선을 넘는다">
+      <defs>
+        <pattern id="hatch8" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+          <rect width="8" height="8" fill="#e45756"/>
+          <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="2" stroke-opacity="0.45"/>
+        </pattern>
+      </defs>
+      <text x="440" y="22" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">테스트 점수(R²) — 떼어 둔 66편으로 잰 값</text>
+      <line x1="240" y1="34" x2="240" y2="210" stroke="#f0e2bc"/>
+      <line x1="440" y1="34" x2="440" y2="210" stroke="#f0e2bc"/>
+      <line x1="640" y1="34" x2="640" y2="210" stroke="#f0e2bc"/>
+      <line x1="240" y1="210" x2="640" y2="210" stroke="#f0e2bc"/>
+      <text x="240" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0</text>
+      <text x="440" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0.5</text>
+      <text x="640" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">1.0</text>
+      <text x="228" y="61" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">첫날 스크린 수만</text>
+      <rect x="240" y="44" width="124" height="26" fill="#f4b400"/>
+      <text x="372" y="61" font-size="12.5" font-weight="800" fill="#2b2d3a">0.31</text>
+      <text x="228" y="97" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">개봉 전 변수 3종</text>
+      <text x="228" y="112" text-anchor="end" font-size="10.5" fill="#7a7f95">(스크린+상영횟수+성수기)</text>
+      <rect x="240" y="86" width="96" height="26" fill="#f4b400"/>
+      <text x="344" y="103" font-size="12.5" font-weight="800" fill="#2b2d3a">0.24</text>
+      <text x="384" y="103" font-size="12.5" font-weight="800" fill="#e8930c">↓ 더 넣었는데 하락</text>
+      <line x1="16" y1="128" x2="664" y2="128" stroke="#e45756" stroke-width="1.5" stroke-dasharray="7 5"/>
+      <text x="340" y="144" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">여기부터 개봉 후 정보 — 예측 시점에 알 수 있는가?</text>
+      <text x="228" y="171" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">3종 + 첫 주 관객 수</text>
+      <rect x="240" y="154" width="360" height="26" fill="url(#hatch8)" stroke="#e45756"/>
+      <text x="608" y="171" font-size="12.5" font-weight="800" fill="#e45756">0.90</text>
+      <text x="240" y="197" font-size="12" font-weight="800" fill="#e45756">⚠ 개봉 후에야 아는 값 — 데이터 누수</text>
+      <text x="340" y="252" text-anchor="middle" font-size="12.5" fill="#7a7f95">216편 중 150편으로 학습, 처음 보는 66편으로 채점한 실측값</text>
+    </svg>
+  </div>
   <div class="callout warn">
-    <div class="h">⚠️ 어느 직선이 진짜인가</div>
-    <p>둘 다 계산은 정확합니다. 다만 <b>다른 질문에 답하는 직선</b>입니다. 전체 114년의 직선은 "지난 한 세기의 평균 추세"를, 최근 20년의 직선은 "요즘의 가파름"을 요약합니다. 같은 2045년을 물어도 예상 기온이 13.9℃와 15.7℃로 갈라집니다. 직선이 내놓는 숫자를 만나면, 그 직선이 <b>어느 창에서 학습되었는지</b>부터 물어야 하는 이유입니다.</p>
+    <div class="h">⚠️ 두 장면을 나눠서 읽어야 한다</div>
+    <ul>
+      <li><b>장면 1 — 예측의 겸손, 그리고 이상한 하락.</b> 개봉 전에 알 수 있는 변수로는 0.3 안팎 — 흥행은 개봉 전 정보만으로 3분의 1도 설명되지 않는다. 게다가 변수를 둘 더 넣자 점수가 오히려 0.24로 <b>내려갔다</b>. 학습 데이터에서는 변수가 많을수록 점수가 오르지만, 처음 보는 영화 앞에서는 외운 것이 통하지 않는다 — 교과서 134쪽이 과대적합이라 부르는 현상의 예고편이다(8차시에서 다시 만난다).</li>
+      <li><b>장면 2 — 급등의 정체.</b> 첫 주 관객 수를 넣는 순간 0.90으로 치솟는다. 그런데 이 변수는 "개봉 전에 총 관객을 예측한다"는 문제에서는 <b>예측 시점에 알 수 없는 미래 정보</b>다. 첫 주 성적이 좋은 영화가 총 관객도 많은 것은 당연하므로, 점수 급등은 실력이 아니라 정답 일부를 미리 본 결과다.</li>
+    </ul>
   </div>
-  <p>하나 더 시험해 봅니다. 슬라이더를 2100년까지 밀어 보세요. 예측값은 주저 없이 나옵니다. 그러나 직선은 1908~2025년의 데이터로 학습되었습니다. 학습 범위를 한참 벗어난 예측을 얼마나 믿어야 하는지 — 이 물음은 9차시에서 정면으로 다룹니다.</p>
-  <div class="callout check">
-    <div class="h">✔️ 내 앱이 자라고 있다</div>
-    <p>4차시에 배포한 내 포트폴리오 앱에 오늘 "기온 예측기" 페이지가 추가되었습니다. 그래프를 보여 주던 앱이 처음으로 미래의 숫자를 내놓는 앱이 되었습니다. 이 페이지는 9차시에 평가 기능이 붙으며 한 번 더 자랍니다.</p>
+  <p>변수 하나를 더했더니 점수가 0.24에서 0.90으로 뛰었다면, 기뻐하기 전에 물어야 합니다. <b>"그 변수, 예측하는 시점에 정말 알 수 있는 값인가?"</b> 미래 정보가 새어 들어와 점수를 부풀리는 이 현상을 데이터 누수라고 부릅니다. 10차시 분류 평가에서 이 사건을 다시 만나 정면으로 해부합니다.</p>
+  <div class="callout tip">
+    <div class="h">💡 그렇다면 0.90은 쓸모없는 숫자인가</div>
+    <p>아닙니다. 질문이 달라지면 정당한 변수가 됩니다. "개봉 1주가 지난 시점에서 남은 흥행을 전망한다"는 문제라면 첫 주 관객은 그 시점에 알 수 있는 값이므로 반칙이 아닙니다. 변수의 좋고 나쁨은 변수 자체가 아니라 <b>문제의 시점 설정</b>이 정합니다.</p>
   </div>
+  <h2>4. 개념 정리 — 좋은 점수가 좋은 모델인가</h2>
+  <p>오늘 배운 것을 정리합니다. 다중 회귀는 여러 독립 변수에 가중치를 매겨 종속 변수를 예측하는 도구이고, 점수는 학습에 쓰지 않은 데이터로 매겨야 믿을 수 있습니다. 그리고 실측 데이터가 보여 준 두 숫자 — 0.24와 0.90 — 는 서로 다른 교훈을 남겼습니다. 낮은 점수는 흥행이 원래 미리 알기 어려운 일임을 보여 주고, 급등한 점수는 성적이 갑자기 오르면 반칙부터 의심해야 한다는 경고입니다. 수업을 시작하며 폼 Ⅲ-01a에 적었던 변수 후보 중 "개봉 후에야 알 수 있는 것"이 섞여 있었는지 표시해 보면, 오늘의 발견이 더 선명해집니다.</p>
+  <p>그런데 우리는 아직 이 점수의 정체를 모릅니다. 0.24는 무엇의 0.24이고, 1에 가깝다는 것은 정확히 무슨 뜻일까요. 6차시의 기온 직선은 얼마나 믿을 만한 걸까요. 다음 시간, 계산기 하나 들고 이 점수를 <b>손으로 직접</b> 계산합니다.</p>
 
-  <h2>4. 판단 — 상관은 인과가 아니다</h2>
-  <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 72쪽</span></div>
-    <p class="q">"상관관계가 있는 데이터 속성 중에서 원인과 결과의 관계가 있는 데이터 속성 간 관계를 인과관계라고 한다." <span class="src">(72쪽)</span></p>
-    <p class="t">→ 상관은 넓고 인과는 그 안의 좁은 영역이다. 함께 변한다고 해서 한쪽이 다른 쪽의 원인인 것은 아니다.</p>
-  </div>
-  <p>아이스크림 판매량과 물놀이 사고 건수는 함께 오르내립니다. 그렇다고 아이스크림이 사고의 원인일까요. 둘 뒤에는 <b>여름철 기온</b>이라는 공통 요인이 있을 뿐입니다. 이런 사례에서 상관을 인과로 잘못 읽으면 "아이스크림을 금지하자" 같은 엉뚱한 결론이 나옵니다. 우리 직선도 마찬가지입니다. 연도-기온의 상관이 강하다는 것이 "시간이 흘러서 더워졌다"는 인과 설명은 아닙니다. 원인 후보(온실가스, 도시화 등)를 밝히는 일은 별도의 검증이 필요한, 회귀 바깥의 작업입니다.</p>
-  <svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="여름철 기온이라는 공통 요인이 아이스크림 판매량과 물놀이 사고 건수에 각각 영향을 주어 상관이 생기지만 둘 사이에 원인 관계는 없다는 구조 그림" style="max-width:560px;display:block;margin:14px auto 0">
-    <defs>
-      <marker id="l7c-gr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#54a24b"/></marker>
-    </defs>
-    <rect x="185" y="16" width="190" height="52" rx="12" fill="#fdf3d8" stroke="#f4b400" stroke-width="2"/>
-    <text x="280" y="38" text-anchor="middle" font-size="15" font-weight="800" fill="#5a4300">여름철 기온</text>
-    <text x="280" y="57" text-anchor="middle" font-size="11.5" fill="#a08c5a">공통 요인</text>
-    <line x1="238" y1="70" x2="152" y2="124" stroke="#54a24b" stroke-width="2.5" marker-end="url(#l7c-gr)"/>
-    <line x1="322" y1="70" x2="408" y2="124" stroke="#54a24b" stroke-width="2.5" marker-end="url(#l7c-gr)"/>
-    <text x="172" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3d7a36">영향</text>
-    <text x="388" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3d7a36">영향</text>
-    <rect x="30" y="130" width="190" height="48" rx="12" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
-    <text x="125" y="159" text-anchor="middle" font-size="14" font-weight="800" fill="#4a4434">아이스크림 판매량</text>
-    <rect x="340" y="130" width="190" height="48" rx="12" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
-    <text x="435" y="159" text-anchor="middle" font-size="14" font-weight="800" fill="#4a4434">물놀이 사고 건수</text>
-    <line x1="226" y1="154" x2="334" y2="154" stroke="#9b937e" stroke-width="2" stroke-dasharray="5 5"/>
-    <text x="280" y="140" text-anchor="middle" font-size="11.5" fill="#6b6350">함께 오르내림 — 상관</text>
-    <path d="M271 145 L289 163 M289 145 L271 163" stroke="#e45756" stroke-width="3.5" stroke-linecap="round"/>
-    <text x="280" y="202" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">원인 관계는 아님</text>
-  </svg>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">함께 변한다(상관)와 원인이다(인과)는 다른 말이다 — 『데이터 과학』 72쪽.</p>
-  <h2>5. 개념 정리 — 직선 하나가 가진 힘과 함정</h2>
-  <p>오늘 우리는 산점도 → 상관계수 → 회귀선의 순서로, 데이터의 관계를 예측 가능한 형태로 요약했습니다. 그리고 두 가지 함정을 함께 확인했습니다. <b>창을 바꾸면 기울기가 3배 벌어진다</b>는 것, 그리고 <b>함께 변하는 것이 원인을 증명하지 않는다</b>는 것. 3차시에 이상한 값을 의심했던 습관이, 오늘은 직선이 어느 기간에서 그어졌는지 의심하는 습관으로 이어졌습니다.</p>
-  <p>마지막 질문이 남았습니다. 슬라이더가 내놓은 2045년 예상 기온 — 이 직선을 도대체 <b>얼마나 믿어야 할까요.</b> 다음 시간에 영화 데이터로 변수 여러 개짜리 회귀를 만들어 본 뒤, 9차시에 그 "믿음의 점수"를 손으로 직접 계산합니다.</p>
-
-  <h2>6. 확인 문제</h2>
+  <h2>5. 확인 문제</h2>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 우리 기온 예측기의 전체 기간 기울기는 +2.60℃/100년입니다. 이 숫자의 뜻으로 옳은 것을 고르세요.</div>
-    <div class="qitem">
-      <div class="qopts qopts-col">
-        <button class="opt">연평균기온이 매년 빠짐없이 2.60℃의 100분의 1씩 똑같이 올랐다는 관측 사실이다</button>
-        <button class="opt" data-ok="1">필터를 통과한 114개 연도의 추세를 직선으로 요약한 것으로, 100년마다 약 2.60℃씩 오르는 평균 속도라는 뜻이다</button>
-        <button class="opt">2100년의 서울 기온이 지금보다 2.60℃ 높아진다는 보장이다</button>
-      </div>
-      <div class="fb">직선은 매년 균일한 상승이라는 관측 사실이 아니라, 전체 기간을 관통하는 평균 추세의 요약입니다. 또한 직선은 학습 범위(1908~2025) 안의 추세를 요약할 뿐, 범위 밖의 미래를 보장하지 않습니다.</div>
-    </div>
-  </div>
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 전체 기간으로 구한 기울기는 +2.60, 최근 20년으로 구한 기울기는 +8.14였습니다.</div>
-    <div class="qitem">
-      <div class="qs">(가) 한쪽이 계산을 틀린 것일까요?</div>
-      <div class="qopts qopts-col">
-        <button class="opt">최근 20년 쪽이 틀렸다 — 데이터가 적으면 기울기 계산 자체가 성립하지 않는다</button>
-        <button class="opt">전체 기간 쪽이 틀렸다 — 100년 전 데이터는 지금의 추세와 무관하므로 섞으면 안 된다</button>
-        <button class="opt" data-ok="1">둘 다 옳다 — 학습에 쓴 창이 달라 서로 다른 질문에 답하는 직선이다</button>
-      </div>
-      <div class="fb">데이터가 적으면 값이 출렁일 뿐 계산이 틀리는 것은 아니고(위 표의 "최근 30년" 행), 전체 창의 직선도 "한 세기의 평균 추세"라는 다른 질문에 답하는 정당한 계산입니다. 두 직선은 둘 다 정확하며, 답하는 질문이 다를 뿐입니다.</div>
-    </div>
-    <div class="qq">(나) 그렇다면 "서울은 더워지고 있는가"라는 질문에는 어떻게 답해야 할까요? 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <div class="qq"><span class="qn">문제 1</span> 단순 선형회귀와 다중 선형회귀의 차이를 우리 수업의 두 예측기(기온·영화)를 들어 설명해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>"더워지고 있다"는 방향은 두 직선이 같습니다. 다만 속도를 말할 때는 반드시 어느 기간에서 잰 기울기인지 밝혀야 합니다 — 전체 기간 직선은 한 세기의 평균 추세를, 최근 20년 직선은 최근의 가파름을 요약합니다.</p>
+      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수·상영횟수·성수기 여부 등 여러 독립 변수에 각각 가중치를 두어 총 관객 수를 예측하는 다중 선형회귀다. 영향을 주는 요인이 여러 개일 때 다중 회귀를 쓴다.</p>
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> "아이스크림 판매량과 물놀이 사고 건수의 상관이 강하므로, 사고를 줄이려면 아이스크림 판매를 규제해야 한다." 이 주장에 대한 판단으로 옳은 것을 고르세요.</div>
+    <div class="qq"><span class="qn">문제 2</span> 개봉 전 변수 3종의 테스트 점수는 0.24, 첫 주 관객 수를 더하면 0.90이었습니다. 이 급등을 "모델이 좋아졌다"라고 결론지으면 안 되는 이유는 무엇일까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">표본이 부족해서 상관계수 계산이 잘못되었다</button>
-        <button class="opt" data-ok="1">여름철 기온이라는 공통 요인이 만든 상관을 인과로 오인했다 — 아이스크림을 규제해도 사고는 줄지 않는다</button>
-        <button class="opt">규제 대상을 바꿔 물놀이를 규제하면 논리가 성립한다</button>
+        <button class="opt">테스트 영화가 66편뿐이라 어떤 점수도 신뢰할 수 없기 때문이다</button>
+        <button class="opt" data-ok="1">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보이므로 — 점수 급등은 실력이 아니라 데이터 누수의 신호다</button>
+        <button class="opt">R²가 0.5를 넘으면 항상 과대적합으로 판정하기 때문이다</button>
       </div>
-      <div class="fb">오류는 계산이 아니라 해석에 있습니다 — 상관이 강하다는 관찰 자체는 사실일 수 있습니다. 그리고 어느 쪽을 규제하든 상관을 인과로 읽는 오류는 그대로입니다. 두 속성은 여름철 기온이라는 공통 요인의 영향을 함께 받아 나란히 움직일 뿐이며, 인과를 주장하려면 상관과 별도로 원인-결과의 검증이 필요합니다.</div>
+      <div class="fb">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보입니다. 총 관객과 사실상 같은 정보를 담은 변수가 새어 들어와 점수를 부풀린 것이므로, 급등은 예측 실력의 향상이 아니라 데이터 누수의 신호이고, 개봉 전 예측이라는 문제 설정에서는 이 모델을 쓸 수 없습니다. 66편 채점 방식 자체는 0.24를 잴 때도 똑같이 쓰였으므로 문제는 표본 수가 아니고, R²에 절대 문턱도 없습니다 — 판단 기준은 점수의 크기가 아니라 변수의 시점입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> "개봉 1주 후에 남은 흥행을 전망하는 서비스"를 만든다면 첫 주 관객 수를 변수로 써도 될까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">안 된다 — 한 번 누수로 판정된 변수는 어떤 문제 설정에서도 쓸 수 없다</button>
+        <button class="opt">안 된다 — 점수를 0.90까지 끌어올리는 변수는 그 자체로 의심 대상이므로 빼야 한다</button>
+        <button class="opt" data-ok="1">써도 된다 — 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아니다</button>
+      </div>
+      <div class="fb">판단 기준은 "예측하는 시점에 그 변수의 값을 알 수 있는가" 한 가지입니다. 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아닙니다. 변수의 좋고 나쁨은 변수 자체가 아니라 문제의 시점 설정이 정하며, 높은 점수가 곧 반칙인 것도 아닙니다.</div>
     </div>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>산점도 → 상관계수 → 회귀선의 순서와 각 단계가 답하는 질문을 말할 수 있다.</li>
-    <li>연도 슬라이더로 예상 기온이 나오는 예측기 페이지를 내 앱에 추가했다.</li>
-    <li>전체 기간과 최근 20년의 기울기가 +2.60과 +8.14로 갈라지는 이유를 설명할 수 있다.</li>
-    <li>상관관계와 인과관계의 차이를 예를 들어 설명할 수 있다.</li>
+    <li>다중 선형회귀가 무엇인지 독립 변수와 가중치로 설명할 수 있다.</li>
+    <li>변수를 골라 끼우는 총 관객 수 예측 페이지를 내 앱에 추가했다.</li>
+    <li>개봉 전 변수만으로는 점수가 0.3 안팎에 머무는 이유를 말할 수 있다.</li>
+    <li>0.90으로의 급등이 왜 실력이 아니라 누수 신호인지 설명할 수 있다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">상관관계</td><td>두 속성이 함께 변하는 선형적 관계. 양·음의 방향이 있다</td></tr>
-    <tr><td class="term">상관계수</td><td>상관의 강도와 방향을 −1~+1로 나타낸 수치</td></tr>
-    <tr><td class="term">선형 회귀</td><td>속성 사이에 선 모양의 관계를 가정하고 가장 잘 대표하는 선을 찾는 분석</td></tr>
-    <tr><td class="term">회귀선</td><td>독립 변수와 종속 변수의 관계를 가장 잘 대표하는 직선</td></tr>
-    <tr><td class="term">기울기</td><td>독립 변수가 1 커질 때 종속 변수가 변하는 양. 우리 문제에선 "1년에 몇 도"</td></tr>
-    <tr><td class="term">인과관계</td><td>상관 중에서 원인과 결과가 검증으로 확인된 관계</td></tr>
+    <tr><td class="term">다중 선형 회귀</td><td>여러 개의 독립 변수로 종속 변수를 예측하는 회귀 분석</td></tr>
+    <tr><td class="term">독립 변수 / 종속 변수</td><td>예측에 사용하는 값 / 예측하려는 값</td></tr>
+    <tr><td class="term">가중치</td><td>각 독립 변수가 예측에 기여하는 크기</td></tr>
+    <tr><td class="term">훈련 데이터 / 테스트 데이터</td><td>모델을 학습시키는 데이터 / 점수를 매기기 위해 따로 떼어 둔 데이터</td></tr>
+    <tr><td class="term">데이터 누수</td><td>예측 시점에 알 수 없는 정보가 변수로 새어 들어와 점수를 부풀리는 것</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
-    <a class="prev" href="lesson06.html"><div class="dir">← 이전</div><div class="tt">6차시 · 영화 API</div></a>
-    <a class="next" href="lesson08.html"><div class="dir">다음 →</div><div class="tt">8차시 · 다중 선형회귀</div></a>
+    <a class="prev" href="lesson06.html"><div class="dir">← 이전</div><div class="tt">6차시 · 회귀 — 직선을 긋다</div></a>
+    <a class="next" href="lesson08.html"><div class="dir">다음 →</div><div class="tt">8차시 · 회귀 평가 손계산</div></a>
   </div>
 </main>
 </div>

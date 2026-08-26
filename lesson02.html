@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>2차시 · 데이터의 종류 · 공공데이터포털 수집 · 데이터 과학 당곡고</title>
+<title>2차시 · 반정형 데이터 · API와 JSON · 어제의 박스오피스 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -20,28 +20,28 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅰ. 데이터 과학의 이해 · Ⅱ. 데이터 준비와 분석 · 2차시</span>
-  <h1>데이터의 종류 · <span class="a">공공데이터포털 수집</span></h1>
+  <h1>반정형 데이터 · API와 JSON · <span class="a">어제의 박스오피스</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"질문이 데이터를 결정한다 — 데이터를 고르는 것부터가 분석이다."</div>
-    <span class="by">1차시에서 질문을 던졌다면, 오늘은 그 질문에 맞는 데이터를 고릅니다</span>
+    <div class="q">"데이터는 내려받는 것만이 아니다 — 필요할 때마다 요청해서 받을 수도 있다."</div>
+    <span class="by">1차시의 기온이 내려받아 둔 파일이었다면, 오늘은 아무것도 내려받지 않습니다</span>
   </div>
 
-  <p class="lead">지난 시간에 만든 질문 카드를 다시 꺼냅니다. 그 질문에 답하려면 데이터가 필요합니다. 오늘은 데이터에 어떤 <b>형태</b>가 있는지 구분하는 눈을 갖추고, 누구에게나 열려 있는 <b>공공데이터포털</b>에서 관심 분야의 데이터를 직접 내려받아 첫인상을 기록합니다. 내려받은 파일은 AI에게 요약을 맡겨 봅니다.</p>
+  <p class="lead">예매 앱이 보여 주는 박스오피스 순위는 어디서 올까요? 오늘은 영화진흥위원회의 KOBIS 박스오피스 API로 <b>어제의 박스오피스 대시보드</b>를 만들어 배포합니다. 그 전에 데이터의 세 가지 형태를 구분하고, API가 돌려주는 JSON을 맨눈으로 해부합니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>형태 구분</b> — 정형·반정형·비정형을 교실 안 사례로 가려내기</li>
-      <li><b>수집 실습</b> — data.go.kr에서 관심 분야 데이터 1개 내려받기</li>
-      <li><b>첫 요약</b> — 내려받은 파일을 AI에게 표로 정리시키기 (①③)</li>
+      <li><b>형태 구분</b> — 정형·반정형·비정형을 실물 세 가지로 가려내기</li>
+      <li><b>맨눈 보기</b> — 완성 주소를 주소창에 붙여 넣어 KOBIS의 JSON 원문 해부</li>
+      <li><b>바이브 코딩</b> — 어제의 박스오피스 대시보드를 만들어 배포 (①②③)</li>
     </ul>
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>데이터 분석의 두 번째 단계는 수집입니다. 그런데 수집은 "많이 모으기"가 아닙니다. 교과서 48쪽의 페트병 사례가 이것을 보여 줍니다 — 비닐이 있는 페트병과 없는 페트병을 구분하는 인공지능을 만들려면, 페트병에 남은 내용물의 양 같은 특성이 아니라 <b>비닐 제거 유무</b>를 담은 데이터가 필요합니다. 문제와 맞지 않는 데이터는 아무리 모아도 소용이 없습니다.</p>
-  <p>세상의 데이터는 생김새도 제각각이어서, 내 질문에 맞는 것을 <b>골라내는 눈</b>이 먼저 필요합니다. 다행히 정부와 공공 기관은 교통·환경·건강·문화 등 수많은 분야의 데이터를 무료로 공개하고 있습니다. 그 문을 오늘 처음 열어 봅니다. 진로가 어느 쪽이든, 그 분야의 공공 데이터가 이미 어딘가에 쌓여 있을 가능성이 큽니다.</p>
+  <p>버스 도착 알림, 날씨 앱, 예매 앱의 실시간 순위 — 이런 앱들은 데이터 파일을 미리 내려받아 두지 않습니다. 여러분이 화면을 여는 순간, 앱이 데이터를 가진 서버에 <b>요청을 보내고 응답을 받아</b> 보여 줍니다. 1차시의 기온 앱은 내려받아 둔 파일(그 시점의 복사본)로 만들었습니다. 오늘은 데이터를 받는 두 번째 방법을 배웁니다. 한 번 익혀 두면 영화·급식·날씨·대중교통 등 세상의 수많은 실시간 데이터가 여러분 앱의 재료가 됩니다.</p>
+  <p>오늘 쓸 KOBIS는 영화진흥위원회가 운영하는 영화관입장권 통합전산망입니다. 전국 극장의 관객 수가 매일 집계되는 공식 통계라, 뉴스에 나오는 "천만 영화"의 근거가 바로 이 데이터입니다.</p>
 
   <h2>1. 개념 이해 — 데이터의 세 가지 형태</h2>
   <div class="tbquote">
@@ -51,10 +51,8 @@
     <p class="q">"반정형 데이터는 일부분이 정형화된 데이터로, 구조가 존재하지만 구조를 바꿀 수도 있는 유연한 형태의 데이터를 말한다." <span class="src">(20쪽)</span></p>
     <p class="t">→ 행과 열이 반듯하면 <b>정형</b>, 구조가 아예 자유로우면 <b>비정형</b>, 구조는 있되 표는 아니면 <b>반정형</b>.</p>
   </div>
-  <p>정형 데이터의 대표는 행과 열로 이루어진 표입니다. 각 <b>열</b>은 데이터의 특정 속성을 나타내고, 각 <b>행</b>은 구체적인 값 하나하나입니다. 교과서 19쪽의 일별 박스 오피스 표가 좋은 예입니다 — 영화명·개봉일·매출액이 열이고, 영화 한 편이 행 하나입니다(이 표의 친척을 6차시에 API로 직접 받게 됩니다). 속성이 명확해 수집·관리가 쉬워서 기업과 공공 기관에서 널리 쓰입니다.</p>
-  <p>비정형 데이터는 이미지·텍스트·음성·영상처럼 구조의 제약 없이 자유롭게 표현된 데이터입니다. 명확한 속성이 정의되어 있지 않지만 버려지는 것은 아닙니다 — 교과서 20쪽은 영화 댓글 리뷰를 숫자로 변환해 영화의 새로운 속성으로 쓰는 예를 듭니다. 가공하면 속성을 추출할 수 있습니다.</p>
-  <p>그 사이에 반정형 데이터가 있습니다. XML과 JSON이 대표적으로, 구조를 쉽게 바꿀 수 있고 필요하면 표 형태로 변환할 수 있어 데이터 공유에 많이 쓰입니다. 공공데이터포털에도 XML·JSON 형태의 파일이 많이 올라와 있습니다.</p>
-  <p>말보다 실물이 빠릅니다. <b>2025년 9월 2일의 당곡고 급식 하나</b>가 세 가지 모습으로 기록된 것을 나란히 놓고 봅니다. 셋 다 같은 급식입니다.</p>
+  <p>정형 데이터의 대표는 행과 열로 이루어진 표입니다. 1차시의 서울 기온 CSV가 바로 이것입니다 — 날짜·평균기온 같은 <b>열</b>이 속성이고, 하루가 <b>행</b> 하나입니다. 교과서 19쪽이 정형 데이터의 예로 든 것도 마침 <b>일별 박스 오피스 표</b>입니다. 비정형 데이터는 이미지·텍스트·음성·영상처럼 구조의 제약 없이 자유롭게 표현된 데이터입니다. 그리고 그 사이에 반정형 데이터가 있습니다 — 오늘의 주인공입니다.</p>
+  <p>말보다 실물이 빠릅니다. <b>당곡고 급식 하루치</b>가 세 가지 모습으로 기록된 것을 나란히 놓고 봅니다. 셋 다 같은 급식입니다.</p>
   <div class="specimen-row">
     <div class="specimen st">
       <div class="tag">정형 — 표 (CSV 파일)</div>
@@ -80,7 +78,7 @@
     &lt;br/&gt;제육볶음 …",
   <span class="k">"CAL_INFO"</span>: "… Kcal"
 }</pre></div>
-      <div class="note">표는 아니지만 <b>"라벨": 값</b>의 구조가 있음. 표로 변환해 씁니다 — 5차시에 직접 받습니다.</div>
+      <div class="note">표는 아니지만 <b>"라벨": 값</b>의 구조가 있음. 표로 변환해 씁니다 — 오늘 실물로 만나고, 5차시에 이 급식판도 직접 받습니다.</div>
     </div>
     <div class="specimen un">
       <div class="tag">비정형 — 사진 (급식 사진)</div>
@@ -107,182 +105,409 @@
   <table class="daymap">
     <thead><tr><th>형태</th><th>위의 실물</th><th>다루는 법</th><th>우리 수업에서 만나는 때</th></tr></thead>
     <tbody>
-      <tr><td><b>정형</b></td><td>CSV 식단표</td><td>표 그대로 분석</td><td>오늘부터 — 내려받는 파일 대부분</td></tr>
-      <tr><td><b>반정형</b></td><td>JSON 응답</td><td>표로 변환해 분석</td><td>5·6차시 — API로 데이터를 받을 때</td></tr>
+      <tr><td><b>정형</b></td><td>CSV 식단표</td><td>표 그대로 분석</td><td>1차시 기온 CSV · 3차시부터 쓰는 축적 표</td></tr>
+      <tr><td><b>반정형</b></td><td>JSON 응답</td><td>표로 변환해 분석</td><td>오늘 KOBIS · 5차시 급식 — API로 받을 때</td></tr>
       <tr><td><b>비정형</b></td><td>급식 사진</td><td>가공해 속성 추출</td><td>팀 프로젝트에서 만날 수 있음</td></tr>
     </tbody>
   </table>
 
-  <h3>속성 — 데이터의 가치를 정하는 열</h3>
-  <p>정형 데이터에서 표의 각 열이 가지는 특성과 성질을 <b>속성</b>이라고 부릅니다. 교과서 21쪽의 도서관 표가 보여 주듯, 같은 데이터라도 "가장 가까운 도서관은 어디인가"를 물으면 위도·경도 속성이 중요해지고, "언제 가면 열려 있나"를 물으면 휴관일·시작 시각 속성이 중요해집니다. 어떤 속성이 가치 있는지는 데이터가 아니라 <b>질문이 정합니다</b>. 문제 해결에 필요한 새로운 속성이 더해지면 데이터의 가치가 높아질 수도 있습니다 — 1차시의 결론("질문이 뒤 단계의 모양을 정한다")이 여기서 한 번 더 확인됩니다.</p>
-  <div class="specimen-row" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-    <div class="specimen">
-      <div class="tag" style="background:#f4b400;color:#5a4300">질문 ① 가장 가까운 도서관은 어디인가</div>
-      <div class="body">
-        <div style="overflow-x:auto;width:100%">
-          <table class="minitable">
-            <thead><tr>
-              <th style="background:#f6f1e3;color:#a9a08c">도서관명</th>
-              <th style="background:#f4b400;color:#5a4300">위도</th>
-              <th style="background:#f4b400;color:#5a4300">경도</th>
-              <th style="background:#f6f1e3;color:#a9a08c">휴관일</th>
-              <th style="background:#f6f1e3;color:#a9a08c">운영 시작 시각</th>
-            </tr></thead>
-            <tbody>
-              <tr><td style="color:#c0b8a4">…</td><td style="background:#fdeeba">…</td><td style="background:#fdeeba">…</td><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td></tr>
-              <tr><td style="color:#c0b8a4">…</td><td style="background:#fdeeba">…</td><td style="background:#fdeeba">…</td><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="note">거리를 재려면 <b>위도·경도</b> 열이 가치 있는 속성이 됩니다.</div>
-    </div>
-    <div class="specimen">
-      <div class="tag" style="background:#3ba6a0">질문 ② 언제 가면 열려 있나</div>
-      <div class="body">
-        <div style="overflow-x:auto;width:100%">
-          <table class="minitable">
-            <thead><tr>
-              <th style="background:#f6f1e3;color:#a9a08c">도서관명</th>
-              <th style="background:#f6f1e3;color:#a9a08c">위도</th>
-              <th style="background:#f6f1e3;color:#a9a08c">경도</th>
-              <th style="background:#3ba6a0;color:#ffffff">휴관일</th>
-              <th style="background:#3ba6a0;color:#ffffff">운영 시작 시각</th>
-            </tr></thead>
-            <tbody>
-              <tr><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td><td style="background:#d8edec">…</td><td style="background:#d8edec">…</td></tr>
-              <tr><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td><td style="color:#c0b8a4">…</td><td style="background:#d8edec">…</td><td style="background:#d8edec">…</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="note">같은 표인데 질문이 바뀌자 가치 있는 열이 바뀌었습니다.</div>
-    </div>
-  </div>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">속성의 가치는 데이터가 아니라 질문이 정한다 (『데이터 과학』 21쪽).</p>
-
-  <h2>2. 수집 실습 — 공공데이터포털에서 내 데이터 찾기</h2>
+  <h2>2. JSON — 라벨 붙은 상자</h2>
   <div class="tbquote">
-    <div class="h">📖 교과서의 기준 <span class="src">『데이터 과학』 48쪽</span></div>
-    <p class="q">"데이터를 수집할 때는 문제를 해결하기 위한 목적과 일치해야 한다." <span class="src">(48쪽)</span></p>
-    <p class="t">→ 검색창에 넣을 말은 유행어가 아니라 <b>내 질문</b>이다. 목적에 맞지 않는 데이터는 아무리 커도 재료가 되지 못한다.</p>
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 20쪽</span></div>
+    <p class="q">"대표적인 반정형 데이터로는 XML(eXtensible Markup Language)과 JSON(JavaScript Object Notation)이 있다." <span class="src">(20쪽)</span></p>
+    <p class="q">"이러한 반정형 데이터는 데이터 구조를 쉽게 변경할 수 있고, 필요한 경우 표 형태로도 쉽게 변환할 수 있어 데이터 공유에 많이 활용된다." <span class="src">(20쪽)</span></p>
+    <p class="t">→ 오늘 KOBIS가 돌려주는 응답이 바로 이 JSON이다. "표로 쉽게 변환할 수 있다"는 문장을 실습에서 직접 확인한다.</p>
   </div>
-  <p>목적과의 일치 말고도, 교과서 48~49쪽은 좋은 데이터의 조건을 몇 가지 더 제시합니다. 데이터를 고를 때의 점검표로 요약해 둡니다.</p>
+  <p>JSON은 <b>{"라벨": 값} 짝으로 이루어진 상자</b>입니다. 상자 안에 상자를 넣을 수 있어서, 복잡한 데이터도 층층이 담을 수 있습니다. 오늘 우리 앱이 받게 될 실제 응답의 일부를 봅니다 — 이 교재를 만들던 날(2026년 8월 25일 조회)의 진짜 데이터입니다.</p>
+  <div class="codewrap code"><span class="label">실제 응답 (일부 발췌)</span><pre>{
+  "boxOfficeResult": {
+    "boxofficeType": "일별 박스오피스",
+    "showRange": "20260825~20260825",
+    "dailyBoxOfficeList": [
+      {
+        "rank": "1",
+        "movieNm": "오디세이",
+        "openDt": "2026-08-05",
+        "audiCnt": "164382",
+        "audiAcc": "7460311",
+        "scrnCnt": "1917"
+      },
+      { "rank": "2", "movieNm": "스파이더맨: 브랜드 뉴 데이", … },
+      { "rank": "3", … }
+    ]
+  }
+}</pre></div>
+  <ul>
+    <li><b>값 꺼내기 = 라벨을 따라 들어가기</b> — 겉상자 <code>boxOfficeResult</code> 안에서 <code>dailyBoxOfficeList</code> 목록을 꺼내면, <b>영화 한 편이 상자 하나</b>씩 들어 있습니다. 그 상자에서 <code>movieNm</code>(영화명)·<code>audiCnt</code>(그날 관객수)를 꺼내는 식입니다. "상자에서 상자를 꺼내라"고 말할 수 있으면 JSON을 읽을 수 있습니다.</li>
+    <li><b>👀 눈여겨볼 것 — 숫자가 따옴표에 싸여 있다.</b> <code>"audiCnt": "164382"</code> — 16만 명이 넘는 관객수가 숫자가 아니라 <b>따옴표 친 글자</b>로 옵니다. 글자인 채로 정렬하면 사전순이 되어 "9"가 "164382"보다 커집니다. 크기 비교·정렬·그래프 전에 숫자로 바꾸는 한 단계가 꼭 필요합니다.</li>
+    <li><b>표로 바꾸면 정형이 된다</b> — <code>dailyBoxOfficeList</code>의 상자 하나가 표의 행 하나가 됩니다. 교과서 20쪽의 "필요한 경우 표 형태로도 쉽게 변환할 수 있다"가 바로 이 작업입니다.</li>
+  </ul>
+
+  <h2>3. API — 요청과 응답의 약속</h2>
+  <p>이 JSON은 누가, 어떻게 보내 줄까요? API는 <b>정해진 주소로 조건을 담은 요청을 보내면, 정해진 양식(JSON)의 응답을 돌려주기로 한 약속</b>입니다. 내 앱이 KOBIS 서버에 "어제의 박스오피스"를 요청하면, 서버는 약속된 형식으로 순위 데이터를 돌려줍니다. 서버 내부에서 무슨 일이 일어나는지는 몰라도 됩니다 — 약속(요청 형식과 응답 형식)만 알면 데이터를 받을 수 있습니다. API를 이루는 네 가지는 다음과 같습니다.</p>
   <table class="daymap">
-    <thead><tr><th>조건</th><th>점검하는 물음</th></tr></thead>
+    <thead><tr><th>구성 요소</th><th>무엇인가</th><th>KOBIS API에서는</th></tr></thead>
     <tbody>
-      <tr><td><b>목적에 알맞은가</b></td><td>내 문제(질문)와 직접 관련된 데이터인가</td></tr>
-      <tr><td><b>양이 충분한가</b></td><td>판단의 근거가 될 만큼 많은가, 한쪽으로 치우치지 않았는가</td></tr>
-      <tr><td><b>골고루 수집되었는가</b></td><td>특정 출처·집단에만 쏠려 편향되지 않았는가</td></tr>
-      <tr><td><b>시기가 알맞은가</b></td><td>지금의 상황을 반영하는 시기의 데이터인가</td></tr>
-      <tr><td><b>형태가 알맞은가</b></td><td>분석에 쓸 수 있는 형태로 되어 있는가(또는 가공할 수 있는가)</td></tr>
+      <tr><td><b>요청 URL</b></td><td>어디에 물어볼지 정해진 인터넷 주소</td><td>kobis.or.kr의 일별 박스오피스 API 주소</td></tr>
+      <tr><td><b>요청(request)</b></td><td>"무엇을 알려줘"라는 물음 — 주소 뒤에 붙는 조건들</td><td>조회 날짜(targetDt)</td></tr>
+      <tr><td><b>응답(response)</b></td><td>정해진 양식(JSON)으로 오는 답</td><td>순위·영화명·관객수가 담긴 JSON</td></tr>
+      <tr><td><b>API 키(인증키)</b></td><td>요청에 함께 실어 보내는, 사용자를 증명하는 문자열</td><td>주소의 key= 뒤에 붙는다 — 아래 5절에서 자세히</td></tr>
     </tbody>
   </table>
-  <p>공공데이터포털(data.go.kr)은 공공 기관의 데이터를 누구나 쓸 수 있게 정부에서 운영하는 사이트입니다. 정형·반정형·비정형 데이터가 모두 제공됩니다. 서울 지역 데이터는 서울열린데이터광장에서도 찾을 수 있습니다.</p>
-  <ol class="steps">
-    <li><span class="st">검색 — 질문 카드의 핵심 단어로</span><br>
-      지난 시간 질문 카드에서 핵심 단어를 뽑아 검색합니다. 결과 목록에서 파일 형식(CSV·JSON·XML 등)과 제공 기관을 확인합니다. 회원가입 없이 바로 받을 수 있는 파일부터 시작합니다 — 선생님이 예시 목록을 안내합니다.</li>
-    <li><span class="st">내려받기 — CSV 1개</span><br>
-      정형 데이터(CSV) 1개를 내려받아 엽니다. 행이 몇 개인지, 열(속성)에는 무엇이 있는지, 어느 기간의 데이터인지 훑어봅니다.</li>
-    <li><span class="st">기록 — 첫인상과 질문</span><br>
-      "이 데이터로 답할 수 있는 질문 1개"를 기록합니다. 처음 질문 그대로일 수도, 데이터를 보고 나서 더 좋은 질문으로 바뀔 수도 있습니다. 이 기록이 폼 Ⅱ-01c의 재료가 됩니다.</li>
-  </ol>
-  <div class="callout warn">
-    <div class="h">⚠️ 오늘의 발견 — 같은 주제, 다른 생김새</div>
-    <p>같은 "미세먼지"를 검색해도 기관마다 파일 형식이 다르고, 다루는 기간이 다르고, 담긴 속성이 다릅니다. "정답 파일"이 준비되어 있는 것이 아니라, 내 질문에 맞는 데이터를 <b>고르는 일</b>부터가 분석입니다. 어떤 파일을 고를지 판단한 이유를 기록에 남겨 두세요.</p>
+
+  <details class="glossary">
+    <summary>🔬 움직여 보기 — 요청과 응답, 클릭으로 한 단계씩</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">내 앱이 박스오피스 데이터를 받아 오는 과정입니다. 그림을 <b>클릭할 때마다 한 단계씩</b> 움직입니다 — ①요청 만들기 → ②서버로 보내기 → ③응답(JSON) 만들기 → ④응답 받기.</p>
+<svg class="api-svg" viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="클릭할 때마다 한 단계씩 진행되는 API 요청과 응답 그림">
+  <defs>
+    <marker id="arR" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#7d93ef"/></marker>
+    <marker id="arL" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#e98bb6"/></marker>
+    <filter id="ds2" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2a3568" flood-opacity="0.14"/></filter>
+  </defs>
+  <g class="lane" data-lane="B" data-req-y="98" data-res-y="142" style="cursor:pointer">
+    <rect x="6" y="12" width="788" height="192" fill="transparent" pointer-events="all"/>
+    <text class="hint" x="400" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#0e9488">👆 클릭 ① — 요청 만들기</text>
+    <g filter="url(#ds2)" pointer-events="none"><rect x="28" y="64" width="180" height="100" rx="18" fill="#ffffff" stroke="#e6e8f2"/></g>
+    <text x="118" y="114" text-anchor="middle" font-size="36" pointer-events="none">💻</text>
+    <text x="118" y="148" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a" pointer-events="none">내 앱 · 브라우저</text>
+    <g filter="url(#ds2)" pointer-events="none"><rect x="592" y="64" width="180" height="100" rx="18" fill="#eef0ff" stroke="#c3c9f5"/></g>
+    <text x="682" y="108" text-anchor="middle" font-size="33" pointer-events="none">🎬</text>
+    <text x="682" y="138" text-anchor="middle" font-size="15" font-weight="800" fill="#3b47c2" pointer-events="none">KOBIS</text>
+    <text x="682" y="155" text-anchor="middle" font-size="11.5" fill="#8a8fb0" pointer-events="none">API 서버 · 박스오피스 집계</text>
+    <line x1="216" y1="98" x2="584" y2="98" stroke="#9fb0f5" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arR)" pointer-events="none"/>
+    <text x="400" y="86" text-anchor="middle" font-size="13" fill="#5B6CF0" font-weight="800" pointer-events="none">요청 →</text>
+    <line x1="584" y1="142" x2="216" y2="142" stroke="#f0b9d2" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arL)" pointer-events="none"/>
+    <text x="400" y="166" text-anchor="middle" font-size="13" fill="#E0568A" font-weight="800" pointer-events="none">← 응답</text>
+    <g class="doc-req" opacity="0" pointer-events="none">
+      <rect x="-66" y="-44" width="132" height="88" rx="8" fill="#ffffff" stroke="#b9c0f5"/>
+      <rect x="-66" y="-44" width="132" height="22" rx="8" fill="#0e9488"/><rect x="-66" y="-33" width="132" height="11" fill="#0e9488"/>
+      <text x="0" y="-28" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📝 요청 (URL)</text>
+      <text x="0" y="-4" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">무엇: 박스오피스</text>
+      <text x="0" y="14" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">날짜: 어제</text>
+      <text x="0" y="32" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">🔑 key=인증키</text>
+    </g>
+    <g class="doc-res" opacity="0" pointer-events="none">
+      <rect x="-82" y="-52" width="164" height="104" rx="8" fill="#ffffff" stroke="#a7d8d4"/>
+      <rect x="-82" y="-52" width="164" height="22" rx="8" fill="#0e9488"/><rect x="-82" y="-41" width="164" height="11" fill="#0e9488"/>
+      <text x="0" y="-36" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📦 응답 (JSON)</text>
+      <text x="0" y="-6" text-anchor="middle" font-size="20" font-weight="800" fill="#2b2d3a">🎬 어제의 순위표</text>
+      <text x="0" y="13" text-anchor="middle" font-size="11" fill="#8a8fa6">순위·영화명·관객수</text>
+      <text x="0" y="36" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0e9488" font-family="monospace">{"movieNm": "…"}</text>
+    </g>
+  </g>
+  <text x="400" y="232" text-anchor="middle" font-size="12.5" fill="#7a7f95" pointer-events="none">요청 = 주소 + 조건(날짜) + 🔑 인증키 · 응답 = 정해진 양식(JSON) · 상태코드 200이면 성공</text>
+</svg>
+<script>
+(function () {
+  var STEPS = {
+    B: ["👆 클릭 ① — 요청 만들기", "👆 클릭 ② — 서버로 보내기", "👆 클릭 ③ — 응답(JSON) 만들기", "👆 클릭 ④ — 응답 받기", "✅ 한 바퀴 끝! 클릭하면 처음부터"]
+  };
+  var START_X = 275, END_X = 525;
+  var MOVE = "transform 2.8s ease-in-out, opacity 0.7s ease";
+  document.querySelectorAll(".api-svg .lane").forEach(function (lane) {
+    var id = lane.getAttribute("data-lane");
+    var req = lane.querySelector(".doc-req");
+    var res = lane.querySelector(".doc-res");
+    var hint = lane.querySelector(".hint");
+    var reqY = +lane.getAttribute("data-req-y");
+    var resY = +lane.getAttribute("data-res-y");
+    var s = 0;
+    function reset() {
+      req.style.transition = "none";
+      res.style.transition = "none";
+      req.style.transform = "translate(" + START_X + "px," + reqY + "px)";
+      res.style.transform = "translate(" + END_X + "px," + resY + "px)";
+      req.style.opacity = 0;
+      res.style.opacity = 0;
+      req.getBoundingClientRect();
+      req.style.transition = MOVE;
+      res.style.transition = MOVE;
+      hint.textContent = STEPS[id][0];
+    }
+    reset();
+    lane.addEventListener("click", function () {
+      s = (s + 1) % 5;
+      if (s === 1) { req.style.opacity = 1; }
+      else if (s === 2) { req.style.transform = "translate(" + END_X + "px," + reqY + "px)"; }
+      else if (s === 3) { req.style.opacity = 0; res.style.opacity = 1; }
+      else if (s === 4) { res.style.transform = "translate(" + START_X + "px," + resY + "px)"; }
+      else { s = 0; reset(); return; }
+      hint.textContent = STEPS[id][s];
+    });
+  });
+})();
+</script>
     </div>
-  <div class="callout mini">
-    <div class="h">🔭 수집 방법은 내려받기만이 아니다</div>
-    <p>파일을 내려받는 것 말고도 데이터를 모으는 길은 여럿입니다 — 설문으로 직접 묻기, 휴대폰 카메라로 직접 찍기, 그리고 5차시에 만날 API로 받기. 방법마다 걸리는 시간과 얻는 형태가 다릅니다. 이 비교는 폼 Ⅱ-04b에서 정리합니다.</p>
+  </details>
+  <p>응답에는 <b>상태코드</b>라는 세 자리 숫자 코드가 함께 옵니다. 셋만 기억하면 됩니다 — <b>200</b> 성공 · <b>404</b> 없음(주소가 틀렸거나 없는 자료) · <b>429</b> 과다 요청(호출이 너무 잦음 — 잠깐 쉬기).</p>
+  <p>내려받기와 API는 무엇이 다를까요? 1차시에 쓴 기온 CSV는 <b>그 시점의 복사본</b>입니다. 내일 기록이 늘어나도 내 파일은 모릅니다. API는 호출할 때마다 서버가 지금 가진 데이터를 보내 주므로 <b>항상 최신</b>이고, 날짜 같은 조건을 지정해 <b>필요한 만큼만</b> 받을 수 있습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>구분</th><th>내려받기(1차시)</th><th>API 호출(오늘)</th></tr></thead>
+    <tbody>
+      <tr><td><b>받는 것</b></td><td>그 시점의 복사본 파일(CSV)</td><td>지금 서버가 가진 데이터(JSON)</td></tr>
+      <tr><td><b>최신성</b></td><td>내려받은 날짜에 멈춰 있음</td><td>호출할 때마다 최신</td></tr>
+      <tr><td><b>범위</b></td><td>제공자가 묶어 둔 파일 전체</td><td>날짜 등 조건을 지정해 필요한 만큼</td></tr>
+      <tr><td><b>형태</b></td><td>정형(표)</td><td>반정형(JSON) — 표로 변환해서 사용</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4. 주소창 맨눈 보기 — 약속의 실물 확인</h2>
+  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 선생님이 나눠 준 <b>완성 주소</b>를 주소창에 붙여 넣으면, 꾸며지지 않은 JSON 원문이 화면에 그대로 나타납니다. 붙여 넣기 전에, 요청 주소 자체를 해부해 봅니다.</p>
+  <div class="specimen semi" style="margin:18px 0">
+    <div class="tag">요청 주소의 해부 — 한 줄에 실려 가는 구성 요소</div>
+    <div class="body"><pre class="mini"><span style="color:#3ba6a0;text-decoration:underline">https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json</span>
+                                                  <span style="color:#9b8c66">↑ 어디에 — 요청 URL</span>
+<span style="color:#f4b400">?key=발급받은 인증키</span>                              <span style="color:#9b8c66">← 누가 — 🔑 인증키 (5절)</span>
+<span style="color:#e8930c">&amp;targetDt=20260825</span>                                <span style="color:#9b8c66">← 조건 — 날짜. 이 값을 바꾸면 응답이 그날 것으로 바뀐다</span></pre></div>
+    <div class="note">§3 표의 구성 요소(요청 URL·조건·인증키)가 주소 한 줄에 모두 실려 간다. 응답만 JSON으로 돌아온다.</div>
+  </div>
+  <p>주소창에 붙여 넣은 뒤에는, 화면의 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
+  <ul>
+    <li><b>겉상자와 목록</b> — <code>boxOfficeResult</code> 안의 <code>dailyBoxOfficeList</code>. 영화 한 편이 상자 하나입니다. 2절에서 본 구조 그대로인지 확인합니다.</li>
+    <li><b>따옴표 친 숫자</b> — <code>audiCnt</code>(그날 관객수)의 값이 따옴표에 싸여 있습니다. 실습에서 이 함정을 프롬프트로 미리 막습니다.</li>
+    <li><b>날짜 조건을 바꾸면</b> — 주소 속 <code>targetDt</code>의 여덟 자리를 다른 날로 고쳐 다시 접속하면 응답이 그날 것으로 바뀝니다. 같은 주소, 다른 조건입니다.</li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">⚠️ 날짜의 약속 — 가장 늦은 조회일은 어제</div>
+    <p>조회 날짜(targetDt)는 하이픈 없는 <b>여덟 자리 숫자</b>(예: 20260825)로 적습니다. 그리고 <b>오늘 날짜를 넣으면 오류가 아니라 빈 목록</b>이 옵니다 — 오늘 관객수는 아직 집계 전이기 때문입니다. 가장 늦게 조회할 수 있는 날은 어제입니다. "응답이 비어 있다 = 고장"이 아니라는 것, 오늘 여러 번 확인하게 됩니다.</p>
   </div>
   <div class="callout tip">
-    <div class="h">💡 한글이 깨져 보인다면</div>
-    <p>공공데이터 파일 중에는 열었을 때 한글이 깨져 나타나는 것이 있습니다. 파일이 잘못된 것이 아니라 글자를 저장한 방식(인코딩)이 다른 것으로, 이것도 데이터의 상태입니다. 다음 절에서 AI에게 파일을 맡길 때 "한글이 깨지면 인코딩을 바꿔서 읽어 줘"라고 덧붙이면 해결됩니다.</p>
+    <div class="h">💡 키가 틀리면 — 상태코드는 200, 대신 faultInfo</div>
+    <p>인증키가 틀린 주소로 접속해도 상태코드는 <b>200(성공)</b>입니다. 대신 응답의 내용이 순위표가 아니라 <b>faultInfo(오류 상자)</b>로 바뀝니다 — <code>"message": "유효하지않은 키값입니다."</code> 번호표(상태코드)만 보고 성공이라 판단하면 안 되고, <b>서류의 내용(응답)까지 둘 다</b> 확인해야 합니다. 수업에서 선생님이 직접 보여 줍니다.</p>
   </div>
 
-  <h2>3. 실습 — 내려받은 파일을 AI에게 요약시키기 (①③)</h2>
-  <p>내려받은 파일이 무엇을 담고 있는지, 오늘은 AI에게 물어봅니다. 지난 시간 선생님 시연으로만 본 세 단계를 처음으로 직접 해 보는 순간입니다. 배포도 코딩도 없습니다 — 파일을 주고, 우리말로 요청하고, 결과를 읽습니다.</p>
+  <h2>5. 비밀 금고(secrets) — 키를 코드 밖에 둔다</h2>
+  <p>API 키(인증키)는 서비스가 발급해 주는 긴 무작위 문자열로, <b>누가 얼마나 쓰는지</b>를 세는 장치입니다. KOBIS 키에는 하루 3,000회의 호출 한도가 있습니다. 오늘은 선생님이 발급한 공용 키를 나눠 씁니다 — 클래스룸에 비공개로 게시된 키를 복사해 쓰고, <b>코드에는 절대 붙여 넣지 않습니다</b>. 코드에 적은 채 공개 저장소에 올리는 순간 남이 내 이름으로 호출하고, 그 사용량과 책임은 내 몫이 됩니다.</p>
+  <p>키가 갈 곳은 코드가 아니라 스트림릿의 <b>비밀 금고(secrets)</b>입니다. 넣는 절차는 세 걸음입니다.</p>
+  <ol class="steps">
+    <li><span class="st">내 앱의 관리 화면 열기</span><br>
+      배포된 내 앱 오른쪽 아래의 <b>Manage app</b>을 누르고, 메뉴(⋮)에서 <b>Settings</b>를 엽니다.</li>
+    <li><span class="st">Secrets에 키 저장</span><br>
+      <b>Secrets</b> 칸에 다음 한 줄을 적고 저장합니다. 등호 왼쪽이 이름, 오른쪽 따옴표 안이 선생님이 준 키입니다.
+      <div class="codewrap code"><span class="label">Secrets에 넣을 한 줄</span><pre>KOBIS_KEY = "선생님이 준 키를 여기에"</pre></div></li>
+    <li><span class="st">저장 — 앱이 스스로 다시 시작</span><br>
+      저장하면 앱이 자동으로 다시 시작됩니다. 화면이 잠깐 깜빡여도 고장이 아닙니다.</li>
+  </ol>
+  <div class="callout warn">
+    <div class="h">⚠️ 이름 세 곳 일치 — 하나라도 다르면 못 찾는다</div>
+    <p>키의 이름 <b>KOBIS_KEY</b>는 세 곳에 등장합니다. 세 곳의 철자가 <b>한 글자까지 똑같아야</b> 합니다. 대문자·밑줄까지 다르면 앱은 금고에서 키를 찾지 못하고 멈춥니다(KeyError).</p>
+    <table class="daymap">
+      <thead><tr><th>어디</th><th>어떤 모습</th></tr></thead>
+      <tbody>
+        <tr><td><b>① 비밀 금고(Secrets)</b></td><td><code>KOBIS_KEY = "…"</code> — 방금 저장한 한 줄</td></tr>
+        <tr><td><b>② 프롬프트</b></td><td>"비밀 금고(secrets)의 KOBIS_KEY에서 불러와" — AI에게 알려 주는 이름</td></tr>
+        <tr><td><b>③ AI가 준 코드</b></td><td><code>st.secrets["KOBIS_KEY"]</code> — 코드가 금고에서 찾는 이름</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>6. 실습 — 어제의 박스오피스 대시보드 (①②③)</h2>
+  <p>준비가 끝났습니다. 1차시처럼 프롬프트를 통째로 붙여 넣고, AI가 준 코드로 앱의 main.py를 교체해 커밋합니다. 프롬프트 끝에 <b>KOBIS 공식 문서에서 복사한 부분</b>이 붙어 있는 것을 눈여겨보세요 — 문서를 함께 주면 AI가 라벨 이름을 지어내지 못합니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>방금 내려받은 파일을 읽어서 행이 몇 개인지, 어떤 열이 있는지,
-각 열이 무엇을 뜻하는 것 같은지 표로 정리해 줘.</pre></div>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>어제의 박스오피스를 보여 주는 스트림릿 앱 하나(main.py)를 만들어 줘. 스트림릿 클라우드에 올릴 거야.
+아래에 공식 API 문서에서 복사한 내용을 붙였어.
+
+- 인증키는 비밀 금고(secrets)의 KOBIS_KEY에서 불러와. 코드에는 절대 쓰지 마.
+- 조회 날짜는 고정하지 말고 '어제'를 자동으로 계산해서 써. 오늘 건 아직 집계 전이거든.
+  '어제'는 한국 시간 기준이야. 배포 서버 시계는 한국 시간이 아니야.
+- 순위·영화명·개봉일·관객수·누적관객·스크린수를 표로 보여 줘.
+- 1위 영화는 지표 카드 세 장으로 크게, 관객수 상위 5편은 막대그래프로.
+- 숫자가 글자로 오니 숫자로 바꿔서 정렬과 그래프에 써 줘.
+- 같은 날짜를 다시 물으면 API를 또 부르지 말고, 불러온 결과를 한 시간쯤 기억해 줘.
+- 요청이 실패하거나, 오류 상자(faultInfo)가 오거나, 영화 목록이 비어서 올 때는
+  빈 화면 대신 무엇을 확인해야 하는지 한국어로 안내해 줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.
+- 초보자용 한국어 주석을 달고 main.py 전체 코드를 한 번에 줘.
+
+──── 아래는 KOBIS 공식 문서에서 복사한 부분 ────
+요청 주소: https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json
+요청변수: key(발급받은 인증키) · targetDt(조회 날짜, yyyymmdd 여덟 자리)
+응답 구조: boxOfficeResult 안의 dailyBoxOfficeList 목록에 영화별로
+  rank(순위) · rankInten(전날 대비 순위 증감) · movieNm(영화명) · openDt(개봉일) ·
+  audiCnt(그날 관객수) · audiAcc(누적 관객수) · scrnCnt(스크린수) · showCnt(상영횟수)
+  ※ 숫자 값이 전부 문자열로 온다.
+  ※ 인증키가 틀려도 상태코드는 200이고, 대신 faultInfo 상자가 온다.</pre></div>
     </li>
-    <li><span class="st">② AI의 답 — 표를 읽고 검증한다</span><br>
-      AI가 정리한 표가 나타나면, 아까 직접 훑어본 내용과 맞는지 확인합니다. 행 수가 일치하는지, 열 설명이 그럴듯한지 — AI의 답을 그대로 믿지 않고 견주어 보는 것이 우리의 일입니다.</li>
-    <li><span class="st">③ 개선 프롬프트 — 빠진 값을 물어본다</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>빠진 값이 있는 열과 그 개수도 함께 알려 줘.</pre></div>
-      빠진 값(결측)이 있다는 답이 나와도 놀랄 일이 아닙니다. 실제 데이터에는 빠진 값이 있는 것이 보통이고, 그것을 다루는 법이 3차시의 주제입니다.</li>
+    <li><span class="st">② AI가 준 코드 예시 — 이런 모습이면 성공</span><br>
+      AI가 준 main.py로 교체해 커밋하면 앱이 다시 배포됩니다. 아래는 실제로 실행해 확인한 코드 예시입니다. <b>여러분 코드가 글자까지 같지 않아도 됩니다</b> — 어제 날짜의 순위표·지표 카드·막대그래프가 나타나면 성공입니다. 이 교재를 만들던 날에는 1위 자리에 「오디세이」(어제 관객수 164,382명)가 떠 있었습니다. 여러분 화면의 1위는 여러분의 어제가 정합니다.
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 (main.py)</span><button class="copy-btn">복사</button><pre># 어제의 박스오피스 — KOBIS 일별 박스오피스 API
+import datetime
+
+import pandas as pd
+import plotly.express as px
+import requests
+import streamlit as st
+
+st.set_page_config(page_title="어제의 박스오피스", page_icon="🎬", layout="wide")
+
+# 인증키는 비밀 금고(secrets)에서 불러온다 — 코드에 직접 쓰지 않는다
+API_KEY = st.secrets["KOBIS_KEY"]
+URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+
+# '어제'를 한국 시간 기준으로 계산한다 (배포 서버의 시계는 한국 시간이 아니다)
+KST = datetime.timezone(datetime.timedelta(hours=9))
+yesterday = datetime.datetime.now(KST).date() - datetime.timedelta(days=1)
+target_dt = yesterday.strftime("%Y%m%d")
+
+
+@st.cache_data(ttl=3600)  # 같은 날짜는 한 시간 동안 기억해 두고 API를 다시 부르지 않는다
+def fetch_boxoffice(date_str):
+    """KOBIS API에서 해당 날짜의 일별 박스오피스를 받아 온다."""
+    params = {"key": API_KEY, "targetDt": date_str}
+    res = requests.get(URL, params=params, timeout=10)
+    res.raise_for_status()
+    return res.json()
+
+
+st.title("🎬 어제의 박스오피스")
+st.caption(f"조회 날짜: {yesterday} (한국 시간 기준 어제)")
+
+try:
+    data = fetch_boxoffice(target_dt)
+except requests.RequestException:
+    st.error("서버에 연결하지 못했습니다. 인터넷 연결을 확인하고 잠시 뒤 새로고침해 주세요.")
+    st.stop()
+
+# 인증키가 틀리면 상태코드는 200이지만 faultInfo 상자가 온다
+if "faultInfo" in data:
+    st.error(f"API가 오류를 돌려주었습니다: {data['faultInfo'].get('message', '')}")
+    st.info("비밀 금고(secrets)의 KOBIS_KEY 값이 올바른지 확인해 주세요.")
+    st.stop()
+
+movies = data.get("boxOfficeResult", {}).get("dailyBoxOfficeList", [])
+
+# 영화 목록이 비어서 오면 — 아직 집계 전인 날짜다
+if not movies:
+    st.warning("영화 목록이 비어 있습니다. 아직 집계 전인 날짜는 아닌지 확인해 주세요.")
+    st.stop()
+
+df = pd.DataFrame(movies)
+
+# 숫자가 글자로 오므로 숫자로 바꿔야 정렬과 그래프에 쓸 수 있다
+for col in ["rank", "audiCnt", "audiAcc", "scrnCnt"]:
+    df[col] = pd.to_numeric(df[col])
+
+# 1위 영화는 지표 카드 세 장으로 크게
+top = df.sort_values("rank").iloc[0]
+st.subheader(f"🥇 1위 — {top['movieNm']}")
+c1, c2, c3 = st.columns(3)
+c1.metric("어제 관객수", f"{top['audiCnt']:,}명")
+c2.metric("누적 관객수", f"{top['audiAcc']:,}명")
+c3.metric("스크린수", f"{top['scrnCnt']:,}개")
+
+# 전체 순위표
+st.subheader("📋 어제의 순위표")
+table = df.sort_values("rank")[["rank", "movieNm", "openDt", "audiCnt", "audiAcc", "scrnCnt"]]
+table.columns = ["순위", "영화명", "개봉일", "관객수", "누적관객", "스크린수"]
+st.dataframe(table, hide_index=True, width="stretch")
+
+# 관객수 상위 5편은 막대그래프로
+st.subheader("📊 관객수 상위 5편")
+top5 = df.sort_values("audiCnt", ascending=False).head(5)
+fig = px.bar(top5, x="movieNm", y="audiCnt", labels={"movieNm": "영화명", "audiCnt": "어제 관객수"})
+st.plotly_chart(fig, width="stretch")</pre></div>
+      <div class="codewrap code"><span class="label">requirements.txt</span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+plotly
+requests</pre></div>
+    </li>
+    <li><span class="st">③ 프롬프트 개선 — 같은 대화창에서 이어서</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘.
+- 날짜를 어제로 고정하지 말고, 달력에서 골라 그날의 박스오피스를 볼 수 있게 해 줘.
+  고를 수 있는 가장 늦은 날짜는 어제까지야. 오늘 건 아직 집계 전이니까.
+- 고른 날짜에 영화 목록이 비어서 오면 "그날은 아직 집계 전입니다"라고 알려 줘.
+- 문서를 보니 rankInten이라는 값이 전날 대비 순위 증감이래. 양수면 순위가 오른 것, 음수면 내린 것.
+  표에서 오른 영화는 빨간 위 화살표, 내린 영화는 파란 아래 화살표를 붙여 줘.
+- 누적관객이 100만 명을 넘은 영화는 영화명 옆에 트로피 이모지를 붙여 줘.</pre></div>
+      ③이 "좋아, 여기서 이어서 고쳐 줘."로 시작하는 것을 눈여겨보세요. 새 대화를 열지 않고 <b>같은 대화창에서 잇는 것</b>이 개선의 요령입니다 — AI가 방금 준 코드를 기억한 채로 고칩니다.</li>
   </ol>
   <div class="callout check">
-    <div class="h">✅ 오늘 익힌 습관 — AI의 답은 견주어 본다</div>
-    <p>②에서 한 일을 기억해 두세요. AI가 정리한 행 수·열 설명을 그대로 받아 적지 않고, 내가 직접 훑어본 내용과 견주었습니다. 앞으로 모든 실습에서 반복되는 순서입니다 — 먼저 내 눈으로 보고, 그다음 AI의 답과 대조합니다.</p>
+    <div class="h">✅ 여기까지 되었는지 확인</div>
+    <ul>
+      <li>어제 날짜의 순위표·1위 지표 카드·상위 5편 막대그래프가 내 앱에 나타난다.</li>
+      <li>인증키가 코드 안에 보이지 않는다 — 비밀 금고(secrets)에서 읽어 온다.</li>
+      <li>③ 개선까지 반영해 달력으로 날짜를 고를 수 있다.</li>
+    </ul>
   </div>
 
-  <h2>4. 정리 — 진로 분야의 데이터 씨앗</h2>
-  <p>오늘 포털에서 스친 데이터 중 진로와 닿는 것이 있었다면 폼 Ⅰ-04c에 기록해 둡니다. 학기말 팀 프로젝트 주제를 정할 때 다시 꺼내게 됩니다.</p>
-  <h2>5. 개념 정리 — 질문에서 데이터로</h2>
-  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>데이터에는 정형·반정형·비정형의 형태가 있고, 그중 무엇을 고를지는 내 질문이 정한다.</b> 같은 주제라도 기관마다 형식·기간·속성이 다르다는 것을 직접 확인했고, 내려받은 파일의 정체를 AI에게 요약시키는 첫 ①③을 밟았습니다. 다음 시간에는 100년 치 서울 기온 데이터(정형)를 그래프로 펼칩니다 — 그래프 한가운데에서 이상한 지점 하나를 만나게 됩니다.</p>
+  <div class="callout warn">
+    <div class="h">⚠️ 발견 — 내려받지 않았는데 어제의 극장이 내 앱에 있다</div>
+    <p>화면에 뜬 순위표는 내 컴퓨터 어디에도 파일로 존재하지 않습니다. 앱이 실행될 때마다 KOBIS 서버에 요청을 보내고 응답을 받아 표시한 것입니다. 그리고 이 숫자는 검증할 수 있습니다 — <b>오늘 저녁, 포털에서 "박스오피스"를 검색해 내 앱의 순위표와 대조해 보세요.</b> 같은 데이터에서 온 같은 숫자를 확인하게 됩니다. 대조한 화면은 과제로 제출합니다(스크린샷).</p>
+  </div>
 
-  <h2>6. 확인 문제</h2>
+  <h2>7. 개념 정리</h2>
+  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>API는 정해진 주소로 조건을 보내면 정해진 양식(JSON)으로 답하는 약속이고, JSON은 라벨 붙은 상자라서 표로 바꿔 쓸 수 있다.</b> 정형(표)·반정형(JSON)·비정형(사진)을 구분했고, 키는 코드가 아니라 비밀 금고에 둔다는 습관을 시작했습니다. 다만 오늘 받은 것은 <b>어제 하루치</b>뿐입니다. "이 영화는 뜨는 중인가, 지는 중인가"에 답하려면 여러 날을 쌓은 표가 필요합니다 — 다음 시간에 354일 치 축적 표로 그 질문을 엽니다.</p>
+
+  <h2>8. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 다음을 정형·반정형·비정형으로 구분해 보세요. 답을 눌러 확인합니다.</div>
     <div class="qitem">
-      <div class="qs">(가) 학급 설문 응답을 정리한 표</div>
+      <div class="qs">(가) KOBIS가 보내 준 어제의 박스오피스 JSON 응답</div>
+      <div class="qopts"><button class="opt">정형</button><button class="opt" data-ok="1">반정형</button><button class="opt">비정형</button></div>
+      <div class="fb">"라벨": 값의 구조는 있지만 표는 아니고 구조를 바꿀 수 있음 — <b>반정형</b>입니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(나) 1차시에 쓴 서울 기온 CSV 파일</div>
       <div class="qopts"><button class="opt" data-ok="1">정형</button><button class="opt">반정형</button><button class="opt">비정형</button></div>
       <div class="fb">행과 열로 속성과 구조가 명확한 표 — <b>정형</b>입니다.</div>
     </div>
     <div class="qitem">
-      <div class="qs">(나) 학교 축제 영상</div>
+      <div class="qs">(다) 영화 포스터 이미지</div>
       <div class="qopts"><button class="opt">정형</button><button class="opt">반정형</button><button class="opt" data-ok="1">비정형</button></div>
-      <div class="fb">구조를 명확하게 정의하기 어려운 영상 — <b>비정형</b>입니다.</div>
-    </div>
-    <div class="qitem">
-      <div class="qs">(다) 급식 API가 보내 준 JSON 응답</div>
-      <div class="qopts"><button class="opt">정형</button><button class="opt" data-ok="1">반정형</button><button class="opt">비정형</button></div>
-      <div class="fb">"라벨": 값의 구조는 있지만 표는 아니고 구조를 바꿀 수 있음 — <b>반정형</b>입니다.</div>
+      <div class="fb">구조를 명확하게 정의하기 어려운 이미지 — <b>비정형</b>입니다.</div>
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 같은 도서관 데이터인데, 어떤 사람에게는 위도·경도 속성이 중요하고 어떤 사람에게는 휴관일 속성이 중요합니다. 이런 일이 생기는 이유는 무엇일까요? 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>속성의 중요성은 문제 상황(질문)에 따라 달라지기 때문입니다. 가까운 도서관을 찾는 질문에는 위도·경도가, 언제 갈지 정하는 질문에는 휴관일·운영 시각이 가치 있는 속성이 됩니다. <b>속성의 가치는 데이터가 아니라 질문이 정합니다.</b></p>
-    </details>
-  </div>
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 공공데이터포털에서 같은 주제를 검색했더니 서로 다른 기관의 파일 여러 개가 나왔습니다. 무엇을 기준으로 하나를 골라야 할까요?</div>
+    <div class="qq"><span class="qn">문제 2</span> 응답 속 관객수가 <code>"audiCnt": "164382"</code>처럼 따옴표에 싸여 옵니다. 이대로 정렬하면 무슨 일이 생기고, 무엇을 해야 할까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">파일 크기가 가장 큰 것 — 데이터가 많을수록 좋으므로</button>
-        <button class="opt">내려받기 횟수가 가장 많은 것 — 남들이 많이 쓴 것이므로</button>
-        <button class="opt" data-ok="1">내 질문이 요구하는 기간·속성·형식을 갖춘 것</button>
+        <button class="opt">아무 문제 없다 — 어차피 화면에는 똑같이 보인다</button>
+        <button class="opt" data-ok="1">글자라서 사전순으로 정렬된다 — 크기 비교·정렬·그래프 전에 숫자로 바꿔야 한다</button>
+        <button class="opt">따옴표를 지우면 API가 오류를 돌려준다 — 그대로 두어야 한다</button>
       </div>
-      <div class="fb">수집은 문제 해결의 목적과 일치해야 합니다. 질문이 요구하는 기간을 담았는지, 필요한 속성이 있는지, 다룰 수 있는 형식인지를 견주어 고릅니다. 크기나 인기만으로 고르지 않습니다.</div>
+      <div class="fb">글자 "9"는 사전순으로 "164382"보다 뒤에 오므로, 글자인 채 정렬하면 9명이 16만 명을 이기는 순위표가 됩니다. 계산·정렬·그래프에 쓰려면 숫자로 바꾸는 한 단계가 필요합니다. ① 프롬프트의 "숫자가 글자로 오니 숫자로 바꿔서 써 줘"가 이 함정을 미리 막은 문장입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 인증키를 틀리게 넣고 호출했더니 상태코드가 200(성공)으로 왔습니다. 어떻게 해석해야 할까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">200이 왔으므로 데이터가 정상적으로 도착했다</button>
+        <button class="opt">키가 틀리면 반드시 404가 온다 — 200이 왔다면 키는 맞은 것이다</button>
+        <button class="opt" data-ok="1">상태코드만으로 판단할 수 없다 — 응답 내용에 faultInfo 상자가 왔는지 함께 확인한다</button>
+      </div>
+      <div class="fb">KOBIS는 키가 틀려도 상태코드 200에 faultInfo 상자("유효하지않은 키값입니다.")를 담아 보냅니다. 번호표(상태코드)와 서류 내용(응답)을 둘 다 확인해야 합니다 — ① 프롬프트에서 faultInfo 처리를 미리 부탁한 이유입니다.</div>
     </div>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
     <li>정형·반정형·비정형을 각각 예를 들어 구분할 수 있다.</li>
-    <li>공공데이터포털에서 관심 분야 데이터 1개를 내려받았다.</li>
-    <li>내려받은 파일의 행 수·열(속성)·기간을 말할 수 있고, AI의 요약과 견주어 보았다.</li>
-    <li>"이 데이터로 답할 수 있는 질문 1개"를 기록했다.</li>
+    <li>주소창에서 KOBIS의 JSON 원문을 열어 상자 구조와 따옴표 친 숫자를 찾았다.</li>
+    <li>키를 비밀 금고(secrets)에 넣었고, 이름 세 곳(금고·프롬프트·코드)이 일치해야 하는 이유를 말할 수 있다.</li>
+    <li>어제의 박스오피스 대시보드를 배포했고, 오늘 저녁 포털 순위와 대조할 준비가 되었다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">정형 데이터</td><td>속성이나 구조가 명확하고 체계화된 데이터. 행과 열로 이루어진 표가 대표적</td></tr>
-    <tr><td class="term">비정형 데이터</td><td>구조를 명확하게 정의하기 어려운 데이터. 이미지·텍스트·음성·영상 등</td></tr>
     <tr><td class="term">반정형 데이터</td><td>일부분이 정형화되어 구조가 있으나 바꿀 수도 있는 유연한 형태. JSON·XML 등</td></tr>
-    <tr><td class="term">속성</td><td>데이터의 항목(열)이 가지는 특성과 성질. 어떤 속성이 중요한지는 문제 상황에 따라 달라진다</td></tr>
-    <tr><td class="term">공공데이터포털</td><td>공공 기관의 데이터를 쉽게 쓸 수 있도록 정부에서 운영하는 사이트 (data.go.kr)</td></tr>
-    <tr><td class="term">CSV</td><td>표 형태의 정형 데이터를 저장하는 파일 형식. 이번 학기 실습의 기본 재료</td></tr>
+    <tr><td class="term">JSON</td><td>"라벨": 값의 쌍으로 데이터를 담는 대표적인 반정형 형식 — 상자 안에 상자를 넣을 수 있다</td></tr>
+    <tr><td class="term">API</td><td>정해진 주소로 요청하면 정해진 양식(JSON)으로 응답하는 약속</td></tr>
+    <tr><td class="term">요청/응답</td><td>조건을 담아 보내는 주소 / 서버가 돌려주는 데이터(주로 JSON)</td></tr>
+    <tr><td class="term">상태코드</td><td>응답과 함께 오는 세 자리 숫자 — 200 성공 · 404 없음 · 429 과다 요청</td></tr>
+    <tr><td class="term">faultInfo</td><td>KOBIS가 오류를 알리는 상자 — 상태코드 200이어도 이 상자가 오면 실패</td></tr>
+    <tr><td class="term">targetDt</td><td>KOBIS에 조회 날짜를 알리는 요청변수 — 하이픈 없는 여덟 자리, 가장 늦은 조회일은 어제</td></tr>
+    <tr><td class="term">인증키(API 키)</td><td>API 사용자를 증명하는 문자열 — 사용량 관리·책임 소재의 장치 (KOBIS는 일 3,000회 한도)</td></tr>
+    <tr><td class="term">비밀 금고(secrets)</td><td>키 같은 비밀값을 코드 밖에 안전하게 두는 스트림릿의 저장 공간</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
     <a class="prev" href="lesson01.html"><div class="dir">← 이전</div><div class="tt">1차시 · 데이터 분석의 6단계 · 질문 던지기</div></a>
-    <a class="next" href="lesson03.html"><div class="dir">다음 →</div><div class="tt">3차시 · 기온 데이터 탐색 — 결측치와 이상치</div></a>
+    <a class="next" href="lesson03.html"><div class="dir">다음 →</div><div class="tt">3차시 · 그래프 도감 Ⅰ — 시간이 보이는 그래프</div></a>
   </div>
 </main>
 </div>

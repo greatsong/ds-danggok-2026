@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>3차시 · 기온 데이터 탐색 — 결측치와 이상치 · 데이터 과학 당곡고</title>
+<title>3차시 · 그래프 도감 Ⅰ · 시간이 보이는 그래프 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -20,238 +20,245 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅱ. 데이터 준비와 분석 · 3차시</span>
-  <h1>기온 데이터 탐색 · <span class="a">결측치와 이상치</span></h1>
+  <h1>그래프 도감 Ⅰ · <span class="a">시간이 보이는 그래프</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"이상한 값을 만나면, 지우기 전에 그 값이 생긴 까닭부터 확인한다."</div>
-    <span class="by">2차시에서 질문에 맞는 데이터를 골랐다면, 오늘은 그 데이터가 만들어진 과정을 살핍니다</span>
+    <div class="q">"그래프는 장식이 아니라, 질문에 답하는 도구다."</div>
+    <span class="by">그래프마다 답할 수 있는 질문이 다릅니다 — 오늘은 시간이 보이는 다섯 가지를 모읍니다</span>
   </div>
 
-  <p class="lead">"서울은 정말 더워지고 있는가." 오늘은 이 질문의 데이터를 처음 엽니다. 1907년부터 어제까지 쌓인 서울의 일별 기온 기록(<code>seoul.csv</code>)을 요약하고, 그래프로 바꾸고, 이상한 곳을 찾아냅니다. 끊긴 선과 뚝 떨어진 한 점 — 그 뒤에서 뜻밖의 역사를 만나게 됩니다.</p>
+  <p class="lead">지난 시간에는 API로 <b>어제 하루</b>의 박스오피스를 받았습니다. 오늘은 선생님이 1년 동안 매일 쌓아 둔 <b>354일치 표</b>를 재료로, 시간의 흐름이 보이는 그래프 다섯 가지를 한 앱에 쌓습니다. 그래프마다 답할 수 있는 질문이 다르므로, 질문과 그래프의 짝을 기록한 <b>도감</b>을 만드는 시간입니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>100년 추세 그래프</b> — 요약통계를 읽고, 일별 기온을 연평균 선 그래프로</li>
-      <li><b>이상 지점의 정체 추적</b> — 끊긴 선(1951·1952년)과 0.6℃의 한 점(1953년)</li>
-      <li><b>전처리 판단</b> — 관측일이 부족한 해를 뺄 것인가, 그 기준은 정당한가</li>
+      <li><b>데이터 전환</b> — 하루치 API 응답에서 354일 축적 표(kobis_daily.csv)로</li>
+      <li><b>도감 만들기</b> — 선·다중 선·영역·가로 막대·히트맵을 한 앱에 쌓기</li>
+      <li><b>발견</b> — 1년 중 극장이 가장 붐빈 3일을 데이터에서 찾기</li>
     </ul>
   </div>
 
-  <h2>0. 왜 배우나</h2>
-  <p>한 달 용돈 지출을 표로 적으면 서른 개 남짓한 숫자 목록이 됩니다. 어느 날 얼마를 썼는지는 다 있는데, 목록만 훑어서는 언제 갑자기 많이 썼는지가 좀처럼 눈에 들어오지 않습니다. 같은 기록을 날짜순 그래프로 바꾸면 이야기가 달라집니다. 평소보다 튀어 오른 날이 한눈에 드러나고, "그날 무슨 일이 있었지?"라는 질문이 자연스럽게 따라옵니다. 숫자를 그림으로 바꾸는 일은 꾸미는 일이 아니라, 표에서는 안 보이던 것을 보이게 만드는 일입니다. 오늘은 100년이 넘는 기온 기록을 그래프 한 장으로 바꾸고, 거기서 이상한 곳을 찾아냅니다. 그리는 것은 AI가 하고, 찾아내고 판단하는 것은 사람의 몫입니다.</p>
-
-  <h2>1. 개념 이해 — 시각화 · 결측치 · 이상치</h2>
-  <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 57·60·63쪽</span></div>
-    <p class="q">"결측치(missing value)란 수집한 데이터에서 값이 없는 경우로 누락된 값을 말한다." <span class="src">(57쪽)</span></p>
-    <p class="q">"이상치(outlier)란 일반적인 데이터의 범위를 벗어나 다른 관측치와 크게 동떨어진 값을 갖는 데이터를 말한다." <span class="src">(60쪽)</span></p>
-    <p class="q">"데이터 시각화란 데이터를 이해하기 쉽게 도형, 선, 색 등의 시각적인 요소로 표현하는 것을 말한다." <span class="src">(63쪽)</span></p>
-    <p class="t">→ 시각화는 <b>수치만 가지고는 파악하기 힘든 특성</b>을 드러내는 도구다. 오늘 그래프에서 결측치와 이상치가 서로 다른 모습으로 나타난다.</p>
+  <h2>0. 왜 배우나 — 하루치로는 답할 수 없는 질문</h2>
+  <p>지난 시간의 앱은 "어제 무엇이 1위였나"에 훌륭하게 답합니다. 그런데 질문을 조금만 바꾸면 바로 막힙니다. <b>이 영화의 관객은 개봉 후 어떻게 변했나? 1년 중 극장이 가장 붐빈 날은 언제인가?</b> 하루치 응답에는 <b>변화</b>가 없어 답할 수 없습니다. 이런 질문에 답하려면 여러 날의 응답을 한 표로 쌓아야 합니다.</p>
+  <p>그래서 오늘 데이터를 바꿉니다. 여러분이 지난 시간에 부른 그 API를 선생님이 매일 한 번씩 불러 저장해 온 축적 표가 있습니다. 2025년 9월 1일부터 2026년 8월 20일까지 <b>354일</b>, 하루 10행씩 <b>3,540행</b>, 등장한 영화 <b>296편</b>(영화코드 기준). 일별 응답 조각을 한 표로 잇는 <b>데이터 통합</b>의 실물이고, 폼 Ⅱ-04a에서 이 통합을 기록하게 됩니다.</p>
+  <div class="specimen-row">
+    <div class="specimen semi">
+      <div class="tag">하루치 — API 응답 (JSON)</div>
+      <div class="body"><pre class="mini">{
+  <span class="k">"rank"</span>: "1",
+  <span class="k">"movieNm"</span>: "극장판 귀멸의 칼날:
+              무한성편",
+  <span class="k">"audiCnt"</span>: "88577",
+  <span class="k">"audiAcc"</span>: "3242295"
+}</pre></div>
+      <div class="note">2025년 9월 1일의 응답 한 상자. <b>그날 하루</b>만 담겨 있고, 숫자가 따옴표 친 글자로 옵니다.</div>
+    </div>
+    <div class="specimen st">
+      <div class="tag">354일 축적 — kobis_daily.csv</div>
+      <div class="body">
+        <table class="minitable">
+          <thead><tr><th>날짜</th><th>순위</th><th>영화명</th><th>일관객</th><th>누적관객</th></tr></thead>
+          <tbody>
+            <tr><td>20250901</td><td>1</td><td>극장판 귀멸의 칼날: 무한성편</td><td>88577</td><td>3242295</td></tr>
+            <tr><td>20250901</td><td>2</td><td>F1 더 무비</td><td>19327</td><td>4779711</td></tr>
+            <tr><td colspan="5" style="text-align:center;color:#c0b8a4">⋮ 354일 × 10행</td></tr>
+            <tr><td>20260820</td><td>1</td><td>오디세이</td><td>188671</td><td>5788173</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">같은 응답을 매일 쌓아 만든 표. 날짜 열이 생기면서 <b>변화</b>를 물을 수 있게 됩니다.</div>
+    </div>
   </div>
-  <p>표를 요약하는 첫 도구는 <b>요약통계</b> — 개수·평균·최소·최대입니다. 강력한 압축이지만 대가가 있습니다. 빠진 값이 몇 개인지는 알아도 <b>어느 시기에</b> 몰려 있는지는 요약에서 사라집니다. 그래프는 이 위치 정보를 되살립니다. 모든 값을 시간 축 위의 제자리에 놓기 때문에, "얼마나"만 알던 것을 "언제"까지 볼 수 있게 됩니다. 요약통계와 그래프는 경쟁하는 도구가 아니라 서로 다른 것을 보여 주는 한 쌍입니다.</p>
-  <p>다만 일별 값을 그대로 그리면 겨울과 여름을 오르내리는 계절의 물결이 너무 커서, 100년에 걸친 느린 변화가 그 속에 묻힙니다. 그래서 같은 해끼리 묶어 <b>연평균</b> 하나로 줄여서 그립니다. 이렇게 여러 값을 묶어 요약하는 일이 <b>집계</b>입니다. 집계는 긴 흐름을 드러내 주지만, 관측이 며칠 없던 해도 평균 하나로 줄어, 다른 해와 똑같이 "연평균"으로 기록됩니다. 이 사실이 오늘 발견할 이상한 점 하나와 이어집니다.</p>
+  <p>왼쪽만 있으면 오늘의 순위표, 오른쪽이 있으면 1년의 흐름입니다. 실시간이 필요한 질문에는 API를, 기간의 흐름을 묻는 질문에는 축적 표를 씁니다. 어느 쪽을 고를지도 분석의 판단입니다.</p>
+
+  <h2>1. 개념 이해 — 도감이라는 방법</h2>
+  <p>식물도감이 잎 모양으로 나무를 찾게 해 주듯, 그래프 도감은 <b>질문의 모양으로 그래프를 찾게</b> 해 줍니다. 좋은 그래프를 고르는 기준은 예쁜 정도가 아니라 "내가 무엇이 궁금한가"입니다. 오늘 모으는 다섯 종은 모두 <b>시간</b>이 한 축에 들어가는 그래프입니다.</p>
   <table class="daymap">
-    <thead><tr><th>이상의 두 종류</th><th>그래프에서</th><th>물어야 할 것</th></tr></thead>
+    <thead><tr><th>#</th><th>그래프</th><th>답하는 질문</th><th>눈여겨볼 것</th><th>구분</th></tr></thead>
     <tbody>
-      <tr><td><b>값이 없다</b> (결측치)</td><td>선이 끊긴다</td><td>왜 이 시기만 기록이 없는가</td></tr>
-      <tr><td><b>값이 유난히 다르다</b> (이상치)</td><td>한 점이 동떨어진다</td><td>이 값은 어떻게 만들어졌는가</td></tr>
+      <tr><td>1</td><td><b>선</b></td><td>한 영화의 관객은 개봉 후 어떻게 변하나</td><td>첫 주에 몰리고 급감, 주말마다 솟는 톱니</td><td>필수</td></tr>
+      <tr><td>2</td><td><b>다중 선</b></td><td>흥행 대작들의 곡선은 서로 닮았나</td><td>개봉일이 달라 곡선의 출발점이 어긋난다</td><td>필수</td></tr>
+      <tr><td>3</td><td><b>영역</b></td><td>1년 중 극장이 가장 붐빈 날은 언제인가</td><td>명절·연말·방학의 봉우리</td><td>필수</td></tr>
+      <tr><td>4</td><td><b>가로 막대</b></td><td>이 기간 누적 TOP 10은 어느 영화인가</td><td>정렬 기준(일관객/누적)에 따라 순위가 바뀐다</td><td>필수</td></tr>
+      <tr><td>5</td><td><b>히트맵</b></td><td>월×요일로 보면 언제 몰리나</td><td>토·일 열이 진하다</td><td>확장</td></tr>
     </tbody>
   </table>
+  <p>만드는 방식은 이렇습니다. 먼저 ① 프롬프트로 <b>뼈대</b>(데이터 불러오기 + 첫 그래프)를 만들고, 그다음부터는 같은 대화창에서 <b>그래프 추가 프롬프트를 하나씩 이어 붙여</b> 도감을 채웁니다. 필수 네 종을 먼저 완성하고, 시간이 남으면 확장(히트맵)까지 갑니다.</p>
 
-  <h2>2. 실습 — 100년의 추세를 그린다 (바이브 코딩)</h2>
-  <p>2차시에는 내려받은 파일을 AI에게 요약시켰습니다. 오늘부터는 ①②③ 세 단계를 <b>내 손으로</b> 완주합니다. 데이터는 기상청 관측 기록을 수업용으로 정리한 <code>seoul.csv</code> — 1907년부터 어제까지의 일별 기온(날짜·지점·평균기온·최저기온·최고기온)이고, 매일 아침 자동으로 갱신됩니다.</p>
-  <div class="callout tip">
-    <div class="h">🔎 데이터의 출처 — 기상청</div>
-    <ul>
-      <li>서울 기온은 <b>기상청</b>의 종관기상관측(ASOS) 일자료입니다 · 서울 지점(108) · <a href="https://data.kma.go.kr" target="_blank" rel="noopener">기상자료개방포털 data.kma.go.kr</a></li>
-      <li><b>믿을 수 있는 이유</b> — 국가 기상 관측을 책임지는 기관이 표준 장비로 100년 넘게 매일 측정한 공식 기록이고, 누구나 포털에서 확인할 수 있습니다.</li>
-      <li>공공누리(출처표시) 계열 공개 데이터입니다. 수업용으로 정리한 사본을 <a href="https://github.com/greatsong/modudata" target="_blank" rel="noopener">modudata</a>에서 매일 자동으로 갱신합니다. 2차시에 살핀 "출처를 따지는 눈"을 오늘 데이터에도 적용한 것입니다.</li>
-    </ul>
-  </div>
-
+  <h2>2. 실습 — 뼈대와 첫 그래프 (선)</h2>
+  <p><b>답하는 질문: 한 영화의 관객은 개봉 후 어떻게 변하나.</b> 지난 시간처럼 main.py를 새 코드로 교체합니다. 덮어써도 커밋 기록에 이전 앱이 그대로 남으므로 아까워할 것 없습니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>서울 기온 데이터(seoul.csv)를 스트림릿으로 불러와 요약통계를 보여 주고,
-일별 기온을 연평균으로 바꿔 1907년부터 지금까지의 추세를 선 그래프로 그려 줘.
-주소는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</pre></div>
+      <div class="codewrap prompt"><span class="label">① 뼈대 프롬프트</span><button class="copy-btn">복사</button><pre>스트림릿 앱(main.py)을 새로 만들어 줘. 제목은 '영화 데이터 그래프 도감 1 - 시간'.
+- 데이터는 이 주소에서 불러와:
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv
+  1년치(354일) 일별 박스오피스 10위권 기록이야. 열은
+  날짜(하이픈 없는 여덟 자리 숫자) · 순위 · 영화코드 · 영화명 · 일관객 · 누적관객 · 스크린수 · 상영횟수.
+- 날짜 열을 진짜 날짜로 바꿔서 써 줘.
+- 첫 그래프: 영화를 드롭다운으로 고르면 그 영화의 날짜별 일관객 변화를 플롯리 선 그래프로 보여 줘.
+  마우스를 올리면 날짜와 관객수가 보이게.
+- 그래프마다 아래에 '이 그래프로 알 수 있는 것' 한 문장을 문구로 넣을 자리를 만들어 줘.
+- 앞으로 그래프를 계속 추가할 거니까 구역을 나눠 줘.</pre></div>
     </li>
-    <li><span class="st">② AI가 준 코드 — 실행하고 두 화면을 읽는다</span><br>
-      먼저 <b>요약통계</b>를 읽습니다. 개수(값이 있는 칸의 수)·평균·최소·최대를 한 세트로 보고, 개수가 전체 행 수보다 적은 열이 있는지 확인합니다. 그 차이가 곧 결측치의 신호입니다. 날짜처럼 숫자가 아닌 속성에는 평균값이 아예 없다는 것도 눈에 띕니다. 다음으로 <b>그래프</b>를 봅니다. 전체 흐름은 오른쪽 위로 향하는데, 두 곳이 이상합니다. 어디인지 스스로 찾아보고 연도를 메모합니다.</li>
-    <li><span class="st">③ 개선 프롬프트 — 이상한 곳을 드러낸다</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>그래프에서 값이 비어 있는 연도와 유난히 낮은 연도가
-눈에 띄게 표시해 줘. 어디가 이상한지 한눈에 보이게.</pre></div>
+    <li><span class="st">② AI가 준 코드 — 이런 모습이면 성공</span><br>
+      아래는 선생님이 같은 프롬프트로 받아 실행까지 확인한 코드입니다. 여러분 코드가 이것과 <b>글자까지 같지 않아도 됩니다</b>. 드롭다운에서 영화를 골랐을 때 선 그래프가 나타나면 성공입니다.
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 (main.py)</span><button class="copy-btn">복사</button><pre># 영화 데이터 그래프 도감 1 - 시간
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+st.set_page_config(page_title="영화 데이터 그래프 도감 1 - 시간", layout="wide")
+st.title("영화 데이터 그래프 도감 1 - 시간")
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv"
+
+
+@st.cache_data
+def load_data():
+    # 1년치(354일) 일별 박스오피스 10위권 기록을 불러옵니다.
+    df = pd.read_csv(DATA_URL)
+    # 여덟 자리 숫자로 된 날짜 열을 진짜 날짜로 바꿉니다.
+    df["날짜"] = pd.to_datetime(df["날짜"], format="%Y%m%d")
+    return df
+
+
+df = load_data()
+
+# ── 그래프 1. 영화 하나의 흥행 곡선 ──────────────────────────
+st.header("1. 한 영화의 흥행 곡선")
+
+# 드롭다운으로 영화를 고릅니다.
+movie_list = sorted(df["영화명"].unique())
+movie = st.selectbox("영화를 고르세요", movie_list)
+
+one = df[df["영화명"] == movie].sort_values("날짜")
+fig = px.line(one, x="날짜", y="일관객", markers=True)
+fig.update_traces(hovertemplate="날짜 %{x|%Y-%m-%d}&lt;br&gt;관객 %{y:,}명")
+st.plotly_chart(fig, width="stretch")
+
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
+
+# ── 앞으로 그래프 2, 3, 4, 5가 이 아래에 추가됩니다 ──────────</pre></div>
     </li>
+    <li><span class="st">눈여겨볼 것 — 곡선의 세 자리</span><br>
+      드롭다운에서 아무 흥행작이나 골라 봅니다. <b>시작점</b>(개봉일의 높이), <b>기울기</b>(첫 주 뒤 줄어드는 속도), <b>톱니</b>(주말마다 솟는 자리), 이 세 자리가 보이면 선 그래프를 읽은 것입니다. 그래프 아래 문구 자리에 "이 그래프로 알 수 있는 것" 한 문장을 적습니다.</li>
   </ol>
 
-  <div class="callout mini">
-    <div class="h">✍️ 교과서로 확인 — 평균값이 없는 속성</div>
-    <p>교과서 54쪽 해 보기 ③ ②번 물음이 방금 화면에서 본 장면과 같은 문제입니다 — 폼 <b>Ⅱ-01b</b>에 내 말로 적습니다.</p>
-  </div>
+  <h2>3. 도감 채우기 — 그래프를 하나씩 쌓는다</h2>
+  <p>이제부터는 <b>같은 대화창</b>에서 추가 프롬프트를 하나씩 복사해 붙입니다. 그래프가 하나 늘 때마다 커밋으로 교체하고, 화면에서 확인한 뒤 다음으로 넘어갑니다.</p>
 
-  <h2>3. 발견 — 끊긴 선과 떨어진 점 (★)</h2>
-  <p>찾았습니까? 이상한 곳은 두 군데이고, 성격이 서로 다릅니다.</p>
-  <div class="callout tip">
-    <div class="h">💡 이상 지점이 안 보이면</div>
-    <ul>
-      <li>그래프에서 <b>1940~1960년 구간만 확대</b>하면 끊긴 선과 떨어진 점이 또렷하게 나타납니다. 플롯리(plotly)로 그린 그래프라면 마우스로 구간을 끌어 확대할 수 있고, 점 위에 마우스를 올리면 연도와 값이 표시됩니다. 확대가 어려우면 "1940년부터 1960년까지만 그려 줘"라고 요청해도 됩니다.</li>
-      <li>정상과 이상을 나누는 눈 = "다른 값들과 <b>유난히 다른가</b>"를 보는 것. 해마다 오르내리는 들쭉날쭉함은 정상 변동입니다.</li>
-    </ul>
-  </div>
-  <div style="overflow-x:auto">
-<svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;min-width:560px" aria-label="1940년부터 1960년까지 연평균 기온 그래프의 확대 — 1951·1952년의 끊긴 선과 1953년의 동떨어진 점">
-  <!-- 한국전쟁 관측 중단 음영 밴드: 1950년 9월 ~ 1953년 11월 -->
-  <rect x="415" y="42" width="104" height="193" fill="#d9d9d9" opacity="0.35"/>
-  <text x="467" y="28" text-anchor="middle" font-size="12.5" font-weight="700" fill="#6b6b6b">한국전쟁 관측 중단 (1950년 9월~1953년 11월)</text>
-  <line x1="467" y1="33" x2="467" y2="42" stroke="#9a9a9a" stroke-width="1"/>
-  <!-- 축 -->
-  <line x1="60" y1="42" x2="60" y2="235" stroke="#b9a97e" stroke-width="1.5"/>
-  <line x1="60" y1="235" x2="732" y2="235" stroke="#b9a97e" stroke-width="1.5"/>
-  <g font-size="12" fill="#7a7563" text-anchor="middle">
-    <line x1="60" y1="235" x2="60" y2="241" stroke="#b9a97e" stroke-width="1.5"/><text x="60" y="256">1940</text>
-    <line x1="225" y1="235" x2="225" y2="241" stroke="#b9a97e" stroke-width="1.5"/><text x="225" y="256">1945</text>
-    <line x1="390" y1="235" x2="390" y2="241" stroke="#b9a97e" stroke-width="1.5"/><text x="390" y="256">1950</text>
-    <line x1="555" y1="235" x2="555" y2="241" stroke="#b9a97e" stroke-width="1.5"/><text x="555" y="256">1955</text>
-    <line x1="720" y1="235" x2="720" y2="241" stroke="#b9a97e" stroke-width="1.5"/><text x="720" y="256">1960</text>
-  </g>
-  <text x="64" y="130" font-size="11" fill="#9a9482">다른 해의 값 표기는 생략(…)</text>
-  <!-- 연평균 꺾은선 (정성적 형태) — 1950년까지 -->
-  <polyline points="60,150 93,140 126,152 159,138 192,148 225,142 258,132 291,145 324,130 357,140 390,136" fill="none" stroke="#e8930c" stroke-width="2.5"/>
-  <circle cx="390" cy="136" r="3.5" fill="#ffffff" stroke="#e8930c" stroke-width="2"/>
-  <!-- 1951·1952 — 선이 끊긴 빈 구간 (결측치) -->
-  <path d="M 402,112 L 402,106 L 440,106 M 440,106 L 478,106 L 478,112 M 440,106 L 440,99" fill="none" stroke="#3ba6a0" stroke-width="1.6"/>
-  <text x="440" y="72" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3ba6a0">1951·1952 — 유효 관측 0일</text>
-  <text x="440" y="89" text-anchor="middle" font-size="12.5" font-weight="700" fill="#3ba6a0">연평균 자체가 없다 (결측치)</text>
-  <!-- 1953 — 동떨어진 한 점 (이상치) -->
-  <line x1="60" y1="210" x2="482" y2="210" stroke="#e45756" stroke-width="1.3" stroke-dasharray="5 4"/>
-  <text x="66" y="203" font-size="12.5" font-weight="700" fill="#e45756">0.6℃</text>
-  <circle cx="489" cy="210" r="7" fill="#e45756"/>
-  <text x="530" y="192" font-size="12.5" font-weight="700" fill="#e45756">1953 — 관측은 12월 31일치뿐</text>
-  <text x="530" y="209" font-size="12.5" font-weight="700" fill="#e45756">겨울 평균이 연평균으로 기록되었다 (이상치)</text>
-  <!-- 1954년 이후 선 재개 -->
-  <circle cx="522" cy="142" r="3.5" fill="#ffffff" stroke="#e8930c" stroke-width="2"/>
-  <polyline points="522,142 555,136 588,144 621,132 654,140 687,130 720,135" fill="none" stroke="#e8930c" stroke-width="2.5"/>
-  <text x="380" y="288" text-anchor="middle" font-size="12.5" fill="#7a7563">선이 끊긴 곳과 점이 떨어진 곳 — 두 이상의 모습이 다르고, 원인도 다르다.</text>
-</svg>
-  </div>
+  <h3>그래프 2 — 다중 선</h3>
+  <p><b>답하는 질문: 흥행 대작들의 곡선은 서로 닮았나.</b></p>
+  <div class="codewrap improve"><span class="label">그래프 2 추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘. 두 번째 그래프를 추가해.
+- 기간 전체 누적관객 상위 5편을 골라, 다섯 영화의 날짜별 일관객을 한 선 그래프에
+  색으로 구분해서 보여 줘. 범례를 눌러 영화를 켜고 끌 수 있게.</pre></div>
+  <p><b>눈여겨볼 것</b> — 다섯 곡선이 한 화면에 오르는데, 개봉일이 서로 달라 <b>출발점이 어긋납니다</b>. "모양을 제대로 견주려면 달력 날짜가 아니라 개봉 후 며칠째로 맞춰야 하지 않나?"라는 생각이 들었다면 정확히 읽은 것입니다. 질문이 깊어지는 순간이고, 그 정렬은 도전 과제로 남겨 둡니다.</p>
+
+  <h3>그래프 3 — 영역</h3>
+  <p><b>답하는 질문: 1년 중 극장이 가장 붐빈 날은 언제인가.</b> 이번에는 영화를 고르지 않습니다. 날짜별로 10위권 전체를 합쳐 극장가 전체의 리듬을 봅니다.</p>
+  <div class="codewrap improve"><span class="label">그래프 3 추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 세 번째 그래프를 추가해.
+- 날짜별로 그날 10위권 일관객의 합계를 구해서 영역 그래프로 보여 줘.
+- 합계가 가장 컸던 날 3일을 그래프 위에 표시하고 날짜를 적어 줘.</pre></div>
+  <p><b>눈여겨볼 것</b> — 그래프 위에 찍힌 3일이 오늘의 발견입니다. 아래 4절에서 함께 확인합니다.</p>
+
+  <h3>그래프 4 — 가로 막대</h3>
+  <p><b>답하는 질문: 이 기간 누적 TOP 10은 어느 영화인가.</b></p>
+  <div class="codewrap improve"><span class="label">그래프 4 추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 네 번째 그래프를 추가해.
+- 영화별 누적관객의 최댓값으로 기간 전체 TOP 10을 뽑아 가로 막대그래프로,
+  관객이 많은 영화가 위에 오게 보여 줘.
+- 막대에 마우스를 올리면 개봉 후 10위권에 든 날수도 보이게.</pre></div>
+  <p><b>눈여겨볼 것</b> — 무엇으로 정렬하느냐에 따라 순위가 달라집니다. 누적관객 기준과 일관객 최고 기록 기준은 서로 다른 TOP 10을 내놓습니다. "TOP 10"이라는 말에는 언제나 <b>기준</b>이 숨어 있습니다. 순위를 볼 때마다 기준부터 확인하는 습관이 여기서 생깁니다.</p>
+
+  <h3>그래프 5 — 히트맵 <span class="a">(확장)</span></h3>
+  <p><b>답하는 질문: 월×요일로 보면 언제 몰리나.</b> 시간이 남으면 도전합니다.</p>
+  <div class="codewrap improve"><span class="label">그래프 5 추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 다섯 번째 그래프를 추가해.
+- 날짜에서 월과 요일을 뽑아, 월×요일별 일관객 합계를 히트맵으로 보여 줘.
+  색이 진할수록 관객이 많게 하고, 요일은 월요일부터 일요일 순서로.</pre></div>
+  <p><b>눈여겨볼 것</b> — 토·일 열이 진합니다. 선 그래프에서 본 주말 톱니가, 1년치를 요일로 접자 색의 기둥으로 다시 나타난 것입니다. 같은 사실이 그래프에 따라 다른 모습으로 보입니다.</p>
+
+  <h2>4. 발견 — 달력이 데이터에 찍혀 있다</h2>
+  <p>그래프 3(영역)이 찾아 준, 10위권 일관객 합계가 가장 컸던 3일은 이렇습니다. 선생님이 같은 데이터로 직접 계산해 확인한 값입니다.</p>
   <table class="daymap">
-    <thead><tr><th>이상 지점</th><th>그래프의 모습</th><th>정체</th></tr></thead>
+    <thead><tr><th>순위</th><th>날짜</th><th>10위권 일관객 합계</th><th>달력의 사건</th></tr></thead>
     <tbody>
-      <tr><td><b>1951·1952년</b></td><td>선이 끊긴다 — 연평균 자체가 없다</td><td>한국전쟁으로 관측 중단(1950년 9월~1953년 11월) · 두 해의 유효 관측 <b>0일</b></td></tr>
-      <tr><td><b>1953년</b></td><td>한 점이 <b>0.6℃</b>로 추락한다</td><td>관측 재개가 12월 — 그해 관측은 <b>12월의 31일치</b>뿐. 겨울 평균이 연평균으로 둔갑</td></tr>
+      <tr><td>1</td><td><b>2025년 12월 25일 (목)</b></td><td>1,347,645명</td><td>성탄절</td></tr>
+      <tr><td>2</td><td><b>2026년 8월 8일 (토)</b></td><td>1,225,215명</td><td>여름 방학의 주말</td></tr>
+      <tr><td>3</td><td><b>2026년 8월 16일 (일)</b></td><td>1,223,253명</td><td>광복절 다음 날, 방학 중 일요일</td></tr>
     </tbody>
   </table>
-  <div style="overflow-x:auto">
-<svg viewBox="0 0 720 132" xmlns="http://www.w3.org/2000/svg" role="img" style="width:100%;height:auto;min-width:560px" aria-label="1953년 열두 달 가운데 12월에만 관측이 있고, 그 31일의 평균 0.6℃가 연평균으로 기록된 과정">
-  <g font-size="10.5" fill="#7a7563" text-anchor="middle">
-    <text x="25" y="22">1월</text><text x="61" y="22">2월</text><text x="97" y="22">3월</text><text x="133" y="22">4월</text><text x="169" y="22">5월</text><text x="205" y="22">6월</text><text x="241" y="22">7월</text><text x="277" y="22">8월</text><text x="313" y="22">9월</text><text x="349" y="22">10월</text><text x="385" y="22">11월</text><text x="421" y="22">12월</text>
-  </g>
-  <g fill="#ffffff" stroke="#f0e2bc" stroke-width="1.5">
-    <rect x="8" y="30" width="34" height="44" rx="4"/><rect x="44" y="30" width="34" height="44" rx="4"/><rect x="80" y="30" width="34" height="44" rx="4"/><rect x="116" y="30" width="34" height="44" rx="4"/><rect x="152" y="30" width="34" height="44" rx="4"/><rect x="188" y="30" width="34" height="44" rx="4"/><rect x="224" y="30" width="34" height="44" rx="4"/><rect x="260" y="30" width="34" height="44" rx="4"/><rect x="296" y="30" width="34" height="44" rx="4"/><rect x="332" y="30" width="34" height="44" rx="4"/><rect x="368" y="30" width="34" height="44" rx="4"/>
-  </g>
-  <text x="25" y="48" text-anchor="middle" font-size="9" fill="#c9c0a6">관측</text>
-  <text x="25" y="61" text-anchor="middle" font-size="9" fill="#c9c0a6">없음</text>
-  <rect x="404" y="30" width="34" height="44" rx="4" fill="#3ba6a0"/>
-  <text x="421" y="48" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">31일</text>
-  <text x="421" y="62" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">관측</text>
-  <line x1="444" y1="52" x2="466" y2="52" stroke="#7a7563" stroke-width="1.6"/>
-  <path d="M 466,47 L 474,52 L 466,57 z" fill="#7a7563"/>
-  <rect x="480" y="26" width="232" height="52" rx="8" fill="#ffffff" stroke="#f0e2bc" stroke-width="1.5"/>
-  <text x="596" y="48" text-anchor="middle" font-size="12" font-weight="700" fill="#5a5442">이 31일의 평균 = <tspan fill="#e45756">0.6℃</tspan></text>
-  <text x="596" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#5a5442">→ '1953년 연평균'으로 기록</text>
-  <text x="360" y="112" text-anchor="middle" font-size="12.5" fill="#7a7563">측정이 틀린 것이 아니라, 겨울 한 달의 평균이 연평균으로 기록된 것이다.</text>
-</svg>
-  </div>
+  <p>세 날 모두 쉬는 날입니다. 우리는 영화 데이터만 보았는데, 그 안에 성탄절과 방학과 주말, 곧 <b>사회의 리듬</b>이 찍혀 있었습니다. 데이터는 세상과 떨어져 있지 않아서, 그래프의 봉우리 하나가 달력의 사건 하나와 짝을 이룹니다. 여러분 앱의 3일이 이 표와 같은지 확인하고, 봉우리를 어떻게 해석했는지 폼 Ⅱ-02a에 기록합니다.</p>
   <div class="callout warn">
-    <div class="h">⚠️ 데이터에도 역사가 있다</div>
-    <ul>
-      <li><b>끊긴 선(결측치)</b> — 기온이 변한 것이 아니라 기록하는 사람이 없었다. 전쟁이라는 역사가 표의 빈칸으로 남았다.</li>
-      <li><b>0.6℃의 점(이상치)</b> — 값 자체는 겨울 31일의 정확한 평균이다. 다만 사계절이 담기지 않아 연평균으로 볼 수 없는 값이다.</li>
-      <li>교과서 60쪽의 지시 그대로 — 이상치는 지우기 전에 <b>생긴 원인을 찾아</b> 상황에 맞게 처리한다. 원인을 찾으니 처방도 보인다.</li>
-    </ul>
+    <div class="h">⚠️ 합계의 정체를 정확히 말하면</div>
+    <p>이 숫자는 그날 극장을 찾은 모든 관객이 아니라 <b>일별 10위권에 든 영화들의 관객 합계</b>입니다. 11위 아래 영화들은 빠져 있습니다. 그래도 붐빈 날을 찾는 데는 충분합니다. 다만 "그날 전체 관객 수"라고 말하면 데이터가 담은 범위를 넘어서는 주장이 됩니다. 그래프를 읽을 때는 데이터의 범위까지 함께 말하는 것이 정확한 해석입니다.</p>
   </div>
 
-  <h2>4. 전처리 판단 — 뺄 것인가, 남길 것인가</h2>
-  <p>정체를 밝혔으니 판단할 차례입니다. 1953년처럼 관측일이 크게 부족한 해는 연평균을 믿기 어렵습니다. 그래서 <b>"관측일 300일 미만인 해는 제외한다"</b>는 기준을 세웁니다. 아직 진행 중인 올해도 미완성이므로 함께 뺍니다. 이 기준을 적용하면 1908년부터 2025년까지 <b>114개 연도</b>가 남습니다.</p>
-  <p>그런데 여기서 물음이 하나 생깁니다. 데이터를 마음대로 빼도 되는 것일까요? 갈림길은 기준에 있습니다. "관측일 300일 미만 제외"는 기온 값을 보기 전에 정할 수 있고 누구에게나 같은 잣대입니다. <b>믿을 수 없는 값</b>을 거르는 정당한 전처리입니다. 반대로 결과 그래프를 본 뒤 내 결론을 약하게 만드는 해만 골라 뺀다면, 같은 삭제라도 <b>불리한 값 제거</b>, 곧 조작이 됩니다. 무엇을 뺐느냐가 아니라 어떤 기준으로 뺐느냐가 전처리와 조작을 가릅니다. 전처리는 조작이 아니라 감식입니다.</p>
-  <table class="daymap">
-    <thead><tr><th>구분</th><th>기준을 정하는 때</th><th>성격</th></tr></thead>
-    <tbody>
-      <tr><td><b>믿을 수 없는 값 제거</b></td><td>값을 보기 전 · 누구에게나 같은 잣대</td><td>정당한 전처리 (예: 관측일 300일 미만 제외)</td></tr>
-      <tr><td><b>불리한 값 제거</b></td><td>결과를 본 뒤 · 내 결론에 맞춰 고름</td><td>조작</td></tr>
-    </tbody>
-  </table>
-  <div class="callout tip">
-    <div class="h">💡 빼기 전과 뺀 후를 남겨 두기</div>
-    <p>전처리 전과 후의 그래프를 비교해 무엇이 달라졌는지 확인하는 활동이 교과서 91쪽 해 보기 ②에 있습니다. 우리 데이터에서는 다음 차시에 이 비교 화면을 앱에 직접 담습니다. 뺀 사실과 기준을 감추지 않고 나란히 보여 주는 것 — 그것이 감식과 조작을 가르는 두 번째 장치입니다.</p>
-  </div>
-  <h2>5. 개념 정리 — 이상 지점이 가르쳐 준 것</h2>
-  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>요약통계는 "얼마나"를, 그래프는 "언제"를 보여 주고, 이상한 곳의 원인을 추적한 사람만 무엇을 걸러 낼지 판단할 수 있다.</b> 결측치(값이 없음)와 이상치(값이 유난히 다름)는 그래프에서 다른 모습으로 나타났고, 원인도 달랐습니다. 그리고 두 이상 지점 모두 뒤에 역사가 있었습니다. 1차시의 6단계에서 "데이터 준비"가 기술이 아니라 판단의 단계라고 했던 이유가 오늘 실제 데이터로 확인된 셈입니다.</p>
-  <p>남은 일이 하나 있습니다. 오늘의 분석은 아직 내 컴퓨터 화면 안에만 있습니다. 다음 차시에는 이 기온 탐색을 정리해 인터넷에 올리고, 학기 내내 커질 <b>나의 포트폴리오 앱</b>의 첫 페이지로 삼습니다.</p>
+  <h2>5. 개념 정리 — 질문이 그래프를 고른다</h2>
+  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>하루치 응답으로는 변화를 물을 수 없고, 축적된 표에서는 그래프마다 다른 질문에 답할 수 있다.</b> 선은 한 영화의 흐름을, 영역은 전체의 리듬을, 가로 막대는 기간의 순위를, 히트맵은 요일의 규칙을 보여 주었습니다. "하루치로는 답할 수 없던 질문"이 무엇이었는지 폼 Ⅱ-04a에 기록해 둡니다. 다음 시간에는 시간 축이 없는 질문들(분포·구성·관계)로 도감 2편을 만듭니다.</p>
 
   <h2>6. 확인 문제</h2>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 1953년의 연평균 0.6℃가 이상치인 근거를 관측일 수를 들어 설명해 보세요. 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>그해 관측은 12월의 31일치뿐이다. 사계절이 골고루 들어가야 할 연평균에 겨울 한 달의 평균만 반영되었으므로, 값 자체가 틀렸다기보다 연평균으로 볼 수 없는 값이다. 다른 해들과 크게 동떨어진 원인이 관측일 수 부족으로 설명되므로 이상치로 판단한다.</p>
-    </details>
-  </div>
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 두 이상 지점의 성격을 구분하고, 무엇이 어떻게 다른지 설명해 보세요.</div>
+    <div class="qq"><span class="qn">문제 1</span> 질문에 맞는 그래프를 골라 보세요. 답을 눌러 확인합니다.</div>
     <div class="qitem">
-      <div class="qs">(가) 1951·1952년 — 선이 끊긴 자리</div>
-      <div class="qopts"><button class="opt" data-ok="1">결측치</button><button class="opt">이상치</button><button class="opt">정상 변동</button></div>
-      <div class="fb">유효 관측 0일 — 연평균 값 자체가 없습니다. 값이 없는 것이 <b>결측치</b>입니다.</div>
+      <div class="qs">(가) "1년 중 극장이 가장 붐빈 날은 언제인가"</div>
+      <div class="qopts"><button class="opt">선 (영화 1편)</button><button class="opt" data-ok="1">영역 (날짜별 합계)</button><button class="opt">가로 막대 (TOP 10)</button></div>
+      <div class="fb">날짜별 10위권 합계의 봉우리를 찾는 질문 — <b>영역 그래프</b>가 답합니다.</div>
     </div>
     <div class="qitem">
-      <div class="qs">(나) 1953년의 0.6℃</div>
-      <div class="qopts"><button class="opt">결측치</button><button class="opt" data-ok="1">이상치</button><button class="opt">정상 변동</button></div>
-      <div class="fb">값은 있으나 다른 해와 크게 동떨어져 있습니다 — 12월 31일치만의 평균이기 때문입니다. <b>이상치</b>입니다.</div>
+      <div class="qs">(나) "이 기간 누적 관객 TOP 10은 어느 영화인가"</div>
+      <div class="qopts"><button class="opt">다중 선</button><button class="opt">히트맵</button><button class="opt" data-ok="1">가로 막대</button></div>
+      <div class="fb">기간 전체의 순위 비교 — <b>가로 막대그래프</b>가 답합니다. 정렬 기준까지 밝혀야 완전한 답입니다.</div>
     </div>
-    <details class="reveal"><summary>두 지점의 차이 서술 — 예시 답 펼쳐 보기</summary>
-      <p>1951·1952년은 유효 관측이 0일이라 연평균 값 자체가 없는 결측치이고, 그래프에서 선이 끊긴다. 1953년은 값(0.6℃)은 있으나 다른 해와 유난히 동떨어진 이상치이고, 그래프에서 한 점이 추락한다. 값이 없는 것과 값이 이상한 것은 원인과 처리를 따로 따져야 한다.</p>
-    </details>
+    <div class="qitem">
+      <div class="qs">(다) "관객은 어느 요일에 몰리는가"</div>
+      <div class="qopts"><button class="opt" data-ok="1">히트맵 (월×요일)</button><button class="opt">선 (영화 1편)</button><button class="opt">영역 (날짜별 합계)</button></div>
+      <div class="fb">날짜를 월과 요일로 접어 규칙을 보는 질문 — <b>히트맵</b>이 답합니다.</div>
+    </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> "관측일 300일 미만인 해 제외"가 정당한 전처리인 이유로 옳은 것을 고르세요.</div>
+    <div class="qq"><span class="qn">문제 2</span> 흥행 상위 5편을 한 선 그래프에 겹쳤더니 곡선 모양을 견주기 어려웠습니다. 가장 큰 이유는 무엇일까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">뺀 연도 수가 적어서 — 조금만 빼면 조작이 아니므로</button>
-        <button class="opt">뺀 뒤의 그래프가 더 매끄럽게 보이므로</button>
-        <button class="opt" data-ok="1">기온 값을 보기 전에 정할 수 있고 누구에게나 같은 잣대이므로</button>
+        <button class="opt">다섯 색이 서로 비슷해서</button>
+        <button class="opt" data-ok="1">개봉일이 서로 달라 곡선의 출발점이 어긋나서</button>
+        <button class="opt">관객 수가 너무 커서</button>
       </div>
-      <div class="fb">전처리와 조작을 가르는 것은 무엇을 뺐느냐가 아니라 <b>어떤 기준으로 뺐느냐</b>입니다. 값을 보기 전에 세운, 누구에게나 같은 기준은 믿을 수 없는 값을 거르는 감식이고, 결과를 본 뒤 불리한 값만 고르는 것은 같은 삭제라도 조작입니다.</div>
+      <div class="fb">달력 날짜 축에서는 12월 개봉작과 8월 개봉작의 곡선이 멀리 떨어져 있습니다. 모양을 견주려면 "개봉 후 며칠째"라는 새 축으로 맞춰야 합니다. 그래프가 던져 준 다음 질문입니다.</div>
     </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 어제 하루치 API 응답만으로는 답할 수 없고, 354일 축적 표라야 답할 수 있는 질문을 하나 적어 보세요. 적은 뒤 펼쳐 봅니다.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>"이 영화의 관객은 개봉 후 몇 주 만에 반으로 줄었나", "1년 중 극장이 가장 붐빈 날은 언제인가", "주말과 평일의 관객 차이는 얼마나 되나". 모두 <b>변화·기간·비교</b>를 묻는 질문입니다. 하루치 응답에는 시간 축이 없어 답할 수 없고, 여러 날을 통합한 표에서만 답할 수 있습니다.</p>
+    </details>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>요약통계(개수·평균·최소·최대)를 읽고 결측치의 신호를 찾을 수 있다.</li>
-    <li>연평균 추세 그래프를 그리고 이상 지점 두 곳을 연도와 함께 기록했다.</li>
-    <li>결측치와 이상치를 구분하고 각각의 원인을 역사로 설명할 수 있다.</li>
-    <li>관측일 300일 기준이 왜 조작이 아니라 감식인지 내 말로 말할 수 있다.</li>
+    <li>하루치 API 응답과 354일 축적 표가 각각 어떤 질문에 맞는지 말할 수 있다.</li>
+    <li>뼈대 앱(선 그래프)을 만들고, 그래프를 최소 4번(가로 막대)까지 쌓았다.</li>
+    <li>영역 그래프의 봉우리 3일을 찾아 달력의 사건과 짝지었다.</li>
+    <li>그래프마다 "이 그래프로 알 수 있는 것" 한 문장을 적었다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">요약통계</td><td>개수·평균·최소·최대로 표의 첫인상을 잡는 숫자 묶음</td></tr>
-    <tr><td class="term">집계</td><td>여러 값을 묶어 하나로 요약하는 일 — 일별을 연평균으로 바꾸는 것이 한 예</td></tr>
-    <tr><td class="term">데이터 시각화</td><td>데이터를 도형·선·색 등 시각적 요소로 표현하는 것</td></tr>
-    <tr><td class="term">결측치</td><td>수집한 데이터에서 값이 없는 경우로 누락된 값 (1951·1952년)</td></tr>
-    <tr><td class="term">이상치</td><td>일반적인 범위를 벗어나 다른 관측치와 크게 동떨어진 값 (1953년 0.6℃)</td></tr>
-    <tr><td class="term">전처리</td><td>결측치·이상치를 처리해 분석에 쓸 수 있는 형태로 가공하는 과정</td></tr>
+    <tr><td class="term">시계열</td><td>시간 순서대로 기록된 데이터. 한 축이 시간이 되는 그래프의 재료</td></tr>
+    <tr><td class="term">스냅샷</td><td>계속 변하는 데이터를 어느 시점에 찍어 고정한 사본. kobis_daily.csv는 354일치 스냅샷</td></tr>
+    <tr><td class="term">데이터 통합</td><td>여러 조각의 데이터를 한 표로 잇는 일. 일별 응답 354개를 쌓아 한 표로 만든 것이 그 예</td></tr>
+    <tr><td class="term">영역 그래프</td><td>선 아래를 색으로 채운 그래프. 전체 양의 흐름과 봉우리를 보여 준다</td></tr>
+    <tr><td class="term">히트맵</td><td>두 기준(월×요일 등)으로 접은 값을 색의 진하기로 나타낸 그래프</td></tr>
+    <tr><td class="term">범례</td><td>그래프에서 색·모양이 무엇을 뜻하는지 알려 주는 표. 플롯리에서는 눌러서 켜고 끌 수 있다</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
-    <a class="prev" href="lesson02.html"><div class="dir">← 이전</div><div class="tt">2차시 · 데이터의 종류 · 공공데이터포털 수집</div></a>
-    <a class="next" href="lesson04.html"><div class="dir">다음 →</div><div class="tt">4차시 · 스트림릿 첫 배포</div></a>
+    <a class="prev" href="lesson02.html"><div class="dir">← 이전</div><div class="tt">2차시 · 반정형 데이터 · API와 JSON · 어제의 박스오피스</div></a>
+    <a class="next" href="lesson04.html"><div class="dir">다음 →</div><div class="tt">4차시 · 그래프 도감 Ⅱ — 분포·구성·관계 · 멀티페이지</div></a>
   </div>
 </main>
 </div>
-
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
 <script src="assets/quiz.js"></script>

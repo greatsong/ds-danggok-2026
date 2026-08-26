@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>4차시 · 스트림릿 첫 배포 — 나의 포트폴리오 · 데이터 과학 당곡고</title>
+<title>4차시 · 그래프 도감 Ⅱ — 분포·구성·관계 · 멀티페이지 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -20,210 +20,319 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅱ. 데이터 준비와 분석 · 4차시</span>
-  <h1>스트림릿 첫 배포 · <span class="a">나의 포트폴리오</span></h1>
+  <h1>그래프 도감 Ⅱ — <span class="a">분포·구성·관계 · 멀티페이지</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"분석은 남이 눌러 볼 수 있는 주소가 생겼을 때 완성된다."</div>
-    <span class="by">1차시에서 본 6단계의 마지막인 공유를, 오늘 실제로 해 봅니다</span>
+    <div class="q">"행의 단위가 바뀌면, 그릴 수 있는 그래프가 바뀐다."</div>
+    <span class="by">도감 Ⅰ은 하루가 한 줄이었고, 오늘은 영화가 한 줄입니다</span>
   </div>
 
-  <p class="lead">지난 차시의 기온 탐색은 아직 내 컴퓨터 화면 안에만 있습니다. 오늘 그 분석을 정리해 인터넷에 올리고, 세상 어디서나 열리는 <b>나의 주소</b>를 얻습니다. 오늘 만드는 앱은 일회용이 아닙니다. 학기 내내 페이지가 하나씩 붙으며 자라날, 나의 데이터 포트폴리오의 시작입니다.</p>
+  <p class="lead">지난 시간의 표는 하루가 한 줄이어서 시간의 흐름을 그렸습니다. 오늘의 표는 영화 한 편이 한 줄입니다. 시간 대신 <b>분포·구성·관계</b>가 보이는 그래프 7종을 도감에 추가하고, 마지막에는 세 차시 동안 만든 앱들을 <b>주소 하나의 멀티페이지 포트폴리오</b>로 통합합니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>기온 탐색 페이지 완성</b> — 추세 그래프와 전처리 전후 비교를 한 화면에</li>
-      <li><b>첫 배포</b> — 깃허브에 올리고 스트림릿 커뮤니티 클라우드에서 주소 얻기</li>
-      <li><b>상호 검증</b> — 갤러리에 주소를 올리고 짝의 앱에 한 줄 피드백</li>
+      <li><b>도감 Ⅱ</b> — 도넛·트리맵·히스토그램·산점도·박스플롯·버블·선버스트, 각각 어떤 질문에 답하는지 확인하며 쌓기</li>
+      <li><b>한 문장 기록</b> — 그래프마다 "이 그래프로 알 수 있는 것"을 내 말로 적기</li>
+      <li><b>멀티페이지 통합</b> — 기온·박스오피스·도감 1·도감 2를 한 앱의 네 페이지로</li>
     </ul>
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>"데이터 분석을 할 줄 압니다"라는 말과, 눌러 볼 수 있는 링크 하나 — 어느 쪽이 더 믿음직할까요? 대학의 면접장에서도, 회사의 채용에서도, 말보다 강한 것은 직접 확인할 수 있는 결과물입니다. 개발자와 데이터 분석가들이 저마다 포트폴리오 주소를 가꾸는 이유입니다. 오늘 얻는 주소는 그 첫 조각입니다. 그리고 배포는 겉치레가 아니라 분석의 마지막 단계입니다. 1차시에 배운 6단계의 끝이 공유였던 것을 기억합니까? 남이 볼 수 있게 여는 순간, 분석은 검증받기 시작합니다.</p>
+  <p>그래프는 종류마다 답할 수 있는 질문이 다릅니다. 지난 시간의 선·영역·히트맵은 전부 "시간에 따라 어떻게 변하나"에 답하는 그래프였습니다. 그런데 "10위권에 든 영화의 장르 구성은 어떠한가", "스크린을 많이 받은 영화가 관객도 많은가" 같은 질문에는 시간 축이 없습니다. 이런 질문에 답하는 그래프를 오늘 도감에 추가합니다.</p>
+  <p>그리고 오늘 도감을 완성하면 세 차시 동안 만든 앱이 넷이 됩니다. 흩어진 넷을 주소 하나로 모으는 것이 오늘의 마지막 작업입니다. 이 주소가 학기 내내 쌓아 갈 나의 데이터 포트폴리오가 됩니다.</p>
 
-  <h2>1. 개념 이해 — 배포, 분석을 여는 일</h2>
-  <p><b>배포</b>는 내 컴퓨터에서만 돌던 프로그램을 인터넷의 서버에 올려, 주소만 알면 누구나 쓸 수 있게 만드는 일입니다. 오늘의 배포에서 내 코드는 네 지점을 지납니다. 각 지점의 역할을 구분해 두면 실습에서 길을 잃지 않습니다.</p>
-  <div style="overflow-x:auto">
-  <svg viewBox="0 0 800 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="배포의 네 지점 — 내 컴퓨터에서 깃허브 저장소, 스트림릿 커뮤니티 클라우드를 거쳐 보는 사람의 브라우저까지 이어지는 흐름" style="min-width:640px;display:block">
-    <defs>
-      <marker id="dep-ar-gold" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
-      <marker id="dep-ar-teal" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
-      <marker id="dep-ar-accent" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
-      <marker id="dep-ar-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#54a24b"/></marker>
-    </defs>
-    <!-- 지점 ① 내 컴퓨터 -->
-    <rect x="10" y="14" width="140" height="118" rx="12" fill="#fffdf7" stroke="#f0e2bc" stroke-width="1.5"/>
-    <text x="80" y="44" text-anchor="middle" font-size="24">💻</text>
-    <text x="80" y="68" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3a2e1a">내 컴퓨터</text>
-    <text x="80" y="86" text-anchor="middle" font-size="10.5" fill="#6b5836">코드를 만들고</text>
-    <text x="80" y="100" text-anchor="middle" font-size="10.5" fill="#6b5836">고치는 곳</text>
-    <text x="80" y="120" text-anchor="middle" font-size="9.5" fill="#9a8b6a" font-family="monospace">app.py · requirements.txt</text>
-    <!-- 화살표 ①→② 올리기(push) -->
-    <line x1="154" y1="73" x2="215" y2="73" stroke="#f4b400" stroke-width="2.5" marker-end="url(#dep-ar-gold)"/>
-    <text x="186" y="54" text-anchor="middle" font-size="10.5" font-weight="800" fill="#e8930c">올리기</text>
-    <text x="186" y="67" text-anchor="middle" font-size="10.5" font-weight="800" fill="#e8930c">(push)</text>
-    <!-- 지점 ② 깃허브 저장소 -->
-    <rect x="223" y="14" width="140" height="118" rx="12" fill="#fffdf7" stroke="#f0e2bc" stroke-width="1.5"/>
-    <text x="293" y="44" text-anchor="middle" font-size="24">📦</text>
-    <text x="293" y="68" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3a2e1a">깃허브 저장소</text>
-    <text x="293" y="86" text-anchor="middle" font-size="10.5" fill="#6b5836">코드 보관·이력</text>
-    <text x="293" y="104" text-anchor="middle" font-size="9.5" fill="#9a8b6a">클라우드가 읽어 갈 원본</text>
-    <!-- 화살표 ②→③ 코드를 읽어 실행 -->
-    <line x1="367" y1="73" x2="428" y2="73" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#dep-ar-teal)"/>
-    <text x="399" y="54" text-anchor="middle" font-size="10.5" font-weight="800" fill="#3ba6a0">코드를 읽어</text>
-    <text x="399" y="67" text-anchor="middle" font-size="10.5" font-weight="800" fill="#3ba6a0">실행</text>
-    <!-- 지점 ③ 스트림릿 커뮤니티 클라우드 -->
-    <rect x="436" y="14" width="140" height="118" rx="12" fill="#fffdf7" stroke="#f0e2bc" stroke-width="1.5"/>
-    <text x="506" y="40" text-anchor="middle" font-size="22">☁️</text>
-    <text x="506" y="62" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3a2e1a">스트림릿 커뮤니티</text>
-    <text x="506" y="77" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3a2e1a">클라우드</text>
-    <text x="506" y="95" text-anchor="middle" font-size="10.5" fill="#6b5836">저장소의 코드를</text>
-    <text x="506" y="109" text-anchor="middle" font-size="10.5" fill="#6b5836">앱으로 실행하는 서버</text>
-    <!-- 화살표 ③→④ 주소(URL) -->
-    <line x1="580" y1="73" x2="641" y2="73" stroke="#e8930c" stroke-width="2.5" marker-end="url(#dep-ar-accent)"/>
-    <text x="612" y="54" text-anchor="middle" font-size="10.5" font-weight="800" fill="#e8930c">주소</text>
-    <text x="612" y="67" text-anchor="middle" font-size="10.5" font-weight="800" fill="#e8930c">(URL)</text>
-    <!-- 지점 ④ 보는 사람의 브라우저 -->
-    <rect x="649" y="14" width="140" height="118" rx="12" fill="#fffdf7" stroke="#f0e2bc" stroke-width="1.5"/>
-    <text x="719" y="44" text-anchor="middle" font-size="24">📱</text>
-    <text x="719" y="68" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">보는 사람의 브라우저</text>
-    <text x="719" y="86" text-anchor="middle" font-size="10.5" fill="#6b5836">내 컴퓨터가 꺼져</text>
-    <text x="719" y="100" text-anchor="middle" font-size="10.5" fill="#6b5836">있어도 열림</text>
-    <!-- 회귀 점선 — 코드를 고치면 앱도 갱신 -->
-    <path d="M 80 136 V 158 H 289 V 140" fill="none" stroke="#54a24b" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#dep-ar-green)"/>
-    <text x="312" y="162" text-anchor="start" font-size="10.5" font-weight="800" fill="#54a24b">코드를 고치면 배포된 앱도 갱신 — 오늘의 배포는 첫 연결</text>
-    <!-- 캡션 -->
-    <text x="400" y="196" text-anchor="middle" font-size="11.5" fill="#9a8b6a">배포 = 저장소를 거쳐 서버에서 실행되고, 주소 하나로 열리는 일.</text>
-  </svg>
-  </div>
-  <p>오늘 앱에 꼭 담을 화면이 하나 있습니다. <b>전처리 전과 후의 그래프를 나란히 놓은 비교</b>입니다. 지난 차시에 관측일 300일 기준으로 걸러 114개 연도(1908~2025)를 남겼습니다. 그 판단을 화면에서 감추지 않고 전후를 함께 보여 주는 것이 분석의 투명성입니다. 보는 사람이 "무엇을 왜 뺐는지"를 직접 확인하고 판단할 수 있기 때문입니다.</p>
-  <div class="tbquote">
-    <div class="h">📖 교과서와 잇기 <span class="src">『데이터 과학』 91쪽</span></div>
-    <p class="q">"결측치와 이상치가 있는 상태로 데이터를 분석하면 전혀 다른 결과가 나올 수 있다." <span class="src">(91쪽)</span></p>
-    <p class="t">→ 그래서 전처리 전후를 나란히 보여 준다 — 처리 전과 후에 결과가 어떻게 달라지는지를 보는 사람 스스로 확인할 수 있게. 교과서 91쪽 해 보기 ②(전처리 결과 비교)가 오늘 화면으로 완성된다.</p>
-  </div>
-
-  <h2>2. 실습 ① — 기온 탐색 페이지 완성 (바이브 코딩)</h2>
-  <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>지금까지 만든 기온 분석을 스트림릿 앱으로 정리해 줘.
-제목, 연평균 추세 그래프, 전처리 전과 후를 나란히 비교하는 화면이 있으면 좋겠어.
-앞으로 페이지를 계속 추가할 수 있는 구조로 만들어 줘.</pre></div>
-    </li>
-    <li><span class="st">② AI가 준 코드 — 실행하고 화면을 점검한다</span><br>
-      제목·추세 그래프·전후 비교가 모두 나타나는지 확인합니다. 전처리 전 그래프에는 1953년의 0.6℃ 점이 보이고, 후 그래프에서는 사라져야 합니다. 두 그래프의 차이를 말로 설명할 수 있으면 화면을 제대로 읽은 것입니다.</li>
-    <li><span class="st">③ 개선 프롬프트 — 판단을 문구로 밝힌다</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>관측일이 적어서 뺀 연도가 몇 개인지 화면에 문구로 보여 줘.</pre></div>
-    </li>
-  </ol>
-  <div class="callout tip">
-    <div class="h">💡 ③이 겨우 문구 한 줄인 이유</div>
-    <p>그래프를 더 화려하게 만드는 개선이 아니라, <b>내가 내린 판단을 화면에 밝히는</b> 개선입니다. 뺀 연도의 개수를 문구로 적어 두면, 이 앱을 여는 누구나 전처리 사실을 알고 결과를 읽게 됩니다. 감식의 기록을 남기는 것 — 지난 차시에 배운 "전처리는 조작이 아니다"의 실천입니다.</p>
-  </div>
-
-  <h2>3. 실습 ② — 세상에 올리기 (첫 배포)</h2>
-  <div class="callout tip">
-    <div class="h">🎒 시작 전 준비물</div>
-    <ul>
-      <li><b>깃허브 계정</b>과 <b>스트림릿 커뮤니티 클라우드 계정</b>이 필요합니다. 계정 만들기는 선생님이 나누어 준 안내에 따릅니다.</li>
-      <li>앱이 쓰는 도구 목록 파일(예: requirements.txt)이 저장소에 함께 있어야 서버가 같은 환경을 갖춥니다. ① 프롬프트로 만든 앱이라면 AI에게 "배포에 필요한 파일도 만들어 줘"라고 이어서 요청합니다.</li>
-    </ul>
-  </div>
-  <ol class="steps">
-    <li><span class="st">깃허브에 올리기</span><br>
-      깃허브 계정으로 저장소를 만들고 앱 코드를 올립니다. 저장소는 코드의 보관함이자, 클라우드가 읽어 갈 원본입니다.</li>
-    <li><span class="st">스트림릿 커뮤니티 클라우드 연결</span><br>
-      스트림릿 커뮤니티 클라우드에 깃허브 계정으로 로그인하고, 방금 만든 저장소와 앱 파일을 선택합니다.</li>
-    <li><span class="st">배포 실행</span><br>
-      배포 단추를 누르면 서버가 저장소의 코드를 읽어 앱을 실행합니다. 잠시 기다리면 화면이 나타납니다.</li>
-    <li><span class="st">주소 확인</span><br>
-      주소창의 URL이 오늘의 결과물입니다. 휴대전화로도 접속해 봅니다 — 내 컴퓨터가 꺼져 있어도 열린다는 것이 배포의 증거입니다.</li>
-  </ol>
-  <div class="callout warn">
-    <div class="h">⚠️ 오늘 안 되어도 괜찮다 — 다만 반드시 완성한다</div>
-    <ul>
-      <li>배포는 계정과 연동 문제로 실패가 잦습니다. 막히면 짝과 화면을 나란히 놓고 어느 단계에서 다른지 비교합니다.</li>
-      <li>오늘 마치지 못한 사람은 <b>다음 차시 시작 전까지</b> 선생님과 함께 반드시 완성합니다. 오늘의 주소는 앞으로 모든 차시의 결과물이 쌓일 자리 — 학기 전체 기록의 뿌리이기 때문입니다.</li>
-    </ul>
-  </div>
-
-  <div class="callout check">
-    <div class="h">✔️ 배포는 한 번으로 끝나지 않는다</div>
-    <ul>
-      <li>저장소의 코드를 고치면 배포된 앱도 그에 따라 갱신됩니다. 오늘의 배포는 마지막이 아니라 <b>첫 연결</b>입니다.</li>
-      <li>① 프롬프트에서 "페이지를 계속 추가할 수 있는 구조"를 부탁한 이유가 여기 있습니다 — 다음 차시부터 새 페이지는 이 앱에 계속 붙습니다.</li>
-    </ul>
-  </div>
-
-  <h2>4. 상호 검증 — 같은 데이터, 다른 화면</h2>
-  <p>주소가 생겼으면 갤러리에 올리고, 짝의 주소를 눌러 봅니다. 그리고 관찰합니다. 모두 같은 <code>seoul.csv</code>로 시작했는데, 열리는 화면은 저마다 다릅니다. 제목이 다르고, 그래프의 모양과 강조가 다르고, 전처리를 밝히는 문구의 자리도 다릅니다. 같은 데이터에서 다른 화면이 나온다는 것 — 분석 곳곳에 사람의 판단이 들어 있다는 1차시의 이야기를, 오늘은 남의 앱에서 직접 확인합니다.</p>
-  <div class="callout check">
-    <div class="h">✔️ 한 줄 피드백의 기준</div>
-    <ul>
-      <li>"좋아요"가 아니라 <b>관찰</b>을 적습니다 — 내 앱과 무엇이 달랐는지 한 가지.</li>
-      <li>예: 전처리 문구의 위치, 그래프에서 강조한 시기, 제목이 담은 질문.</li>
-    </ul>
-  </div>
-  <h2>5. 개념 정리 — 포트폴리오의 시작</h2>
-  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>배포는 분석의 마지막 단계이고, 전처리 전후를 나란히 보이는 것은 내 판단을 검증 가능하게 여는 일이다.</b> 내 컴퓨터의 코드가 깃허브 저장소를 거쳐 클라우드에서 실행되고, 주소 하나로 누구에게나 열렸습니다. 6단계의 수집·준비·탐색(2~3차시)을 지나 공유까지, 작은 한 바퀴를 완주한 셈입니다.</p>
+  <h2>1. 표의 모양이 바뀌었다</h2>
+  <p>먼저 오늘의 재료를 봅니다. 지난 시간과 같은 1년치 박스오피스 기록인데, 표의 모양이 다릅니다.</p>
   <table class="daymap">
-    <thead><tr><th>6단계에서</th><th>어느 차시에</th><th>무엇으로</th></tr></thead>
+    <thead><tr><th></th><th>도감 Ⅰ의 표 (kobis_daily.csv)</th><th>오늘의 표 (kobis_movies.csv)</th></tr></thead>
     <tbody>
-      <tr><td>수집</td><td>2차시</td><td>공공데이터포털에서 내려받기</td></tr>
-      <tr><td>준비·탐색</td><td>3차시</td><td>요약통계 · 추세 그래프 · 전처리 판단</td></tr>
-      <tr><td><b>공유</b></td><td><b>4차시(오늘)</b></td><td><b>배포 — 나의 주소</b></td></tr>
+      <tr><td><b>행 하나의 단위</b></td><td>하루의 순위 한 칸</td><td>영화 한 편</td></tr>
+      <tr><td><b>크기</b></td><td>3,540행 (354일 × 톱10)</td><td>216행 (영화 216편)</td></tr>
+      <tr><td><b>담긴 것</b></td><td>날짜별 순위·일관객</td><td>영화별 장르·국가·스크린수·총 관객</td></tr>
+      <tr><td><b>그릴 수 있는 것</b></td><td>시간의 흐름 (선·영역·히트맵)</td><td>분포·구성·관계 (오늘의 7종)</td></tr>
     </tbody>
   </table>
-  <p>이 앱은 오늘로 끝나지 않습니다. 다음 차시에는 내려받지 않아도 흘러들어 오는 데이터 — 우리 학교 급식 — 가 새 페이지로 붙습니다. 이어서 영화, 예측, 분류, 군집의 페이지가 차례로 늘어나, 학기말에는 "나의 데이터 포트폴리오 앱" 하나가 완성됩니다. 오늘의 주소를 소중히 보관하세요.</p>
+  <p>같은 극장가의 1년인데, 하루 단위 기록을 영화 단위로 다시 정리한 표입니다. 앞부분 몇 행을 봅니다.</p>
+  <div class="specimen-row" style="grid-template-columns:1fr">
+    <div class="specimen st">
+      <div class="tag">kobis_movies.csv — 영화가 한 줄 (216편, 앞 3행)</div>
+      <div class="body">
+        <div style="overflow-x:auto;width:100%">
+          <table class="minitable">
+            <thead><tr><th>movieNm</th><th>openDt</th><th>genre</th><th>nation</th><th>first_scrn</th><th>first_week_audi</th><th>total_audi</th><th>days_in_top10</th></tr></thead>
+            <tbody>
+              <tr><td>컨저링: 마지막 의식</td><td>20250903</td><td>공포(호러)</td><td>미국</td><td>843</td><td>266613</td><td>410827</td><td>19</td></tr>
+              <tr><td>투게더</td><td>20250903</td><td>공포(호러)|멜로/로맨스</td><td>미국</td><td>251</td><td>30694</td><td>33273</td><td>7</td></tr>
+              <tr><td>3670</td><td>20250903</td><td>드라마|멜로/로맨스</td><td>한국</td><td>62</td><td>1760</td><td>9312</td><td>2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="note">날짜 열이 사라지고, 대신 영화의 속성(장르·국가·개봉일 스크린수·첫 주 관객·총 관객)이 열로 들어왔습니다. genre 열은 세로막대 기호(|)로 여러 장르가 적힌 영화가 있습니다.</div>
+    </div>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 오늘의 열 안내</div>
+    <p>movieCd(영화코드) · movieNm(영화명) · openDt(개봉일) · genre(장르) · nation(제작 국가) · first_scrn(개봉일 스크린수) · first_show(개봉일 상영횟수) · first_week_audi(개봉 첫 주 관객) · total_audi(총 관객) · days_in_top10(10위권에 머문 날수). 프롬프트에 열 이름과 뜻을 전부 적는 이유는 지난 시간과 같습니다 — AI는 파일을 열어 보기 전에는 열 구조를 모릅니다.</p>
+  </div>
 
-  <h2>6. 확인 문제</h2>
+  <h2>2. 뼈대 만들기 — 도넛까지 (①②)</h2>
+  <p>도감 Ⅰ과 같은 방식입니다. 뼈대(데이터 로드 + 첫 그래프)를 ①로 만들고, 그래프를 하나씩 추가 프롬프트로 쌓습니다. 오늘도 main.py를 새로 교체합니다 — 덮어써도 이전 코드는 커밋 기록에 그대로 남아 있습니다.</p>
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>스트림릿 앱(main.py)을 새로 만들어 줘. 제목은 '영화 데이터 그래프 도감 2 - 분포와 관계'.
+- 데이터는 이 주소에서 불러와:
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
+  1년간 박스오피스 10위권에 든 영화 216편의 요약표야. 열은
+  movieCd(영화코드) · movieNm(영화명) · openDt(개봉일, 여덟 자리 숫자) ·
+  genre(장르 - 세로막대 기호로 여러 개 적힌 영화는 첫 번째 장르만 써) · nation(제작 국가) ·
+  first_scrn(개봉일 스크린수) · first_show(개봉일 상영횟수) · first_week_audi(개봉 첫 주 관객) ·
+  total_audi(총 관객) · days_in_top10(10위권에 머문 날수).
+- 첫 그래프: 장르별 영화 편수를 플롯리 도넛 그래프로 보여 줘. 조각에 마우스를 올리면 편수와 비율이 보이게.
+- 그래프마다 아래에 '이 그래프로 알 수 있는 것' 한 문장을 넣을 자리를 만들고, 구역을 나눠 줘.</pre></div>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 이런 모습이면 성공</span><br>
+      아래는 같은 프롬프트로 받은 코드 예시입니다. 여러분이 받은 코드가 글자까지 같지 않아도 됩니다 — 화면에 장르별 도넛 그래프가 뜨면 성공입니다.
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 (main.py)</span><button class="copy-btn">복사</button><pre>import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+st.set_page_config(page_title="영화 데이터 그래프 도감 2 - 분포와 관계", layout="wide")
+st.title("영화 데이터 그래프 도감 2 - 분포와 관계")
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+
+
+@st.cache_data
+def load_data():
+    # 1년간 박스오피스 10위권에 든 영화 216편의 요약표를 불러옵니다
+    df = pd.read_csv(DATA_URL)
+    # 장르가 세로막대 기호(|)로 여러 개 적힌 영화는 첫 번째 장르만 씁니다
+    df["장르"] = df["genre"].str.split("|").str[0]
+    return df
+
+
+df = load_data()
+
+# ── 그래프 1. 장르별 영화 편수 도넛 ──
+st.header("1. 장르별 영화 편수 (도넛)")
+genre_count = df["장르"].value_counts().reset_index()
+genre_count.columns = ["장르", "편수"]
+
+fig = px.pie(
+    genre_count,
+    names="장르",
+    values="편수",
+    hole=0.45,  # 가운데 구멍을 뚫어 도넛 모양으로
+)
+# 조각에 마우스를 올리면 편수와 비율이 보이게 합니다
+fig.update_traces(hovertemplate="%{label}&lt;br&gt;%{value}편 (%{percent})&lt;extra&gt;&lt;/extra&gt;")
+st.plotly_chart(fig, width="stretch")
+
+# '이 그래프로 알 수 있는 것' 한 문장을 적는 자리
+st.text_input("이 그래프로 알 수 있는 것", key="note1")
+
+st.divider()
+# 앞으로 그래프를 계속 추가할 구역
+st.header("2. (다음 그래프를 여기에 추가)")</pre></div>
+    </li>
+    <li><span class="st">첫 그래프 읽기 — 도넛</span><br>
+      도넛이 답하는 질문은 <b>"10위권에 든 영화의 장르 구성은 어떠한가"</b>입니다. 조각의 크기가 편수 기준 구성비입니다. 실제로 그려 보면 <b>애니메이션(57편)과 드라마(56편)</b>가 나란히 가장 큰 두 조각으로, 둘이 합쳐 216편의 절반이 넘습니다. 이 사실을 "이 그래프로 알 수 있는 것" 칸에 내 말로 적습니다.</li>
+  </ol>
+
+  <h2>3. 도감 Ⅱ — 그래프를 쌓는다</h2>
+  <p>이제 추가 프롬프트를 하나씩 복붙해 그래프를 쌓습니다. 오늘의 7종과 각각이 답하는 질문입니다. 필수 4종을 먼저 완성하고, 시간이 남으면 확장·심화로 나아갑니다.</p>
+  <table class="daymap">
+    <thead><tr><th>#</th><th>그래프</th><th>답하는 질문</th><th>구분</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>도넛</b></td><td>10위권에 든 영화의 장르 구성은</td><td>필수 (완료)</td></tr>
+      <tr><td>2</td><td><b>트리맵</b></td><td>장르 안에서 어떤 영화가 컸나</td><td>필수</td></tr>
+      <tr><td>3</td><td><b>히스토그램</b></td><td>영화 대부분은 관객이 몇 명쯤인가</td><td>필수</td></tr>
+      <tr><td>4</td><td><b>산점도</b></td><td>스크린을 많이 받은 영화가 관객도 많나</td><td>필수</td></tr>
+      <tr><td>5</td><td><b>박스플롯</b></td><td>장르별 관객 분포는 어떻게 다른가</td><td>확장</td></tr>
+      <tr><td>6</td><td><b>버블</b></td><td>첫 주 관객까지 넣으면 무엇이 더 보이나</td><td>확장</td></tr>
+      <tr><td>7</td><td><b>선버스트</b></td><td>국가에서 장르로 내려가면 무엇이 보이나</td><td>심화</td></tr>
+    </tbody>
+  </table>
+
+  <h3>그래프 2 · 트리맵 (필수) — 장르 안에서 어떤 영화가 컸나</h3>
+  <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘. 두 번째 그래프를 추가해.
+- 장르 안에 영화가 들어 있는 트리맵을 그려 줘. 칸의 크기는 total_audi(총 관객)로.
+- 칸에 마우스를 올리면 영화명과 총 관객이 보이게.</pre></div>
+  <p><b>읽는 법</b> — 트리맵은 장르 상자 안에 영화 칸이 들어 있는 이중 구조입니다. 칸의 크기가 총 관객이어서, 도넛과는 다른 것을 잽니다. 도넛과 트리맵을 위아래로 놓고 견주어 보세요 — 편수로는 컸던 장르가 관객으로는 작아지고, 편수로는 보이지도 않던 장르가 큰 상자로 나타납니다. 이 차이가 오늘의 발견(4절)입니다.</p>
+
+  <h3>그래프 3 · 히스토그램 (필수) — 영화 대부분은 관객이 몇 명쯤인가</h3>
+  <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 세 번째 그래프를 추가해.
+- total_audi(총 관객)의 히스토그램을 그려 줘.
+- 대부분의 영화가 어느 구간에 몰려 있는지, 가장 관객이 많은 영화 이름이 무엇인지
+  그래프 아래에 문구로 보여 줘.</pre></div>
+  <p><b>읽는 법</b> — 히스토그램은 값의 구간별로 영화가 몇 편씩 있는지 세는 그래프입니다. 그려 보면 모양이 한쪽으로 심하게 쏠려 있습니다. 216편 중 193편이 총 관객 100만 명에 못 미쳐 왼쪽 낮은 구간에 몰려 있고, 오른쪽 끝에는 <b>왕과 사는 남자(총 관객 16,916,280명)</b> 같은 소수의 대작이 홀로 서 있습니다. 소수의 대작이 판 전체를 흔드는 이 쏠림은 실제 데이터에서 아주 흔한 모양입니다 — 뒤 차시에서 이 모양을 다시 만나게 됩니다.</p>
+
+  <h3>그래프 4 · 산점도 (필수) — 스크린을 많이 받은 영화가 관객도 많나</h3>
+  <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 네 번째 그래프를 추가해.
+- first_scrn(개봉일 스크린수)과 total_audi(총 관객)의 산점도를 그려 줘.
+- 점에 마우스를 올리면 영화명이 보이게 하고, 장르별로 점 색을 다르게 해 줘.</pre></div>
+  <p><b>읽는 법</b> — 산점도는 처음으로 <b>두 속성의 관계</b>를 묻는 그래프입니다. 점 하나가 영화 한 편이고, 가로가 개봉일 스크린수, 세로가 총 관객입니다. 점들이 대체로 오른쪽 위로 향하는지, 그 경향에서 멀리 벗어난 점은 어떤 영화인지 마우스를 올려 확인해 보세요.</p>
+  <div class="callout check">
+    <div class="h">✔️ 미리 던져 두는 질문 — 이 점들 위에 직선을 긋는다면?</div>
+    <p>점들의 경향을 따라 직선 하나를 긋는다고 상상해 보세요. 그 직선이 있으면 "스크린 500개로 개봉하는 영화의 관객 수"를 짐작할 수 있게 됩니다. 어디에 그어야 가장 좋은 직선인지, 그 직선을 얼마나 믿을 수 있는지가 <b>6차시(회귀)</b>의 주제입니다. 오늘은 점들의 모양만 눈에 담아 둡니다.</p>
+  </div>
+
+  <h3>그래프 5 · 박스플롯 (확장) — 장르별 관객 분포는 어떻게 다른가</h3>
+  <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 다섯 번째 그래프를 추가해.
+- 영화가 10편 이상인 장르만 골라, 장르별 total_audi(총 관객)의 상자 그림(박스플롯)을 그려 줘.
+- 상자 밖으로 튀는 점에 마우스를 올리면 영화명이 보이게.</pre></div>
+  <p><b>읽는 법</b> — 상자의 가운데 선이 그 장르의 중앙값, 상자 밖으로 튀어 나간 점이 이상치입니다. 장르마다 상자의 위치와 높이가 다르고, 상자 위로 멀리 떨어진 점들이 곧 그 장르의 대작입니다. 히스토그램에서 본 쏠림을 장르별로 쪼개어 보는 그래프인 셈입니다.</p>
+
+  <h3>그래프 6 · 버블 (확장) — 첫 주 관객까지 넣으면 무엇이 더 보이나</h3>
+  <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 여섯 번째 그래프를 추가해.
+- 네 번째 산점도에 점 크기를 first_week_audi(첫 주 관객)로 넣어 버블 그래프로 바꾼 판을
+  따로 하나 더 그려 줘.</pre></div>
+  <p><b>읽는 법</b> — 산점도의 두 축(스크린수·총 관객)에 <b>크기</b>라는 세 번째 축이 더해졌습니다. 총 관객이 많은 점들이 대체로 큰 원인지 살펴보세요. 큰 원이 위쪽에 몰려 있다면, 첫 주에 이미 승부가 상당 부분 난다는 뜻입니다.</p>
+
+  <h3>그래프 7 · 선버스트 (심화) — 국가에서 장르로 내려가면</h3>
+  <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 일곱 번째 그래프를 추가해.
+- nation(제작 국가)에서 genre(장르)로 파고드는 선버스트 그래프를 그려 줘.
+  칸의 크기는 영화 편수로.</pre></div>
+  <p><b>읽는 법</b> — 안쪽 고리가 국가, 바깥 고리가 그 국가의 장르입니다. 한 그래프가 "어느 나라 영화가 많은가"와 "그 나라는 어떤 장르가 많은가" 두 겹의 질문에 한꺼번에 답합니다. 안쪽 고리를 누르면 그 국가만 확대됩니다.</p>
+
+  <h2>4. 발견 — 도넛과 트리맵이 다른 말을 한다</h2>
+  <p>필수 4종을 완성했다면 도넛(그래프 1)과 트리맵(그래프 2)을 다시 나란히 놓아 봅니다. 같은 216편, 같은 장르인데 두 그래프의 구성이 다릅니다.</p>
+  <svg viewBox="0 0 760 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 216편을 편수 기준과 총 관객 기준으로 나눈 두 띠그래프 비교" style="max-width:100%;height:auto;display:block;margin:8px 0 4px">
+    <text x="30" y="34" font-size="14" font-weight="700" fill="#3d3425">같은 216편, 두 가지 저울</text>
+
+    <text x="30" y="72" font-size="12.5" font-weight="700" fill="#3d3425">편수 기준 (도넛이 재는 것)</text>
+    <rect x="30" y="82" width="185" height="40" fill="#e8930c" rx="3"/>
+    <rect x="217" y="82" width="181" height="40" fill="#f4b400" rx="3"/>
+    <rect x="400" y="82" width="4" height="40" fill="#b279a2"/>
+    <rect x="406" y="82" width="324" height="40" fill="#e9dfc8" rx="3"/>
+    <text x="122" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">애니메이션 57편</text>
+    <text x="307" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#5a4300">드라마 56편</text>
+    <text x="568" y="107" text-anchor="middle" font-size="12" fill="#8a7a55">나머지 15개 장르 103편</text>
+    <text x="402" y="140" text-anchor="middle" font-size="11" fill="#b279a2">↑ 사극 1편</text>
+
+    <text x="30" y="186" font-size="12.5" font-weight="700" fill="#3d3425">총 관객 기준 (트리맵이 재는 것)</text>
+    <rect x="30" y="196" width="159" height="40" fill="#e8930c" rx="3"/>
+    <rect x="191" y="196" width="123" height="40" fill="#b279a2" rx="3"/>
+    <rect x="316" y="196" width="57" height="40" fill="#f4b400" rx="3"/>
+    <rect x="375" y="196" width="355" height="40" fill="#e9dfc8" rx="3"/>
+    <text x="109" y="221" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">애니메이션 23%</text>
+    <text x="252" y="221" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">사극 18%</text>
+    <text x="344" y="221" text-anchor="middle" font-size="11" font-weight="700" fill="#5a4300">드라마 8%</text>
+    <text x="552" y="221" text-anchor="middle" font-size="12" fill="#8a7a55">나머지 장르</text>
+    <text x="252" y="254" text-anchor="middle" font-size="11" fill="#b279a2">사극은 딱 1편 — 왕과 사는 남자(총 관객 16,916,280명)</text>
+
+    <text x="380" y="286" text-anchor="middle" font-size="12" fill="#8a7a55">비율은 반올림한 값입니다. 무엇으로 재느냐에 따라 같은 데이터가 다른 이야기를 합니다.</text>
+  </svg>
+  <div class="callout warn">
+    <div class="h">⚠️ 발견 — 무엇으로 재느냐가 메시지를 정한다</div>
+    <p>편수로 재면 드라마는 두 번째로 큰 장르(56편)이지만, 총 관객으로 재면 작은 조각이 됩니다. 반대로 사극은 단 1편이라 도넛에서는 보이지도 않는데, 그 1편이 <b>왕과 사는 남자(총 관객 16,916,280명)</b>여서 트리맵에서는 큰 상자로 나타납니다. 그래프가 틀린 것이 아닙니다 — <b>재는 기준이 다를 뿐</b>입니다. 그래서 구성 그래프를 읽을 때는 "무엇을 기준으로 나눈 구성인가"를 먼저 확인해야 하고, 만들 때는 내 질문에 맞는 기준을 골라야 합니다.</p>
+  </div>
+
+  <h2>5. 멀티페이지 통합 — 주소 하나의 포트폴리오</h2>
+  <p>이제 세 차시의 산출물을 한 앱으로 모읍니다. 스트림릿은 앱 폴더 안에 pages 폴더를 만들면, 그 안의 파일들이 자동으로 왼쪽 메뉴가 되는 멀티페이지 방식을 지원합니다. 규칙은 세 줄이 전부입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>규칙</th><th>내용</th></tr></thead>
+    <tbody>
+      <tr><td><b>폴더 이름</b></td><td>pages로 고정 — 다른 이름은 메뉴로 인식되지 않는다</td></tr>
+      <tr><td><b>메뉴 순서</b></td><td>파일 이름 앞의 숫자가 정한다 (1_기온.py → 2_박스오피스.py → …)</td></tr>
+      <tr><td><b>secrets</b></td><td>앱 하나에 하나 — 페이지가 늘어도 비밀 금고는 앱 전체가 공유한다</td></tr>
+    </tbody>
+  </table>
+  <div class="codewrap prompt"><span class="label">통합 프롬프트</span><button class="copy-btn">복사</button><pre>지금까지 만든 것들을 한 앱의 여러 페이지로 정리해 줘.
+- 첫 화면은 표지로 하고, 페이지는 넷: 기온 분석, 어제의 박스오피스, 그래프 도감 1, 그래프 도감 2.
+- 앞에서 만든 코드들은 각각의 페이지 파일로 옮겨 줘.
+- 표지에는 '나의 데이터 포트폴리오'라는 제목과 각 페이지로 가는 안내를 넣어 줘.
+- 페이지 이름 앞에 어울리는 이모지를 붙여 줘.</pre></div>
+  <p>앞에서 만든 코드들은 전부 커밋 기록에 남아 있으므로, AI에게 이전 코드를 붙여 주며 요청하거나 커밋 기록에서 꺼내 옮기면 됩니다. 완성되면 왼쪽 메뉴에 네 페이지가 나타나고, 배포 주소 하나로 전부 열립니다.</p>
+  <div class="callout tip">
+    <div class="h">💡 1차시 앱이 이미 멀티페이지라면</div>
+    <p>1차시에 만든 기온 앱이 이미 pages 구조라면 새로 만들 필요가 없습니다. 그 앱의 pages 폴더에 박스오피스·도감 1·도감 2 페이지를 추가해 달라고 요청하면 됩니다.</p>
+  </div>
+  <div class="callout check">
+    <div class="h">✔️ 여기까지 되었는지 확인</div>
+    <ul>
+      <li>왼쪽 메뉴에 표지와 네 페이지가 원하는 순서로 나타난다.</li>
+      <li>박스오피스 페이지가 secrets의 KOBIS_KEY를 그대로 읽어 온다 — 금고를 새로 만들지 않았다.</li>
+      <li>주소 하나로 네 산출물이 전부 열린다.</li>
+    </ul>
+  </div>
+
+  <h2>6. 개념 정리 — 질문이 그래프를 고른다</h2>
+  <p>오늘 배운 것을 정리하면 이렇습니다. 첫째, <b>행의 단위가 바뀌면 그릴 수 있는 그래프가 바뀝니다.</b> 하루가 한 줄인 표에서는 시간의 그래프를, 영화가 한 줄인 표에서는 분포·구성·관계의 그래프를 그렸습니다. 둘째, <b>같은 데이터라도 재는 기준이 다르면 다른 이야기를 합니다.</b> 편수의 도넛과 관객의 트리맵이 그 증거였습니다. 셋째, 흩어져 있던 산출물이 <b>주소 하나의 포트폴리오</b>로 모였습니다. 다음 시간에는 두 번째 API인 급식 API로, 이번에는 공식 문서 발췌만 보고 같은 순서를 스스로 밟아 봅니다.</p>
+
+  <h2>7. 확인 문제</h2>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 전처리 전과 후의 그래프를 앱에 나란히 두는 이유를 서술해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>결측치와 이상치가 있는 상태로 분석하면 전혀 다른 결과가 나올 수 있으므로, 처리 전후에 결과가 어떻게 달라졌는지를 보는 사람이 직접 확인할 수 있어야 한다. 전후를 나란히 보이면 무엇을 어떤 기준으로 뺐는지 드러나므로, 전처리가 조작이 아니라 정당한 감식이었음을 검증할 수 있다. 분석의 투명성을 위한 장치다.</p>
-    </details>
+    <div class="qq"><span class="qn">문제 1</span> 도넛(그래프 1)에서 드라마는 두 번째로 큰 조각인데, 트리맵(그래프 2)에서는 작은 상자였습니다. 이유로 알맞은 것은?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">트리맵이 드라마 영화 일부를 빼고 그렸기 때문</button>
+        <button class="opt" data-ok="1">도넛은 편수를, 트리맵은 총 관객을 기준으로 나눴기 때문</button>
+        <button class="opt">두 그래프가 서로 다른 파일을 읽었기 때문</button>
+      </div>
+      <div class="fb">같은 216편을 읽었지만 재는 기준이 다릅니다. 드라마는 편수(56편)로는 크지만 편당 관객이 적어 총 관객 기준에서는 작아집니다. <b>무엇으로 재느냐가 메시지를 정합니다.</b></div>
+    </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> "내 컴퓨터에서 실행되는 앱"과 "배포된 앱"의 차이를 서술해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>내 컴퓨터에서 실행되는 앱은 그 컴퓨터 앞에 있는 사람만 볼 수 있고 컴퓨터를 끄면 사라진다. 배포된 앱은 인터넷의 서버에서 실행되므로 내 컴퓨터가 꺼져 있어도 주소만 알면 누구나 접속할 수 있다. 배포를 거쳐야 분석이 공유되고 남의 검증을 받을 수 있다.</p>
-    </details>
+    <div class="qq"><span class="qn">문제 2</span> 질문에 알맞은 그래프를 골라 보세요.</div>
+    <div class="qitem">
+      <div class="qs">(가) 영화 대부분은 총 관객이 몇 명쯤인가?</div>
+      <div class="qopts"><button class="opt">도넛</button><button class="opt" data-ok="1">히스토그램</button><button class="opt">산점도</button></div>
+      <div class="fb">값의 구간별로 몇 편씩 있는지 세는 <b>히스토그램</b>이 분포의 질문에 답합니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(나) 개봉일 스크린수와 총 관객은 관계가 있는가?</div>
+      <div class="qopts"><button class="opt">트리맵</button><button class="opt">히스토그램</button><button class="opt" data-ok="1">산점도</button></div>
+      <div class="fb">두 속성을 가로·세로 축에 놓고 점을 찍는 <b>산점도</b>가 관계의 질문에 답합니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(다) 10위권 영화의 장르 구성은 어떠한가?</div>
+      <div class="qopts"><button class="opt" data-ok="1">도넛</button><button class="opt">산점도</button><button class="opt">박스플롯</button></div>
+      <div class="fb">전체에서 각 부분이 차지하는 비율을 보이는 <b>도넛</b>이 구성의 질문에 답합니다.</div>
+    </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 배포에서 깃허브 저장소가 맡는 역할을 서술해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>깃허브 저장소는 앱 코드를 보관하는 원본 창고다. 스트림릿 커뮤니티 클라우드는 저장소에 있는 코드를 읽어 와 서버에서 실행하므로, 저장소의 코드를 고치면 배포된 앱도 그에 따라 갱신된다. 내 컴퓨터(작업실)와 클라우드(실행 서버)를 잇는 다리 역할이다.</p>
-    </details>
+    <div class="qq"><span class="qn">문제 3</span> 멀티페이지 앱에서 왼쪽 메뉴의 페이지 순서를 정하는 것은 무엇일까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">pages 폴더 안에 파일을 넣은 순서</button>
+        <button class="opt" data-ok="1">파일 이름 앞에 붙인 숫자</button>
+        <button class="opt">파일의 코드 길이</button>
+      </div>
+      <div class="fb">파일 이름 앞의 숫자가 메뉴 순서를 정합니다. 폴더 이름은 pages로 고정, secrets는 앱 하나에 하나 — 오늘의 세 줄 규칙입니다.</div>
+    </div>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>추세 그래프와 전처리 전후 비교가 담긴 기온 탐색 페이지를 완성했다.</li>
-    <li>깃허브와 스트림릿 커뮤니티 클라우드로 앱을 배포하고 주소를 얻었다.</li>
-    <li>배포 URL을 갤러리에 올리고 짝의 앱에 관찰 한 줄을 남겼다.</li>
-    <li>전처리 전후를 나란히 보이는 이유를 투명성으로 설명할 수 있다.</li>
+    <li>필수 4종(도넛·트리맵·히스토그램·산점도)을 완성하고, 각각 "이 그래프로 알 수 있는 것"을 한 문장씩 적었다.</li>
+    <li>도넛과 트리맵의 구성이 왜 다른지 기준의 차이로 설명할 수 있다.</li>
+    <li>산점도의 점들 위에 "직선을 긋는다면?"이라는 질문을 기억해 두었다.</li>
+    <li>네 산출물이 주소 하나의 멀티페이지 포트폴리오로 모였다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">배포</td><td>내 컴퓨터의 프로그램을 서버에 올려 누구나 주소로 쓸 수 있게 하는 일</td></tr>
-    <tr><td class="term">깃허브(GitHub)</td><td>코드를 보관하고 변경 이력을 관리하는 인터넷 저장소 서비스</td></tr>
-    <tr><td class="term">저장소(repository)</td><td>한 프로젝트의 코드와 파일을 담는 깃허브의 보관 단위</td></tr>
-    <tr><td class="term">스트림릿 커뮤니티 클라우드</td><td>깃허브 저장소의 스트림릿 앱을 무료로 실행해 주는 배포 서비스</td></tr>
-    <tr><td class="term">URL(주소)</td><td>인터넷에서 내 앱이 있는 자리를 가리키는 문자열 — 오늘의 결과물</td></tr>
-    <tr><td class="term">포트폴리오</td><td>내 작업을 모아 남에게 보여 주는 묶음 — 이 앱이 학기 내내 그 역할을 한다</td></tr>
+    <tr><td class="term">도넛 그래프</td><td>전체에서 각 부분이 차지하는 비율(구성비)을 고리 모양으로 보이는 그래프</td></tr>
+    <tr><td class="term">트리맵</td><td>큰 분류 상자 안에 작은 항목 칸을 넣어, 칸의 크기로 값을 보이는 계층 구성 그래프</td></tr>
+    <tr><td class="term">히스토그램</td><td>값을 구간으로 나눠 각 구간에 몇 개가 있는지 세는 분포 그래프</td></tr>
+    <tr><td class="term">산점도</td><td>두 속성을 가로·세로 축에 놓고 점을 찍어 관계를 보는 그래프</td></tr>
+    <tr><td class="term">박스플롯(상자 그림)</td><td>중앙값과 값의 퍼짐을 상자로 요약하고, 밖으로 튀는 점(이상치)을 함께 보이는 그래프</td></tr>
+    <tr><td class="term">버블 그래프</td><td>산점도의 점 크기에 세 번째 속성을 넣은 그래프</td></tr>
+    <tr><td class="term">선버스트</td><td>안쪽 고리에서 바깥 고리로 분류를 펼치는 계층 구성 그래프</td></tr>
+    <tr><td class="term">멀티페이지(pages)</td><td>앱 폴더 안의 pages 폴더 파일들이 자동으로 메뉴가 되는 스트림릿의 여러 페이지 방식</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
-    <a class="prev" href="lesson03.html"><div class="dir">← 이전</div><div class="tt">3차시 · 기온 데이터 탐색</div></a>
-    <a class="next" href="lesson05.html"><div class="dir">다음 →</div><div class="tt">5차시 · API의 이해 · 급식 API</div></a>
+    <a class="prev" href="lesson03.html"><div class="dir">← 이전</div><div class="tt">3차시 · 그래프 도감 Ⅰ — 시간이 보이는 그래프</div></a>
+    <a class="next" href="lesson05.html"><div class="dir">다음 →</div><div class="tt">5차시 · 두 번째 API — 우리 학교 급식</div></a>
   </div>
 </main>
 </div>
-
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
 <script src="assets/quiz.js"></script>

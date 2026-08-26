@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>5차시 · API의 이해 · 급식 API · 데이터 과학 당곡고</title>
+<title>5차시 · 두 번째 API — 우리 학교 급식 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -20,158 +20,63 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅱ. 데이터 준비와 분석 · 5차시</span>
-  <h1>API의 이해 · <span class="a">우리 학교 급식을 내 앱에</span></h1>
+  <h1>두 번째 API — <span class="a">우리 학교 급식</span></h1>
   <div class="under"></div>
 
-  <div class="quote">
-    <div class="q">"데이터는 내려받는 것만이 아니다 — 필요할 때마다 요청해서 받을 수도 있다."</div>
-    <span class="by">2차시에서 이름으로만 만난 반정형 데이터를 오늘 실물로 만납니다</span>
-  </div>
-
-  <p class="lead">2차시에 급식 식단표는 정형, 급식 사진은 비정형, 그리고 "급식 API 응답은 반정형"이라고 예고만 하고 지나갔습니다. 오늘 그 실물을 직접 봅니다. 파일을 하나도 내려받지 않고, <b>오늘 점심 식단이 내 스트림릿 앱에 나타나는</b> 순간까지 갑니다.</p>
+  <p class="lead">오늘은 <b>나이스(NEIS) 급식 API</b>로 우리 학교 점심을 내 앱에 불러옵니다. 방법은 2차시의 KOBIS와 같습니다 — 공식 문서의 발췌를 읽고, 완성 주소로 응답을 먼저 확인하고, 문서를 프롬프트에 붙입니다. 다른 점이 하나 있습니다. 이번 API는 <b>인증키가 필요 없습니다</b>.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>주소창 실험</b> — 브라우저 주소창에서 급식 API를 호출해 JSON 원문을 눈으로 확인</li>
-      <li><b>바이브 코딩</b> — 날짜를 고르면 그날 식단이 나오는 급식 페이지를 내 앱에 추가</li>
-      <li><b>관찰</b> — 식단표에는 없던 칼로리·알레르기·원산지 정보가 API 응답 속에 있다는 것</li>
+      <li><b>두 API 비교</b> — KOBIS와 나이스, 무엇이 같고 무엇이 다른가</li>
+      <li><b>바이브 코딩</b> — 내 포트폴리오 앱에 급식 페이지 추가 + 학기 154일 최다 메뉴 TOP 10</li>
+      <li><b>기록</b> — 함께 자주 나올 것 같은 메뉴 짝 3개 (12차시에 다시 꺼냅니다)</li>
     </ul>
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>버스 도착 알림, 날씨 앱, 실시간 환율 — 이런 앱들은 데이터 파일을 미리 내려받아 두지 않습니다. 여러분이 화면을 여는 순간, 앱이 데이터를 가진 서버에 <b>요청을 보내고 응답을 받아</b> 보여 줍니다. 이때 요청을 받아 응답을 돌려주는 통로가 API입니다. 2차시에 공공데이터포털에서 CSV 파일을 내려받아 봤다면, 오늘은 데이터를 받는 두 번째 방법을 배웁니다. 한 번 익혀 두면 급식·영화·날씨·대중교통 등 세상의 수많은 실시간 데이터가 여러분 앱의 재료가 됩니다. 팀 프로젝트에서 "항상 최신인 데이터"를 다루고 싶다면 오늘이 그 출발점입니다.</p>
+  <p>세상의 API는 수천 개가 넘고, 수업이 그것을 전부 소개할 수는 없습니다. 그래서 오늘 배우는 것은 급식 API 하나가 아니라, <b>처음 보는 API에 다가가는 순서</b>입니다. 문서 발췌를 읽고, 완성 주소를 맨눈으로 확인하고, 문서를 붙여 부탁한다 — 이 순서가 손에 붙으면 날씨·대중교통·도서관 등 어떤 API든 공식 문서만 있으면 여러분 앱의 재료가 됩니다. 2학기 후반의 팀 프로젝트에서 팀이 고른 데이터가 API로 온다면, 오늘 연습한 순서가 그대로 쓰입니다.</p>
 
-  <h2>1. 개념 이해 — API는 요청과 응답의 약속</h2>
-  <p>API는 <b>정해진 주소로 조건을 담은 요청을 보내면, 정해진 양식(JSON)의 응답을 돌려주기로 한 약속</b>입니다. 내 앱이 나이스 서버에 "당곡고의 오늘 급식"을 요청하면, 서버는 약속된 형식으로 식단 데이터를 돌려줍니다. 우리는 서버 내부에서 무슨 일이 일어나는지 몰라도 됩니다 — 약속(요청 형식과 응답 형식)만 알면 데이터를 받을 수 있습니다. API를 이루는 네 가지는 다음과 같습니다.</p>
+  <h2>1. 두 API 비교 — 같은 순서, 다른 규칙</h2>
+  <p>KOBIS에서 밟은 순서는 나이스에서도 통합니다. 그러나 규칙은 API마다 다릅니다. 가장 큰 차이는 인증키입니다. KOBIS는 키가 요청에 실려 가야 했지만, 나이스 급식 API는 <b>키 없이 부를 수 있습니다</b>. 공짜에는 조건이 붙습니다 — 키가 없으면 <b>한 번에 오는 건수에 제한</b>이 있어서, 조회 기간을 짧게 잡아야 합니다.</p>
   <table class="daymap">
-    <thead><tr><th>구성 요소</th><th>무엇인가</th><th>급식 API에서는</th></tr></thead>
+    <thead><tr><th></th><th>KOBIS 박스오피스 (2차시)</th><th>나이스 급식 (오늘)</th></tr></thead>
     <tbody>
-      <tr><td><b>요청 URL</b></td><td>어디에 물어볼지 정해진 인터넷 주소</td><td>open.neis.go.kr의 급식식단 API 주소</td></tr>
-      <tr><td><b>요청(request)</b></td><td>"무엇을 알려줘"라는 물음 — 주소 뒤에 붙는 조건들</td><td>교육청·학교 코드, 날짜</td></tr>
-      <tr><td><b>응답(response)</b></td><td>정해진 양식(JSON)으로 오는 답</td><td>식단·칼로리·원산지가 담긴 JSON</td></tr>
-      <tr><td><b>API 키(인증키)</b></td><td>요청에 함께 실어 보내는, 사용자를 증명하는 문자열</td><td>주소 속 KEY= 자리에 들어감 — 아래 5절에서 자세히</td></tr>
+      <tr><td><b>인증키</b></td><td>필요 — 비밀 금고(secrets)에 보관</td><td><b>불필요</b> — 대신 한 번에 오는 건수 제한</td></tr>
+      <tr><td><b>실패 신호</b></td><td>상태코드 200인데 <code>faultInfo</code> 상자가 옴</td><td>데이터가 없으면 <code>RESULT</code> 상자만 옴</td></tr>
+      <tr><td><b>빈 응답의 정체</b></td><td>오늘 것은 아직 집계 전</td><td>주말·방학은 급식이 없는 날 — 오류가 아니다</td></tr>
+      <tr><td><b>받자마자 다듬을 것</b></td><td>숫자가 따옴표 친 글자로 온다</td><td>메뉴 전체가 한 덩어리 글자로 온다 — 구분 기호와 알레르기 괄호를 떼야 표가 된다</td></tr>
     </tbody>
   </table>
-
-  <details class="glossary">
-    <summary>🔬 움직여 보기 — 요청과 응답, 클릭으로 한 단계씩</summary>
-    <div class="gin">
-      <p style="margin:10px 0 12px">내 앱이 급식 데이터를 받아 오는 과정입니다. 그림을 <b>클릭할 때마다 한 단계씩</b> 움직입니다 — ①요청 만들기 → ②서버로 보내기 → ③응답(JSON) 만들기 → ④응답 받기.</p>
-<svg class="api-svg" viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="클릭할 때마다 한 단계씩 진행되는 API 요청과 응답 그림">
-  <defs>
-    <marker id="arR" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#7d93ef"/></marker>
-    <marker id="arL" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#e98bb6"/></marker>
-    <filter id="ds2" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2a3568" flood-opacity="0.14"/></filter>
-  </defs>
-  <g class="lane" data-lane="B" data-req-y="98" data-res-y="142" style="cursor:pointer">
-    <rect x="6" y="12" width="788" height="192" fill="transparent" pointer-events="all"/>
-    <text class="hint" x="400" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#0e9488">👆 클릭 ① — 요청 만들기</text>
-    <g filter="url(#ds2)" pointer-events="none"><rect x="28" y="64" width="180" height="100" rx="18" fill="#ffffff" stroke="#e6e8f2"/></g>
-    <text x="118" y="114" text-anchor="middle" font-size="36" pointer-events="none">💻</text>
-    <text x="118" y="148" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a" pointer-events="none">내 앱 · 브라우저</text>
-    <g filter="url(#ds2)" pointer-events="none"><rect x="592" y="64" width="180" height="100" rx="18" fill="#eef0ff" stroke="#c3c9f5"/></g>
-    <text x="682" y="108" text-anchor="middle" font-size="33" pointer-events="none">🏫</text>
-    <text x="682" y="138" text-anchor="middle" font-size="15" font-weight="800" fill="#3b47c2" pointer-events="none">나이스(NEIS)</text>
-    <text x="682" y="155" text-anchor="middle" font-size="11.5" fill="#8a8fb0" pointer-events="none">API 서버 · 데이터 보관</text>
-    <line x1="216" y1="98" x2="584" y2="98" stroke="#9fb0f5" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arR)" pointer-events="none"/>
-    <text x="400" y="86" text-anchor="middle" font-size="13" fill="#5B6CF0" font-weight="800" pointer-events="none">요청 →</text>
-    <line x1="584" y1="142" x2="216" y2="142" stroke="#f0b9d2" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arL)" pointer-events="none"/>
-    <text x="400" y="166" text-anchor="middle" font-size="13" fill="#E0568A" font-weight="800" pointer-events="none">← 응답</text>
-    <g class="doc-req" opacity="0" pointer-events="none">
-      <rect x="-66" y="-44" width="132" height="88" rx="8" fill="#ffffff" stroke="#b9c0f5"/>
-      <rect x="-66" y="-44" width="132" height="22" rx="8" fill="#0e9488"/><rect x="-66" y="-33" width="132" height="11" fill="#0e9488"/>
-      <text x="0" y="-28" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📝 요청 (URL)</text>
-      <text x="0" y="-4" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">학교: 당곡고</text>
-      <text x="0" y="14" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">날짜: 오늘</text>
-      <text x="0" y="32" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">🔑 KEY=인증키</text>
-    </g>
-    <g class="doc-res" opacity="0" pointer-events="none">
-      <rect x="-82" y="-52" width="164" height="104" rx="8" fill="#ffffff" stroke="#a7d8d4"/>
-      <rect x="-82" y="-52" width="164" height="22" rx="8" fill="#0e9488"/><rect x="-82" y="-41" width="164" height="11" fill="#0e9488"/>
-      <text x="0" y="-36" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📦 응답 (JSON)</text>
-      <text x="0" y="-6" text-anchor="middle" font-size="20" font-weight="800" fill="#2b2d3a">🍚 오늘의 급식</text>
-      <text x="0" y="13" text-anchor="middle" font-size="11" fill="#8a8fa6">식단·칼로리·원산지</text>
-      <text x="0" y="36" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0e9488" font-family="monospace">{"DDISH_NM": "…"}</text>
-    </g>
-  </g>
-  <text x="400" y="232" text-anchor="middle" font-size="12.5" fill="#7a7f95" pointer-events="none">요청 = 주소 + 조건(학교·날짜) + 🔑 인증키 · 응답 = 정해진 양식(JSON) · 상태코드 200이면 성공</text>
-</svg>
-<script>
-(function () {
-  var STEPS = {
-    B: ["👆 클릭 ① — 요청 만들기", "👆 클릭 ② — 서버로 보내기", "👆 클릭 ③ — 응답(JSON) 만들기", "👆 클릭 ④ — 응답 받기", "✅ 한 바퀴 끝! 클릭하면 처음부터"]
-  };
-  var START_X = 275, END_X = 525;
-  var MOVE = "transform 2.8s ease-in-out, opacity 0.7s ease";
-  document.querySelectorAll(".api-svg .lane").forEach(function (lane) {
-    var id = lane.getAttribute("data-lane");
-    var req = lane.querySelector(".doc-req");
-    var res = lane.querySelector(".doc-res");
-    var hint = lane.querySelector(".hint");
-    var reqY = +lane.getAttribute("data-req-y");
-    var resY = +lane.getAttribute("data-res-y");
-    var s = 0;
-    function reset() {
-      req.style.transition = "none";
-      res.style.transition = "none";
-      req.style.transform = "translate(" + START_X + "px," + reqY + "px)";
-      res.style.transform = "translate(" + END_X + "px," + resY + "px)";
-      req.style.opacity = 0;
-      res.style.opacity = 0;
-      req.getBoundingClientRect();
-      req.style.transition = MOVE;
-      res.style.transition = MOVE;
-      hint.textContent = STEPS[id][0];
-    }
-    reset();
-    lane.addEventListener("click", function () {
-      s = (s + 1) % 5;
-      if (s === 1) { req.style.opacity = 1; }
-      else if (s === 2) { req.style.transform = "translate(" + END_X + "px," + reqY + "px)"; }
-      else if (s === 3) { req.style.opacity = 0; res.style.opacity = 1; }
-      else if (s === 4) { res.style.transform = "translate(" + START_X + "px," + resY + "px)"; }
-      else { s = 0; reset(); return; }
-      hint.textContent = STEPS[id][s];
-    });
-  });
-})();
-</script>
-    </div>
-  </details>
-  <p>응답에는 <b>상태코드</b>라는 세 자리 숫자 코드가 함께 옵니다. 셋만 기억하면 됩니다 — <b>200</b> 성공 · <b>404</b> 없음(주소가 틀렸거나 없는 자료) · <b>429</b> 과다 요청(호출이 너무 잦음 — 잠깐 쉬기).</p>
-  <p>내려받기와 API는 무엇이 다를까요? 내려받은 CSV는 <b>그 시점의 복사본</b>입니다. 내일 식단이 바뀌어도 내 파일은 모릅니다. API는 호출할 때마다 서버가 지금 가진 데이터를 보내 주므로 <b>항상 최신</b>이고, 날짜나 학교를 지정해 <b>필요한 만큼만</b> 받을 수 있습니다.</p>
-
-  <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 20쪽</span></div>
-    <p class="q">"반정형 데이터는 일부분이 정형화된 데이터로, 구조가 존재하지만 구조를 바꿀 수도 있는 유연한 형태의 데이터를 말한다." <span class="src">(20쪽)</span></p>
-    <p class="q">"대표적인 반정형 데이터로는 XML(eXtensible Markup Language)과 JSON(JavaScript Object Notation)이 있다." <span class="src">(20쪽)</span></p>
-    <p class="q">"이러한 반정형 데이터는 데이터 구조를 쉽게 변경할 수 있고, 필요한 경우 표 형태로도 쉽게 변환할 수 있어 데이터 공유에 많이 활용된다." <span class="src">(20쪽)</span></p>
-    <p class="t">→ API가 돌려주는 응답이 바로 이 JSON이다. "표로 쉽게 변환할 수 있다"는 문장을 오늘 실습에서 직접 확인한다.</p>
+  <div class="callout warn">
+    <div class="h">⚠️ 건수 제한의 실물 — 조회 기간은 짧게</div>
+    <p>키 없이 넉 달치(2026-03-01~07-31)를 한 번에 물어보면, 응답은 "전체 82건"이라고 알려 주면서 <b>목록에는 앞의 5건만</b> 담아 보냅니다(실측). 오류도 나지 않아서 알아채기 어렵습니다. 그래서 오늘 실습의 날짜 조회는 하루~한 주 단위로 짧게 잡고, 학기 전체가 궁금할 때는 미리 쌓아 둔 표(③에서 등장)를 씁니다.</p>
   </div>
 
-  <table class="daymap">
-    <thead><tr><th>구분</th><th>내려받기(2차시)</th><th>API 호출(오늘)</th></tr></thead>
-    <tbody>
-      <tr><td><b>받는 것</b></td><td>그 시점의 복사본 파일(CSV)</td><td>지금 서버가 가진 데이터(JSON)</td></tr>
-      <tr><td><b>최신성</b></td><td>내려받은 날짜에 멈춰 있음</td><td>호출할 때마다 최신</td></tr>
-      <tr><td><b>범위</b></td><td>제공자가 묶어 둔 파일 전체</td><td>날짜·학교 등 조건을 지정해 필요한 만큼</td></tr>
-      <tr><td><b>형태</b></td><td>정형(표)</td><td>반정형(JSON) — 표로 변환해서 사용</td></tr>
-    </tbody>
-  </table>
-
-  <h3>JSON — 라벨 붙은 상자</h3>
-  <p>API가 돌려주는 JSON은 <b>{"라벨": 값} 짝으로 이루어진 상자</b>입니다. 상자 안에 상자를 넣을 수 있어서, 복잡한 데이터도 층층이 담을 수 있습니다. 오늘 쓸 급식 API의 실제 응답 일부를 봅니다.</p>
-  <div class="codewrap code"><span class="label">실제 응답 (일부 발췌)</span><pre>{
+  <h2>2. 완성 주소 맨눈 보기 — 급식 JSON 해부</h2>
+  <p>2차시와 같은 순서입니다. 코드를 쓰기 전에 완성 주소를 새 탭에서 열어, 응답 JSON을 맨눈으로 확인합니다. 먼저 주소를 해부해 봅니다. KOBIS 주소에 있던 <code>key=</code>가 여기에는 <b>없습니다</b>.</p>
+  <div class="specimen semi" style="margin:18px 0">
+    <div class="tag">요청 주소의 해부 — 인증키 없는 요청</div>
+    <div class="body"><pre class="mini"><span style="color:#3ba6a0;text-decoration:underline">https://open.neis.go.kr/hub/mealServiceDietInfo</span>   <span style="color:#9b8c66">← 어디에 — 요청 주소</span>
+<span style="color:#f4b400">?Type=json</span>                                        <span style="color:#9b8c66">← 응답 형식 — 이 줄이 빠지면 XML로 온다</span>
+<span style="color:#54a24b">&amp;ATPT_OFCDC_SC_CODE=B10</span>                           <span style="color:#9b8c66">← 조건 — 교육청(서울)</span>
+<span style="color:#54a24b">&amp;SD_SCHUL_CODE=7010073</span>                            <span style="color:#9b8c66">← 조건 — 학교(당곡고)</span>
+<span style="color:#54a24b">&amp;MMEAL_SC_CODE=2</span>                                  <span style="color:#9b8c66">← 조건 — 식사(중식)</span>
+<span style="color:#e8930c">&amp;MLSV_FROM_YMD=20260602&amp;MLSV_TO_YMD=20260602</span>      <span style="color:#9b8c66">← 조건 — 기간(하이픈 없는 여덟 자리)</span></pre></div>
+    <div class="note">요청 주소와 조건은 2차시 KOBIS와 같은 구조인데, 인증키만 없다. 날짜 두 값을 바꾸면 응답이 그 기간 것으로 바뀐다.</div>
+  </div>
+  <p>이 주소를 주소창에 붙여 넣으면 아래와 같은 JSON이 화면에 그대로 나타납니다. 2026년 6월 2일의 실제 응답입니다.</p>
+  <div class="codewrap code"><span class="label">실제 응답 (일부 발췌 · 2026-06-02)</span><pre>{
   "mealServiceDietInfo": [
     { "head": [ { "list_total_count": 1 } ] },
     { "row": [
         {
           "SCHUL_NM": "당곡고등학교",
-          "MLSV_YMD": "20260821",
-          "DDISH_NM": "친환경현미밥 &lt;br/&gt;근대된장국 &lt;br/&gt;제육볶음 (5.6.10.13)...",
-          "CAL_INFO": "796.4 Kcal",
-          "ORPLC_INFO": "쌀 : 국내산 ..."
+          "MLSV_YMD": "20260602",
+          "DDISH_NM": "친환경현미밥 &lt;br/&gt;오징어무국 (5.6.13.17)&lt;br/&gt;두부조림 (5.6.13)&lt;br/&gt;
+                       찜닭(당면) (5.6.13.15)&lt;br/&gt;얼갈이무침 &lt;br/&gt;배추김치 (9)&lt;br/&gt;초코맛아이스크림 (2)",
+          "CAL_INFO": "941.7 Kcal",
+          "ORPLC_INFO": "닭고기 : 국내산 ..."
         }
     ] }
   ]
@@ -197,9 +102,9 @@
       <text x="50" y="104" font-size="13" font-weight="800" fill="#3ba6a0" font-family="monospace">row</text>
       <rect x="52" y="118" width="292" height="158" rx="10" fill="#fffdf6" stroke="#f0e2bc"/>
       <text x="66" y="146" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"SCHUL_NM"</tspan><tspan fill="#2b2d3a">: 당곡고등학교</tspan></text>
-      <text x="66" y="174" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"MLSV_YMD"</tspan><tspan fill="#2b2d3a">: 20260821</tspan></text>
+      <text x="66" y="174" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"MLSV_YMD"</tspan><tspan fill="#2b2d3a">: 20260602</tspan></text>
       <text x="66" y="202" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"DDISH_NM"</tspan><tspan fill="#2b2d3a">: 친환경현미밥 …</tspan></text>
-      <text x="66" y="230" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"CAL_INFO"</tspan><tspan fill="#2b2d3a">: "796.4 Kcal"</tspan></text>
+      <text x="66" y="230" font-size="12.5" font-family="monospace"><tspan fill="#e8930c">"CAL_INFO"</tspan><tspan fill="#2b2d3a">: "941.7 Kcal"</tspan></text>
       <text x="80" y="256" font-size="10.5" fill="#e45756">↑ 따옴표 친 글자 — 숫자로 바꿔야 계산된다</text>
       <!-- 라벨 → 열 머리글 화살표 -->
       <path d="M348,170 C430,140 500,130 568,164" fill="none" stroke="#f4b400" stroke-width="2" marker-end="url(#arGoldL5)"/>
@@ -215,156 +120,201 @@
       <rect x="520" y="200" width="110" height="34" fill="#ffffff" stroke="#f0e2bc"/>
       <rect x="630" y="200" width="130" height="34" fill="#ffffff" stroke="#f0e2bc"/>
       <rect x="760" y="200" width="90" height="34" fill="#ffffff" stroke="#f0e2bc"/>
-      <text x="575" y="221" text-anchor="middle" font-size="11.5" fill="#2b2d3a" font-family="monospace">20260821</text>
+      <text x="575" y="221" text-anchor="middle" font-size="11.5" fill="#2b2d3a" font-family="monospace">20260602</text>
       <text x="695" y="221" text-anchor="middle" font-size="11.5" fill="#2b2d3a" font-family="monospace">친환경현미밥 …</text>
-      <text x="805" y="221" text-anchor="middle" font-size="11.5" fill="#2b2d3a" font-family="monospace">"796.4 Kcal"</text>
+      <text x="805" y="221" text-anchor="middle" font-size="11.5" fill="#2b2d3a" font-family="monospace">"941.7 Kcal"</text>
       <!-- 하단 캡션 -->
       <text x="430" y="384" text-anchor="middle" font-size="12.5" fill="#7a7f95">row의 상자 하나가 표의 행 하나가 된다 — "필요한 경우 표 형태로도 쉽게 변환할 수 있다"(교과서 20쪽)의 실제 모습.</text>
     </svg>
   </div>
   <ul>
-    <li><b>값 꺼내기 = 라벨을 따라 들어가기</b> — 겉상자 <code>mealServiceDietInfo</code> 안의 목록에서 <code>row</code>를 꺼내고, 그 안의 <code>DDISH_NM</code>(식단)을 꺼내는 식입니다. "상자에서 상자를 꺼내라"고 말할 수 있으면 JSON을 읽을 수 있습니다.</li>
-    <li><b>👀 눈여겨볼 것 — 숫자가 따옴표에 싸여 있다.</b> <code>"CAL_INFO": "796.4 Kcal"</code> — 칼로리가 숫자가 아니라 <b>따옴표 친 글자</b>로 옵니다. 글자인 채로는 크기 비교·정렬·그래프가 되지 않으므로, 숫자로 바꾸는 한 단계가 꼭 필요합니다. 3차시에 배운 전처리가 API 데이터에서도 반복되는 것입니다.</li>
-    <li><b>표로 바꾸면 정형이 된다</b> — 교과서 20쪽의 "필요한 경우 표 형태로도 쉽게 변환할 수 있다"가 바로 이 작업입니다. <code>row</code> 목록의 상자 하나가 표의 행 하나가 됩니다.</li>
+    <li><b>값 꺼내기는 2차시와 같다</b> — 겉상자 <code>mealServiceDietInfo</code>에서 <code>row</code> 목록을 꺼내고, 그 안의 <code>DDISH_NM</code>(메뉴)을 꺼냅니다. KOBIS의 <code>boxOfficeResult</code> → <code>dailyBoxOfficeList</code>와 이름만 다를 뿐, 상자에서 상자를 꺼내는 읽기는 같습니다.</li>
+    <li><b>👀 눈여겨볼 것 — 메뉴 일곱 개가 한 칸에 들어 있다.</b> <code>DDISH_NM</code>에는 그날 메뉴 전체가 <code>&lt;br/&gt;</code>라는 구분 기호로 이어진 <b>한 덩어리 글자</b>로 옵니다. 메뉴 뒤 괄호 속 숫자는 알레르기 유발 식품 번호입니다. 이대로는 "배추김치가 며칠 나왔나"를 셀 수 없습니다 — 구분 기호로 낱개를 나누고 괄호를 떼는 다듬기가 필요합니다.</li>
+    <li><b>급식이 없는 날을 골라 보면</b> — 일요일 날짜로 바꿔 다시 접속하면 <code>row</code> 없이 <code>RESULT</code> 상자만 옵니다("해당하는 데이터가 없습니다"). 고장이 아니라 <b>그날 급식이 없다는 정상 응답</b>입니다.</li>
   </ul>
 
-  <h2>2. 주소창 실험 — 반정형 데이터의 실물</h2>
-  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 선생님이 나눠 준 요청 주소를 주소창에 붙여 넣으면, 꾸며지지 않은 JSON 원문이 화면에 그대로 나타납니다. 붙여 넣기 전에, 요청 주소 자체를 해부해 봅니다.</p>
-  <div class="specimen semi" style="margin:18px 0">
-    <div class="tag">요청 주소의 해부 — 한 줄에 실려 가는 네 구성 요소</div>
-    <div class="body"><pre class="mini"><span style="color:#3ba6a0;text-decoration:underline">https://open.neis.go.kr/hub/mealServiceDietInfo</span>   <span style="color:#9b8c66">← 어디에 — 요청 URL</span>
-<span style="color:#f4b400">?KEY=발급받은 인증키</span>                              <span style="color:#9b8c66">← 누가 — 🔑 인증키 (5절)</span>
-<span style="color:#54a24b">&amp;ATPT_OFCDC_SC_CODE=B10</span>                           <span style="color:#9b8c66">← 조건 — 교육청(서울)</span>
-<span style="color:#54a24b">&amp;SD_SCHUL_CODE=7010073</span>                            <span style="color:#9b8c66">← 조건 — 학교(당곡고)</span>
-<span style="color:#e8930c">&amp;MLSV_YMD=20260821</span>                                <span style="color:#9b8c66">← 조건 — 날짜. 이 값을 바꾸면 응답이 그날 것으로 바뀐다</span></pre></div>
-    <div class="note">§1 표의 네 구성 요소(요청 URL·요청 조건·인증키)가 주소 한 줄에 모두 실려 간다. 응답만 §1 그림처럼 JSON으로 돌아온다.</div>
-  </div>
-  <p>주소창에 붙여 넣은 뒤에는, 화면의 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
-  <ul>
-    <li><b>학교를 가리키는 조건</b> — 교육청 코드 <code>B10</code>(서울), 학교 코드 <code>7010073</code>(당곡고). 주소 속 이 두 값이 "우리 학교 것"이라는 요청 조건입니다.</li>
-    <li><b>이름표와 값의 쌍</b> — 메뉴가 담긴 항목, 칼로리가 담긴 <code>CAL_INFO</code>, 원산지가 담긴 <code>ORPLC_INFO</code>. 열 이름이 표 머리글이 아니라 <b>데이터 안에 이름표로</b> 붙어 있습니다. 이것이 반정형의 생김새입니다.</li>
-    <li><b>날짜 조건을 바꾸면</b> — 주소 속 날짜를 다른 날로 고쳐 다시 접속하면 응답이 그날 것으로 바뀝니다. 같은 주소, 다른 조건입니다.</li>
-  </ul>
-  <table class="daymap">
-    <thead><tr><th>응답 속 이름표</th><th>담긴 것</th><th>급식실 식단표에는?</th></tr></thead>
-    <tbody>
-      <tr><td>메뉴 항목</td><td>메뉴 이름 + 알레르기 유발 식품 번호</td><td>메뉴 이름만 있음</td></tr>
-      <tr><td><code>CAL_INFO</code></td><td>한 끼의 칼로리</td><td>없음</td></tr>
-      <tr><td><code>ORPLC_INFO</code></td><td>재료의 원산지</td><td>없음</td></tr>
-    </tbody>
-  </table>
-  <div class="callout tip">
-    <div class="h">💡 인증키가 없으면 어떻게 되나</div>
-    <p>이 API는 인증키 없이도 날짜별 1일 조회는 가능합니다. 그러나 키 없이 긴 기간을 한 번에 조회하면 <b>첫 5행만 반복되는 샘플 응답</b>이 돌아옵니다. 제대로 쓰려면 키가 필요합니다 — 키 이야기는 5절에서 다시 합니다.</p>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 20쪽</span></div>
+    <p class="q">"이러한 반정형 데이터는 데이터 구조를 쉽게 변경할 수 있고, 필요한 경우 표 형태로도 쉽게 변환할 수 있어 데이터 공유에 많이 활용된다." <span class="src">(20쪽)</span></p>
+    <p class="t">→ 2차시에 읽은 문장이 오늘 두 번째로 실물이 된다. 급식 JSON도 row 하나가 표의 행 하나로 바뀐다.</p>
   </div>
 
-  <h2>3. 실습 — 급식 페이지를 내 앱에 추가한다 (바이브 코딩)</h2>
-  <p>4차시에 배포한 내 스트림릿 앱에 두 번째 페이지를 답니다. 인증키는 선생님이 나눠 주며, 코드에 직접 쓰지 않고 스트림릿의 <b>비밀값 보관함(secrets)</b>에 넣습니다.</p>
+  <h2>3. 실습 — 급식 페이지를 내 앱에 추가한다</h2>
+  <p>4차시에 완성한 포트폴리오 앱에 다섯 번째 페이지를 답니다. 2차시에는 프롬프트를 쓰기 전에 키를 비밀 금고(secrets)에 넣는 단계가 있었지만, 오늘은 <b>넣을 키가 없으므로 그 단계가 통째로 없습니다</b>. 프롬프트 끝에 공식 문서 발췌를 붙이는 요령은 그대로입니다 — AI가 필드 이름을 지어내지 못하게 막는 안전장치입니다.</p>
 
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>나이스 급식 API로 우리 학교(당곡고) 급식을 불러오는 페이지를
-내 스트림릿 앱에 추가해 줘. 날짜를 고르면 그날 식단이 보이게.
-인증키는 스트림릿의 비밀값 보관함에 넣어 줘.
-교육청 코드는 B10, 학교 코드는 7010073이야.</pre></div>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 포트폴리오 앱에 '우리 학교 급식' 페이지를 추가해 줘.
+아래에 나이스 교육정보 개방 포털 문서에서 복사한 내용을 붙였어. 이 API는 인증키가 없어도 돼.
+
+- 날짜를 달력에서 고르면 그날 당곡고등학교 중식 메뉴를 카드로 보여 줘.
+- 메뉴 이름 뒤 괄호 속 숫자는 알레르기 번호야. 평소엔 떼고 보여 주되,
+  '알레르기 정보 보기'를 켜면 번호와 함께 보이게 해 줘.
+- 그날의 칼로리도 함께 보여 줘.
+- 주말이나 방학처럼 급식이 없는 날은 오류 대신 "급식이 없는 날입니다"라고 안내해 줘.
+
+──── 아래는 나이스 교육정보 개방 포털 문서에서 복사한 부분 ────
+요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo
+요청변수: Type=json · ATPT_OFCDC_SC_CODE=B10(서울시교육청) · SD_SCHUL_CODE=7010073(당곡고등학교) ·
+  MMEAL_SC_CODE=2(중식) · MLSV_FROM_YMD, MLSV_TO_YMD(조회 시작일과 끝일, 하이픈 없는 여덟 자리)
+응답 구조: mealServiceDietInfo의 두 번째 상자 안 row 목록에 날짜별로
+  MLSV_YMD(급식일) · DDISH_NM(메뉴 전체 - &lt;br/&gt;로 구분되고, 메뉴 뒤 괄호 숫자는 알레르기 번호) ·
+  CAL_INFO(칼로리) · ORPLC_INFO(원산지)
+  ※ 급식이 없는 날은 row가 없고 RESULT 상자가 온다. 오류가 아니다.
+  ※ 인증키 없이 부를 수 있고, 한 번에 오는 건수에 제한이 있다. 조회 기간은 짧게 잡는다.</pre></div>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 관찰한다</span><br>
-      날짜 선택 상자에서 오늘을 고르면 오늘 점심 식단이 나타납니다. 파일을 내려받은 적이 없다는 점을 확인하세요. 어제, 지난주, 방학 중 날짜도 골라 봅니다 — 급식이 없는 날은 응답이 비어 있습니다. 빈 응답을 앱이 어떻게 처리하는지도 관찰 대상입니다.</li>
-    <li><span class="st">③ 개선 프롬프트 — 식단 옆의 숨은 정보를 꺼낸다</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>식단 옆에 칼로리와 알레르기 정보도 함께 보여 줘.
-급식이 없는 날짜를 고르면 "급식이 없는 날입니다"라고 안내해 줘.</pre></div>
+      아래는 이 프롬프트로 받은 코드의 한 예입니다. 여러분 화면이 이런 모습이면 성공이고, <b>글자까지 같지 않아도 됩니다</b>.
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시</span><button class="copy-btn">복사</button><pre># pages/5_🍚_우리학교_급식.py — 나이스 급식 API로 그날 식단을 보여 주는 페이지
+import datetime
+import re
+
+import requests
+import streamlit as st
+
+st.title("🍚 우리 학교 급식")
+
+# 날짜 고르기 — 기본값은 오늘
+picked = st.date_input("날짜를 고르세요", value=datetime.date.today())
+ymd = picked.strftime("%Y%m%d")
+
+# 알레르기 번호를 보일지 선택
+show_allergy = st.toggle("알레르기 정보 보기")
+
+# 나이스 급식 API — 인증키 없이 호출한다 (조회 기간은 하루)
+url = "https://open.neis.go.kr/hub/mealServiceDietInfo"
+params = {
+    "Type": "json",                # 응답을 JSON으로
+    "ATPT_OFCDC_SC_CODE": "B10",   # 서울시교육청
+    "SD_SCHUL_CODE": "7010073",    # 당곡고등학교
+    "MMEAL_SC_CODE": "2",          # 중식
+    "MLSV_FROM_YMD": ymd,
+    "MLSV_TO_YMD": ymd,
+}
+data = requests.get(url, params=params, timeout=10).json()
+
+if "mealServiceDietInfo" not in data:
+    # 급식이 없는 날은 row 없이 RESULT 상자만 온다 — 오류가 아니다
+    st.info("급식이 없는 날입니다. (주말·방학·공휴일)")
+else:
+    row = data["mealServiceDietInfo"][1]["row"][0]
+    st.subheader(picked.strftime("%Y년 %m월 %d일") + " 중식")
+    # 메뉴 전체가 한 덩어리 글자로 온다 — &lt;br/&gt;로 잘라 낱개 메뉴로
+    for dish in row["DDISH_NM"].split("&lt;br/&gt;"):
+        dish = dish.strip()
+        if not show_allergy:
+            # 괄호 속 알레르기 번호 떼기
+            dish = re.sub(r"\s*\([0-9.]+\)", "", dish)
+        st.markdown("- " + dish)
+    st.metric("칼로리", row["CAL_INFO"])</pre></div>
+      실행되면 세 가지를 관찰합니다. 수업일을 고르면 그날 식단과 칼로리가 나오는지, '알레르기 정보 보기'를 켜면 괄호 숫자가 나타나는지, 그리고 <b>일요일이나 방학 날짜를 골랐을 때</b> 오류 화면 대신 안내 문구가 나오는지. 빈 응답을 앱이 어떻게 받아 내는지가 오늘의 관찰 대상입니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 하루에서 학기 전체로</span><br>
+      달력 조회는 하루씩만 보여 줍니다. "한 학기 동안 무엇이 가장 자주 나왔나"에 답하려면, 건수 제한이 있는 API 대신 <b>미리 쌓아 둔 표</b>로 갈아탑니다. 3차시에 하루치 API에서 354일 표로 전환했던 것과 같은 장면입니다.
+      <div class="codewrap improve"><span class="label">③ 프롬프트 개선</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘.
+- 학기 전체가 궁금해. 이번엔 API 말고 미리 쌓아 둔 표를 써:
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/danggok_meals.csv
+  우리 학교 중식 154일치야. 열은 날짜(여덟 자리 숫자) · 식사 · 메뉴이고,
+  메뉴 열은 한 날의 메뉴 여러 개가 세로막대 기호로 이어져 있어.
+- 메뉴를 낱개로 나눠서, 한 학기 동안 가장 자주 나온 메뉴 TOP 10을 가로 막대그래프로 보여 줘.
+- 메뉴마다 154일 중 며칠 나왔는지 일수와 비율을 함께 보여 줘.</pre></div>
     </li>
   </ol>
 
   <div class="callout check">
-    <div class="h">✅ 여기까지 되었는지 확인</div>
+    <div class="h">✔️ 여기까지 되었는지 확인</div>
     <ul>
-      <li>날짜 선택 상자에서 오늘을 고르면 오늘 식단이 나타난다.</li>
-      <li>인증키가 코드 안에 보이지 않는다 — 비밀값 보관함에서 읽어 온다.</li>
-      <li>급식이 없는 날짜를 골랐을 때 앱이 안내 문구를 표시한다.</li>
+      <li>날짜를 고르면 그날 식단과 칼로리가 나온다. 알레르기 번호는 켜고 끌 수 있다.</li>
+      <li>일요일 날짜를 골랐을 때 오류 화면 대신 "급식이 없는 날입니다"가 나온다.</li>
+      <li>학기 154일 최다 메뉴 TOP 10 가로 막대그래프가 일수·비율과 함께 나온다.</li>
     </ul>
   </div>
 
-  <div class="callout warn">
-    <div class="h">⚠️ 발견 — 내려받지 않았는데 점심이 뜬다</div>
-    <p>화면에 나타난 오늘 식단은 내 컴퓨터 어디에도 파일로 존재하지 않습니다. 앱이 실행될 때마다 나이스 서버에 요청을 보내고 응답을 받아 표시한 것입니다. 데이터가 "가져다 두는 것"에서 <b>"흘러오는 것"</b>으로 바뀌는 순간입니다. 내일 이 페이지를 열면, 아무것도 고치지 않아도 내일 식단이 나옵니다.</p>
-  </div>
-
-  <h2>4. 관찰 — 표에 없던 것이 API엔 있다</h2>
-  <p>급식실 앞에 붙은 식단표에는 메뉴 이름이 전부입니다. 그런데 API 응답에는 메뉴마다 <b>알레르기 유발 식품 번호</b>가 붙어 있고, 한 끼의 <b>칼로리</b>와 재료의 <b>원산지</b>까지 들어 있습니다. 같은 급식인데, 어떤 경로로 받느냐에 따라 손에 들어오는 속성이 다릅니다. 교과서 21~22쪽에서 "문제 상황에 따라 중요한 속성이 달라진다"고 배웠습니다 — 알레르기가 있는 학생에게는 식단표에 없던 이 번호들이 가장 중요한 속성일 수 있습니다.</p>
-  <p>규모도 가늠해 봅시다. 최근 1년치(2025-09-01~2026-07-15)를 모으면 총 <b>199건</b> — 중식 154일과 석식 45일 — 이고, 등장한 고유 메뉴는 <b>453종</b>, 하루 평균 <b>6.8품</b>입니다. 이렇게 모은 한 학기치 데이터는 13차시에 "제육볶음이 나오는 날, 국은 무엇이 나올까"라는 질문으로 다시 만납니다.</p>
-  <p>제출할 "한 줄 관찰"은 다음 중 하나를 골라 자기 말로 쓰면 됩니다.</p>
-  <ul>
-    <li>식단표에는 없는데 API 응답에는 있는 정보 하나와, 그 정보가 유용한 사람은 누구인가.</li>
-    <li>같은 급식 데이터인데 경로(식단표/API)에 따라 속성이 달라지는 까닭은 무엇이라 생각하는가.</li>
-    <li>급식이 없는 날의 응답을 보고 알게 된 것 한 가지.</li>
-  </ul>
-
-  <h2>5. API 키 — 요청에 실어 보내는 나의 증명</h2>
-  <p>API 키(인증키)는 서비스가 발급해 주는 <b>긴 무작위 문자열</b>입니다. 생김새는 <code>a1b2c3d4e5f6...</code> 같은 32자 안팎의 글자·숫자 조합이고, 요청 주소의 <code>KEY=</code> 자리에 넣어 함께 보냅니다. 2절의 주소창 실험에서 쓴 요청 주소를 다시 보면 그 자리를 찾을 수 있습니다.</p>
-  <p><b>왜 필요할까요.</b> API가 아무에게나 무제한으로 열려 있으면 서버는 감당할 수 없고, 문제가 생겨도 누구의 호출인지 알 수 없습니다. 키가 있으면 서비스는 <b>누가, 얼마나 쓰는지</b>를 셀 수 있고, 과도한 호출을 막고(한도를 넘으면 상태코드 <b>429</b>), 문제가 생긴 사용자에게 연락하거나 키를 정지할 수 있습니다. 무료 공공 API가 굳이 키를 요구하는 이유가 이것입니다 — 요금이 아니라 <b>관리와 책임</b>의 장치입니다.</p>
+  <h2>4. 발견 — 154일의 1위</h2>
+  <p>③의 그래프에서 1위를 확인해 보세요. 중식 154일을 낱개 메뉴로 나눠 세면(고유 메뉴 453종, 하루 평균 6.8품) 최다 등장 TOP 10은 다음과 같습니다.</p>
   <table class="daymap">
-    <thead><tr><th>물음</th><th>답</th></tr></thead>
+    <thead><tr><th>순위</th><th>메뉴</th><th>등장 일수 (154일 중)</th><th>비율</th></tr></thead>
     <tbody>
-      <tr><td><b>어떻게 받나</b></td><td>나이스 교육정보 개방 포털(open.neis.go.kr)에 가입해 활용 신청을 하면 즉시 발급된다. 오늘 수업에서는 선생님이 발급한 공용 키를 나눠 쓴다</td></tr>
-      <tr><td><b>어디에 쓰나</b></td><td>요청 주소의 <code>KEY=</code> 자리. 키가 요청에 실려 가야 "정식 사용자"의 호출이 된다</td></tr>
-      <tr><td><b>없으면 어떻게 되나</b></td><td>이 API는 맛보기 응답만 준다 — 긴 기간을 조회하면 첫 5행만 반복된다 (2절 실험에서 확인)</td></tr>
-      <tr><td><b>어디에 보관하나</b></td><td>코드가 아니라 <b>비밀값 보관함(secrets)</b>. 코드에 적어 공개 저장소에 올리는 순간 남이 내 이름으로 호출하고, 그 사용량과 책임은 내 몫이 된다</td></tr>
+      <tr><td>1</td><td><b>배추김치</b></td><td><b>86일</b></td><td><b>56%</b></td></tr>
+      <tr><td>2</td><td>깍두기</td><td>26일</td><td>17%</td></tr>
+      <tr><td>3</td><td>친환경현미밥</td><td>24일</td><td>16%</td></tr>
+      <tr><td>4</td><td>칼슘강화기장밥</td><td>24일</td><td>16%</td></tr>
+      <tr><td>5</td><td>석박지</td><td>17일</td><td>11%</td></tr>
+      <tr><td>6</td><td>총각김치</td><td>14일</td><td>9%</td></tr>
+      <tr><td>7</td><td>추가밥</td><td>12일</td><td>8%</td></tr>
+      <tr><td>8</td><td>친환경잡곡밥</td><td>12일</td><td>8%</td></tr>
+      <tr><td>9</td><td>친환경흑미밥</td><td>10일</td><td>6%</td></tr>
+      <tr><td>10</td><td>친환경칼슘기장밥</td><td>10일</td><td>6%</td></tr>
     </tbody>
   </table>
-  <p>키를 코드가 아니라 비밀값 보관함에 넣는 오늘의 습관은, 14차시 데이터 윤리에서 다시 이야기할 주제의 첫 연습입니다.</p>
+  <p>TOP 10이 전부 <b>밥과 김치</b>입니다. 가장 자주 나온 반찬 요리인 제육볶음(9일)조차 10위 안에 들지 못합니다. 그리고 1위 배추김치는 154일 중 86일, <b>둘에 하루꼴(56%)</b>로 식판에 올랐습니다. 이 56%라는 숫자를 기억해 두세요 — 12차시에 이 표를 다시 열 때, 오늘의 이 숫자가 뜻밖의 역할로 다시 등장합니다.</p>
 
-  <h2>6. 개념 정리</h2>
-  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>API는 정해진 주소로 조건을 보내면 정해진 양식(JSON)으로 답하는 약속이고, 그 요청에는 나를 증명하는 키가 실려 간다.</b> 내려받은 CSV가 "그 시점의 복사본"이라면 API 호출은 "지금의 데이터"이며, 조건을 지정해 필요한 만큼만 받습니다. 2차시에 머리로 구분했던 정형·반정형이 오늘 손끝에서 구분되었습니다.</p>
-
-  <h2>7. 확인 문제</h2>
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 내려받은 CSV 파일과 API 호출의 차이를 두 가지 써 보세요.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>① 최신성: CSV는 내려받은 시점의 복사본이라 이후 변경이 반영되지 않지만, API는 호출할 때마다 서버의 최신 데이터를 받는다. ② 선택 조회: CSV는 제공자가 묶어 둔 파일 전체를 받지만, API는 날짜·학교 같은 조건을 지정해 필요한 부분만 받을 수 있다.</p>
-    </details>
+  <h2>5. 기록 — 함께 자주 나올 것 같은 메뉴 짝 3개</h2>
+  <p>154일 표에는 "무엇이 자주 나왔나"만이 아니라 <b>"무엇이 함께 나왔나"</b>도 들어 있습니다. 카레라이스가 나오는 날의 국은 무엇이었을까요? 제육볶음 옆에는 무엇이 놓였을까요? 12차시에 이 표에서 <b>함께 나오는 메뉴의 규칙</b>을 데이터로 찾아봅니다. 오늘은 데이터를 열어 보기 전, 여러분의 직감을 먼저 기록해 둡니다.</p>
+  <ul>
+    <li><b>형식</b> — "○○가 나오는 날엔 △△도 나온다" 꼴의 짝을 <b>3개</b> 적습니다.</li>
+    <li><b>제출</b> — 선생님이 안내하는 폼(또는 클래스룸 과제)에 기록합니다.</li>
+    <li><b>주의</b> — 12차시에 오늘의 예상을 그대로 다시 꺼내 실제 규칙과 대조합니다. 무엇을 적었는지 기억해 두세요.</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">💡 예상을 고를 때 한 가지</div>
+    <p>위 표에서 봤듯 배추김치는 둘에 하루꼴로 나옵니다. 매일 나오다시피 하는 메뉴를 짝으로 적으면 맞을 수밖에 없겠지요. 그 "맞은 예상"이 과연 의미가 있는지도 12차시에 함께 따져 봅니다.</p>
   </div>
+
+  <h2>6. 갤러리 — 포트폴리오를 공개한다</h2>
+  <p>여러분의 앱은 이제 다섯 페이지입니다 — 기온 분석, 어제의 박스오피스, 그래프 도감 1·2, 그리고 오늘의 급식 페이지. 포트폴리오 주소를 갤러리에 올리고(주소는 클래스룸 공지 참고), 짝의 앱을 열어 봅니다. 피드백은 두 줄이면 됩니다.</p>
+  <ul>
+    <li><b>좋았던 것 하나</b> — 내 앱에 없는 화면·문구·아이디어.</li>
+    <li><b>궁금한 것 하나</b> — "이 날짜를 고르면 어떻게 되나요?" 같은 물음.</li>
+  </ul>
+
+  <h2>7. 개념 정리</h2>
+  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>API마다 규칙(키·실패 신호·응답 모양)은 다르지만, 다가가는 순서는 같다.</b> 문서 발췌를 읽고, 완성 주소를 맨눈으로 확인하고, 프롬프트에 문서를 붙여 부탁한다 — 이 순서를 KOBIS와 나이스에서 두 번 밟았으니, 세 번째 API는 여러분 혼자서도 만날 수 있습니다. 그리고 받은 데이터가 바로 셀 수 있는 모양이 아닐 때가 많다는 것도 확인했습니다 — 한 덩어리 글자를 낱개로 나누는 다듬기(전처리)를 거쳐야 "154일 중 86일" 같은 숫자가 나옵니다.</p>
+
+  <h2>8. 확인 문제</h2>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 급식 API의 JSON 응답은 정형·반정형·비정형 중 무엇일까요? 고른 뒤, 근거를 자기 말로 말해 보세요.</div>
+    <div class="qq"><span class="qn">문제 1</span> 일요일 날짜로 급식 API를 불렀더니 식단 목록 없이 RESULT 상자만 왔습니다. 가장 알맞은 해석은 무엇일까요?</div>
     <div class="qitem">
-      <div class="qopts"><button class="opt">정형</button><button class="opt" data-ok="1">반정형</button><button class="opt">비정형</button></div>
-      <div class="fb">구조는 있지만 표처럼 고정되지 않고 바꿀 수 있는 유연한 형태 — <b>반정형</b>입니다. 정형이 아닌 까닭: 표로 변환해 쓸 수 있다고 해서 정형은 아닙니다 — 변환하기 전의 JSON은 행과 열이 고정된 표가 아닙니다. 비정형이 아닌 까닭: 구조가 없지는 않습니다 — 이름표와 값의 쌍이라는 구조가 분명히 있습니다.</div>
+      <div class="qopts"><button class="opt">주소가 틀렸다</button><button class="opt">서버가 고장 났다</button><button class="opt" data-ok="1">그날 급식이 없어 데이터가 없는 것이다</button></div>
+      <div class="fb">주말·방학은 급식이 없는 날이므로 돌려줄 데이터가 없습니다. 오류가 아니라 <b>정상 응답</b>이고, 좋은 앱은 이 경우를 "급식이 없는 날입니다"로 안내합니다. 주소가 틀리면 다른 오류가 나고, 서버 고장이면 응답 자체가 오지 않거나 500번대 상태코드가 옵니다.</div>
     </div>
-    <details class="reveal"><summary>근거 예시 답 펼쳐 보기</summary>
-      <p>이름표와 값의 쌍으로 구조가 존재하지만, 표처럼 행과 열이 고정되어 있지는 않고 구조를 바꿀 수도 있는 유연한 형태이기 때문이다. 교과서의 정의대로 "일부분이 정형화된 데이터"이며, 필요하면 표 형태로 변환해 분석에 쓸 수 있다.</p>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> KOBIS와 나이스 급식 API의 차이를 인증키를 중심으로 두 가지 써 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>① KOBIS는 인증키가 요청에 실려 가야 하고 키는 비밀 금고(secrets)에 보관하지만, 나이스 급식 API는 키 없이 부를 수 있다. ② 대신 나이스는 키가 없으면 한 번에 오는 건수에 제한이 있어 조회 기간을 짧게 잡아야 하고, KOBIS는 키가 틀리면 상태코드 200인 채로 faultInfo 상자가 온다.</p>
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 인증키를 코드에 직접 쓰지 않고 비밀값 보관함(secrets)에 넣는 이유는 무엇일까요?</div>
+    <div class="qq"><span class="qn">문제 3</span> 메뉴 열은 한 날의 메뉴 여러 개가 구분 기호로 이어진 한 덩어리 글자입니다. "가장 자주 나온 메뉴 TOP 10"을 세기 전에 어떤 단계가 필요하고, 그 단계를 건너뛰면 어떻게 될까요?</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>인증키는 사용량 관리와 책임 소재를 위해 나에게 발급된 값이다. 코드에 쓴 채 공개 저장소에 올리면 누구나 내 키로 API를 호출할 수 있어, 사용량 한도를 잃거나 내 이름으로 문제가 생길 수 있다. 비밀값 보관함에 넣으면 코드는 공개해도 키는 공개되지 않는다.</p>
+      <p>구분 기호를 기준으로 메뉴를 낱개로 나누고, 메뉴 뒤 괄호 속 알레르기 번호를 떼는 다듬기(전처리)가 필요하다. 건너뛰면 하루 식단 전체("친환경현미밥|오징어무국|…")가 통째로 한 메뉴로 세어져, 같은 배추김치라도 그날의 식단 조합이 다르면 전부 다른 값이 되므로 등장 횟수를 셀 수 없다.</p>
     </details>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>API를 요청 주소·조건·응답(JSON)의 구성으로 설명할 수 있다.</li>
-    <li>주소창에서 급식 API의 JSON 원문을 확인하고, 이름표-값 구조를 찾았다.</li>
-    <li>날짜를 고르면 그날 식단이 나오는 급식 페이지를 내 앱에 추가했다.</li>
-    <li>인증키를 비밀값 보관함에 넣었고, 그 이유를 말할 수 있다.</li>
+    <li>KOBIS와 나이스 급식 API의 같은 점(다가가는 순서)과 다른 점(키·실패 신호·빈 응답)을 말할 수 있다.</li>
+    <li>완성 주소를 주소창에 열어 급식 JSON에서 메뉴·칼로리 값을 찾았다.</li>
+    <li>급식 페이지를 내 앱에 추가했고, 급식이 없는 날의 안내 문구를 확인했다.</li>
+    <li>학기 154일 최다 메뉴 TOP 10을 만들고 1위와 등장 일수를 확인했다.</li>
+    <li>함께 자주 나올 것 같은 메뉴 짝 3개를 기록해 제출했다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">API</td><td>정해진 주소로 요청하면 정해진 양식(JSON)으로 응답하는 약속</td></tr>
-    <tr><td class="term">요청/응답</td><td>조건을 담아 보내는 주소 / 서버가 돌려주는 데이터(주로 JSON)</td></tr>
-    <tr><td class="term">JSON</td><td>이름표와 값의 쌍으로 데이터를 담는 대표적인 반정형 형식</td></tr>
-    <tr><td class="term">반정형 데이터</td><td>구조가 존재하지만 바꿀 수도 있는 유연한 형태의 데이터 (XML, JSON)</td></tr>
-    <tr><td class="term">상태코드</td><td>응답과 함께 오는 세 자리 숫자 코드 — 200 성공 · 404 없음 · 429 과다 요청</td></tr>
-    <tr><td class="term">인증키</td><td>API 사용자를 증명하는 값 — 사용량 관리·책임 소재의 장치</td></tr>
-    <tr><td class="term">비밀값 보관함(secrets)</td><td>키 같은 비밀값을 코드 밖에 안전하게 두는 스트림릿의 저장 공간</td></tr>
+    <tr><td class="term">API 문서</td><td>요청 주소·요청변수·응답 구조를 알려 주는 공식 설명서 — 프롬프트 끝에 붙이는 재료</td></tr>
+    <tr><td class="term">faultInfo</td><td>KOBIS가 키가 틀렸을 때 보내는 오류 상자 — 상태코드는 200인 채로 옴</td></tr>
+    <tr><td class="term">RESULT 상자</td><td>나이스가 데이터 없음을 알리는 상자 — 주말·방학의 급식 없음은 오류가 아님</td></tr>
+    <tr><td class="term">건수 제한</td><td>키 없는 호출에서 한 번에 오는 행 수의 상한 — 조회 기간을 짧게 잡는 이유</td></tr>
+    <tr><td class="term">구분 기호</td><td>한 칸에 여러 값을 이어 담을 때 쓰는 기호 — 급식 메뉴의 &lt;br/&gt;, CSV의 세로막대</td></tr>
+    <tr><td class="term">전처리</td><td>분석 전에 데이터를 셀 수 있는 모양으로 다듬는 일 — 메뉴 낱개 나누기, 괄호 떼기</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
-    <a class="prev" href="lesson04.html"><div class="dir">← 이전</div><div class="tt">4차시 · 스트림릿 첫 배포</div></a>
-    <a class="next" href="lesson06.html"><div class="dir">다음 →</div><div class="tt">6차시 · 영화 API</div></a>
+    <a class="prev" href="lesson04.html"><div class="dir">← 이전</div><div class="tt">4차시 · 그래프 도감 Ⅱ — 분포·구성·관계</div></a>
+    <a class="next" href="lesson06.html"><div class="dir">다음 →</div><div class="tt">6차시 · 회귀 — 직선을 긋다</div></a>
   </div>
 </main>
 </div>

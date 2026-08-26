@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>8차시 · 다중 선형회귀 — 영화 흥행 예측 · 데이터 과학 당곡고</title>
+<title>8차시 · 회귀 평가 손계산 — 오차·MSE·결정계수 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -20,228 +20,274 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 8차시</span>
-  <h1>다중 선형회귀 · <span class="a">영화 흥행을 예측할 수 있을까</span></h1>
+  <h1>회귀 평가 손계산 · <span class="a">오차·MSE·결정계수</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">점수가 갑자기 급등하면, 실력보다 먼저 반칙을 의심한다.</div>
-    <span class="by">7차시에서 상관과 인과를 구분했다면, 오늘은 변수가 어디서 왔는지를 따집니다</span>
+    <div class="q">"큰 숫자를 만나면, 그 숫자가 무엇과 견주어진 값인지부터 확인한다."</div>
+    <span class="by">오늘 배우는 R²가 이 습관의 첫 연습입니다</span>
   </div>
 
-  <p class="lead">7차시의 직선은 독립 변수가 연도 하나였습니다. 그런데 영화 관객 수는 하나의 요인으로 정해지지 않습니다. 오늘은 6차시에 모아 둔 박스오피스 데이터로 <b>변수 여러 개짜리 회귀</b>를 만들고, 변수를 넣고 빼며 예측 점수가 어떻게 달라지는지 관찰합니다. 그 과정에서 수업 후반에 다시 만나게 될 중요한 사건 하나를 목격합니다.</p>
+  <p class="lead">6차시의 기온 직선, 7차시의 영화 점수 0.24와 0.90. 화면에 떠 있던 그 점수의 정체를 오늘 밝힙니다. 도구는 화려하지 않습니다. 활동지 한 장과 사칙연산 — AI가 보여 주는 R² 점수, 직접 계산해 보면 별것 아닙니다. 그리고 별것 아니라는 것을 아는 사람만 그 숫자를 의심할 수 있습니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>변수 발상</b> — 관객 수를 미리 맞히려면 무엇을 알아야 하는가 (폼 Ⅲ-01a)</li>
-      <li><b>바이브 코딩</b> — 변수를 골라 끼우는 총 관객 수 예측 페이지를 내 앱에 추가</li>
-      <li><b>발견</b> — 변수를 더했는데 점수가 내려가고, 어떤 변수 하나에 0.90으로 급등하는 두 사건</li>
+      <li><b>손계산 활동지 1</b> — 교과서 120쪽 해 보기 ①에서 시작해, 오차 → MSE → R²를 손으로</li>
+      <li><b>R²의 정체</b> — "평균만 찍는 모델 대비 얼마나 나은가"임을 계산으로 확인</li>
+      <li><b>내 모델 재해석</b> — 기온 예측기의 0.70, 필터를 끄면 0.39가 되는 이유</li>
     </ul>
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>영화사는 개봉 전에 상영관 수를 정해야 하고, 투자사는 제작 단계에서 흥행을 가늠해야 합니다. 배달 앱은 시간대별 수요를, 편의점은 발주량을 여러 요인으로 예측합니다. 현실의 예측 문제는 대부분 "요인이 여러 개"이고, 그래서 실무에서 쓰이는 회귀는 대부분 오늘 배우는 다중 회귀입니다. 동시에, 변수를 더할수록 점수가 오르는 이 도구에는 함정이 하나 숨어 있습니다. <b>점수를 올려 주는 변수가 반칙일 수 있다</b>는 것 — 오늘 그 장면을 직접 목격합니다.</p>
+  <p>지금까지 우리는 모델의 점수를 AI가 계산해 주는 대로 받아 읽었습니다. 그런데 점수의 계산법을 모르면, 점수가 이상할 때 알아챌 방법이 없습니다. 자동차 계기판을 믿더라도 연비 계산법은 알아야 "이 수치가 말이 되나"를 판단할 수 있는 것과 같습니다. 오늘 배우는 세 계산 — 오차, 평균제곱오차, 결정계수 — 은 앞으로 이 수업의 모든 모델(분류·군집까지)을 판정하는 감각의 뿌리가 됩니다. 그리고 지필평가의 계산 문항도 오늘 활동지의 흐름 그대로 출제됩니다.</p>
 
-  <h2>1. 개념 이해 — 직선에서 평면으로</h2>
+  <h2>1. 개념 이해 — 오차에서 R²까지</h2>
   <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 128·112쪽</span></div>
-    <p class="q">"다중 선형 회귀(multiple linear regression)는 영향을 미치는 요인이 여러 개인 경우에 종속 변수를 설명하기 위해 여러 개의 독립 변수를 이용하는 회귀 분석이다." <span class="src">(128쪽)</span></p>
-    <p class="q">"학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다." <span class="src">(112쪽)</span></p>
-    <p class="t">→ 독립 변수가 여러 개면 다중 회귀. 그리고 모델의 점수는 학습에 쓰지 않은 문제(테스트 데이터)로 매겨야 믿을 수 있다.</p>
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 120·131·132쪽</span></div>
+    <p class="q">"실젯값과 예측값의 차이를 오차라고 하는데, 두 직선을 비교하여 오차가 더 작은 것을 선택해야 한다." <span class="src">(120쪽)</span></p>
+    <p class="q">"평균제곱오차(MSE: Mean Squared Error)는 실젯값과 예측값의 차이를 모두 제곱하여 평균한 값으로, 이 값이 작을수록 예측 성능이 좋다." <span class="src">(131쪽)</span></p>
+    <p class="q">"결정 계수(R² score: R-squared score)는 회귀 모델이 실제 데이터와 얼마나 유사하게 예측하고 구체적으로 설명하는지를 나타낸다." <span class="src">(132쪽)</span></p>
+    <p class="t">→ 오차는 빗나간 <b>거리</b>, MSE는 그 거리를 제곱해 <b>평균</b>낸 값, R²는 그것을 기준 모델과 <b>견준</b> 값이다.</p>
   </div>
-  <p>단순 회귀가 "쪽수 → 독서 시간"처럼 독립 변수 하나로 직선을 그었다면, 다중 회귀는 독립 변수마다 가중치를 하나씩 두고 이를 모두 더해 예측합니다. 변수가 둘이면 직선 대신 평면이 되고, 셋 이상이면 그림으로 그릴 수는 없지만 원리는 같습니다. <b>각 변수의 가중치</b>를 보면 어느 요인이 예측에 크게 기여하는지도 읽을 수 있습니다.</p>
-  <h3>점수는 처음 보는 문제로 매긴다</h3>
-  <p>변수가 늘어난 만큼, 점수를 매기는 규칙도 분명히 해 둡니다. 학습에 쓴 영화로 점수를 재면, 모델이 규칙을 이해한 것인지 답을 외운 것인지 구분할 수 없습니다. 시험 범위의 기출문제를 그대로 시험에 내는 것과 같습니다. 그래서 데이터의 일부를 <b>테스트 데이터</b>로 미리 떼어 두고, 학습이 끝난 뒤 이 "처음 보는 영화들"로 점수를 잽니다. 오늘 화면에 뜨는 점수는 전부 이 방식으로 계산된 값입니다.</p>
-  <div style="overflow-x:auto;margin:18px 0">
-    <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="216편을 영화 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 학습 150편으로 가중치를 학습한 뒤 테스트 66편으로 점수를 재는 구조">
-      <defs>
-        <marker id="arGold8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
-        <marker id="arTeal8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
-        <g id="blk8">
-          <rect x="0" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="10" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="20" y="0" width="9" height="24" fill="#3ba6a0"/>
-          <rect x="30" y="0" width="9" height="24" fill="#f4b400"/><rect x="40" y="0" width="9" height="24" fill="#f4b400"/><rect x="50" y="0" width="9" height="24" fill="#f4b400"/><rect x="60" y="0" width="9" height="24" fill="#f4b400"/><rect x="70" y="0" width="9" height="24" fill="#f4b400"/><rect x="80" y="0" width="9" height="24" fill="#f4b400"/><rect x="90" y="0" width="9" height="24" fill="#f4b400"/>
-        </g>
-      </defs>
-      <text x="20" y="20" font-size="12.5" font-weight="800" fill="#2b2d3a">분석 대상 216편 · 영화 코드 순 정렬</text>
-      <use href="#blk8" x="20" y="30"/><use href="#blk8" x="128" y="30"/><use href="#blk8" x="236" y="30"/><use href="#blk8" x="344" y="30"/><use href="#blk8" x="452" y="30"/><use href="#blk8" x="560" y="30"/>
-      <text x="674" y="48" font-size="15" font-weight="800" fill="#7a7f95">…</text>
-      <rect x="20" y="72" width="13" height="13" fill="#3ba6a0"/>
-      <text x="40" y="83" font-size="12" fill="#2b2d3a">테스트 66편 — 학습에 쓰지 않음</text>
-      <rect x="256" y="72" width="13" height="13" fill="#f4b400"/>
-      <text x="276" y="83" font-size="12" fill="#2b2d3a">학습 150편</text>
-      <text x="20" y="123" font-size="12.5" font-weight="800" fill="#2b2d3a">학습 150편</text>
-      <line x1="112" y1="118" x2="180" y2="118" stroke="#f4b400" stroke-width="2.5" marker-end="url(#arGold8)"/>
-      <rect x="188" y="102" width="168" height="32" rx="8" fill="#fff8e6" stroke="#f4b400"/>
-      <text x="272" y="123" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">모델 — 가중치 학습</text>
-      <text x="20" y="163" font-size="12.5" font-weight="800" fill="#2b2d3a">테스트 66편</text>
-      <line x1="112" y1="158" x2="180" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
-      <rect x="188" y="142" width="190" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
-      <text x="283" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">처음 보는 영화로 예측</text>
-      <line x1="384" y1="158" x2="414" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
-      <rect x="420" y="142" width="104" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
-      <text x="472" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">점수(R²)</text>
-      <text x="360" y="196" text-anchor="middle" font-size="12" fill="#7a7f95">학습에 쓴 문제로 점수를 재면 이해인지 암기인지 알 수 없다 — 『데이터 과학』 112쪽</text>
-    </svg>
-  </div>
-  <p>우리 데이터에는 지난 1년 극장가를 지나간 영화들이 담겨 있고, 그중 분석 기간 안에 개봉한 <b>216편</b>이 오늘의 학습 재료입니다. 변수 후보는 "언제 알 수 있는 값인가"를 기준으로 이렇게 갈립니다.</p>
   <table class="daymap">
-    <thead><tr><th>구분</th><th>변수 예</th><th>알 수 있는 시점</th></tr></thead>
+    <thead><tr><th>계산</th><th>구하는 법</th><th>묻는 말</th></tr></thead>
     <tbody>
-      <tr><td><b>개봉 전 변수</b></td><td>첫날 스크린 수 · 상영횟수 · 성수기 여부 · 장르 · 국적</td><td>개봉일에 이미 확정</td></tr>
-      <tr><td><b>개봉 후 변수</b></td><td>첫 주 관객 수 · 누적 관객 수</td><td>개봉하고 시간이 지나야 확정</td></tr>
-    </tbody>
-  </table>
-  <p>이 구분이 오늘 수업의 복선입니다. 지금은 당연해 보이지만, 실습 후반에 이 경계선이 점수를 가르는 결정적인 선이 됩니다.</p>
-  <div class="callout mini">
-    <div class="h">📝 변수 발상부터 — 폼 Ⅲ-01a</div>
-    <p>교과서 106쪽 해 보기 ①은 태풍의 진로를 예측하려면 어떤 데이터가 필요한지 묻습니다. 같은 발상을 영화로 옮겨 봅니다. "총 관객 수를 미리 맞히려면 무엇을 알아야 하는가" — 개봉 시기, 장르, 상영관 수, 전작의 성적, 출연 배우… 떠오르는 후보를 폼 Ⅲ-01a에 적고 시작합니다.</p>
-  </div>
-
-  <h2>2. 실습 — 총 관객 수 예측기 (바이브 코딩)</h2>
-  <p>6차시에 "데이터를 합치면 질문이 생긴다"를 경험했습니다. 그때 생긴 질문 — "다음 주 관객 수를 맞힐 수 있을까?" — 에 오늘 답합니다. 학생마다 수집 기간이 달라 결과가 흔들리지 않도록, 실습은 모두가 같은 공통 스냅샷으로 진행합니다.</p>
-  <div class="callout mini">
-    <div class="h">📦 오늘의 데이터</div>
-    <ul>
-      <li><b>kobis_daily.csv</b> — 지난 1년(354일)의 일별 박스오피스 톱10 기록 3,540행, 영화 296편</li>
-      <li><b>kobis_movies.csv</b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 기간 안에 개봉한 216편</li>
-    </ul>
-    <p>내가 6차시에 직접 수집한 데이터는 버리지 않습니다 — 공통 스냅샷으로 얻은 결과와 비교하는 재료로 씁니다.</p>
-  </div>
-
-  <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 스트림릿 앱에 "영화 흥행 예측" 페이지를 추가해 줘.
-박스오피스 데이터(kobis_daily.csv)와 영화 정보 표(kobis_movies.csv)를 합쳐서
-영화의 총 관객 수를 예측하는 다중 회귀 모델을 만들어 줘.
-어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,
-학습에 쓰지 않은 영화들로 잰 예측 점수와
-예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.</pre></div>
-    </li>
-    <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
-      화면에 예측 점수가 표시됩니다. 이 점수는 결정계수라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 9차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
-    <li><span class="st">③ 개선 프롬프트 — 변수의 출처를 나눠서 비교한다</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>변수를 "개봉 전에 알 수 있는 것"과 "개봉 후에야 알 수 있는 것"으로 나눠 줘.
-개봉 전 변수만 쓴 경우와 개봉 후 정보까지 넣은 경우의 예측 점수를
-나란히 비교해서, 차이가 한눈에 보이게 해 줘.</pre></div>
-    </li>
-  </ol>
-
-  <div class="callout tip">
-    <div class="h">💡 프롬프트가 하는 일과 내가 하는 일</div>
-    <p>모델을 만드는 계산 — 표 합치기, 가중치 찾기, 테스트 데이터 떼어 두기 — 는 전부 AI의 몫입니다. 우리가 한 일은 파일 이름을 지정하고, <b>변수를 고르는 권한</b>과 <b>점수를 재는 조건</b>을 요구한 것입니다. 어떤 변수를 켜고 끌지, 나온 점수를 어떻게 읽을지는 도구가 대신해 주지 않습니다. 그것이 오늘 수업의 본론입니다.</p>
-  </div>
-
-  <h2>3. 발견 사건 — 내려가는 점수, 치솟는 점수</h2>
-  <p>③을 실행하면 다음과 같은 결과가 나타납니다. 분석 대상 216편을 영화 코드 순으로 정렬해 10편 중 3편(66편)을 테스트로 떼어 두고, 나머지 150편으로 학습한 뒤 <b>떼어 둔 66편으로</b> 잰 점수입니다.</p>
-  <table class="daymap">
-    <thead><tr><th>사용한 변수</th><th>알 수 있는 시점</th><th>테스트 점수(R²)</th></tr></thead>
-    <tbody>
-      <tr><td>첫날 스크린 수만</td><td>개봉 전</td><td><b>0.31</b></td></tr>
-      <tr><td>개봉 전 변수 3종 (스크린 + 상영횟수 + 성수기)</td><td>개봉 전</td><td><b>0.24</b> — 더 넣었는데 내려감</td></tr>
-      <tr><td>위 3종 + <b>첫 주 관객 수</b></td><td><b>개봉 후 1주</b></td><td><b>0.90</b></td></tr>
+      <tr><td><b>오차</b></td><td>실젯값 − 예측값</td><td>이 예측은 얼마나, 어느 쪽으로 빗나갔나</td></tr>
+      <tr><td><b>절대오차 / 제곱오차</b></td><td>오차의 절댓값 / 오차의 제곱</td><td>부호를 없애 크기를 공정하게 비교하면?</td></tr>
+      <tr><td><b>MSE</b></td><td>제곱오차의 평균</td><td>이 모델은 평균적으로 얼마나 빗나가나</td></tr>
+      <tr><td><b>R²</b></td><td>1 − (내 모델의 제곱오차 합 ÷ 평균 모델의 제곱오차 합)</td><td>평균만 찍는 모델보다 얼마나 나은가</td></tr>
     </tbody>
   </table>
   <div style="overflow-x:auto;margin:18px 0">
-    <svg viewBox="0 0 680 264" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="변수 조합별 테스트 점수 막대 그림 — 첫날 스크린 수만 0.31, 개봉 전 변수 3종 0.24로 하락, 첫 주 관객 수를 더하면 0.90으로 급등하며 데이터 누수 경계선을 넘는다">
+    <svg viewBox="0 0 680 310" style="min-width:560px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="점과 회귀 직선 사이의 세로 거리가 오차이고, 그 거리를 한 변으로 하는 정사각형이 제곱오차임을 나타낸 그림. 오른쪽에는 오차에서 결정계수까지 이어지는 네 단계 계단이 있다">
       <defs>
-        <pattern id="hatch8" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
-          <rect width="8" height="8" fill="#e45756"/>
-          <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="2" stroke-opacity="0.45"/>
-        </pattern>
+        <marker id="arStep9" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
       </defs>
-      <text x="440" y="22" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">테스트 점수(R²) — 떼어 둔 66편으로 잰 값</text>
-      <line x1="240" y1="34" x2="240" y2="210" stroke="#f0e2bc"/>
-      <line x1="440" y1="34" x2="440" y2="210" stroke="#f0e2bc"/>
-      <line x1="640" y1="34" x2="640" y2="210" stroke="#f0e2bc"/>
-      <line x1="240" y1="210" x2="640" y2="210" stroke="#f0e2bc"/>
-      <text x="240" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0</text>
-      <text x="440" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0.5</text>
-      <text x="640" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">1.0</text>
-      <text x="228" y="61" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">첫날 스크린 수만</text>
-      <rect x="240" y="44" width="124" height="26" fill="#f4b400"/>
-      <text x="372" y="61" font-size="12.5" font-weight="800" fill="#2b2d3a">0.31</text>
-      <text x="228" y="97" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">개봉 전 변수 3종</text>
-      <text x="228" y="112" text-anchor="end" font-size="10.5" fill="#7a7f95">(스크린+상영횟수+성수기)</text>
-      <rect x="240" y="86" width="96" height="26" fill="#f4b400"/>
-      <text x="344" y="103" font-size="12.5" font-weight="800" fill="#2b2d3a">0.24</text>
-      <text x="384" y="103" font-size="12.5" font-weight="800" fill="#e8930c">↓ 더 넣었는데 하락</text>
-      <line x1="16" y1="128" x2="664" y2="128" stroke="#e45756" stroke-width="1.5" stroke-dasharray="7 5"/>
-      <text x="340" y="144" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">여기부터 개봉 후 정보 — 예측 시점에 알 수 있는가?</text>
-      <text x="228" y="171" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">3종 + 첫 주 관객 수</text>
-      <rect x="240" y="154" width="360" height="26" fill="url(#hatch8)" stroke="#e45756"/>
-      <text x="608" y="171" font-size="12.5" font-weight="800" fill="#e45756">0.90</text>
-      <text x="240" y="197" font-size="12" font-weight="800" fill="#e45756">⚠ 개봉 후에야 아는 값 — 데이터 누수</text>
-      <text x="340" y="252" text-anchor="middle" font-size="12.5" fill="#7a7f95">216편 중 150편으로 학습, 처음 보는 66편으로 채점한 실측값</text>
+      <!-- 좌측: 좌표평면 -->
+      <line x1="36" y1="20" x2="36" y2="260" stroke="#f0e2bc" stroke-width="2"/>
+      <line x1="36" y1="260" x2="400" y2="260" stroke="#f0e2bc" stroke-width="2"/>
+      <!-- 골드 회귀선: y = 230 − 0.5(x − 50) -->
+      <line x1="50" y1="230" x2="390" y2="60" stroke="#f4b400" stroke-width="3"/>
+      <!-- 점 1: 직선 위쪽 — 짧은 오차와 작은 정사각형 -->
+      <rect x="110" y="180" width="20" height="20" fill="#e45756" opacity="0.18" stroke="#e45756" stroke-width="1"/>
+      <line x1="110" y1="180" x2="110" y2="200" stroke="#e45756" stroke-width="2.5"/>
+      <circle cx="110" cy="180" r="5" fill="#9a9a9a"/>
+      <!-- 점 2: 직선 아래쪽 — 오차 라벨 -->
+      <line x1="200" y1="155" x2="200" y2="190" stroke="#e45756" stroke-width="2.5"/>
+      <circle cx="200" cy="190" r="5" fill="#9a9a9a"/>
+      <text x="210" y="176" font-size="12" font-weight="800" fill="#e45756">오차 = 실젯값 − 예측값</text>
+      <!-- 점 3: 직선에서 먼 점 — 큰 정사각형 -->
+      <rect x="310" y="100" width="90" height="90" fill="#e45756" opacity="0.18" stroke="#e45756" stroke-width="1"/>
+      <line x1="310" y1="100" x2="310" y2="190" stroke="#e45756" stroke-width="2.5"/>
+      <circle cx="310" cy="190" r="5" fill="#9a9a9a"/>
+      <text x="355" y="212" text-anchor="middle" font-size="11.5" font-weight="800" fill="#e45756">제곱오차 — 큰 오차일수록 훨씬 커진다</text>
+      <!-- 우측: 네 단계 계단 -->
+      <rect x="440" y="36" width="220" height="36" rx="9" fill="#fffdf6" stroke="#f0e2bc"/>
+      <text x="550" y="59" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">오차 — 부호 있는 거리</text>
+      <line x1="550" y1="72" x2="550" y2="90" stroke="#e8930c" stroke-width="2" marker-end="url(#arStep9)"/>
+      <rect x="440" y="96" width="220" height="36" rx="9" fill="#fffdf6" stroke="#f0e2bc"/>
+      <text x="550" y="119" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">|오차| · 오차² — 부호 제거</text>
+      <line x1="550" y1="132" x2="550" y2="150" stroke="#e8930c" stroke-width="2" marker-end="url(#arStep9)"/>
+      <rect x="440" y="156" width="220" height="36" rx="9" fill="#fffdf6" stroke="#f0e2bc"/>
+      <text x="550" y="179" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">MSE — 제곱오차의 평균</text>
+      <line x1="550" y1="192" x2="550" y2="210" stroke="#e8930c" stroke-width="2" marker-end="url(#arStep9)"/>
+      <rect x="440" y="216" width="220" height="36" rx="9" fill="#fdeeba" stroke="#f4b400"/>
+      <text x="550" y="239" text-anchor="middle" font-size="12.5" font-weight="800" fill="#5a4300">R² — 게으른 모델과 견주기</text>
+      <!-- 캡션 -->
+      <text x="340" y="296" text-anchor="middle" font-size="12.5" fill="#7a7f95">오늘 활동지의 계단 — 왼쪽 그림의 세로 거리 하나에서 시작한다.</text>
     </svg>
   </div>
+  <p>왜 오차를 그냥 더하지 않고 절댓값이나 제곱을 쓰는지, 왜 하필 제곱인지 — 이 물음들은 설명으로 듣는 것보다 계산하다가 직접 부딪히는 편이 훨씬 오래 남습니다. 그래서 오늘은 개념 설명을 여기서 멈추고, 바로 활동지로 갑니다.</p>
+
+  <h2>2. 손 활동지 — 교과서 해 보기에서 자작 문제까지</h2>
   <div class="callout warn">
-    <div class="h">⚠️ 두 장면을 나눠서 읽어야 한다</div>
+    <div class="h">✍️ 활동지 문제 1 (교과서 120쪽 해 보기 ①)</div>
+    <p>교과서 120쪽을 펴고 활동지 문제 1부터 시작합니다. 소설책 쪽수로 독서 시간을 예측하는 <b>두 회귀선</b>이 놓여 있습니다. 그래프만 보면 한쪽이 좋아 보입니다. 그런데 다섯 점의 오차를 전부 계산해 절대오차 합계로 판정하면 — 눈으로 고른 답과 계산으로 고른 답이 갈리는 학생이 적지 않습니다. <b>눈이 아니라 오차로 판정한다</b>, 이것이 첫 문제의 결론입니다.</p>
+  </div>
+  <p>이어지는 문제들은 한 계단씩 올라갑니다. 전부 사칙연산만으로 풀리도록 만들어져 있어, 수학 진도와 무관하게 누구나 끝까지 갈 수 있습니다.</p>
+  <div class="callout tip">
+    <div class="h">💡 활동지 규칙</div>
     <ul>
-      <li><b>장면 1 — 예측의 겸손, 그리고 이상한 하락.</b> 개봉 전에 알 수 있는 변수로는 0.3 안팎 — 흥행은 개봉 전 정보만으로 3분의 1도 설명되지 않는다. 게다가 변수를 둘 더 넣자 점수가 오히려 0.24로 <b>내려갔다</b>. 학습 데이터에서는 변수가 많을수록 점수가 오르지만, 처음 보는 영화 앞에서는 외운 것이 통하지 않는다 — 교과서 134쪽이 과대적합이라 부르는 현상의 예고편이다(9차시에서 다시 만난다).</li>
-      <li><b>장면 2 — 급등의 정체.</b> 첫 주 관객 수를 넣는 순간 0.90으로 치솟는다. 그런데 이 변수는 "개봉 전에 총 관객을 예측한다"는 문제에서는 <b>예측 시점에 알 수 없는 미래 정보</b>다. 첫 주 성적이 좋은 영화가 총 관객도 많은 것은 당연하므로, 점수 급등은 실력이 아니라 정답 일부를 미리 본 결과다.</li>
+      <li><b>계산 과정을 지우지 않는다.</b> 과정이 곧 점수다 — 답만 적힌 활동지는 검산할 수 없다.</li>
+      <li><b>막히면 표의 빈칸부터 채운다.</b> 오차 계산은 언제나 "실젯값 − 예측값" 한 칸에서 시작한다.</li>
+      <li>지필평가의 계산 문항은 이 활동지의 흐름 그대로 출제된다.</li>
     </ul>
   </div>
-  <p>변수 하나를 더했더니 점수가 0.24에서 0.90으로 뛰었다면, 기뻐하기 전에 물어야 합니다. <b>"그 변수, 예측하는 시점에 정말 알 수 있는 값인가?"</b> 미래 정보가 새어 들어와 점수를 부풀리는 이 현상을 데이터 누수라고 부릅니다. 11차시 분류 평가에서 이 사건을 다시 만나 정면으로 해부합니다.</p>
-  <div class="callout tip">
-    <div class="h">💡 그렇다면 0.90은 쓸모없는 숫자인가</div>
-    <p>아닙니다. 질문이 달라지면 정당한 변수가 됩니다. "개봉 1주가 지난 시점에서 남은 흥행을 전망한다"는 문제라면 첫 주 관객은 그 시점에 알 수 있는 값이므로 반칙이 아닙니다. 변수의 좋고 나쁨은 변수 자체가 아니라 <b>문제의 시점 설정</b>이 정합니다.</p>
-  </div>
-  <h2>4. 개념 정리 — 좋은 점수가 좋은 모델인가</h2>
-  <p>오늘 배운 것을 정리합니다. 다중 회귀는 여러 독립 변수에 가중치를 매겨 종속 변수를 예측하는 도구이고, 점수는 학습에 쓰지 않은 데이터로 매겨야 믿을 수 있습니다. 그리고 실측 데이터가 보여 준 두 숫자 — 0.24와 0.90 — 는 서로 다른 교훈을 남겼습니다. 낮은 점수는 흥행이 원래 미리 알기 어려운 일임을 보여 주고, 급등한 점수는 성적이 갑자기 오르면 반칙부터 의심해야 한다는 경고입니다. 수업을 시작하며 폼 Ⅲ-01a에 적었던 변수 후보 중 "개봉 후에야 알 수 있는 것"이 섞여 있었는지 표시해 보면, 오늘의 발견이 더 선명해집니다.</p>
-  <p>그런데 우리는 아직 이 점수의 정체를 모릅니다. 0.24는 무엇의 0.24이고, 1에 가깝다는 것은 정확히 무슨 뜻일까요. 7차시의 기온 직선은 얼마나 믿을 만한 걸까요. 다음 시간, 계산기 하나 들고 이 점수를 <b>손으로 직접</b> 계산합니다.</p>
+  <table class="daymap">
+    <thead><tr><th>활동지</th><th>내용</th><th>부딪히는 물음</th></tr></thead>
+    <tbody>
+      <tr><td><b>문제 1</b></td><td>교과서 120쪽 해 보기 ① — 두 회귀선의 오차 비교</td><td>왜 절댓값으로 바꿔 비교하는가</td></tr>
+      <tr><td><b>문제 2~3</b></td><td>오차를 그냥 더하면 벌어지는 일 · MAE vs MSE</td><td>제곱은 큰 실수 하나를 어떻게 취급하는가</td></tr>
+      <tr><td><b>문제 4~6</b></td><td>평균 모델과 견주어 R² 계산 (기온·영화 자작 표)</td><td>R²의 분모는 무엇인가</td></tr>
+      <tr><td><b>문제 7</b></td><td>수업의 실측 숫자 해석 (0.70 ↔ 0.39)</td><td>전처리가 점수를 어떻게 지탱했나</td></tr>
+      <tr><td>심화 도전</td><td>교과서 121쪽 해 보기 ② — 공식으로 최적 직선 구하기</td><td>AI의 학습이 하는 계산의 정체 (빠른 학생용)</td></tr>
+    </tbody>
+  </table>
 
-  <h2>5. 확인 문제</h2>
+  <h2>3. R²의 정체 — 게으른 모델과 견주기</h2>
+  <p>활동지 문제 4에서 만나는 핵심 장치는 <b>게으른 모델</b>입니다. 데이터를 들여다보지도 않고 매번 평균값만 찍는 모델 — 이것이 R²의 기준선입니다. R²는 내 모델의 제곱오차 합을 이 게으른 모델의 제곱오차 합과 견줍니다. 이해를 위해 가상의 예를 하나만 들면, 평균만 찍었을 때 제곱오차 합이 20인 데이터에서 내 직선의 제곱오차 합이 5라면, R² = 1 − (5 ÷ 20) = <b>0.75</b>. "내 직선은 평균만 찍는 모델이 내는 오차의 75%를 없앴다"라고 읽습니다.</p>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 700 310" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 점 다섯 개를 두고, 평균 수평선을 쓰는 게으른 모델과 내 회귀 직선의 제곱오차 넓이를 비교한 그림. 게으른 모델의 정사각형은 크고 내 직선의 정사각형은 작다">
+      <!-- 좌 패널: 게으른 모델 -->
+      <text x="180" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#7a7f95">게으른 모델 — 매번 평균만 찍는다</text>
+      <line x1="35" y1="132" x2="325" y2="132" stroke="#9a9a9a" stroke-width="3"/>
+      <text x="330" y="128" font-size="11" fill="#7a7f95">평균</text>
+      <!-- 점 1 (55,185) 오차 53 -->
+      <rect x="55" y="132" width="53" height="53" fill="#9a9a9a" opacity="0.18" stroke="#aaaaaa" stroke-width="1"/>
+      <line x1="55" y1="132" x2="55" y2="185" stroke="#e45756" stroke-width="2"/>
+      <circle cx="55" cy="185" r="4.5" fill="#9a9a9a"/>
+      <!-- 점 2 (115,160) 오차 28 -->
+      <rect x="115" y="132" width="28" height="28" fill="#9a9a9a" opacity="0.18" stroke="#aaaaaa" stroke-width="1"/>
+      <line x1="115" y1="132" x2="115" y2="160" stroke="#e45756" stroke-width="2"/>
+      <circle cx="115" cy="160" r="4.5" fill="#9a9a9a"/>
+      <!-- 점 3 (175,130) 오차 2 -->
+      <rect x="175" y="130" width="2" height="2" fill="#9a9a9a" opacity="0.18" stroke="#aaaaaa" stroke-width="1"/>
+      <line x1="175" y1="130" x2="175" y2="132" stroke="#e45756" stroke-width="2"/>
+      <circle cx="175" cy="130" r="4.5" fill="#9a9a9a"/>
+      <!-- 점 4 (235,105) 오차 27 — 정사각형은 왼쪽으로 -->
+      <rect x="208" y="105" width="27" height="27" fill="#9a9a9a" opacity="0.18" stroke="#aaaaaa" stroke-width="1"/>
+      <line x1="235" y1="105" x2="235" y2="132" stroke="#e45756" stroke-width="2"/>
+      <circle cx="235" cy="105" r="4.5" fill="#9a9a9a"/>
+      <!-- 점 5 (295,80) 오차 52 — 정사각형은 왼쪽으로 -->
+      <rect x="243" y="80" width="52" height="52" fill="#9a9a9a" opacity="0.18" stroke="#aaaaaa" stroke-width="1"/>
+      <line x1="295" y1="80" x2="295" y2="132" stroke="#e45756" stroke-width="2"/>
+      <circle cx="295" cy="80" r="4.5" fill="#9a9a9a"/>
+      <text x="180" y="235" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">제곱오차 합 = 20</text>
+      <!-- 우 패널: 내 직선 -->
+      <text x="530" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#a97a00">내 직선</text>
+      <line x1="385" y1="163" x2="675" y2="99" stroke="#f4b400" stroke-width="3"/>
+      <!-- 같은 위치의 점 5개 — 오차 길이가 절반으로 줄어, 정사각형 넓이는 4분의 1 (20 대 5) -->
+      <rect x="405" y="159" width="26" height="26" fill="#f4b400" opacity="0.35" stroke="#e8930c" stroke-width="1"/>
+      <line x1="405" y1="159" x2="405" y2="185" stroke="#e45756" stroke-width="2"/>
+      <circle cx="405" cy="185" r="4.5" fill="#9a9a9a"/>
+      <rect x="465" y="146" width="14" height="14" fill="#f4b400" opacity="0.35" stroke="#e8930c" stroke-width="1"/>
+      <line x1="465" y1="146" x2="465" y2="160" stroke="#e45756" stroke-width="2"/>
+      <circle cx="465" cy="160" r="4.5" fill="#9a9a9a"/>
+      <rect x="525" y="130" width="2" height="2" fill="#f4b400" opacity="0.35" stroke="#e8930c" stroke-width="1"/>
+      <line x1="525" y1="130" x2="525" y2="132" stroke="#e45756" stroke-width="2"/>
+      <circle cx="525" cy="130" r="4.5" fill="#9a9a9a"/>
+      <rect x="585" y="105" width="14" height="14" fill="#f4b400" opacity="0.35" stroke="#e8930c" stroke-width="1"/>
+      <line x1="585" y1="105" x2="585" y2="119" stroke="#e45756" stroke-width="2"/>
+      <circle cx="585" cy="105" r="4.5" fill="#9a9a9a"/>
+      <rect x="645" y="80" width="26" height="26" fill="#f4b400" opacity="0.35" stroke="#e8930c" stroke-width="1"/>
+      <line x1="645" y1="80" x2="645" y2="106" stroke="#e45756" stroke-width="2"/>
+      <circle cx="645" cy="80" r="4.5" fill="#9a9a9a"/>
+      <text x="530" y="235" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">제곱오차 합 = 5</text>
+      <!-- 중앙 식과 캡션 -->
+      <text x="350" y="270" text-anchor="middle" font-size="13.5" font-weight="800" fill="#a97a00">R² = 1 − (5 ÷ 20) = 0.75 — 게으른 모델이 내는 오차의 75%를 없앴다</text>
+      <text x="350" y="296" text-anchor="middle" font-size="11.5" fill="#7a7f95">점 배치는 이해를 위한 가상의 예(본문의 수치와 동일).</text>
+    </svg>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 R² 눈금 읽기</div>
+    <ul>
+      <li><b>1에 가까움</b> → 평균 모델의 오차를 대부분 없앴다</li>
+      <li><b>0</b> → 평균만 찍는 것과 다를 바 없다 — 교과서도 "결정 계수가 0에 가깝다면 회귀 모델이 데이터의 평균을 맞추는 정도로 예측했고, 회귀 모델의 유의미성이 떨어진다는 뜻이다"라고 적는다(132쪽)</li>
+      <li><b>음수</b> → 평균만 찍는 게으른 모델보다도 못하다 (활동지 문제 5에서 직접 만들어 본다)</li>
+    </ul>
+  </div>
+  <p>이제 7차시의 0.24가 다르게 읽힙니다. "개봉 전 변수 3종은 처음 보는 영화에서, 평균만 찍기보다 오차를 4분의 1 정도 줄였을 뿐"이라는 뜻이었습니다. R²는 좋다/나쁘다의 절대 점수가 아니라 <b>"무엇 대비 얼마나"</b>의 비교값입니다. 큰 숫자를 만나면 무엇과 견주어진 값인지 확인하는 습관 — 여기서 시작됩니다.</p>
+
+  <h2>4. 내 모델과 대조 — 0.70을 지탱한 것 (실측)</h2>
+  <p>손계산 감각을 얻었으니, 6차시에 만든 기온 예측기의 점수를 다시 봅니다. ③ 개선 하나만 실행합니다.</p>
+  <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>내 기온 예측기에 관측일 필터를 켜고 끌 수 있는 스위치를 달아 줘.
+필터를 켠 경우와 끈 경우 각각의 R² 점수가
+어떻게 달라지는지 화면에 함께 표시해 줘.</pre></div>
+  <div class="callout warn">
+    <div class="h">⚠️ 발견 — 필터를 끄면 0.70이 0.39로 떨어진다</div>
+    <p>관측일 필터를 켠 우리 예측기의 R²는 <b>0.70</b>. 필터를 끄는 순간 <b>0.39</b>로 추락합니다. 범인은 6차시에 필터로 걸러 냈던 1953년 — 겨울 한 달만 관측되어 연평균이 반쪽 값으로 둔갑한 해입니다. 직선에서 멀리 떨어진 이 점의 오차가 <b>제곱</b>되면서(활동지 문제 3에서 확인한 "제곱은 큰 실수에 민감하다") 점수를 끌어내립니다. 모델의 성능은 알고리즘이 아니라 <b>전처리가 지탱하고 있었던 것</b>입니다.</p>
+  </div>
+  <p>남은 시간에는 교과서 134쪽 해 보기 ③(폼 Ⅲ-02c)으로 단순 회귀와 다중 회귀의 성능을 MSE와 결정계수, 두 지표로 나란히 비교합니다. 데이터 몇 행만으로 학습한 모델이 훈련 데이터에서만 높은 점수를 받는 현상 — 교과서가 <b>과대적합</b>이라 부르는 것 — 도 여기서 관찰합니다.</p>
+  <div class="callout check">
+    <div class="h">✔️ R²가 높아도 남는 물음</div>
+    <p>R²는 <b>가진 데이터 안에서의</b> 성적입니다. 6차시에 슬라이더를 2100년까지 밀었을 때를 떠올려 보세요. 직선은 학습 범위(1908~2025) 밖에서도 주저 없이 숫자를 내놓지만, 그 구간의 성적표는 어디에도 없습니다. "R²가 높은 모델 = 미래를 잘 맞히는 모델"이 아닌 이유 — 활동지 문제 7에서 글로 정리합니다.</p>
+  </div>
+  <h2>5. 개념 정리 — 점수를 의심할 자격</h2>
+  <p>오늘 우리는 회귀 모델의 성적표가 만들어지는 전 과정을 손으로 통과했습니다. 오차를 재고, 부호를 없애 공정하게 더하고, 제곱해서 평균 내고, 게으른 모델과 견준다 — 이 네 걸음이 전부입니다. 그러자 이번 주 화면에 떠 있던 숫자들이 전부 다시 읽히기 시작합니다.</p>
+  <table class="daymap">
+    <thead><tr><th>숫자</th><th>어디서 나왔나</th><th>손계산 뒤의 읽기</th></tr></thead>
+    <tbody>
+      <tr><td><b>0.70</b></td><td>기온 예측기 (필터 적용)</td><td>평균 모델 오차의 70%를 없앰 — 단, 전처리가 지탱하는 점수</td></tr>
+      <tr><td><b>0.39</b></td><td>기온 예측기 (필터 해제)</td><td>1953년 반쪽 값 하나가 제곱오차를 키워 끌어내린 점수</td></tr>
+      <tr><td><b>0.24</b></td><td>영화, 개봉 전 변수 3종 (테스트)</td><td>흥행은 원래 미리 알기 어렵다는 사실의 반영</td></tr>
+      <tr><td><b>0.90</b></td><td>영화, +첫 주 관객 (테스트)</td><td>미래 정보를 미리 본 반칙 점수 (10차시에서 해부)</td></tr>
+    </tbody>
+  </table>
+  <p>큰 숫자를 만나면 무엇과 견주어진 값인지 확인한다 — 이 습관은 앞으로 이름을 바꿔 반복됩니다. 10차시 분류에서는 "전부 한쪽으로 찍는 기준선"과 견주고, 12차시 연관 분석에서는 "우연"과 견줍니다.</p>
+
+  <h2>6. 확인 문제</h2>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 단순 선형회귀와 다중 선형회귀의 차이를 우리 수업의 두 예측기(기온·영화)를 들어 설명해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
+    <div class="qq"><span class="qn">문제 1</span> 어느 예측기의 3일간 오차가 +3, −3, 0이었습니다. 두 소문항에 답해 보세요.</div>
+    <div class="qitem">
+      <div class="qs">(가) 오차를 그냥 더해 "합계 0이니 완벽한 예측기"라고 주장한다면, 이 주장의 문제는?</div>
+      <div class="qopts qopts-col">
+        <button class="opt">문제없다 — 오차의 합이 0이면 정의상 완벽한 예측이다</button>
+        <button class="opt" data-ok="1">양수 오차와 음수 오차가 상쇄되었을 뿐, 3일 중 2일을 3씩 빗나갔다 — 부호를 없애야 크기를 공정하게 잰다</button>
+        <button class="opt">3일은 표본이 너무 적어서 어떤 판단도 할 수 없다</button>
+      </div>
+      <div class="fb">+3과 −3이 상쇄되어 합이 0일 뿐입니다. "완벽하다"는 주장은 상쇄를 놓친 판단으로, +3과 −3은 둘 다 3만큼의 빗나감입니다. 표본 수의 문제도 아닙니다 — 표본이 아무리 많아도, 부호 있는 오차를 그냥 더하는 방식 자체가 잘못입니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(나) 이 예측기의 MSE는?</div>
+      <div class="qopts">
+        <button class="opt">0</button>
+        <button class="opt" data-ok="1">6</button>
+        <button class="opt">18</button>
+      </div>
+      <div class="fb">제곱오차는 9, 9, 0이고 MSE는 그 평균 = 18 ÷ 3 = <b>6</b>입니다. 오차 합이 0이어도 제곱오차는 0이 아니므로 0은 답이 될 수 없고, 18은 제곱오차의 합 — MSE는 평균이므로 3으로 나눠야 합니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 어느 데이터에서 평균만 찍는 모델의 제곱오차 합이 40, 내 회귀 직선의 제곱오차 합이 10입니다.</div>
+    <div class="qitem">
+      <div class="qs">(가) R²는?</div>
+      <div class="qopts">
+        <button class="opt">0.25</button>
+        <button class="opt" data-ok="1">0.75</button>
+        <button class="opt">4.0</button>
+      </div>
+      <div class="fb">R² = 1 − (10 ÷ 40) = <b>0.75</b>. 게으른 모델 오차의 75%를 없앴다는 뜻입니다. 0.25는 10÷40까지만 계산하고 1에서 빼는 걸음을 빠뜨린 값 — "남아 있는 오차의 비율"입니다. 4.0은 분자·분모를 뒤집은 40÷10 — R²의 분모는 평균 모델의 제곱오차 합입니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(나) 내 직선의 제곱오차 합이 60이라면?</div>
+      <div class="qopts qopts-col">
+        <button class="opt">0 — R²는 음수가 될 수 없으므로 0에서 멈춘다</button>
+        <button class="opt">0.5</button>
+        <button class="opt" data-ok="1">−0.5 — 평균만 찍는 모델보다도 못하다</button>
+      </div>
+      <div class="fb">R² = 1 − (60 ÷ 40) = <b>−0.5</b>. R²는 음수가 될 수 있습니다(활동지 문제 5). 0.5는 부호 처리를 놓친 값으로, 60÷40 = 1.5이므로 1 − 1.5 = −0.5입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 기온 예측기의 R²는 관측일 필터를 켜면 0.70, 끄면 0.39입니다. 필터를 껐을 때 점수가 떨어지는 이유를 1953년과 "제곱"의 성질을 근거로 설명해 보세요.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수·상영횟수·성수기 여부 등 여러 독립 변수에 각각 가중치를 두어 총 관객 수를 예측하는 다중 선형회귀다. 영향을 주는 요인이 여러 개일 때 다중 회귀를 쓴다.</p>
+      <p>1953년은 겨울 한 달 치만 관측되어 연평균이 실제보다 훨씬 낮은 반쪽 값이 된 해다. 필터를 끄면 이 점이 데이터에 들어오는데, 직선에서 멀리 떨어진 점의 오차는 제곱되면서 매우 커져 제곱오차 합을 크게 키운다. 그 결과 R²가 0.70에서 0.39로 떨어진다. 모델의 점수를 지탱한 것은 알고리즘이 아니라 전처리였다.</p>
     </details>
-  </div>
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 개봉 전 변수 3종의 테스트 점수는 0.24, 첫 주 관객 수를 더하면 0.90이었습니다. 이 급등을 "모델이 좋아졌다"라고 결론지으면 안 되는 이유는 무엇일까요?</div>
-    <div class="qitem">
-      <div class="qopts qopts-col">
-        <button class="opt">테스트 영화가 66편뿐이라 어떤 점수도 신뢰할 수 없기 때문이다</button>
-        <button class="opt" data-ok="1">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보이므로 — 점수 급등은 실력이 아니라 데이터 누수의 신호다</button>
-        <button class="opt">R²가 0.5를 넘으면 항상 과대적합으로 판정하기 때문이다</button>
-      </div>
-      <div class="fb">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보입니다. 총 관객과 사실상 같은 정보를 담은 변수가 새어 들어와 점수를 부풀린 것이므로, 급등은 예측 실력의 향상이 아니라 데이터 누수의 신호이고, 개봉 전 예측이라는 문제 설정에서는 이 모델을 쓸 수 없습니다. 66편 채점 방식 자체는 0.24를 잴 때도 똑같이 쓰였으므로 문제는 표본 수가 아니고, R²에 절대 문턱도 없습니다 — 판단 기준은 점수의 크기가 아니라 변수의 시점입니다.</div>
-    </div>
-  </div>
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> "개봉 1주 후에 남은 흥행을 전망하는 서비스"를 만든다면 첫 주 관객 수를 변수로 써도 될까요?</div>
-    <div class="qitem">
-      <div class="qopts qopts-col">
-        <button class="opt">안 된다 — 한 번 누수로 판정된 변수는 어떤 문제 설정에서도 쓸 수 없다</button>
-        <button class="opt">안 된다 — 점수를 0.90까지 끌어올리는 변수는 그 자체로 의심 대상이므로 빼야 한다</button>
-        <button class="opt" data-ok="1">써도 된다 — 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아니다</button>
-      </div>
-      <div class="fb">판단 기준은 "예측하는 시점에 그 변수의 값을 알 수 있는가" 한 가지입니다. 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아닙니다. 변수의 좋고 나쁨은 변수 자체가 아니라 문제의 시점 설정이 정하며, 높은 점수가 곧 반칙인 것도 아닙니다.</div>
-    </div>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>다중 선형회귀가 무엇인지 독립 변수와 가중치로 설명할 수 있다.</li>
-    <li>변수를 골라 끼우는 총 관객 수 예측 페이지를 내 앱에 추가했다.</li>
-    <li>개봉 전 변수만으로는 점수가 0.3 안팎에 머무는 이유를 말할 수 있다.</li>
-    <li>0.90으로의 급등이 왜 실력이 아니라 누수 신호인지 설명할 수 있다.</li>
+    <li>오차 → 절대오차·제곱오차 → MSE → R²의 계산 순서를 손으로 밟았다.</li>
+    <li>교과서 120쪽 해 보기 ①의 두 회귀선을 오차 계산으로 판정했다.</li>
+    <li>R²가 "평균 모델 대비 개선율"임을 계산으로 설명할 수 있다.</li>
+    <li>필터에 따라 0.70이 0.39가 되는 이유를 1953년으로 설명할 수 있다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">다중 선형 회귀</td><td>여러 개의 독립 변수로 종속 변수를 예측하는 회귀 분석</td></tr>
-    <tr><td class="term">독립 변수 / 종속 변수</td><td>예측에 사용하는 값 / 예측하려는 값</td></tr>
-    <tr><td class="term">가중치</td><td>각 독립 변수가 예측에 기여하는 크기</td></tr>
-    <tr><td class="term">훈련 데이터 / 테스트 데이터</td><td>모델을 학습시키는 데이터 / 점수를 매기기 위해 따로 떼어 둔 데이터</td></tr>
-    <tr><td class="term">데이터 누수</td><td>예측 시점에 알 수 없는 정보가 변수로 새어 들어와 점수를 부풀리는 것</td></tr>
+    <tr><td class="term">오차</td><td>실젯값과 예측값의 차이</td></tr>
+    <tr><td class="term">절대오차(MAE)</td><td>오차의 절댓값(을 평균낸 값). 부호를 없애 크기를 공정하게 비교</td></tr>
+    <tr><td class="term">평균제곱오차(MSE)</td><td>오차를 제곱해 평균낸 값. 큰 실수에 민감하다</td></tr>
+    <tr><td class="term">결정계수(R²)</td><td>1 − (내 모델의 제곱오차 합 ÷ 평균 모델의 제곱오차 합). 평균 모델 대비 개선율</td></tr>
+    <tr><td class="term">기준선(평균 모델)</td><td>매번 평균값만 찍는 게으른 모델. R²가 견주는 상대</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
-    <a class="prev" href="lesson07.html"><div class="dir">← 이전</div><div class="tt">7차시 · 회귀 — 직선을 긋다</div></a>
-    <a class="next" href="lesson09.html"><div class="dir">다음 →</div><div class="tt">9차시 · 회귀 평가 손계산</div></a>
+    <a class="prev" href="lesson07.html"><div class="dir">← 이전</div><div class="tt">7차시 · 다중 선형회귀</div></a>
+    <a class="next" href="lesson09.html"><div class="dir">다음 →</div><div class="tt">9차시 · 분류</div></a>
   </div>
 </main>
 </div>

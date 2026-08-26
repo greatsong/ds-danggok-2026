@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>11차시 · 분류 평가 손계산 — 혼동행렬 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<title>11차시 · 군집 — 스포츠 선수 유형 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css?v=tb2">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -20,229 +20,352 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 11차시</span>
-  <h1>분류 평가 손계산 · <span class="a">혼동행렬</span></h1>
+  <h1>군집 · <span class="a">스포츠 선수 유형</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"큰 숫자를 만나면, 그 숫자가 무엇과 견주어진 값인지부터 확인한다."</div>
-    <span class="by">9차시에서 평균 모델과 견주었다면, 오늘은 다수결과 견줍니다</span>
+    <div class="q">"컴퓨터는 묶기만 한다. 의미는 사람이 붙인다."</div>
+    <span class="by">군집에 이름을 붙이는 오늘, 이 문장이 기준이 됩니다</span>
   </div>
 
-  <p class="lead">지난 시간은 "정확도 0.877, 이 숫자를 믿어도 되나?"로 끝났습니다. 오늘 그 답을 손으로 만듭니다. 도구는 <b>혼동행렬</b> — 예측의 맞음과 틀림을 네 칸으로 나누는 표 하나입니다. 계산을 마치면, 아무 계산도 하지 않는 게으른 모델이 내 분류기를 이기는 장면을 확인하게 됩니다.</p>
+  <p class="lead">지금까지의 모델에는 정답이 있었습니다. 기온이라는 실제 값(6차시), 성공/실패라는 라벨(9차시)이 있었고, 모델은 그것을 맞히도록 학습했습니다. 오늘은 정답표 없이 시작합니다. <b>2025 시즌 KBO 타자 43명</b>의 기록만 주고 "비슷한 선수끼리 묶어 보라"고 하면, 컴퓨터는 무엇을 기준으로 나눌까요?</p>
+
+  <div class="callout data">
+    <div class="h">🙋 도입 5분 — 우리 반 데이터: 나는 어떤 유형일까</div>
+    <ol class="steps3">
+      <li><span class="k">묻기</span> 폼으로 내 취향 다섯 가지를 1~5로 답합니다 — 매운맛 · 단 음식 · 국물 요리 · 분식 · 야식 빈도.</li>
+      <li><span class="k">보기</span> 선생님 화면에서 우리 반 응답을 산점도로 봅니다. 몇 덩어리로 보이나요?</li>
+      <li><span class="k">잇기</span> 덩어리마다 이름을 붙일 수 있을까요? 오늘 선수 데이터로 이 질문을 제대로 다룹니다. 우리 반 취향 군집은 팀 프로젝트 주제 후보로도 좋습니다.</li>
+    </ol>
+    <p class="fallback">응답이 적으면 지난 학기 예시 화면으로 대체합니다.</p>
+  </div>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>교과서로 손계산</b> — 139~140쪽 토마토 농장 사례와 해 보기 ④ (활동지 2)</li>
-      <li><b>내 모델과 대조</b> — 흥행 분류기의 혼동행렬을 열고 "전부 실패 찍기" 모델과 겨루기</li>
-      <li><b>반칙 판정</b> — 8차시의 의문 회수: 성능 급등의 정체는 레이블 누수</li>
+      <li><b>지도학습과 비지도학습 구분</b> — 정답이 있는 학습과 없는 학습</li>
+      <li><b>k-평균 군집</b> — KBO 타자 43명을 k개의 묶음으로 나누고 k를 바꿔 본다</li>
+      <li><b>정규화 실험과 이름 붙이기</b> — 기준이 결과를 바꾸는 것을 확인하고, 묶음에 유형 이름을 붙인다</li>
     </ul>
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>스팸 필터가 합격 통지 메일을 스팸함에 넣는 것과, 스팸 하나를 받은편지함에 남겨 두는 것 — 둘 다 "틀림"이지만 아픔의 크기가 다릅니다. 감염병 검사가 감염자 한 명을 놓치는 것과, 건강한 사람을 한 번 더 검사하게 하는 것도 마찬가지입니다. 정확도 하나로는 이 차이가 보이지 않습니다. <b>어떻게 틀렸는지</b>를 네 칸으로 가르는 순간, 같은 모델의 성적표가 완전히 다르게 읽힙니다. 오늘 배우는 세 지표는 인공지능을 쓰는 모든 분야에서 판단의 언어로 쓰입니다.</p>
+  <p>쇼핑몰은 고객을 몇 개의 유형으로 나눠 유형별로 다른 전략을 세우고, 음악 서비스는 청취 기록이 비슷한 사람끼리 묶어 추천을 만듭니다. 이런 일에는 미리 정해진 정답표가 없습니다. 데이터 스스로가 드러내는 비슷함을 찾아 묶는 것 — 이것이 <b>군집화</b>이고, 정답 없이 배우는 <b>비지도학습</b>의 대표 사례입니다. 오늘의 재료는 지난 시즌 KBO 타자들의 실제 기록입니다. 우리가 아는 선수들이 홈런·도루·타율 같은 숫자만으로 어떻게 나뉘는지, 그 묶음이 우리가 아는 선수의 모습과 얼마나 닮았는지 비교하는 것이 오늘의 관찰 과제입니다.</p>
 
-  <h2>1. 개념 이해 — 네 칸과 세 지표</h2>
+  <h2>1. 개념 이해 — 정답 없이 묶는다는 것</h2>
   <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 139·140쪽</span></div>
-    <p class="q">"오분류표란 각각의 실제 클래스와 예측 결과를 행렬로 나타낸 것이다." <span class="src">(139쪽)</span></p>
-    <p class="q">"정확도는 전체 데이터 중 실제와 같게 예측한 데이터의 비율을 나타내며, 레이블별 분포가 균일하지 않은 경우 정확도로 모델을 평가하는 것은 부적절하다." <span class="src">(139쪽)</span></p>
-    <p class="q">"문제 상황에 따라 적합한 성능 지표가 다르므로, 상황에 맞는 지표를 선택해야 한다." <span class="src">(140쪽)</span></p>
-    <p class="t">→ 오분류표(혼동행렬)가 표, 정확도·정밀도·재현율이 그 표에서 나오는 세 지표다. 교과서 스스로 "정확도만으로는 부적절한 경우"를 경고하고 있다 — 오늘 그 경우를 우리 데이터로 만난다.</p>
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 146·154쪽</span></div>
+    <p class="q">"k-평균 알고리즘은 k개의 군집을 구성하는 기계학습 알고리즘이다. 군집의 개수, 즉 k값에 따라 군집화 결과와 그에 따른 의미 해석이 달라지기 때문에 k값을 적절히 설정하는 것이 중요하다." <span class="src">(146쪽)</span></p>
+    <p class="q">"데이터 속성 간의 유사성을 측정하여 유사한 데이터끼리 군집을 형성하는 것을 군집화라고 한다." <span class="src">(154쪽)</span></p>
+    <p class="t">→ 군집의 개수 k는 사람이 직접 정한다(146쪽). 정답이 없으므로, 몇 묶음이 적절한지도 판단의 대상이다.</p>
   </div>
-  <p>영어 약자보다 우리말이 먼저입니다. "성공"을 양성(Positive)이라 할 때, 예측은 네 가지 중 하나로 끝납니다.</p>
+  <p>교과서 148쪽의 군집화 과정 그림처럼, k-평균 알고리즘은 네 단계를 반복합니다. ①묶음의 개수 k를 정하고 ②임의의 중심점 k개를 놓은 뒤 ③각 데이터를 가장 가까운 중심점의 묶음에 넣고 ④묶음의 평균 지점으로 중심점을 옮깁니다. 중심점이 더 움직이지 않을 때까지 ③④를 반복하면 묶음이 완성됩니다. "가깝다"는 두 점 사이의 거리(유클리디안 거리, 148쪽)로 잽니다.</p>
+
+  <details class="glossary">
+    <summary>🔬 움직여 보기 — k-평균, 클릭으로 한 단계씩</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">묶기 전의 데이터에서 시작합니다. 그림을 <b>클릭할 때마다 한 단계씩</b> 진행됩니다 — ①중심점 놓기 → ②가까운 묶음에 넣기 → ③중심점 옮기기 → ④반복·수렴.</p>
+<svg id="km12" class="km12-svg" viewBox="0 0 700 275" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="k-평균 알고리즘이 네 단계를 반복하며 점들을 두 묶음으로 나누는 과정을 클릭으로 진행하는 그림" style="cursor:pointer">
+  <rect x="0" y="0" width="700" height="275" fill="transparent" pointer-events="all"/>
+  <text class="km12-hint" x="350" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#e8930c" pointer-events="none">👆 클릭 ① — 중심점 k=2개를 임의로 놓는다</text>
+  <g class="km12-stage" pointer-events="none">
+    <circle class="km12-dot" cx="150" cy="110" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="190" cy="90" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="230" cy="150" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="170" cy="165" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="255" cy="100" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="365" cy="170" r="9" fill="#b6b0a2" data-a1="t" data-a2="g"/>
+    <circle class="km12-dot" cx="410" cy="70" r="9" fill="#b6b0a2" data-a1="g" data-a2="t"/>
+    <circle class="km12-dot" cx="520" cy="95" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="565" cy="120" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="610" cy="85" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="585" cy="165" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="540" cy="155" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <g class="km12-cg" data-k="g" data-x0="310" data-y0="55" data-x1="225" data-y1="130" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#f4b400" stroke="#c28f00" stroke-width="0.8">★</text></g>
+    <g class="km12-cg" data-k="t" data-x0="445" data-y0="195" data-x1="540" data-y1="115" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#3ba6a0" stroke="#2b7a75" stroke-width="0.8">★</text></g>
+  </g>
+  <text x="350" y="243" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">"가깝다"는 두 점 사이의 거리(유클리디안 거리, 교과서 148쪽)로 잰다.</text>
+  <text x="350" y="261" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">점의 위치는 과정을 보이기 위한 모식도이며 실제 선수 기록의 좌표가 아니다.</text>
+</svg>
+<script>
+(function () {
+  var root = document.getElementById("km12");
+  if (!root) return;
+  var STEPS = [
+    "👆 클릭 ① — 중심점 k=2개를 임의로 놓는다",
+    "👆 클릭 ② — 각 점을 가장 가까운 중심점의 묶음에 넣는다",
+    "👆 클릭 ③ — 묶음의 평균 지점으로 중심점을 옮긴다",
+    "👆 클릭 ④ — ③④를 반복, 중심점이 더 움직이지 않으면 완성",
+    "✅ 완성! 클릭하면 처음부터"
+  ];
+  var COLORS = { g: "#f4b400", t: "#3ba6a0" };
+  var GRAY = "#b6b0a2";
+  var hint = root.querySelector(".km12-hint");
+  var stage = root.querySelector(".km12-stage");
+  var dots = [].slice.call(root.querySelectorAll(".km12-dot"));
+  var stars = {};
+  [].slice.call(root.querySelectorAll(".km12-cg")).forEach(function (g) {
+    stars[g.getAttribute("data-k")] = g;
+    g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
+  });
+  var links = dots.map(function (d) {
+    var k = d.getAttribute("data-a1");
+    var ln = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    ln.setAttribute("x1", d.getAttribute("cx"));
+    ln.setAttribute("y1", d.getAttribute("cy"));
+    ln.setAttribute("x2", stars[k].getAttribute("data-x0"));
+    ln.setAttribute("y2", stars[k].getAttribute("data-y0"));
+    ln.setAttribute("stroke", COLORS[k]);
+    ln.setAttribute("stroke-width", "1.3");
+    ln.setAttribute("opacity", "0");
+    ln.style.transition = "opacity 0.6s ease";
+    stage.insertBefore(ln, stage.firstChild);
+    return ln;
+  });
+  dots.forEach(function (d) { d.style.transition = "fill 0.6s ease"; });
+  function place(g, x, y) { g.style.transform = "translate(" + x + "px," + y + "px)"; }
+  function reset() {
+    Object.keys(stars).forEach(function (k) {
+      var g = stars[k];
+      g.style.transition = "none";
+      place(g, g.getAttribute("data-x0"), g.getAttribute("data-y0"));
+      g.style.opacity = 0;
+      g.getBoundingClientRect();
+      g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
+    });
+    dots.forEach(function (d) { d.style.fill = GRAY; });
+    links.forEach(function (ln) { ln.style.opacity = 0; });
+    hint.textContent = STEPS[0];
+  }
+  var s = 0;
+  reset();
+  root.addEventListener("click", function () {
+    s = (s + 1) % 5;
+    if (s === 1) {
+      stars.g.style.opacity = 1; stars.t.style.opacity = 1;
+    } else if (s === 2) {
+      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a1")]; });
+      links.forEach(function (ln) { ln.style.opacity = 1; });
+    } else if (s === 3) {
+      links.forEach(function (ln) { ln.style.opacity = 0; });
+      Object.keys(stars).forEach(function (k) {
+        var g = stars[k];
+        place(g, g.getAttribute("data-x1"), g.getAttribute("data-y1"));
+      });
+    } else if (s === 4) {
+      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a2")]; });
+    } else {
+      s = 0; reset(); return;
+    }
+    hint.textContent = STEPS[s];
+  });
+})();
+</script>
+    </div>
+  </details>
+
   <table class="daymap">
-    <thead><tr><th>칸</th><th>우리말로</th><th>영화라면</th></tr></thead>
+    <thead><tr><th>구분</th><th>정답(라벨)</th><th>모델이 하는 일</th><th>우리 수업의 예</th></tr></thead>
     <tbody>
-      <tr><td><b>TP</b></td><td>맞다고 했는데 정말 맞음</td><td>성공이라 예측했고 실제로 성공</td></tr>
-      <tr><td><b>FP</b></td><td>맞다고 했는데 틀림</td><td>성공이라 예측했지만 실제는 실패</td></tr>
-      <tr><td><b>FN</b></td><td>아니라고 했는데 사실 맞음</td><td>실패라 예측했지만 실제는 성공 (놓친 성공작)</td></tr>
-      <tr><td><b>TN</b></td><td>아니라고 했는데 정말 아님</td><td>실패라 예측했고 실제로 실패</td></tr>
-    </tbody>
-  </table>
-  <p>세 지표는 이 네 칸의 나눗셈입니다 (공식은 교과서 140쪽). 분자는 셋 다 "맞힌 것"에서 출발하고, <b>분모가 무엇이냐</b>가 셋을 가릅니다. 손계산에서 가장 자주 틀리는 곳도 분모입니다.</p>
-  <div style="overflow-x:auto;margin:16px 0">
-  <svg viewBox="0 0 720 500" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="혼동행렬 네 칸의 2×2 배치와, 정확도·정밀도·재현율이 분모로 삼는 범위를 나타낸 그림">
-    <!-- 큰 행렬: 실제 × 예측 -->
-    <text x="265" y="44" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a">예측: 성공</text>
-    <text x="515" y="44" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a">예측: 실패</text>
-    <text x="128" y="109" text-anchor="end" font-size="15" font-weight="800" fill="#2b2d3a">실제: 성공</text>
-    <text x="128" y="201" text-anchor="end" font-size="15" font-weight="800" fill="#2b2d3a">실제: 실패</text>
-    <rect x="140" y="58" width="250" height="92" fill="#54a24b" fill-opacity="0.16" stroke="#f0e2bc"/>
-    <rect x="390" y="58" width="250" height="92" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"/>
-    <rect x="140" y="150" width="250" height="92" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"/>
-    <rect x="390" y="150" width="250" height="92" fill="#3ba6a0" fill-opacity="0.15" stroke="#f0e2bc"/>
-    <text x="265" y="95" text-anchor="middle" font-size="16" font-weight="800" fill="#2f6d2a">TP</text>
-    <text x="265" y="120" text-anchor="middle" font-size="13" fill="#2b2d3a">맞다고 했는데 정말 맞음</text>
-    <text x="515" y="88" text-anchor="middle" font-size="16" font-weight="800" fill="#b23c3c">FN</text>
-    <text x="515" y="110" text-anchor="middle" font-size="13" fill="#2b2d3a">아니라고 했는데 사실 맞음</text>
-    <text x="515" y="130" text-anchor="middle" font-size="13" fill="#2b2d3a">(놓친 성공작)</text>
-    <text x="265" y="187" text-anchor="middle" font-size="16" font-weight="800" fill="#b23c3c">FP</text>
-    <text x="265" y="212" text-anchor="middle" font-size="13" fill="#2b2d3a">맞다고 했는데 틀림</text>
-    <text x="515" y="187" text-anchor="middle" font-size="16" font-weight="800" fill="#23706b">TN</text>
-    <text x="515" y="212" text-anchor="middle" font-size="13" fill="#2b2d3a">아니라고 했는데 정말 아님</text>
-    <!-- 미니 행렬 ① 정확도 -->
-    <text x="140" y="302" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">① 정확도</text>
-    <text x="140" y="322" text-anchor="middle" font-size="12.5" fill="#2b2d3a">(TP+TN) ÷ 전체</text>
-    <rect x="85" y="334" width="55" height="32" fill="#54a24b" fill-opacity="0.35" stroke="#f0e2bc"/>
-    <rect x="140" y="334" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
-    <rect x="85" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
-    <rect x="140" y="366" width="55" height="32" fill="#3ba6a0" fill-opacity="0.35" stroke="#f0e2bc"/>
-    <text x="112.5" y="354" text-anchor="middle" font-size="9.5" font-weight="800" fill="#2f6d2a">TP</text>
-    <text x="167.5" y="354" text-anchor="middle" font-size="9.5" fill="#7a7f95">FN</text>
-    <text x="112.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">FP</text>
-    <text x="167.5" y="386" text-anchor="middle" font-size="9.5" font-weight="800" fill="#23706b">TN</text>
-    <rect x="85" y="334" width="110" height="64" fill="none" stroke="#e8930c" stroke-width="3"/>
-    <!-- 미니 행렬 ② 정밀도 -->
-    <text x="360" y="302" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">② 정밀도</text>
-    <text x="360" y="322" text-anchor="middle" font-size="12.5" fill="#2b2d3a">TP ÷ (TP+FP)</text>
-    <rect x="305" y="334" width="55" height="32" fill="#54a24b" fill-opacity="0.35" stroke="#f0e2bc"/>
-    <rect x="360" y="334" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
-    <rect x="305" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
-    <rect x="360" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
-    <text x="332.5" y="354" text-anchor="middle" font-size="9.5" font-weight="800" fill="#2f6d2a">TP</text>
-    <text x="387.5" y="354" text-anchor="middle" font-size="9.5" fill="#7a7f95">FN</text>
-    <text x="332.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">FP</text>
-    <text x="387.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">TN</text>
-    <rect x="305" y="334" width="55" height="64" fill="none" stroke="#e8930c" stroke-width="3"/>
-    <text x="360" y="422" text-anchor="middle" font-size="12" fill="#7a7f95">"성공이라 말한 것" 중에서</text>
-    <!-- 미니 행렬 ③ 재현율 -->
-    <text x="580" y="302" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">③ 재현율</text>
-    <text x="580" y="322" text-anchor="middle" font-size="12.5" fill="#2b2d3a">TP ÷ (TP+FN)</text>
-    <rect x="525" y="334" width="55" height="32" fill="#54a24b" fill-opacity="0.35" stroke="#f0e2bc"/>
-    <rect x="580" y="334" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
-    <rect x="525" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
-    <rect x="580" y="366" width="55" height="32" fill="#fdf8ea" stroke="#f0e2bc"/>
-    <text x="552.5" y="354" text-anchor="middle" font-size="9.5" font-weight="800" fill="#2f6d2a">TP</text>
-    <text x="607.5" y="354" text-anchor="middle" font-size="9.5" fill="#7a7f95">FN</text>
-    <text x="552.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">FP</text>
-    <text x="607.5" y="386" text-anchor="middle" font-size="9.5" fill="#7a7f95">TN</text>
-    <rect x="525" y="334" width="110" height="32" fill="none" stroke="#e8930c" stroke-width="3"/>
-    <text x="580" y="422" text-anchor="middle" font-size="12" fill="#7a7f95">"실제 성공작" 중에서</text>
-    <!-- 캡션 -->
-    <text x="360" y="470" text-anchor="middle" font-size="13.5" fill="#7a7f95">세 지표의 분자는 같은 칸에서 출발한다 — 셋을 가르는 것은 분모가 가리키는 범위다.</text>
-  </svg>
-  </div>
-  <table class="daymap">
-    <thead><tr><th>지표</th><th>계산 (140쪽 공식)</th><th>묻는 말</th></tr></thead>
-    <tbody>
-      <tr><td><b>정확도</b></td><td>(TP+TN) ÷ 전체</td><td>전체 중 얼마나 맞혔는가</td></tr>
-      <tr><td><b>정밀도</b></td><td>TP ÷ (TP+FP)</td><td>"성공"이라 말한 것 중 진짜 성공은 얼마인가</td></tr>
-      <tr><td><b>재현율</b></td><td>TP ÷ (TP+FN)</td><td>실제 성공작 중 얼마나 잡아냈는가</td></tr>
+      <tr><td><b>지도학습</b></td><td>있음</td><td>정답을 맞히도록 학습</td><td>기온 회귀(6차시) · 흥행 분류(9차시)</td></tr>
+      <tr><td><b>비지도학습</b></td><td>없음</td><td>데이터 안의 구조를 스스로 찾음</td><td>선수 유형 군집(오늘)</td></tr>
     </tbody>
   </table>
 
-  <h2>2. 손 활동지 — 교과서 해 보기부터</h2>
-  <div class="callout mini">
-    <div class="h">✍️ 활동지 2 문제 1 (교과서 139~140쪽 해 보기 ④)</div>
-    <p>교과서 139쪽의 토마토 농장 사례를 폅니다. 과일 이미지를 토마토인지 아닌지 분류한 결과가 본문에 있습니다. 활동지에서 오분류표의 네 칸을 채우고 정밀도·재현율·정확도를 차례로 구합니다. 마지막 물음 — "정밀도가 낮으면 이 농장에 무슨 일이 벌어지는가" — 까지 문장으로 써 보세요. 같은 계산을 폼 Ⅲ-02d에 기록합니다.</p>
-  </div>
-  <p>이어지는 문제 2~5는 무대가 영화와 스팸 필터로 바뀝니다. 작은 표로 내 흥행 분류기의 혼동행렬을 채우고, 아무 계산도 하지 않는 게으른 모델과 겨루고, 정확도는 같아도 정밀도와 재현율이 갈리는 두 모델을 놓고 <b>투자자와 발굴팀 중 누가 어느 모델을 골라야 하는지</b> 판정합니다. 교과서 140쪽도 같은 원리를 말합니다 — 스팸 필터처럼 멀쩡한 메일을 잘못 거르면 안 되는 문제는 정밀도가, 감염병 검사처럼 한 명도 놓치면 안 되는 문제는 재현율이 적절한 지표라고.</p>
-  <div class="callout tip">
-    <div class="h">💡 지표 선택은 계산이 아니라 판단이다</div>
-    <p>정밀도와 재현율 중 무엇을 볼 것인가는 "어느 쪽 틀림의 비용이 더 큰가"에 대한 판단입니다. 도전 문제(문제 7)에서는 문턱값을 0.5에서 움직여 봅니다 — 문턱을 내리면 재현율이 오르는 대신 정밀도가 내려갑니다. 두 지표는 맞바꿈 관계입니다 — 한쪽을 올리면 다른 쪽이 내려갑니다.</p>
-  </div>
+  <h2>2. 실습 — 타자 43명을 묶어 본다 (바이브 코딩)</h2>
+  <p>데이터는 <b>2025 정규시즌 규정타석을 채운 타자 43명</b>의 공식 기록(kbo_hitters_2025.csv — KBO 공식 기록실)입니다. 행 하나가 선수 한 명, 열은 홈런·도루·볼넷·삼진·출루율·장타율·타율 등 20개 항목입니다. 홈런 1위 디아즈(50개), 도루 1위 박해민(49개), 타율 1위 양의지(0.337)가 모두 이 표 안에 있습니다.</p>
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 스트림릿 앱에 "타자 유형 군집" 페이지를 추가해 줘.
+타자 기록 데이터(kbo_hitters_2025.csv)를 읽어서
+홈런, 도루, 볼넷, 삼진, 출루율, 장타율, 타율로 비슷한 선수끼리 묶어 줘.
+묶음의 개수는 슬라이더로 고르게 하고,
+묶음마다 평균 기록과 소속 선수 명단을 보여 줘.</pre></div>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 실행하고 명단을 읽는다</span><br>
+      k를 2에서 5까지 바꿔 봅니다. 묶음이 갈라지고 합쳐질 때마다 명단을 읽습니다 — 43명이라 전체를 눈으로 읽을 수 있습니다. 내가 아는 선수가 어느 묶음에 들어갔는지가 첫 번째 관찰 거리입니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 정규화 실험</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>기록 항목들의 단위 차이를 없애고(정규화) 다시 묶어서,
+정규화 전과 후의 묶음이 어떻게 달라졌는지 나란히 비교해 줘.
+잘 나뉜 정도를 나타내는 점수도 k마다 보여 줘.</pre></div>
+    </li>
+  </ol>
 
-  <div class="callout check">
-    <div class="h">✅ 지필 예고</div>
-    <p>오늘 활동지의 계산 — 혼동행렬 채우기, 세 지표 구하기, 기준선과 견주기, 누수 판정 — 은 중간 지필평가 계산 문항의 원천입니다. 시험에는 수업에서 함께 본 실측 수치만 나옵니다. 오늘 손으로 한 번 끝까지 계산해 둔 사람은 시험장에서 같은 길을 다시 걸으면 됩니다.</p>
-  </div>
-
-  <h2>3. 발견 사건 — 게으른 모델이 이긴다</h2>
-  <p>이제 지난 시간의 숫자로 돌아갑니다. 우리 분석 대상 216편 중, 기준 100만 명을 넘긴 성공작은 <b>23편(11%)</b>뿐입니다. 그렇다면 아무 계산도 하지 않고 <b>전부 "실패"로만 찍는 모델</b>의 정확도는 얼마일까요? 216편 중 193편을 맞히므로 <b>89%</b>입니다. 지난 시간의 성적표 옆에 이 게으른 모델을 세워 봅니다.</p>
-  <table class="daymap">
-    <thead><tr><th>모델</th><th>정확도</th><th>성공 재현율</th><th>판정</th></tr></thead>
-    <tbody>
-      <tr><td><b>전부 "실패" 찍기 (기준선)</b></td><td><b>0.89</b></td><td>0.00</td><td>계산 없이 얻는 출발점</td></tr>
-      <tr><td><b>로지스틱 회귀</b></td><td>0.877</td><td><b>0.00</b></td><td>기준선보다도 낮다 — 성공작을 한 편도 못 잡음</td></tr>
-      <tr><td><b>의사결정트리 (깊이 3)</b></td><td>0.908</td><td>0.29</td><td>기준선을 겨우 넘고, 성공작 일부를 잡기 시작</td></tr>
-      <tr><td><b>로지스틱 + 첫 주 관객 (반칙)</b></td><td><b>0.985</b></td><td>—</td><td>급등 — 4절에서 정체를 밝힌다</td></tr>
-    </tbody>
-  </table>
   <div class="callout warn">
-    <div class="h">⚠️ 정확도만 보면 놓치는 세 가지</div>
+    <div class="h">⚠️ 발견 사건 — 기준이 결과를 정한다</div>
     <ul>
-      <li><b>기준선 위에서 봐야 한다</b> — 로지스틱의 87.7%는 "전부 실패 찍기" 89%보다도 낮다. 정확도 자체는 높아 보여도, 견줄 상대를 세우는 순간 의미가 사라진다. 9차시의 R²가 평균 모델과 견주었듯, 분류는 다수결 모델과 견준다.</li>
-      <li><b>재현율이 따로 논다</b> — 성공 재현율 0.00: 정작 잡고 싶었던 성공작 23편 중 단 한 편도 성공이라 말하지 못했다. 라벨이 11 대 89로 치우친 데이터에서는 다수만 따라 찍어도 정확도가 후하게 나오기 때문이다 — 교과서 139쪽의 경고("레이블별 분포가 균일하지 않은 경우") 그대로다.</li>
-      <li><b>성능 급등은 반칙 신호다</b> — 98.5%의 정체는 실력이 아니다. 4절에서 판정한다.</li>
+      <li><b>정규화를 끄면 삼진과 홈런이 지배합니다.</b> 삼진(수십~백 단위)과 홈런처럼 값이 큰 항목이 거리 계산을 지배해, 타율·출루율(0.3 안팎)의 차이는 사실상 무시됩니다. 실측으로도 스케일링 없는 군집은 삼진 개수가 갈라놓은 것과 다름없었습니다.</li>
+      <li><b>점수는 k=2, 해석은 k=3.</b> 잘 나뉜 정도 점수(실루엣)는 k=2(0.268)가 k=3(0.262)보다 근소하게 높습니다. 그런데 두 묶음(강타자 10명 vs 나머지 33명)보다 세 묶음의 이야기가 훨씬 선명합니다. 숫자가 시키는 답과 사람이 이해하는 답이 다를 때, 어느 쪽을 따를지는 판단의 문제입니다.</li>
     </ul>
   </div>
 
-  <p>내 분류기에서도 같은 장면을 직접 확인합니다. 오늘의 ①②③은 손계산이 주인공이므로 화면 실습은 이것 하나입니다.</p>
-  <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>내 분류기의 혼동행렬을 그려 주고, '무조건 실패로만 찍는 모델'의
-정확도와 나란히 비교해 줘. 성공 재현율도 함께 보여 줘.</pre></div>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 700 352" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="정규화 전에는 삼진과 장타율의 눈금자 단위가 달라 큰 숫자가 거리 계산을 지배하고, 정규화 후에는 두 항목이 0에서 1 사이의 같은 자로 재배치되는 것을 나타낸 그림">
+      <!-- 상단 — 정규화 전 -->
+      <text x="24" y="30" font-size="15" font-weight="800" fill="#3a2e1a">정규화 전 — 원래 단위의 자</text>
+      <text x="100" y="67" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">삼진</text>
+      <line x1="110" y1="62" x2="630" y2="62" stroke="#c9b990" stroke-width="2"/>
+      <line x1="110" y1="56" x2="110" y2="68" stroke="#c9b990" stroke-width="2"/>
+      <line x1="630" y1="56" x2="630" y2="68" stroke="#c9b990" stroke-width="2"/>
+      <text x="110" y="84" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
+      <text x="630" y="84" text-anchor="middle" font-size="11" fill="#9a8b6a">120</text>
+      <circle cx="425" cy="62" r="7" fill="#54a24b"/>
+      <circle cx="503" cy="62" r="7" fill="#f4b400"/>
+      <circle cx="581" cy="62" r="7" fill="#3ba6a0"/>
+      <text x="425" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯ 72.7</text>
+      <text x="503" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮ 90.6</text>
+      <text x="581" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰ 108.6</text>
+      <text x="100" y="121" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">장타율</text>
+      <line x1="110" y1="116" x2="420" y2="116" stroke="#c9b990" stroke-width="2"/>
+      <line x1="110" y1="110" x2="110" y2="122" stroke="#c9b990" stroke-width="2"/>
+      <line x1="420" y1="110" x2="420" y2="122" stroke="#c9b990" stroke-width="2"/>
+      <text x="110" y="138" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
+      <text x="420" y="138" text-anchor="middle" font-size="11" fill="#9a8b6a">0.6</text>
+      <circle cx="313" cy="116" r="7" fill="#54a24b"/>
+      <circle cx="332" cy="116" r="7" fill="#3ba6a0"/>
+      <circle cx="390" cy="116" r="7" fill="#f4b400"/>
+      <text x="299" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯ 0.393</text>
+      <text x="341" y="138" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰ 0.429</text>
+      <text x="397" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮ 0.542</text>
+      <text x="350" y="168" text-anchor="middle" font-size="12.5" fill="#6b5836">삼진의 차이는 수십 단위, 장타율의 차이는 0.1 안팎 — 거리 계산은 큰 숫자가 지배한다.</text>
+      <line x1="24" y1="186" x2="676" y2="186" stroke="#f0e2bc" stroke-width="1.5"/>
+      <!-- 하단 — 정규화 후 -->
+      <text x="24" y="214" font-size="15" font-weight="800" fill="#3a2e1a">정규화 후 — 같은 자(0~1)</text>
+      <text x="100" y="251" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">삼진</text>
+      <line x1="110" y1="246" x2="630" y2="246" stroke="#c9b990" stroke-width="2"/>
+      <line x1="110" y1="240" x2="110" y2="252" stroke="#c9b990" stroke-width="2"/>
+      <line x1="630" y1="240" x2="630" y2="252" stroke="#c9b990" stroke-width="2"/>
+      <circle cx="110" cy="246" r="7" fill="#54a24b"/>
+      <circle cx="369" cy="246" r="7" fill="#f4b400"/>
+      <circle cx="630" cy="246" r="7" fill="#3ba6a0"/>
+      <text x="110" y="231" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯</text>
+      <text x="369" y="231" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮</text>
+      <text x="630" y="231" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰</text>
+      <text x="100" y="295" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">장타율</text>
+      <line x1="110" y1="290" x2="630" y2="290" stroke="#c9b990" stroke-width="2"/>
+      <line x1="110" y1="284" x2="110" y2="296" stroke="#c9b990" stroke-width="2"/>
+      <line x1="630" y1="284" x2="630" y2="296" stroke="#c9b990" stroke-width="2"/>
+      <circle cx="110" cy="290" r="7" fill="#54a24b"/>
+      <circle cx="236" cy="290" r="7" fill="#3ba6a0"/>
+      <circle cx="630" cy="290" r="7" fill="#f4b400"/>
+      <text x="110" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯</text>
+      <text x="236" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰</text>
+      <text x="630" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮</text>
+      <text x="350" y="322" text-anchor="middle" font-size="12.5" fill="#6b5836">단위 차이를 없애면 두 항목이 같은 무게로 거리를 나눈다.</text>
+      <text x="350" y="344" text-anchor="middle" font-size="12" fill="#9a8b6a">실측 — 스케일링 없는 군집은 삼진이 갈라놓은 것과 다름없었다.</text>
+    </svg>
+  </div>
 
-  <h2>4. 반칙 판정 — 레이블 누수</h2>
-  <p>8차시에 남겨 둔 의문을 회수할 시간입니다. 다중회귀에서 첫 주 관객 수를 넣자 테스트 R²가 0.24에서 0.90으로 급등했고, 우리는 "그 변수는 미래를 미리 본 것 아닌가"라고 물었습니다. 분류에서도 똑같이 해 보면 — 개봉 전 변수만 쓰던 모델에 첫 주 관객 수를 추가하는 순간 정확도가 <b>0.985</b>로 급등합니다.</p>
-  <p>이것이 <b>레이블 누수</b>입니다. 첫 주 관객 수는 개봉 전에는 알 수 없는 정보이고, 총 관객 수(라벨의 재료)와 사실상 한 몸입니다. 정답의 일부를 입력으로 미리 보여 준 셈이므로, 시험지에 답이 인쇄된 채 시험을 본 것과 같습니다. 시험 점수는 완벽하지만 실전 — 아직 개봉하지 않은 영화 — 에서는 쓸 수 없는 모델입니다. <b>성능이 갑자기 좋아지면 기뻐하기 전에 의심한다.</b> 활동지 문제 6에서 입력 변수 후보들을 놓고 반칙 여부를 직접 판정합니다.</p>
+  <h2>3. 활동 — 묶음에 이름 붙이기</h2>
+  <p>k=3으로 나눈 세 묶음의 평균 기록입니다(정규화 적용, 2025 실측). 각 묶음에 어울리는 유형 이름을 붙이고, 그 근거를 기록 항목으로 말해 봅니다 — 이름 칸은 여러분의 몫입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>묶음</th><th>인원</th><th>홈런</th><th>도루</th><th>삼진</th><th>장타율</th><th>대표 선수</th><th>유형 이름은?</th></tr></thead>
+    <tbody>
+      <tr><td>㉮</td><td>9</td><td><b>27.6</b></td><td>6.9</td><td>90.6</td><td><b>0.542</b></td><td>양의지 · 구자욱 · 디아즈</td><td>______</td></tr>
+      <tr><td>㉯</td><td>18</td><td>6.4</td><td><b>17.1</b></td><td>72.7</td><td>0.393</td><td>박해민 · 정수빈 · 신민재</td><td>______</td></tr>
+      <tr><td>㉰</td><td>16</td><td>16.8</td><td>5.4</td><td><b>108.6</b></td><td>0.429</td><td>오지환 · 박동원</td><td>______</td></tr>
+    </tbody>
+  </table>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 700 420" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="홈런 평균과 도루 평균 두 축 위에 세 묶음의 평균 위치를 나타낸 산점도. 세 묶음이 서로 다른 방향으로 갈라져 있다">
+      <!-- 축 -->
+      <line x1="90" y1="40" x2="90" y2="340" stroke="#c9b990" stroke-width="2"/>
+      <line x1="90" y1="340" x2="640" y2="340" stroke="#c9b990" stroke-width="2"/>
+      <line x1="273" y1="340" x2="273" y2="346" stroke="#c9b990" stroke-width="2"/>
+      <line x1="457" y1="340" x2="457" y2="346" stroke="#c9b990" stroke-width="2"/>
+      <line x1="640" y1="340" x2="640" y2="346" stroke="#c9b990" stroke-width="2"/>
+      <line x1="84" y1="190" x2="90" y2="190" stroke="#c9b990" stroke-width="2"/>
+      <line x1="84" y1="40" x2="90" y2="40" stroke="#c9b990" stroke-width="2"/>
+      <text x="90" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
+      <text x="273" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">10</text>
+      <text x="457" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">20</text>
+      <text x="640" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">30</text>
+      <text x="78" y="344" text-anchor="end" font-size="11" fill="#9a8b6a">0</text>
+      <text x="78" y="194" text-anchor="end" font-size="11" fill="#9a8b6a">10</text>
+      <text x="78" y="44" text-anchor="end" font-size="11" fill="#9a8b6a">20</text>
+      <text x="365" y="386" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5836">홈런(평균)</text>
+      <text x="34" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5836" transform="rotate(-90 34 190)">도루(평균)</text>
+      <!-- 묶음 평균 점 3개 (크기는 인원에 비례) -->
+      <circle cx="207" cy="84" r="25" fill="#54a24b" fill-opacity="0.8" stroke="#3e7d38" stroke-width="1.5"/>
+      <circle cx="398" cy="259" r="24" fill="#3ba6a0" fill-opacity="0.8" stroke="#2b7a75" stroke-width="1.5"/>
+      <circle cx="596" cy="237" r="18" fill="#f4b400" fill-opacity="0.85" stroke="#c28f00" stroke-width="1.5"/>
+      <!-- 라벨 -->
+      <text x="242" y="80" font-size="12.5" font-weight="700" fill="#3e7d38">㉯ 18명 — 박해민 · 정수빈 · 신민재</text>
+      <text x="242" y="98" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
+      <text x="432" y="255" font-size="12.5" font-weight="700" fill="#2b7a75">㉰ 16명 — 오지환 · 박동원</text>
+      <text x="432" y="273" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
+      <text x="570" y="209" text-anchor="end" font-size="12.5" font-weight="700" fill="#c28f00">㉮ 9명 — 양의지 · 구자욱 · 디아즈</text>
+      <text x="570" y="227" text-anchor="end" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
+      <text x="365" y="412" text-anchor="middle" font-size="12" fill="#9a8b6a">홈런과 도루 두 축만으로도 세 묶음의 방향이 갈린다 — 이름 칸은 여러분의 몫이다.</text>
+    </svg>
+  </div>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 한 줄 <span class="src">『데이터 과학』 154쪽</span></div>
+    <p class="q">"군집 분석 결과를 해석하기 위해서는 데이터에 대한 깊은 이해가 필요하다." <span class="src">(154쪽)</span></p>
+    <p class="t">→ 알고리즘은 묶음의 번호까지만 만든다. 이름과 의미는 야구를 아는 사람이 붙인다.</p>
+  </div>
 
-  <h2>5. 개념 정리 — 기준선이라는 습관</h2>
-  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>분류기의 성적은 정확도 한 숫자가 아니라, 기준선과 견준 위치·정밀도·재현율로 함께 읽는다.</b> 9차시에서 R²는 "평균만 찍는 모델보다 얼마나 나은가"였습니다. 오늘의 정확도는 "다수만 찍는 모델보다 나은가"를 통과해야 의미가 생겼습니다. 이름은 달라도 같은 습관 — 큰 숫자를 만나면 견줄 상대부터 세운다 — 의 두 번째 모습입니다. 이 습관은 13차시의 연관 분석에서 세 번째 모습(우연과 견주는 향상도)으로 다시 나타납니다.</p>
-  <p>그리고 하나 더. 성능이 급등하면 실력이 아니라 누수를 의심한다는 것 — 8차시의 회귀와 오늘의 분류에서 두 번 확인했습니다. 좋은 성적표보다 <b>공정한 시험</b>이 먼저입니다.</p>
+  <h3>시연 — 군집과 분류는 다르다 (축구 선수 800명)</h3>
+  <p>선생님 화면으로 한 장면을 더 봅니다. 축구 게임(EA FC)의 필드플레이어 800명을 능력치 6종으로 묶으면, k=2에서 공격형(메시·음바페)과 수비형(판다이크·캉테)으로 나뉩니다. 그런데 이 묶음을 실제 포지션(공격수/미드필더/수비수)과 대조하면 겹치되 일치하지는 않습니다 — 공격수처럼 뛰는 미드필더, 수비형 공격수가 섞여 있기 때문입니다. 교과서 155쪽의 참고가 말하는 그대로입니다: 군집은 데이터의 유사도로, 분류는 정해진 체계로 나눕니다. 둘의 결과는 다를 수 있습니다. 덧붙여 이 능력치는 게임 회사가 매긴 주관적 평가라는 점도 기억해 둡니다 — 데이터의 출처를 따지는 습관(13차시)은 여기서도 유효합니다.</p>
 
-  <h2>6. 확인 문제</h2>
+  <h3>도전 — 투수는 어떤 유형으로 나뉠까</h3>
+  <p>시간이 남는 사람을 위한 확장 데이터가 두 가지 더 준비되어 있습니다.</p>
+  <ul>
+    <li><b>투수 전체 280명</b>(kbo_pitchers_2025.csv) — 이닝·경기 수·세이브·홀드·탈삼진으로 묶으면 네 유형이 나타납니다. 실측으로는 <b>선발형</b>(이닝 132), <b>마무리형</b>(세이브 27.4 — 박영현·김택연), <b>필승조</b>(홀드 13.9), <b>추격조</b>로 갈렸고, 이번에는 점수(실루엣)도 k=4를 가리켰습니다. 타자와 달리 점수와 해석이 일치하는 경우도 있습니다 — 야구가 투수를 실제로 그렇게 나누어 쓰기 때문입니다.</li>
+    <li><b>타자 전체 396명</b>(kbo_hitters_2025_full.csv) — 부분 출전 선수까지 전부 들어 있습니다. 그대로 군집하면 1타석 타율 1.000 같은 값이 결과를 흔듭니다. 몇 타석부터 믿을 수 있는 기록인지 <b>문턱을 스스로 정해 보는 것</b>이 이 데이터의 진짜 과제입니다 — 6차시의 관측일 필터와 같은 판단입니다.</li>
+    <li><b>선수 프로필 980명</b>(kbo_player_profiles_2026.csv — 포지션·생년월일·키·몸무게) — 기록 표에는 없는 정보입니다. 7차시에서 영화 코드로 두 표를 이었듯, 이번에는 <b>선수명과 팀을 공통 속성으로</b> 기록 표에 옆으로 이어 봅니다. 병합이 되면 "몸무게와 홈런은 관계가 있을까", "유형별 평균 키는 다를까" 같은 질문이 새로 열립니다. 병합하면서 발견하게 되는 사실이 하나 있습니다 — <b>기록에는 있는데 프로필에 없는 선수</b>(팀을 떠난 선수)와 <b>프로필에는 있는데 기록에 없는 선수</b>(1군 기록이 없는 선수)가 존재합니다. 두 표의 시점이 다르기 때문이며, 짝이 없는 행을 어떻게 처리할지도 병합의 판단입니다.</li>
+  </ul>
+
+  <h2>4. 개념 정리 — 정답이 없다는 것의 뜻</h2>
+  <p>회귀와 분류에서는 모델의 점수를 정답과 비교해 계산했습니다. 군집에는 정답이 없으므로, 묶음이 얼마나 조밀하고 서로 얼마나 떨어져 있는지를 재는 실루엣 분석(교과서 153쪽)으로 살펴봅니다. 그러나 오늘 확인했듯 점수가 좋은 묶음이 곧 의미 있는 묶음은 아닙니다. k의 선택, 정규화 여부, 그리고 이름 붙이기까지 — 군집 분석은 처음부터 끝까지 사람의 판단이 개입하는 분석입니다. 그 판단의 근거를 말할 수 있는 것이 이 차시의 목표입니다.</p>
+
+  <h2>5. 확인 문제</h2>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 영화 216편 중 성공작이 23편입니다. 전부 "실패"로만 찍는 모델의 성적을 구해 보세요.</div>
+    <div class="qq"><span class="qn">문제 1</span> 기온 예측(6차시), 흥행 분류(9차시), 선수 유형 묶기(오늘) 중 비지도학습은 무엇일까요? 답을 눌러 확인합니다.</div>
     <div class="qitem">
-      <div class="qs">(a) 이 모델의 정확도는?</div>
-      <div class="qopts"><button class="opt">0.11</button><button class="opt" data-ok="1">0.89</button><button class="opt">0.877</button></div>
-      <div class="fb">실패 193편을 전부 맞히므로 193÷216 ≈ <b>0.89</b>입니다.</div>
-    </div>
-    <div class="qitem">
-      <div class="qs">(b) 이 모델의 성공 재현율은?</div>
-      <div class="qopts"><button class="opt">0.89</button><button class="opt">1.00</button><button class="opt" data-ok="1">0.00</button></div>
-      <div class="fb">실제 성공작 23편 중 잡아낸 것이 0편 — 0÷23 = <b>0.00</b>. 정확도 0.89와 재현율 0.00의 공존이 "정확도만 보면 안 되는" 첫 증거입니다.</div>
+      <div class="qopts"><button class="opt">기온 예측(6차시)</button><button class="opt">흥행 분류(9차시)</button><button class="opt" data-ok="1">선수 유형 묶기(오늘)</button></div>
+      <div class="fb">선수 묶기에는 정답표가 없고 데이터 속 유사성만으로 구조를 찾으므로 <b>비지도학습</b>입니다. 기온 예측에는 실제 기온이라는 정답이 있고, 흥행 분류의 성공/실패는 사람이 정해 붙인 라벨이지만 붙인 뒤에는 정답이 있는 지도학습이 됩니다.</div>
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 로지스틱 회귀는 정확도 0.877을 받았습니다. 이 모델을 "꽤 좋은 모델"이라고 말할 수 있을까요?</div>
-    <div class="qitem">
-      <div class="qopts qopts-col">
-        <button class="opt">그렇다 — 100점 만점의 88점에 해당하는 높은 성적이므로</button>
-        <button class="opt" data-ok="1">아니다 — 전부 실패로 찍는 기준선 0.89보다 낮고, 성공 재현율이 0.00이므로</button>
-        <button class="opt">그렇다 — 재현율이 낮아도 정확도가 높으면 좋은 모델이므로</button>
-      </div>
-      <div class="fb">라벨이 11 대 89로 치우친 데이터에서는 다수만 따라 찍어도 정확도가 후하게 나옵니다. 기준선과 재현율을 함께 세워야 판정이 됩니다 — 교과서 139쪽의 경고 그대로입니다.</div>
-    </div>
+    <div class="qq"><span class="qn">문제 2</span> 정규화 없이 타자 기록을 군집했더니 삼진이 많은 선수끼리 묶였습니다. §2 그림의 두 자를 떠올리며, 왜 이런 일이 생기고 어떻게 해결하는지 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>삼진은 수십~백 단위로 값의 범위가 커서 거리 계산을 지배한다. 타율·출루율(0.3 안팎)의 차이는 상대적으로 무시되어 사실상 삼진 순 정렬이 된다. 항목들의 단위 차이를 없애는 정규화를 한 뒤 다시 군집하면, 기록의 유형이 기준이 된 묶음을 얻을 수 있다.</p>
+    </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> "개봉 전 흥행 예측 모델"에 첫 주 관객 수를 넣자 정확도가 0.908에서 0.985로 올랐습니다. 이 변화를 성능 개선이라 부를 수 있을까요?</div>
-    <div class="qitem">
-      <div class="qopts qopts-col">
-        <button class="opt">부를 수 있다 — 정확도가 실제로 0.077만큼 올랐으므로</button>
-        <button class="opt" data-ok="1">부를 수 없다 — 개봉 전에는 알 수 없는 미래 정보가 입력에 섞인 레이블 누수이므로</button>
-        <button class="opt">부를 수 있다 — 변수를 많이 넣을수록 모델은 언제나 좋아지므로</button>
-      </div>
-      <div class="fb">첫 주 관객 수는 라벨(총 관객)과 사실상 한 몸인 미래 정보입니다. 시험 성적은 올라도 미개봉 영화에는 쓸 수 없습니다 — 성능 급등은 개선이 아니라 반칙 신호로 먼저 의심합니다.</div>
-    </div>
+    <div class="qq"><span class="qn">문제 3</span> 실루엣 점수는 k=2가 더 높은데 해석은 k=3이 자연스러웠습니다. 이 상황이 군집 분석에 대해 말해 주는 바를 서술해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>점수는 묶음의 기하학적 조밀함만 잴 뿐 의미를 재지 못한다. k에는 정답이 없으므로 점수와 해석이 다를 수 있고, 최종 선택은 분석 목적에 비추어 사람이 판단해야 한다. 어느 k를 골랐든 그 근거를 말할 수 있어야 한다.</p>
+    </details>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>혼동행렬 네 칸을 우리말("맞다고 했는데 틀림" 등)로 설명할 수 있다.</li>
-    <li>교과서 해 보기 ④의 정밀도·재현율·정확도를 손으로 계산했다.</li>
-    <li>"전부 실패 찍기" 89%와 내 분류기의 정확도를 견주어 판정했다.</li>
-    <li>첫 주 관객 수가 반칙(레이블 누수)인 이유를 한 문장으로 말할 수 있다.</li>
+    <li>지도학습과 비지도학습을 정답(라벨)의 유무로 구분할 수 있다.</li>
+    <li>k-평균 알고리즘의 네 단계 반복 과정을 말할 수 있다.</li>
+    <li>정규화 전후의 군집 결과가 왜 달라지는지 삼진을 예로 설명할 수 있다.</li>
+    <li>세 묶음에 붙인 유형 이름의 근거를 기록 항목으로 말할 수 있다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">혼동행렬(오분류표)</td><td>실제 클래스와 예측 결과를 행렬(네 칸)로 나타낸 표</td></tr>
-    <tr><td class="term">정확도</td><td>전체 중 맞힌 비율. 라벨이 치우치면 홀로는 부적절</td></tr>
-    <tr><td class="term">정밀도</td><td>양성이라 예측한 것 중 실제 양성의 비율 (TP÷(TP+FP))</td></tr>
-    <tr><td class="term">재현율</td><td>실제 양성 중 잡아낸 비율 (TP÷(TP+FN))</td></tr>
-    <tr><td class="term">다수결 기준선</td><td>전부 다수 클래스로 찍는 모델의 정확도. 분류기가 넘어야 할 출발선</td></tr>
-    <tr><td class="term">레이블 누수</td><td>예측 시점에 알 수 없는 정답 관련 정보가 입력에 섞이는 반칙</td></tr>
+    <tr><td class="term">비지도학습</td><td>정답(라벨) 없이 데이터 안의 구조를 스스로 찾는 학습</td></tr>
+    <tr><td class="term">군집화</td><td>속성 간 유사성을 측정해 유사한 데이터끼리 묶는 것</td></tr>
+    <tr><td class="term">k-평균</td><td>k개의 중심점을 반복 조정하며 군집을 만드는 알고리즘. k는 사람이 정한다</td></tr>
+    <tr><td class="term">정규화</td><td>속성 간 단위·범위 차이를 없애 같은 기준으로 거리를 재게 하는 처리</td></tr>
+    <tr><td class="term">실루엣 분석</td><td>군집 내 조밀함과 군집 간 분리를 계수로 재는 군집 평가 방법</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
-    <a class="prev" href="lesson10.html"><div class="dir">← 이전</div><div class="tt">10차시 · 분류</div></a>
-    <a class="next" href="lesson12.html"><div class="dir">다음 →</div><div class="tt">12차시 · 군집</div></a>
+    <a class="prev" href="lesson10.html"><div class="dir">← 이전</div><div class="tt">10차시 · 분류 평가 손계산</div></a>
+    <a class="next" href="lesson12.html"><div class="dir">다음 →</div><div class="tt">12차시 · 연관 분석</div></a>
   </div>
 </main>
 </div>
+
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
 <script src="assets/quiz.js"></script>
