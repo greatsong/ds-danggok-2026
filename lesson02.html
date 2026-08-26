@@ -515,14 +515,14 @@ requests</pre></div>
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 인증키를 틀리게 넣고 호출했더니 상태코드가 200(성공)으로 왔습니다. 어떻게 해석해야 할까요?</div>
+    <div class="qq"><span class="qn">문제 3</span> 1차시에는 기온 데이터를 파일로 내려받아 썼고, 오늘은 박스오피스를 API로 받았습니다. API로 받는 방식의 좋은 점으로 알맞은 것은?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">200이 왔으므로 데이터가 정상적으로 도착했다</button>
-        <button class="opt">키가 틀리면 반드시 404가 온다 — 200이 왔다면 키는 맞은 것이다</button>
-        <button class="opt" data-ok="1">상태코드만으로 판단할 수 없다 — 응답 내용에 faultInfo 상자가 왔는지 함께 확인한다</button>
+        <button class="opt">한 번 받아 두면 인터넷이 없어도 항상 최신 데이터를 볼 수 있다</button>
+        <button class="opt" data-ok="1">부를 때마다 그 시점의 데이터를 받고, 날짜 같은 조건으로 필요한 만큼만 받을 수 있다</button>
+        <button class="opt">내려받은 파일은 표가 아니어서 분석에 쓸 수 없다</button>
       </div>
-      <div class="fb">KOBIS는 키가 틀려도 상태코드 200에 faultInfo 상자("유효하지않은 키값입니다.")를 담아 보냅니다. 번호표(상태코드)와 서류 내용(응답)을 둘 다 확인해야 합니다 — ① 프롬프트에서 faultInfo 처리를 미리 부탁한 이유입니다.</div>
+      <div class="fb">내려받은 파일은 그 시점의 복사본으로 멈춰 있습니다. API는 호출할 때마다 최신이고, 조건(날짜 등)으로 필요한 만큼만 받습니다. 어느 쪽이 좋은가는 질문에 달려 있습니다 — 100년 치 역사가 필요하면 파일이, 어제의 순위가 필요하면 API가 맞습니다.</div>
     </div>
   </div>
 
