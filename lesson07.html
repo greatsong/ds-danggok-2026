@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>7차시 · 다중 선형회귀 — 영화 흥행 예측 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -24,8 +24,8 @@
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">점수가 갑자기 급등하면, 실력보다 먼저 반칙을 의심한다.</div>
-    <span class="by">6차시에서 상관과 인과를 구분했다면, 오늘은 변수가 어디서 왔는지를 따집니다</span>
+    <div class="q">"예측은 매우 어렵다. 특히 미래에 관해서는."</div>
+    <span class="by">닐스 보어에게 전해지는 말 — 개봉 전 정보만으로 흥행을 맞히는 일이 꼭 그렇습니다</span>
   </div>
 
   <p class="lead">6차시의 직선은 독립 변수가 연도 하나였습니다. 그런데 영화 관객 수는 하나의 요인으로 정해지지 않습니다. 오늘은 2~4차시에 다뤄 온 박스오피스 데이터로 <b>변수 여러 개짜리 회귀</b>를 만들고, 변수를 넣고 빼며 예측 점수가 어떻게 달라지는지 관찰합니다. 그 과정에서 수업 후반에 다시 만나게 될 중요한 사건 하나를 목격합니다.</p>
@@ -115,10 +115,17 @@
 영화의 총 관객 수를 예측하는 다중 회귀 모델을 만들어 줘.
 어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,
 학습에 쓰지 않은 영화들로 잰 예측 점수와
-예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.</pre></div>
+예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.
+두 표는 이 주소에서 불러와. 영화코드(movieCd) 열이 같은 영화를 가리켜.
+- https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv
+  (열: 날짜(여덟 자리 숫자)·순위·영화코드·영화명·일관객·누적관객·스크린수·상영횟수)
+- https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
+  (열: movieCd(영화코드)·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·
+   first_scrn(개봉일 스크린수)·first_show(개봉일 상영횟수)·first_week_audi(첫 주 관객)·
+   total_audi(총 관객)·days_in_top10)</pre></div>
     </li>
     <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
-      화면에 예측 점수가 표시됩니다. 이 점수는 결정계수라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 8차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
+      화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 8차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 변수의 출처를 나눠서 비교한다</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>변수를 "개봉 전에 알 수 있는 것"과 "개봉 후에야 알 수 있는 것"으로 나눠 줘.
 개봉 전 변수만 쓴 경우와 개봉 후 정보까지 넣은 경우의 예측 점수를
@@ -248,6 +255,7 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 </body>
 </html>

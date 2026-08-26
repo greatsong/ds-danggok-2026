@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>5차시 · 두 번째 API — 우리 학교 급식 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -22,6 +22,11 @@
   <span class="eyebrow">Ⅱ. 데이터 준비와 분석 · 5차시</span>
   <h1>두 번째 API — <span class="a">우리 학교 급식</span></h1>
   <div class="under"></div>
+
+  <div class="quote">
+    <div class="q">"물고기를 주면 하루를 먹이고, 잡는 법을 가르치면 평생을 먹인다."</div>
+    <span class="by">속담 — 오늘은 두 번째 API를 여러분 손으로 붙입니다</span>
+  </div>
 
   <p class="lead">오늘은 <b>나이스(NEIS) 급식 API</b>로 우리 학교 점심을 내 앱에 불러옵니다. 나이스는 <b>교육행정정보시스템(National Education Information System)</b>의 약자로, 전국 학교의 학사·행정 정보를 다루는 시스템입니다 — 여러분의 성적표와 생활기록부도 이 시스템에 있습니다. 방법은 2차시의 KOBIS와 같습니다 — 공식 문서의 발췌를 읽고, 완성 주소로 응답을 먼저 확인하고, 문서를 프롬프트에 붙입니다. 다른 점이 하나 있습니다. 이번 API는 <b>인증키가 필요 없습니다</b>.</p>
 
@@ -43,20 +48,23 @@
     <thead><tr><th></th><th>KOBIS 박스오피스 (2차시)</th><th>나이스 급식 (오늘)</th></tr></thead>
     <tbody>
       <tr><td><b>인증키</b></td><td>필요 — 비밀 금고(secrets)에 보관</td><td><b>불필요</b> — 대신 한 번에 오는 건수 제한</td></tr>
-      <tr><td><b>실패 신호</b></td><td>상태코드 200인데 <code>faultInfo</code> 상자가 옴</td><td>데이터가 없으면 <code>RESULT</code> 상자만 옴</td></tr>
       <tr><td><b>빈 응답의 정체</b></td><td>오늘 것은 아직 집계 전</td><td>주말·방학은 급식이 없는 날 — 오류가 아니다</td></tr>
       <tr><td><b>받자마자 다듬을 것</b></td><td>숫자가 따옴표 친 글자로 온다</td><td>메뉴 전체가 한 덩어리 글자로 온다 — 구분 기호와 알레르기 괄호를 떼야 표가 된다</td></tr>
     </tbody>
   </table>
   <div class="callout warn">
     <div class="h">⚠️ 건수 제한의 실물 — 조회 기간은 짧게</div>
-    <p>키 없이 넉 달치(2026-03-01~07-31)를 한 번에 물어보면, 응답은 "전체 82건"이라고 알려 주면서 <b>목록에는 앞의 5건만</b> 담아 보냅니다(실측). 오류도 나지 않아서 알아채기 어렵습니다. 그래서 오늘 실습의 날짜 조회는 하루~한 주 단위로 짧게 잡고, 학기 전체가 궁금할 때는 미리 쌓아 둔 표(③에서 등장)를 씁니다.</p>
+    <p>키 없이 다섯 달치(2026-03-01~07-31)를 한 번에 물어보면, 응답은 "전체 82건"이라고 알려 주면서 <b>목록에는 앞의 5건만</b> 담아 보냅니다(실측). 오류도 나지 않아서 알아채기 어렵습니다. 그래서 오늘 실습의 날짜 조회는 하루~한 주 단위로 짧게 잡고, 학기 전체가 궁금할 때는 미리 쌓아 둔 표 <a href="https://github.com/greatsong/modudata/blob/main/data/danggok_meals.csv" target="_blank" rel="noopener"><code>danggok_meals.csv</code></a>(③에서 등장)를 씁니다.</p>
   </div>
 
   <h2>2. 완성 주소 맨눈 보기 — 급식 JSON 해부</h2>
   <div class="callout mini">
     <div class="h">🔎 이런 사이트예요 — 나이스 교육정보 개방 포털</div>
     <p><a href="https://open.neis.go.kr" target="_blank" rel="noopener">open.neis.go.kr</a>은 나이스의 학교 데이터 일부를 누구나 쓸 수 있게 공개한 곳입니다. 급식 식단 말고도 학교 기본 정보·학사 일정·시간표 API가 있고, 우리 학교만이 아니라 <b>전국 어느 학교든</b> 학교 코드만 바꾸면 조회됩니다 — "우리 학교와 옆 학교의 급식은 얼마나 다를까" 같은 질문의 재료가 됩니다.</p>
+  </div>
+  <div class="callout check">
+    <div class="h">✔️ 문서까지 가는 길 — 2차시에 KOBIS에서 했던 그대로</div>
+    <p>포털 첫 화면에서 <b>데이터셋</b> 메뉴로 들어가 <b>급식식단정보</b>를 찾아 열고, 상세 화면의 <b>Open API</b> 항목을 펼치면 오늘의 문서가 나옵니다. 볼 곳 세 곳의 이름이 KOBIS와 조금 다릅니다 — <b>신청주소</b>(요청 주소) · <b>신청인자 표</b>(요청변수 — 교육청·학교 코드 등) · <b>출력값 표</b>(응답 구조). 이름이 달라도 하는 일은 같아서, 세 곳을 긁어 프롬프트 끝에 붙이면 됩니다. 아래 ①의 발췌가 바로 그 결과물입니다.</p>
   </div>
   <p>2차시와 같은 순서입니다. 코드를 쓰기 전에 완성 주소를 새 탭에서 열어, 응답 JSON을 맨눈으로 확인합니다. 먼저 주소를 해부해 봅니다. KOBIS 주소에 있던 <code>key=</code>가 여기에는 <b>없습니다</b>.</p>
   <div class="specimen semi" style="margin:18px 0">
@@ -69,7 +77,7 @@
 <span style="color:#e8930c">&amp;MLSV_FROM_YMD=20260602&amp;MLSV_TO_YMD=20260602</span>      <span style="color:#9b8c66">← 조건 — 기간(하이픈 없는 여덟 자리)</span></pre></div>
     <div class="note">요청 주소와 조건은 2차시 KOBIS와 같은 구조인데, 인증키만 없다. 날짜 두 값을 바꾸면 응답이 그 기간 것으로 바뀐다.</div>
   </div>
-  <p>이 주소를 주소창에 붙여 넣으면 아래와 같은 JSON이 화면에 그대로 나타납니다. 2026년 6월 2일의 실제 응답입니다.</p>
+  <p>키가 필요 없으니 완성 주소를 그냥 눌러서 열 수 있습니다 → <a href="https://open.neis.go.kr/hub/mealServiceDietInfo?Type=json&amp;ATPT_OFCDC_SC_CODE=B10&amp;SD_SCHUL_CODE=7010073&amp;MMEAL_SC_CODE=2&amp;MLSV_FROM_YMD=20260602&amp;MLSV_TO_YMD=20260602" target="_blank" rel="noopener"><b>2026년 6월 2일 당곡고 중식, 새 탭에서 열어 보기</b></a>. 아래는 그 실제 응답입니다.</p>
   <div class="codewrap code"><span class="label">실제 응답 (일부 발췌 · 2026-06-02)</span><pre>{
   "mealServiceDietInfo": [
     { "head": [ { "list_total_count": 1 } ] },
@@ -134,7 +142,7 @@
   <ul>
     <li><b>값 꺼내기는 2차시와 같다</b> — 겉상자 <code>mealServiceDietInfo</code>에서 <code>row</code> 목록을 꺼내고, 그 안의 <code>DDISH_NM</code>(메뉴)을 꺼냅니다. KOBIS의 <code>boxOfficeResult</code> → <code>dailyBoxOfficeList</code>와 이름만 다를 뿐, 상자에서 상자를 꺼내는 읽기는 같습니다.</li>
     <li><b>👀 눈여겨볼 것 — 메뉴 일곱 개가 한 칸에 들어 있다.</b> <code>DDISH_NM</code>에는 그날 메뉴 전체가 <code>&lt;br/&gt;</code>라는 구분 기호로 이어진 <b>한 덩어리 글자</b>로 옵니다. 메뉴 뒤 괄호 속 숫자는 알레르기 유발 식품 번호입니다. 이대로는 "배추김치가 며칠 나왔나"를 셀 수 없습니다 — 구분 기호로 낱개를 나누고 괄호를 떼는 다듬기가 필요합니다.</li>
-    <li><b>급식이 없는 날을 골라 보면</b> — 일요일 날짜로 바꿔 다시 접속하면 <code>row</code> 없이 <code>RESULT</code> 상자만 옵니다("해당하는 데이터가 없습니다"). 고장이 아니라 <b>그날 급식이 없다는 정상 응답</b>입니다.</li>
+    <li><b>급식이 없는 날을 골라 보면</b> — 일요일 날짜로 바꿔 다시 접속하면 식단 없이 "해당하는 데이터가 없습니다"라는 안내만 옵니다. 고장이 아니라 <b>그날 급식이 없다는 정상 응답</b>입니다.</li>
   </ul>
 
   <div class="tbquote">
@@ -276,7 +284,7 @@ else:
 
   <h2>8. 확인 문제</h2>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 일요일 날짜로 급식 API를 불렀더니 식단 목록 없이 RESULT 상자만 왔습니다. 가장 알맞은 해석은 무엇일까요?</div>
+    <div class="qq"><span class="qn">문제 1</span> 일요일 날짜로 급식 API를 불렀더니 식단 없이 "해당하는 데이터가 없습니다"라는 안내만 왔습니다. 가장 알맞은 해석은 무엇일까요?</div>
     <div class="qitem">
       <div class="qopts"><button class="opt">주소가 틀렸다</button><button class="opt">서버가 고장 났다</button><button class="opt" data-ok="1">그날 급식이 없어 데이터가 없는 것이다</button></div>
       <div class="fb">주말·방학은 급식이 없는 날이므로 돌려줄 데이터가 없습니다. 오류가 아니라 <b>정상 응답</b>이고, 좋은 앱은 이 경우를 "급식이 없는 날입니다"로 안내합니다. 주소가 틀리면 다른 오류가 나고, 서버 고장이면 응답 자체가 오지 않거나 500번대 상태코드가 옵니다.</div>
@@ -285,7 +293,7 @@ else:
   <div class="quiz">
     <div class="qq"><span class="qn">문제 2</span> KOBIS와 나이스 급식 API의 차이를 인증키를 중심으로 두 가지 써 보세요.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>① KOBIS는 인증키가 요청에 실려 가야 하고 키는 비밀 금고(secrets)에 보관하지만, 나이스 급식 API는 키 없이 부를 수 있다. ② 대신 나이스는 키가 없으면 한 번에 오는 건수에 제한이 있어 조회 기간을 짧게 잡아야 하고, KOBIS는 키가 틀리면 상태코드 200인 채로 faultInfo 상자가 온다.</p>
+      <p>① KOBIS는 인증키가 요청에 실려 가야 하고 키는 비밀 금고(secrets)에 보관하지만, 나이스 급식 API는 키 없이 부를 수 있다. ② 대신 나이스는 키가 없으면 한 번에 오는 건수에 제한이 있어 조회 기간을 짧게 잡는다.</p>
     </details>
   </div>
   <div class="quiz">
@@ -309,8 +317,6 @@ else:
     <tr><th>용어</th><th>뜻</th></tr>
     <tr><td class="term">나이스(NEIS)</td><td>교육행정정보시스템(National Education Information System). 전국 학교의 학사·행정 정보를 다루며, 일부를 개방 포털로 공개함</td></tr>
     <tr><td class="term">API 문서</td><td>요청 주소·요청변수·응답 구조를 알려 주는 공식 설명서 — 프롬프트 끝에 붙이는 재료</td></tr>
-    <tr><td class="term">faultInfo</td><td>KOBIS가 키가 틀렸을 때 보내는 오류 상자 — 상태코드는 200인 채로 옴</td></tr>
-    <tr><td class="term">RESULT 상자</td><td>나이스가 데이터 없음을 알리는 상자 — 주말·방학의 급식 없음은 오류가 아님</td></tr>
     <tr><td class="term">건수 제한</td><td>키 없는 호출에서 한 번에 오는 행 수의 상한 — 조회 기간을 짧게 잡는 이유</td></tr>
     <tr><td class="term">구분 기호</td><td>한 칸에 여러 값을 이어 담을 때 쓰는 기호 — 급식 메뉴의 &lt;br/&gt;, CSV의 세로막대</td></tr>
     <tr><td class="term">전처리</td><td>분석 전에 데이터를 셀 수 있는 모양으로 다듬는 일 — 메뉴 낱개 나누기, 괄호 떼기</td></tr>
@@ -326,6 +332,7 @@ else:
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 </body>
 </html>

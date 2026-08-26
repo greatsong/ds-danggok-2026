@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>9차시 · 분류 — 로지스틱 회귀와 의사결정트리 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -24,8 +24,8 @@
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"같은 데이터 앞에서도, 질문이 바뀌면 모델이 바뀐다."</div>
-    <span class="by">7차시에서 "몇 명이 볼까"(회귀)를 물었다면, 오늘은 "성공할까"(분류)를 묻습니다</span>
+    <div class="q">"문제를 잘 정의하면 절반은 푼 것이다."</div>
+    <span class="by">존 듀이 『논리학』(1938) — 성공의 기준선을 정하는 일부터가 분류 문제의 절반입니다</span>
   </div>
 
   <p class="lead">7차시와 똑같은 영화 데이터를 폅니다. 바뀌는 것은 질문 하나입니다. "관객이 몇 명일까"가 아니라 <b>"흥행에 성공할까, 못 할까"</b>를 묻습니다. 숫자를 맞히던 회귀 대신, 둘 중 하나를 고르는 <b>분류</b> 모델이 등장합니다. 그리고 그 전에, 아무도 대신 정해 주지 않는 질문을 우리가 먼저 정해야 합니다 — "성공"이란 관객 몇 명부터인가.</p>
@@ -151,9 +151,16 @@
 
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>모아 둔 영화 데이터에 '흥행 성공' 여부 라벨을 붙이고
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>이 주소의 영화 데이터에 '흥행 성공' 여부 라벨을 붙이고
 (기준: 우리 반이 정한 관객 수), 개봉 전에 알 수 있는 정보로
-성공 확률을 알려 주는 분류 모델을 만들어 줘. 정확도도 보여 줘.</pre></div>
+성공 확률을 알려 주는 분류 모델을 만들어 줘. 정확도도 보여 줘.
+데이터: https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
+열은 movieCd·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·
+first_scrn(개봉일 스크린수)·first_show(개봉일 상영횟수)·first_week_audi(첫 주 관객)·
+total_audi(총 관객)·days_in_top10이야.
+성공 여부는 total_audi로 정하되, 예측에 쓰는 변수는
+개봉 전에 알 수 있는 것(first_scrn·first_show·genre·nation·개봉 시기)만 써 줘.
+first_week_audi처럼 개봉 후에야 아는 값은 넣지 마.</pre></div>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 확률을 읽는다</span><br>
       영화를 하나 고르면 "성공 확률 몇 %"가 나타납니다. 확률이 0.5보다 크면 성공, 작으면 실패로 분류됩니다 — 교과서 136쪽의 문턱 규칙 그대로입니다. 화면에 함께 표시되는 <b>정확도</b>를 기록해 두세요.</li>
@@ -179,7 +186,7 @@
   </table>
   <div class="callout warn">
     <div class="h">⚠️ 발견 — 기준선을 움직이면 모델이 흔들린다</div>
-    <p>성공 기준선을 300만에서 500만으로 바꾸어 다시 학습시키면, 성공 라벨이 붙는 영화의 수가 달라지고 정확도도 함께 달라집니다. 모델은 그대로인데 <b>사람이 정한 기준 하나가 성적표를 바꾼 것</b>입니다. 라벨 기준도 판단이며, 모델의 성능은 그 판단 위에 서 있습니다.</p>
+    <p>성공 기준선을 100만에서 300만으로 바꾸어 다시 학습시키면, 성공 라벨이 붙는 영화의 수가 달라지고 정확도도 함께 달라집니다. 모델은 그대로인데 <b>사람이 정한 기준 하나가 성적표를 바꾼 것</b>입니다. 라벨 기준도 판단이며, 모델의 성능은 그 판단 위에 서 있습니다.</p>
   </div>
   <p>이 과정 전체는 교과서 116쪽 탐구활동의 스팸 메일 예측 모델을 만드는 과정과 같은 뼈대입니다. 폼 Ⅲ-01b에서 우리 실습을 그 단계에 대응시켜 봅니다.</p>
   <table class="daymap">
@@ -258,6 +265,7 @@
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 </body>
 </html>

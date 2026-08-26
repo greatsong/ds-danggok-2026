@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>8차시 · 회귀 평가 손계산 — 오차·MSE·결정계수 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -24,8 +24,8 @@
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"큰 숫자를 만나면, 그 숫자가 무엇과 견주어진 값인지부터 확인한다."</div>
-    <span class="by">오늘 배우는 R²가 이 습관의 첫 연습입니다</span>
+    <div class="q">"계산의 목적은 숫자가 아니라 통찰이다."</div>
+    <span class="by">리처드 해밍 (1962) — 오늘 손으로 구하는 것은 R²라는 숫자가 아니라 그 숫자의 정체입니다</span>
   </div>
 
   <p class="lead">6차시의 기온 직선, 7차시의 영화 점수 0.24와 0.90. 화면에 떠 있던 그 점수의 정체를 오늘 밝힙니다. 도구는 화려하지 않습니다. 활동지 한 장과 사칙연산 — AI가 보여 주는 R² 점수, 직접 계산해 보면 별것 아닙니다. 그리고 별것 아니라는 것을 아는 사람만 그 숫자를 의심할 수 있습니다.</p>
@@ -54,7 +54,7 @@
     <thead><tr><th>계산</th><th>구하는 법</th><th>묻는 말</th></tr></thead>
     <tbody>
       <tr><td><b>오차</b></td><td>실젯값 − 예측값</td><td>이 예측은 얼마나, 어느 쪽으로 빗나갔나</td></tr>
-      <tr><td><b>절대오차 / 제곱오차</b></td><td>오차의 절댓값 / 오차의 제곱</td><td>부호를 없애 크기를 공정하게 비교하면?</td></tr>
+      <tr><td><b>절대오차(MAE) / 제곱오차</b></td><td>오차의 절댓값 / 오차의 제곱</td><td>부호를 없애 크기를 공정하게 비교하면?</td></tr>
       <tr><td><b>MSE</b></td><td>제곱오차의 평균</td><td>이 모델은 평균적으로 얼마나 빗나가나</td></tr>
       <tr><td><b>R²</b></td><td>1 − (내 모델의 제곱오차 합 ÷ 평균 모델의 제곱오차 합)</td><td>평균만 찍는 모델보다 얼마나 나은가</td></tr>
     </tbody>
@@ -294,6 +294,7 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 </body>
 </html>

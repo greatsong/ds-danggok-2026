@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>개념 정리 · 중간고사 대비 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -77,11 +77,10 @@
     <tbody>
       <tr><td><b>내려받기(CSV) vs API 호출(JSON)</b></td><td>내려받은 파일은 그 시점의 복사본으로 멈춰 있고, API는 호출할 때마다 최신이며 조건(날짜 등)으로 필요한 만큼만 받는다</td></tr>
       <tr><td><b>KOBIS vs 나이스 급식</b></td><td>KOBIS는 인증키 필요(비밀 금고에 보관), 나이스는 키 불필요 — 대신 한 번에 오는 건수에 제한이 있다</td></tr>
-      <tr><td><b>상태코드 200 vs 진짜 성공</b></td><td>KOBIS는 키가 틀려도 200에 faultInfo 상자가 온다. 나이스는 급식 없는 날 RESULT 상자만 온다(오류가 아니라 정상 응답) — 번호표와 서류 내용을 둘 다 확인한다</td></tr>
       <tr><td><b>숫자 vs 따옴표 친 글자</b></td><td>관객수가 "164382"처럼 글자로 온다. 글자인 채 정렬하면 사전순이 되어 "9"가 "164382"를 이긴다 — 계산 전에 숫자로 바꾼다</td></tr>
     </tbody>
   </table>
-  <p><b>관련 실측</b> — 나이스 급식 API(나이스 교육정보 개방 포털)에 키 없이 넉 달치를 한 번에 물으면, 응답은 "전체 82건"이라고 알려 주면서 <b>목록에는 앞의 5건만</b> 담아 보낸다. 오류도 나지 않아 알아채기 어렵다 — 건수 제한의 실물이다. → <a href="lesson02.html">2차시</a> · <a href="lesson05.html">5차시 다시 보기</a></p>
+  <p><b>관련 실측</b> — 나이스 급식 API(<a href="https://open.neis.go.kr" target="_blank" rel="noopener">나이스 교육정보 개방 포털</a>)에 키 없이 다섯 달치를 한 번에 물으면, 응답은 "전체 82건"이라고 알려 주면서 <b>목록에는 앞의 5건만</b> 담아 보낸다. 오류도 나지 않아 알아채기 어렵다 — 건수 제한의 실물이다. → <a href="lesson02.html">2차시</a> · <a href="lesson05.html">5차시 다시 보기</a></p>
 
   <h2 id="g3">③ 시각화 — 질문과 그래프의 짝 <span class="a">(3·4차시)</span></h2>
 
@@ -204,7 +203,7 @@
       <tr><td><b>높은 향상도 vs 적은 등장 횟수</b></td><td>동시 등장이 1회뿐이면 향상도가 크게 과장된다. 그래서 최소 지지도 문턱(예: 동시 5회 이상)으로 한 번의 우연을 먼저 거른다</td></tr>
     </tbody>
   </table>
-  <p><b>관련 실측 — "김치의 배신"</b> — 당곡고 중식 154일(원출처: 나이스 급식식단정보 API)에서 <b>제육볶음 → 배추김치</b>는 신뢰도 <b>0.56</b>인데 향상도 <b>0.99</b> — 배추김치는 원래 154일 중 86일(56%)에 나오므로 우연과 같다. 반면 <b>순대국 → 석박지</b>는 신뢰도 <b>1.00</b>, 향상도 <b>9.1</b> — 순대국이 나온 5일 모두 석박지가 함께 나온 진짜 짝꿍이다. 다만 향상도 9.1도 인과의 증명은 아니다 — 두 메뉴를 함께 정하는 식단표 작성자의 판단이 뒤에 있을 뿐이다. → <a href="lesson12.html">12차시 다시 보기</a></p>
+  <p><b>관련 실측 — "김치의 배신"</b> — 당곡고 중식 154일(원출처: <a href="https://open.neis.go.kr" target="_blank" rel="noopener">나이스 급식식단정보 API</a>)에서 <b>제육볶음 → 배추김치</b>는 신뢰도 <b>0.56</b>인데 향상도 <b>0.99</b> — 배추김치는 원래 154일 중 86일(56%)에 나오므로 우연과 같다. 반면 <b>순대국 → 석박지</b>는 신뢰도 <b>1.00</b>, 향상도 <b>9.1</b> — 순대국이 나온 5일 모두 석박지가 함께 나온 진짜 짝꿍이다. 다만 향상도 9.1도 인과의 증명은 아니다 — 두 메뉴를 함께 정하는 식단표 작성자의 판단이 뒤에 있을 뿐이다. → <a href="lesson12.html">12차시 다시 보기</a></p>
 
   <h2 id="g8">⑧ 윤리와 데이터베이스 <span class="a">(13·14차시)</span></h2>
 

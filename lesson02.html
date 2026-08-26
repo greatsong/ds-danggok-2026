@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>2차시 · 반정형 데이터 · API와 JSON · 어제의 박스오피스 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb3">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -24,8 +24,8 @@
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"데이터는 내려받는 것만이 아니다 — 필요할 때마다 요청해서 받을 수도 있다."</div>
-    <span class="by">1차시의 기온이 내려받아 둔 파일이었다면, 오늘은 아무것도 내려받지 않습니다</span>
+    <div class="q">"데이터는 소중한 것이며, 시스템 자체보다 오래 남는다."</div>
+    <span class="by">팀 버너스리(월드 와이드 웹 창시자) — 오늘은 그 데이터가 요청 한 번으로 내 앱에 흘러 들어옵니다</span>
   </div>
 
   <p class="lead">예매 앱이 보여 주는 박스오피스 순위는 어디서 올까요? 오늘은 영화진흥위원회의 KOBIS 박스오피스 API로 <b>어제의 박스오피스 대시보드</b>를 만들어 배포합니다. 그 전에 데이터의 세 가지 형태를 구분하고, API가 돌려주는 JSON을 맨눈으로 해부합니다.</p>
@@ -148,7 +148,7 @@
   <table class="daymap">
     <thead><tr><th>구성 요소</th><th>무엇인가</th><th>KOBIS API에서는</th></tr></thead>
     <tbody>
-      <tr><td><b>요청 URL</b></td><td>어디에 물어볼지 정해진 인터넷 주소</td><td>kobis.or.kr의 일별 박스오피스 API 주소</td></tr>
+      <tr><td><b>요청 URL</b></td><td>어디에 물어볼지 정해진 인터넷 주소 — URL은 Uniform Resource Locator의 약자</td><td>kobis.or.kr의 일별 박스오피스 API 주소</td></tr>
       <tr><td><b>요청(request)</b></td><td>"무엇을 알려줘"라는 물음 — 주소 뒤에 붙는 조건들</td><td>조회 날짜(targetDt)</td></tr>
       <tr><td><b>응답(response)</b></td><td>정해진 양식(JSON)으로 오는 답</td><td>순위·영화명·관객수가 담긴 JSON</td></tr>
       <tr><td><b>API 키(인증키)</b></td><td>요청에 함께 실어 보내는, 사용자를 증명하는 문자열</td><td>주소의 key= 뒤에 붙는다 — 아래 6절에서 자세히</td></tr>
@@ -283,8 +283,8 @@
     <p>조회 날짜(targetDt)는 하이픈 없는 <b>여덟 자리 숫자</b>(예: 20260825)로 적습니다. 그리고 <b>오늘 날짜를 넣으면 오류가 아니라 빈 목록</b>이 옵니다 — 오늘 관객수는 아직 집계 전이기 때문입니다. 가장 늦게 조회할 수 있는 날은 어제입니다. "응답이 비어 있다 = 고장"이 아니라는 것, 오늘 여러 번 확인하게 됩니다.</p>
   </div>
   <div class="callout tip">
-    <div class="h">💡 키가 틀리면 — 상태코드는 200, 대신 faultInfo</div>
-    <p>인증키가 틀린 주소로 접속해도 상태코드는 <b>200(성공)</b>입니다. 대신 응답의 내용이 순위표가 아니라 <b>faultInfo(오류 상자)</b>로 바뀝니다 — <code>"message": "유효하지않은 키값입니다."</code> 번호표(상태코드)만 보고 성공이라 판단하면 안 되고, <b>서류의 내용(응답)까지 둘 다</b> 확인해야 합니다. 수업에서 선생님이 직접 보여 줍니다.</p>
+    <div class="h">💡 뭔가 이상한 응답이 왔다면 — 그대로 AI에게</div>
+    <p>키를 잘못 붙여 넣는 등의 이유로 순위표 대신 낯선 오류 안내가 올 수 있습니다. 원인을 외울 필요는 없습니다 — <b>화면에 뜬 내용을 통째로 복사해 AI에게 붙여넣고 "무엇이 문제냐"고 물으면 됩니다.</b> 오류를 다루는 것도 바이브 코딩의 일부입니다.</p>
   </div>
 
   <h2>5. API 문서 읽는 법 — 다 읽지 않아도 됩니다</h2>
@@ -310,7 +310,7 @@
   </div>
   <div class="callout warn">
     <div class="h">⚠️ 4번 응답 예시 링크를 눌러 보면 — 익숙한 상자가 뜹니다</div>
-    <p>문서 끝의 응답 예시에는 보기용 키가 들어간 주소가 있는데, 지금 누르면 순위표 대신 <code>faultInfo</code>가 옵니다 — 보기용 키가 만료되었기 때문입니다. 4절에서 만난 그 오류 상자를 문서에서 다시 만나는 셈이고, 주소의 <code>key=</code> 값을 내 키로 바꾸면 실물 응답이 뜹니다.</p>
+    <p>문서 끝의 응답 예시에는 보기용 키가 들어간 주소가 있는데, 보기용 키가 만료되어 지금 누르면 오류 안내가 옵니다. 주소의 <code>key=</code> 값을 내 키로 바꾸면 실물 응답이 뜹니다.</p>
   </div>
   <div class="callout check">
     <div class="h">✔️ 바이브 코딩의 문서 활용법 — 이해가 아니라 복사</div>
@@ -544,8 +544,6 @@ requests</pre></div>
     <tr><td class="term">requirements.txt</td><td>내 앱이 쓰는 라이브러리 이름을 적은 목록 — 배포 서버가 이 목록을 보고 설치함</td></tr>
     <tr><td class="term">요청/응답</td><td>조건을 담아 보내는 주소 / 서버가 돌려주는 데이터(주로 JSON)</td></tr>
     <tr><td class="term">상태코드</td><td>응답과 함께 오는 세 자리 숫자 — 200 성공 · 404 없음 · 429 과다 요청</td></tr>
-    <tr><td class="term">faultInfo</td><td>KOBIS가 오류를 알리는 상자 — 상태코드 200이어도 이 상자가 오면 실패</td></tr>
-    <tr><td class="term">targetDt</td><td>KOBIS에 조회 날짜를 알리는 요청변수 — 하이픈 없는 여덟 자리, 가장 늦은 조회일은 어제</td></tr>
     <tr><td class="term">인증키(API 키)</td><td>API 사용자를 증명하는 문자열 — 사용량 관리·책임 소재의 장치 (KOBIS는 일 3,000회 한도)</td></tr>
     <tr><td class="term">비밀 금고(secrets)</td><td>키 같은 비밀값을 코드 밖에 안전하게 두는 스트림릿의 저장 공간</td></tr>
   </table>
@@ -559,6 +557,7 @@ requests</pre></div>
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 <script>
 // 주소 만들기 위젯 — 키를 붙여 넣으면 어제(KST) 날짜의 완성 주소를 만들고,

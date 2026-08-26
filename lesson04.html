@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>4차시 · 그래프 도감 Ⅱ — 분포·구성·관계 · 멀티페이지 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -24,8 +24,8 @@
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"행의 단위가 바뀌면, 그릴 수 있는 그래프가 바뀐다."</div>
-    <span class="by">도감 Ⅰ은 하루가 한 줄이었고, 오늘은 영화가 한 줄입니다</span>
+    <div class="q">"진정한 발견의 여정은 새로운 풍경을 찾는 것이 아니라, 새로운 눈으로 보는 데 있다."</div>
+    <span class="by">마르셀 프루스트 『잃어버린 시간을 찾아서』(널리 통용되는 의역) — 같은 216편이 그래프마다 다르게 보입니다</span>
   </div>
 
   <p class="lead">지난 시간의 표는 하루가 한 줄이어서 시간의 흐름을 그렸습니다. 오늘의 표는 영화 한 편이 한 줄입니다. 시간 대신 <b>분포·구성·관계</b>가 보이는 그래프 7종을 도감에 추가하고, 마지막에는 세 차시 동안 만든 앱들을 <b>주소 하나의 멀티페이지 포트폴리오</b>로 통합합니다.</p>
@@ -54,7 +54,7 @@
       <tr><td><b>그릴 수 있는 것</b></td><td>시간의 흐름 (선·영역·히트맵)</td><td>분포·구성·관계 (오늘의 7종)</td></tr>
     </tbody>
   </table>
-  <p>같은 극장가의 1년인데, 하루 단위 기록을 영화 단위로 다시 정리한 표입니다. 앞부분 몇 행을 봅니다.</p>
+  <p>같은 극장가의 1년인데, 하루 단위 기록을 영화 단위로 다시 정리한 표입니다. 이 기간에 개봉한 영화만 추렸기 때문에, 도감 Ⅰ에서 세었던 296편 중 기간 전에 개봉한 영화·재개봉작 80편은 빠져 있습니다. 앞부분 몇 행을 봅니다.</p>
   <div class="specimen-row" style="grid-template-columns:1fr">
     <div class="specimen st">
       <div class="tag">kobis_movies.csv — 영화가 한 줄 (216편, 앞 3행)</div>
@@ -85,7 +85,7 @@
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>스트림릿 앱(main.py)을 새로 만들어 줘. 제목은 '영화 데이터 그래프 도감 2 - 분포와 관계'.
 - 데이터는 이 주소에서 불러와:
   https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
-  1년간 박스오피스 10위권에 든 영화 216편의 요약표야. 열은
+  1년간 박스오피스 10위권에 든 영화 가운데 이 기간에 개봉한 216편의 요약표야. 열은
   movieCd(영화코드) · movieNm(영화명) · openDt(개봉일, 여덟 자리 숫자) ·
   genre(장르 - 세로막대 기호로 여러 개 적힌 영화는 첫 번째 장르만 써) · nation(제작 국가) ·
   first_scrn(개봉일 스크린수) · first_show(개봉일 상영횟수) · first_week_audi(개봉 첫 주 관객) ·
@@ -195,7 +195,7 @@ st.header("2. (다음 그래프를 여기에 추가)")</pre></div>
 
   <h3>그래프 7 · 선버스트 (심화) — 국가에서 장르로 내려가면</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 일곱 번째 그래프를 추가해.
-- nation(제작 국가)에서 genre(장르)로 파고드는 선버스트 그래프를 그려 줘.
+- nation(제작 국가)에서 genre(장르)로 내려가는 선버스트 그래프를 그려 줘.
   칸의 크기는 영화 편수로.</pre></div>
   <p><b>읽는 법</b> — 안쪽 고리가 국가, 바깥 고리가 그 국가의 장르입니다. 한 그래프가 "어느 나라 영화가 많은가"와 "그 나라는 어떤 장르가 많은가" 두 겹의 질문에 한꺼번에 답합니다. 안쪽 고리를 누르면 그 국가만 확대됩니다.</p>
 
@@ -211,7 +211,7 @@ st.header("2. (다음 그래프를 여기에 추가)")</pre></div>
     <rect x="406" y="82" width="324" height="40" fill="#e9dfc8" rx="3"/>
     <text x="122" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#fff">애니메이션 57편</text>
     <text x="307" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#5a4300">드라마 56편</text>
-    <text x="568" y="107" text-anchor="middle" font-size="12" fill="#8a7a55">나머지 15개 장르 103편</text>
+    <text x="568" y="107" text-anchor="middle" font-size="12" fill="#8a7a55">나머지 14개 장르 102편</text>
     <text x="402" y="140" text-anchor="middle" font-size="11" fill="#b279a2">↑ 사극 1편</text>
 
     <text x="30" y="186" font-size="12.5" font-weight="700" fill="#3d3425">총 관객 기준 (트리맵이 재는 것)</text>
@@ -330,6 +330,7 @@ st.header("2. (다음 그래프를 여기에 추가)")</pre></div>
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 </body>
 </html>

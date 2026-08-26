@@ -309,3 +309,11 @@ table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var
 .urlmaker .copybtn.done{background:var(--green);border-color:var(--green)}
 .urlmaker .openbtn{background:#fff;color:#b45309}
 .urlmaker .um-note{margin-top:9px;font-size:.8rem;color:var(--text-soft);line-height:1.6}
+
+/* ---- 오늘의 체크 — 클릭 체크박스 (2026-08-27) ---- */
+.checklist li{cursor:pointer;user-select:none;border-radius:8px;padding-top:3px;padding-bottom:3px;transition:background .18s ease,color .18s ease}
+.checklist li:hover{background:var(--green-soft)}
+.checklist li::before{content:"";width:19px;height:19px;box-sizing:border-box;border:2px solid var(--green);border-radius:6px;background:#fff;top:5px;font-size:13px;font-weight:800;line-height:15px;text-align:center;color:#fff;transition:background .18s ease,transform .18s ease}
+.checklist li.done{background:var(--green-soft);color:var(--text-soft)}
+.checklist li.done::before{content:"✓";background:var(--green);border-color:var(--green);animation:checkpop .28s ease}
+@keyframes checkpop{0%{transform:scale(.6)}55%{transform:scale(1.25)}100%{transform:scale(1)}}

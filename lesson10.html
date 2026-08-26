@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>10차시 · 분류 평가 손계산 — 혼동행렬 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -24,8 +24,8 @@
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"큰 숫자를 만나면, 그 숫자가 무엇과 견주어진 값인지부터 확인한다."</div>
-    <span class="by">8차시에서 평균 모델과 견주었다면, 오늘은 다수결과 견줍니다</span>
+    <div class="q">"셀 수 있다고 다 중요한 것은 아니고, 중요하다고 다 셀 수 있는 것도 아니다."</div>
+    <span class="by">윌리엄 브루스 캐머런 (1963) — 정확도 하나로는 보이지 않는 것을 오늘 손으로 셉니다</span>
   </div>
 
   <p class="lead">지난 시간은 "정확도 0.877, 이 숫자를 믿어도 되나?"로 끝났습니다. 오늘 그 답을 손으로 만듭니다. 도구는 <b>혼동행렬</b> — 예측의 맞음과 틀림을 네 칸으로 나누는 표 하나입니다. 계산을 마치면, 아무 계산도 하지 않는 게으른 모델이 내 분류기를 이기는 장면을 확인하게 됩니다.</p>
@@ -50,7 +50,7 @@
     <p class="q">"문제 상황에 따라 적합한 성능 지표가 다르므로, 상황에 맞는 지표를 선택해야 한다." <span class="src">(140쪽)</span></p>
     <p class="t">→ 오분류표(혼동행렬)가 표, 정확도·정밀도·재현율이 그 표에서 나오는 세 지표다. 교과서 스스로 "정확도만으로는 부적절한 경우"를 경고하고 있다 — 오늘 그 경우를 우리 데이터로 만난다.</p>
   </div>
-  <p>영어 약자보다 우리말이 먼저입니다. "성공"을 양성(Positive)이라 할 때, 예측은 네 가지 중 하나로 끝납니다.</p>
+  <p>영어 약자보다 우리말이 먼저입니다. "성공"을 양성(Positive)이라 할 때, 예측은 네 가지 중 하나로 끝납니다. 곧 만날 약자 TP·FP·FN·TN은 True/False(예측이 맞음/틀림)와 Positive/Negative(성공/실패로 예측)의 조합입니다.</p>
   <table class="daymap">
     <thead><tr><th>칸</th><th>우리말로</th><th>영화라면</th></tr></thead>
     <tbody>
@@ -245,6 +245,7 @@
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 </body>
 </html>

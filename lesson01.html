@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>1차시 · 데이터 분석의 6단계 · 질문 던지기 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -24,8 +24,8 @@
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"코드는 AI가 짜고, 우리는 데이터를 의심하고 판단한다."</div>
-    <span class="by">이 수업 전체의 한 줄 정의입니다</span>
+    <div class="q">"중요한 것은 질문을 멈추지 않는 것이다."</div>
+    <span class="by">알베르트 아인슈타인 (LIFE 인터뷰, 1955) — 데이터 분석 6단계의 첫 단계는 기술이 아니라 질문입니다</span>
   </div>
 
   <p class="lead">데이터 과학 수업의 첫 시간입니다. 오늘은 데이터 분석이 어떤 단계로 흘러가는지 전체 지도를 살펴보고, 그 지도의 출발점인 <b>질문 던지기</b>를 직접 해 봅니다. 학기가 끝날 때, 여러분 각자의 데이터 앱 하나가 인터넷에 떠 있게 됩니다. 그 앱의 첫 번째 재료가 오늘 만드는 질문 한 개입니다.</p>
@@ -148,7 +148,7 @@
   <p>하나 더 알아 둘 것 — 교과서 12쪽은 데이터 과학의 특징으로 <b>융합적 학문</b>(컴퓨터 과학·수학·통계·분야 지식의 결합), <b>데이터 중심 접근</b>, <b>유연성</b>(도구와 기술이 계속 변한다), 그리고 <b>윤리적 고려</b>를 꼽습니다. 특히 마지막 특징은 개인 정보 같은 민감한 데이터를 다루게 될 때의 태도로, 13차시에 학기 전체의 실습 사례를 돌아보며 정면으로 다룹니다.</p>
 
   <h2>2. 우리 수업의 방식 — 바이브 코딩 ①②③</h2>
-  <p>이 수업에서는 코드 문법을 배우지 않습니다. 대신 세 단계를 반복하며 실습합니다. <b>① 샘플 프롬프트를 AI에게 준다 → ② AI가 준 코드를 실행하고 결과를 읽는다 → ③ 프롬프트를 고쳐 더 나은 결과를 얻는다.</b> 오늘은 이 세 단계가 실제로 어떻게 진행되는지 선생님 화면으로 함께 확인합니다. 2차시부터는 매시간 직접 합니다.</p>
+  <p>이 수업에서는 코드 문법을 배우지 않습니다. 대신 세 단계를 반복하며 실습합니다. <b>① 샘플 프롬프트를 AI에게 준다 → ② AI가 준 코드를 실행하고 결과를 읽는다 → ③ 프롬프트를 고쳐 더 나은 결과를 얻는다.</b> 오늘은 선생님 화면을 따라 이 세 단계를 각자 직접 밟습니다. 오늘 만든 앱이 학기 내내 페이지를 더해 갈 나의 포트폴리오가 됩니다.</p>
   <div style="overflow-x:auto">
   <svg viewBox="0 0 720 178" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="바이브 코딩 세 단계 — 샘플 프롬프트, AI가 준 코드, 개선이 반복되는 흐름" style="min-width:560px;max-width:100%;display:block">
     <defs>
@@ -184,19 +184,45 @@
   <p>실습 재료는 서울의 100년 일별 기온(<a href="https://github.com/greatsong/modudata/blob/main/data/seoul.csv" target="_blank" rel="noopener"><code>seoul.csv</code></a>)입니다. 원출처는 <a href="https://data.kma.go.kr" target="_blank" rel="noopener">기상청 기상자료개방포털</a>의 종관기상관측(ASOS) 서울 지점 기록으로, 수업용 저장소에서 매일 갱신된 사본을 받아 씁니다.</p>
   <div class="callout mini">
     <div class="h">🔎 이런 사이트예요 — 기상자료개방포털</div>
-    <p>기상자료개방포털(data.kma.go.kr)은 기상청이 관측 자료를 공개하는 곳입니다. 기온만이 아니라 강수·바람·미세먼지 등도 지역과 기간을 골라 CSV로 내려받을 수 있어, "우리 지역은 언제부터 더워졌나" 같은 질문의 재료가 됩니다 — 팀 프로젝트에서 날씨가 필요해지면 여기부터 찾아보세요.</p>
+    <p>기상자료개방포털(data.kma.go.kr)은 기상청이 관측 자료를 공개하는 곳입니다. 기온만이 아니라 강수·바람·미세먼지 등도 지역과 기간을 골라 CSV(Comma-Separated Values — 값을 쉼표로 구분한 표 파일)로 내려받을 수 있어, "우리 지역은 언제부터 더워졌나" 같은 질문의 재료가 됩니다 — 팀 프로젝트에서 날씨가 필요해지면 여기부터 찾아보세요.</p>
   </div>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 자연어로 요청한다</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>서울의 기온 데이터(<a href="https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv" target="_blank" rel="noopener" style="color:#8fd8c8">seoul.csv</a>)를 읽어서,
-100년 동안 연평균 기온이 어떻게 변해 왔는지 한눈에 보이는 그래프로 그려 줘.
-데이터는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv</pre></div>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>서울의 기온 데이터(seoul.csv)를 읽어서, 100년 동안 연평균 기온이
+어떻게 변해 왔는지 한눈에 보이는 그래프를 담은 스트림릿 앱(main.py)을 만들어 줘.
+스트림릿 클라우드에 올릴 거야.
+데이터는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv
+열은 날짜·지점·평균기온·최저기온·최고기온이야. 화면 글자는 한국어로.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       프롬프트에 코드 문법이 한 줄도 없다는 점을 확인하세요. 파일 이름과 원하는 결과만 우리말로 적었습니다.</li>
     <li><span class="st">② AI가 준 코드 — 실행하고 결과를 읽는다</span><br>
       AI가 코드를 만들어 응답하고, 실행하면 100년 치 기온 그래프가 나타납니다. 코드를 읽는 것이 아니라 <b>결과 그래프를 읽는 것</b>이 우리의 일입니다. 그래프를 어떻게 읽는지는 바로 아래 시연에서 함께 연습합니다.</li>
     <li><span class="st">③ 개선 — 프롬프트를 고쳐 다시 요청한다</span><br>
-      "제목을 붙여 줘", "다른 그래프로 보여 줘"처럼 프롬프트를 고치면 결과가 달라집니다. 이 세 번째 단계가 이 수업의 핵심이고, 2차시부터 학생의 몫입니다.</li>
+      "제목을 붙여 줘", "다른 그래프로 보여 줘"처럼 프롬프트를 고치면 결과가 달라집니다. 이 세 번째 단계가 이 수업의 핵심이고, 오늘부터 학생의 몫입니다.</li>
   </ol>
+
+  <h3>첫 배포 — 내 주소 만들기</h3>
+  <p>②에서 받은 코드는 인터넷에 올려 <b>내 주소</b>로 엽니다. 이 관문은 오늘 한 번뿐입니다 — 다음 차시부터는 파일 하나만 바꿔 올려도 앱이 새로 배포됩니다.</p>
+  <ol class="steps">
+    <li><span class="st">깃허브에 저장소 만들기</span><br>
+      깃허브에 로그인해 새 공개 저장소(예: my-data-app)를 만들고, ②에서 받은 <b>main.py</b>와 <b>requirements.txt</b> 두 파일을 올립니다. requirements.txt는 내 앱이 쓰는 라이브러리 목록입니다 — 자세한 이야기는 2차시에서 다룹니다.</li>
+    <li><span class="st">스트림릿 클라우드에 연결하기</span><br>
+      <a href="https://share.streamlit.io" target="_blank" rel="noopener"><code>share.streamlit.io</code></a>에 깃허브 계정으로 로그인해 <b>New app</b>을 누르고, 방금 만든 저장소와 main.py를 고릅니다.</li>
+    <li><span class="st">내 주소 확인</span><br>
+      1~3분 뒤 <code>~.streamlit.app</code> 주소가 생기고, 그 주소에서 내 그래프가 열립니다. 이 주소가 학기 내내 페이지를 더해 갈 <b>나의 포트폴리오</b>의 출발점입니다.</li>
+  </ol>
+  <div class="callout tip">
+    <div class="h">🔎 이런 사이트예요 — 깃허브와 스트림릿 클라우드</div>
+    <p><a href="https://github.com" target="_blank" rel="noopener">깃허브(GitHub)</a>는 코드를 저장·공유하는 세계 최대의 저장소 서비스입니다. 파일을 고칠 때마다 기록(커밋)이 남아, 덮어써도 이전 버전이 사라지지 않습니다. <a href="https://share.streamlit.io" target="_blank" rel="noopener">스트림릿 커뮤니티 클라우드</a>는 깃허브의 코드를 읽어 무료로 웹 앱으로 띄워 주는 서비스입니다 — 저장소에 커밋하면 앱이 스스로 다시 배포됩니다.</p>
+  </div>
+  <div class="callout mini">
+    <div class="h">🔎 수업 데이터 저장소 — modudata</div>
+    <p><a href="https://github.com/greatsong/modudata" target="_blank" rel="noopener">modudata</a>는 이 수업의 데이터 사본을 모아 둔 깃허브 저장소입니다. seoul.csv는 매일 아침 자동으로 갱신되어, 내려받지 않고 주소만으로 항상 최신을 읽습니다.</p>
+  </div>
+  <div class="callout warn">
+    <div class="h">⚠️ 배포가 안 되어도 오늘은 괜찮습니다</div>
+    <p>계정·연동 문제로 첫 배포는 실패가 잦습니다. 짝의 화면을 함께 보며 진행하고, 안 되면 손을 들어 주세요 — 다음 차시 시작 전까지 반드시 함께 해결합니다.</p>
+  </div>
 
   <h3>시연 — 같은 데이터에 세 번 묻는다</h3>
   <p>③이 실제로 어떻게 쓰이는지, 선생님 화면으로 같은 기온 데이터에 그래프를 세 번 요청하며 확인합니다. 그래프는 종류마다 <b>보여 주는 것이 다르기</b> 때문에, 무엇이 궁금한지에 따라 고르는 그래프가 달라집니다.</p>
@@ -333,6 +359,7 @@
 </div>
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 </body>
 </html>
