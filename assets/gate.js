@@ -49,6 +49,7 @@
     if (path.indexOf('/teacher/') !== -1) locked = true;
     else if (/(glossary|concepts)\.html$/.test(path)) locked = released < 15; // 시험 대비 시점(15차시)에 공개
     else if (/extra-movie\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
+    else if (/project\.html$/.test(path)) locked = released < 14;             // 팀 프로젝트 안내 — 14차시(팀 구성)와 함께
     else if (m && parseInt(m[1], 10) > released) locked = true;
   }
 
@@ -85,6 +86,7 @@
           (lm && parseInt(lm[1], 10) > released) ||
           (/(glossary|concepts)\.html/.test(href) && released < 15) ||
           (/extra-movie\.html/.test(href) && released < 4) ||
+          (/project\.html/.test(href) && released < 14) ||
           /(^|\/)teacher\//.test(href);
         if (!blocked) return;
         if (a.classList.contains('linkcard')) return; // 목록 카드는 index.html이 따로 처리
