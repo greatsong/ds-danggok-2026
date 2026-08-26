@@ -1,4 +1,4 @@
 // 차시별 순차 공개 설정 — 수업 진도에 맞춰 숫자만 올리면 됨 (1~16)
 // 이 값보다 큰 차시는 목록에서 잠기고, 주소를 직접 쳐도 gate.js가 막는다.
 // 교사는 ?teacher=<열람키> 로 한 번 열면 이 값과 무관하게 전부 볼 수 있다.
-window.RELEASED_LESSON = 1;
+window.RELEASED_LESSON = 2;
