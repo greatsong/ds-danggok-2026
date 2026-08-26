@@ -43,13 +43,13 @@
   <p>2~4차시의 박스오피스 데이터는 최근 1년 치였습니다. 이번에는 시야를 <b>2004년부터 지금까지 23년치</b>로 넓힙니다. 그 길이면 데이터에 큰 사건이 찍히기에 충분합니다 — 천만 영화의 등장, 코로나의 급감, 다시 회복까지. 절1만 KOBIS 라이브 API를 쓰고(수업에서 쓰던 공용 키 그대로), 절2·절3은 정리된 CSV를 읽으므로 호출 부담이 없습니다.</p>
 
   <h2>1. 새 데이터 3종 — 23년치 기록</h2>
-  <p>이 실습을 위해 수업 데이터 저장소(modudata)에 표 세 개가 새로 실렸습니다. 주간 박스오피스 API를 2004년부터 전 기간 수집해 정리한 것입니다.</p>
+  <p>이 실습을 위해 수업 데이터 저장소(<a href="https://github.com/greatsong/modudata" target="_blank" rel="noopener">modudata</a>)에 표 세 개가 새로 실렸습니다. 파일명을 누르면 저장소에서 표를 눈으로 훑어볼 수 있습니다. 주간 박스오피스 API를 2004년부터 전 기간 수집해 정리한 것입니다.</p>
   <table class="daymap">
     <thead><tr><th>파일</th><th>무엇</th><th>크기</th><th>열</th></tr></thead>
     <tbody>
-      <tr><td><b>kobis_weekly.csv</b></td><td>주간 TOP 10 원자료 (2004년 1월~)</td><td>11,809행 · 1,181주</td><td>주시작일·순위·영화코드·영화명·개봉일·주간관객·누적관객</td></tr>
-      <tr><td><b>kobis_yearly_top10.csv</b></td><td>연도별 관객 상위 10편 (2004~2026)</td><td>230행 (23년 × 10편)</td><td>연도·순위·영화명·그해관객·그해말누적·개봉일</td></tr>
-      <tr><td><b>kobis_alltime.csv</b></td><td>역대 누적 관객 상위 300편</td><td>300행</td><td>순위·영화명·개봉일·누적관객</td></tr>
+      <tr><td><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_weekly.csv" target="_blank" rel="noopener"><code>kobis_weekly.csv</code></a></b></td><td>주간 TOP 10 원자료 (2004년 1월~)</td><td>11,809행 · 1,181주</td><td>주시작일·순위·영화코드·영화명·개봉일·주간관객·누적관객</td></tr>
+      <tr><td><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_yearly_top10.csv" target="_blank" rel="noopener"><code>kobis_yearly_top10.csv</code></a></b></td><td>연도별 관객 상위 10편 (2004~2026)</td><td>230행 (23년 × 10편)</td><td>연도·순위·영화명·그해관객·그해말누적·개봉일</td></tr>
+      <tr><td><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_alltime.csv" target="_blank" rel="noopener"><code>kobis_alltime.csv</code></a></b></td><td>역대 누적 관객 상위 300편</td><td>300행</td><td>순위·영화명·개봉일·누적관객</td></tr>
     </tbody>
   </table>
   <div class="specimen-row" style="grid-template-columns:1fr">
