@@ -48,6 +48,7 @@
   if (!teacher) {
     if (path.indexOf('/teacher/') !== -1) locked = true;
     else if (/(glossary|concepts)\.html$/.test(path)) locked = released < 15; // 시험 대비 시점(15차시)에 공개
+    else if (/extra-movie\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
     else if (m && parseInt(m[1], 10) > released) locked = true;
   }
 
@@ -76,13 +77,14 @@
   // 4) 열린 페이지: 잠긴 차시로 가는 링크를 눌리지 않게 하고, 교사 모드면 배지를 단다
   document.addEventListener('DOMContentLoaded', function () {
     if (!teacher) {
-      var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="teacher/"]');
+      var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="teacher/"], a[href*="extra-movie"]');
       Array.prototype.forEach.call(links, function (a) {
         var href = a.getAttribute('href') || '';
         var lm = href.match(/lesson(\d{2})\.html/);
         var blocked =
           (lm && parseInt(lm[1], 10) > released) ||
           (/(glossary|concepts)\.html/.test(href) && released < 15) ||
+          (/extra-movie\.html/.test(href) && released < 4) ||
           /(^|\/)teacher\//.test(href);
         if (!blocked) return;
         if (a.classList.contains('linkcard')) return; // 목록 카드는 index.html이 따로 처리

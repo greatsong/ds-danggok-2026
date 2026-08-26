@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>영화 심화 · 타임머신 · 연간 TOP 10 · 역대 기록 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css?v=tb1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<script src="assets/release.js"></script>
+<script src="assets/gate.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">심화 · 자유 실습(4차시 이후)</span>
+  <h1>영화 심화 — <span class="a">타임머신 · 연간 TOP 10 · 역대 기록</span></h1>
+  <div class="under"></div>
+
+  <div class="quote">
+    <div class="q">"기록을 거슬러 올라가면, 숫자에 그 해의 사회가 찍혀 있다."</div>
+    <span class="by">2020년 크리스마스의 1위 영화 관객은 100,446명 — 최근 10년 가장 붐빈 크리스마스의 12분의 1이 되지 않습니다</span>
+  </div>
+
+  <p class="lead">이 페이지는 차시가 아니라 <b>자유 실습</b>입니다. 그래프 도감(3~4차시)을 일찍 끝냈거나, 영화 데이터로 더 만들어 보고 싶은 사람을 위한 도전 과제입니다. 세 절은 서로 독립이라 <b>순서 없이 아무거나</b> 골라도 되고, 하나만 만들어도 됩니다. 셋 다 4차시에 완성한 멀티페이지 포트폴리오 앱에 <b>페이지를 추가하는</b> 방식입니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 만들 수 있는 것 (골라서)</div>
+    <ul>
+      <li><b>🕰️ 박스오피스 타임머신</b> — 크리스마스·광복절·어린이날, 그 날짜의 10년을 라이브 API로 거슬러 보기 (①②③)</li>
+      <li><b>🏆 연간 TOP 10</b> — 2004년부터 해마다의 관객 상위 10편 (①③)</li>
+      <li><b>🎖️ 역대 기록</b> — 누적 관객 상위 300편의 순위·검색 (①③)</li>
+    </ul>
+  </div>
+
+  <h2>0. 어떤 실습인가</h2>
+  <p>2~4차시의 박스오피스 데이터는 최근 1년 치였습니다. 이번에는 시야를 <b>2004년부터 지금까지 22년</b>으로 넓힙니다. 22년이면 데이터에 큰 사건이 찍히기에 충분한 길이입니다 — 천만 영화의 등장, 코로나의 급감, 다시 회복까지. 절1만 KOBIS 라이브 API를 쓰고(수업에서 쓰던 공용 키 그대로), 절2·절3은 정리된 CSV를 읽으므로 호출 부담이 없습니다.</p>
+
+  <h2>1. 새 데이터 3종 — 22년의 기록</h2>
+  <p>이 실습을 위해 수업 데이터 저장소(modudata)에 표 세 개가 새로 실렸습니다. 주간 박스오피스 API를 2004년부터 전 기간 수집해 정리한 것입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>파일</th><th>무엇</th><th>크기</th><th>열</th></tr></thead>
+    <tbody>
+      <tr><td><b>kobis_weekly.csv</b></td><td>주간 TOP 10 원자료 (2004년 1월~)</td><td>11,809행 · 1,181주</td><td>주시작일·순위·영화코드·영화명·개봉일·주간관객·누적관객</td></tr>
+      <tr><td><b>kobis_yearly_top10.csv</b></td><td>연도별 관객 상위 10편 (2004~2026)</td><td>230행 (23년 × 10편)</td><td>연도·순위·영화명·그해관객·그해말누적·개봉일</td></tr>
+      <tr><td><b>kobis_alltime.csv</b></td><td>역대 누적 관객 상위 300편</td><td>300행</td><td>순위·영화명·개봉일·누적관객</td></tr>
+    </tbody>
+  </table>
+  <div class="specimen-row" style="grid-template-columns:1fr">
+    <div class="specimen st">
+      <div class="tag">kobis_alltime.csv — 앞 5행</div>
+      <div class="body">
+        <div style="overflow-x:auto;width:100%">
+          <table class="minitable">
+            <thead><tr><th>순위</th><th>영화명</th><th>개봉일</th><th>누적관객</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>명량</td><td>2014-07-30</td><td>17597914</td></tr>
+              <tr><td>2</td><td>왕과 사는 남자</td><td>2026-02-04</td><td>16880997</td></tr>
+              <tr><td>3</td><td>극한직업</td><td>2019-01-23</td><td>16243231</td></tr>
+              <tr><td>4</td><td>신과함께-죄와 벌</td><td>2017-12-20</td><td>14398110</td></tr>
+              <tr><td>5</td><td>국제시장</td><td>2014-12-17</td><td>14198690</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="note">12년 전 영화(명량)와 올해 영화(왕과 사는 남자)가 한 표에서 순위를 다툽니다. 개봉일은 하이픈이 있는 날짜 글자입니다.</div>
+    </div>
+  </div>
+  <div class="callout warn">
+    <div class="h">⚠️ "근삿값"이라는 꼬리표 — 이 숫자를 언제, 얼마나 믿을 수 있나</div>
+    <p>이 표의 관객수는 공식 발표를 그대로 옮긴 것이 아니라, <b>주간 TOP 10 기록에 남은 누적 관객의 최댓값</b>으로 다시 계산한 <b>근삿값</b>입니다. 그해관객은 그 해의 최대 누적에서 전년까지의 최대 누적을 뺀 값이라, 10위권에 들지 못한 주의 관객은 빠질 수 있습니다. 다만 굵직한 수치는 공식 기록과 부합하는 것을 확인했습니다 — <b>명량 17,597,914명 · 극한직업 16,243,231명 · 천만 돌파 32편</b>. 그래서 절2·절3의 프롬프트에는 화면 아래에 "근삿값입니다"라고 적어 달라는 요청이 들어 있습니다. 출처와 한계를 화면에 밝히는 것까지가 분석입니다.</p>
+  </div>
+
+  <h2>2. 절1 · 박스오피스 타임머신 (①②③)</h2>
+  <p>크리스마스, 광복절, 어린이날 — 특정 날짜에 해마다 극장에서 무슨 일이 있었는지 10년을 거슬러 봅니다. 2차시에서 쓴 KOBIS 일별 박스오피스 API를 그대로 쓰되, 이번에는 같은 날짜를 연도만 바꿔 여러 번 조회합니다. 키는 새로 만들 것 없이 포트폴리오 앱의 비밀 금고에 이미 있는 <b>KOBIS_KEY</b>를 그대로 씁니다 — 4차시에 배운 대로 금고는 앱 전체가 공유합니다.</p>
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 포트폴리오 앱에 '박스오피스 타임머신' 페이지를 추가해 줘.
+아래에 공식 API 문서에서 복사한 내용을 붙였어.
+
+- 월과 일을 고르면, 최근 10년 동안 해마다 그 날짜의 박스오피스를 조회해서
+  연도별 1위 영화를 카드로 죽 보여 줘. 카드에는 연도, 영화 이름, 그날 관객수, 개봉일이 보이게.
+- 자주 찾는 날짜는 버튼으로 준비해 줘: 크리스마스(12월 25일), 광복절(8월 15일), 어린이날(5월 5일).
+- 카드 아래에는 연도별 1위 영화의 그날 관객수를 세로 막대그래프로 나란히 보여 줘.
+  어느 해의 그 날짜가 가장 붐볐는지 한눈에 보이게.
+- 연도를 하나 고르면 그 해 그 날짜의 TOP 10 전체 표도 볼 수 있게 해 줘.
+- 인증키는 비밀 금고(secrets)의 KOBIS_KEY에서 불러와. 코드에는 절대 쓰지 마.
+- 한 번 불러온 날짜의 결과는 다시 부르지 말고 기억해 줘(하루쯤). 10년치면 호출이 10번이니까.
+- 올해 날짜가 아직 오지 않았거나 집계 전이면 그 연도 카드는 "집계 전"으로 표시해 줘.
+- 숫자가 글자로 오니 숫자로 바꿔서 정렬과 그래프에 써 줘.
+- 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.
+
+──── 아래는 KOBIS 공식 문서에서 복사한 부분 ────
+요청 주소: https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json
+요청변수: key(발급받은 인증키) · targetDt(조회 날짜, yyyymmdd 여덟 자리)
+응답 구조: boxOfficeResult 안의 dailyBoxOfficeList 목록에 영화별로
+  rank(순위) · movieNm(영화명) · openDt(개봉일) · audiCnt(그날 관객수) · audiAcc(누적 관객수)
+  ※ 숫자 값이 전부 문자열로 온다.
+  ※ 과거 날짜는 넉넉히 열려 있다(10년 전 크리스마스도 그날의 TOP 10이 그대로 온다).</pre></div>
+    </li>
+    <li><span class="st">② AI가 준 코드 예시 — 이런 모습이면 성공</span><br>
+      아래는 같은 프롬프트로 받아 실제로 실행해 확인한 코드 예시입니다. <b>여러분이 받은 코드가 글자까지 같지 않아도 됩니다</b> — 프리셋 버튼 세 개, 연도별 1위 카드, 막대그래프가 뜨면 성공입니다. 크리스마스 기준으로 올해(2026년) 카드는 "집계 전"으로 표시되고, 지난 10년의 1위가 카드로 줄지어 나타납니다.
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 (pages/5_박스오피스_타임머신.py)</span><button class="copy-btn">복사</button><pre># 박스오피스 타임머신 — 특정 날짜의 극장가를 해마다 거슬러 본다
+import datetime
+
+import pandas as pd
+import plotly.express as px
+import requests
+import streamlit as st
+
+st.set_page_config(page_title="박스오피스 타임머신", page_icon="🕰️", layout="wide")
+st.title("🕰️ 박스오피스 타임머신")
+st.caption("월과 일을 고르면, 최근 10년 동안 해마다 그 날짜의 박스오피스 1위를 보여 줍니다.")
+
+# 인증키는 비밀 금고(secrets)에서 불러온다 — 코드에 직접 쓰지 않는다
+API_KEY = st.secrets["KOBIS_KEY"]
+URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+
+# 오늘 날짜는 한국 시간 기준으로 계산한다
+KST = datetime.timezone(datetime.timedelta(hours=9))
+today = datetime.datetime.now(KST).date()
+
+# ── 날짜 고르기: 자주 찾는 날짜는 버튼으로 ──
+if "month" not in st.session_state:
+    st.session_state.month = 12  # 처음 열면 크리스마스
+    st.session_state.day = 25
+
+
+def set_date(m, d):
+    """프리셋 버튼을 누르면 월과 일을 바꾼다."""
+    st.session_state.month = m
+    st.session_state.day = d
+
+
+b1, b2, b3 = st.columns(3)
+b1.button("🎄 크리스마스 (12월 25일)", on_click=set_date, args=(12, 25))
+b2.button("🇰🇷 광복절 (8월 15일)", on_click=set_date, args=(8, 15))
+b3.button("🎈 어린이날 (5월 5일)", on_click=set_date, args=(5, 5))
+
+c1, c2 = st.columns(2)
+month = c1.number_input("월", min_value=1, max_value=12, key="month")
+day = c2.number_input("일", min_value=1, max_value=31, key="day")
+
+
+def date_or_none(year, m, d):
+    """달력에 없는 날짜(2월 30일 등)면 None을 돌려준다."""
+    try:
+        return datetime.date(year, m, d)
+    except ValueError:
+        return None
+
+
+this_date = date_or_none(today.year, month, day)
+if this_date is None:
+    st.error("달력에 없는 날짜입니다. 월과 일을 다시 골라 주세요.")
+    st.stop()
+
+# 올해 그 날짜가 아직 오지 않았으면 올해 카드는 "집계 전"으로 두고,
+# 데이터가 있는 해가 10년이 되도록 한 해 더 거슬러 간다
+if this_date &gt;= today:
+    years = list(range(today.year - 10, today.year + 1))
+else:
+    years = list(range(today.year - 9, today.year + 1))
+
+
+@st.cache_data(ttl=86400)  # 한 번 불러온 날짜의 결과는 하루쯤 기억해 둔다
+def fetch_boxoffice(date_str):
+    """해당 날짜의 일별 박스오피스 TOP 10 목록을 받아 온다."""
+    params = {"key": API_KEY, "targetDt": date_str}
+    res = requests.get(URL, params=params, timeout=10)
+    res.raise_for_status()
+    data = res.json()
+    # 인증키가 틀리면 상태코드 200에 faultInfo 상자가 온다
+    if "faultInfo" in data:
+        raise RuntimeError(data["faultInfo"].get("message", "API 오류"))
+    return data.get("boxOfficeResult", {}).get("dailyBoxOfficeList", [])
+
+
+st.header(f"{month}월 {day}일, 해마다 극장에서는")
+
+records = []  # 연도별 1위를 모아 두는 목록 (막대그래프용)
+tables = {}  # 연도별 TOP 10 전체 표
+
+shown = list(reversed(years))  # 최근 해부터 보여 준다
+for i in range(0, len(shown), 4):
+    row = st.columns(4)
+    for col, year in zip(row, shown[i : i + 4]):
+        target = date_or_none(year, month, day)
+        with col:
+            st.markdown(f"#### {year}년")
+            # 아직 오지 않은 날짜(올해)는 집계 전으로 표시한다
+            if target is None or target &gt;= today:
+                st.markdown("🕐 집계 전")
+                continue
+            try:
+                movies = fetch_boxoffice(target.strftime("%Y%m%d"))
+            except Exception:
+                st.markdown("불러오지 못했습니다 — 잠시 뒤 새로고침해 주세요")
+                continue
+            if not movies:
+                st.markdown("🕐 집계 전")
+                continue
+            df = pd.DataFrame(movies)
+            # 숫자가 글자로 오므로 숫자로 바꿔야 정렬과 그래프에 쓸 수 있다
+            for c in ["rank", "audiCnt", "audiAcc"]:
+                df[c] = pd.to_numeric(df[c])
+            tables[year] = df
+            top = df.sort_values("rank").iloc[0]
+            st.markdown(f"**{top['movieNm']}**")
+            st.markdown(f"그날 관객 {top['audiCnt']:,}명")
+            st.markdown(f"개봉일 {top['openDt']}")
+            records.append(
+                {"연도": str(year), "영화명": top["movieNm"], "그날 관객수": top["audiCnt"]}
+            )
+
+if records:
+    # ── 연도별 1위 영화의 그날 관객수 막대그래프 ──
+    st.subheader("연도별 1위 영화의 그날 관객수")
+    chart_df = pd.DataFrame(records).sort_values("연도")
+    fig = px.bar(chart_df, x="연도", y="그날 관객수", hover_data=["영화명"])
+    st.plotly_chart(fig, width="stretch")
+
+    # ── 연도를 하나 고르면 그 해 그 날짜의 TOP 10 전체 표 ──
+    st.subheader("그 해 그 날짜의 TOP 10 전체 보기")
+    pick = st.selectbox("연도 고르기", sorted(tables.keys(), reverse=True))
+    table = tables[pick].sort_values("rank")[["rank", "movieNm", "openDt", "audiCnt", "audiAcc"]]
+    table.columns = ["순위", "영화명", "개봉일", "그날 관객수", "누적 관객수"]
+    st.dataframe(table, hide_index=True, width="stretch")</pre></div>
+      이 코드를 실행해 크리스마스 카드를 확인했습니다. 2025년 「아바타: 불과 재」(그날 관객 640,291명)부터 2016년 「마스터」(902,734명)까지 열 장의 카드가 나타나면 여러분 화면도 성공입니다.</li>
+    <li><span class="st">③ 프롬프트 개선 — 같은 대화창에서 이어서</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘.
+- 연도별 1위 카드에서, 그 영화가 그 날짜 기준으로 개봉 며칠째였는지도 작게 보여 줘.
+  개봉 첫 주의 신작이 1위인 해와, 오래 버틴 영화가 1위인 해를 구분해 보고 싶어.
+- 세 시즌(크리스마스·광복절·어린이날)의 연도별 1위 관객수 평균을 구해서,
+  어느 시즌이 가장 큰 대목인지 한 문장과 숫자로 보여 줘.</pre></div>
+    </li>
+  </ol>
+  <div class="callout tip">
+    <div class="h">🔍 읽어 볼 것 — 카드 열 장에서 보이는 세 가지</div>
+    <ul>
+      <li><b>코로나가 카드에 찍혀 있다.</b> 2020년 크리스마스 1위 「원더 우먼 1984」의 그날 관객은 <b>100,446명</b>. 열 장의 카드 중 가장 붐빈 2017년(「신과함께-죄와 벌」 1,212,822명)의 12분의 1이 되지 않습니다. 막대그래프에서 2020년만 움푹 꺼져 있습니다.</li>
+      <li><b>개봉일을 보면 배급 전략이 보인다.</b> 최근 10년의 크리스마스 1위는 열 편 전부 <b>그해 12월 개봉작</b>입니다(12월 14일~24일 개봉). 대목에 맞춰 신작을 내놓는 전략이 카드의 개봉일 한 줄에서 읽힙니다. ③의 "개봉 며칠째"를 붙이면 더 뚜렷해집니다.</li>
+      <li><b>대목의 크기는 시즌마다 다르다.</b> 이 교재를 검증하던 날 기준으로 크리스마스 1위 열 해의 평균은 약 71만 명, 광복절은 약 43만 명이었습니다. ③의 시즌 평균 계산으로 여러분 화면에서도 확인해 보세요.</li>
+    </ul>
+  </div>
+
+  <h2>3. 절2 · 연간 TOP 10 (①③)</h2>
+  <p>이번에는 라이브 API가 아니라 정리된 CSV입니다. 2004년부터 해마다 "그 해의 상위 10편"을 슬라이더로 넘겨 봅니다.</p>
+  <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 포트폴리오 앱에 '연간 박스오피스 TOP 10' 페이지를 추가해 줘.
+- 데이터는 이 주소에서 불러와:
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_yearly_top10.csv
+  2004년부터 2026년까지 해마다 관객 상위 10편이 정리된 표야. 열은
+  연도 · 순위 · 영화명 · 그해관객 · 그해말누적 · 개봉일.
+- 연도를 슬라이더로 고르면 그 해 TOP 10을 가로 막대그래프로, 관객 많은 영화가 위에 오게 보여 줘.
+  막대에 마우스를 올리면 영화명, 그해관객, 개봉일이 보이게.
+- 그래프 아래에 같은 내용의 표도 보여 줘.
+- 그해관객이 1,000만 명을 넘은 영화는 막대 색을 다르게 하고 영화명 옆에 트로피 이모지를 붙여 줘.
+- 화면 아래에 작은 글씨로 "그해관객은 주간 박스오피스 기록으로 계산한 근삿값입니다"라고 표기해 줘.
+- 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.</pre></div>
+  <p><b>이런 화면이면 성공</b> — 같은 프롬프트로 받은 코드를 실제 실행해 확인한 모습입니다. 슬라이더는 처음에 가장 최근 연도를 가리킵니다. 2026년이면 맨 위에 🏆 왕과 사는 남자(16,880,997명) 막대가 홀로 다른 색으로 서 있고, 그 아래로 스파이더맨: 브랜드 뉴 데이(8,127,603명), 오디세이(7,109,334명)가 이어집니다. 슬라이더를 2020년으로 돌리면 1위가 남산의 부장들(4,748,005명)로 바뀌고 트로피가 하나도 없습니다. 그래프 아래에 같은 내용의 표, 화면 아래에 근삿값 표기가 보이면 완성입니다.</p>
+  <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘.
+- 연도별 1위 영화의 그해관객을 2004년부터 지금까지 선 그래프로 이어 그려 줘.
+  "그 해 1위가 얼마나 컸는가"의 23년 흐름이 보이게.
+- 선 그래프에서 가장 낮은 두 해를 자동으로 찾아 표시해 줘. 왜 낮은지는 내가 해석할게.</pre></div>
+  <div class="callout tip">
+    <div class="h">🔍 읽어 볼 것 — 23년 흐름에서 보이는 것</div>
+    <ul>
+      <li><b>1위의 크기는 해마다 다르다.</b> 2014년 1위 명량은 17,597,914명, 2025년 1위 주토피아 2는 8,088,641명 — 같은 "그 해 1위"인데 두 배가 넘게 차이 납니다.</li>
+      <li><b>가장 낮은 두 해를 자동으로 찾게 하면 2004년과 2020년이 찍힙니다.</b> 그런데 두 해의 사정은 다릅니다. 2004년(태극기 휘날리며, 2,542,870명)은 이 데이터가 시작된 첫해라 근삿값이 실제보다 작게 잡혔을 가능성이 큽니다. 흐름 한가운데에서 꺼진 해는 2020년(남산의 부장들 4,748,005명)과 2021년(스파이더맨: 노 웨이 홈 6,075,636명)입니다 — 3차시에서 그래프의 피크로 달력의 사건을 읽었듯, 여기서는 급감으로 사회의 사건이 읽힙니다.</li>
+      <li><b>기계가 찾아 준 값에도 해석은 내 몫입니다.</b> "가장 낮은 두 해"라는 계산은 맞지만, 그중 무엇이 사건이고 무엇이 데이터의 한계인지는 사람이 가려 읽어야 합니다.</li>
+    </ul>
+  </div>
+
+  <h2>4. 절3 · 역대 기록 (①③)</h2>
+  <p>마지막은 역대 누적 관객 상위 300편입니다. 뉴스에 나오는 "역대 박스오피스"를 내 앱에 들입니다.</p>
+  <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 포트폴리오 앱에 '역대 박스오피스 기록' 페이지를 추가해 줘.
+- 데이터는 이 주소에서 불러와:
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_alltime.csv
+  2004년부터 지금까지 누적 관객 상위 300편이야. 열은 순위 · 영화명 · 개봉일 · 누적관객.
+- 역대 TOP 20을 가로 막대그래프로, 1위가 맨 위에 오게 보여 줘.
+  1,000만 명을 넘은 영화는 막대 색을 다르게 해 줘.
+- 그래프 옆이나 위에 지표 카드 세 장: 역대 1위 영화 이름, 그 관객수, 1,000만 돌파 영화 편수.
+- 검색창에 영화 이름을 넣으면 300편 안에서 찾아 순위와 누적 관객을 알려 주고,
+  없으면 "역대 300위 안에 없는 영화입니다"라고 안내해 줘.
+- 화면 아래에 작은 글씨로 "누적관객은 주간 박스오피스 기록으로 계산한 근삿값입니다"라고 표기해 줘.
+- 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.</pre></div>
+  <p><b>이런 화면이면 성공</b> — 실행해 확인한 모습입니다. 지표 카드 세 장에 <b>명량 · 17,597,914명 · 32편</b>이 뜨고, TOP 20 가로 막대의 맨 위가 명량입니다. 검색창에 "극한직업"을 넣으면 "3위 · 누적 관객 16,243,231명"이 나오고, 300위 밖의 영화를 넣으면 "역대 300위 안에 없는 영화입니다"가 나옵니다.</p>
+  <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘.
+- 개봉일에서 연도를 뽑아, 1,000만 돌파 영화가 몇 편씩 나왔는지 연도별 세로 막대로 보여 줘.
+  천만 영화가 한 편도 없는 해도 0으로 표시해 줘.
+- 300편 전체로 누적관객의 히스토그램을 그려 줘. 역대 기록이라는 게
+  소수의 초대형 영화와 다수의 나머지로 이루어져 있다는 게 보이게.</pre></div>
+  <div class="callout tip">
+    <div class="h">🔍 읽어 볼 것 — 역대 300편이 말하는 것</div>
+    <ul>
+      <li><b>역대 TOP 5</b> — 명량(17,597,914) · 왕과 사는 남자(2026년 개봉, 16,880,997) · 극한직업(16,243,231) · 신과함께-죄와 벌(14,398,110) · 국제시장(14,198,690). 12년 전 영화와 올해 영화가 나란히 순위를 다툽니다.</li>
+      <li><b>천만 32편의 연도별 분포</b> — ③의 연도별 막대를 그려 보면 2019년이 5편으로 가장 많고, <b>2020년과 2021년은 0편</b>입니다. 절1의 급감, 절2의 최저 두 해와 같은 사건이 세 번째 그래프에서 또 확인됩니다.</li>
+      <li><b>쏠림이 또 나온다</b> — 300편의 히스토그램을 그리면 <b>170편이 누적 500만 명 미만</b>으로 왼쪽에 몰려 있고, 오른쪽 끝에서 1,600만을 넘는 영화는 세 편(명량·왕과 사는 남자·극한직업)뿐입니다. 4차시 히스토그램에서 본 그 쏠림이 역대 기록에서도 반복됩니다. 소수의 초대형과 다수의 나머지 — 실제 데이터의 아주 흔한 모양입니다.</li>
+    </ul>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>세 절 가운데 적어도 하나를 내 포트폴리오 앱의 새 페이지로 추가해 배포했다.</li>
+    <li>이 데이터에 "근삿값" 꼬리표가 붙는 이유를 설명할 수 있고, 화면에도 그 표기를 남겼다.</li>
+    <li>타임머신을 만들었다면, 인증키는 코드에 없고 비밀 금고(secrets)의 KOBIS_KEY만 썼다.</li>
+    <li>그래프에서 2020~2021년의 흔적(급감 또는 공백)을 하나 찾아 한 문장으로 적었다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">근삿값</td><td>참값에 가깝게 계산했지만 정확히 일치한다고 보장하지 않는 값 — 어떻게 계산했는지를 함께 밝혀야 함</td></tr>
+    <tr><td class="term">누적관객</td><td>개봉일부터 그 시점까지의 관객수 총합 — "천만 영화"의 기준이 되는 수</td></tr>
+    <tr><td class="term">지표 카드</td><td>핵심 숫자 몇 개를 큰 글씨로 강조해 보여 주는 화면 요소</td></tr>
+  </table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="lesson04.html"><div class="dir">← 이전</div><div class="tt">4차시 · 그래프 도감 Ⅱ — 분포·구성·관계 · 멀티페이지</div></a>
+    <a class="next" href="index.html"><div class="dir">다음 →</div><div class="tt">목차</div></a>
+  </div>
+</main>
+</div>
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+</body>
+</html>
