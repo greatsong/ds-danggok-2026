@@ -23,7 +23,7 @@
   <h1>두 번째 API — <span class="a">우리 학교 급식</span></h1>
   <div class="under"></div>
 
-  <p class="lead">오늘은 <b>나이스(NEIS) 급식 API</b>로 우리 학교 점심을 내 앱에 불러옵니다. 방법은 2차시의 KOBIS와 같습니다 — 공식 문서의 발췌를 읽고, 완성 주소로 응답을 먼저 확인하고, 문서를 프롬프트에 붙입니다. 다른 점이 하나 있습니다. 이번 API는 <b>인증키가 필요 없습니다</b>.</p>
+  <p class="lead">오늘은 <b>나이스(NEIS) 급식 API</b>로 우리 학교 점심을 내 앱에 불러옵니다. 나이스는 <b>교육행정정보시스템(National Education Information System)</b>의 약자로, 전국 학교의 학사·행정 정보를 다루는 시스템입니다 — 여러분의 성적표와 생활기록부도 이 시스템에 있습니다. 방법은 2차시의 KOBIS와 같습니다 — 공식 문서의 발췌를 읽고, 완성 주소로 응답을 먼저 확인하고, 문서를 프롬프트에 붙입니다. 다른 점이 하나 있습니다. 이번 API는 <b>인증키가 필요 없습니다</b>.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
@@ -54,6 +54,10 @@
   </div>
 
   <h2>2. 완성 주소 맨눈 보기 — 급식 JSON 해부</h2>
+  <div class="callout mini">
+    <div class="h">🔎 이런 사이트예요 — 나이스 교육정보 개방 포털</div>
+    <p><a href="https://open.neis.go.kr" target="_blank" rel="noopener">open.neis.go.kr</a>은 나이스의 학교 데이터 일부를 누구나 쓸 수 있게 공개한 곳입니다. 급식 식단 말고도 학교 기본 정보·학사 일정·시간표 API가 있고, 우리 학교만이 아니라 <b>전국 어느 학교든</b> 학교 코드만 바꾸면 조회됩니다 — "우리 학교와 옆 학교의 급식은 얼마나 다를까" 같은 질문의 재료가 됩니다.</p>
+  </div>
   <p>2차시와 같은 순서입니다. 코드를 쓰기 전에 완성 주소를 새 탭에서 열어, 응답 JSON을 맨눈으로 확인합니다. 먼저 주소를 해부해 봅니다. KOBIS 주소에 있던 <code>key=</code>가 여기에는 <b>없습니다</b>.</p>
   <div class="specimen semi" style="margin:18px 0">
     <div class="tag">요청 주소의 해부 — 인증키 없는 요청</div>
@@ -303,6 +307,7 @@ else:
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">나이스(NEIS)</td><td>교육행정정보시스템(National Education Information System). 전국 학교의 학사·행정 정보를 다루며, 일부를 개방 포털로 공개함</td></tr>
     <tr><td class="term">API 문서</td><td>요청 주소·요청변수·응답 구조를 알려 주는 공식 설명서 — 프롬프트 끝에 붙이는 재료</td></tr>
     <tr><td class="term">faultInfo</td><td>KOBIS가 키가 틀렸을 때 보내는 오류 상자 — 상태코드는 200인 채로 옴</td></tr>
     <tr><td class="term">RESULT 상자</td><td>나이스가 데이터 없음을 알리는 상자 — 주말·방학의 급식 없음은 오류가 아님</td></tr>
