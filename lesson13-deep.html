@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>13차시 · 데이터 윤리 · 데이터 과학 당곡고</title>
+<title>13차시 · 데이터 윤리 · 데이터 과학 당곡고 · 자세한 판</title>
 <link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -27,7 +27,8 @@
     <div class="q">"윤리란, 할 권리가 있는 것과 하는 것이 옳은 것의 차이를 아는 것이다."</div>
     <span class="by">포터 스튜어트(미국 대법관)에게 통용되는 말 — 할 수 있는 분석과 해도 되는 분석은 다릅니다</span>
   </div>
-  <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson13-deep.html">🔎 더 자세한 판 보기 →</a></p>
+
+  <div class="callout mini"><div class="h">🔎 자세한 판</div><p>이 페이지는 내용을 줄이지 않은 판입니다. 수업은 <a href="lesson13.html">기본판</a>으로 진행하고, 더 깊이 보고 싶을 때 이 판을 읽습니다.</p></div>
 
   <p class="lead">우리는 한 학기 동안 남이 모은 데이터를 불러와, AI가 짠 코드로 분석하고, 결과를 인터넷에 공개했습니다. 이 과정 어디에 윤리 문제가 있을까요? 오늘은 교과서의 세 가지 윤리 문제를 익힌 뒤, 그 눈으로 <b>내 포트폴리오 앱</b>을 다시 점검합니다.</p>
 
@@ -70,9 +71,6 @@
 
   <h3>장면 2 — 급식 데이터는 되고, 위치 데이터는 왜 조심스러운가</h3>
   <p>우리가 분석한 급식 식단은 <b>학교 단위</b>의 공개 정보였습니다. 어느 학생이 무엇을 먹었는지는 어디에도 없으므로, 전량을 내려받아 공개 앱으로 만들어도 누구의 사생활도 다치지 않습니다. 그런데 같은 공공데이터라도 개인의 위치나 이동 기록이 담긴 데이터라면 이야기가 다릅니다. 한 건 한 건은 익명이라도, 시간대별로 이어 붙이면 특정 개인이나 집단의 동선이 드러날 수 있습니다. <b>같은 "공개 데이터"라도 민감도는 같지 않다</b> — 팀 프로젝트에서 데이터를 고를 때 가장 먼저 확인할 항목입니다.</p>
-  <details class="glossary">
-    <summary>🔬 그림으로 — 급식과 위치 데이터의 차이</summary>
-    <div class="gin">
   <div style="overflow-x:auto;margin:18px 0 6px">
     <svg viewBox="0 0 800 300" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학교 단위 급식 식단과, 이어 붙이면 동선이 드러나는 개인 위치 기록의 대조">
       <defs>
@@ -124,8 +122,6 @@
     </svg>
   </div>
   <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">민감도는 "공개되어 있는가"가 아니라 "개인을 추적할 수 있는가"로 판단합니다.</p>
-    </div>
-  </details>
 
   <h3>장면 3 — 모델이 사회의 편향을 학습한다</h3>
   <p>7차시에서 영화 흥행 예측에 첫날 스크린 수 변수를 넣었습니다. 스크린을 많이 받은 영화가 관객도 많이 모으는 것은 사실이지만, 스크린 배정은 대형 배급사에 유리하게 이루어지는 <b>사람의 결정</b>입니다. 이 변수로 학습한 모델은 "스크린을 많이 받을 영화가 성공한다"고 예측하게 되고, 그 예측이 다시 스크린 배정의 근거가 되면 작은 영화는 더 밀려납니다. 교과서 38쪽의 정의 그대로 — 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동합니다. 모델은 세상을 비추기만 하는 것이 아니라, 세상의 치우침을 <b>되풀이하게 만들 수도</b> 있습니다.</p>
@@ -165,7 +161,7 @@
       <text x="68" y="118" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e45756">더 밀려난다</text>
     </svg>
   </div>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동합니다(교과서 38쪽).</p>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동한다(교과서 38쪽) — 모델은 세상을 비추기만 하지 않고, 치우침을 되풀이하게 만들 수도 있습니다.</p>
 
   <h3>장면 4 — AI가 짠 코드의 책임은 누구에게</h3>
   <p>우리는 ①프롬프트를 쓰고 ②AI가 준 코드를 실행해 왔습니다. 그 코드가 잘못된 수치를 화면에 표시했다면 책임은 누구에게 있을까요? 이 수업의 답은 분명합니다. 앱에 이름을 걸고 공개한 사람, 곧 <b>나</b>입니다. 그래서 우리는 8·10·12차시에 손계산으로 AI의 결과를 검산하는 연습을 해 왔습니다. 검증할 수 있는 사람만이 책임질 수 있고, 책임질 수 있는 사람만이 도구를 믿고 쓸 수 있습니다.</p>

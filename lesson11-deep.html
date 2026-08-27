@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>11차시 · 군집 — 스포츠 선수 유형 · 데이터 과학 당곡고</title>
+<title>11차시 · 군집 — 스포츠 선수 유형 · 데이터 과학 당곡고 · 자세한 판</title>
 <link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -27,7 +27,8 @@
     <div class="q">"유유상종(類類相從) — 비슷한 것끼리 서로 따른다."</div>
     <span class="by">옛말 — 컴퓨터는 비슷한 것끼리 묶기만 하고, 무엇이 비슷했는지 읽는 일은 사람 몫입니다</span>
   </div>
-  <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson11-deep.html">🔎 더 자세한 판 보기 →</a></p>
+
+  <div class="callout mini"><div class="h">🔎 자세한 판</div><p>이 페이지는 내용을 줄이지 않은 판입니다. 수업은 <a href="lesson11.html">기본판</a>으로 진행하고, 더 깊이 보고 싶을 때 이 판을 읽습니다.</p></div>
 
   <p class="lead">지금까지의 모델에는 정답이 있었습니다. 기온이라는 실제 값(6차시), 성공/실패라는 라벨(9차시)이 있었고, 모델은 그것을 맞히도록 학습했습니다. 오늘은 정답표 없이 시작합니다. <b>2025 시즌 KBO 타자 43명</b>의 기록만 주고 "비슷한 선수끼리 묶어 보라"고 하면, 컴퓨터는 무엇을 기준으로 나눌까요?</p>
 
@@ -175,6 +176,10 @@
 
   <h2>2. 실습 — 타자 43명을 묶어 본다 (바이브 코딩)</h2>
   <p>데이터는 <b>2025 정규시즌 규정타석을 채운 타자 43명</b>의 공식 기록(<a href="https://github.com/greatsong/modudata/blob/main/data/kbo_hitters_2025.csv" target="_blank" rel="noopener"><code>kbo_hitters_2025.csv</code></a> — 원출처: <a href="https://www.koreabaseball.com" target="_blank" rel="noopener">KBO 공식 기록실</a>)입니다. 행 하나가 선수 한 명, 열은 홈런·도루·볼넷·삼진·출루율·장타율·타율 등 20개 항목입니다. 홈런 1위 디아즈(50개), 도루 1위 박해민(49개), 타율 1위 양의지(0.337)가 모두 이 표 안에 있습니다.</p>
+  <div class="callout mini">
+    <div class="h">🔎 이런 사이트예요 — KBO 공식 기록실</div>
+    <p>koreabaseball.com의 기록실은 한국야구위원회가 리그의 모든 경기 기록을 공개하는 곳입니다. 연도·팀·선수별로 수십 개 항목을 조회할 수 있어 스포츠 데이터 분석의 대표 재료입니다 — 오늘 표도 여기서 정리한 사본입니다.</p>
+  </div>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 스트림릿 앱에 "타자 유형 군집" 페이지를 추가해 줘.
@@ -253,6 +258,7 @@
       <text x="236" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰</text>
       <text x="630" y="275" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮</text>
       <text x="350" y="322" text-anchor="middle" font-size="12.5" fill="#6b5836">단위 차이를 없애면 두 항목이 같은 무게로 거리를 나눈다.</text>
+      <text x="350" y="344" text-anchor="middle" font-size="12" fill="#9a8b6a">실측 — 스케일링 없는 군집은 삼진이 갈라놓은 것과 다름없었다.</text>
     </svg>
   </div>
 
@@ -308,17 +314,13 @@
   <h3>시연 — 군집과 분류는 다르다 (축구 선수 800명)</h3>
   <p>선생님 화면으로 한 장면을 더 봅니다. 축구 게임(EA FC)의 필드플레이어 800명을 능력치 6종으로 묶으면, k=2에서 공격형(메시·음바페)과 수비형(판다이크·캉테)으로 나뉩니다. 그런데 이 묶음을 실제 포지션(공격수/미드필더/수비수)과 대조하면 겹치되 일치하지는 않습니다 — 공격수처럼 뛰는 미드필더, 수비형 공격수가 섞여 있기 때문입니다. 교과서 155쪽의 참고가 말하는 그대로입니다: 군집은 데이터의 유사도로, 분류는 정해진 체계로 나눕니다. 둘의 결과는 다를 수 있습니다. 덧붙여 이 능력치는 게임 회사가 매긴 주관적 평가라는 점도 기억해 둡니다 — 데이터의 출처를 따지는 습관(13차시)은 여기서도 유효합니다.</p>
 
-  <details class="glossary">
-    <summary>🏋️ 도전 — 확장 데이터 3종</summary>
-    <div class="gin">
-      <p style="margin:10px 0 12px">시간이 남는 사람을 위한 확장 데이터가 세 가지 준비되어 있습니다.</p>
-      <ul>
+  <h3>도전 — 투수는 어떤 유형으로 나뉠까</h3>
+  <p>시간이 남는 사람을 위한 확장 데이터가 두 가지 더 준비되어 있습니다.</p>
+  <ul>
     <li><b>투수 전체 280명</b>(<a href="https://github.com/greatsong/modudata/blob/main/data/kbo_pitchers_2025.csv" target="_blank" rel="noopener"><code>kbo_pitchers_2025.csv</code></a>) —이닝·경기 수·세이브·홀드·탈삼진으로 묶으면 네 유형이 나타납니다. 실측으로는 <b>선발형</b>(이닝 132), <b>마무리형</b>(세이브 27.4 — 박영현·김택연), <b>필승조</b>(홀드 13.9), <b>추격조</b>로 갈렸고, 이번에는 점수(실루엣)도 k=4를 가리켰습니다. 타자와 달리 점수와 해석이 일치하는 경우도 있습니다 — 야구가 투수를 실제로 그렇게 나누어 쓰기 때문입니다.</li>
     <li><b>타자 전체 396명</b>(<a href="https://github.com/greatsong/modudata/blob/main/data/kbo_hitters_2025_full.csv" target="_blank" rel="noopener"><code>kbo_hitters_2025_full.csv</code></a>) —부분 출전 선수까지 전부 들어 있습니다. 그대로 군집하면 1타석 타율 1.000 같은 값이 결과를 흔듭니다. 몇 타석부터 믿을 수 있는 기록인지 <b>문턱을 스스로 정해 보는 것</b>이 이 데이터의 진짜 과제입니다 — 6차시의 관측일 필터와 같은 판단입니다.</li>
     <li><b>선수 프로필 980명</b>(<a href="https://github.com/greatsong/modudata/blob/main/data/kbo_player_profiles_2026.csv" target="_blank" rel="noopener"><code>kbo_player_profiles_2026.csv</code></a> — 포지션·생년월일·키·몸무게) —기록 표에는 없는 정보입니다. 7차시에서 영화 코드로 두 표를 이었듯, 이번에는 <b>선수명과 팀을 공통 속성으로</b> 기록 표에 옆으로 이어 봅니다. 병합이 되면 "몸무게와 홈런은 관계가 있을까", "유형별 평균 키는 다를까" 같은 질문이 새로 열립니다. 병합하면서 발견하게 되는 사실이 하나 있습니다 — <b>기록에는 있는데 프로필에 없는 선수</b>(팀을 떠난 선수)와 <b>프로필에는 있는데 기록에 없는 선수</b>(1군 기록이 없는 선수)가 존재합니다. 두 표의 시점이 다르기 때문이며, 짝이 없는 행을 어떻게 처리할지도 병합의 판단입니다.</li>
-      </ul>
-    </div>
-  </details>
+  </ul>
 
   <h2>4. 개념 정리 — 정답이 없다는 것의 뜻</h2>
   <p>회귀와 분류에서는 모델의 점수를 정답과 비교해 계산했습니다. 군집에는 정답이 없으므로, 묶음이 얼마나 조밀하고 서로 얼마나 떨어져 있는지를 재는 실루엣 분석(교과서 153쪽)으로 살펴봅니다. 그러나 오늘 확인했듯 점수가 좋은 묶음이 곧 의미 있는 묶음은 아닙니다. k의 선택, 정규화 여부, 그리고 이름 붙이기까지 — 군집 분석은 처음부터 끝까지 사람의 판단이 개입하는 분석입니다. 그 판단의 근거를 말할 수 있는 것이 이 차시의 목표입니다.</p>

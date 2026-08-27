@@ -43,12 +43,12 @@
   // 2) 이 페이지를 잠글지 판정
   var path = location.pathname;
   var released = (typeof window.RELEASED_LESSON === 'number') ? window.RELEASED_LESSON : 1;
-  var m = path.match(/lesson(\d{2})\.html$/);
+  var m = path.match(/lesson(\d{2})(?:-deep)?\.html$/);
   var locked = false;
   if (!teacher) {
     if (path.indexOf('/teacher/') !== -1) locked = true;
     else if (/(glossary|concepts)\.html$/.test(path)) locked = released < 15; // 시험 대비 시점(15차시)에 공개
-    else if (/extra-movie\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
+    else if (/extra-movie(?:-deep)?\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
     else if (/project\.html$/.test(path)) locked = released < 14;             // 팀 프로젝트 안내 — 14차시(팀 구성)와 함께
     else if (m && parseInt(m[1], 10) > released) locked = true;
   }
@@ -81,11 +81,11 @@
       var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="teacher/"], a[href*="extra-movie"]');
       Array.prototype.forEach.call(links, function (a) {
         var href = a.getAttribute('href') || '';
-        var lm = href.match(/lesson(\d{2})\.html/);
+        var lm = href.match(/lesson(\d{2})(?:-deep)?\.html/);
         var blocked =
           (lm && parseInt(lm[1], 10) > released) ||
           (/(glossary|concepts)\.html/.test(href) && released < 15) ||
-          (/extra-movie\.html/.test(href) && released < 4) ||
+          (/extra-movie(?:-deep)?\.html/.test(href) && released < 4) ||
           (/project\.html/.test(href) && released < 14) ||
           /(^|\/)teacher\//.test(href);
         if (!blocked) return;

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>8차시 · 회귀 평가 손계산 — 오차·MSE·결정계수 · 데이터 과학 당곡고</title>
+<title>8차시 · 회귀 평가 손계산 — 오차·MSE·결정계수 · 자세한 판 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -27,7 +27,11 @@
     <div class="q">"계산의 목적은 숫자가 아니라 통찰이다."</div>
     <span class="by">리처드 해밍 (1962) — 오늘 손으로 구하는 것은 R²라는 숫자가 아니라 그 숫자의 정체입니다</span>
   </div>
-  <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson08-deep.html">🔎 더 자세한 판 보기 →</a></p>
+
+  <div class="callout mini">
+    <div class="h">🔎 자세한 판</div>
+    <p>이 페이지는 내용을 줄이지 않은 판입니다. 수업은 <a href="lesson08.html">기본판</a>으로 진행하고, 더 깊이 보고 싶을 때 이 판을 읽습니다.</p>
+  </div>
 
   <p class="lead">6차시의 기온 직선, 7차시의 영화 점수 0.24와 0.90. 화면에 떠 있던 그 점수의 정체를 오늘 밝힙니다. 도구는 화려하지 않습니다. 활동지 한 장과 사칙연산 — AI가 보여 주는 R² 점수, 직접 계산해 보면 별것 아닙니다. 그리고 별것 아니라는 것을 아는 사람만 그 숫자를 의심할 수 있습니다.</p>
 
@@ -60,9 +64,6 @@
       <tr><td><b>R²</b></td><td>1 − (내 모델의 제곱오차 합 ÷ 평균 모델의 제곱오차 합)</td><td>평균만 찍는 모델보다 얼마나 나은가</td></tr>
     </tbody>
   </table>
-  <details class="glossary">
-    <summary>🔬 그림으로 예열 — 오차와 제곱</summary>
-    <div class="gin">
   <div style="overflow-x:auto;margin:18px 0">
     <svg viewBox="0 0 680 310" style="min-width:560px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="점과 회귀 직선 사이의 세로 거리가 오차이고, 그 거리를 한 변으로 하는 정사각형이 제곱오차임을 나타낸 그림. 오른쪽에는 오차에서 결정계수까지 이어지는 네 단계 계단이 있다">
       <defs>
@@ -102,8 +103,6 @@
       <text x="340" y="296" text-anchor="middle" font-size="12.5" fill="#7a7f95">오늘 활동지의 계단 — 왼쪽 그림의 세로 거리 하나에서 시작한다.</text>
     </svg>
   </div>
-    </div>
-  </details>
   <p>왜 오차를 그냥 더하지 않고 절댓값이나 제곱을 쓰는지, 왜 하필 제곱인지 — 이 물음들은 설명으로 듣는 것보다 계산하다가 직접 부딪히는 편이 훨씬 오래 남습니다. 그래서 오늘은 개념 설명을 여기서 멈추고, 바로 활동지로 갑니다.</p>
 
   <h2>2. 손 활동지 — 교과서 해 보기에서 자작 문제까지</h2>
