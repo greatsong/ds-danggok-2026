@@ -88,14 +88,14 @@
   </div>
 
   <h2>2. 랜덤 포레스트 — 나무 한 그루가 아니라 숲의 투표</h2>
-  <p>9차시의 의사결정트리는 질문을 던져 데이터를 나누는 모델이었습니다. 트리 하나는 이해하기 쉽지만, 학습 데이터의 우연한 특징까지 외워 버리기 쉽습니다. <b>랜덤 포레스트(Random Forest)</b>는 이 약점을 수로 해결합니다 — 데이터를 조금씩 다르게 뽑아 <b>서로 다른 트리 수십~수백 그루</b>를 기르고, 새 영화가 오면 <b>전원 투표</b>로 판정합니다. 이렇게 여러 모델을 묶는 방식을 <b>앙상블(ensemble)</b>이라 부릅니다.</p>
+  <p>9차시의 의사결정트리는 질문을 던져 데이터를 나누는 모델이었습니다. 트리 하나는 이해하기 쉽지만, 학습 데이터의 우연한 특징까지 외워 버리기 쉽습니다. <b>랜덤 포레스트(Random Forest)</b>는 이 약점을 수로 해결합니다 — 전체 데이터에서 중복을 허용해 무작위로 표본을 다시 뽑는 방식으로 <b>조금씩 다르게 공부한 트리 수십~수백 그루</b>를 기르고, 새 영화가 오면 <b>전원 투표</b>로 판정합니다. 이렇게 여러 모델을 묶는 방식을 <b>앙상블(ensemble)</b>이라 부릅니다.</p>
   <p>아래 나무 다섯 그루를 하나씩 눌러 표를 열어 보세요. <b>둘은 틀리지만, 숲은 맞춥니다.</b></p>
 
   <div class="specimen di" style="margin:16px 0">
     <div class="tag">🔬 움직여 보기 — 다섯 그루의 투표</div>
     <div class="body" style="text-align:center">
       <svg id="rf-svg" viewBox="0 0 560 300" style="max-width:560px;width:100%">
-        <text x="280" y="22" text-anchor="middle" font-size="12" fill="#7a7f95">각 나무는 데이터의 서로 다른 조각으로 공부했다 — 나무를 눌러 표를 확인</text>
+        <text x="280" y="22" text-anchor="middle" font-size="12" fill="#7a7f95">같은 새 영화 한 편을 놓고, 서로 다르게 공부한 다섯 그루가 각자 판정합니다 — 나무를 눌러 표 확인</text>
         <g id="rf-trees"></g>
         <g id="rf-tally" transform="translate(70,230)">
           <text x="0" y="0" font-size="12.5" font-weight="800" fill="#2b2d3a">개표:</text>
@@ -109,7 +109,7 @@
         <text id="rf-verdict" x="280" y="288" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">나무 다섯 그루를 모두 열면 숲의 판정이 나옵니다</text>
       </svg>
     </div>
-    <div class="note">나무 아래 색 조각은 그 나무가 공부한 데이터 부분입니다 — 전원이 같은 것을 외운 숲은 다양성이 없어 투표의 의미가 사라집니다.</div>
+    <div class="note">나무 아래 색 조각은 그 나무가 공부한 표본입니다. 데이터를 나눠 갖는 것이 아니라 전체에서 중복을 허용해 무작위로 다시 뽑기 때문에, 표본들은 서로 많이 겹치면서도 조금씩 다릅니다 — 이 "조금씩 다름"이 투표를 의미 있게 만듭니다.</div>
   </div>
 
   <div class="callout tip">
@@ -284,7 +284,7 @@
       document.getElementById('rf-count-f').textContent = f ? f + '표' : '';
       if (opened === votes.length) {
         var verdict = document.getElementById('rf-verdict');
-        verdict.textContent = '숲의 판정: 성공 ' + s + '표 : 실패 ' + f + '표 → "성공" — 나무 둘은 틀렸지만 숲은 맞췄습니다';
+        verdict.textContent = '숲의 판정: 성공 ' + s + '표 : 실패 ' + f + '표 → "성공" — 두 그루의 다른 의견은 다수결에 묻힙니다';
         verdict.setAttribute('fill', '#54a24b');
       }
     });
