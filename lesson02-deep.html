@@ -377,7 +377,7 @@
     </li>
     <li><span class="st">② AI가 준 코드 예시 — 이런 모습이면 성공</span><br>
       AI가 준 main.py로 교체해 커밋하면 앱이 다시 배포됩니다. 아래는 실제로 실행해 확인한 코드 예시입니다. <b>여러분 코드가 글자까지 같지 않아도 됩니다</b> — 어제 날짜의 순위표·지표 카드·막대그래프가 나타나면 성공입니다. 이 교재를 만들던 날에는 1위 자리에 「오디세이」(어제 관객수 164,382명)가 떠 있었습니다. 여러분 화면의 1위는 여러분의 어제가 정합니다.
-      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 (main.py)</span><button class="copy-btn">복사</button><pre># 어제의 박스오피스 — KOBIS 일별 박스오피스 API
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">main.py</button></span><button class="copy-btn">복사</button><pre># 어제의 박스오피스 — KOBIS 일별 박스오피스 API
 import datetime
 
 import pandas as pd
@@ -453,7 +453,7 @@ st.subheader("📊 관객수 상위 5편")
 top5 = df.sort_values("audiCnt", ascending=False).head(5)
 fig = px.bar(top5, x="movieNm", y="audiCnt", labels={"movieNm": "영화명", "audiCnt": "어제 관객수"})
 st.plotly_chart(fig, width="stretch")</pre></div>
-      <div class="codewrap code"><span class="label">requirements.txt</span><button class="copy-btn">복사</button><pre>streamlit
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
 pandas
 plotly
 requests</pre></div>
