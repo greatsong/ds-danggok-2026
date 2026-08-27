@@ -238,15 +238,8 @@
   
 
   <h2>4. 주소창 맨눈 보기 — 약속의 실물 확인</h2>
-  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 클래스룸에서 받은 <b>키</b>를 아래 상자에 붙여 넣으면 어제 날짜가 채워진 <b>완성 주소</b>가 만들어집니다. 그 전에, 요청 주소 자체를 해부해 봅니다.</p>
-  <div class="specimen semi" style="margin:18px 0">
-    <div class="tag">요청 주소의 해부 — 한 줄에 실려 가는 구성 요소</div>
-    <div class="body"><pre class="mini"><span style="color:#3ba6a0;text-decoration:underline">https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json</span>
-                                                  <span style="color:#9b8c66">↑ 어디에 — 요청 URL</span>
-<span style="color:#f4b400">?key=발급받은 인증키</span>                              <span style="color:#9b8c66">← 누가 — 🔑 인증키</span>
-<span style="color:#e8930c">&amp;targetDt=20260825</span>                                <span style="color:#9b8c66">← 조건 — 날짜. 이 값을 바꾸면 응답이 그날 것으로 바뀐다</span></pre></div>
-    <div class="note">§3 표의 구성 요소(요청 URL·조건·인증키)가 주소 한 줄에 모두 실려 간다. 응답만 JSON으로 돌아온다.</div>
-  </div>
+  <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 클래스룸에서 받은 <b>키</b>를 아래 상자에 붙여 넣으면 어제 날짜가 채워진 <b>완성 주소</b>가 만들어집니다 — 그 주소를 새 탭에서 열어 봅니다.</p>
+  
   <div class="urlmaker" id="km-box">
     <span class="um-label">🔗 주소 만들기 — 클래스룸에서 받은 키를 붙여 넣기만 하세요</span>
     <input type="text" id="km-key" placeholder="여기에 키 붙여넣기" autocomplete="off" spellcheck="false">
@@ -262,6 +255,15 @@
     <li><b>겉상자와 목록</b> — <code>boxOfficeResult</code> 안의 <code>dailyBoxOfficeList</code>. 영화 한 편이 상자 하나입니다. 2절에서 본 구조 그대로인지 확인합니다.</li>
     <li><b>따옴표 친 숫자</b> — <code>audiCnt</code>(그날 관객수)의 값이 따옴표에 싸여 있습니다. 실습에서 이 함정을 프롬프트로 미리 막습니다.</li>
       </ul>
+  <p>이제 방금 쓴 주소의 정체를 해부해 봅니다. §3 표의 구성 요소가 한 줄에 다 실려 있습니다.</p>
+  <div class="specimen semi" style="margin:18px 0">
+    <div class="tag">요청 주소의 해부 — 한 줄에 실려 가는 구성 요소</div>
+    <div class="body"><pre class="mini"><span style="color:#3ba6a0;text-decoration:underline">https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json</span>
+                                                  <span style="color:#9b8c66">↑ 어디에 — 요청 URL</span>
+<span style="color:#f4b400">?key=발급받은 인증키</span>                              <span style="color:#9b8c66">← 누가 — 🔑 인증키</span>
+<span style="color:#e8930c">&amp;targetDt=20260825</span>                                <span style="color:#9b8c66">← 조건 — 날짜. 이 값을 바꾸면 응답이 그날 것으로 바뀐다</span></pre></div>
+    <div class="note">§3 표의 구성 요소(요청 URL·조건·인증키)가 주소 한 줄에 모두 실려 간다. 응답만 JSON으로 돌아온다.</div>
+  </div>
   <div class="callout warn">
     <div class="h">⚠️ 날짜의 약속 — 가장 늦은 조회일은 어제</div>
     <p>조회 날짜(targetDt)는 하이픈 없는 <b>여덟 자리 숫자</b>(예: 20260825)로 적습니다. 그리고 <b>오늘 날짜를 넣으면 오류가 아니라 빈 목록</b>이 옵니다 — 오늘 관객수는 아직 집계 전이기 때문입니다. 가장 늦게 조회할 수 있는 날은 어제입니다. "응답이 비어 있다 = 고장"이 아니라는 것, 오늘 여러 번 확인하게 됩니다.</p>
