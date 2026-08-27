@@ -338,7 +338,7 @@
     </li>
     <li><span class="st">② AI가 준 코드 — 파일 두 개를 받는다</span><br>
       main.py와 requirements.txt, 두 파일이 옵니다. <b>여러분 코드가 아래와 글자까지 같지 않아도 됩니다.</b> requirements.txt는 내 앱이 쓰는 라이브러리 목록입니다 — 목록에 없는 라이브러리를 코드가 쓰면 앱이 멈추기 때문에, ① 프롬프트가 코드와 함께 이 목록도 받아 옵니다.
-      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 (main.py)</span><button class="copy-btn">복사</button><pre># 어제의 박스오피스 — KOBIS 일별 박스오피스 API
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">main.py</button></span><button class="copy-btn">복사</button><pre># 어제의 박스오피스 — KOBIS 일별 박스오피스 API
 import datetime
 
 import pandas as pd
@@ -414,15 +414,13 @@ st.subheader("📊 관객수 상위 5편")
 top5 = df.sort_values("audiCnt", ascending=False).head(5)
 fig = px.bar(top5, x="movieNm", y="audiCnt", labels={"movieNm": "영화명", "audiCnt": "어제 관객수"})
 st.plotly_chart(fig, width="stretch")</pre></div>
-      <div class="codewrap code"><span class="label">requirements.txt</span><button class="copy-btn">복사</button><pre>streamlit
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
 pandas
 plotly
 requests</pre></div>
     </li>
     <li><span class="st">깃허브에 올리기 — 커밋하면 다시 배포된다</span><br>
-      1차시 저장소에서 <b>main.py</b>를 열어 연필 아이콘으로 전체를 지우고 새 코드를 붙여 넣어 커밋합니다. <b>requirements.txt</b>도 열어 위 네 줄이 다 있는지 확인하고, 없는 줄은 추가해 커밋합니다. 커밋하면 앱이 스스로 다시 배포됩니다(1~3분). 파일 이름은 아래에서 그대로 복사해 쓰세요 — 한 글자만 달라도 앱이 찾지 못합니다.
-      <div class="codewrap code"><span class="label">파일 이름 ① (그대로 복사)</span><pre>main.py</pre></div>
-      <div class="codewrap code"><span class="label">파일 이름 ② (그대로 복사)</span><pre>requirements.txt</pre></div>
+      1차시 저장소에서 <button type="button" class="fname">main.py</button>를 열어 연필 아이콘으로 전체를 지우고 새 코드를 붙여 넣어 커밋합니다. <button type="button" class="fname">requirements.txt</button>도 열어 위 네 줄이 다 있는지 확인하고, 없는 줄은 추가해 커밋합니다. 커밋하면 앱이 스스로 다시 배포됩니다(1~3분). 파일 이름은 눌러서 그대로 복사해 쓰세요 — 한 글자만 달라도 앱이 찾지 못합니다.
     </li>
     <li><span class="st">스트림릿에서 키 넣기 — 비밀 금고(secrets)</span><br>
       키는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 코드에 적어 공개 저장소에 올리는 순간 전 세계에 공개되고, 남이 내 이름으로 호출한 사용량과 책임은 내 몫이 됩니다. 배포된 내 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸에 아래 한 줄을 붙여 넣고 저장합니다. 저장하면 앱이 자동으로 다시 시작됩니다.

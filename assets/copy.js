@@ -33,3 +33,25 @@ document.addEventListener('DOMContentLoaded', function () {
     wrap.appendChild(btn);
   });
 });
+
+// 파일명 칩(.fname) — 누르면 파일 이름만 복사된다
+document.addEventListener('DOMContentLoaded', function () {
+  var chips = document.querySelectorAll('.fname');
+  Array.prototype.forEach.call(chips, function (btn) {
+    btn.title = '누르면 파일 이름이 복사됩니다';
+    btn.addEventListener('click', function () {
+      var name = btn.getAttribute('data-copy') || btn.textContent.trim();
+      function ok() {
+        btn.classList.add('done');
+        setTimeout(function () { btn.classList.remove('done'); }, 1500);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(name).then(ok).catch(function () {
+          window.prompt('아래 이름을 복사하세요', name);
+        });
+      } else {
+        window.prompt('아래 이름을 복사하세요', name);
+      }
+    });
+  });
+});

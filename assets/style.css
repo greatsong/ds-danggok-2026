@@ -317,3 +317,13 @@ table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var
 .checklist li.done{background:var(--green-soft);color:var(--text-soft)}
 .checklist li.done::before{content:"✓";background:var(--green);border-color:var(--green);animation:checkpop .28s ease}
 @keyframes checkpop{0%{transform:scale(.6)}55%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+/* 파일명 복사 칩 — 파일 이름을 누르면 이름이 그대로 복사된다 */
+.fname { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 0.85em; font-weight: 700; color: #5b4a22; background: #faf3e3; border: 1px solid #e3d5b3; border-radius: 6px; padding: 1px 8px; cursor: pointer; vertical-align: baseline; line-height: 1.5; }
+.fname::after { content: "📋"; font-size: 0.85em; }
+.fname:hover { background: #f3e8cd; }
+.fname.done { color: #166534; background: #dcfce7; border-color: #86efac; }
+.fname.done::after { content: "✓ 복사됨"; font-size: 0.8em; }
+.codewrap .label .fname { color: #fff; background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); margin-left: 6px; font-size: 1em; padding: 0 7px; }
+.codewrap .label .fname:hover { background: rgba(255,255,255,0.28); }
+.codewrap .label .fname.done { background: rgba(255,255,255,0.28); border-color: #86efac; color: #bbf7d0; }
