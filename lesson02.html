@@ -40,8 +40,7 @@
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>버스 도착 알림, 날씨 앱, 예매 앱의 실시간 순위 — 이런 앱들은 데이터 파일을 미리 내려받아 두지 않습니다. 여러분이 화면을 여는 순간, 앱이 데이터를 가진 서버에 <b>요청을 보내고 응답을 받아</b> 보여 줍니다. 1차시의 기온 앱은 내려받아 둔 파일(그 시점의 복사본)로 만들었습니다. 오늘은 데이터를 받는 두 번째 방법을 배웁니다. 한 번 익혀 두면 영화·급식·날씨·대중교통 등 세상의 수많은 실시간 데이터가 여러분 앱의 재료가 됩니다.</p>
-  <p>오늘 쓸 KOBIS는 영화진흥위원회가 운영하는 영화관입장권 통합전산망입니다. 전국 극장의 관객 수가 매일 집계되는 공식 통계라, 뉴스에 나오는 "천만 영화"의 근거가 바로 이 데이터입니다.</p>
+  <p>버스 도착 알림, 날씨 앱, 예매 앱의 실시간 순위 — 이런 앱들은 파일을 내려받아 두지 않고, 화면을 여는 순간 서버에 <b>요청을 보내고 응답을 받아</b> 보여 줍니다. 오늘 데이터를 받는 이 두 번째 방법을 배웁니다. 재료는 영화진흥위원회가 운영하는 <b>KOBIS(영화관입장권 통합전산망)</b> — 전국 극장의 관객 수가 매일 집계되는 공식 통계로, 뉴스에 나오는 "천만 영화"의 근거가 바로 이 데이터입니다.</p>
 
   <h2>1. 개념 이해 — 데이터의 세 가지 형태</h2>
   <div class="tbquote">
@@ -101,15 +100,7 @@
       <div class="note">행도 라벨도 없는 이미지. 그대로는 분석할 수 없고, <b>가공해야</b> 속성(메뉴·양)을 꺼낼 수 있습니다.</div>
     </div>
   </div>
-  <p>같은 하루인데 담긴 그릇이 다릅니다. 수업에서 만나는 때와 함께 정리하면 이렇습니다.</p>
-  <table class="daymap">
-    <thead><tr><th>형태</th><th>위의 실물</th><th>다루는 법</th><th>우리 수업에서 만나는 때</th></tr></thead>
-    <tbody>
-      <tr><td><b>정형</b></td><td>CSV 식단표</td><td>표 그대로 분석</td><td>1차시 기온 CSV · 3차시부터 쓰는 축적 표</td></tr>
-      <tr><td><b>반정형</b></td><td>JSON 응답</td><td>표로 변환해 분석</td><td>오늘 KOBIS · 5차시 급식 — API로 받을 때</td></tr>
-      <tr><td><b>비정형</b></td><td>급식 사진</td><td>가공해 속성 추출</td><td>팀 프로젝트에서 만날 수 있음</td></tr>
-    </tbody>
-  </table>
+  <p>같은 하루인데 담긴 그릇이 다릅니다. 오늘의 주인공은 가운데의 <b>반정형(JSON)</b>입니다.</p>
 
   <h2>2. JSON — 라벨 붙은 상자</h2>
   <div class="tbquote">
@@ -138,10 +129,9 @@
   }
 }</pre></div>
   <ul>
-    <li><b>값 꺼내기 = 라벨을 따라 들어가기</b> — 겉상자 <code>boxOfficeResult</code> 안에서 <code>dailyBoxOfficeList</code> 목록을 꺼내면, <b>영화 한 편이 상자 하나</b>씩 들어 있습니다. 그 상자에서 <code>movieNm</code>(영화명)·<code>audiCnt</code>(그날 관객수)를 꺼내는 식입니다. "상자에서 상자를 꺼내라"고 말할 수 있으면 JSON을 읽을 수 있습니다.</li>
+    <li><b>값 꺼내기 = 라벨을 따라 들어가기</b> — 겉상자 <code>boxOfficeResult</code> 안에서 <code>dailyBoxOfficeList</code> 목록을 꺼내면, <b>영화 한 편이 상자 하나</b>씩 들어 있습니다. 그 상자에서 <code>movieNm</code>(영화명)·<code>audiCnt</code>(그날 관객수)를 꺼내는 식이고, 상자 하나가 표의 행 하나가 됩니다 — 교과서 20쪽의 "표 형태로 쉽게 변환"이 바로 이 작업입니다.</li>
     <li><b>👀 눈여겨볼 것 — 숫자가 따옴표에 싸여 있다.</b> <code>"audiCnt": "164382"</code> — 16만 명이 넘는 관객수가 숫자가 아니라 <b>따옴표 친 글자</b>로 옵니다. 글자인 채로 정렬하면 사전순이 되어 "9"가 "164382"보다 커집니다. 크기 비교·정렬·그래프 전에 숫자로 바꾸는 한 단계가 꼭 필요합니다.</li>
-    <li><b>표로 바꾸면 정형이 된다</b> — <code>dailyBoxOfficeList</code>의 상자 하나가 표의 행 하나가 됩니다. 교과서 20쪽의 "필요한 경우 표 형태로도 쉽게 변환할 수 있다"가 바로 이 작업입니다.</li>
-  </ul>
+      </ul>
 
   <h2>3. API — 요청과 응답의 약속</h2>
   <p>이 JSON은 누가, 어떻게 보내 줄까요? 보내 주는 통로가 API입니다. API는 <b>Application Programming Interface</b>의 약자로, 프로그램(application)끼리 기능과 데이터를 주고받도록 정해 둔 접점(interface)이라는 뜻입니다. 지도 앱이 지도 데이터를 받아 오고, 쇼핑 앱의 결제 버튼이 카드사와 통신하는 것이 전부 API를 통한 일입니다. 이 수업에서 다루는 것은 그중 <b>데이터를 요청해 받는 API</b>이고, 한 문장으로 줄이면 <b>정해진 주소로 조건을 담은 요청을 보내면, 정해진 양식(JSON)의 응답을 돌려주기로 한 약속</b>입니다. 내 앱이 KOBIS 서버에 "어제의 박스오피스"를 요청하면, 서버는 약속된 형식으로 순위 데이터를 돌려줍니다. 서버 내부에서 무슨 일이 일어나는지는 몰라도 됩니다 — 약속(요청 형식과 응답 형식)만 알면 데이터를 받을 수 있습니다. API를 이루는 네 가지는 다음과 같습니다.</p>
@@ -151,106 +141,14 @@
       <tr><td><b>요청 URL</b></td><td>어디에 물어볼지 정해진 인터넷 주소 — URL은 Uniform Resource Locator의 약자</td><td>kobis.or.kr의 일별 박스오피스 API 주소</td></tr>
       <tr><td><b>요청(request)</b></td><td>"무엇을 알려줘"라는 물음 — 주소 뒤에 붙는 조건들</td><td>조회 날짜(targetDt)</td></tr>
       <tr><td><b>응답(response)</b></td><td>정해진 양식(JSON)으로 오는 답</td><td>순위·영화명·관객수가 담긴 JSON</td></tr>
-      <tr><td><b>API 키(인증키)</b></td><td>요청에 함께 실어 보내는, 사용자를 증명하는 문자열</td><td>주소의 key= 뒤에 붙는다 — 아래 6절에서 자세히</td></tr>
+      <tr><td><b>API 키(인증키)</b></td><td>요청에 함께 실어 보내는, 사용자를 증명하는 문자열</td><td>주소의 key= 뒤에 붙는다 — 실습에서 비밀 금고에 저장한다</td></tr>
     </tbody>
   </table>
 
-  <details class="glossary">
-    <summary>🔬 움직여 보기 — 요청과 응답, 클릭으로 한 단계씩</summary>
-    <div class="gin">
-      <p style="margin:10px 0 12px">내 앱이 박스오피스 데이터를 받아 오는 과정입니다. 그림을 <b>클릭할 때마다 한 단계씩</b> 움직입니다 — ①요청 만들기 → ②서버로 보내기 → ③응답(JSON) 만들기 → ④응답 받기.</p>
-<svg class="api-svg" viewBox="0 0 800 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="클릭할 때마다 한 단계씩 진행되는 API 요청과 응답 그림">
-  <defs>
-    <marker id="arR" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#7d93ef"/></marker>
-    <marker id="arL" markerWidth="11" markerHeight="11" refX="8" refY="5.5" orient="auto"><path d="M0,0 L11,5.5 L0,11 z" fill="#e98bb6"/></marker>
-    <filter id="ds2" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2a3568" flood-opacity="0.14"/></filter>
-  </defs>
-  <g class="lane" data-lane="B" data-req-y="98" data-res-y="142" style="cursor:pointer">
-    <rect x="6" y="12" width="788" height="192" fill="transparent" pointer-events="all"/>
-    <text class="hint" x="400" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#0e9488">👆 클릭 ① — 요청 만들기</text>
-    <g filter="url(#ds2)" pointer-events="none"><rect x="28" y="64" width="180" height="100" rx="18" fill="#ffffff" stroke="#e6e8f2"/></g>
-    <text x="118" y="114" text-anchor="middle" font-size="36" pointer-events="none">💻</text>
-    <text x="118" y="148" text-anchor="middle" font-size="15" font-weight="800" fill="#2b2d3a" pointer-events="none">내 앱 · 브라우저</text>
-    <g filter="url(#ds2)" pointer-events="none"><rect x="592" y="64" width="180" height="100" rx="18" fill="#eef0ff" stroke="#c3c9f5"/></g>
-    <text x="682" y="108" text-anchor="middle" font-size="33" pointer-events="none">🎬</text>
-    <text x="682" y="138" text-anchor="middle" font-size="15" font-weight="800" fill="#3b47c2" pointer-events="none">KOBIS</text>
-    <text x="682" y="155" text-anchor="middle" font-size="11.5" fill="#8a8fb0" pointer-events="none">API 서버 · 박스오피스 집계</text>
-    <line x1="216" y1="98" x2="584" y2="98" stroke="#9fb0f5" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arR)" pointer-events="none"/>
-    <text x="400" y="86" text-anchor="middle" font-size="13" fill="#5B6CF0" font-weight="800" pointer-events="none">요청 →</text>
-    <line x1="584" y1="142" x2="216" y2="142" stroke="#f0b9d2" stroke-width="2.5" stroke-dasharray="6 6" marker-end="url(#arL)" pointer-events="none"/>
-    <text x="400" y="166" text-anchor="middle" font-size="13" fill="#E0568A" font-weight="800" pointer-events="none">← 응답</text>
-    <g class="doc-req" opacity="0" pointer-events="none">
-      <rect x="-66" y="-44" width="132" height="88" rx="8" fill="#ffffff" stroke="#b9c0f5"/>
-      <rect x="-66" y="-44" width="132" height="22" rx="8" fill="#0e9488"/><rect x="-66" y="-33" width="132" height="11" fill="#0e9488"/>
-      <text x="0" y="-28" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📝 요청 (URL)</text>
-      <text x="0" y="-4" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">무엇: 박스오피스</text>
-      <text x="0" y="14" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">날짜: 어제</text>
-      <text x="0" y="32" text-anchor="middle" font-size="12.5" font-weight="800" fill="#3b47c2">🔑 key=인증키</text>
-    </g>
-    <g class="doc-res" opacity="0" pointer-events="none">
-      <rect x="-82" y="-52" width="164" height="104" rx="8" fill="#ffffff" stroke="#a7d8d4"/>
-      <rect x="-82" y="-52" width="164" height="22" rx="8" fill="#0e9488"/><rect x="-82" y="-41" width="164" height="11" fill="#0e9488"/>
-      <text x="0" y="-36" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">📦 응답 (JSON)</text>
-      <text x="0" y="-6" text-anchor="middle" font-size="20" font-weight="800" fill="#2b2d3a">🎬 어제의 순위표</text>
-      <text x="0" y="13" text-anchor="middle" font-size="11" fill="#8a8fa6">순위·영화명·관객수</text>
-      <text x="0" y="36" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0e9488" font-family="monospace">{"movieNm": "…"}</text>
-    </g>
-  </g>
-  <text x="400" y="232" text-anchor="middle" font-size="12.5" fill="#7a7f95" pointer-events="none">요청 = 주소 + 조건(날짜) + 🔑 인증키 · 응답 = 정해진 양식(JSON) · 상태코드 200이면 성공</text>
-</svg>
-<script>
-(function () {
-  var STEPS = {
-    B: ["👆 클릭 ① — 요청 만들기", "👆 클릭 ② — 서버로 보내기", "👆 클릭 ③ — 응답(JSON) 만들기", "👆 클릭 ④ — 응답 받기", "✅ 한 바퀴 끝! 클릭하면 처음부터"]
-  };
-  var START_X = 275, END_X = 525;
-  var MOVE = "transform 2.8s ease-in-out, opacity 0.7s ease";
-  document.querySelectorAll(".api-svg .lane").forEach(function (lane) {
-    var id = lane.getAttribute("data-lane");
-    var req = lane.querySelector(".doc-req");
-    var res = lane.querySelector(".doc-res");
-    var hint = lane.querySelector(".hint");
-    var reqY = +lane.getAttribute("data-req-y");
-    var resY = +lane.getAttribute("data-res-y");
-    var s = 0;
-    function reset() {
-      req.style.transition = "none";
-      res.style.transition = "none";
-      req.style.transform = "translate(" + START_X + "px," + reqY + "px)";
-      res.style.transform = "translate(" + END_X + "px," + resY + "px)";
-      req.style.opacity = 0;
-      res.style.opacity = 0;
-      req.getBoundingClientRect();
-      req.style.transition = MOVE;
-      res.style.transition = MOVE;
-      hint.textContent = STEPS[id][0];
-    }
-    reset();
-    lane.addEventListener("click", function () {
-      s = (s + 1) % 5;
-      if (s === 1) { req.style.opacity = 1; }
-      else if (s === 2) { req.style.transform = "translate(" + END_X + "px," + reqY + "px)"; }
-      else if (s === 3) { req.style.opacity = 0; res.style.opacity = 1; }
-      else if (s === 4) { res.style.transform = "translate(" + START_X + "px," + resY + "px)"; }
-      else { s = 0; reset(); return; }
-      hint.textContent = STEPS[id][s];
-    });
-  });
-})();
-</script>
-    </div>
-  </details>
-  <p>응답에는 <b>상태코드</b>라는 세 자리 숫자 코드가 함께 옵니다. 셋만 기억하면 됩니다 — <b>200</b> 성공 · <b>404</b> 없음(주소가 틀렸거나 없는 자료) · <b>429</b> 과다 요청(호출이 너무 잦음 — 잠깐 쉬기).</p>
+  
+  
   <p>내려받기와 API는 무엇이 다를까요? 1차시에 쓴 기온 CSV는 <b>그 시점의 복사본</b>입니다. 내일 기록이 늘어나도 내 파일은 모릅니다. API는 호출할 때마다 서버가 지금 가진 데이터를 보내 주므로 <b>항상 최신</b>이고, 날짜 같은 조건을 지정해 <b>필요한 만큼만</b> 받을 수 있습니다.</p>
-  <table class="daymap">
-    <thead><tr><th>구분</th><th>내려받기(1차시)</th><th>API 호출(오늘)</th></tr></thead>
-    <tbody>
-      <tr><td><b>받는 것</b></td><td>그 시점의 복사본 파일(CSV)</td><td>지금 서버가 가진 데이터(JSON)</td></tr>
-      <tr><td><b>최신성</b></td><td>내려받은 날짜에 멈춰 있음</td><td>호출할 때마다 최신</td></tr>
-      <tr><td><b>범위</b></td><td>제공자가 묶어 둔 파일 전체</td><td>날짜 등 조건을 지정해 필요한 만큼</td></tr>
-      <tr><td><b>형태</b></td><td>정형(표)</td><td>반정형(JSON) — 표로 변환해서 사용</td></tr>
-    </tbody>
-  </table>
+  
 
   <h2>4. 주소창 맨눈 보기 — 약속의 실물 확인</h2>
   <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 클래스룸에서 받은 <b>키</b>를 아래 상자에 붙여 넣으면 어제 날짜가 채워진 <b>완성 주소</b>가 만들어집니다. 그 전에, 요청 주소 자체를 해부해 봅니다.</p>
@@ -258,7 +156,7 @@
     <div class="tag">요청 주소의 해부 — 한 줄에 실려 가는 구성 요소</div>
     <div class="body"><pre class="mini"><span style="color:#3ba6a0;text-decoration:underline">https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json</span>
                                                   <span style="color:#9b8c66">↑ 어디에 — 요청 URL</span>
-<span style="color:#f4b400">?key=발급받은 인증키</span>                              <span style="color:#9b8c66">← 누가 — 🔑 인증키 (6절)</span>
+<span style="color:#f4b400">?key=발급받은 인증키</span>                              <span style="color:#9b8c66">← 누가 — 🔑 인증키</span>
 <span style="color:#e8930c">&amp;targetDt=20260825</span>                                <span style="color:#9b8c66">← 조건 — 날짜. 이 값을 바꾸면 응답이 그날 것으로 바뀐다</span></pre></div>
     <div class="note">§3 표의 구성 요소(요청 URL·조건·인증키)가 주소 한 줄에 모두 실려 간다. 응답만 JSON으로 돌아온다.</div>
   </div>
@@ -270,14 +168,13 @@
       <button class="copybtn" id="km-copy" type="button" disabled>📋 주소 복사</button>
       <a class="openbtn" id="km-open" target="_blank" rel="noopener" style="display:none">↗ 새 탭에서 열어 보기</a>
     </div>
-    <div class="um-note">키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다 · 날짜는 한국 시간 기준 어제로 자동 계산 · 아래 6절의 비밀 금고(Secrets) 예시에도 이 키가 자동으로 채워집니다</div>
+    <div class="um-note">키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다 · 날짜는 한국 시간 기준 어제로 자동 계산 · 아래 실습의 비밀 금고(Secrets) 예시에도 이 키가 자동으로 채워집니다</div>
   </div>
   <p>새 탭에 화면 가득 글자 덩어리(JSON)가 뜨면 성공입니다. 한 줄로 뭉쳐 보여도 정상입니다. 중괄호와 따옴표 사이에서 다음을 찾아보세요.</p>
   <ul>
     <li><b>겉상자와 목록</b> — <code>boxOfficeResult</code> 안의 <code>dailyBoxOfficeList</code>. 영화 한 편이 상자 하나입니다. 2절에서 본 구조 그대로인지 확인합니다.</li>
     <li><b>따옴표 친 숫자</b> — <code>audiCnt</code>(그날 관객수)의 값이 따옴표에 싸여 있습니다. 실습에서 이 함정을 프롬프트로 미리 막습니다.</li>
-    <li><b>날짜 조건을 바꾸면</b> — 주소 속 <code>targetDt</code>의 여덟 자리를 다른 날로 고쳐 다시 접속하면 응답이 그날 것으로 바뀝니다. 같은 주소, 다른 조건입니다.</li>
-  </ul>
+      </ul>
   <div class="callout warn">
     <div class="h">⚠️ 날짜의 약속 — 가장 늦은 조회일은 어제</div>
     <p>조회 날짜(targetDt)는 하이픈 없는 <b>여덟 자리 숫자</b>(예: 20260825)로 적습니다. 그리고 <b>오늘 날짜를 넣으면 오류가 아니라 빈 목록</b>이 옵니다 — 오늘 관객수는 아직 집계 전이기 때문입니다. 가장 늦게 조회할 수 있는 날은 어제입니다. "응답이 비어 있다 = 고장"이 아니라는 것, 오늘 여러 번 확인하게 됩니다.</p>
@@ -287,7 +184,9 @@
     <p>키를 잘못 붙여 넣는 등의 이유로 순위표 대신 낯선 오류 안내가 올 수 있습니다. 원인을 외울 필요는 없습니다 — <b>화면에 뜬 내용을 통째로 복사해 AI에게 붙여넣고 "무엇이 문제냐"고 물으면 됩니다.</b> 오류를 다루는 것도 바이브 코딩의 일부입니다.</p>
   </div>
 
-  <h2>5. API 문서 읽는 법 — 다 읽지 않아도 됩니다</h2>
+  <details class="glossary">
+    <summary>📖 더 알아보기 — API 문서 읽는 법 (수업 필수 아님 · 5차시 전에 한 번 읽어 오세요)</summary>
+    <div class="gin">
   <p>오늘 실습 프롬프트의 끝에는 "공식 문서에서 복사한 부분"이 붙어 있습니다. 그 발췌가 어디서 왔는지, 문서를 직접 열어 봅니다. <a href="https://www.kobis.or.kr/kobisopenapi/" target="_blank" rel="noopener">KOBIS 오픈API 홈페이지</a>는 영화진흥위원회가 전국 극장의 매출·관객 집계를 누구나 프로그램으로 받아 갈 수 있게 공개한 곳입니다 — 예매 앱과 뉴스의 박스오피스도 결국 이 집계에서 나옵니다.</p>
   <ol class="steps">
     <li><span class="st">문서까지 가는 길</span><br>
@@ -317,33 +216,11 @@
     <p>문서를 다 이해한 뒤 옮겨 적는 것이 아닙니다. <b>위의 세 곳을 마우스로 긁어 그대로 복사해, 프롬프트 맨 끝에 붙입니다.</b> AI는 이 API의 문서를 읽은 적이 없어서 필드 이름을 지어내기도 하는데, 문서 발췌를 붙여 주면 실제 이름으로 코드를 씁니다. 오늘 ① 프롬프트의 "──── 아래는 KOBIS 공식 문서에서 복사한 부분 ────"이 바로 그렇게 만든 것입니다. 처음 보는 API를 만나도 방법은 같습니다 — 5차시에 다른 API의 문서로 직접 해 봅니다.</p>
   </div>
 
-  <h2>6. 비밀 금고(secrets) — 키를 코드 밖에 둔다</h2>
-  <p>API 키(인증키)는 서비스가 발급해 주는 긴 무작위 문자열로, <b>누가 얼마나 쓰는지</b>를 세는 장치입니다. KOBIS 키에는 하루 3,000회의 호출 한도가 있습니다. 오늘은 선생님이 발급한 공용 키를 나눠 씁니다 — 클래스룸에 비공개로 게시된 키를 복사해 쓰고, <b>코드에는 절대 붙여 넣지 않습니다</b>. 코드에 적은 채 공개 저장소에 올리는 순간 남이 내 이름으로 호출하고, 그 사용량과 책임은 내 몫이 됩니다.</p>
-  <p>키가 갈 곳은 코드가 아니라 스트림릿의 <b>비밀 금고(secrets)</b>입니다. 넣는 절차는 세 걸음입니다.</p>
-  <ol class="steps">
-    <li><span class="st">내 앱의 관리 화면 열기</span><br>
-      배포된 내 앱 오른쪽 아래의 <b>Manage app</b>을 누르고, 메뉴(⋮)에서 <b>Settings</b>를 엽니다.</li>
-    <li><span class="st">Secrets에 키 저장</span><br>
-      <b>Secrets</b> 칸에 다음 한 줄을 적고 저장합니다. 등호 왼쪽이 이름, 오른쪽 따옴표 안이 선생님이 준 키입니다.
-      <div class="codewrap code"><span class="label">Secrets에 넣을 한 줄 (4절 상자에 키를 붙여 넣었다면 이미 채워져 있음)</span><pre class="secrets-sync">KOBIS_KEY = "선생님이 준 키를 여기에"</pre></div></li>
-    <li><span class="st">저장 — 앱이 스스로 다시 시작</span><br>
-      저장하면 앱이 자동으로 다시 시작됩니다. 화면이 잠깐 깜빡여도 고장이 아닙니다.</li>
-  </ol>
-  <div class="callout warn">
-    <div class="h">⚠️ 이름 세 곳 일치 — 하나라도 다르면 못 찾는다</div>
-    <p>키의 이름 <b>KOBIS_KEY</b>는 세 곳에 등장합니다. 세 곳의 철자가 <b>한 글자까지 똑같아야</b> 합니다. 대문자·밑줄까지 다르면 앱은 금고에서 키를 찾지 못하고 멈춥니다(KeyError).</p>
-    <table class="daymap">
-      <thead><tr><th>어디</th><th>어떤 모습</th></tr></thead>
-      <tbody>
-        <tr><td><b>① 비밀 금고(Secrets)</b></td><td><code>KOBIS_KEY = "…"</code> — 방금 저장한 한 줄</td></tr>
-        <tr><td><b>② 프롬프트</b></td><td>"비밀 금고(secrets)의 KOBIS_KEY에서 불러와" — AI에게 알려 주는 이름</td></tr>
-        <tr><td><b>③ AI가 준 코드</b></td><td><code>st.secrets["KOBIS_KEY"]</code> — 코드가 금고에서 찾는 이름</td></tr>
-      </tbody>
-    </table>
-  </div>
+    </div>
+  </details>
 
-  <h2>7. 실습 — 어제의 박스오피스 대시보드 (①②③)</h2>
-  <p>준비가 끝났습니다. 1차시처럼 프롬프트를 통째로 붙여 넣고, AI가 준 코드로 앱의 main.py를 교체해 커밋합니다. 프롬프트 끝에 <b>KOBIS 공식 문서에서 복사한 부분</b>이 붙어 있는 것을 눈여겨보세요 — 문서를 함께 주면 AI가 라벨 이름을 지어내지 못합니다.</p>
+  <h2>5. 실습 — 어제의 박스오피스 대시보드 (①②③)</h2>
+  <p>이제 만듭니다. 순서는 넷입니다 — <b>AI에게 코드 받기 → 깃허브에 올리기 → 스트림릿에서 키 넣기 → 확인</b>. 프롬프트 끝에 KOBIS 공식 문서에서 복사한 부분이 붙어 있는 것을 눈여겨보세요 — 문서를 함께 주면 AI가 라벨 이름을 지어내지 못합니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>어제의 박스오피스를 보여 주는 스트림릿 앱 하나(main.py)를 만들어 줘. 스트림릿 클라우드에 올릴 거야.
@@ -370,8 +247,8 @@
   ※ 숫자 값이 전부 문자열로 온다.
   ※ 인증키가 틀려도 상태코드는 200이고, 대신 faultInfo 상자가 온다.</pre></div>
     </li>
-    <li><span class="st">② AI가 준 코드 예시 — 이런 모습이면 성공</span><br>
-      AI가 준 main.py로 교체해 커밋하면 앱이 다시 배포됩니다. 아래는 실제로 실행해 확인한 코드 예시입니다. <b>여러분 코드가 글자까지 같지 않아도 됩니다</b> — 어제 날짜의 순위표·지표 카드·막대그래프가 나타나면 성공입니다. 이 교재를 만들던 날에는 1위 자리에 「오디세이」(어제 관객수 164,382명)가 떠 있었습니다. 여러분 화면의 1위는 여러분의 어제가 정합니다.
+    <li><span class="st">② AI가 준 코드 — 파일 두 개를 받는다</span><br>
+      main.py와 requirements.txt, 두 파일이 옵니다. <b>여러분 코드가 아래와 글자까지 같지 않아도 됩니다.</b> requirements.txt는 내 앱이 쓰는 라이브러리 목록입니다 — 목록에 없는 라이브러리를 코드가 쓰면 앱이 멈추기 때문에, ① 프롬프트가 코드와 함께 이 목록도 받아 옵니다.
       <div class="codewrap code"><span class="label">② AI가 준 코드 예시 (main.py)</span><button class="copy-btn">복사</button><pre># 어제의 박스오피스 — KOBIS 일별 박스오피스 API
 import datetime
 
@@ -452,11 +329,30 @@ st.plotly_chart(fig, width="stretch")</pre></div>
 pandas
 plotly
 requests</pre></div>
-      <div class="callout tip">
-        <div class="h">🧰 requirements.txt — 내 앱이 쓰는 도구 목록</div>
-        <p>requirements.txt는 <b>내 앱이 쓰는 라이브러리 이름을 한 줄에 하나씩 적은 파일</b>입니다. 스트림릿 클라우드는 배포할 때 이 목록을 보고 라이브러리를 설치합니다 — 목록에 없는 라이브러리를 코드가 쓰면 앱이 <code>ModuleNotFoundError</code>로 멈춥니다. 오늘 코드는 그래프를 그리는 <b>plotly</b>와 API를 부르는 <b>requests</b>를 쓰므로 위 목록이 필요합니다. 고치는 방법은 main.py와 같습니다 — 깃허브 저장소에서 requirements.txt를 열어 연필 아이콘으로 편집하고 커밋하면 앱이 다시 배포됩니다. ① 프롬프트에 "requirements.txt도 같이 줘"라는 줄이 들어 있는 이유가 이것입니다. AI가 코드와 함께 도구 목록까지 만들어 주면, 여러분은 두 파일을 나란히 올리기만 하면 됩니다.</p>
+    </li>
+    <li><span class="st">깃허브에 올리기 — 커밋하면 다시 배포된다</span><br>
+      1차시 저장소에서 <b>main.py</b>를 열어 연필 아이콘으로 전체를 지우고 새 코드를 붙여 넣어 커밋합니다. <b>requirements.txt</b>도 열어 위 네 줄이 다 있는지 확인하고, 없는 줄은 추가해 커밋합니다. 커밋하면 앱이 스스로 다시 배포됩니다(1~3분). 파일 이름은 아래에서 그대로 복사해 쓰세요 — 한 글자만 달라도 앱이 찾지 못합니다.
+      <div class="codewrap code"><span class="label">파일 이름 ① (그대로 복사)</span><pre>main.py</pre></div>
+      <div class="codewrap code"><span class="label">파일 이름 ② (그대로 복사)</span><pre>requirements.txt</pre></div>
+    </li>
+    <li><span class="st">스트림릿에서 키 넣기 — 비밀 금고(secrets)</span><br>
+      키는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 코드에 적어 공개 저장소에 올리는 순간 전 세계에 공개되고, 남이 내 이름으로 호출한 사용량과 책임은 내 몫이 됩니다. 배포된 내 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸에 아래 한 줄을 붙여 넣고 저장합니다. 저장하면 앱이 자동으로 다시 시작됩니다.
+      <div class="codewrap code"><span class="label">Secrets에 넣을 한 줄 (4절의 주소 만들기 상자에 키를 붙여 넣었다면 이미 채워져 있음)</span><pre class="secrets-sync">KOBIS_KEY = "선생님이 준 키를 여기에"</pre></div>
+      <div class="callout warn">
+        <div class="h">⚠️ 이름 세 곳 일치 — 하나라도 다르면 못 찾는다</div>
+        <p>키의 이름 <b>KOBIS_KEY</b>는 세 곳에 등장하고, 철자가 <b>한 글자까지 똑같아야</b> 합니다. 다르면 앱이 금고에서 키를 찾지 못하고 멈춥니다(KeyError).</p>
+        <table class="daymap">
+          <thead><tr><th>어디</th><th>어떤 모습</th></tr></thead>
+          <tbody>
+            <tr><td><b>① 비밀 금고(Secrets)</b></td><td><code>KOBIS_KEY = "…"</code> — 방금 저장한 한 줄</td></tr>
+            <tr><td><b>② 프롬프트</b></td><td>"비밀 금고(secrets)의 KOBIS_KEY에서 불러와"</td></tr>
+            <tr><td><b>③ AI가 준 코드</b></td><td><code>st.secrets["KOBIS_KEY"]</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </li>
+    <li><span class="st">확인 — 어제의 극장이 내 앱에 뜬다</span><br>
+      앱을 새로고침하면 어제 날짜의 순위표·1위 지표 카드·막대그래프가 나타납니다. 이 교재를 만들던 날에는 1위 자리에 「오디세이」(어제 관객수 164,382명)가 떠 있었습니다 — 여러분 화면의 1위는 여러분의 어제가 정합니다.</li>
     <li><span class="st">③ 프롬프트 개선 — 같은 대화창에서 이어서</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘.
 - 날짜를 어제로 고정하지 말고, 달력에서 골라 그날의 박스오피스를 볼 수 있게 해 줘.
@@ -481,10 +377,10 @@ requests</pre></div>
     <p>화면에 뜬 순위표는 내 컴퓨터 어디에도 파일로 존재하지 않습니다. 앱이 실행될 때마다 KOBIS 서버에 요청을 보내고 응답을 받아 표시한 것입니다. 그리고 이 숫자는 검증할 수 있습니다 — <b>오늘 저녁, 포털에서 "박스오피스"를 검색해 내 앱의 순위표와 대조해 보세요.</b> 같은 데이터에서 온 같은 숫자를 확인하게 됩니다. 대조한 화면은 과제로 제출합니다(스크린샷).</p>
   </div>
 
-  <h2>8. 개념 정리</h2>
+  <h2>6. 개념 정리</h2>
   <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>API는 정해진 주소로 조건을 보내면 정해진 양식(JSON)으로 답하는 약속이고, JSON은 라벨 붙은 상자라서 표로 바꿔 쓸 수 있다.</b> 정형(표)·반정형(JSON)·비정형(사진)을 구분했고, 키는 코드가 아니라 비밀 금고에 둔다는 습관을 시작했습니다. 다만 오늘 받은 것은 <b>어제 하루치</b>뿐입니다. "이 영화는 뜨는 중인가, 지는 중인가"에 답하려면 여러 날을 쌓은 표가 필요합니다 — 다음 시간에 354일 치 축적 표로 그 질문을 엽니다.</p>
 
-  <h2>9. 확인 문제</h2>
+  <h2>7. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 다음을 정형·반정형·비정형으로 구분해 보세요. 답을 눌러 확인합니다.</div>
     <div class="qitem">
@@ -543,7 +439,6 @@ requests</pre></div>
     <tr><td class="term">CSV</td><td>Comma-Separated Values. 표의 값을 쉼표로 구분해 저장하는 파일 형식 — 정형 데이터의 대표 그릇</td></tr>
     <tr><td class="term">requirements.txt</td><td>내 앱이 쓰는 라이브러리 이름을 적은 목록 — 배포 서버가 이 목록을 보고 설치함</td></tr>
     <tr><td class="term">요청/응답</td><td>조건을 담아 보내는 주소 / 서버가 돌려주는 데이터(주로 JSON)</td></tr>
-    <tr><td class="term">상태코드</td><td>응답과 함께 오는 세 자리 숫자 — 200 성공 · 404 없음 · 429 과다 요청</td></tr>
     <tr><td class="term">인증키(API 키)</td><td>API 사용자를 증명하는 문자열 — 사용량 관리·책임 소재의 장치 (KOBIS는 일 3,000회 한도)</td></tr>
     <tr><td class="term">비밀 금고(secrets)</td><td>키 같은 비밀값을 코드 밖에 안전하게 두는 스트림릿의 저장 공간</td></tr>
   </table>
