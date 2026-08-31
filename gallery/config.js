@@ -7,7 +7,7 @@
 //   - 실제 모드: 아래 두 값을 채우면 Supabase 프로젝트와 연동
 //
 // ⚠️ 반드시 "publishable"(공개용 anon) 키만 넣으세요. secret 키는 절대 넣지 마세요.
-// 설정 방법은 SETUP.md 참고.
+// 설정 방법은 AUTH_SETUP.md 참고.
 // ============================================================
 window.APP_CONFIG = {
   SUPABASE_URL: "https://upkakhnpvepqhsbwdyjb.supabase.co",

@@ -2,7 +2,9 @@
 //
 // 규칙
 //   · lessonNN.html  : NN > RELEASED_LESSON(release.js) 이면 잠금
-//   · glossary.html  : 잠금 (전 차시 용어가 들어 있어 진도보다 앞서감)
+//   · glossary.html · concepts.html : 15차시 전까지 잠금 (전 차시 용어·개념이 들어 있어 진도보다 앞서감)
+//   · extra-movie(-deep).html : 4차시 전까지 잠금
+//   · extra-models.html · project.html : 14차시 전까지 잠금
 //   · /teacher/ 이하 : 항상 잠금
 //   · index.html·gallery : 열어 둔다
 //
@@ -67,7 +69,7 @@
         'font-family:system-ui,-apple-system,\'Apple SD Gothic Neo\',sans-serif;color:#334155;line-height:1.7">' +
         '<div style="font-size:56px">🔒</div>' +
         '<h1 style="font-size:20px;margin:12px 0 8px;color:#0f172a">아직 열리지 않았어요</h1>' +
-        '<p style="margin:0 0 20px">이 페이지는 수업 진도에 맞춰 차례로 열립니다. 지금은 <b>1차시</b>까지 볼 수 있어요.</p>' +
+        '<p style="margin:0 0 20px">이 페이지는 수업 진도에 맞춰 차례로 열립니다. 지금은 <b>' + released + '차시</b>까지 볼 수 있어요.</p>' +
         '<a href="' + toIndex + '" style="display:inline-block;padding:10px 18px;border-radius:10px;' +
         'background:#2563eb;color:#fff;text-decoration:none;font-weight:700">교재 첫 화면으로</a>' +
         '</div>';
@@ -79,7 +81,7 @@
   // 4) 열린 페이지: 잠긴 차시로 가는 링크를 눌리지 않게 하고, 교사 모드면 배지를 단다
   document.addEventListener('DOMContentLoaded', function () {
     if (!teacher) {
-      var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="teacher/"], a[href*="extra-movie"], a[href*="extra-models"]');
+      var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="concepts"], a[href*="teacher/"], a[href*="extra-movie"], a[href*="extra-models"], a[href*="project"]');
       Array.prototype.forEach.call(links, function (a) {
         var href = a.getAttribute('href') || '';
         var lm = href.match(/lesson(\d{2})(?:-deep)?\.html/);

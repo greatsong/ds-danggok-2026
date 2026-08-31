@@ -87,7 +87,7 @@
       <text x="472" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">점수(R²)</text>
     </svg>
   </div>
-  <p>우리 데이터에는 지난 1년 극장가를 지나간 영화들이 담겨 있고, 그중 분석 기간 안에 개봉한 <b>216편</b>이 오늘의 학습 재료입니다. 변수 후보는 "언제 알 수 있는 값인가"를 기준으로 이렇게 나뉩니다.</p>
+  <p>우리 데이터에는 지난 1년 극장가를 지나간 영화들이 담겨 있고, 그중 영화별 표에 정리된 <b>216편</b>이 오늘의 학습 재료입니다. 변수 후보는 "언제 알 수 있는 값인가"를 기준으로 이렇게 나뉩니다.</p>
   <table class="daymap">
     <thead><tr><th>구분</th><th>변수 예</th><th>알 수 있는 시점</th></tr></thead>
     <tbody>
@@ -107,7 +107,7 @@
     <div class="h">📦 오늘의 데이터</div>
     <ul>
       <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a></b> — 지난 1년(365일)의 일별 박스오피스 톱10 기록 3,650행, 영화 301편</li>
-      <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a></b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 기간 안에 개봉한 216편</li>
+      <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a></b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 표에 정리된 216편</li>
     </ul>
     <p>3·4차시 그래프 도감에서 쓰던 바로 그 두 표입니다 — 오늘은 읽는 데서 나아가 예측의 재료로 사용합니다.</p>
   </div>
@@ -125,8 +125,9 @@
   (열: 날짜(여덟 자리 숫자)·순위·영화코드·영화명·일관객·누적관객·스크린수·상영횟수)
 - https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
   (열: movieCd(영화코드)·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·
-   first_scrn(개봉일 스크린수)·first_show(개봉일 상영횟수)·first_week_audi(첫 주 관객)·
-   total_audi(총 관객)·days_in_top10)</pre></div>
+   first_scrn(개봉일 스크린수)·first_show(개봉일 상영횟수)·first_date(10위권 첫 등장일)·
+   peak(성수기 개봉이면 1, 아니면 0 — 1월·7월·12월이 성수기)·
+   first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)</pre></div>
     </li>
     <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
       화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 8차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
@@ -205,7 +206,7 @@
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 단순 선형회귀와 다중 선형회귀의 차이를 우리 수업의 두 예측기(기온·영화)를 들어 설명해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수·상영횟수·성수기 여부 등 여러 독립 변수에 각각 가중치를 두어 총 관객 수를 예측하는 다중 선형회귀다. 영향을 주는 요인이 여러 개일 때 다중 회귀를 사용합니다.</p>
+      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수·상영횟수·성수기 여부 등 여러 독립 변수에 각각 가중치를 두어 총 관객 수를 예측하는 다중 선형회귀다. 영향을 주는 요인이 여러 개일 때 다중 회귀를 사용한다.</p>
     </details>
   </div>
   <div class="quiz">
