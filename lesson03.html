@@ -30,12 +30,12 @@
 
   <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson03-deep.html">🔎 더 자세한 판 보기 →</a></p>
 
-  <p class="lead">지난 시간에는 API로 <b>어제 하루</b>의 박스오피스를 받았습니다. 오늘은 선생님이 1년 동안 매일 쌓아 둔 <b>354일치 표</b>를 재료로, 시간의 흐름이 보이는 그래프 다섯 가지를 한 앱에 담습니다. 그래프마다 답할 수 있는 질문이 다르므로, 질문과 그래프의 짝을 기록한 <b>도감</b>을 만드는 시간입니다.</p>
+  <p class="lead">지난 시간에는 API로 <b>어제 하루</b>의 박스오피스를 받았습니다. 오늘은 선생님이 1년 동안 매일 쌓아 둔 <b>365일치 표</b>를 재료로, 시간의 흐름이 보이는 그래프 다섯 가지를 한 앱에 담습니다. 그래프마다 답할 수 있는 질문이 다르므로, 질문과 그래프의 짝을 기록한 <b>도감</b>을 만드는 시간입니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>데이터 전환</b> — 하루치 API 응답에서 354일 축적 표(<a href="https://github.com/greatsong/modudata/blob/main/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a>)로</li>
+      <li><b>데이터 전환</b> — 하루치 API 응답에서 365일 축적 표(<a href="https://github.com/greatsong/modudata/blob/main/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a>)로</li>
       <li><b>도감 만들기</b> — 선·다중 선·영역·가로 막대·히트맵을 한 앱에 쌓기</li>
       <li><b>발견</b> — 1년 중 극장이 가장 붐빈 3일을 데이터에서 찾기</li>
     </ul>
@@ -43,7 +43,7 @@
 
   <h2>0. 왜 배우나 — 하루치로는 답할 수 없는 질문</h2>
   <p>지난 시간의 앱은 "어제 무엇이 1위였나"에 잘 답합니다. 그런데 질문을 조금만 바꾸면 바로 막힙니다. <b>이 영화의 관객은 개봉 후 어떻게 변했나? 1년 중 극장이 가장 붐빈 날은 언제인가?</b> 하루치 응답에는 <b>변화</b>가 없어 답할 수 없습니다. 이런 질문에 답하려면 여러 날의 응답을 한 표로 모아야 합니다.</p>
-  <p>그래서 오늘 데이터를 바꿉니다. 여러분이 지난 시간에 부른 그 API를 선생님이 매일 한 번씩 불러 저장해 온 축적 표가 있습니다. 2025년 9월 1일부터 2026년 8월 20일까지 <b>354일</b>, 하루 10행씩 <b>3,540행</b>, 등장한 영화 <b>296편</b>(영화코드 기준). 일별 응답 조각을 한 표로 잇는 <b>데이터 통합</b>의 실제 사례입니다. 원출처는 <a href="https://www.kobis.or.kr" target="_blank" rel="noopener">영화진흥위원회 영화관입장권통합전산망(KOBIS)</a>의 일별 박스오피스 집계 — 지난 시간에 만난 그 공식 통계입니다.</p>
+  <p>그래서 오늘 데이터를 바꿉니다. 여러분이 지난 시간에 부른 그 API를 선생님이 매일 한 번씩 불러 저장해 온 축적 표가 있습니다. 2025년 9월 1일부터 2026년 8월 31일까지 <b>365일</b>, 하루 10행씩 <b>3,650행</b>, 등장한 영화 <b>301편</b>(영화코드 기준). 일별 응답 조각을 한 표로 잇는 <b>데이터 통합</b>의 실제 사례입니다. 원출처는 <a href="https://www.kobis.or.kr" target="_blank" rel="noopener">영화진흥위원회 영화관입장권통합전산망(KOBIS)</a>의 일별 박스오피스 집계 — 지난 시간에 만난 그 공식 통계입니다.</p>
   <div class="specimen-row">
     <div class="specimen semi">
       <div class="tag">하루치 — API 응답 (JSON)</div>
@@ -57,15 +57,15 @@
       <div class="note">2025년 9월 1일의 응답 한 상자. <b>그날 하루</b>만 담겨 있고, 숫자가 따옴표 친 글자로 옵니다.</div>
     </div>
     <div class="specimen st">
-      <div class="tag">354일 축적 — kobis_daily.csv</div>
+      <div class="tag">365일 축적 — kobis_daily.csv</div>
       <div class="body">
         <table class="minitable">
           <thead><tr><th>날짜</th><th>순위</th><th>영화명</th><th>일관객</th><th>누적관객</th></tr></thead>
           <tbody>
             <tr><td>20250901</td><td>1</td><td>극장판 귀멸의 칼날: 무한성편</td><td>88577</td><td>3242295</td></tr>
             <tr><td>20250901</td><td>2</td><td>F1 더 무비</td><td>19327</td><td>4779711</td></tr>
-            <tr><td colspan="5" style="text-align:center;color:#c0b8a4">⋮ 354일 × 10행</td></tr>
-            <tr><td>20260820</td><td>1</td><td>오디세이</td><td>188671</td><td>5788173</td></tr>
+            <tr><td colspan="5" style="text-align:center;color:#c0b8a4">⋮ 365일 × 10행</td></tr>
+            <tr><td>20260831</td><td>1</td><td>오디세이</td><td>145918</td><td>9010850</td></tr>
           </tbody>
         </table>
       </div>
@@ -95,7 +95,7 @@
       <div class="codewrap prompt"><span class="label">① 뼈대 프롬프트</span><button class="copy-btn">복사</button><pre>스트림릿 앱(main.py)을 새로 만들어 줘. 제목은 '영화 데이터 그래프 도감 1 - 시간'.
 - 데이터는 이 주소에서 불러와:
   https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv
-  1년치(354일) 일별 박스오피스 10위권 기록이야. 열은
+  1년치(365일) 일별 박스오피스 10위권 기록이야. 열은
   날짜(하이픈 없는 여덟 자리 숫자) · 순위 · 영화코드 · 영화명 · 일관객 · 누적관객 · 스크린수 · 상영횟수.
 - 날짜 열을 진짜 날짜로 바꿔서 써 줘.
 - 첫 그래프: 영화를 드롭다운으로 고르면 그 영화의 날짜별 일관객 변화를 플롯리 선 그래프로 보여 줘.
@@ -123,7 +123,7 @@ DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis
 
 @st.cache_data
 def load_data():
-    # 1년치(354일) 일별 박스오피스 10위권 기록을 불러옵니다.
+    # 1년치(365일) 일별 박스오피스 10위권 기록을 불러옵니다.
     df = pd.read_csv(DATA_URL)
     # 여덟 자리 숫자로 된 날짜 열을 진짜 날짜로 바꿉니다.
     df["날짜"] = pd.to_datetime(df["날짜"], format="%Y%m%d")
@@ -234,7 +234,7 @@ st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 어제 하루치 API 응답만으로는 답할 수 없고, 354일 축적 표라야 답할 수 있는 질문을 하나 적어 보세요. 적은 뒤 펼쳐 봅니다.</div>
+    <div class="qq"><span class="qn">문제 3</span> 어제 하루치 API 응답만으로는 답할 수 없고, 365일 축적 표라야 답할 수 있는 질문을 하나 적어 보세요. 적은 뒤 펼쳐 봅니다.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
       <p>"이 영화의 관객은 개봉 후 몇 주 만에 반으로 줄었나", "1년 중 극장이 가장 붐빈 날은 언제인가", "주말과 평일의 관객 차이는 얼마나 되나". 모두 <b>변화·기간·비교</b>를 묻는 질문입니다. 하루치 응답에는 시간 축이 없어 답할 수 없고, 여러 날을 통합한 표에서만 답할 수 있습니다.</p>
     </details>
@@ -242,7 +242,7 @@ st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>하루치 API 응답과 354일 축적 표가 각각 어떤 질문에 맞는지 말할 수 있다.</li>
+    <li>하루치 API 응답과 365일 축적 표가 각각 어떤 질문에 맞는지 말할 수 있다.</li>
     <li>뼈대 앱(선 그래프)을 만들고, 그래프를 최소 4번(가로 막대)까지 쌓았다.</li>
     <li>영역 그래프의 봉우리 3일을 찾아 달력의 사건과 짝지었다.</li>
     <li>그래프마다 "이 그래프로 알 수 있는 것" 한 문장을 적었다.</li>
@@ -252,8 +252,8 @@ st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
     <tr><td class="term">시계열</td><td>시간 순서대로 기록된 데이터. 한 축이 시간이 되는 그래프의 재료</td></tr>
-    <tr><td class="term">스냅샷</td><td>계속 변하는 데이터를 어느 시점에 찍어 고정한 사본. kobis_daily.csv는 354일치 스냅샷</td></tr>
-    <tr><td class="term">데이터 통합</td><td>여러 조각의 데이터를 한 표로 잇는 일. 일별 응답 354개를 쌓아 한 표로 만든 것이 그 예</td></tr>
+    <tr><td class="term">스냅샷</td><td>계속 변하는 데이터를 어느 시점에 찍어 고정한 사본. kobis_daily.csv는 365일치 스냅샷</td></tr>
+    <tr><td class="term">데이터 통합</td><td>여러 조각의 데이터를 한 표로 잇는 일. 일별 응답 365개를 쌓아 한 표로 만든 것이 그 예</td></tr>
     <tr><td class="term">영역 그래프</td><td>선 아래를 색으로 채운 그래프. 전체 양의 흐름과 봉우리를 보여 준다</td></tr>
     <tr><td class="term">히트맵</td><td>두 기준(월×요일 등)으로 접은 값을 색의 진하기로 나타낸 그래프</td></tr>
     <tr><td class="term">범례</td><td>그래프에서 색·모양이 무엇을 뜻하는지 알려 주는 표. 플롯리에서는 눌러서 켜고 끌 수 있다</td></tr>
