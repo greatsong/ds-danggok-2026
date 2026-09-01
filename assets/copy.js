@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.codewrap').forEach(function (wrap) {
     var pre = wrap.querySelector('pre');
     if (!pre) return;
+    if (wrap.querySelector('.copy-btn')) return;   // 마크업에 이미 버튼이 있으면 두 번 붙이지 않는다
     var btn = document.createElement('button');
     btn.className = 'copy-btn';
     btn.type = 'button';
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
   var chips = document.querySelectorAll('.fname');
   Array.prototype.forEach.call(chips, function (btn) {
-    btn.title = '누르면 파일 이름이 복사됩니다';
+    btn.title = '누르면 복사됩니다';
     btn.addEventListener('click', function () {
       var name = btn.getAttribute('data-copy') || btn.textContent.trim();
       function ok() {
@@ -47,10 +48,10 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(name).then(ok).catch(function () {
-          window.prompt('아래 이름을 복사하세요', name);
+          window.prompt('아래 내용을 복사하세요', name);
         });
       } else {
-        window.prompt('아래 이름을 복사하세요', name);
+        window.prompt('아래 내용을 복사하세요', name);
       }
     });
   });

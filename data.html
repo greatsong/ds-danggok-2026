@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>데이터 목록 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css?v=tb4">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<script src="assets/release.js"></script>
+<script src="assets/gate.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">언제든 펼쳐 보는</span>
+  <h1>데이터 <span class="a">목록</span></h1>
+  <div class="under"></div>
+  <p class="lead">이 목록은 수업 실습과 학기 후반 팀 프로젝트에서 사용할 수 있는 데이터를 한자리에 모은 것입니다. 데이터는 부를 때마다 새로 받아 오는 API와 이미 만들어져 주소만 넣으면 읽히는 표로 나뉩니다. 표의 주소는 눌러서 복사한 뒤 프롬프트에 붙여 넣어 사용합니다.</p>
+
+  <div class="make-banner">
+    <div class="t">📋 주소 복사하는 법</div>
+    <p>표의 파일 이름 아래에 주소 칩이 있습니다. 한 번 누르면 주소가 통째로 복사되고 칩이 초록색으로 바뀝니다. 그대로 프롬프트에 붙여 넣으면 됩니다.</p>
+  </div>
+
+  <h2>1. API — 물을 때마다 새로 받아 오는 것</h2>
+  <p>API는 물을 때마다 응답이 새로 만들어집니다. 날짜나 학교처럼 조건을 바꿔 가며 물을 수 있지만, 한 번에 받는 양이 정해져 있고 인증키가 필요한 곳도 있습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>API</th><th>인증키</th><th>무엇을 주나</th><th>조건으로 바꿀 수 있는 것</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>KOBIS 일별 박스오피스</b><br><button type="button" class="fname" data-copy="https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json">주소 복사</button></td>
+        <td>필요</td>
+        <td>지정한 하루의 10위권 — 순위·영화코드·영화명·관객수·누적관객·스크린수</td>
+        <td><code>targetDt</code>(하루). <b>2003년 11월부터 어제까지</b> 부를 수 있습니다. 범위를 벗어난 날짜는 오류가 아니라 <b>빈 목록</b>으로 옵니다</td>
+      </tr>
+      <tr>
+        <td><b>나이스 학교급식</b><br><button type="button" class="fname" data-copy="https://open.neis.go.kr/hub/mealServiceDietInfo">주소 복사</button></td>
+        <td>없어도 됨</td>
+        <td>지정한 학교·날짜의 식단 — 메뉴·칼로리·영양</td>
+        <td><code>MLSV_FROM_YMD</code>·<code>MLSV_TO_YMD</code>(기간), <code>MMEAL_SC_CODE</code>(중식 2·석식 3)</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="mini">우리 학교 코드는 <code>ATPT_OFCDC_SC_CODE=B10</code>(서울) · <code>SD_SCHUL_CODE=7010073</code>입니다. 키 없이 부르면 목록이 다섯 건까지만 옵니다.</p>
+
+  <h2>2. 표(CSV) — 이미 만들어져 있는 것</h2>
+  <p>표는 이미 만들어져 있어 호출 제한 없이 바로 읽힙니다. 만든 시점에서 멈춰 있으므로 그 뒤의 일은 담기지 않습니다. 기간의 흐름이나 여러 해의 비교에는 표가 맞습니다.</p>
+
+  <h3>영화 — 극장가</h3>
+  <p>하루 단위, 영화 단위, 주 단위, 해 단위, 역대 순위까지 다섯 가지 결로 같은 극장가를 서로 다른 단위로 정리한 것입니다. 행 하나가 무엇을 뜻하는지에 따라 그릴 수 있는 그래프가 달라집니다.</p>
+  <table class="daymap">
+    <thead><tr><th>파일 · 주소</th><th>크기 · 기간</th><th>행 하나 = </th><th>물어볼 수 있는 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>kobis_daily.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv">주소 복사</button></td><td>3,650행<br>2025-09-01 ~ 2026-08-31</td><td>어느 날의 순위 한 칸</td><td>흥행 곡선, 붐빈 날, 요일별 규칙</td></tr>
+      <tr><td><code>kobis_movies.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv">주소 복사</button></td><td>216행 · 12열<br>2026년 7월 중순까지</td><td>영화 한 편</td><td>장르·국가 구성, 스크린 수와 관객의 관계, 흥행 예측</td></tr>
+      <tr><td><code>kobis_weekly.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_weekly.csv">주소 복사</button></td><td>11,809행 · 영화 3,800편<br>2004-01-05 ~ 2026-08-17</td><td>어느 주의 순위 한 칸</td><td>22년의 흐름, 개봉 주차별 관객 감소</td></tr>
+      <tr><td><code>kobis_yearly_top10.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_yearly_top10.csv">주소 복사</button></td><td>230행<br>2004 ~ 2026</td><td>어느 해의 순위 한 칸</td><td>해마다 1위가 어떻게 바뀌었나</td></tr>
+      <tr><td><code>kobis_alltime.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_alltime.csv">주소 복사</button></td><td>300행<br>2005년 이후 개봉작<br><span class="mini">그 이전 작품은 담기지 않았습니다</span></td><td>역대 순위 한 칸</td><td>천만 영화의 개봉 시기 분포</td></tr>
+    </tbody>
+  </table>
+  <p class="mini">주간·연간·역대 표는 주간 기록을 모아 만든 근사 집계입니다. 집계가 시작된 2004년 무렵은 기록이 성글어, 실미도와 태극기 휘날리며는 연간 표에 실제보다 훨씬 적은 관객으로 남았고 역대 300위 안에는 아예 들지 못했습니다. 역대 표로 천만 영화를 셀 때는 초기 연도가 구조적으로 비어 있다는 점을 함께 말해야 합니다.</p>
+
+  <h3>학교 급식</h3>
+  <p>우리 학교 실제 급식 기록입니다. 한 날의 메뉴 여러 개가 한 칸에 붙어 있어 낱개로 나누는 손질이 먼저 필요합니다.</p>
+  <table class="daymap">
+    <thead><tr><th>파일 · 주소</th><th>크기 · 기간</th><th>열</th><th>물어볼 수 있는 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>danggok_meals.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/danggok_meals.csv">주소 복사</button></td><td>199행 (중식 154 · 석식 45)<br>2025-09-01 ~ 2026-07-15<br><span class="mini">석식은 2026-03-30~06-25 구간에만 있습니다</span></td><td>날짜 · 식사 · 메뉴</td><td>최다 등장 메뉴, 함께 나오는 메뉴 짝</td></tr>
+      <tr><td><code>danggok_meals_live.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/danggok_meals_live.csv">주소 복사</button></td><td>209행에서 계속 늘어남<br>2025-09-01 ~ 어제<br><span class="mini">매일 아침 갱신됩니다</span></td><td>날짜 · 식사 · 메뉴</td><td>이번 학기 급식까지 포함해 묻기</td></tr>
+    </tbody>
+  </table>
+
+  <h3>서울 — 기온·지하철·혼잡도</h3>
+  <p>기온은 1907년부터, 지하철은 2015년부터, 혼잡도는 최근 두 달까지 기록되어 있습니다. 기간의 길이가 서로 달라 답할 수 있는 질문도 다릅니다.</p>
+  <table class="daymap">
+    <thead><tr><th>파일 · 주소</th><th>크기 · 기간</th><th>열</th><th>물어볼 수 있는 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>seoul.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv">주소 복사</button></td><td>약 43,000행<br>1907-10-01 ~ 최근<br><span class="mini">매일 아침 한 행씩 늘어납니다</span></td><td>날짜 · 지점 · 평균/최저/최고기온</td><td>100년 추세, 결측과 이상치</td></tr>
+      <tr><td><code>seoul_yearly.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_yearly.csv">주소 복사</button></td><td>114행<br>1908 ~ 2025</td><td>연도 · 평균기온</td><td>연평균 추세를 바로 그리기</td></tr>
+      <tr><td><code>subway_pay.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/subway_pay.csv">주소 복사</button></td><td>81,471행<br>2015-01 ~ 2026-07</td><td>사용월 · 호선 · 역 · 유임/무임 승하차</td><td>역별 이용 순위, 무임 비율의 변화</td></tr>
+      <tr><td><code>subway_time.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/subway_time.csv">주소 복사</button></td><td>83,594행 · 52열<br>2015-01 ~ 2026-07</td><td>사용월 · 호선 · 역 · 시간대별 승하차</td><td>출퇴근 봉우리, 역의 성격 나누기</td></tr>
+      <tr><td><code>seoul_congestion_log.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv">주소 복사</button></td><td>약 1만 7천 행<br>2026-06-30 ~ 지금<br><span class="mini">정시마다 쌓입니다</span></td><td>시각 · 지역 · 혼잡도 · 인구 범위 · 위도 · 경도</td><td>시간대별 혼잡, 지역 유형 나누기</td></tr>
+    </tbody>
+  </table>
+
+  <h3>스포츠·게임</h3>
+  <p>야구 선수 기록과 축구 게임 능력치가 담겨 있습니다. 사람이 정한 포지션과 데이터가 묶어 주는 유형이 늘 같지는 않습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>파일 · 주소</th><th>크기</th><th>담긴 것</th><th>물어볼 수 있는 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>kbo_hitters_2025.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kbo_hitters_2025.csv">주소 복사</button></td><td>43명 · 20열</td><td>2025 규정타석 타자</td><td>타자 유형 묶기, 홈런과 삼진의 관계</td></tr>
+      <tr><td><code>kbo_hitters_2025_full.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kbo_hitters_2025_full.csv">주소 복사</button></td><td>396명 · 25열</td><td>타격 기록에 오른 등록 선수<br><span class="mini">포지션이 투수인 행이 83개, 타석 0인 행이 99개입니다. 신체 정보는 78%에만 있습니다. 타율·출루율·장타율·OPS는 타석 0인 선수에 <code>-</code>가 들어 있어 숫자로 바꾸는 손질이 필요합니다</span></td><td>출전 기회와 성적, 체격과 장타</td></tr>
+      <tr><td><code>kbo_pitchers_2025.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kbo_pitchers_2025.csv">주소 복사</button></td><td>280명 · 21열</td><td>2025년 1군 등판 투수<br><span class="mini">이닝이 <code>197 1/3</code>처럼 분수로 적혀 있어 숫자로 바꾸는 손질이 먼저 필요합니다</span></td><td>선발·마무리·필승조 유형 나누기</td></tr>
+      <tr><td><code>kbo_player_profiles_2026.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/kbo_player_profiles_2026.csv">주소 복사</button></td><td>980명 · 6열</td><td>2026 선수 프로필</td><td>팀별 포지션 구성, 나이 분포</td></tr>
+      <tr><td><code>eafc_players.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/eafc_players.csv">주소 복사</button></td><td>800명 · 14열</td><td>축구 게임 능력치·포지션<br><span class="mini">포지션이 <code>RW, ST, CF</code>처럼 한 칸에 여럿 적힌 행이 61%입니다. 골키퍼는 들어 있지 않습니다</span></td><td>능력치로 묶은 유형과 실제 포지션 비교</td></tr>
+    </tbody>
+  </table>
+
+  <h3>자연·에너지</h3>
+  <p>동물 4,513종의 몸무게와 수명, 나라 195곳의 전력 데이터가 있습니다. 우리 수업의 본실습은 아니지만 팀 프로젝트 주제로 고를 수 있습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>파일 · 주소</th><th>크기</th><th>담긴 것</th><th>물어볼 수 있는 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>life_animals.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/life_animals.csv">주소 복사</button></td><td>4,513종 · 11열</td><td>몸무게 · 수명<br><span class="mini">무게 열이 <code>adult_weight_g</code>과 <code>body_mass_g</code> 둘이므로 어느 쪽을 쓸지 정해야 합니다. 대사율과 체온은 14%에만 있습니다</span></td><td>몸무게와 수명의 관계, 분류군별 차이</td></tr>
+      <tr><td><code>energy_countries.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/energy_countries.csv">주소 복사</button></td><td>195개국 · 11열</td><td>전력 생산 · 인구 · 재생에너지 비율<br><span class="mini">재생 비율이 태양광·풍력·수력의 합과 최대 46.8%포인트까지 다릅니다</span></td><td>1인당 전력과 재생 비율에 관계가 있는가</td></tr>
+      <tr><td><code>solar_by_latitude.csv</code><br><button type="button" class="fname" data-copy="https://raw.githubusercontent.com/greatsong/modudata/main/data/solar_by_latitude.csv">주소 복사</button></td><td>35개 도시 · 4열</td><td>위도 · 일사량<br><span class="mini">남반구 도시가 11곳이라 부호가 붙은 위도로 재면 어긋납니다. <code>abs_latitude</code>가 함께 들어 있습니다</span></td><td>적도에서 멀수록 일사량이 줄어드는가</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout tip">
+    <div class="h">💡 데이터를 고르는 기준</div>
+    <p>데이터를 고를 때는 우리 질문에 답할 수 있는 열이 있는지를 먼저 봅니다. 기간을 물을 때는 변화가 드러나도록 여러 시점이 맞는지 살펴야 합니다. 크기보다 맞음이 먼저이므로, 큰 표라도 필요한 열이 없으면 답하지 못합니다.</p>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+</body>
+</html>
