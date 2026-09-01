@@ -81,6 +81,35 @@
 연도를 슬라이더로 고르면 그 해의 예상 기온이 크게 표시되게 해 줘.
 슬라이더 범위는 1900년부터 2100년까지.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/6_기온_예측기.py</span><pre># pages/6_기온_예측기.py — 연평균기온에 직선을 맞추고 예측한다
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+
+st.header("기온 예측기")
+
+
+@st.cache_data
+def load_yearly():
+    df = pd.read_csv(DATA_URL)
+    df["연도"] = pd.to_datetime(df["날짜"]).dt.year
+    grouped = df.groupby("연도")["평균기온"].agg(["mean", "count"]).reset_index()
+    # 관측일이 300일이 안 되는 해는 뺀다 (반쪽 자료라 평균을 믿을 수 없다)
+    return grouped[grouped["count"] &gt;= 300].rename(columns={"mean": "연평균기온"})
+
+
+yearly = load_yearly()
+a, b = np.polyfit(yearly["연도"], yearly["연평균기온"], 1)   # 기울기, 절편
+
+fig = px.scatter(yearly, x="연도", y="연평균기온", opacity=0.6)
+fig.add_scatter(x=yearly["연도"], y=a * yearly["연도"] + b, mode="lines", name="회귀 직선")
+st.plotly_chart(fig, width="stretch")
+
+year = st.slider("연도를 고르세요", 1900, 2100, 2045)
+st.metric(f"{year}년 예상 연평균기온", f"{a * year + b:.1f}℃")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 직선을 읽는다</span><br>
       코드는 5차시처럼 <b>pages</b> 폴더에 새 파일로 올려 커밋합니다 — 1~3분 뒤 앱에 새 페이지가 나타납니다. 산점도 위에 직선이 나타납니다. 슬라이더를 내년으로, 2045년으로 옮겨 봅니다. 내가 만든 작은 AI가 미래의 숫자를 내놓습니다. 이 값을 얼마나 믿어야 하는지는 잠시 미뤄 두고, 먼저 직선이 데이터의 추세와 어울리는지 눈으로 확인합니다.</li>
@@ -88,6 +117,13 @@
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>직선의 기울기를 "100년에 몇 도 오르는가"로 바꿔 화면에 크게 보여 줘.
 그리고 전체 기간으로 구한 기울기와 최근 20년만으로 구한 기울기를
 나란히 비교해서 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/6_기온_예측기.py에 이어 붙일 부분</span><pre># 기울기를 100년 단위로, 그리고 최근 20년과 비교
+recent = yearly[yearly["연도"] &gt;= yearly["연도"].max() - 19]
+a2, _ = np.polyfit(recent["연도"], recent["연평균기온"], 1)
+c1, c2 = st.columns(2)
+c1.metric("전체 기간 기울기", f"{a * 100:+.2f}℃ / 100년")
+c2.metric("최근 20년 기울기", f"{a2 * 100:+.2f}℃ / 100년")
+st.caption(f"사용한 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['연도'].max()})")</pre></div></details>
     </li>
   </ol>
 

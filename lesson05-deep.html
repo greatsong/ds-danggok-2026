@@ -235,6 +235,36 @@ else:
   메뉴 열은 한 날의 메뉴 여러 개가 세로막대 기호로 이어져 있어.
 - 메뉴를 낱개로 나눠서, 이 기간에 가장 자주 나온 메뉴 TOP 10을 가로 막대그래프로 보여 줘.
 - 메뉴마다 154일 중 며칠 나왔는지 일수와 비율을 함께 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 페이지 전체를 새 코드로 바꿉니다</p><div class="codewrap code"><span class="label">pages/5_급식.py (표로 갈아탄 판)</span><pre># pages/5_급식.py — 두 학기 급식 기록에서 최다 등장 메뉴 TOP 10
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/danggok_meals.csv"
+
+st.header("두 학기 최다 등장 메뉴 TOP 10")
+
+
+@st.cache_data
+def load_meals():
+    df = pd.read_csv(DATA_URL)
+    return df[df["식사"] == "중식"]          # 석식이 섞여 있으므로 중식만 고른다
+
+
+meals = load_meals()
+days = meals["날짜"].nunique()
+
+# 한 칸에 붙어 있는 메뉴를 낱개로 나눈다
+items = meals["메뉴"].str.split("|").explode().str.strip()
+top10 = items.value_counts().head(10).reset_index()
+top10.columns = ["메뉴", "일수"]
+top10["비율(%)"] = (top10["일수"] / days * 100).round(0).astype(int)
+
+fig = px.bar(top10.sort_values("일수"), x="일수", y="메뉴", orientation="h",
+             text="비율(%)")
+st.plotly_chart(fig, width="stretch")
+st.dataframe(top10, hide_index=True)
+st.caption(f"중식 {days}일 기준 · 이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
     </li>
   </ol>
 

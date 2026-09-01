@@ -128,6 +128,47 @@
    first_scrn(개봉일 스크린수)·first_show(개봉일 상영횟수)·first_date(10위권 첫 등장일)·
    peak(성수기 개봉이면 1, 아니면 0 — 1월·7월·12월이 성수기)·
    first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/7_영화_흥행_예측.py</span><pre># pages/7_영화_흥행_예측.py — 여러 변수로 총 관객을 예측한다
+import streamlit as st
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score, mean_absolute_error
+
+DAILY = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv"
+MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+
+st.header("영화 흥행 예측")
+
+
+@st.cache_data
+def load_data():
+    daily = pd.read_csv(DAILY, dtype={"영화코드": str})
+    movies = pd.read_csv(MOVIES, dtype={"movieCd": str})
+    # 두 표를 영화코드로 잇는다 — 하루 단위 기록에서 영화별 등장 일수를 만들어 붙인다
+    days = daily.groupby("영화코드").size().rename("등장일수")
+    return movies.join(days, on="movieCd")
+
+
+df = load_data().sort_values("movieCd").reset_index(drop=True)
+# 열 편 중 앞 세 편을 시험용으로 떼어 둔다 (누가 해도 같은 결과가 나오도록)
+is_test = df.index % 10 &lt; 3
+train, test = df[~is_test], df[is_test]
+st.caption(f"학습 {len(train)}편 · 시험 {len(test)}편")
+
+전 = {"개봉일 스크린수": "first_scrn", "개봉일 상영횟수": "first_show", "성수기 개봉": "peak"}
+후 = {"첫 주 관객": "first_week_audi"}
+
+st.subheader("변수 고르기")
+picked = [col for name, col in {**전, **후}.items() if st.checkbox(name, value=col in 전.values())]
+if not picked:
+    st.warning("변수를 하나 이상 골라 주세요.")
+    st.stop()
+
+model = LinearRegression().fit(train[picked], train["total_audi"])
+pred = model.predict(test[picked])
+c1, c2 = st.columns(2)
+c1.metric("시험용 영화로 잰 점수 (R²)", f"{r2_score(test['total_audi'], pred):.3f}")
+c2.metric("평균 오차", f"{mean_absolute_error(test['total_audi'], pred):,.0f}명")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
       화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 8차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
@@ -135,6 +176,15 @@
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>변수를 "개봉 전에 알 수 있는 것"과 "개봉 후에야 알 수 있는 것"으로 나눠 줘.
 개봉 전 변수만 쓴 경우와 개봉 후 정보까지 넣은 경우의 예측 점수를
 나란히 비교해서, 차이가 한눈에 보이게 해 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/7_영화_흥행_예측.py에 이어 붙일 부분</span><pre># 개봉 전 변수만 쓴 경우와 개봉 후 정보까지
+st.subheader("개봉 전 정보만 vs 개봉 후 정보까지")
+결과 = []
+for 이름, 변수 in [("개봉 전 정보만", list(전.values())),
+                ("개봉 후 정보까지", list(전.values()) + list(후.values()))]:
+    m = LinearRegression().fit(train[변수], train["total_audi"])
+    결과.append({"쓴 변수": 이름, "R²": round(r2_score(test["total_audi"], m.predict(test[변수])), 3)})
+st.dataframe(pd.DataFrame(결과), hide_index=True)
+st.caption("점수가 갑자기 뛰면 실력이 아니라 반칙 신호일 수 있습니다.")</pre></div></details>
     </li>
   </ol>
 
