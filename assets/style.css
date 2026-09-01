@@ -327,3 +327,10 @@ table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var
 .codewrap .label .fname { color: #fff; background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); margin-left: 6px; font-size: 1em; padding: 0 7px; }
 .codewrap .label .fname:hover { background: rgba(255,255,255,0.28); }
 .codewrap .label .fname.done { background: rgba(255,255,255,0.28); border-color: #86efac; color: #bbf7d0; }
+
+/* 프롬프트 아래 접어 두는 예시 코드 */
+details.sample { margin: -6px 0 14px; }
+details.sample summary { cursor: pointer; display: inline-block; font-size: 0.85rem; font-weight: 700; color: var(--accent); list-style: none; padding: 4px 0; }
+details.sample summary::-webkit-details-marker { display: none; }
+details.sample summary::before { content: "▸ "; }
+details.sample[open] summary::before { content: "▾ "; }

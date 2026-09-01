@@ -54,6 +54,7 @@
     else if (/extra-movie(?:-deep)?\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
     else if (/extra-models\.html$/.test(path)) locked = released < 14;        // 모델 도감 — 팀 프로젝트 안내와 함께
     else if (/data\.html$/.test(path)) locked = released < 4;              // 데이터 목록 — 영화 트랙을 마친 뒤
+    else if (/extra-api\.html$/.test(path)) locked = released < 4;         // 영화 API 프로젝트 — 4차시 이후
     else if (/project\.html$/.test(path)) locked = released < 14;             // 팀 프로젝트 안내 — 14차시(팀 구성)와 함께
     else if (m && parseInt(m[1], 10) > released) locked = true;
   }
@@ -83,7 +84,7 @@
   // 4) 열린 페이지: 잠긴 차시로 가는 링크를 눌리지 않게 하고, 교사 모드면 배지를 단다
   document.addEventListener('DOMContentLoaded', function () {
     if (!teacher) {
-      var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="concepts"], a[href*="teacher/"], a[href*="extra-movie"], a[href*="extra-models"], a[href*="project"]');
+      var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="concepts"], a[href*="teacher/"], a[href*="extra-movie"], a[href*="extra-api"], a[href*="extra-models"], a[href*="project"]');
       Array.prototype.forEach.call(links, function (a) {
         var href = a.getAttribute('href') || '';
         var lm = href.match(/lesson(\d{2})(?:-deep)?\.html/);
@@ -93,6 +94,7 @@
           (/extra-movie(?:-deep)?\.html/.test(href) && released < 4) ||
           (/extra-models\.html/.test(href) && released < 14) ||
           (/(^|\/)data\.html/.test(href) && released < 4) ||
+          (/extra-api\.html/.test(href) && released < 4) ||
           (/project\.html/.test(href) && released < 14) ||
           /(^|\/)teacher\//.test(href);
         if (!blocked) return;
