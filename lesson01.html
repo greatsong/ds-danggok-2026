@@ -197,6 +197,31 @@
 데이터는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv
 열은 날짜·지점·평균기온·최저기온·최고기온이야. 화면 글자는 한국어로.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새로 만드는 파일입니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 서울의 100년 기온
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+st.set_page_config(page_title="서울의 100년 기온", layout="wide")
+st.title("서울의 100년 기온")
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+
+
+@st.cache_data
+def load_data():
+    df = pd.read_csv(DATA_URL)
+    df["날짜"] = pd.to_datetime(df["날짜"])
+    df["연도"] = df["날짜"].dt.year
+    return df
+
+
+df = load_data()
+
+st.header("연평균기온의 흐름")
+yearly = df.groupby("연도", as_index=False)["평균기온"].mean()
+fig = px.line(yearly, x="연도", y="평균기온", markers=True)
+st.plotly_chart(fig, width="stretch")</pre></div></details>
       프롬프트에 코드 문법이 한 줄도 없다는 점을 확인하세요. 파일 이름과 원하는 결과만 우리말로 적었습니다.</li>
     <li><span class="st">② AI가 준 코드 — 실행하고 결과를 읽는다</span><br>
       AI가 코드를 만들어 응답하고, 실행하면 100년 치 기온 그래프가 나타납니다. 코드를 읽는 것이 아니라 <b>결과 그래프를 읽는 것</b>이 우리의 일입니다. 그래프를 어떻게 읽는지는 바로 아래 시연에서 함께 연습합니다.</li>
@@ -234,9 +259,17 @@
       ①의 결과입니다. 해마다 오르내리는 들쭉날쭉한 선이지만, 왼쪽에서 오른쪽으로 갈수록 조금씩 높아지는 흐름이 보입니다. 100년의 변화가 한 장에 담겼습니다. 이 그래프 한가운데의 이상한 지점 하나는 6차시에 다시 만나게 됩니다.</li>
     <li><span class="st">두 번째 그래프 — 히스토그램, 분포의 모양</span>
       <div class="codewrap prompt"><span class="label">③ 개선 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 일별 평균기온이 어느 구간에 얼마나 몰려 있는지 히스토그램으로 그려 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 일별 평균기온의 분포
+st.header("일별 평균기온은 어느 구간에 몰려 있나")
+fig2 = px.histogram(df, x="평균기온", nbins=50)
+st.plotly_chart(fig2, width="stretch")</pre></div></details>
       그리기 전에 예상해 봅니다. 키나 시험 점수처럼 가운데가 높고 양옆이 낮은, 산 하나의 모양일까요? 실제 결과는 다릅니다 — <b>봉우리가 둘</b>입니다. 0℃ 부근에 하나, 20℃를 넘는 곳에 하나. 하루하루의 기온이 겨울과 여름, 두 곳에 몰려 있기 때문입니다. 한 그래프에 사계절이 모두 담겨서 생긴 모양입니다. 평균 하나만 보고 넘어갔다면 이 두 봉우리는 영영 몰랐을 것입니다 — <b>요약 숫자로는 안 보이던 것이 그래프에서 보입니다.</b></li>
     <li><span class="st">세 번째 그래프 — 산점도, 두 값의 관계</span>
       <div class="codewrap prompt"><span class="label">③ 개선 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 날마다의 최저기온과 최고기온이 어떤 관계인지 산점도로 그려 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 최저기온과 최고기온의 관계
+st.header("최저기온과 최고기온의 관계")
+fig3 = px.scatter(df, x="최저기온", y="최고기온", opacity=0.2)
+st.plotly_chart(fig3, width="stretch")</pre></div></details>
       점들이 왼쪽 아래에서 오른쪽 위로 곧게 늘어섭니다. 최저기온이 낮은 날은 최고기온도 낮다 — 강한 관계입니다. 다만 이것은 누구나 예상할 수 있는 관계입니다. 분석에서 정말 가치 있는 것은 이런 뻔한 관계가 아니라 <b>"이 둘이 관계가 있다고?" 싶은 뜻밖의 관계</b>를 찾는 일이고, 그 도구들을 6차시부터 하나씩 배웁니다.</li>
   </ol>
 

@@ -445,6 +445,41 @@ requests</pre></div>
 - 문서를 보니 rankInten이라는 값이 전날 대비 순위 증감이래. 양수면 순위가 오른 것, 음수면 내린 것.
   표에서 오른 영화는 빨간 위 화살표, 내린 영화는 파란 아래 화살표를 붙여 줘.
 - 누적관객이 100만 명을 넘은 영화는 영화명 옆에 트로피 이모지를 붙여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 날짜를 골라 보는 박스오피스 — main.py에 이어 붙일 부분
+import datetime
+import pandas as pd
+import requests
+import streamlit as st
+
+KST = datetime.timezone(datetime.timedelta(hours=9))
+어제 = datetime.datetime.now(KST).date() - datetime.timedelta(days=1)
+고른날 = st.date_input("날짜를 고르세요", value=어제, max_value=어제)
+
+URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+
+
+@st.cache_data(ttl=3600)
+def fetch(day_text):
+    res = requests.get(URL, params={"key": st.secrets["KOBIS_KEY"], "targetDt": day_text}, timeout=20)
+    answer = res.json().get("boxOfficeResult")
+    return answer["dailyBoxOfficeList"] if answer else []
+
+
+movies = fetch(고른날.strftime("%Y%m%d"))
+if not movies:
+    st.info("그날은 아직 집계 전입니다.")
+    st.stop()
+
+표 = pd.DataFrame([{
+    "순위": int(m["rank"]),
+    "영화명": ("🏆 " if int(m["audiAcc"]) &gt;= 1_000_000 else "") + m["movieNm"],
+    "순위 변화": ("🔺" + str(int(m["rankInten"])) if int(m["rankInten"]) &gt; 0
+                 else "🔻" + str(-int(m["rankInten"])) if int(m["rankInten"]) &lt; 0 else "—"),
+    "관객수": int(m["audiCnt"]),
+    "누적관객": int(m["audiAcc"]),
+} for m in movies])
+st.dataframe(표, hide_index=True)
+st.caption("🔺 오른 영화 · 🔻 내린 영화 · 🏆 누적 100만 명을 넘은 영화")</pre></div></details>
       ③이 "좋아, 여기서 이어서 고쳐 줘."로 시작하는 것을 눈여겨보세요. 새 대화를 열지 않고 <b>같은 대화창에서 잇는 것</b>이 개선의 요령입니다 — AI가 방금 준 코드를 기억한 채로 고칩니다.</li>
   </ol>
   <div class="callout check">
