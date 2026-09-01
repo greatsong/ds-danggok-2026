@@ -141,7 +141,7 @@ movie = st.selectbox("영화를 고르세요", movie_list)
 
 one = df[df["영화명"] == movie].sort_values("날짜")
 fig = px.line(one, x="날짜", y="일관객", markers=True)
-fig.update_traces(hovertemplate="날짜 %{x|%Y-%m-%d}&lt;br&gt;관객 %{y:,}명")
+fig.update_traces(hovertemplate="날짜 %{x|%Y-%m-%d}&lt;br&gt;관객 %{y:,}명&lt;extra&gt;&lt;/extra&gt;")
 st.plotly_chart(fig, width="stretch")
 
 st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")
@@ -163,6 +163,13 @@ plotly</pre></div>
   <div class="codewrap improve"><span class="label">그래프 2 추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘. 두 번째 그래프를 추가해.
 - 이 기간 일관객 합계가 가장 큰 5편을 골라, 다섯 영화의 날짜별 일관객을 한 선 그래프에
   색으로 구분해서 보여 줘. 범례를 눌러 영화를 켜고 끌 수 있게.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 2. 흥행 대작들의 곡선 겹쳐 보기 ────────────────────
+st.header("2. 흥행 대작 다섯 편의 곡선")
+top5 = df.groupby("영화명")["일관객"].sum().nlargest(5).index
+five = df[df["영화명"].isin(top5)].sort_values("날짜")
+fig2 = px.line(five, x="날짜", y="일관객", color="영화명", markers=True)
+st.plotly_chart(fig2, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>눈여겨볼 것</b> — 다섯 곡선이 한 화면에 오르는데, 10위권에 처음 든 날이 서로 달라 <b>출발점이 어긋납니다</b>. "모양을 제대로 비교하려면 달력 날짜가 아니라 개봉 후 며칠째로 맞춰야 하지 않나?"라는 생각이 들었다면 정확히 읽은 것입니다. 질문이 깊어지는 순간이고, 그 정렬은 도전 과제로 남겨 둡니다.</p>
 
   <h3>그래프 3 — 영역</h3>
@@ -170,6 +177,16 @@ plotly</pre></div>
   <div class="codewrap improve"><span class="label">그래프 3 추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 세 번째 그래프를 추가해.
 - 날짜별로 그날 10위권 일관객의 합계를 구해서 영역 그래프로 보여 줘.
 - 합계가 가장 컸던 날 3일을 그래프 위에 표시하고 날짜를 적어 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 3. 극장가 전체의 흐름과 봉우리 ─────────────────────
+st.header("3. 날짜별 10위권 관객 합계")
+daily = df.groupby("날짜", as_index=False)["일관객"].sum()
+peak3 = daily.nlargest(3, "일관객")
+fig3 = px.area(daily, x="날짜", y="일관객")
+fig3.add_scatter(x=peak3["날짜"], y=peak3["일관객"], mode="markers+text",
+                 text=peak3["날짜"].dt.strftime("%Y-%m-%d"), textposition="top center",
+                 marker=dict(size=10, color="crimson"), name="가장 붐빈 3일")
+st.plotly_chart(fig3, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>눈여겨볼 것</b> — 그래프 위에 찍힌 3일이 오늘의 발견입니다. 아래 4절에서 함께 확인합니다.</p>
 
   <h3>그래프 4 — 가로 막대</h3>
@@ -178,6 +195,15 @@ plotly</pre></div>
 - 영화별로 이 기간 일관객을 모두 더해 TOP 10을 뽑아 가로 막대그래프로,
   관객이 많은 영화가 위에 오게 보여 줘.
 - 막대에 마우스를 올리면 개봉 후 10위권에 든 날수도 보이게.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 4. 기간 전체 관객 TOP 10 ─────────────────────────
+st.header("4. 이 기간 관객이 가장 많았던 열 편")
+total = (df.groupby("영화명", as_index=False)
+           .agg(관객합계=("일관객", "sum"), 등장일수=("날짜", "count"))
+           .nlargest(10, "관객합계"))
+fig4 = px.bar(total.sort_values("관객합계"), x="관객합계", y="영화명",
+              orientation="h", hover_data=["등장일수"])
+st.plotly_chart(fig4, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>눈여겨볼 것</b> — 무엇으로 정렬하느냐에 따라 순위가 달라집니다. 누적관객 열을 기준으로 삼으면 안 됩니다. 이 값은 개봉일부터 누적된 수치이므로, 이 표가 시작되기 전의 기록까지 포함합니다. 따라서 이 기간에 며칠만 걸린 재개봉작이 상위에 올라옵니다. "TOP 10"이라는 말에는 언제나 <b>기준</b>이 숨어 있습니다. 순위를 볼 때마다 기준부터 확인하는 습관이 여기서 생깁니다.</p>
 
   <h3>그래프 5 — 히트맵 <span class="a">(확장)</span></h3>
@@ -185,6 +211,17 @@ plotly</pre></div>
   <div class="codewrap improve"><span class="label">그래프 5 추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 다섯 번째 그래프를 추가해.
 - 날짜에서 월과 요일을 뽑아, 월×요일별 일관객 합계를 히트맵으로 보여 줘.
   색이 진할수록 관객이 많게 하고, 요일은 월요일부터 일요일 순서로.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 5. 월 × 요일 히트맵 ──────────────────────────────
+st.header("5. 월과 요일로 접어 보기")
+요일이름 = ["월", "화", "수", "목", "금", "토", "일"]
+df["월"] = df["날짜"].dt.month
+df["요일"] = df["날짜"].dt.weekday.map(lambda i: 요일이름[i])
+pivot = (df.pivot_table(index="월", columns="요일", values="일관객", aggfunc="sum")
+           .reindex(columns=요일이름))
+fig5 = px.imshow(pivot, text_auto=".2s", aspect="auto",
+                 labels=dict(x="요일", y="월", color="관객"))
+st.plotly_chart(fig5, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>눈여겨볼 것</b> — 토·일 열이 진합니다. 선 그래프에서 본 주말 톱니가, 1년치를 요일로 접자 색의 기둥으로 다시 나타난 것입니다. 같은 사실이 그래프에 따라 다른 모습으로 보입니다.</p>
 
   <h2>4. 발견 — 달력이 데이터에 찍혀 있다</h2>

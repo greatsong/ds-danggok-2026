@@ -158,6 +158,12 @@ st.header("2. (다음 그래프를 여기에 추가)")</pre></div>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘. 두 번째 그래프를 추가해.
 - 장르 안에 영화가 들어 있는 트리맵을 그려 줘. 칸의 크기는 total_audi(총 관객)로.
 - 칸에 마우스를 올리면 영화명과 총 관객이 보이게.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 2. 장르 안의 영화 (트리맵) ──
+st.header("2. 장르 안의 영화 (트리맵)")
+fig2 = px.treemap(df, path=["장르", "movieNm"], values="total_audi",
+                  hover_data=["total_audi"])
+st.plotly_chart(fig2, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>읽는 법</b> — 트리맵은 장르 상자 안에 영화 칸이 들어 있는 이중 구조입니다. 칸의 크기가 총 관객이어서, 도넛과는 다른 것을 잽니다. 도넛과 트리맵을 위아래로 놓고 비교해 보세요 — 이 차이가 오늘의 발견(4절)입니다.</p>
 
   <h3>그래프 3 · 히스토그램 (필수) — 영화 대부분은 관객이 몇 명쯤인가</h3>
@@ -165,12 +171,27 @@ st.header("2. (다음 그래프를 여기에 추가)")</pre></div>
 - total_audi(총 관객)의 히스토그램을 그려 줘.
 - 대부분의 영화가 어느 구간에 몰려 있는지, 가장 관객이 많은 영화 이름이 무엇인지
   그래프 아래에 문구로 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 3. 총 관객의 분포 (히스토그램) ──
+st.header("3. 총 관객의 분포 (히스토그램)")
+fig3 = px.histogram(df, x="total_audi", nbins=40)
+st.plotly_chart(fig3, width="stretch")
+under_1m = (df["total_audi"] &lt; 1_000_000).sum()
+best = df.loc[df["total_audi"].idxmax()]
+st.write(f"216편 가운데 {under_1m}편이 100만 명 미만입니다. "
+         f"가장 많이 본 영화는 {best['movieNm']}({best['total_audi']:,}명)입니다.")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>읽는 법</b> — 히스토그램은 값의 구간별로 영화가 몇 편씩 있는지 세는 그래프입니다. 그려 보면 모양이 한쪽으로 심하게 쏠려 있습니다. 216편 중 193편이 총 관객 100만 명에 못 미쳐 왼쪽 낮은 구간에 몰려 있고, 오른쪽 끝에는 <b>왕과 사는 남자</b> 같은 소수의 대작이 홀로 서 있습니다. 소수의 대작이 판 전체를 흔드는 이 쏠림은 실제 데이터에서 아주 흔한 모양입니다 — 뒤 차시에서 이 모양을 다시 만나게 됩니다.</p>
 
   <h3>그래프 4 · 산점도 (필수) — 스크린을 많이 받은 영화가 관객도 많나</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 네 번째 그래프를 추가해.
 - first_scrn(개봉일 스크린수)과 total_audi(총 관객)의 산점도를 그려 줘.
 - 점에 마우스를 올리면 영화명이 보이게 하고, 장르별로 점 색을 다르게 해 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 4. 스크린 수와 총 관객 (산점도) ──
+st.header("4. 개봉일 스크린 수와 총 관객 (산점도)")
+fig4 = px.scatter(df, x="first_scrn", y="total_audi", color="장르",
+                  hover_name="movieNm")
+st.plotly_chart(fig4, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>읽는 법</b> — 산점도는 처음으로 <b>두 속성의 관계</b>를 묻는 그래프입니다. 점 하나가 영화 한 편이고, 가로가 개봉일 스크린수, 세로가 총 관객입니다. 점들이 대체로 오른쪽 위로 향하는지, 그 경향에서 멀리 벗어난 점은 어떤 영화인지 마우스를 올려 확인해 보세요.</p>
   <div class="callout check">
     <div class="h">✔️ 미리 던져 두는 질문 — 이 점들 위에 직선을 긋는다면?</div>
@@ -181,18 +202,40 @@ st.header("2. (다음 그래프를 여기에 추가)")</pre></div>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 다섯 번째 그래프를 추가해.
 - 영화가 10편 이상인 장르만 골라, 장르별 total_audi(총 관객)의 상자 그림(박스플롯)을 그려 줘.
 - 상자 밖으로 튀는 점에 마우스를 올리면 영화명이 보이게.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 5. 장르별 총 관객 (박스플롯) ──
+st.header("5. 장르별 총 관객 (박스플롯)")
+big = df["장르"].value_counts()
+big = big[big &gt;= 10].index
+fig5 = px.box(df[df["장르"].isin(big)], x="장르", y="total_audi", points="outliers",
+              hover_name="movieNm")
+st.plotly_chart(fig5, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>읽는 법</b> — 상자의 가운데 선이 그 장르의 중앙값, 상자 밖으로 튀어 나간 점이 이상치입니다. 장르마다 상자의 위치와 높이가 다르고, 상자 위로 멀리 떨어진 점들이 곧 그 장르의 대작입니다. 히스토그램에서 본 쏠림을 장르별로 쪼개어 보는 그래프인 셈입니다.</p>
 
   <h3>그래프 6 · 버블 (확장) — 첫 주 관객까지 넣으면 무엇이 더 보이나</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 여섯 번째 그래프를 추가해.
 - 네 번째 산점도에 점 크기를 first_week_audi(첫 주 관객)로 넣어 버블 그래프로 바꾼 판을
   따로 하나 더 그려 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 6. 첫 주 관객을 점 크기로 (버블) ──
+st.header("6. 첫 주 관객을 점 크기로 (버블)")
+fig6 = px.scatter(df, x="first_scrn", y="total_audi", color="장르",
+                  size="first_week_audi", size_max=40, hover_name="movieNm")
+st.plotly_chart(fig6, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>읽는 법</b> — 산점도의 두 축(스크린수·총 관객)에 <b>크기</b>라는 세 번째 축이 더해졌습니다. 총 관객이 많은 점들이 대체로 큰 원인지 살펴보세요. 큰 원이 위쪽에 몰려 있다면, 첫 주에 이미 승부가 상당 부분 난다는 뜻입니다.</p>
 
   <h3>그래프 7 · 선버스트 (심화) — 국가에서 장르로 내려가면</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 일곱 번째 그래프를 추가해.
 - nation(제작 국가)에서 genre(장르)로 내려가는 선버스트 그래프를 그려 줘.
   칸의 크기는 영화 편수로.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 7. 국가에서 장르로 (선버스트) ──
+st.header("7. 국가에서 장르로 (선버스트)")
+df["대표국가"] = df["nation"].str.split("|").str[0]
+counted = (df.groupby(["대표국가", "장르"], as_index=False)
+             .agg(편수=("movieNm", "count")))
+fig7 = px.sunburst(counted, path=["대표국가", "장르"], values="편수")
+st.plotly_chart(fig7, width="stretch")
+st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
   <p><b>읽는 법</b> — 안쪽 고리가 국가, 바깥 고리가 그 국가의 장르입니다. 한 그래프가 "어느 나라 영화가 많은가"와 "그 나라는 어떤 장르가 많은가" 두 겹의 질문에 한꺼번에 답합니다. 안쪽 고리를 누르면 그 국가만 확대됩니다.</p>
 
   <h2>4. 발견 — 도넛과 트리맵이 다른 말을 한다</h2>
@@ -243,6 +286,18 @@ st.header("2. (다음 그래프를 여기에 추가)")</pre></div>
 - 앞에서 만든 코드들은 각각의 페이지 파일로 옮겨 줘.
 - 표지에는 '나의 데이터 포트폴리오'라는 제목과 각 페이지로 가는 안내를 넣어 줘.
 - 페이지 이름 앞에 어울리는 이모지를 붙여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞의 코드들은 pages 폴더로 옮기고, main.py는 표지로 바꿉니다</p><div class="codewrap code"><span class="label">main.py (표지)</span><pre># main.py — 표지
+import streamlit as st
+
+st.set_page_config(page_title="나의 데이터 포트폴리오", layout="wide")
+st.title("📊 나의 데이터 포트폴리오")
+st.write("왼쪽 차림표에서 페이지를 골라 보세요.")
+st.markdown("""
+- 🌡️ **기온 분석** — 서울의 100년 기온
+- 🎬 **어제의 박스오피스** — API로 받아 오는 오늘의 순위
+- 📈 **그래프 도감 1** — 시간이 보이는 그래프 다섯
+- 🍩 **그래프 도감 2** — 분포·구성·관계 일곱
+""")</pre></div></details>
   <p>앞에서 만든 코드들은 전부 커밋 기록에 남아 있으므로, AI에게 이전 코드를 붙여 주며 요청하거나 커밋 기록에서 꺼내 옮기면 됩니다. 완성되면 왼쪽 메뉴에 네 페이지가 나타나고, 배포 주소 하나로 전부 열립니다.</p>
   <div class="callout tip">
     <div class="h">💡 1차시 앱이 이미 멀티페이지라면</div>
