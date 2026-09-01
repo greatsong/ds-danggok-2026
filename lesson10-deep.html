@@ -174,6 +174,45 @@
   <p>내 분류기에서도 같은 장면을 직접 확인합니다. 오늘의 ①②③은 손계산이 중심이므로 화면 실습은 이것 하나입니다.</p>
   <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>내 분류기의 혼동행렬을 그려 주고, '무조건 실패로만 찍는 모델'의
 정확도와 나란히 비교해 줘. 성공 재현율도 함께 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다.</p><div class="codewrap code"><span class="label">pages/10_혼동행렬.py</span><pre># 혼동행렬과 기준선 — 정확도만 보면 놓치는 것
+import streamlit as st
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix, accuracy_score, recall_score
+
+MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+
+
+@st.cache_data
+def load_data():
+    df = pd.read_csv(MOVIES, dtype={"movieCd": str}).sort_values("movieCd").reset_index(drop=True)
+    df["장르"] = df["genre"].str.split("|").str[0]
+    df["국가"] = df["nation"].str.split("|").str[0]
+    df["성공"] = (df["total_audi"] &gt;= 1_000_000).astype(int)
+    return df
+
+
+df = load_data()
+X = pd.get_dummies(df[["first_scrn", "first_show", "peak", "장르", "국가"]])
+is_test = df.index % 10 &lt; 3
+scaler = StandardScaler().fit(X[~is_test])
+model = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), df["성공"][~is_test])
+yte = df["성공"][is_test]
+pred = model.predict(scaler.transform(X[is_test]))
+
+tn, fp, fn, tp = confusion_matrix(yte, pred, labels=[0, 1]).ravel()
+st.subheader("혼동행렬")
+st.dataframe(pd.DataFrame([[tn, fp], [fn, tp]],
+                          index=["실제 실패", "실제 성공"],
+                          columns=["예측 실패", "예측 성공"]))
+
+c1, c2, c3 = st.columns(3)
+c1.metric("내 분류기 정확도", f"{accuracy_score(yte, pred):.3f}")
+c2.metric("전부 실패로 찍기", f"{(yte == 0).mean():.3f}")
+c3.metric("성공 재현율", f"{recall_score(yte, pred, zero_division=0):.2f}")
+st.caption(f"시험용 {len(yte)}편 가운데 실제 성공은 {int(yte.sum())}편입니다. "
+           "두 정확도는 같은 자료로 잰 값이라 그대로 비교할 수 있습니다.")</pre></div></details>
 
   <h2>4. 반칙 판정 — 레이블 누수</h2>
   <p>7차시에 남겨 둔 의문을 회수할 시간입니다. 다중회귀에서 첫 주 관객 수를 넣자 테스트 R²가 0.24에서 0.90으로 급등했고, 우리는 "그 변수는 미래를 미리 본 것 아닌가"라고 물었습니다. 분류에서도 똑같이 해 보면 — 개봉 전 변수만 쓰던 모델에 첫 주 관객 수를 추가하는 순간 정확도가 <b>0.985</b>로 급등합니다.</p>

@@ -199,6 +199,39 @@
   <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>내 기온 예측기에 관측일 필터를 켜고 끌 수 있는 스위치를 달아 줘.
 필터를 켠 경우와 끈 경우 각각의 R² 점수가
 어떻게 달라지는지 화면에 함께 표시해 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/6_기온_예측기.py에 이어 붙일 부분</span><pre># 관측일 필터를 켜고 끄며 R²가 어떻게 달라지는지 본다
+import streamlit as st
+import pandas as pd
+import numpy as np
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+
+
+@st.cache_data
+def load_all():
+    df = pd.read_csv(DATA_URL)
+    df["연도"] = pd.to_datetime(df["날짜"]).dt.year
+    return df.groupby("연도")["평균기온"].agg(["mean", "count"]).reset_index()
+
+
+def score(yearly):
+    a, b = np.polyfit(yearly["연도"], yearly["mean"], 1)
+    pred = a * yearly["연도"] + b
+    ss_res = ((yearly["mean"] - pred) ** 2).sum()
+    ss_tot = ((yearly["mean"] - yearly["mean"].mean()) ** 2).sum()
+    return 1 - ss_res / ss_tot
+
+
+all_years = load_all().dropna(subset=["mean"])
+# 아직 진행 중인 올해는 어느 경우에도 뺀다
+all_years = all_years[all_years["연도"] &lt; all_years["연도"].max()]
+on = st.toggle("관측일 300일 미만인 해를 뺀다", value=True)
+used = all_years[all_years["count"] &gt;= 300] if on else all_years
+
+c1, c2 = st.columns(2)
+c1.metric("필터를 켠 경우 R²", f"{score(all_years[all_years['count'] &gt;= 300]):.2f}")
+c2.metric("필터를 끈 경우 R²", f"{score(all_years):.2f}")
+st.caption(f"지금 쓰는 해: {len(used)}개 · 뺀 해: {len(all_years) - len(used)}개")</pre></div></details>
   <div class="callout warn">
     <div class="h">⚠️ 발견 — 필터를 끄면 0.70이 0.39로 떨어진다</div>
     <p>관측일 필터를 켠 우리 예측기의 R²는 <b>0.70</b>. 필터를 끄는 순간 <b>0.39</b>로 떨어집니다. 범인은 6차시에 필터로 걸러 냈던 1953년 — 겨울 한 달만 관측되어 연평균이 반쪽 값으로 둔갑한 해입니다. 직선에서 멀리 떨어진 이 점의 오차가 <b>제곱</b>되면서(활동지 문제 3에서 확인한 "제곱은 큰 실수에 민감하다") 점수를 끌어내립니다. 모델의 성능은 알고리즘이 아니라 <b>전처리가 지탱하고 있었던 것</b>입니다.</p>

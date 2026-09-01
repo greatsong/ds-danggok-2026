@@ -187,6 +187,36 @@
 홈런, 도루, 볼넷, 삼진, 출루율, 장타율로 비슷한 선수끼리 묶어 줘.
 묶음의 개수는 슬라이더로 고르게 하고,
 묶음마다 평균 기록과 소속 선수 명단을 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/11_타자_유형_군집.py</span><pre># pages/11_타자_유형_군집.py — 비슷한 선수끼리 묶는다
+import streamlit as st
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kbo_hitters_2025.csv"
+FEATS = ["홈런", "도루", "볼넷", "삼진", "출루율", "장타율"]
+
+
+@st.cache_data
+def load_data():
+    return pd.read_csv(DATA_URL)
+
+
+df = load_data()
+k = st.slider("몇 묶음으로 나눌까요", 2, 6, 3)
+
+X = df[FEATS]
+Xs = StandardScaler().fit_transform(X)
+df["묶음(정규화 전)"] = KMeans(n_clusters=k, n_init=10, random_state=42).fit_predict(X)
+df["묶음(정규화 후)"] = KMeans(n_clusters=k, n_init=10, random_state=42).fit_predict(Xs)
+
+st.subheader("묶음별 평균 기록 (정규화 후)")
+st.dataframe(df.groupby("묶음(정규화 후)")[FEATS].mean().round(2))
+
+st.subheader("묶음별 선수 명단")
+for g, part in df.groupby("묶음(정규화 후)"):
+    st.write(f"**{g}번 묶음 ({len(part)}명)** — " + ", ".join(part["선수명"]))</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 명단을 읽는다</span><br>
       k를 2에서 5까지 바꿔 봅니다. 묶음이 갈라지고 합쳐질 때마다 명단을 읽습니다 — 43명이라 전체를 눈으로 읽을 수 있습니다. 내가 아는 선수가 어느 묶음에 들어갔는지가 첫 번째 관찰 거리입니다.</li>
@@ -194,6 +224,14 @@
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>기록 항목들의 단위 차이를 없애고(정규화) 다시 묶어서,
 정규화 전과 후의 묶음이 어떻게 달라졌는지 나란히 비교해 줘.
 잘 나뉜 정도를 나타내는 점수도 k마다 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/11_타자_유형_군집.py에 이어 붙일 부분</span><pre># 정규화 전후 비교와 k별 점수
+st.subheader("정규화 전과 후, 그리고 k별 점수")
+st.dataframe(pd.crosstab(df["묶음(정규화 전)"], df["묶음(정규화 후)"]))
+scores = [{"k": kk,
+           "점수(실루엣)": round(silhouette_score(Xs, KMeans(n_clusters=kk, n_init=10, random_state=42).fit_predict(Xs)), 3)}
+          for kk in range(2, 6)]
+st.dataframe(pd.DataFrame(scores), hide_index=True)
+st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 같지는 않습니다.")</pre></div></details>
     </li>
   </ol>
 

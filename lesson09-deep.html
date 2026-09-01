@@ -167,12 +167,52 @@ first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10이야.
 성공 여부는 total_audi로 정하되, 예측에 쓰는 변수는
 개봉 전에 알 수 있는 것(first_scrn·first_show·genre·nation·개봉 시기)만 써 줘.
 first_week_audi처럼 개봉 후에야 아는 값은 넣지 마.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다.</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py</span><pre># pages/9_흥행_분류.py — 개봉 전 정보로 흥행 성공을 가린다
+import streamlit as st
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+
+MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+
+
+@st.cache_data
+def load_data():
+    df = pd.read_csv(MOVIES, dtype={"movieCd": str}).sort_values("movieCd").reset_index(drop=True)
+    df["장르"] = df["genre"].str.split("|").str[0]
+    df["국가"] = df["nation"].str.split("|").str[0]
+    return df
+
+
+df = load_data()
+기준 = st.selectbox("성공 기준 (총 관객)", [500_000, 1_000_000, 3_000_000], index=1)
+df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
+st.caption(f"성공 {df['성공'].sum()}편 / 216편")
+
+X = pd.get_dummies(df[["first_scrn", "first_show", "peak", "장르", "국가"]])
+is_test = df.index % 10 &lt; 3                      # 열 편 중 앞 세 편을 시험용으로
+Xtr, Xte = X[~is_test], X[is_test]
+ytr, yte = df["성공"][~is_test], df["성공"][is_test]
+
+scaler = StandardScaler().fit(Xtr)
+logi = LogisticRegression(max_iter=2000).fit(scaler.transform(Xtr), ytr)
+tree = DecisionTreeClassifier(max_depth=3, random_state=0).fit(Xtr, ytr)
+
+c1, c2 = st.columns(2)
+c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(yte, logi.predict(scaler.transform(Xte))):.3f}")
+c2.metric("의사결정트리 정확도", f"{accuracy_score(yte, tree.predict(Xte)):.3f}")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 확률을 읽는다</span><br>
       영화를 하나 고르면 "성공 확률 몇 %"가 나타납니다. 확률이 0.5보다 크면 성공, 작으면 실패로 분류됩니다 — 교과서 136쪽의 문턱 규칙 그대로입니다. 화면에 함께 표시되는 <b>정확도</b>를 기록해 두세요.</li>
     <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>의사결정트리로도 만들어서 어떤 질문을 어떤 순서로 던지는지
 그림으로 보여 줘. 두 모델의 정확도를 나란히 비교해 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 트리가 던지는 질문의 순서
+st.subheader("트리는 어떤 질문을 먼저 던지나")
+st.code(export_text(tree, feature_names=list(X.columns), max_depth=2))
+st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도는 달라집니다.")</pre></div></details>
     </li>
   </ol>
 
