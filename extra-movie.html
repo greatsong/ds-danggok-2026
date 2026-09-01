@@ -105,6 +105,59 @@
   rank(순위) · movieNm(영화명) · openDt(개봉일) · audiCnt(그날 관객수) · audiAcc(누적 관객수)
   ※ 숫자 값이 전부 문자열로 온다.
   ※ 과거 날짜는 넉넉히 열려 있다(10년 전 크리스마스도 그날의 TOP 10이 그대로 온다).</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다. ③이 요구하는 ‘개봉 며칠째’ 표시까지 들어 있습니다</p><div class="codewrap code"><span class="label">pages/박스오피스_타임머신.py</span><pre># pages/박스오피스_타임머신.py — 해마다 같은 날짜의 1위를 모아 본다
+import datetime
+import streamlit as st
+import pandas as pd
+import requests
+import plotly.express as px
+
+URL = "https://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+올해 = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).year
+
+st.header("박스오피스 타임머신")
+
+c1, c2, c3 = st.columns(3)
+if c1.button("크리스마스"): st.session_state.update(월=12, 일=25)
+if c2.button("광복절"): st.session_state.update(월=8, 일=15)
+if c3.button("어린이날"): st.session_state.update(월=5, 일=5)
+month = st.number_input("월", 1, 12, key="월", value=st.session_state.get("월", 12))
+day = st.number_input("일", 1, 31, key="일", value=st.session_state.get("일", 25))
+
+
+@st.cache_data(ttl=3600)
+def fetch(ymd):
+    res = requests.get(URL, params={"key": st.secrets["KOBIS_KEY"], "targetDt": ymd}, timeout=20)
+    answer = res.json().get("boxOfficeResult")
+    return answer["dailyBoxOfficeList"] if answer else []
+
+
+rows = []
+for year in range(올해 - 10, 올해):
+    top = fetch(f"{year}{month:02d}{day:02d}")
+    if top:
+        m = top[0]
+        열린날 = pd.to_datetime(m["openDt"], errors="coerce")
+        지난날 = (pd.Timestamp(f"{year}-{month:02d}-{day:02d}") - 열린날).days if pd.notna(열린날) else None
+        rows.append({"연도": year, "영화명": m["movieNm"], "관객": int(m["audiCnt"]),
+                     "개봉일": m["openDt"], "개봉 후": 지난날})
+
+if not rows:
+    st.info("그 날짜에는 기록이 없습니다.")
+    st.stop()
+
+board = pd.DataFrame(rows)
+for _, r in board.iterrows():
+    안내 = f"개봉 {int(r['개봉 후'])}일째" if pd.notna(r["개봉 후"]) else "개봉일 모름"
+    st.write(f"**{r['연도']}년 — {r['영화명']}** · {r['관객']:,}명 · {안내}")
+
+st.plotly_chart(px.bar(board, x="연도", y="관객", hover_name="영화명"), width="stretch")
+
+고른해 = st.selectbox("그 해 TOP 10 보기", board["연도"])
+top10 = fetch(f"{고른해}{month:02d}{day:02d}")
+st.dataframe(pd.DataFrame([{"순위": int(m["rank"]), "영화명": m["movieNm"],
+                            "관객": int(m["audiCnt"])} for m in top10]), hide_index=True)
+st.caption(f"{month}월 {day}일 · 최근 10년")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 예시 — 이런 모습이면 성공</span><br>
       아래는 같은 프롬프트로 받아 실제로 실행해 확인한 코드 예시입니다. <b>여러분이 받은 코드가 글자까지 같지 않아도 됩니다</b> — 프리셋 버튼 세 개, 연도별 1위 카드, 막대그래프가 뜨면 성공입니다. 크리스마스 기준으로 올해(2026년) 카드는 "집계 전"으로 표시되고, 2025년 「아바타: 불과 재」(그날 관객 640,291명)부터 2016년 「마스터」(902,734명)까지 열 장의 카드가 줄지어 나타납니다.
@@ -245,6 +298,20 @@ if records:
   개봉 첫 주의 신작이 1위인 해와, 오래 버틴 영화가 1위인 해를 구분해 보고 싶어.
 - 세 시즌(크리스마스·광복절·어린이날)의 연도별 1위 관객수 평균을 구해서,
   어느 시즌이 가장 큰 대목인지 한 문장과 숫자로 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">타임머신 페이지에 이어 붙일 부분</span><pre># 세 시즌 비교 — 타임머신 페이지에 이어 붙일 부분
+시즌 = {"크리스마스": (12, 25), "광복절": (8, 15), "어린이날": (5, 5)}
+평균 = {}
+for 이름, (m, d) in 시즌.items():
+    관객 = [top[0]["audiCnt"] for year in range(올해 - 10, 올해)
+           if (top := fetch(f"{year}{m:02d}{d:02d}"))]
+    평균[이름] = sum(int(v) for v in 관객) / len(관객) if 관객 else 0
+
+큰시즌 = max(평균, key=평균.get)
+st.subheader("어느 시즌이 가장 큰 대목인가")
+st.dataframe(pd.DataFrame([{"시즌": k, "1위 평균 관객": round(v)} for k, v in 평균.items()]),
+             hide_index=True)
+st.write(f"최근 10년 기준 1위 영화의 평균 관객이 가장 많은 시즌은 **{큰시즌}**"
+         f"({평균[큰시즌]:,.0f}명)입니다.")</pre></div></details>
     </li>
   </ol>
   <div class="callout tip">
@@ -269,11 +336,46 @@ if records:
 - 그해관객이 1,000만 명을 넘은 영화는 막대 색을 다르게 하고 영화명 옆에 트로피 이모지를 붙여 줘.
 - 화면 아래에 작은 글씨로 "그해관객은 주간 박스오피스 기록으로 계산한 근삿값입니다"라고 표기해 줘.
 - 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/연간_박스오피스_TOP10.py</span><pre># pages/연간_박스오피스_TOP10.py — 해마다 관객 상위 10편
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_yearly_top10.csv"
+
+st.header("연간 박스오피스 TOP 10")
+
+
+@st.cache_data
+def load_data():
+    return pd.read_csv(DATA_URL)
+
+
+df = load_data()
+year = st.slider("연도", int(df["연도"].min()), int(df["연도"].max()), 2024)
+one = df[df["연도"] == year].copy()
+one["표시"] = one.apply(lambda r: ("🏆 " if r["그해관객"] &gt;= 10_000_000 else "") + r["영화명"], axis=1)
+one["천만"] = one["그해관객"] &gt;= 10_000_000
+
+fig = px.bar(one.sort_values("그해관객"), x="그해관객", y="표시", orientation="h",
+             color="천만", hover_data=["개봉일"])
+st.plotly_chart(fig, width="stretch")
+st.dataframe(one[["순위", "영화명", "그해관객", "개봉일"]], hide_index=True)</pre></div></details>
   <p><b>이런 화면이면 성공</b> — 같은 프롬프트로 받은 코드를 실제 실행해 확인한 모습입니다. 슬라이더는 처음에 가장 최근 연도를 가리킵니다. 2026년이면 맨 위에 🏆 왕과 사는 남자(16,880,997명) 막대가 홀로 다른 색으로 서 있고, 그 아래로 스파이더맨: 브랜드 뉴 데이(8,127,603명), 오디세이(7,109,334명)가 이어집니다. 슬라이더를 2020년으로 돌리면 1위가 남산의 부장들(4,748,005명)로 바뀌고 트로피가 하나도 없습니다. 그래프 아래에 같은 내용의 표, 화면 아래에 근삿값 표기가 보이면 완성입니다.</p>
   <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘.
 - 연도별 1위 영화의 그해관객을 2004년부터 지금까지 선 그래프로 이어 그려 줘.
   "그 해 1위가 얼마나 컸는가"의 23년 흐름이 보이게.
 - 선 그래프에서 가장 낮은 두 해를 자동으로 찾아 표시해 줘. 왜 낮은지는 내가 해석할게.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">연간 페이지에 이어 붙일 부분</span><pre># 해마다 1위가 얼마나 컸는가
+st.subheader("해마다 1위 영화의 관객 (23년)")
+top1 = df[df["순위"] == 1].sort_values("연도")
+fig2 = px.line(top1, x="연도", y="그해관객", markers=True, hover_name="영화명")
+low2 = top1.nsmallest(2, "그해관객")
+fig2.add_scatter(x=low2["연도"], y=low2["그해관객"], mode="markers+text",
+                 text=low2["영화명"], textposition="top center",
+                 marker=dict(size=12, color="crimson"), name="가장 낮은 두 해")
+st.plotly_chart(fig2, width="stretch")
+st.caption("왜 그 두 해가 낮은지는 직접 해석해 보세요.")</pre></div></details>
   <div class="callout tip">
     <div class="h">🔍 읽어 볼 것 — 23년 흐름에서 보이는 것</div>
     <ul>
@@ -296,12 +398,59 @@ if records:
   없으면 "역대 300위 안에 없는 영화입니다"라고 안내해 줘.
 - 화면 아래에 작은 글씨로 "누적관객은 주간 박스오피스 기록으로 계산한 근삿값입니다"라고 표기해 줘.
 - 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/역대_박스오피스_기록.py</span><pre># pages/역대_박스오피스_기록.py — 누적 관객 상위 300편
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_alltime.csv"
+
+st.header("역대 박스오피스 기록")
+
+
+@st.cache_data
+def load_data():
+    df = pd.read_csv(DATA_URL)
+    df["개봉연도"] = pd.to_datetime(df["개봉일"]).dt.year
+    return df
+
+
+df = load_data()
+best = df.iloc[0]
+c1, c2, c3 = st.columns(3)
+c1.metric("역대 1위", best["영화명"])
+c2.metric("그 관객수", f"{best['누적관객']:,}명")
+c3.metric("천만 돌파", f"{(df['누적관객'] &gt;= 10_000_000).sum()}편")
+
+top20 = df.head(20).copy()
+top20["천만"] = top20["누적관객"] &gt;= 10_000_000
+fig = px.bar(top20.sort_values("누적관객"), x="누적관객", y="영화명", orientation="h", color="천만")
+st.plotly_chart(fig, width="stretch")
+
+찾기 = st.text_input("영화 이름으로 찾기")
+if 찾기:
+    hit = df[df["영화명"].str.contains(찾기, case=False, na=False)]
+    if hit.empty:
+        st.info("역대 300위 안에 없는 영화입니다.")
+    else:
+        st.dataframe(hit[["순위", "영화명", "개봉일", "누적관객"]], hide_index=True)</pre></div></details>
   <p><b>이런 화면이면 성공</b> — 실행해 확인한 모습입니다. 지표 카드 세 장에 <b>명량 · 17,597,914명 · 32편</b>이 뜨고, TOP 20 가로 막대의 맨 위가 명량입니다. 검색창에 "극한직업"을 넣으면 "3위 · 누적 관객 16,243,231명"이 나오고, 300위 밖의 영화를 넣으면 "역대 300위 안에 없는 영화입니다"가 나옵니다.</p>
   <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘.
 - 개봉일에서 연도를 뽑아, 1,000만 돌파 영화가 몇 편씩 나왔는지 연도별 세로 막대로 보여 줘.
   천만 영화가 한 편도 없는 해도 0으로 표시해 줘.
 - 300편 전체로 누적관객의 히스토그램을 그려 줘. 역대 기록이라는 게
   소수의 초대형 영화와 다수의 나머지로 이루어져 있다는 게 보이게.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">역대 페이지에 이어 붙일 부분</span><pre># 연도별 천만 편수와 기록의 분포
+st.subheader("연도별 천만 영화 편수")
+천만 = df[df["누적관객"] &gt;= 10_000_000]
+years = range(int(df["개봉연도"].min()), int(df["개봉연도"].max()) + 1)
+count = 천만["개봉연도"].value_counts().reindex(years, fill_value=0).reset_index()
+count.columns = ["개봉연도", "편수"]
+st.plotly_chart(px.bar(count, x="개봉연도", y="편수"), width="stretch")
+
+st.subheader("역대 300편의 누적관객 분포")
+st.plotly_chart(px.histogram(df, x="누적관객", nbins=40), width="stretch")
+st.caption("소수의 초대형 영화와 다수의 나머지로 이루어져 있는지 확인해 보세요.")</pre></div></details>
   <div class="callout tip">
     <div class="h">🔍 읽어 볼 것 — 역대 300편이 말하는 것</div>
     <ul>

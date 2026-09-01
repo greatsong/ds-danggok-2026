@@ -189,6 +189,66 @@
   맨 위에 "전부 실패로 찍는 기준선" 행을 넣어 줘.
 - 표 아래에 '내가 고른 모델과 그 이유'를 적는 글상자를 만들어 줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다. XGBoost는 설치돼 있을 때만 오디션에 참가합니다</p><div class="codewrap code"><span class="label">pages/모델_오디션.py</span><pre># pages/모델_오디션.py — 같은 문제에 다섯 모델을 세운다
+import streamlit as st
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+
+st.header("모델 오디션")
+
+
+@st.cache_data
+def load_data():
+    df = pd.read_csv(DATA_URL)
+    df["장르"] = df["genre"].str.split("|").str[0]
+    df["성공"] = (df["total_audi"] &gt;= 1_000_000).astype(int)
+    return df
+
+
+df = load_data()
+X = pd.get_dummies(df[["first_scrn", "first_show", "장르"]])   # 첫 주 관객은 넣지 않는다
+y = df["성공"]
+
+
+def 모델들():
+    models = {
+        "로지스틱 회귀": make_pipeline(StandardScaler(), LogisticRegression(max_iter=2000)),
+        "의사결정트리": DecisionTreeClassifier(max_depth=3, random_state=0),
+        "k-최근접 이웃": make_pipeline(StandardScaler(), KNeighborsClassifier(n_neighbors=5)),
+        "랜덤 포레스트": RandomForestClassifier(n_estimators=200, random_state=0),
+    }
+    try:                                   # XGBoost는 설치돼 있을 때만 넣는다
+        from xgboost import XGBClassifier
+        models["XGBoost"] = XGBClassifier(n_estimators=200, eval_metric="logloss")
+    except ImportError:
+        st.caption("XGBoost가 설치되어 있지 않아 네 모델만 세웁니다. requirements.txt에 xgboost를 넣어 보세요.")
+    return models
+
+
+def 한판(seed):
+    Xtr, Xte, ytr, yte = train_test_split(X, y, test_size=0.3, random_state=seed, stratify=y)
+    결과 = [{"모델": "전부 실패로 찍기", "정확도": round((yte == 0).mean(), 3), "정밀도": 0.0, "재현율": 0.0}]
+    for 이름, m in 모델들().items():
+        m.fit(Xtr, ytr)
+        p = m.predict(Xte)
+        결과.append({"모델": 이름,
+                   "정확도": round(accuracy_score(yte, p), 3),
+                   "정밀도": round(precision_score(yte, p, zero_division=0), 3),
+                   "재현율": round(recall_score(yte, p, zero_division=0), 3)})
+    return pd.DataFrame(결과)
+
+
+st.subheader("한 번 나눠 본 결과")
+st.dataframe(한판(42), hide_index=True)</pre></div></details>
       코드를 받으면 4차시처럼 <b>pages</b> 폴더에 새 파일로 올려 커밋합니다. 파일 이름은 <button type="button" class="fname">pages/9_모델_오디션.py</button>를 눌러 그대로 복사해 쓰세요. requirements.txt에 <b>xgboost</b>가 새로 추가되었는지 확인하고, 없으면 한 줄 추가해 커밋합니다.</li>
     <li><span class="st">② 성적표 읽기 — 표가 뜨면 절반, 읽어야 완성</span><br>
       화면에 여섯 줄짜리 성적표(기준선 + 다섯 모델)가 뜨면 성공입니다. 읽는 순서는 10차시 그대로입니다. 첫째, <b>기준선(약 89%)을 넘지 못한 모델</b>부터 지웁니다 — 정확도가 높아 보여도 기준선 아래면 다수결만 못한 것입니다. 둘째, 남은 모델끼리는 <b>재현율</b>을 봅니다 — 정작 잡고 싶은 성공작을 몇이나 잡았는지. 셋째, 표에 없는 것도 하나 고려합니다 — 그 모델의 판단을 <b>설명할 수 있는가</b>(트리는 보여 주고, 숲은 감춥니다).</li>
@@ -197,6 +257,15 @@
 - 학습용/시험용을 나누는 방법을 바꿔 가며 같은 학습을 5번 반복하고,
   모델별 점수의 평균과 최고·최저 폭을 표에 함께 보여 줘.
 - 한 번의 성적만 보고 고르면 우연에 속을 수 있으니까.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">모델 오디션 페이지에 이어 붙일 부분</span><pre># 나누는 방법을 바꿔 가며 다섯 번
+st.subheader("다섯 번 반복한 결과")
+쌓기 = pd.concat([한판(s) for s in range(5)])
+요약 = (쌓기.groupby("모델")["정확도"].agg(평균="mean", 최저="min", 최고="max").round(3)
+          .sort_values("평균", ascending=False).reset_index())
+요약["최고-최저"] = (요약["최고"] - 요약["최저"]).round(3)
+st.dataframe(요약, hide_index=True)
+st.text_area("내가 고른 모델과 그 이유")
+st.caption("한 번의 성적만 보고 고르면 우연에 속을 수 있습니다.")</pre></div></details>
       다시 배포하면 표에 폭이 나타납니다. <b>평균이 비슷한 두 모델이라면 폭이 좁은 쪽이 더 믿을 만합니다.</b> 한 번의 시험 성적이 아니라 여러 번의 안정성으로 고르는 것 — 팀 프로젝트에서 모델을 고를 때 그대로 쓰는 방법입니다.</li>
   </ol>
 
