@@ -3,11 +3,16 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.codewrap').forEach(function (wrap) {
     var pre = wrap.querySelector('pre');
     if (!pre) return;
-    if (wrap.querySelector('.copy-btn')) return;   // 마크업에 이미 버튼이 있으면 두 번 붙이지 않는다
-    var btn = document.createElement('button');
-    btn.className = 'copy-btn';
+    // 마크업에 이미 버튼이 있으면 그 버튼을 쓰고, 없을 때만 새로 만든다
+    var btn = wrap.querySelector('.copy-btn');
+    var 만들었다 = false;
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = '복사';
+      만들었다 = true;
+    }
     btn.type = 'button';
-    btn.textContent = '복사';
     btn.addEventListener('click', function () {
       var text = pre.innerText;
       // 클립보드 접근 실패 시 텍스트 선택으로 대체
@@ -31,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fallback();
       }
     });
-    wrap.appendChild(btn);
+    if (만들었다) wrap.appendChild(btn);
   });
 });
 
