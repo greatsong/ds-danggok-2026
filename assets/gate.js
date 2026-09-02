@@ -2,7 +2,7 @@
 //
 // 규칙
 //   · lessonNN.html  : NN > RELEASED_LESSON(release.js) 이면 잠금
-//   · glossary.html · concepts.html : 15차시 전까지 잠금 (전 차시 용어·개념이 들어 있어 진도보다 앞서감)
+//   · glossary.html · concepts.html · study-guide.html · eval-workbook.html : 15차시 전까지 잠금 (전 차시 용어·개념이 들어 있어 진도보다 앞서감)
 //   · extra-movie(-deep).html : 4차시 전까지 잠금
 //   · extra-models.html · project.html : 14차시 전까지 잠금
 //   · data.html : 4차시 전까지 잠금 (데이터 목록)
@@ -50,7 +50,7 @@
   var locked = false;
   if (!teacher) {
     if (path.indexOf('/teacher/') !== -1) locked = true;
-    else if (/(glossary|concepts)\.html$/.test(path)) locked = released < 15; // 시험 대비 시점(15차시)에 공개
+    else if (/(glossary|concepts|study-guide|eval-workbook)\.html$/.test(path)) locked = released < 15; // 시험 대비 시점(15차시)에 공개
     else if (/extra-movie(?:-deep)?\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
     else if (/extra-models\.html$/.test(path)) locked = released < 14;        // 모델 도감 — 팀 프로젝트 안내와 함께
     else if (/data\.html$/.test(path)) locked = released < 4;              // 데이터 목록 — 영화 트랙을 마친 뒤

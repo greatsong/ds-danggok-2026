@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>14차시 · 데이터베이스와 수파베이스 · 데이터 과학 당곡고</title>
+<title>13차시 · 데이터베이스와 수파베이스 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -19,7 +19,7 @@
 
 <div class="wrap">
 <main>
-  <span class="eyebrow">Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 14차시</span>
+  <span class="eyebrow">Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 13차시</span>
   <h1>데이터베이스와 <span class="a">수파베이스</span></h1>
   <div class="under"></div>
 
@@ -27,7 +27,7 @@
     <div class="q">"빨리 가려면 혼자 가고, 멀리 가려면 함께 가라."</div>
     <span class="by">속담 — 오늘 데이터가 '내 파일'에서 '우리의 저장소'가 됩니다</span>
   </div>
-  <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson14-deep.html">🔎 더 자세한 판 보기 →</a></p>
+  <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson13-deep.html">🔎 더 자세한 판 보기 →</a></p>
 
   <p class="lead">"내 앱에 방문 소감을 받고 싶다." 이 한 가지 소원에서 오늘 수업이 시작됩니다. 지금까지 우리 앱은 데이터를 <b>읽기만</b> 했습니다 — 방문자가 남긴 글을 저장할 곳이 없었기 때문입니다. 오늘은 CSV 파일로는 안 되는 순간을 확인하고, <b>수파베이스</b>로 내 앱에 방명록을 만듭니다.</p>
 
@@ -243,7 +243,7 @@
 새 표를 만들지 말고 이 표에 그대로 연결해 줘.
 접속 정보는 비밀 금고에 넣어 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/14_방명록.py</span><pre># pages/14_방명록.py — 수파베이스 표에 글을 남기고 읽는다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/13_방명록.py</span><pre># pages/13_방명록.py — 수파베이스 표에 글을 남기고 읽는다
 import streamlit as st
 from supabase import create_client
 
@@ -296,7 +296,7 @@ for row in rows:
   <div class="codewrap improve"><span class="label">③ 개선(도전)</span><button class="copy-btn">복사</button><pre>내가 남긴 글 옆에 고치기와 지우기 단추를 달아 줘.
 글을 남길 때 password 열에 저장한 네 자리 비밀번호가
 맞을 때만 고치거나 지울 수 있게 해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/14_방명록.py에 이어 붙일 부분</span><pre># 도전 — 비밀번호가 맞을 때만 고치고 지운다 (방명록 페이지에 이어 붙일 부분)
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/13_방명록.py에 이어 붙일 부분</span><pre># 도전 — 비밀번호가 맞을 때만 고치고 지운다 (방명록 페이지에 이어 붙일 부분)
 for row in rows:
     with st.expander(f"{row['name']} — {row['message']}"):
         확인 = st.text_input("비밀번호", type="password", key=f"pw{row['id']}")
@@ -320,21 +320,21 @@ for row in rows:
   </div>
 
   <h2>3. 팀 프로젝트 예고 — 데이터로 답할 수 있는 문제인가</h2>
-  <p>공통 수업은 오늘로 마지막입니다. 중간 지필평가 이후에는 2~3인 팀으로 한 학기의 도구 전부를 들고 <b>팀만의 질문</b>에 도전합니다. 오늘은 그 준비로 팀을 구성하고 주제 후보를 고릅니다.</p>
+  <p>공통 수업은 다음 시간 데이터 윤리까지 두 차시가 남았습니다. 중간 지필평가 이후에는 2~3인 팀으로 한 학기의 도구 전부를 들고 <b>팀만의 질문</b>에 도전합니다. 오늘은 그 준비로 팀을 구성하고 주제 후보를 고릅니다.</p>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 174쪽</span></div>
     <p class="q">"데이터 과학은 다양한 분야의 문제를 해결하고 의사 결정을 지원하는 데 큰 도움이 되지만, 모든 문제를 해결할 수 있는 것은 아니다." <span class="src">(174쪽)</span></p>
     <p class="t">→ 그래서 주제를 고를 때는 세 가지를 차례로 묻는다 — 데이터가 <b>충분히 있는가</b> · 그 데이터가 문제 해결에 <b>적합한가</b> · 법적·윤리적으로 <b>올바른가</b>.</p>
   </div>
-  <p>세 번째 물음은 지난 시간에 세운 기준 그대로입니다 — 개인정보 · 출처 · 이용 약관 · 편향. 데이터가 아무리 많아도 윤리 관문을 통과하지 못하면 프로젝트 주제가 될 수 없습니다. 프로젝트의 5주 흐름·팀 저장소·개인의 몫은 <a href="project.html">팀 프로젝트 안내</a>에 정리되어 있습니다. 팀에서는 다음 순서로 주제 카드를 만듭니다.</p>
+  <p>세 번째 물음의 기준 네 가지(개인정보 · 출처 · 이용 약관 · 편향)는 다음 시간 데이터 윤리에서 세웁니다. 오늘 고른 후보는 다음 시간에 그 기준으로 다시 점검합니다. 데이터가 아무리 많아도 윤리 관문을 통과하지 못하면 프로젝트 주제가 될 수 없습니다. 프로젝트의 5주 흐름·팀 저장소·개인의 몫은 <a href="project.html">팀 프로젝트 안내</a>에 정리되어 있습니다. 팀에서는 다음 순서로 주제 카드를 만듭니다.</p>
   <ul>
     <li><b>팀 구성(2~3인)</b> — 관심 질문이 비슷한 사람끼리</li>
     <li><b>틀 고르기</b> — 회귀·분류·군집·연관 중 팀의 질문에 맞는 분석 틀은 무엇인가</li>
-    <li><b>데이터 후보 3개</b> — 각 후보를 세 가지 물음으로 판단해 보기 (교과서 176쪽 탐구활동)</li>
+    <li><b>데이터 후보 3개</b> — 각 후보를 앞의 두 물음으로 먼저 판단해 보기 (교과서 176쪽 탐구활동). 세 번째 물음은 다음 시간에</li>
   </ul>
   <h2>4. 개념 정리 — 파일에서 공동 저장소로</h2>
   <p>오늘 배운 것을 한 줄로 정리하면 이렇습니다. <b>혼자 읽는 데이터는 파일이면 되지만, 여럿이 동시에 쌓는 데이터에는 데이터베이스가 필요하다.</b> 그리고 그 필요는 팀 프로젝트가 시작되는 순간 현실이 됩니다.</p>
-  <p>1차시에 질문 던지기로 시작한 공통 수업이 오늘 마무리됩니다. 질문을 세우고 첫 앱을 배포하고(1차시), API로 데이터를 구해 오고(2·5차시), 그래프로 데이터를 읽고(3·4차시), 회귀·분류·군집·연관의 네 가지 틀로 모델을 만들고 평가했으며(6~12차시), 그 전 과정의 윤리를 점검했고(13차시), 오늘 여럿이 함께 쓰는 저장소까지 갖췄습니다. 이제 이 도구 전부가 팀 프로젝트에서 여러분의 것입니다.</p>
+  <p>1차시에 질문 던지기로 시작한 공통 수업이 이제 한 시간 남았습니다. 질문을 세우고 첫 앱을 배포하고(1차시), API로 데이터를 구해 오고(2·5차시), 그래프로 데이터를 읽고(3·4차시), 회귀·분류·군집·연관의 네 가지 틀로 모델을 만들고 평가했으며(6~12차시), 오늘 여럿이 함께 쓰는 저장소까지 갖췄습니다. 다음 시간에는 이 전 과정을 윤리의 기준으로 점검하고 공통 수업을 마무리합니다.</p>
 
   <h2>5. 확인 문제</h2>
   <div class="quiz">
@@ -375,7 +375,7 @@ for row in rows:
     <li>CSV 파일로 부족해지는 세 순간(동시에 쓰기·계속 쌓기·골라 읽기)을 말할 수 있다.</li>
     <li>내 앱에 방명록 페이지를 달고, 남긴 글이 목록에 쌓이는 것을 확인했다.</li>
     <li>친구의 앱에 글을 남겨 "우리의 저장소"가 된 것을 확인했다.</li>
-    <li>팀을 구성하고, 데이터 후보를 세 가지 물음으로 판단해 주제 카드를 냈다.</li>
+    <li>팀을 구성하고, 데이터 후보를 앞의 두 물음으로 먼저 판단해 주제 카드 초안을 냈다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
@@ -391,8 +391,8 @@ for row in rows:
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
-    <a class="prev" href="lesson13.html"><div class="dir">← 이전</div><div class="tt">13차시 · 데이터 윤리</div></a>
-    <a class="next" href="index.html"><div class="dir">다음 →</div><div class="tt">목차로 돌아가기</div></a>
+    <a class="prev" href="lesson12.html"><div class="dir">← 이전</div><div class="tt">12차시 · 연관 분석 — 급식에서 규칙 찾기</div></a>
+    <a class="next" href="lesson14.html"><div class="dir">다음 →</div><div class="tt">14차시 · 데이터 윤리</div></a>
   </div>
 </main>
 </div>
