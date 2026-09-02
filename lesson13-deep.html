@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>13차시 · 데이터 윤리 · 데이터 과학 당곡고 · 자세한 판</title>
+<title>14차시 · 데이터베이스와 수파베이스 · 데이터 과학 당곡고 · 자세한 판</title>
 <link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -19,232 +19,382 @@
 
 <div class="wrap">
 <main>
-  <span class="eyebrow">Ⅰ. 데이터 과학의 이해 · 13차시</span>
-  <h1>데이터 윤리 · <span class="a">내 앱에서 쟁점 찾기</span></h1>
+  <span class="eyebrow">Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 14차시</span>
+  <h1>데이터베이스와 <span class="a">수파베이스</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"윤리란, 할 권리가 있는 것과 하는 것이 옳은 것의 차이를 아는 것이다."</div>
-    <span class="by">포터 스튜어트(미국 대법관)에게 통용되는 말 — 할 수 있는 분석과 해도 되는 분석은 다릅니다</span>
+    <div class="q">"빨리 가려면 혼자 가고, 멀리 가려면 함께 가라."</div>
+    <span class="by">속담 — 오늘 데이터가 '내 파일'에서 '우리의 저장소'가 됩니다</span>
   </div>
 
-  <div class="callout mini"><div class="h">🔎 자세한 판</div><p>이 페이지는 내용을 줄이지 않은 판입니다. 수업은 <a href="lesson13.html">기본판</a>으로 진행하고, 더 깊이 보고 싶을 때 이 판을 읽습니다.</p></div>
+  <div class="callout mini"><div class="h">🔎 자세한 판</div><p>이 페이지는 내용을 줄이지 않은 판입니다. 수업은 <a href="lesson14.html">기본판</a>으로 진행하고, 더 깊이 보고 싶을 때 이 판을 읽습니다.</p></div>
 
-  <p class="lead">한 학기 동안 우리는 다른 사람이 모은 데이터를 불러와, AI가 작성한 코드로 분석하고, 결과를 인터넷에 공개했습니다. 이 과정 어디에 윤리 문제가 있을까요? 오늘은 교과서의 세 가지 윤리 문제를 익힌 뒤, 그 기준으로 <b>내 포트폴리오 앱</b>을 다시 점검합니다.</p>
+  <p class="lead">"내 앱에 방문 소감을 받고 싶다." 이 한 가지 소원에서 오늘 수업이 시작됩니다. 지금까지 우리 앱은 데이터를 <b>읽기만</b> 했습니다 — 방문자가 남긴 글을 저장할 곳이 없었기 때문입니다. 오늘은 CSV 파일로는 안 되는 순간을 확인하고, <b>수파베이스</b>로 내 앱에 방명록을 만듭니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>교과서의 세 문제</b> — 편향성 · 혐오 표현 · 소유권</li>
-      <li><b>내 실습 돌아보기</b> — 인증키 · 데이터 민감도 · 모델이 배우는 편향 · AI 코드의 책임</li>
-      <li><b>모둠 토론</b> — 내가 겪은 윤리 사례 · SDGs와 데이터</li>
+      <li><b>개념</b> — 데이터셋 · 데이터베이스 · 테이블, 그리고 CSV로 부족해지는 세 순간</li>
+      <li><b>바이브 코딩</b> — 내 앱에 방명록 페이지를 달아 수파베이스에 글이 쌓이게</li>
+      <li><b>팀 프로젝트 예고</b> — 팀 구성 · 데이터로 답할 수 있는 문제 고르기</li>
     </ul>
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>데이터 윤리라고 하면 흔히 기업의 개인 정보 유출 뉴스처럼 먼 이야기를 떠올립니다. 그런데 이번 학기 실습을 돌아보면, 인증키를 어디에 두었는지, 데이터 출처를 표기했는지, 그 데이터에 누군가의 정보가 들어 있는지 — 이 모두가 이미 우리가 내린 <b>윤리적 판단</b>이었습니다. 데이터로 무엇을 만들 줄 아는 사람일수록, 그 결과가 누구에게 어떤 영향을 주는지 판단할 책임도 함께 커집니다. 팀 프로젝트에서 데이터를 직접 고르기 전, 오늘이 그 판단 기준을 세우는 시간입니다.</p>
+  <p>인터넷 게시판, 메신저, 온라인 쇼핑몰 — 여러 사람이 함께 쓰는 서비스의 뒤에는 예외 없이 데이터베이스가 있습니다. 우리가 한 학기 동안 다룬 CSV 파일은 <b>혼자 분석하기</b>에는 충분했지만, 이제 상황이 달라집니다. 다음 주부터 시작하는 팀 프로젝트에서는 2~3명이 <b>같은 데이터를 동시에</b> 쌓고 고쳐야 합니다. 그 도구를 오늘 익힙니다. 그리고 사실, 여러분은 이미 한 학기 내내 데이터베이스를 써 왔습니다 — 작품을 올리고 서로 피드백을 남긴 우리 갤러리가 바로 그것입니다.</p>
 
-  <h2>1. 개념 이해 — 교과서의 세 가지 윤리 문제</h2>
+  <h2>1. 개념 이해 — 데이터셋, 데이터베이스, 테이블</h2>
   <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 38·39쪽</span></div>
-    <p class="q">"수집된 데이터의 분포가 고르지 못하고, 특정한 지역, 연령, 성별 등에 치우쳐 있을 경우 데이터에 편향성이 있다고 한다." <span class="src">(38쪽)</span></p>
-    <p class="q">"실제 현실을 대표하지 못하고 특정한 방향으로 치우쳐 있는 데이터를 가지고 모델을 만들면, 특정 대상에게 유리하거나 불리한 모델이 만들어질 수 있다." <span class="src">(38쪽)</span></p>
-    <p class="q">"학교 수업 중에 생성된 데이터는 학생의 것일까? 학교의 것일까? 서비스를 만든 기업의 것일까?" <span class="src">(39쪽)</span></p>
-    <p class="t">→ 데이터가 <b>치우쳐 있으면</b> 모델도 치우친다. 그리고 데이터가 자원이 된 시대에는 <b>누구의 것인가</b>부터가 쟁점이 된다.</p>
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 25~27쪽</span></div>
+    <p class="q">"데이터셋(dataset)이란 하나의 주제에 대한 여러 데이터들이 모인 집합(set)을 말한다." <span class="src">(25쪽)</span></p>
+    <p class="q">"데이터베이스(database)는 여러 사람이 공유하여 사용하기 위해 통합 관리되는 데이터의 집합으로, 데이터베이스 시스템을 사용하면 대규모의 데이터를 효율적으로 저장하고 검색하며, 업데이트하고 관리할 수 있다." <span class="src">(26쪽)</span></p>
+    <p class="q">"데이터베이스에는 여러 종류의 데이터셋이 들어가는데, 이때 각각의 데이터셋은 표 형태로 저장되며 이를 테이블(table)이라고 한다." <span class="src">(27쪽)</span></p>
+    <p class="t">→ 우리가 쓰던 CSV 파일 하나가 데이터셋. 그것을 <b>여러 사람이 공유</b>하도록 통합 관리하는 것이 데이터베이스이고, 그 안의 표 하나하나가 테이블이다.</p>
   </div>
-  <p>교과서는 데이터 과학 속 윤리 문제를 세 갈래로 정리합니다. 셋 다 "데이터를 잘못 다루면 사람이 피해를 본다"는 공통 구조를 갖습니다.</p>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 880 300" style="min-width:720px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이터셋과 데이터베이스와 테이블의 포함 관계를 나타낸 그림">
+      <defs>
+        <marker id="ar15gold" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+      </defs>
+      <!-- 왼쪽: 데이터셋 — 파일 하나 -->
+      <path d="M60 80 h72 l28 28 v104 h-100 z" fill="#ffffff" stroke="#d8cbb8" stroke-width="2"/>
+      <path d="M132 80 v28 h28 z" fill="#f3ece2" stroke="#d8cbb8" stroke-width="2"/>
+      <text x="106" y="132" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a" font-family="monospace">CSV</text>
+      <text x="110" y="156" text-anchor="middle" font-size="11" fill="#c0b8a4">… , … , …</text>
+      <text x="110" y="172" text-anchor="middle" font-size="11" fill="#c0b8a4">… , … , …</text>
+      <text x="110" y="238" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">데이터셋</text>
+      <text x="110" y="257" text-anchor="middle" font-size="11.5" fill="#7a7f95">급식 CSV 파일 하나</text>
+      <text x="110" y="273" text-anchor="middle" font-size="11" fill="#7a7f95">(혼자 분석할 때)</text>
+      <!-- 화살표: 데이터셋 → 데이터베이스 -->
+      <line x1="176" y1="150" x2="342" y2="150" stroke="#e8930c" stroke-width="2.5" marker-end="url(#ar15gold)"/>
+      <text x="258" y="176" text-anchor="middle" font-size="10.5" fill="#a05f06">여러 사람이 공유하도록</text>
+      <text x="258" y="192" text-anchor="middle" font-size="10.5" fill="#a05f06">통합 관리되면, 데이터셋은</text>
+      <text x="258" y="208" text-anchor="middle" font-size="10.5" fill="#a05f06">표 형태의 테이블로 저장된다</text>
+      <text x="258" y="224" text-anchor="middle" font-size="10.5" fill="#a05f06">(교과서 27쪽)</text>
+      <!-- 오른쪽: 데이터베이스 -->
+      <rect x="360" y="26" width="500" height="214" rx="16" fill="#fffdf6" stroke="#f4b400" stroke-width="2.5"/>
+      <text x="382" y="56" font-size="14" font-weight="800" fill="#5a4300">데이터베이스 — 우리 학급 수파베이스 프로젝트</text>
+      <!-- 방명록 테이블 -->
+      <text x="388" y="90" font-size="12.5" font-weight="800" fill="#16635e">방명록 테이블</text>
+      <rect x="388" y="98" width="60" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <rect x="448" y="98" width="90" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <rect x="538" y="98" width="80" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <text x="418" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">이름</text>
+      <text x="493" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">소감</text>
+      <text x="578" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">작성 시각</text>
+      <rect x="388" y="122" width="60" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="448" y="122" width="90" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="538" y="122" width="80" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="418" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="493" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="578" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <rect x="388" y="144" width="60" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="448" y="144" width="90" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="538" y="144" width="80" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="418" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="493" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="578" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="503" y="188" text-anchor="middle" font-size="10.5" fill="#7a7f95">오늘 만드는 것</text>
+      <!-- 갤러리 테이블 -->
+      <text x="650" y="90" font-size="12.5" font-weight="800" fill="#16635e">갤러리 테이블</text>
+      <rect x="650" y="98" width="85" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <rect x="735" y="98" width="85" height="24" fill="#d8edec" stroke="#f0e2bc"/>
+      <text x="692" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">작품</text>
+      <text x="777" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">피드백</text>
+      <rect x="650" y="122" width="85" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="735" y="122" width="85" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="692" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="777" y="137" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <rect x="650" y="144" width="85" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <rect x="735" y="144" width="85" height="22" fill="#ffffff" stroke="#f0e2bc"/>
+      <text x="692" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="777" y="159" text-anchor="middle" font-size="11" fill="#c0b8a4">…</text>
+      <text x="735" y="188" text-anchor="middle" font-size="10.5" fill="#7a7f95">한 학기 내내 쓴 것</text>
+    </svg>
+  </div>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">CSV 파일 하나가 데이터셋, 그것을 여럿이 공유하도록 모아 관리하는 것이 데이터베이스, 그 안의 표 하나하나가 테이블입니다.</p>
+  <p>정의의 핵심은 "여러 사람이 공유하여"입니다. 혼자 쓸 때는 파일이면 충분한데, 여럿이 함께 쓰는 순간 파일은 세 가지 한계에 부딪힙니다.</p>
   <table class="daymap">
-    <thead><tr><th>문제</th><th>무엇이 잘못되나</th><th>우리 실습과의 접점</th></tr></thead>
+    <thead><tr><th>부족해지는 순간</th><th>CSV 파일이라면</th><th>데이터베이스라면</th></tr></thead>
     <tbody>
-      <tr><td><b>데이터 편향성</b></td><td>치우친 데이터로 만든 모델이 특정 대상에게 불리하게 작동한다</td><td>7차시 영화 모델의 스크린 수 변수 — 아래 2절</td></tr>
-      <tr><td><b>혐오 표현</b></td><td>사람들이 쓴 잘못된 언어를 인공지능이 그대로 학습한다</td><td>우리가 매일 쓰는 AI 챗봇의 학습 데이터</td></tr>
-      <tr><td><b>데이터 소유권</b></td><td>내가 만든 데이터를 누가 소유하고 팔 수 있는지가 불분명하다</td><td>수업 중 폼으로 제출한 우리 응답은 누구의 것인가</td></tr>
+      <tr><td><b>동시에 쓰기</b></td><td>두 사람이 같은 파일을 고쳐 저장하면 한쪽의 작업이 덮여 사라진다</td><td>여러 사람의 기록이 각각 한 행으로 안전하게 들어간다</td></tr>
+      <tr><td><b>계속 쌓기</b></td><td>새 글이 올 때마다 파일을 열어 고치고 다시 저장해야 한다</td><td>새 데이터가 자동으로 누적된다</td></tr>
+      <tr><td><b>골라 읽기</b></td><td>전체를 내려받아 눈으로 찾아야 한다</td><td>조건에 맞는 것만 즉시 검색해 가져온다</td></tr>
     </tbody>
   </table>
-  <p>세 문제의 자세한 사례는 교과서 38~39쪽에서 함께 읽습니다.</p>
-
-  <h2>2. 내 실습 속 쟁점 — 네 장면 돌아보기</h2>
-  <p>한 학기 동안의 실습에서 윤리적 판단이 필요했던 네 장면입니다. 각 장면마다 "나는 어떻게 했더라?"를 떠올리며 읽습니다.</p>
-
-  <h3>장면 1 — 인증키를 코드에 적어 공개하면</h3>
-  <p>2차시에는 영화 API의 인증키를 받아 공개 저장소에 올라가지 않도록 비밀 금고에 넣었고, 5차시의 급식 API는 인증키 없이도 호출할 수 있었습니다. 이유가 있습니다. 인증키는 "이 요청을 보낸 사람이 누구인가"를 밝히는 서명이고, 영화 API는 하루 3,000회의 호출 한도가 <b>키 단위로</b> 걸려 있습니다. 키가 적힌 코드를 공개하면 다른 사람이 내 이름으로 요청을 보낼 수 있고, 한도 소진이든 오·남용이든 <b>책임은 키의 주인에게</b> 돌아옵니다. 키를 코드에 적지 않고 비밀 금고에 두는 습관은 기술 요령이 아니라 책임 관리입니다.</p>
-
-  <h3>장면 2 — 급식 데이터는 되고, 위치 데이터는 왜 조심스러운가</h3>
-  <p>우리가 분석한 급식 식단은 <b>학교 단위</b>의 공개 정보였습니다. 어느 학생이 무엇을 먹었는지는 어디에도 없으므로, 전량을 내려받아 공개 앱으로 만들어도 누구의 사생활도 다치지 않습니다. 그런데 같은 공공데이터라도 개인의 위치나 이동 기록이 담긴 데이터라면 이야기가 다릅니다. 한 건 한 건은 익명이라도, 시간대별로 이어 붙이면 특정 개인이나 집단의 동선이 드러날 수 있습니다. <b>같은 "공개 데이터"라도 민감도는 같지 않다</b> — 팀 프로젝트에서 데이터를 고를 때 가장 먼저 확인할 항목입니다.</p>
-  <div style="overflow-x:auto;margin:18px 0 6px">
-    <svg viewBox="0 0 800 300" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학교 단위 급식 식단과, 이어 붙이면 동선이 드러나는 개인 위치 기록의 대조">
-      <defs>
-        <marker id="arRed14b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e45756"/></marker>
-      </defs>
-      <!-- 왼쪽 패널: 급식 식단 -->
-      <text x="200" y="34" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">급식 식단 — 학교 단위</text>
-      <rect x="70" y="54" width="100" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
-      <rect x="170" y="54" width="70" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
-      <rect x="240" y="54" width="120" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
-      <text x="120" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">날짜</text>
-      <text x="205" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">식사</text>
-      <text x="300" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">메뉴</text>
-      <rect x="70" y="84" width="100" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <rect x="170" y="84" width="70" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <rect x="240" y="84" width="120" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <rect x="70" y="114" width="100" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <rect x="170" y="114" width="70" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <rect x="240" y="114" width="120" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <rect x="70" y="144" width="100" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <rect x="170" y="144" width="70" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <rect x="240" y="144" width="120" height="30" fill="#ffffff" stroke="#f0e2bc"/>
-      <text x="120" y="104" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="205" y="104" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="300" y="104" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="120" y="134" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="205" y="134" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="300" y="134" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="120" y="164" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="205" y="164" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="300" y="164" text-anchor="middle" font-size="12" fill="#c0b8a4">…</text>
-      <text x="215" y="214" text-anchor="middle" font-size="12.5" font-weight="700" fill="#54a24b">어느 학생이 먹었는지에 대한 정보가 없다</text>
-      <!-- 패널 구분선 -->
-      <line x1="400" y1="24" x2="400" y2="280" stroke="#f0e2bc" stroke-width="2"/>
-      <!-- 오른쪽 패널: 개인 위치 기록 -->
-      <text x="605" y="34" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">개인 위치 기록 — 이어 붙이면 동선</text>
-      <line x1="478" y1="107" x2="574" y2="80" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
-      <line x1="592" y1="81" x2="670" y2="142" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
-      <line x1="672" y1="158" x2="610" y2="216" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
-      <circle cx="470" cy="110" r="7" fill="#3ba6a0"/>
-      <circle cx="585" cy="75" r="7" fill="#3ba6a0"/>
-      <circle cx="678" cy="150" r="7" fill="#3ba6a0"/>
-      <circle cx="600" cy="224" r="7" fill="#3ba6a0"/>
-      <text x="470" y="92" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ① (익명)</text>
-      <text x="585" y="57" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ② (익명)</text>
-      <text x="700" y="133" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ③ (익명)</text>
-      <text x="558" y="230" text-anchor="end" font-size="11.5" fill="#7a7f95">기록 ④ (익명)</text>
-      <text x="612" y="262" text-anchor="middle" font-size="13" font-weight="800" fill="#e45756">한 사람의 동선이 드러남</text>
-    </svg>
-  </div>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">민감도는 "공개되어 있는가"가 아니라 "개인을 추적할 수 있는가"로 판단합니다.</p>
-
-  <h3>장면 3 — 모델이 사회의 편향을 학습한다</h3>
-  <p>7차시에는 영화 흥행 예측에 첫날 스크린 수 변수를 넣었습니다. 스크린을 많이 받은 영화가 관객도 많이 모으는 것은 사실이지만, 스크린 배정은 대형 배급사에 유리하게 이루어지는 <b>사람의 결정</b>입니다. 이 변수로 학습한 모델은 "스크린을 많이 받을 영화가 성공한다"고 예측하게 되고, 그 예측이 다시 스크린 배정의 근거가 되면 작은 영화는 더 밀려납니다. 교과서 38쪽의 정의 그대로 — 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동합니다. 모델은 세상을 비추기만 하는 것이 아니라, 세상의 치우침을 <b>되풀이하게 만들 수도</b> 있습니다.</p>
-  <div style="overflow-x:auto;margin:18px 0 6px">
-    <svg viewBox="0 0 780 470" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="치우친 스크린 배정이 데이터와 모델을 거쳐 다시 배정의 근거가 되는 순환 구조">
-      <defs>
-        <marker id="arAcc14" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
-        <marker id="arRed14" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e45756"/></marker>
-      </defs>
-      <!-- ① 스크린 배정 (상단) -->
-      <rect x="240" y="18" width="300" height="66" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
-      <text x="390" y="45" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">① 스크린 배정</text>
-      <text x="390" y="68" text-anchor="middle" font-size="12" fill="#7a7f95">대형 배급사에 유리한 사람의 결정</text>
-      <!-- ② 데이터 (오른쪽) -->
-      <rect x="528" y="188" width="238" height="88" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
-      <text x="647" y="216" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">② 데이터</text>
-      <text x="647" y="239" text-anchor="middle" font-size="12" fill="#7a7f95">스크린을 많이 받은</text>
-      <text x="647" y="257" text-anchor="middle" font-size="12" fill="#7a7f95">영화의 흥행 기록</text>
-      <!-- ③ 모델 (하단) -->
-      <rect x="230" y="372" width="320" height="86" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
-      <text x="390" y="400" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">③ 모델</text>
-      <text x="390" y="423" text-anchor="middle" font-size="12" fill="#7a7f95">"스크린을 많이 받을 영화가</text>
-      <text x="390" y="441" text-anchor="middle" font-size="12" fill="#7a7f95">성공한다"고 학습</text>
-      <!-- ④ 예측 (왼쪽) -->
-      <rect x="14" y="188" width="226" height="88" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
-      <text x="127" y="221" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">④ 예측</text>
-      <text x="127" y="247" text-anchor="middle" font-size="12" fill="#7a7f95">다음 배정의 근거가 됨</text>
-      <!-- 중앙 -->
-      <text x="390" y="230" text-anchor="middle" font-size="14" font-weight="800" fill="#e8930c">치우침이</text>
-      <text x="390" y="252" text-anchor="middle" font-size="14" font-weight="800" fill="#e8930c">되풀이된다</text>
-      <!-- 화살표: ①→②→③→④는 주황, 고리를 닫는 ④→①만 빨강 -->
-      <path d="M505,90 C570,112 610,145 638,180" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
-      <path d="M655,284 C640,322 600,352 552,378" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
-      <path d="M225,412 C165,392 135,345 122,286" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
-      <path d="M118,180 C132,115 175,72 232,55" fill="none" stroke="#e45756" stroke-width="3" marker-end="url(#arRed14)"/>
-      <text x="68" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e45756">작은 영화는</text>
-      <text x="68" y="118" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e45756">더 밀려난다</text>
-    </svg>
-  </div>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동한다(교과서 38쪽) — 모델은 세상을 비추기만 하지 않고, 치우침을 되풀이하게 만들 수도 있습니다.</p>
-
-  <h3>장면 4 — AI가 짠 코드의 책임은 누구에게</h3>
-  <p>우리는 ①프롬프트를 쓰고 ②AI가 준 코드를 실행해 왔습니다. 그 코드가 잘못된 수치를 화면에 표시했다면 책임은 누구에게 있을까요? 이 수업의 답은 분명합니다. 앱에 이름을 걸고 공개한 사람, 곧 <b>나</b>입니다. 그래서 우리는 8·10·12차시에 손계산으로 AI의 결과를 검산하는 연습을 해 왔습니다. 검증할 수 있는 사람만이 책임질 수 있고, 책임질 수 있는 사람만이 도구를 믿고 쓸 수 있습니다.</p>
-
-  <h2>3. 점검 활동 — 내 앱을 윤리의 눈으로</h2>
-  <p>오늘은 새 페이지를 만들지 않습니다. 대신 자기 포트폴리오 앱을 열어, 네 장면의 기준으로 스스로 점검합니다.</p>
-  <div class="callout check">
-    <div class="h">✔️ 내 앱 셀프 점검 3항목</div>
-    <ul>
-      <li><b>키</b> — 인증키가 코드나 공개 저장소에 적혀 있지 않은가? (비밀 금고에 있는가)</li>
-      <li><b>출처</b> — 사용한 데이터의 출처(제공 기관·수집 시점)가 앱 화면에 표기되어 있는가?</li>
-      <li><b>사람</b> — 내 앱의 데이터에 특정 개인을 알아볼 수 있는 정보가 들어 있지 않은가?</li>
-    </ul>
-  </div>
-  <p>세 항목 중 걸리는 것이 있다면 지금 고칩니다. 출처 표기 한 줄을 앱에 추가하는 일은 ③개선 프롬프트 한 번이면 됩니다.</p>
-
-  <h2>4. 사례 토론 — 내 경험과 세계의 문제</h2>
-  <p>이제 시야를 넓힙니다. 교과서 39쪽 조사하기 ①은 <b>직접 겪었거나 간접적으로 들은</b> 데이터 윤리 사례를 묻습니다. 뉴스에서 본 일반론보다, 게임·SNS·쇼핑에서 내가 실제로 겪은 일이 좋은 답입니다 — 맞춤 광고가 따라다녔던 경험, 동의한 기억이 없는 수집 안내문 같은 것들 말입니다.</p>
-  <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 36쪽</span></div>
-    <p class="q">"세계 연합(UN)은 전 세계 빈곤을 종식시키고, 지구를 보호하며, 2030년까지 모든 사람들이 평화와 번영을 누릴 수 있는 지속 가능한 미래를 만들기 위한 17개의 지속 가능 발전 목표(SDGs: Sustainable Development Goals)를 제시하였다." <span class="src">(36쪽)</span></p>
-    <p class="t">→ 데이터는 문제를 만들기도 하지만, 기후·건강·교통 같은 세계의 문제를 <b>진단하고 푸는</b> 도구이기도 하다.</p>
-  </div>
-  <p>교과서 37쪽 조사하기 ①은 지속 가능한 미래를 위해 데이터 과학이 활용되는 사례를 조사합니다. 오늘 수업이 "데이터는 위험하다"로 끝나지 않도록 — 같은 도구가 문제를 만들기도 하고 풀기도 한다는 양면을 모둠 발표로 확인합니다.</p>
-  <h2>5. 개념 정리 — 윤리는 별도 단원이 아니다</h2>
-  <p>오늘 확인한 것을 한 줄로 줄이면 이렇습니다. <b>데이터 윤리는 교과서 속 남의 이야기가 아니라, 내 앱의 인증키 한 줄과 출처 표기 한 줄에 이미 들어와 있었다.</b> 데이터가 치우치면 모델이 치우치고(편향), 데이터를 다루는 권한에는 책임이 따르고(키·소유권), AI가 짠 코드라도 공개한 사람이 책임진다 — 이것은 우리가 배워 온 판단 습관의 연장입니다. 좋은 질문을 세우고, 데이터를 감식하고, 결과를 해석하고, 한계를 아는 사람이 곧 윤리적으로 데이터를 다루는 사람입니다.</p>
-  <p>다음 시간에 팀 프로젝트의 도구인 데이터베이스를 만난 뒤, 팀이 데이터를 고를 때는 오늘 세운 기준으로 네 가지 — <b>개인정보 · 출처 · 이용 약관 · 편향</b> — 를 점검하게 됩니다.</p>
-
-  <h2>6. 확인 문제</h2>
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 급식 식단 데이터는 전량 내려받아 공개 앱으로 만들었지만, 개인 위치 데이터라면 같은 방식이 위험합니다. 두 데이터의 민감도를 가르는 기준은 무엇일까요? 고른 뒤, 차이를 자기 말로 설명해 보고 펼쳐 봅니다.</div>
-    <div class="qitem">
-      <div class="qopts qopts-col">
-        <button class="opt">공개된 데이터인가 아닌가</button>
-        <button class="opt">데이터의 양이 많은가 적은가</button>
-        <button class="opt" data-ok="1">기록을 이어 붙였을 때 특정 개인을 추적할 수 있는가</button>
-      </div>
-      <div class="fb">급식 식단은 학교 단위 정보라 개인이 없고, 위치 기록은 한 건씩 익명이라도 이으면 동선이 드러납니다. 둘 다 공개 데이터라 "공개 여부"로는 구분되지 않고, 양과 민감도는 무관합니다.</div>
+  <details class="glossary">
+    <summary>🔬 움직여 보기 — "동시에 쓰기", 파일과 테이블에서 각각 벌어지는 일</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">그림을 <b>클릭할 때마다 한 단계씩</b> 움직입니다 — ① A가 적는다 → ② 그 사이 B도 적는다 → ③ 저장 — 두 결과를 비교합니다.</p>
+<svg class="csvdb-svg" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg" role="img" style="cursor:pointer" aria-label="두 사람이 동시에 쓸 때 CSV 파일과 데이터베이스 테이블에서 벌어지는 일을 클릭할 때마다 한 단계씩 보여 주는 그림">
+  <text class="csvdb-hint" x="400" y="26" text-anchor="middle" font-size="15" font-weight="800" fill="#e8930c">지금 보이는 것은 저장이 끝난 뒤의 결과입니다 — 👆 클릭하면 처음부터 한 단계씩</text>
+  <!-- 위 레인: CSV 파일 한 개 -->
+  <rect x="10" y="44" width="780" height="196" rx="14" fill="#fffdf6" stroke="#f0e2bc" stroke-width="1.5"/>
+  <text x="26" y="70" font-size="14" font-weight="800" fill="#e8930c">CSV 파일 한 개</text>
+  <text x="70" y="122" text-anchor="middle" font-size="26">🙋</text>
+  <text x="70" y="146" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a">학생 A</text>
+  <text x="70" y="196" text-anchor="middle" font-size="26">🙋</text>
+  <text x="70" y="220" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a">학생 B</text>
+  <line x1="248" y1="112" x2="306" y2="128" stroke="#d8cbb8" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <line x1="248" y1="188" x2="306" y2="170" stroke="#d8cbb8" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <g class="csvdb-a-side" opacity="0">
+    <rect x="112" y="98" width="130" height="24" rx="5" fill="#fdeeba" stroke="#e8c96a"/>
+    <text x="177" y="114" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5a4300">A의 글 · …</text>
+  </g>
+  <g class="csvdb-b-side" opacity="0">
+    <rect x="112" y="174" width="130" height="24" rx="5" fill="#d8edec" stroke="#8fc7c3"/>
+    <text x="177" y="190" text-anchor="middle" font-size="11.5" font-weight="700" fill="#16635e">B의 글 · …</text>
+  </g>
+  <rect x="310" y="76" width="240" height="146" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="1.5"/>
+  <text x="430" y="98" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a" font-family="monospace">방명록.csv</text>
+  <rect x="322" y="108" width="216" height="22" fill="#faf6ea" stroke="#f0e2bc"/>
+  <text x="430" y="123" text-anchor="middle" font-size="11.5" fill="#c0b8a4">…</text>
+  <g class="csvdb-file-a" opacity="0.3">
+    <rect x="322" y="134" width="216" height="22" fill="#fdeeba" stroke="#e8c96a"/>
+    <text x="430" y="149" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5a4300">A의 글 · …</text>
+    <line x1="330" y1="145" x2="530" y2="145" stroke="#e45756" stroke-width="2"/>
+  </g>
+  <g class="csvdb-file-b" opacity="1">
+    <rect x="322" y="160" width="216" height="22" fill="#d8edec" stroke="#8fc7c3"/>
+    <text x="430" y="175" text-anchor="middle" font-size="11.5" font-weight="700" fill="#16635e">B의 글 · …</text>
+  </g>
+  <text class="csvdb-red" opacity="1" x="672" y="150" text-anchor="middle" font-size="13" font-weight="800" fill="#e45756">A의 글이 사라졌다</text>
+  <!-- 아래 레인: 데이터베이스 테이블 -->
+  <rect x="10" y="250" width="780" height="196" rx="14" fill="#fffdf6" stroke="#f0e2bc" stroke-width="1.5"/>
+  <text x="26" y="276" font-size="14" font-weight="800" fill="#3ba6a0">데이터베이스 테이블</text>
+  <text x="70" y="328" text-anchor="middle" font-size="26">🙋</text>
+  <text x="70" y="352" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a">학생 A</text>
+  <text x="70" y="402" text-anchor="middle" font-size="26">🙋</text>
+  <text x="70" y="426" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a">학생 B</text>
+  <line x1="248" y1="318" x2="306" y2="334" stroke="#d8cbb8" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <line x1="248" y1="394" x2="306" y2="376" stroke="#d8cbb8" stroke-width="1.5" stroke-dasharray="5 5"/>
+  <rect x="310" y="282" width="240" height="146" rx="10" fill="#ffffff" stroke="#a7d8d4" stroke-width="1.5"/>
+  <text x="430" y="304" text-anchor="middle" font-size="13" font-weight="800" fill="#16635e">방명록 테이블</text>
+  <rect x="322" y="314" width="216" height="22" fill="#f2f9f8" stroke="#d8edec"/>
+  <text x="430" y="329" text-anchor="middle" font-size="11.5" fill="#c0b8a4">…</text>
+  <g class="csvdb-db-a" opacity="1">
+    <rect x="322" y="340" width="216" height="22" fill="#fdeeba" stroke="#e8c96a"/>
+    <text x="430" y="355" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5a4300">A의 글 · …</text>
+  </g>
+  <g class="csvdb-db-b" opacity="1">
+    <rect x="322" y="366" width="216" height="22" fill="#d8edec" stroke="#8fc7c3"/>
+    <text x="430" y="381" text-anchor="middle" font-size="11.5" font-weight="700" fill="#16635e">B의 글 · …</text>
+  </g>
+  <text class="csvdb-green" opacity="1" text-anchor="middle" font-size="13" font-weight="800" fill="#54a24b"><tspan x="672" y="348">기록이 각각</tspan><tspan x="672" y="366">한 행으로 쌓인다</tspan></text>
+</svg>
+<script>
+(function () {
+  var svg = document.querySelector(".csvdb-svg");
+  if (!svg) return;
+  var hint = svg.querySelector(".csvdb-hint");
+  function pick(c) { return svg.querySelector("." + c); }
+  var aSide = pick("csvdb-a-side"), bSide = pick("csvdb-b-side"),
+      fileA = pick("csvdb-file-a"), fileB = pick("csvdb-file-b"), red = pick("csvdb-red"),
+      dbA = pick("csvdb-db-a"), dbB = pick("csvdb-db-b"), green = pick("csvdb-green");
+  var all = [aSide, bSide, fileA, fileB, red, dbA, dbB, green];
+  var HINTS = [
+    "① A가 파일에 자기 글을 적는다 — 👆 계속 클릭",
+    "② 그 사이 B도 같은 파일에 자기 글을 적는다 — 👆 계속 클릭",
+    "③ A 저장 → B 저장 — 나중에 저장한 쪽이 파일을 통째로 덮는다 (클릭하면 처음부터)"
+  ];
+  var s = 0;
+  function apply(state) {
+    all.forEach(function (g) { g.style.transition = "opacity 0.6s ease"; });
+    if (state === 1) {
+      aSide.style.opacity = 1; bSide.style.opacity = 0;
+      fileA.style.opacity = 0; fileB.style.opacity = 0; red.style.opacity = 0;
+      dbA.style.opacity = 1; dbB.style.opacity = 0; green.style.opacity = 0;
+      hint.textContent = HINTS[0];
+    } else if (state === 2) {
+      bSide.style.opacity = 1; dbB.style.opacity = 1;
+      hint.textContent = HINTS[1];
+    } else {
+      aSide.style.opacity = 0; bSide.style.opacity = 0;
+      fileA.style.opacity = 0.3; fileB.style.opacity = 1; red.style.opacity = 1;
+      green.style.opacity = 1;
+      hint.textContent = HINTS[2];
+    }
+  }
+  svg.addEventListener("click", function () {
+    s = (s === 0 || s === 3) ? 1 : s + 1;
+    apply(s);
+  });
+})();
+</script>
+      <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">위 표의 첫 줄 "동시에 쓰기"가 일어나는 실제 순서입니다. 오늘 실습 ②에서 옆자리 친구와 직접 재현합니다.</p>
     </div>
+  </details>
+  <p>교과서 26쪽은 데이터베이스의 이점을 네 가지로 정리합니다 — 편리한 버전 관리, 데이터 무결성 유지, 데이터 보안 강화, 체계적인 데이터 관리. 누가 언제 고쳤는지 기록이 남고, 이상한 값의 입력을 막고, 사용자별로 권한을 나누고, 조건 검색이 된다는 뜻입니다. 그리고 데이터베이스가 하는 일은 결국 네 동작 — 데이터를 <b>생성하고, 읽고, 갱신하고, 삭제</b>하는 것(29쪽) — 으로 요약됩니다. 오늘 기본 실습에서 "생성"과 "읽기"를 직접 하고, 이어지는 도전에서 "갱신"과 "삭제"까지 네 동작을 모두 채웁니다.</p>
+  <div class="callout tip">
+    <div class="h">💡 수파베이스 — 우리가 쓸 데이터베이스</div>
+    <p>수파베이스(Supabase)는 웹에서 테이블을 만들고 앱과 연결할 수 있는 데이터베이스 서비스입니다. 수업에서는 선생님이 미리 만들어 둔 <b>학급 공용 프로젝트</b>에 접속 정보만 받아 연결합니다. 수업 도입에서 교과서 31쪽 탐구활동의 쇼핑몰 테이블 설계를 수파베이스 화면으로 직접 확인합니다 — 속성 이름, 데이터형, 조건이 교과서의 설계표 그대로 화면에 나타납니다.</p>
+  </div>
+
+  <h2>2. 실습 — 내 앱에 방명록 달기 (바이브 코딩)</h2>
+  <p class="mini">그림에는 주요 열만 그렸습니다. 실제 표에는 도전 과제에서 쓰는 비밀번호 열이 하나 더 있습니다.</p>
+  <p>1차시에 배포한 내 포트폴리오 앱에 방명록 페이지를 추가합니다. 방문자가 남긴 글이 수파베이스의 방명록 테이블에 쌓이고, 쌓인 글이 목록으로 나타나는 것이 목표입니다.</p>
+
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 앱에 방명록 페이지를 추가해 줘.
+방문자가 이름과 한 줄 소감을 남기면 수파베이스 표에 저장되고,
+저장된 글이 최신순으로 보이게 해 줘.
+표는 이미 만들어져 있어. 표 이름은 guestbook이고
+열은 name(이름) · message(소감) · created_at(작성 시각) · password(비밀번호)야.
+새 표를 만들지 말고 이 표에 그대로 연결해 줘.
+접속 정보는 비밀 금고에 넣어 줘.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/14_방명록.py</span><pre># pages/14_방명록.py — 수파베이스 표에 글을 남기고 읽는다
+import streamlit as st
+from supabase import create_client
+
+st.header("방명록")
+
+
+@st.cache_resource
+def connect():
+    # 접속 정보는 코드가 아니라 비밀 금고에 둔다
+    return create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
+
+
+db = connect()
+
+with st.form("write"):
+    name = st.text_input("이름")
+    message = st.text_input("한 줄 소감")
+    password = st.text_input("네 자리 비밀번호", type="password", max_chars=4)
+    sent = st.form_submit_button("남기기")
+
+if sent:
+    if not name.strip() or not message.strip():
+        st.warning("이름과 소감을 모두 적어 주세요.")          # 빈 칸이면 저장하지 않는다
+    else:
+        db.table("guestbook").insert({
+            "name": name.strip(), "message": message.strip(), "password": password
+        }).execute()
+        st.success("남겼습니다.")
+        st.rerun()
+
+rows = db.table("guestbook").select("*").order("created_at", desc=True).execute().data
+for row in rows:
+    st.write(f"**{row['name']}** — {row['message']}")
+    st.caption(row["created_at"])</pre></div></details>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 실행하고 직접 남겨 본다</span><br>
+      배포된 내 앱에서 이름과 소감을 남기고, 목록에 나타나는 것을 확인합니다. 그리고 옆자리 친구의 앱에도 한 줄을 남깁니다 — 여러 사람이 <b>동시에</b> 써도 기록이 덮이지 않고 쌓인다는 것을 서로의 화면에서 확인합니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 무결성을 한 줄 챙긴다</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>빈 칸으로 제출하면 저장하지 말고 안내 문구를 보여 줘.</pre></div>
+    </li>
+  </ol>
+
+  <div class="callout warn">
+    <div class="h">⚠️ 발견 — "내 파일"에서 "우리의 저장소"로</div>
+    <p>새로고침해도 글이 남아 있습니다. 친구의 컴퓨터에서 열어도 같은 글이 보입니다. 지금까지 우리의 데이터는 내 컴퓨터 속 파일이었지만, 이 순간부터는 <b>인터넷 위의 공동 저장소</b>입니다. 그리고 ③에서 빈 칸 저장을 막은 것은 교과서 26쪽의 "데이터 무결성 유지"를 직접 구현한 것입니다 — 잘못된 값이 들어오지 않도록 제약을 거는 일입니다.</p>
+  </div>
+
+  <h3>도전 — 갱신(U)과 삭제(D)까지, 네 동작 완성</h3>
+  <p>기본 실습으로 생성(C)과 읽기(R)를 마쳤다면, 남은 두 동작을 해 봅니다.</p>
+  <div class="codewrap improve"><span class="label">③ 개선(도전)</span><button class="copy-btn">복사</button><pre>내가 남긴 글 옆에 고치기와 지우기 단추를 달아 줘.
+글을 남길 때 password 열에 저장한 네 자리 비밀번호가
+맞을 때만 고치거나 지울 수 있게 해 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/14_방명록.py에 이어 붙일 부분</span><pre># 도전 — 비밀번호가 맞을 때만 고치고 지운다 (방명록 페이지에 이어 붙일 부분)
+for row in rows:
+    with st.expander(f"{row['name']} — {row['message']}"):
+        확인 = st.text_input("비밀번호", type="password", key=f"pw{row['id']}")
+        새글 = st.text_input("새 소감", value=row["message"], key=f"msg{row['id']}")
+        c1, c2 = st.columns(2)
+        if c1.button("고치기", key=f"edit{row['id']}"):
+            if 확인 == row["password"]:
+                db.table("guestbook").update({"message": 새글}).eq("id", row["id"]).execute()
+                st.rerun()
+            else:
+                st.error("비밀번호가 다릅니다.")
+        if c2.button("지우기", key=f"del{row['id']}"):
+            if 확인 == row["password"]:
+                db.table("guestbook").delete().eq("id", row["id"]).execute()
+                st.rerun()
+            else:
+                st.error("비밀번호가 다릅니다.")</pre></div></details>
+  <div class="callout tip">
+    <div class="h">💡 판단 — 왜 비밀번호가 필요한가</div>
+    <p>고치기·지우기 단추를 아무 조건 없이 달면, 누구든 남의 글을 지울 수 있게 됩니다. 갱신과 삭제는 데이터를 바꾸는 동작이라 <b>"누가 할 수 있는가"라는 권한의 문제</b>가 반드시 따라옵니다 — 교과서 26쪽의 "데이터 보안 강화"가 실습에서 처음으로 필요해지는 순간입니다. 실제 서비스는 이 권한 규칙을 데이터베이스에 세워 둡니다. 우리 학급 공용 프로젝트에도 선생님이 같은 성격의 규칙을 미리 설정해 두었습니다.</p>
+  </div>
+
+  <h2>3. 팀 프로젝트 예고 — 데이터로 답할 수 있는 문제인가</h2>
+  <p>공통 수업은 오늘로 마지막입니다. 중간 지필평가 이후에는 2~3인 팀으로 한 학기의 도구 전부를 들고 <b>팀만의 질문</b>에 도전합니다. 오늘은 그 준비로 팀을 구성하고 주제 후보를 고릅니다.</p>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 174쪽</span></div>
+    <p class="q">"데이터 과학은 다양한 분야의 문제를 해결하고 의사 결정을 지원하는 데 큰 도움이 되지만, 모든 문제를 해결할 수 있는 것은 아니다." <span class="src">(174쪽)</span></p>
+    <p class="t">→ 그래서 주제를 고를 때는 세 가지를 차례로 묻는다 — 데이터가 <b>충분히 있는가</b> · 그 데이터가 문제 해결에 <b>적합한가</b> · 법적·윤리적으로 <b>올바른가</b>.</p>
+  </div>
+  <p>세 번째 물음은 지난 시간에 세운 기준 그대로입니다 — 개인정보 · 출처 · 이용 약관 · 편향. 데이터가 아무리 많아도 윤리 관문을 통과하지 못하면 프로젝트 주제가 될 수 없습니다. 프로젝트의 5주 흐름·팀 저장소·개인의 몫은 <a href="project.html">팀 프로젝트 안내</a>에 정리되어 있습니다. 팀에서는 다음 순서로 주제 카드를 만듭니다.</p>
+  <ul>
+    <li><b>팀 구성(2~3인)</b> — 관심 질문이 비슷한 사람끼리</li>
+    <li><b>틀 고르기</b> — 회귀·분류·군집·연관 중 팀의 질문에 맞는 분석 틀은 무엇인가</li>
+    <li><b>데이터 후보 3개</b> — 각 후보를 세 가지 물음으로 판단해 보기 (교과서 176쪽 탐구활동)</li>
+  </ul>
+  <h2>4. 개념 정리 — 파일에서 공동 저장소로</h2>
+  <p>오늘 배운 것을 한 줄로 정리하면 이렇습니다. <b>혼자 읽는 데이터는 파일이면 되지만, 여럿이 동시에 쌓는 데이터에는 데이터베이스가 필요하다.</b> 그리고 그 필요는 팀 프로젝트가 시작되는 순간 현실이 됩니다.</p>
+  <p>1차시에 질문 던지기로 시작한 공통 수업이 오늘 마무리됩니다. 질문을 세우고 첫 앱을 배포하고(1차시), API로 데이터를 구해 오고(2·5차시), 그래프로 데이터를 읽고(3·4차시), 회귀·분류·군집·연관의 네 가지 틀로 모델을 만들고 평가했으며(6~12차시), 그 전 과정의 윤리를 점검했고(13차시), 오늘 여럿이 함께 쓰는 저장소까지 갖췄습니다. 이제 이 도구 전부가 팀 프로젝트에서 여러분의 것입니다.</p>
+
+  <h2>5. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 모둠 과제 자료를 CSV 파일로 만들어 메신저로 주고받는 방식과 비교해, 데이터베이스를 쓸 때의 이점을 두 가지 서술해 본 뒤 펼쳐 보세요.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>급식 식단은 학교 단위의 공개 정보로, 어떤 개인이 무엇을 했는지에 대한 정보가 전혀 들어 있지 않다. 반면 개인 위치 데이터는 한 건 한 건이 익명이라도 시간 순서로 이어 붙이면 특정 개인이나 집단의 동선·생활 패턴이 드러날 수 있어, 수집·공개 시 사생활 침해 위험이 있다. 데이터의 민감도는 "공개되어 있는가"가 아니라 "개인을 추적할 수 있는가"로 판단해야 한다.</p>
+      <p>① 여러 사람이 동시에 데이터를 입력해도 서로의 작업을 덮어쓰지 않고 각각의 기록이 안전하게 쌓인다(파일은 마지막에 저장한 사람이 이전 내용을 덮을 수 있다). ② 데이터가 한곳에 계속 누적되고, 필요한 것만 조건으로 검색해 읽을 수 있다(파일은 최신본이 무엇인지 헷갈리고 전체를 열어 찾아야 한다). 이 밖에 수정 기록이 남는 버전 관리, 잘못된 값을 막는 무결성 유지, 사용자별 접근 권한 설정도 이점이다.</p>
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> API 인증키를 코드에 적은 채 공개 저장소에 올리면 안 되는 이유를 두 가지 서술해 보세요.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>① 인증키는 요청을 보낸 사람을 식별하는 값이므로, 공개되면 다른 사람이 내 이름으로 API를 호출할 수 있다. ② 호출 한도(예: 영화 API 일 3,000회)가 키 단위로 관리되므로, 남이 내 키를 쓰면 한도가 소진되고 오·남용의 책임도 키 주인에게 돌아온다. 따라서 키는 코드와 분리해 비밀 금고에 두어야 한다.</p>
+    <div class="qq"><span class="qn">문제 2</span> 데이터셋, 데이터베이스, 테이블 — 세 용어를 우리 실습의 예에 대응해 봅니다.</div>
+    <div class="qitem">
+      <div class="qs">우리 실습에서 테이블에 해당하는 것은?</div>
+      <div class="qopts qopts-col">
+        <button class="opt">급식 CSV 파일</button>
+        <button class="opt">우리 학급의 수파베이스 프로젝트</button>
+        <button class="opt" data-ok="1">오늘 만든 방명록 표</button>
+      </div>
+      <div class="fb">데이터베이스(수파베이스 프로젝트) 안에 표 형태로 저장된 데이터셋 하나가 테이블입니다. 급식 CSV 파일은 데이터베이스 밖의 파일 하나 — 데이터셋이고, 수파베이스 프로젝트는 테이블들을 담는 쪽 — 데이터베이스입니다.</div>
+    </div>
+    <details class="reveal"><summary>세 용어의 관계 펼쳐 보기</summary>
+      <p>데이터셋은 하나의 주제에 대한 데이터의 집합으로, 우리가 쓰던 급식 CSV 파일 하나가 데이터셋이다. 데이터베이스는 여러 사람이 공유하도록 데이터를 통합 관리하는 집합으로, 우리 학급의 수파베이스 프로젝트가 그것이다. 데이터베이스 안에서 각 데이터셋은 표 형태로 저장되는데 이것이 테이블이며, 오늘 만든 방명록 표가 테이블 하나에 해당한다.</p>
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 영화 흥행 예측 모델에 첫날 스크린 수 변수를 넣으면 예측에 도움이 됩니다. 그런데 이 모델을 "좋은 영화를 가려내는 모델"이라고 소개하면 왜 문제가 될까요?</div>
+    <div class="qq"><span class="qn">문제 3</span> 어느 팀이 "우리 학교 학생들의 등하교 위치 기록을 모아 시간대별 이동 패턴을 분석하겠다"는 주제를 제안했습니다. 주제 판단의 세 물음 중 이 주제가 걸리는 곳은?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">스크린 수는 흥행 예측에 도움이 되지 않는 변수이기 때문</button>
-        <button class="opt">변수가 하나 늘면 모델의 정확도가 낮아지기 때문</button>
-        <button class="opt" data-ok="1">스크린 배정이라는 사람의 결정에 담긴 치우침을 학습해, 예측이 다시 배정의 근거가 되면 작은 영화에 불리한 구조가 강화되기 때문</button>
+        <button class="opt">첫째 물음 — 등하교 위치 데이터는 모을 방법이 없기 때문</button>
+        <button class="opt">둘째 물음 — 이동 패턴은 우리가 배운 분석 틀에 맞지 않기 때문</button>
+        <button class="opt" data-ok="1">셋째 물음 — 위치 기록은 이어 붙이면 특정 학생의 동선이 드러나는 민감한 개인정보라, 동의 없는 수집·분석이 사생활을 침해하기 때문</button>
       </div>
-      <div class="fb">흥행을 잘 맞히는 것과 "좋은 영화를 가려내는 것"은 다릅니다. 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동할 수 있다는 편향성 문제(교과서 38쪽)입니다.</div>
+      <div class="fb">데이터가 있다는 것과 써도 된다는 것은 다릅니다. 개인을 추적할 수 없는 형태로 바꾸어 다시 설계해야 합니다.</div>
     </div>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>데이터 편향성·혐오 표현·소유권 문제를 각각 예를 들어 설명할 수 있다.</li>
-    <li>내 앱에서 키·출처·개인정보 3항목을 점검하고 필요한 것을 고쳤다.</li>
-    <li>급식 데이터와 개인 위치 데이터의 민감도 차이를 설명할 수 있다.</li>
-    <li>내가 겪은 데이터 윤리 사례 하나를 모둠에서 이야기했다.</li>
+    <li>CSV 파일로 부족해지는 세 순간(동시에 쓰기·계속 쌓기·골라 읽기)을 말할 수 있다.</li>
+    <li>내 앱에 방명록 페이지를 달고, 남긴 글이 목록에 쌓이는 것을 확인했다.</li>
+    <li>친구의 앱에 글을 남겨 "우리의 저장소"가 된 것을 확인했다.</li>
+    <li>팀을 구성하고, 데이터 후보를 세 가지 물음으로 판단해 주제 카드를 냈다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">데이터 편향성</td><td>데이터의 분포가 특정 지역·연령·성별 등으로 치우쳐 있는 것. 모델의 치우침으로 이어진다</td></tr>
-    <tr><td class="term">데이터 소유권</td><td>생성된 데이터를 누구의 것으로 볼 것인가의 문제 (학생·학교·기업?)</td></tr>
-    <tr><td class="term">개인정보</td><td>특정 개인을 알아보거나 추적할 수 있는 정보. 결합하면 드러나는 정보도 포함</td></tr>
-    <tr><td class="term">인증키(API 키)</td><td>API 요청자를 식별하는 값. 사용량과 책임이 키 단위로 관리된다</td></tr>
-    <tr><td class="term">SDGs</td><td>UN의 17개 지속 가능 발전 목표. 데이터 과학이 진단·해결에 쓰이는 무대</td></tr>
+    <tr><td class="term">데이터셋</td><td>하나의 주제에 대한 여러 데이터가 모인 집합 (예: CSV 파일 하나)</td></tr>
+    <tr><td class="term">데이터베이스</td><td>여러 사람이 공유하여 사용하도록 통합 관리되는 데이터의 집합</td></tr>
+    <tr><td class="term">테이블</td><td>데이터베이스 안에 표 형태로 저장된 데이터셋 하나</td></tr>
+    <tr><td class="term">수파베이스</td><td>웹에서 테이블을 만들고 앱과 연결하는 데이터베이스 서비스. 우리 갤러리의 뼈대</td></tr>
+    <tr><td class="term">데이터 무결성</td><td>잘못된 값이 들어오지 않도록 제약을 걸어 데이터의 올바름을 지키는 것</td></tr>
+    <tr><td class="term">데이터 적합성</td><td>어떤 문제가 데이터로 답할 수 있는 문제인지 — 존재·적합·윤리로 판단</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
-    <a class="prev" href="lesson12.html"><div class="dir">← 이전</div><div class="tt">12차시 · 연관 분석 — 급식에서 규칙 찾기</div></a>
-    <a class="next" href="lesson14.html"><div class="dir">다음 →</div><div class="tt">14차시 · 데이터베이스와 수파베이스</div></a>
+    <a class="prev" href="lesson13.html"><div class="dir">← 이전</div><div class="tt">13차시 · 데이터 윤리</div></a>
+    <a class="next" href="index.html"><div class="dir">다음 →</div><div class="tt">목차로 돌아가기</div></a>
   </div>
 </main>
 </div>
