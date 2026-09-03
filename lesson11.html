@@ -199,7 +199,7 @@ def load_data():
 
 
 df = load_data()
-k = st.slider("몇 묶음으로 나눌까요", 2, 6, 3)
+k = st.slider("몇 묶음으로 나눌까요", 2, 5, 3)
 
 X = df[FEATS]
 Xs = StandardScaler().fit_transform(X)

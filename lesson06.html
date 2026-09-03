@@ -136,7 +136,7 @@ st.caption(f"사용한 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['
   <table class="daymap">
     <thead><tr><th>학습 창</th><th>기울기 (℃/100년)</th><th>읽기</th></tr></thead>
     <tbody>
-      <tr><td><b>전체 114년</b></td><td><b>+2.60</b></td><td>한 세기를 관통하는 완만한 상승</td></tr>
+      <tr><td><b>전체 114개 해</b></td><td><b>+2.60</b></td><td>한 세기를 관통하는 완만한 상승</td></tr>
       <tr><td>최근 50년</td><td>+3.96</td><td>상승이 빨라지고 있다</td></tr>
       <tr><td>최근 30년</td><td>+3.82</td><td>데이터가 줄수록 값이 출렁인다</td></tr>
       <tr><td><b>최근 20년</b></td><td><b>+8.14</b></td><td>전체 기간의 3배가 넘는 가파름</td></tr>
@@ -173,7 +173,7 @@ st.caption(f"사용한 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['
     <!-- 회귀 직선 2개 -->
     <line x1="60" y1="321" x2="700" y2="189" stroke="#f4b400" stroke-width="3"/>
     <line x1="383" y1="266" x2="700" y2="61" stroke="#e8930c" stroke-width="3"/>
-    <text x="605" y="258" text-anchor="middle" font-size="12.5" font-weight="800" fill="#a97f00">전체 114년 · +2.60℃/100년</text>
+    <text x="605" y="258" text-anchor="middle" font-size="12.5" font-weight="800" fill="#a97f00">전체 114개 해 · +2.60℃/100년</text>
     <text x="585" y="88" text-anchor="middle" font-size="12.5" font-weight="800" fill="#b25f00">최근 20년 · +8.14℃/100년</text>
     <!-- 2045년 세로 점선과 두 교점 -->
     <line x1="517" y1="70" x2="517" y2="330" stroke="#8a8069" stroke-width="1.5" stroke-dasharray="4 4"/>
@@ -196,7 +196,7 @@ st.caption(f"사용한 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['
   <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">점의 위치는 추세를 나타낸 모식 표기입니다. 같은 점들 위에서 학습 창이 다른 두 직선이, 같은 2045년에 13.9℃와 15.7℃로 갈라집니다.</p>
   <div class="callout warn">
     <div class="h">⚠️ 어느 직선이 진짜인가</div>
-    <p>둘 다 계산은 정확합니다. 다만 <b>다른 질문에 답하는 직선</b>입니다. 전체 114년의 직선은 "지난 한 세기의 평균 추세"를, 최근 20년의 직선은 "요즘의 가파름"을 요약합니다. 같은 2045년을 물어도 예상 기온이 13.9℃와 15.7℃로 갈라집니다. 직선이 내놓는 숫자를 만나면, 그 직선이 <b>어느 창에서 학습되었는지</b>부터 물어야 합니다.</p>
+    <p>둘 다 계산은 정확합니다. 다만 <b>다른 질문에 답하는 직선</b>입니다. 전체 114개 해의 직선은 "지난 한 세기의 평균 추세"를, 최근 20년의 직선은 "요즘의 가파름"을 요약합니다. 같은 2045년을 물어도 예상 기온이 13.9℃와 15.7℃로 갈라집니다. 직선이 내놓는 숫자를 만나면, 그 직선이 <b>어느 창에서 학습되었는지</b>부터 물어야 합니다.</p>
   </div>
   <p>하나 더 시험해 봅니다. 슬라이더를 2100년까지 밀어 보세요. 예측값은 주저 없이 나옵니다. 그러나 직선은 1908~2025년의 데이터로 학습되었습니다. 학습 범위를 한참 벗어난 곳의 값을 직선으로 내다보는 것을 <b>외삽</b>이라 합니다. 외삽을 얼마나 믿어야 하는지 — 이 물음은 8차시에서 다룹니다.</p>
   <div class="callout check">
