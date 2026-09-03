@@ -170,6 +170,10 @@
 .sim .w-code pre{border-radius:14px}
 .sim .w-out{font-size:.9rem;margin:8px 0 0;color:var(--w-soft);padding:10px 12px;background:#fff;border-radius:12px;border:1px solid var(--w-line);line-height:1.6}
 .sim .w-out:empty{display:none}
+.sim .w-code{margin-top:4px}
+.sim .w-code.w-flash{animation:wFlash .9s ease}
+@keyframes wFlash{0%{box-shadow:0 0 0 0 rgba(232,147,12,.0);transform:scale(1)}30%{box-shadow:0 0 0 6px rgba(232,147,12,.35);transform:scale(1.01)}100%{box-shadow:0 0 0 0 rgba(232,147,12,0);transform:scale(1)}}
+.sim .w-listhead{font-weight:800;font-size:.9rem;margin:14px 0 8px;color:var(--text-soft)}
 @media (max-width:480px){
   .sim .sim-steps{padding-left:26px}
   .sim .sim-n{left:-33px;width:26px;height:26px;font-size:.74rem}
@@ -898,9 +902,10 @@ LIMIT 5;</pre></div>
               </div>
             </div>
           </div>
-          <table class="glossary-table w-table"><thead><tr><th>id</th><th>작성자</th><th>댓글</th><th>좋아요</th><th>작성시각</th></tr></thead><tbody></tbody></table>
           <div class="codewrap code w-code"><span class="label">뒤에서 실행된 SQL</span><pre class="w-sql">-- 아직 실행한 문장이 없습니다</pre></div>
           <p class="w-out"></p>
+          <div class="w-listhead">💬 댓글 목록 — 문장이 실행되면 아래 목록이 바뀝니다</div>
+          <table class="glossary-table w-table"><thead><tr><th>id</th><th>작성자</th><th>댓글</th><th>좋아요</th><th>작성시각</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
     </div>
@@ -1084,7 +1089,7 @@ LIMIT 5;</pre></div>
     trs.forEach(function (tr) { if (tr.firstChild && tr.firstChild.textContent === String(id)) { tr.classList.add("row-out"); done = true; setTimeout(after, 420); } });
     if (!done) after();
   }
-  function say(sql, text, bad) { wsql.textContent = sql; wmsg.innerHTML = (bad ? '<span style="color:#c23b3a;font-weight:700">주의</span> ' : '<span style="color:#3d7a37;font-weight:700">해석</span> ') + esc(text); }
+  function say(sql, text, bad) { wsql.textContent = sql; var box = wsql.closest(".w-code"); if (box) { box.classList.remove("w-flash"); void box.offsetWidth; box.classList.add("w-flash"); } wmsg.innerHTML = (bad ? '<span style="color:#c23b3a;font-weight:700">주의</span> ' : '<span style="color:#3d7a37;font-weight:700">해석</span> ') + esc(text); }
   function find(id) { return gb.filter(function (x) { return x[0] === id; })[0]; }
   W.querySelector(".w-insert").addEventListener("click", function () {
     var n = W.querySelector(".w-name").value.trim(), m = W.querySelector(".w-msg").value.trim();
