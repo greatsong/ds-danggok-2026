@@ -38,6 +38,68 @@
     </ul>
   </div>
 
+  <details class="glossary">
+    <summary>🗄️ 수파베이스 프로젝트 설정 SQL — 표 + 권한 규칙 (반별 프로젝트마다 한 번, 복사해서 SQL Editor에 붙여 넣기)</summary>
+    <div class="gin">
+      <p style="margin:10px 0 8px">대시보드의 <b>SQL Editor → New query</b>에 아래 전체를 붙여 넣고 <b>Run</b>을 누릅니다. 마지막 조회의 결과 표가 뜨면 성공입니다. B반·E반 프로젝트에 각각 한 번씩 실행합니다. 표 이름·열·권한이 두 반에서 같아야 학생용 프롬프트와 예시 코드를 그대로 씁니다. 학생용 3절의 설계표·CREATE TABLE 예문과 같은 구조이고, 갱신은 message 열만 열어 두어 이름·비밀번호·시각은 바꿀 수 없습니다. 비밀번호 확인은 학생 앱 안에서 하는 검사입니다(교재 서술과 일치).</p>
+      <div class="codewrap code"><span class="label">수파베이스_방명록_설정.sql</span><button class="copy-btn">복사</button><pre>-- =====================================================================
+-- 13차시 방명록 표 — 수파베이스 프로젝트 설정 SQL (반별 프로젝트마다 한 번 실행)
+-- 실행 위치: 수파베이스 대시보드 → SQL Editor → New query → 전체 붙여 넣기 → Run
+-- 두 반(B·E) 프로젝트 모두 이 파일을 그대로 실행한다. 표 이름·열·권한이 같아야
+-- 학생용 ① 프롬프트와 예시 코드를 두 반이 그대로 쓴다.
+-- =====================================================================
+
+-- 1) 표 만들기 — 학생용 교재 3절의 설계표(속성명·데이터형·조건)와 같은 구조
+create table if not exists public.guestbook (
+  id          bigint generated always as identity primary key,          -- 정수 · 자동 증가 · 기본 키
+  name        text not null check (char_length(btrim(name)) between 1 and 20),      -- 비워 둘 수 없음, 20자 이내
+  message     text not null check (char_length(btrim(message)) between 1 and 200),  -- 비워 둘 수 없음, 200자 이내
+  password    text check (coalesce(password, &#x27;&#x27;) ~ &#x27;^([0-9]{4})?$&#x27;),   -- 비우거나 숫자 네 자리
+  created_at  timestamptz not null default now()                        -- 저장 시각 자동
+);
+
+-- 2) 권한 규칙 켜기 — 켜는 순간 정책으로 허용한 동작만 통과한다
+alter table public.guestbook enable row level security;
+
+-- 3) 정책 — 학생 앱은 공개용(anon) 키로 접속한다. 네 동작을 모두 열되 범위를 좁힌다.
+drop policy if exists guestbook_select on public.guestbook;
+drop policy if exists guestbook_insert on public.guestbook;
+drop policy if exists guestbook_update on public.guestbook;
+drop policy if exists guestbook_delete on public.guestbook;
+
+create policy guestbook_select on public.guestbook
+  for select to anon, authenticated using (true);                       -- 읽기: 누구나
+
+create policy guestbook_insert on public.guestbook
+  for insert to anon, authenticated with check (true);                  -- 생성: 누구나 (빈 값은 위 check 제약이 막음)
+
+create policy guestbook_update on public.guestbook
+  for update to anon, authenticated using (true) with check (true);     -- 갱신: 도전 과제용 (비밀번호 확인은 앱에서)
+
+create policy guestbook_delete on public.guestbook
+  for delete to anon, authenticated using (true);                       -- 삭제: 도전 과제용
+
+-- 4) 열 단위 권한 — 갱신은 message 열만 허용 (이름·비밀번호·작성 시각은 바꿀 수 없게)
+revoke update on public.guestbook from anon, authenticated;
+grant  update (message) on public.guestbook to anon, authenticated;
+
+-- 5) 확인용 조회 (Run 뒤 결과 표가 뜨면 성공)
+select id, name, message, created_at from public.guestbook order by created_at desc limit 5;
+
+-- ---------------------------------------------------------------------
+-- 운영 메모
+-- · 접속 정보: Project Settings → API 의 Project URL 과 anon public 키를 학생용 두 줄
+--   (SUPABASE_URL, SUPABASE_KEY)로 각 반 클래스룸에 비공개 게시한다. service_role 키는 절대 배포하지 않는다.
+-- · 시연용 첫 글:  insert into public.guestbook (name, message, password) values (&#x27;선생님&#x27;, &#x27;첫 글입니다&#x27;, &#x27;0000&#x27;);
+-- · 학기 중 초기화(전부 지우기):  truncate table public.guestbook restart identity;
+-- · 키 유출 의심 시: Project Settings → API → anon 키 재발급(rotate) 후 학생 Secrets 값만 교체.
+-- · 학기말: 표를 남길지 지울지 결정.  drop table public.guestbook;  (지우면 복구 불가)
+-- ---------------------------------------------------------------------
+</pre></div>
+      <p style="font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">같은 내용이 저장소의 <code>curriculum/수파베이스_방명록_설정.sql</code>에 있습니다. 접속 정보(Project URL·anon 키)는 Project Settings → API에서 복사해 반별 클래스룸에 비공개 게시하고, service_role 키는 절대 배포하지 않습니다.</p>
+    </div>
+  </details>
+
   <h2>⏱️ 50분 진행 시간표</h2>
   <table class="timetable">
     <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
