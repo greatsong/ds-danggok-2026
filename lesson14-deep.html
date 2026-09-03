@@ -6,6 +6,173 @@
 <title>14차시 · 데이터 윤리 · 데이터 과학 당곡고 · 자세한 판</title>
 <link rel="stylesheet" href="assets/style.css?v=tb4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<style>
+/* ===== 14차시 데이터 윤리 페이지 전용 스타일 — 13차시 위젯(.sch/.sim)과 같은 결 =====
+   셀렉터는 main.eth 아래로만 한정한다. 팔레트는 공용 변수와 어울리는 진한 톤(대비 4.5:1 이상).
+   문구는 건드리지 않고 카드·배지·애니메이션만 얹는다. 라벨 문자열은 CSS content로 그린다. */
+main.eth{--w-ink:#2b2418;--w-soft:#6b5836;--w-line:#eadfc4;--w-ring:0 0 0 3px rgba(76,141,246,.38);--w-grad:linear-gradient(120deg,#b45309 0%,#c2417a 55%,#6d3fb5 100%);--w-grad2:linear-gradient(120deg,#1f7f7a 0%,#2f6bd6 100%);--w-shadow:0 2px 10px rgba(120,90,20,.08),0 1px 2px rgba(120,90,20,.06)}
+main.eth .l14-btn{font-family:var(--font)}
+main.eth .l14-btn:focus-visible,main.eth .l14-items li:focus-visible,main.eth .quiz .opt:focus-visible,main.eth .l14-fig svg:focus-visible{outline:none;box-shadow:var(--w-ring)}
+@keyframes l14Pop{0%{opacity:0;transform:scale(.3)}70%{opacity:1;transform:scale(1.35)}100%{opacity:1;transform:scale(1)}}
+@keyframes l14Draw{to{stroke-dashoffset:0}}
+@keyframes l14ArrowIn{from{stroke-dasharray:100 100;stroke-dashoffset:100}to{stroke-dasharray:100 100;stroke-dashoffset:0}}
+@keyframes l14March{from{stroke-dashoffset:14}to{stroke-dashoffset:0}}
+@keyframes l14Pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes l14Badge{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1)}}
+@keyframes l14Glow{0%{box-shadow:0 0 0 0 rgba(84,162,75,.55)}100%{box-shadow:0 0 0 16px rgba(84,162,75,0)}}
+
+/* ---- 스크롤 등장(자바스크립트가 있을 때만 숨겼다가 보여 준다) ---- */
+main.eth.l14-js .l14-reveal{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s cubic-bezier(.2,.8,.2,1)}
+main.eth.l14-js .l14-reveal.in{opacity:1;transform:none}
+main.eth.l14-js .l14-probs tr:nth-child(2).l14-reveal{transition-delay:.12s}
+main.eth.l14-js .l14-probs tr:nth-child(3).l14-reveal{transition-delay:.24s}
+
+/* ---- §1 세 가지 윤리 문제: 표 구조는 그대로, 보이기는 세 장의 컬러 카드 ---- */
+main.eth table.l14-probs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:18px 0;border-collapse:separate;border-spacing:0;font-size:.9rem}
+main.eth table.l14-probs thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+main.eth table.l14-probs tbody{display:contents}
+main.eth table.l14-probs tr{--pc:#b45309;--pc-soft:#fff3d6;display:flex;flex-direction:column;min-width:0;border:1px solid var(--w-line);border-radius:16px;background:#fff;overflow:hidden;box-shadow:var(--w-shadow);transition:box-shadow .18s,border-color .18s}
+main.eth table.l14-probs tr:nth-child(2){--pc:#c2417a;--pc-soft:#fff0f5}
+main.eth table.l14-probs tr:nth-child(3){--pc:#6d3fb5;--pc-soft:#f1ebfb}
+main.eth table.l14-probs tr:hover{border-color:var(--pc);box-shadow:0 10px 22px rgba(120,90,20,.16)}
+main.eth table.l14-probs td{display:block;border:none;min-width:0;white-space:normal;line-height:1.6;color:var(--w-ink)}
+main.eth table.l14-probs td:first-child{display:flex;align-items:center;gap:9px;padding:12px 16px;background:var(--pc);color:#fff;font-size:1rem}
+main.eth table.l14-probs td:first-child b{font-weight:800}
+main.eth table.l14-probs td:first-child::before{content:"⚖️";flex:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.22);font-size:1.1rem}
+main.eth table.l14-probs tr:nth-child(2) td:first-child::before{content:"💬"}
+main.eth table.l14-probs tr:nth-child(3) td:first-child::before{content:"🔑"}
+main.eth table.l14-probs td:nth-child(n+2)::before{display:block;font-size:.72rem;font-weight:800;letter-spacing:.05em;color:var(--pc);margin-bottom:2px}
+main.eth table.l14-probs td:nth-child(2){flex:1;padding:12px 16px;background:#fff}
+main.eth table.l14-probs td:nth-child(2)::before{content:"무엇이 잘못되나"}
+main.eth table.l14-probs td:nth-child(3){margin-top:auto;padding:10px 16px 14px;background:var(--pc-soft);border-top:1px solid var(--w-line)}
+main.eth table.l14-probs td:nth-child(3)::before{content:"우리 실습과의 접점"}
+
+/* ---- §2 네 장면: 번호 배지 + 왼쪽 컬러 바 + 연결선 ---- */
+main.eth .l14-scenes{position:relative;margin:18px 0 8px;padding-left:38px;counter-reset:l14s}
+main.eth .l14-scene{--sc:#b45309;position:relative;margin:0 0 18px;padding:14px 18px 6px;border-radius:16px;background:#fff;border:1px solid var(--w-line);border-left:5px solid var(--sc);box-shadow:var(--w-shadow)}
+main.eth .l14-scene:nth-child(2){--sc:#1f7f7a}
+main.eth .l14-scene:nth-child(3){--sc:#c2417a}
+main.eth .l14-scene:nth-child(4){--sc:#6d3fb5}
+main.eth .l14-scene::before{counter-increment:l14s;content:counter(l14s);position:absolute;left:-43px;top:14px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--sc);color:#fff;font-weight:800;font-size:.85rem;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+main.eth .l14-scene:not(:last-child)::after{content:"";position:absolute;left:-29px;top:48px;bottom:-30px;width:2px;border-radius:2px;background:linear-gradient(var(--sc),#eadfc4)}
+main.eth .l14-scene h3{margin:0 0 6px;font-size:1.08rem;line-height:1.4;color:var(--sc)}
+main.eth .l14-scene p{margin:8px 0 10px}
+main.eth .l14-scene details.glossary{margin:10px 0 12px;border-radius:14px}
+
+/* ---- 그림 카드(장면 2·3 공통) ---- */
+main.eth .l14-fig{position:relative;margin:12px 0 4px;padding:8px 8px 6px;border-radius:14px;background:linear-gradient(180deg,#fffdf7,#fff);border:1px solid #f3ecd9}
+main.eth .l14-scroll{overflow-x:auto}
+main.eth .l14-fig svg{display:block;width:100%;height:auto;cursor:pointer;border-radius:8px}
+main.eth .l14-route svg{min-width:640px}
+main.eth .l14-loop svg{min-width:600px}
+main.eth .l14-cap{text-align:center;font-size:.85rem;color:var(--text-soft);margin:6px 0 14px}
+main.eth .l14-ctl{display:none;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:center;margin:6px 0 2px}
+main.eth.l14-js .l14-ctl{display:flex}
+main.eth .l14-btn{border:1.5px solid var(--w-line);border-radius:999px;padding:5px 13px;min-height:30px;background:#fff;color:var(--w-ink);font-size:.8rem;font-weight:700;cursor:pointer;transition:border-color .15s,color .15s,background .15s,transform .1s,box-shadow .15s}
+main.eth .l14-btn:hover{border-color:#c2417a;color:#a2255f;background:#fff5f9;transform:translateY(-1px);box-shadow:0 3px 8px rgba(194,65,122,.18)}
+main.eth .l14-btn:active{transform:scale(.97)}
+main.eth .l14-btn.l14-primary{border-color:transparent;background:var(--w-grad);color:#fff;box-shadow:0 3px 10px rgba(194,65,122,.28)}
+main.eth .l14-btn.l14-primary:hover{color:#fff;box-shadow:0 5px 14px rgba(194,65,122,.36)}
+main.eth .l14-replay::before{content:"▶ 다시 보기"}
+main.eth .l14-play::before{content:"⏸ 정지"}
+main.eth .l14-loop.paused .l14-play::before{content:"▶ 재생"}
+main.eth .l14-step::before{content:"다음 단계 ▸"}
+
+/* 장면 2: 위치 기록 네 점이 차례로 이어져 동선이 드러난다(마스크 선을 그려 가며 점선을 드러낸다) */
+main.eth .l14-route .l14-mk{stroke-dasharray:140;stroke-dashoffset:0}
+main.eth .l14-route .l14-pt,main.eth .l14-route .l14-fin{transform-box:fill-box;transform-origin:center}
+main.eth .l14-route.l14-anim .l14-mk{stroke-dashoffset:140}
+main.eth .l14-route.l14-anim .l14-pt,main.eth .l14-route.l14-anim .l14-fin{opacity:0}
+main.eth .l14-route.play .l14-mk{animation:l14Draw .55s ease-out forwards}
+main.eth .l14-route.play .l14-pt{animation:l14Pop .5s cubic-bezier(.2,.8,.2,1) forwards}
+main.eth .l14-route.play .l14-fin{animation:l14Pop .6s cubic-bezier(.2,.8,.2,1) forwards}
+main.eth .l14-route.play .l14-d0{animation-delay:.1s}
+main.eth .l14-route.play .l14-d1{animation-delay:.55s}
+main.eth .l14-route.play .l14-d2{animation-delay:1.05s}
+main.eth .l14-route.play .l14-d3{animation-delay:1.5s}
+main.eth .l14-route.play .l14-d4{animation-delay:2s}
+main.eth .l14-route.play .l14-d5{animation-delay:2.45s}
+main.eth .l14-route.play .l14-d6{animation-delay:2.95s}
+main.eth .l14-route.play .l14-d7{animation-delay:3.5s}
+
+/* 장면 3: 네 상자가 순서대로 켜지고 화살표가 돈다 */
+main.eth .l14-loop .l14-node,main.eth .l14-loop .l14-core{transform-box:fill-box;transform-origin:center}
+main.eth .l14-loop .l14-node,main.eth .l14-loop .l14-arrow,main.eth .l14-loop .l14-warn,main.eth .l14-loop .l14-core{transition:opacity .4s}
+main.eth .l14-loop .l14-node rect{transition:fill .35s,stroke .35s}
+main.eth .l14-loop.l14-anim .l14-node{opacity:.42}
+main.eth .l14-loop.l14-anim .l14-node.on{opacity:1}
+main.eth .l14-loop .l14-node.on rect{fill:#fff3d6;stroke:#e8930c;stroke-width:2.5}
+main.eth .l14-loop .l14-node.cur{animation:l14Pulse .6s ease}
+main.eth .l14-loop .l14-node.cur rect{filter:drop-shadow(0 4px 10px rgba(232,147,12,.5))}
+main.eth .l14-loop.l14-anim .l14-arrow{opacity:.16}
+main.eth .l14-loop.l14-anim .l14-arrow.on{opacity:1;stroke-dasharray:8 6;animation:l14ArrowIn .5s ease-out,l14March .6s linear .5s infinite}
+main.eth .l14-loop.l14-anim .l14-warn,main.eth .l14-loop.l14-anim .l14-core{opacity:.22}
+main.eth .l14-loop.l14-anim .l14-warn.on,main.eth .l14-loop.l14-anim .l14-core.on{opacity:1}
+main.eth .l14-loop .l14-core.on{animation:l14Pulse .8s ease}
+
+/* ---- §3 셀프 점검: 큰 체크 카드 + 진행 바 + 완료 배지 ---- */
+main.eth .l14-self{border-radius:16px;border-left-width:5px;padding:16px 18px 14px;box-shadow:var(--w-shadow)}
+main.eth .l14-self.l14-complete{animation:l14Glow 1s ease}
+main.eth .l14-self .h{font-size:1rem}
+main.eth .l14-prog{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:8px 0 12px}
+main.eth .l14-bar{flex:1 1 140px;height:10px;border-radius:999px;background:#d3e6cd;overflow:hidden}
+main.eth .l14-bar i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#3d7a37,#54a24b);transition:width .45s cubic-bezier(.2,.8,.2,1)}
+main.eth .l14-cnt{font-weight:800;font-size:.86rem;color:#2f6a2a;font-variant-numeric:tabular-nums;min-width:2.4em}
+main.eth .l14-done{display:inline-flex;align-items:center;gap:5px;padding:3px 12px;border-radius:999px;background:linear-gradient(120deg,#3d7a37,#54a24b);color:#fff;font-weight:800;font-size:.8rem;animation:l14Badge .5s cubic-bezier(.2,.8,.2,1)}
+main.eth .l14-done::before{content:"🎉"}
+main.eth .l14-done[hidden]{display:none}
+main.eth .l14-items{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+main.eth .l14-items li{position:relative;margin:0;padding:12px 14px 12px 52px;border-radius:14px;background:#fff;border:1.5px solid #cfe5c8;cursor:pointer;user-select:none;line-height:1.6;transition:background .2s,border-color .2s,transform .12s}
+main.eth .l14-items li:hover{border-color:#54a24b;transform:translateY(-1px)}
+main.eth .l14-items li::before{content:"";position:absolute;left:14px;top:14px;width:26px;height:26px;box-sizing:border-box;border-radius:8px;border:2px solid #54a24b;background:#fff;color:#fff;font-weight:800;font-size:15px;line-height:22px;text-align:center;transition:background .2s}
+main.eth .l14-items li.done{background:#eef6e8;border-color:#54a24b;color:var(--w-soft)}
+main.eth .l14-items li.done::before{content:"✓";background:#54a24b;animation:checkpop .28s ease}
+main.eth .l14-items li b{display:inline-block;padding:0 10px;border-radius:999px;background:#fff3d6;color:#7a4a08;font-weight:800;line-height:1.55;margin-right:2px}
+main.eth .l14-items li.done b{background:#3d7a37;color:#fff}
+
+/* ---- §4 교과서 인용 상자: 여백·리듬 정리 ---- */
+main.eth .tbquote{border-radius:16px;border-left-width:5px;padding:16px 20px;margin:20px 0 16px;box-shadow:var(--w-shadow);background:linear-gradient(180deg,#fffdf6,#fff)}
+main.eth .tbquote .h{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;margin-bottom:8px}
+main.eth .tbquote .h .src{margin-left:0;padding:1px 9px;border-radius:999px;background:#fff3d6;color:#7a4a08;font-size:.74rem;font-weight:700}
+main.eth .tbquote .q{margin:6px 0;padding-left:12px;border-left:2px solid var(--w-line);line-height:1.75}
+main.eth .tbquote .q .src{color:var(--muted);font-size:.8rem}
+main.eth .tbquote .t{margin-top:10px;padding-top:10px;border-top:1px dashed var(--w-line);color:var(--w-soft)}
+
+/* ---- §6 확인 문제: 13차시 시뮬레이터와 같은 카드 결(옵션 버튼은 공용 규칙 유지) ---- */
+main.eth .quiz{border-radius:16px;border-color:var(--w-line);box-shadow:var(--w-shadow);padding:18px 20px;margin:18px 0}
+main.eth .quiz .qn{border:none;padding:2px 11px;background:var(--w-grad);color:#fff}
+main.eth .quiz .fb{border-radius:0 12px 12px 0}
+main.eth .quiz details.reveal{border-radius:12px}
+
+@media (max-width:720px){
+  main.eth table.l14-probs{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  main.eth .l14-scenes{padding-left:30px}
+  main.eth .l14-scene{padding:12px 14px 4px}
+  main.eth .l14-scene::before{left:-38px;top:12px;width:26px;height:26px;font-size:.76rem}
+  main.eth .l14-scene:not(:last-child)::after{left:-26px;top:42px}
+  main.eth .l14-fig{padding:6px 6px 4px}
+}
+@media (prefers-reduced-motion:reduce){
+  main.eth *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  main.eth.l14-js .l14-reveal{opacity:1;transform:none}
+  main.eth .l14-route.l14-anim .l14-mk{stroke-dashoffset:0}
+  main.eth .l14-route.l14-anim .l14-pt,main.eth .l14-route.l14-anim .l14-fin{opacity:1}
+}
+@media print{
+  main.eth *{animation:none!important;transition:none!important}
+  main.eth.l14-js .l14-reveal{opacity:1;transform:none}
+  main.eth .l14-route.l14-anim .l14-mk{stroke-dashoffset:0}
+  main.eth .l14-route.l14-anim .l14-pt,main.eth .l14-route.l14-anim .l14-fin{opacity:1}
+  main.eth .l14-loop.l14-anim .l14-node,main.eth .l14-loop.l14-anim .l14-arrow,main.eth .l14-loop.l14-anim .l14-warn,main.eth .l14-loop.l14-anim .l14-core{opacity:1}
+  main.eth .l14-loop.l14-anim .l14-arrow{stroke-dasharray:none}
+  main.eth .l14-ctl{display:none!important}
+  main.eth .l14-route svg,main.eth .l14-loop svg{min-width:0}
+  main.eth table.l14-probs td:first-child,main.eth table.l14-probs td:nth-child(3),main.eth .l14-scene::before,main.eth .l14-done,main.eth .l14-bar i,main.eth .quiz .qn,main.eth .l14-items li.done::before{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  main.eth .l14-scene,main.eth table.l14-probs tr,main.eth .quiz,main.eth .l14-self,main.eth .tbquote{break-inside:avoid;box-shadow:none}
+}
+</style>
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
 </head>
@@ -18,7 +185,7 @@
 </div></div>
 
 <div class="wrap">
-<main>
+<main class="eth">
   <span class="eyebrow">Ⅰ. 데이터 과학의 이해 · 14차시</span>
   <h1>데이터 윤리 · <span class="a">내 앱에서 쟁점 찾기</span></h1>
   <div class="under"></div>
@@ -53,7 +220,7 @@
     <p class="t">→ 데이터가 <b>치우쳐 있으면</b> 모델도 치우친다. 그리고 데이터가 자원이 된 시대에는 <b>누구의 것인가</b>부터가 쟁점이 된다.</p>
   </div>
   <p>교과서는 데이터 과학 속 윤리 문제를 세 갈래로 정리합니다. 셋 다 "데이터를 잘못 다루면 사람이 피해를 본다"는 공통 구조를 갖습니다.</p>
-  <table class="daymap">
+  <table class="daymap l14-probs">
     <thead><tr><th>문제</th><th>무엇이 잘못되나</th><th>우리 실습과의 접점</th></tr></thead>
     <tbody>
       <tr><td><b>데이터 편향성</b></td><td>치우친 데이터로 만든 모델이 특정 대상에게 불리하게 작동한다</td><td>7차시 영화 모델의 스크린 수 변수 — 아래 2절</td></tr>
@@ -66,24 +233,33 @@
   <h2>2. 내 실습 속 쟁점 — 네 장면 돌아보기</h2>
   <p>한 학기 동안의 실습에서 윤리적 판단이 필요했던 네 장면입니다. 각 장면마다 "나는 어떻게 했더라?"를 떠올리며 읽습니다.</p>
 
+  <div class="l14-scenes">
+  <section class="l14-scene">
   <h3>장면 1 — 인증키를 코드에 적어 공개하면</h3>
   <p>2차시에는 영화 API의 인증키를 받아 공개 저장소에 올라가지 않도록 비밀 금고에 넣었고, 5차시의 급식 API는 인증키 없이도 호출할 수 있었습니다. 이유가 있습니다. 인증키는 "이 요청을 보낸 사람이 누구인가"를 밝히는 서명이고, 영화 API는 하루 3,000회의 호출 한도가 <b>키 단위로</b> 걸려 있습니다. 키가 적힌 코드를 공개하면 다른 사람이 내 이름으로 요청을 보낼 수 있고, 한도 소진이든 오·남용이든 <b>책임은 키의 주인에게</b> 돌아옵니다. 키를 코드에 적지 않고 비밀 금고에 두는 습관은 기술 요령이 아니라 책임 관리입니다.</p>
 
+  </section>
+  <section class="l14-scene">
   <h3>장면 2 — 급식 데이터는 되고, 위치 데이터는 왜 조심스러운가</h3>
   <p>우리가 분석한 급식 식단은 <b>학교 단위</b>의 공개 정보였습니다. 어느 학생이 무엇을 먹었는지는 어디에도 없으므로, 전량을 내려받아 공개 앱으로 만들어도 누구의 사생활도 다치지 않습니다. 그런데 같은 공공데이터라도 개인의 위치나 이동 기록이 담긴 데이터라면 이야기가 다릅니다. 한 건 한 건은 익명이라도, 시간대별로 이어 붙이면 특정 개인이나 집단의 동선이 드러날 수 있습니다. <b>같은 "공개 데이터"라도 민감도는 같지 않다</b> — 팀 프로젝트에서 데이터를 고를 때 가장 먼저 확인할 항목입니다.</p>
-  <div style="overflow-x:auto;margin:18px 0 6px">
-    <svg viewBox="0 0 800 300" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학교 단위 급식 식단과, 이어 붙이면 동선이 드러나는 개인 위치 기록의 대조">
+  <div class="l14-fig l14-route">
+  <div class="l14-scroll">
+    <svg tabindex="0" viewBox="0 0 800 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학교 단위 급식 식단과, 이어 붙이면 동선이 드러나는 개인 위치 기록의 대조">
       <defs>
         <marker id="arRed14b" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e45756"/></marker>
+        <!-- 동선 그리기용 마스크: 흰 선을 그려 가며 아래 점선을 드러낸다 -->
+        <mask id="l14m1" maskUnits="userSpaceOnUse" x="0" y="0" width="800" height="300"><line class="l14-mk l14-d1" x1="478" y1="107" x2="574" y2="80" stroke="#fff" stroke-width="18" stroke-linecap="square"/></mask>
+        <mask id="l14m2" maskUnits="userSpaceOnUse" x="0" y="0" width="800" height="300"><line class="l14-mk l14-d3" x1="592" y1="81" x2="670" y2="142" stroke="#fff" stroke-width="18" stroke-linecap="square"/></mask>
+        <mask id="l14m3" maskUnits="userSpaceOnUse" x="0" y="0" width="800" height="300"><line class="l14-mk l14-d5" x1="672" y1="158" x2="610" y2="216" stroke="#fff" stroke-width="18" stroke-linecap="square"/></mask>
       </defs>
       <!-- 왼쪽 패널: 급식 식단 -->
       <text x="200" y="34" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">급식 식단 — 학교 단위</text>
       <rect x="70" y="54" width="100" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
       <rect x="170" y="54" width="70" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
       <rect x="240" y="54" width="120" height="30" fill="#fdf8ef" stroke="#f0e2bc"/>
-      <text x="120" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">날짜</text>
-      <text x="205" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">식사</text>
-      <text x="300" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#9b8c66">메뉴</text>
+      <text x="120" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#7a6a3f">날짜</text>
+      <text x="205" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#7a6a3f">식사</text>
+      <text x="300" y="74" text-anchor="middle" font-size="12.5" font-weight="800" fill="#7a6a3f">메뉴</text>
       <rect x="70" y="84" width="100" height="30" fill="#ffffff" stroke="#f0e2bc"/>
       <rect x="170" y="84" width="70" height="30" fill="#ffffff" stroke="#f0e2bc"/>
       <rect x="240" y="84" width="120" height="30" fill="#ffffff" stroke="#f0e2bc"/>
@@ -107,70 +283,90 @@
       <line x1="400" y1="24" x2="400" y2="280" stroke="#f0e2bc" stroke-width="2"/>
       <!-- 오른쪽 패널: 개인 위치 기록 -->
       <text x="605" y="34" text-anchor="middle" font-size="14" font-weight="800" fill="#2b2d3a">개인 위치 기록 — 이어 붙이면 동선</text>
-      <line x1="478" y1="107" x2="574" y2="80" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
-      <line x1="592" y1="81" x2="670" y2="142" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
-      <line x1="672" y1="158" x2="610" y2="216" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)"/>
-      <circle cx="470" cy="110" r="7" fill="#3ba6a0"/>
-      <circle cx="585" cy="75" r="7" fill="#3ba6a0"/>
-      <circle cx="678" cy="150" r="7" fill="#3ba6a0"/>
-      <circle cx="600" cy="224" r="7" fill="#3ba6a0"/>
-      <text x="470" y="92" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ① (익명)</text>
-      <text x="585" y="57" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ② (익명)</text>
-      <text x="700" y="133" text-anchor="middle" font-size="11.5" fill="#7a7f95">기록 ③ (익명)</text>
-      <text x="558" y="230" text-anchor="end" font-size="11.5" fill="#7a7f95">기록 ④ (익명)</text>
-      <text x="612" y="262" text-anchor="middle" font-size="13" font-weight="800" fill="#e45756">한 사람의 동선이 드러남</text>
+      <line x1="478" y1="107" x2="574" y2="80" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)" mask="url(#l14m1)"/>
+      <line x1="592" y1="81" x2="670" y2="142" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)" mask="url(#l14m2)"/>
+      <line x1="672" y1="158" x2="610" y2="216" stroke="#e45756" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arRed14b)" mask="url(#l14m3)"/>
+      <g class="l14-pt l14-d0"><circle cx="470" cy="110" r="7" fill="#3ba6a0"/><text x="470" y="92" text-anchor="middle" font-size="11.5" fill="#5c617a">기록 ① (익명)</text></g>
+      <g class="l14-pt l14-d2"><circle cx="585" cy="75" r="7" fill="#3ba6a0"/><text x="585" y="57" text-anchor="middle" font-size="11.5" fill="#5c617a">기록 ② (익명)</text></g>
+      <g class="l14-pt l14-d4"><circle cx="678" cy="150" r="7" fill="#3ba6a0"/><text x="700" y="133" text-anchor="middle" font-size="11.5" fill="#5c617a">기록 ③ (익명)</text></g>
+      <g class="l14-pt l14-d6"><circle cx="600" cy="224" r="7" fill="#3ba6a0"/><text x="558" y="230" text-anchor="end" font-size="11.5" fill="#5c617a">기록 ④ (익명)</text></g>
+      <text class="l14-fin l14-d7" x="612" y="262" text-anchor="middle" font-size="13" font-weight="800" fill="#e45756">한 사람의 동선이 드러남</text>
     </svg>
   </div>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">민감도는 "공개되어 있는가"가 아니라 "개인을 추적할 수 있는가"로 판단합니다.</p>
+  <div class="l14-ctl"><button type="button" class="l14-btn l14-primary l14-replay" aria-label="동선 애니메이션 다시 보기"></button></div>
+  </div>
+  <p class="l14-cap">민감도는 "공개되어 있는가"가 아니라 "개인을 추적할 수 있는가"로 판단합니다.</p>
 
+  </section>
+  <section class="l14-scene">
   <h3>장면 3 — 모델이 사회의 편향을 학습한다</h3>
   <p>7차시에는 영화 흥행 예측에 첫날 스크린 수 변수를 넣었습니다. 스크린을 많이 받은 영화가 관객도 많이 모으는 것은 사실이지만, 스크린 배정은 대형 배급사에 유리하게 이루어지는 <b>사람의 결정</b>입니다. 이 변수로 학습한 모델은 "스크린을 많이 받을 영화가 성공한다"고 예측하게 되고, 그 예측이 다시 스크린 배정의 근거가 되면 작은 영화는 더 밀려납니다. 교과서 38쪽의 정의 그대로 — 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동합니다. 모델은 세상을 비추기만 하는 것이 아니라, 세상의 치우침을 <b>되풀이하게 만들 수도</b> 있습니다.</p>
-  <div style="overflow-x:auto;margin:18px 0 6px">
-    <svg viewBox="0 0 780 470" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="치우친 스크린 배정이 데이터와 모델을 거쳐 다시 배정의 근거가 되는 순환 구조">
+  <div class="l14-fig l14-loop">
+  <div class="l14-scroll">
+    <svg tabindex="0" viewBox="0 0 780 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="치우친 스크린 배정이 데이터와 모델을 거쳐 다시 배정의 근거가 되는 순환 구조">
       <defs>
         <marker id="arAcc14" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
         <marker id="arRed14" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e45756"/></marker>
       </defs>
       <!-- ① 스크린 배정 (상단) -->
+      <g class="l14-node" data-n="1">
       <rect x="240" y="18" width="300" height="66" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
       <text x="390" y="45" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">① 스크린 배정</text>
-      <text x="390" y="68" text-anchor="middle" font-size="12" fill="#7a7f95">대형 배급사에 유리한 사람의 결정</text>
+      <text x="390" y="68" text-anchor="middle" font-size="12" fill="#5c617a">대형 배급사에 유리한 사람의 결정</text>
+      </g>
       <!-- ② 데이터 (오른쪽) -->
+      <g class="l14-node" data-n="2">
       <rect x="528" y="188" width="238" height="88" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
       <text x="647" y="216" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">② 데이터</text>
-      <text x="647" y="239" text-anchor="middle" font-size="12" fill="#7a7f95">스크린을 많이 받은</text>
-      <text x="647" y="257" text-anchor="middle" font-size="12" fill="#7a7f95">영화의 흥행 기록</text>
+      <text x="647" y="239" text-anchor="middle" font-size="12" fill="#5c617a">스크린을 많이 받은</text>
+      <text x="647" y="257" text-anchor="middle" font-size="12" fill="#5c617a">영화의 흥행 기록</text>
+      </g>
       <!-- ③ 모델 (하단) -->
+      <g class="l14-node" data-n="3">
       <rect x="230" y="372" width="320" height="86" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
       <text x="390" y="400" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">③ 모델</text>
-      <text x="390" y="423" text-anchor="middle" font-size="12" fill="#7a7f95">"스크린을 많이 받을 영화가</text>
-      <text x="390" y="441" text-anchor="middle" font-size="12" fill="#7a7f95">성공한다"고 학습</text>
+      <text x="390" y="423" text-anchor="middle" font-size="12" fill="#5c617a">"스크린을 많이 받을 영화가</text>
+      <text x="390" y="441" text-anchor="middle" font-size="12" fill="#5c617a">성공한다"고 학습</text>
+      </g>
       <!-- ④ 예측 (왼쪽) -->
+      <g class="l14-node" data-n="4">
       <rect x="14" y="188" width="226" height="88" rx="12" fill="#fdf8ef" stroke="#f0e2bc" stroke-width="2"/>
       <text x="127" y="221" text-anchor="middle" font-size="14.5" font-weight="800" fill="#2b2d3a">④ 예측</text>
-      <text x="127" y="247" text-anchor="middle" font-size="12" fill="#7a7f95">다음 배정의 근거가 됨</text>
+      <text x="127" y="247" text-anchor="middle" font-size="12" fill="#5c617a">다음 배정의 근거가 됨</text>
+      </g>
       <!-- 중앙 -->
+      <g class="l14-core">
       <text x="390" y="230" text-anchor="middle" font-size="14" font-weight="800" fill="#e8930c">치우침이</text>
       <text x="390" y="252" text-anchor="middle" font-size="14" font-weight="800" fill="#e8930c">되풀이된다</text>
+      </g>
       <!-- 화살표: ①→②→③→④는 주황, 고리를 닫는 ④→①만 빨강 -->
-      <path d="M505,90 C570,112 610,145 638,180" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
-      <path d="M655,284 C640,322 600,352 552,378" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
-      <path d="M225,412 C165,392 135,345 122,286" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
-      <path d="M118,180 C132,115 175,72 232,55" fill="none" stroke="#e45756" stroke-width="3" marker-end="url(#arRed14)"/>
+      <path class="l14-arrow" data-n="1" pathLength="100" d="M505,90 C570,112 610,145 638,180" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
+      <path class="l14-arrow" data-n="2" pathLength="100" d="M655,284 C640,322 600,352 552,378" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
+      <path class="l14-arrow" data-n="3" pathLength="100" d="M225,412 C165,392 135,345 122,286" fill="none" stroke="#e8930c" stroke-width="2.5" marker-end="url(#arAcc14)"/>
+      <path class="l14-arrow" data-n="4" pathLength="100" d="M118,180 C132,115 175,72 232,55" fill="none" stroke="#e45756" stroke-width="3" marker-end="url(#arRed14)"/>
+      <g class="l14-warn">
       <text x="68" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e45756">작은 영화는</text>
       <text x="68" y="118" text-anchor="middle" font-size="12.5" font-weight="700" fill="#e45756">더 밀려난다</text>
+      </g>
     </svg>
   </div>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동한다(교과서 38쪽) — 모델은 세상을 비추기만 하지 않고, 치우침을 되풀이하게 만들 수도 있습니다.</p>
+  <div class="l14-ctl"><button type="button" class="l14-btn l14-primary l14-play" aria-label="되먹임 고리 애니메이션 재생"></button><button type="button" class="l14-btn l14-step" aria-label="되먹임 고리 다음 단계"></button></div>
+  </div>
+  <p class="l14-cap">치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동한다(교과서 38쪽) — 모델은 세상을 비추기만 하지 않고, 치우침을 되풀이하게 만들 수도 있습니다.</p>
 
+  </section>
+  <section class="l14-scene">
   <h3>장면 4 — AI가 짠 코드의 책임은 누구에게</h3>
   <p>우리는 ①프롬프트를 쓰고 ②AI가 준 코드를 실행해 왔습니다. 그 코드가 잘못된 수치를 화면에 표시했다면 책임은 누구에게 있을까요? 이 수업의 답은 분명합니다. 앱에 이름을 걸고 공개한 사람, 곧 <b>나</b>입니다. 그래서 우리는 8·10·12차시에 손계산으로 AI의 결과를 검산하는 연습을 해 왔습니다. 검증할 수 있는 사람만이 책임질 수 있고, 책임질 수 있는 사람만이 도구를 믿고 쓸 수 있습니다.</p>
+  </section>
+  </div>
 
   <h2>3. 점검 활동 — 내 앱을 윤리의 눈으로</h2>
   <p>오늘은 새 페이지를 만들지 않습니다. 대신 자기 포트폴리오 앱을 열어, 네 장면의 기준으로 스스로 점검합니다.</p>
-  <div class="callout check">
+  <div class="callout check l14-self">
     <div class="h">✔️ 내 앱 셀프 점검 3항목</div>
-    <ul>
+    <div class="l14-prog" role="progressbar" aria-label="셀프 점검 진행" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div class="l14-bar"><i></i></div><span class="l14-cnt">0/3</span><span class="l14-done" hidden>점검 완료</span></div>
+    <ul class="l14-items">
       <li><b>키</b> — 인증키가 코드나 공개 저장소에 적혀 있지 않은가? (비밀 금고에 있는가)</li>
       <li><b>출처</b> — 사용한 데이터의 출처(제공 기관·수집 시점)가 앱 화면에 표기되어 있는가?</li>
       <li><b>사람</b> — 내 앱의 데이터에 특정 개인을 알아볼 수 있는 정보가 들어 있지 않은가?</li>
@@ -254,5 +450,6 @@
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
+<script src="assets/lesson14.js"></script>
 </body>
 </html>
