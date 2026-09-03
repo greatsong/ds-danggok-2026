@@ -239,14 +239,46 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
   </table>
   </details>
 
-  <h2>5. 개념 정리 — 질문이 모델을 고른다</h2>
+    <h2>5. 도전 — 모델은 무엇을 보고 맞혔나</h2>
+  <p>모델에게 무엇을 보고 맞혔는지 물을 수 있으며 이를 <b>특성 중요도</b>라고 합니다. 우리 트리는 개봉일 스크린수를 가장 무겁게 보며 0.476이고 상영횟수 0.277이 뒤를 받치며 장르는 조연입니다.</p>
+  <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 트리에게 무엇을 보고 맞혔는지 물어보자.
+- 의사결정트리의 특성 중요도를 큰 순서로 표로 보여 줘. 0인 것은 빼 줘.
+- 개봉일 스크린수가 가장 많은 열 편의 성공률과 전체 216편의 성공률을
+  나란히 지표 카드로 보여 줘.</pre></div>
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 도전 — 모델은 무엇을 보고 맞혔나 (흥행 분류 페이지에 이어 붙일 부분)
+st.subheader("도전 — 모델은 무엇을 보고 맞혔나")
+중요도 = pd.Series(tree.feature_importances_, index=X.columns)
+중요도 = 중요도[중요도 &gt; 0].sort_values(ascending=False).round(3).reset_index()
+중요도.columns = ["변수", "중요도"]
+st.dataframe(중요도, hide_index=True)
+
+상위 = df.nlargest(10, "first_scrn")
+c1, c2 = st.columns(2)
+c1.metric("스크린 상위 10편의 성공률", f"{상위['성공'].mean():.0%}")
+c2.metric("전체 216편의 성공률", f"{df['성공'].mean():.0%}")
+st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보여 줄 뿐, 그것이 원인이라는 뜻은 아닙니다.")</pre></div></details>
+  <table class="daymap">
+    <thead><tr><th>변수</th><th>중요도 (트리, 깊이 3)</th></tr></thead>
+    <tbody>
+      <tr><td><b>개봉일 스크린수</b></td><td><b>0.476</b></td></tr>
+      <tr><td>개봉일 상영횟수</td><td>0.277</td></tr>
+      <tr><td>장르 · 판타지</td><td>0.131</td></tr>
+      <tr><td>장르 · 드라마</td><td>0.116</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn">
+    <div class="h">⚠️ 영향력은 원인이 아니다</div>
+    <p>중요도는 이 모델이 그렇게 본 것일 뿐이며 모델을 바꾸면 순서가 달라집니다. 랜덤 포레스트에서는 상영횟수가 스크린수보다 앞섭니다. 스크린 상위 열 편의 성공률은 70%이고 전체 216편은 11%로 관계는 분명히 있습니다. 그러나 스크린을 많이 잡아서 흥행했는지 흥행할 것 같아서 스크린을 많이 잡았는지는 이 숫자로 알 수 없습니다. 상관은 인과가 아니며 이는 6차시 상관계수에서 미뤄 둔 경고의 머신러닝판입니다. 14차시에서 이 물음이 편향의 되먹임 고리로 다시 나옵니다.</p>
+  </div>
+
+<h2>6. 개념 정리 — 질문이 모델을 고른다</h2>
   <p>6~8차시의 회귀는 "얼마나"에 숫자로 답했고, 오늘의 분류는 "어느 쪽"에 범주로 답했습니다. 데이터는 같아도 질문이 바뀌면 모델의 종류가 바뀌고, 답의 형태가 바뀌고, 곧 배우게 될 평가 방법까지 바뀝니다. 그리고 분류에는 회귀에 없던 단계, <b>정답(라벨)을 사람이 정하는 단계</b>가 하나 앞서 있었습니다.</p>
   <div class="callout warn">
     <div class="h">⚠️ 이 숫자, 믿어도 되나?</div>
     <p>오늘 우리 분류기는 정확도 0.877과 0.908을 받았습니다. 꽤 높아 보입니다. 그런데 8차시에서 우리는 습관 하나를 익혔습니다. <b>큰 숫자를 만나면, 무엇과 비교된 값인지부터 묻는다.</b> 이 정확도는 무엇과 비교해야 할까요? 다음 시간에는 이 숫자를 직접 살펴봅니다.</p>
   </div>
 
-  <h2>6. 확인 문제</h2>
+  <h2>7. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 다음 물음이 회귀 문제인지 분류 문제인지 골라 보세요. 답을 눌러 확인합니다.</div>
     <div class="qitem">
@@ -277,6 +309,13 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
       <p>선형 회귀가 만든 값을 로지스틱 함수(시그모이드)에 통과시켜 0과 1 사이의 확률로 바꾸고, 그 확률이 문턱(0.5)보다 크면 양성, 작으면 음성으로 범주를 답하기 때문입니다. 회귀의 도구를 빌리지만 최종 답은 숫자가 아니라 범주입니다.</p>
     </details>
   </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 4</span> 특성 중요도에서 개봉일 스크린수가 0.476으로 1위였습니다. 이 결과에서 끌어낼 수 있는 말로 알맞은 것은?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col"><button class="opt">스크린을 많이 확보하면 흥행에 성공한다 — 원인이 밝혀졌다</button><button class="opt" data-ok="1">이 모델은 스크린수를 가장 큰 단서로 삼았다 — 원인인지는 이 숫자로 알 수 없다</button><button class="opt">스크린수가 1위이므로 장르는 흥행과 무관하다</button></div>
+      <div class="fb">중요도는 '무엇을 단서로 삼았나'를 보여 줄 뿐 원인의 증거가 아닙니다. 기대작에 스크린을 몰아주는 결정이 먼저였을 수도 있습니다. 모델을 랜덤 포레스트로 바꾸면 순서가 뒤집히는 것도 그 증거입니다.</div>
+    </div>
+  </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
@@ -295,7 +334,8 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
     <tr><td class="term">시그모이드 함수</td><td>어떤 입력이든 0~1 사이의 확률로 바꾸는 함수</td></tr>
     <tr><td class="term">의사결정트리</td><td>질문을 차례로 던져 가지를 나누며 분류하는 모델. 판단 순서가 그림으로 보인다</td></tr>
     <tr><td class="term">문턱값</td><td>확률을 범주로 바꾸는 경계 (예: 0.5보다 크면 양성)</td></tr>
-  </table>
+      <tr><td class="term">특성 중요도</td><td>모델이 예측할 때 각 변수를 얼마나 무겁게 썼는지 나타낸 값. 단서의 무게일 뿐 원인의 증거는 아니다</td></tr>
+</table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
