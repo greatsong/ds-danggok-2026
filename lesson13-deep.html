@@ -129,7 +129,7 @@
 .sim .feed .fc .tx{order:4;font-size:.82rem;padding:4px 10px 12px;color:var(--w-ink);line-height:1.45}
 .sim .feed-note{font-size:.8rem;color:var(--w-soft);margin:10px 0 0}
 /* 쓰기 탭: 네 동작 카드 */
-.sim .w-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:10px 0 14px}
+.sim .w-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:10px 0 14px}
 .sim .w-card{--c:#3d7a37;--c-soft:#eef6e8;position:relative;display:flex;flex-direction:column;gap:8px;border:1px solid var(--w-line);border-top:4px solid var(--c);border-radius:14px;padding:12px;background:#fff;box-shadow:var(--w-shadow)}
 .sim .w-card.upd{--c:#2f6bd6;--c-soft:#eef3ff}
 .sim .w-card.like{--c:#c2417a;--c-soft:#fff0f5}
@@ -1026,35 +1026,35 @@ LIMIT 5;</pre></div>
     var COLS = cur.cols, NUM = cur.num, rows = cur.rows;
     msg.innerHTML = '<span style="color:#3d7a37;font-weight:700">실행 성공</span> 아래 단계를 위에서부터 읽어 보세요.';
     var html = "", n = 1;
-    html += card(n++, "표를 편다", "FROM " + cur.name, "<p class="sim-p">" + cur.label + "(" + cur.name + ") " + rows.length + "행 전체가 출발점입니다.</p>" + tbl(COLS, rows));
+    html += card(n++, "표를 편다", "FROM " + cur.name, "<p class='sim-p'>" + cur.label + "(" + cur.name + ") " + rows.length + "행 전체가 출발점입니다.</p>" + tbl(COLS, rows));
     var kept = rows;
     if (p.where.length) {
       var mask = rows.map(function (r) { return p.where.every(function (w) { return passes(r, w); }); });
       kept = rows.filter(function (r, i) { return mask[i]; });
-      html += card(n++, "조건에 맞는 행만 남긴다", "WHERE " + p.where.map(function (w) { return w.col + " " + w.op + " " + (typeof w.val === "number" ? w.val : "'" + w.val + "'"); }).join(" AND "), "<p class="sim-p">" + rows.length + "행 가운데 " + kept.length + "행이 통과했습니다. 흐린 행은 걸러진 행입니다.</p>" + tbl(COLS, rows, { dim: mask }));
+      html += card(n++, "조건에 맞는 행만 남긴다", "WHERE " + p.where.map(function (w) { return w.col + " " + w.op + " " + (typeof w.val === "number" ? w.val : "'" + w.val + "'"); }).join(" AND "), "<p class='sim-p'>" + rows.length + "행 가운데 " + kept.length + "행이 통과했습니다. 흐린 행은 걸러진 행입니다.</p>" + tbl(COLS, rows, { dim: mask }));
     }
     var result;
     if (p.group) {
       var gi = COLS.indexOf(p.group), groups = {}, order = [];
       kept.forEach(function (r) { var k = r[gi]; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
       var colors = kept.map(function (r) { return PALETTE[order.indexOf(r[gi]) % PALETTE.length]; });
-      html += card(n++, "같은 값끼리 묶는다", "GROUP BY " + p.group, "<p class="sim-p">" + p.group + " 값이 같은 행끼리 " + order.length + "개 묶음이 됩니다(색 띠). 이제부터 한 묶음이 결과의 한 행입니다. 묶음 안에 값이 여러 개인 열은 그대로 쓸 수 없고 집계 함수로 감싸야 합니다.</p>" + tbl(COLS, kept, { color: colors }));
+      html += card(n++, "같은 값끼리 묶는다", "GROUP BY " + p.group, "<p class='sim-p'>" + p.group + " 값이 같은 행끼리 " + order.length + "개 묶음이 됩니다(색 띠). 이제부터 한 묶음이 결과의 한 행입니다. 묶음 안에 값이 여러 개인 열은 그대로 쓸 수 없고 집계 함수로 감싸야 합니다.</p>" + tbl(COLS, kept, { color: colors }));
       result = order.map(function (k) { return p.select.map(function (x) { return x.fn ? agg(x.fn, x.col, groups[k]) : k; }); });
     } else if (p.select.some(function (x) { return x.fn; })) {
       result = [p.select.map(function (x) { return agg(x.fn, x.col, kept); })];
-      html += card(n++, "전체를 하나로 집계한다", p.select.map(function (x) { return x.fn + "(" + x.col + ")"; }).join(", "), "<p class="sim-p">GROUP BY가 없으므로 통과한 " + kept.length + "행 전체가 한 묶음이 되어 결과는 한 행입니다.</p>");
+      html += card(n++, "전체를 하나로 집계한다", p.select.map(function (x) { return x.fn + "(" + x.col + ")"; }).join(", "), "<p class='sim-p'>GROUP BY가 없으므로 통과한 " + kept.length + "행 전체가 한 묶음이 되어 결과는 한 행입니다.</p>");
     } else {
       result = kept.map(function (r) { return p.select.map(function (x) { return r[COLS.indexOf(x.col)]; }); });
     }
     var headers = p.select.map(function (x) { return x.alias; });
-    html += card(n++, "보여 줄 열만 고른다", "SELECT " + headers.join(", "), "<p class="sim-p">" + (p.group ? "묶음마다 " : "") + headers.length + "개 열만 남깁니다.</p>");
+    html += card(n++, "보여 줄 열만 고른다", "SELECT " + headers.join(", "), "<p class='sim-p'>" + (p.group ? "묶음마다 " : "") + headers.length + "개 열만 남깁니다.</p>");
     if (p.order) {
       var oi = headers.indexOf(p.order), ci = COLS.indexOf(p.order);
       if (oi >= 0) result.sort(function (a, b) { var x = a[oi], y = b[oi]; var c = (typeof x === "number" && typeof y === "number") ? x - y : String(x).localeCompare(String(y), "ko"); return p.dir === "DESC" ? -c : c; });
       else if (!p.group && ci >= 0) { var idx = kept.map(function (r, i) { return i; }); idx.sort(function (i, j) { var x = kept[i][ci], y = kept[j][ci]; var c = NUM[COLS[ci]] ? (+x) - (+y) : String(x).localeCompare(String(y), "ko"); return p.dir === "DESC" ? -c : c; }); result = idx.map(function (i) { return result[i]; }); }
-      html += card(n++, "정렬한다", "ORDER BY " + p.order + " " + p.dir, "<p class="sim-p">" + p.order + " 기준 " + (p.dir === "DESC" ? "내림차순(큰 것부터, 시각이면 최신부터)" : "오름차순(작은 것부터)") + "으로 줄을 세웁니다.</p>");
+      html += card(n++, "정렬한다", "ORDER BY " + p.order + " " + p.dir, "<p class='sim-p'>" + p.order + " 기준 " + (p.dir === "DESC" ? "내림차순(큰 것부터, 시각이면 최신부터)" : "오름차순(작은 것부터)") + "으로 줄을 세웁니다.</p>");
     }
-    if (p.limit !== null) { var before = result.length; result = result.slice(0, p.limit); html += card(n++, "앞에서 몇 행만 자른다", "LIMIT " + p.limit, "<p class="sim-p">" + before + "행 가운데 앞의 " + result.length + "행만 남깁니다." + (p.order ? " 피드가 '최신 몇 개'만 불러오는 것이 이 두 낱말의 조합입니다." : " ORDER BY가 없으면 어떤 행이 앞에 오는지 보장되지 않습니다.") + "</p>"); }
+    if (p.limit !== null) { var before = result.length; result = result.slice(0, p.limit); html += card(n++, "앞에서 몇 행만 자른다", "LIMIT " + p.limit, "<p class='sim-p'>" + before + "행 가운데 앞의 " + result.length + "행만 남깁니다." + (p.order ? " 피드가 '최신 몇 개'만 불러오는 것이 이 두 낱말의 조합입니다." : " ORDER BY가 없으면 어떤 행이 앞에 오는지 보장되지 않습니다.") + "</p>"); }
     var feed = "";
     if (cur.name === "posts" && !p.select.some(function (x) { return x.fn; }) && result.length) {
       var hi = function (c) { return headers.indexOf(c); };
