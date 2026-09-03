@@ -26,7 +26,7 @@
 
   <div class="make-banner">
     <div class="t">🔎 주제 인덱스 — 시험 범위의 흐름 순서</div>
-    <p><a href="#g1">① 데이터 과학과 6단계</a> · <a href="#g2">② 데이터의 형태·API·JSON</a> · <a href="#g3">③ 시각화</a> · <a href="#g4">④ 회귀와 평가</a> · <a href="#g5">⑤ 분류와 평가</a> · <a href="#g6">⑥ 군집</a> · <a href="#g7">⑦ 연관 분석</a> · <a href="#g8">⑧ 윤리와 데이터베이스</a></p>
+    <p><a href="#g1">① 데이터 과학과 6단계</a> · <a href="#g2">② 데이터의 형태·API·JSON</a> · <a href="#g3">③ 시각화</a> · <a href="#g4">④ 회귀와 평가</a> · <a href="#g5">⑤ 분류와 평가</a> · <a href="#g6">⑥ 군집</a> · <a href="#g7">⑦ 연관 분석</a> · <a href="#g8">⑧ 데이터베이스와 윤리</a></p>
   </div>
 
   <div class="callout warn">
@@ -205,21 +205,25 @@
   </table>
   <p><b>관련 실측 — "김치의 배신"</b> — 당곡고 중식 154일(원출처: <a href="https://open.neis.go.kr" target="_blank" rel="noopener">나이스 급식식단정보 API</a>)에서 <b>제육볶음 → 배추김치</b>는 신뢰도 <b>0.56</b>인데 향상도 <b>0.99</b> — 배추김치는 원래 154일 중 86일(56%)에 나오므로 우연과 같다. 반면 <b>순대국 → 석박지</b>는 신뢰도 <b>1.00</b>, 향상도 <b>9.1</b> — 순대국이 나온 5일 모두 석박지가 함께 나온 진짜 짝꿍이다. 다만 향상도 9.1도 인과의 증명은 아니다 — 두 메뉴를 함께 정하는 식단표 작성자의 판단이 뒤에 있을 뿐이다. → <a href="lesson12.html">12차시 다시 보기</a></p>
 
-  <h2 id="g8">⑧ 윤리와 데이터베이스 <span class="a">(13·14차시)</span></h2>
+  <h2 id="g8">⑧ 데이터베이스와 윤리 <span class="a">(13·14차시)</span></h2>
 
-  <div class="tbquote">
-    <div class="h">데이터 편향성 · 소유권 <span class="src">『데이터 과학』 38·39쪽 · <a href="lesson14.html">14차시</a></span></div>
-    <p class="q">"수집된 데이터의 분포가 고르지 못하고, 특정한 지역, 연령, 성별 등에 치우쳐 있을 경우 데이터에 편향성이 있다고 한다." <span class="src">(38쪽)</span></p>
-    <p class="q">"실제 현실을 대표하지 못하고 특정한 방향으로 치우쳐 있는 데이터를 가지고 모델을 만들면, 특정 대상에게 유리하거나 불리한 모델이 만들어질 수 있다." <span class="src">(38쪽)</span></p>
-    <p class="q">"학교 수업 중에 생성된 데이터는 학생의 것일까? 학교의 것일까? 서비스를 만든 기업의 것일까?" <span class="src">(39쪽)</span></p>
-    <p class="t">→ 한 줄 정리: 데이터가 치우치면 모델도 치우친다. 그리고 데이터가 자원이 된 시대에는 누구의 것인가부터가 쟁점이다.</p>
-  </div>
   <div class="tbquote">
     <div class="h">데이터셋 · 데이터베이스 · 테이블 <span class="src">『데이터 과학』 25~27쪽 · <a href="lesson13.html">13차시</a></span></div>
     <p class="q">"데이터셋(dataset)이란 하나의 주제에 대한 여러 데이터들이 모인 집합(set)을 말한다." <span class="src">(25쪽)</span></p>
     <p class="q">"데이터베이스(database)는 여러 사람이 공유하여 사용하기 위해 통합 관리되는 데이터의 집합으로, 데이터베이스 시스템을 사용하면 대규모의 데이터를 효율적으로 저장하고 검색하며, 업데이트하고 관리할 수 있다." <span class="src">(26쪽)</span></p>
     <p class="q">"데이터베이스에는 여러 종류의 데이터셋이 들어가는데, 이때 각각의 데이터셋은 표 형태로 저장되며 이를 테이블(table)이라고 한다." <span class="src">(27쪽)</span></p>
     <p class="t">→ 한 줄 정리: CSV 파일 하나가 데이터셋, 그것을 여럿이 공유하도록 통합 관리하는 것이 데이터베이스(우리 학급 수파베이스 프로젝트), 그 안의 표 하나하나가 테이블(방명록 표)이다.</p>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 교재 보충 — SQL 한 줄 정리 <span class="src"><a href="lesson13.html">13차시 3절</a></span></div>
+    <p>데이터베이스의 네 동작은 SQL 네 문장에 대응한다. 생성 INSERT · 읽기 SELECT · 갱신 UPDATE · 삭제 DELETE. WHERE는 조건, ORDER BY는 정렬, GROUP BY는 같은 값끼리 묶어 COUNT·AVG로 세는 낱말이다. 기본 키(id)는 행 하나를 유일하게 가리키는 열이고, WHERE 없는 UPDATE·DELETE는 표 전체를 바꾼다. AI에게 DB를 주문할 때는 표 이름·열 이름, 새 표를 만들지 말 것, 접속 정보는 비밀 금고에, 빈 값 저장 금지의 네 가지를 알려 준다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">데이터 편향성 · 소유권 <span class="src">『데이터 과학』 38·39쪽 · <a href="lesson14.html">14차시</a></span></div>
+    <p class="q">"수집된 데이터의 분포가 고르지 못하고, 특정한 지역, 연령, 성별 등에 치우쳐 있을 경우 데이터에 편향성이 있다고 한다." <span class="src">(38쪽)</span></p>
+    <p class="q">"실제 현실을 대표하지 못하고 특정한 방향으로 치우쳐 있는 데이터를 가지고 모델을 만들면, 특정 대상에게 유리하거나 불리한 모델이 만들어질 수 있다." <span class="src">(38쪽)</span></p>
+    <p class="q">"학교 수업 중에 생성된 데이터는 학생의 것일까? 학교의 것일까? 서비스를 만든 기업의 것일까?" <span class="src">(39쪽)</span></p>
+    <p class="t">→ 한 줄 정리: 데이터가 치우치면 모델도 치우친다. 그리고 데이터가 자원이 된 시대에는 누구의 것인가부터가 쟁점이다.</p>
   </div>
   <table class="daymap">
     <thead><tr><th>시험에 나오는 대비</th><th>가르는 기준</th></tr></thead>

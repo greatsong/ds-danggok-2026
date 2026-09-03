@@ -4,7 +4,7 @@
 //   · lessonNN.html  : NN > RELEASED_LESSON(release.js) 이면 잠금
 //   · glossary.html · concepts.html · study-guide.html · eval-workbook.html : 15차시 전까지 잠금 (전 차시 용어·개념이 들어 있어 진도보다 앞서감)
 //   · extra-movie(-deep).html : 4차시 전까지 잠금
-//   · extra-models.html · project.html : 14차시 전까지 잠금
+//   · extra-models.html : 14차시 전까지 잠금 · project.html : 13차시 전까지 잠금(2026-09-03 순서 교체)
 //   · data.html : 4차시 전까지 잠금 (데이터 목록)
 //   · /teacher/ 이하 : 항상 잠금
 //   · index.html·gallery : 열어 둔다
@@ -55,7 +55,7 @@
     else if (/extra-models\.html$/.test(path)) locked = released < 14;        // 모델 도감 — 팀 프로젝트 안내와 함께
     else if (/data\.html$/.test(path)) locked = released < 4;              // 데이터 목록 — 영화 트랙을 마친 뒤
     else if (/extra-api\.html$/.test(path)) locked = released < 4;         // 영화 API 프로젝트 — 4차시 이후
-    else if (/project\.html$/.test(path)) locked = released < 14;             // 팀 프로젝트 안내 — 14차시(팀 구성)와 함께
+    else if (/project\.html$/.test(path)) locked = released < 13;             // 팀 프로젝트 안내 — 13차시(팀 구성)와 함께 (2026-09-03 순서 교체)
     else if (m && parseInt(m[1], 10) > released) locked = true;
   }
 
@@ -90,12 +90,12 @@
         var lm = href.match(/lesson(\d{2})(?:-deep)?\.html/);
         var blocked =
           (lm && parseInt(lm[1], 10) > released) ||
-          (/(glossary|concepts)\.html/.test(href) && released < 15) ||
+          (/(glossary|concepts|study-guide|eval-workbook)\.html/.test(href) && released < 15) ||
           (/extra-movie(?:-deep)?\.html/.test(href) && released < 4) ||
           (/extra-models\.html/.test(href) && released < 14) ||
           (/(^|\/)data\.html/.test(href) && released < 4) ||
           (/extra-api\.html/.test(href) && released < 4) ||
-          (/project\.html/.test(href) && released < 14) ||
+          (/project\.html/.test(href) && released < 13) ||
           /(^|\/)teacher\//.test(href);
         if (!blocked) return;
         if (a.classList.contains('linkcard')) return; // 목록 카드는 index.html이 따로 처리

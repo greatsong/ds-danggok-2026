@@ -8,6 +8,10 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✍️</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
+<script>
+// 교사용 정답지 인쇄: 주소 끝에 ?answers=1 을 붙이면 정답 상자가 모두 펼쳐지고 인쇄에도 포함된다
+(function(){try{if(/[?&]answers=1/.test(location.search)){document.addEventListener("DOMContentLoaded",function(){document.body.classList.add("answers");document.querySelectorAll("details.key").forEach(function(d){d.open=true;});});}}catch(e){}})();
+</script>
 <style>
   .wb h2 { font-size: 1.5rem; margin-top: 54px; border-top: 3px solid var(--accent); padding-top: 14px; }
   .wb h2 .unit { display: block; font-size: 0.78rem; color: var(--accent); letter-spacing: 0.08em; font-weight: 800; margin-bottom: 4px; }
@@ -74,6 +78,10 @@
     .wb h2, .wb h3 { break-after: avoid; }
     .wb .ex, .wb .pr, .wb .card, .wb table, .wb .fig, .wb .rule, .wb .cards { break-inside: avoid; }
     .wb details.key { display: none; }
+    body.answers .wb details.key { display: block; }
+  }
+  @media (max-width: 640px) {
+    .wb table.tb, .wb table.cm { display: block; overflow-x: auto; max-width: 100%; }
   }
 </style>
 </head>
@@ -94,7 +102,7 @@
 
   <div class="rule">
     <div class="h">✍️ 활동지 규칙</div>
-    <p>계산 과정을 지우지 않습니다. 과정이 곧 점수입니다. 답만 적힌 활동지는 검산할 수 없습니다. 막히면 표의 빈칸부터 채웁니다. 정답은 접힌 상자 안에 있으니, 먼저 끝까지 푼 뒤에 펼칩니다. 지필평가의 계산 문항은 이 활동지의 흐름 그대로 출제되며, 수치는 수업에서 함께 본 실측값에서만 나옵니다.</p>
+    <p>계산 과정을 지우지 않습니다. 과정이 곧 점수입니다. 답만 적힌 활동지는 검산할 수 없습니다. 막히면 표의 빈칸부터 채웁니다. 정답은 접힌 상자 안에 있으니, 먼저 끝까지 푼 뒤에 펼칩니다. 지필평가의 계산 문항은 1~3부(수업 손계산 활동지 3종)의 흐름 그대로 출제되며, 수치는 수업에서 함께 본 실측값에서만 나옵니다. 4부(군집)는 수업 활동지에 없던 보충으로, 개념 이해용입니다.</p>
   </div>
 
   <div class="ladder">
@@ -158,7 +166,7 @@
 
   <h3><span class="step b">예제 2</span>R² — 게으른 모델과 비교하기</h3>
   <div class="ex">
-    <div class="h">어느 도시의 5년치 연평균기온과 회귀 직선의 예측입니다. R²를 구합니다.</div>
+    <div class="h">어느 도시의 5년치 연평균 기온과 회귀 직선의 예측값입니다. R²를 구합니다.</div>
     <table class="tb">
       <tr><th class="k"></th><th>1년차</th><th>2년차</th><th>3년차</th><th>4년차</th><th>5년차</th></tr>
       <tr><td class="k">실제(℃)</td><td>4</td><td>6</td><td>8</td><td>10</td><td>12</td></tr>
@@ -176,7 +184,7 @@
 
   <h3><span class="step g">연습 1</span>오차 표 채우기</h3>
   <div class="pr">
-    <div class="h">영화 4편의 실제 관객 수(만 명)와 내 모델의 예측입니다. 빈칸을 채우고 세 값을 구하세요.</div>
+    <div class="h">영화 4편의 실제 관객 수(만 명)와 내 모델의 예측값입니다. 빈칸을 채우고 세 값을 구하세요.</div>
     <table class="tb">
       <tr><th class="k"></th><th>가</th><th>나</th><th>다</th><th>라</th></tr>
       <tr><td class="k">실제(만 명)</td><td>30</td><td>50</td><td>40</td><td>60</td></tr>
@@ -213,7 +221,7 @@
 
   <h3><span class="step g">연습 3</span>R² 계산</h3>
   <div class="pr">
-    <div class="h">4개 점의 실제 값과 직선의 예측입니다. 표를 채우고 R²를 구하세요.</div>
+    <div class="h">4개 점의 실제 값과 직선의 예측값입니다. 표를 채우고 R²를 구하세요.</div>
     <table class="tb">
       <tr><th class="k"></th><th>1</th><th>2</th><th>3</th><th>4</th><th>합</th></tr>
       <tr><td class="k">실제</td><td>10</td><td>20</td><td>30</td><td>40</td><td></td></tr>
@@ -238,7 +246,7 @@
   <div class="pr self">
     <div class="h">문제 2. 영화 3편의 실제 관객(만 명) 20, 40, 90과 예측 30, 40, 80. R²를 구하고, 같은 모델을 "관객 수가 서로 비슷한 3편"에 썼다면 SST와 R²가 어떻게 되는지 쓰세요.</div>
     <span class="line"></span><span class="line"></span>
-    <details class="key"><summary>정답 확인</summary><div class="in"><p>평균 50 · SST = 900 + 100 + 1600 = 2600 · SSE = 100 + 0 + 100 = 200 · R² = 1 − 200/2600 ≈ <b>0.923</b>. 관객 수가 비슷하면 SST(분모)가 작아져 같은 SSE라도 R²가 뚝 떨어진다. R²는 데이터의 퍼짐에도 달려 있다.</p></div></details>
+    <details class="key"><summary>정답 확인</summary><div class="in"><p>평균 50 · SST = 900 + 100 + 1600 = 2600 · SSE = 100 + 0 + 100 = 200 · R² = 1 − 200/2600 ≈ <b>0.923</b>. 관객 수가 비슷하면 SST(분모)가 작아져 같은 SSE라도 R²가 크게 떨어진다. R²는 데이터의 퍼짐에도 달려 있다.</p></div></details>
   </div>
   <div class="pr self">
     <div class="h">문제 3. 실제 값 10, 12, 14에 대해 세 번 모두 16으로 예측하는 엉터리 모델이 있습니다. SST·SSE·R²를 구하고, R²가 음수라는 것이 무슨 뜻인지 한 문장으로 쓰세요.</div>
@@ -291,7 +299,7 @@
       <rect x="70" y="125" width="100" height="70" fill="#fdeeee" stroke="#e45756"/><text x="120" y="155" text-anchor="middle" font-size="16" font-weight="800" fill="#c23b3a">FP</text><text x="120" y="178" text-anchor="middle" font-size="10" fill="#c23b3a">맞다고 했는데 틀림</text>
       <rect x="170" y="125" width="100" height="70" fill="#eef6e8" stroke="#54a24b"/><text x="220" y="155" text-anchor="middle" font-size="16" font-weight="800" fill="#3d7a37">TN</text><text x="220" y="178" text-anchor="middle" font-size="10" fill="#3d7a37">아니라고 했는데 정말 아님</text>
       <g font-size="12" fill="#3a2e1a">
-        <text x="320" y="70" font-weight="800" fill="#e8930c">① 정확도 = (TP + TN) ÷ 전체</text><text x="320" y="88" font-size="11" fill="#6b5836">네 칸 전체 중 초록 두 칸</text>
+        <text x="320" y="70" font-weight="800" fill="#e8930c">① 정확도 = (TP + TN) ÷ 전체</text><text x="320" y="88" font-size="11" fill="#6b5836">TP와 TN 두 칸(초록) ÷ 네 칸 전체</text>
         <text x="320" y="125" font-weight="800" fill="#4c8df6">② 정밀도 = TP ÷ (TP + FP)</text><text x="320" y="143" font-size="11" fill="#6b5836">"성공"이라 말한 것(왼쪽 세로 열) 중에서</text>
         <text x="320" y="180" font-weight="800" fill="#b279a2">③ 재현율 = TP ÷ (TP + FN)</text><text x="320" y="198" font-size="11" fill="#6b5836">실제 성공작(위쪽 가로 행) 중에서</text>
       </g>
@@ -401,7 +409,7 @@
     <p>(4) 0.985를 성능 개선이라 부를 수 없는 까닭을 "변수의 시점"으로 쓰세요.</p>
     <span class="line"></span>
     <details class="key"><summary>예시 답</summary><div class="in">
-      <p>(1) 193 ÷ 216 ≈ <b>0.89</b> (2) 기준선 0.89보다 낮다. 성공 재현율이 0.00이라 성공작 23편 중 한 편도 잡지 못했다. 라벨이 11 대 89로 치우친 데이터라 다수만 따라 찍어도 정확도가 후하게 나온다(교과서 139쪽). (3) 재현율 0.29. 실제 성공작 중 29%만 잡았으므로 약 열 편 중 일곱 편은 놓친다. (4) 첫 주 관객 수는 개봉 전에는 알 수 없고 총 관객 수와 사실상 한 몸인 미래 정보다. 정답의 일부를 입력으로 미리 본 레이블 누수이므로 미개봉 영화에는 쓸 수 없다.</p>
+      <p>(1) 193 ÷ 216 ≈ <b>0.89</b> (2) 기준선 0.89보다 낮다. 성공 재현율이 0.00이라 시험용 데이터의 성공작을 한 편도 잡지 못했다. 라벨이 11 대 89로 치우친 데이터라 다수만 따라 찍어도 정확도가 후하게 나온다(교과서 139쪽). (3) 재현율 0.29. 실제 성공작 중 29%만 잡았으므로 약 열 편 중 일곱 편은 놓친다. (4) 첫 주 관객 수는 개봉 전에는 알 수 없고 총 관객 수와 사실상 한 몸인 미래 정보다. 정답의 일부를 입력으로 미리 본 레이블 누수이므로 미개봉 영화에는 쓸 수 없다.</p>
     </div></details>
   </div>
 
@@ -496,14 +504,14 @@
   <h3><span class="step t">수업 실측</span>김치의 배신</h3>
   <div class="pr real">
     <div class="h">당곡고 중식 154일에서 제육볶음 9일, 배추김치 86일, 함께 나온 날 5일. 순대국 5일, 석박지 17일, 순대국이 나온 5일 모두 석박지 동행. 배추김치 86일과 깍두기 26일은 함께 나온 날 0일.</div>
-    <p>(1) "제육볶음 → 배추김치": 신뢰도 5 ÷ 9 ≈ <span class="fill"></span> 기본 등장률 86 ÷ 154 ≈ <span class="fill"></span> 향상도 ≈ <span class="fill"></span></p>
+    <p>(1) "제육볶음 → 배추김치": 신뢰도 5 ÷ 9 ≈ <span class="fill"></span> 기본 등장률 86 ÷ 154 ≈ <span class="fill"></span> 향상도 = (5 ÷ 9) ÷ (86 ÷ 154) ≈ <span class="fill"></span> (소수 셋째 자리까지 계산한 뒤 반올림)</p>
     <p>(2) "순대국 → 석박지": 신뢰도 <span class="fill"></span> 향상도 1.00 ÷ (17 ÷ 154) ≈ <span class="fill"></span> 역방향 "석박지 → 순대국"의 신뢰도 5 ÷ 17 ≈ <span class="fill"></span></p>
     <p>(3) 배추김치와 깍두기가 우연으로 나온다면 함께 나올 것으로 기대되는 날수 86 × 26 ÷ 154 ≈ <span class="fill"></span>일. 실제는 0일. 이 "음의 연관"에서 급식실의 운영 규칙을 역추론하세요.</p>
     <span class="line"></span>
     <p>(4) 향상도 9.1은 "순대국이 석박지를 나오게 만든다"는 인과의 증명입니까?</p>
     <span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in">
-      <p>(1) 0.56 · 0.56 · <b>0.99</b>(우연과 같음. 배추김치는 원래 56%의 날에 나온다) (2) 1.00 · <b>9.1</b> · 0.29(규칙에는 방향이 있다) (3) 약 14.5일. "김치류는 거의 매일 나오지만 주력 김치는 하루 한 종류"라는 운영 원칙이 데이터에서 거꾸로 드러난다. (4) 아니다. 두 메뉴를 함께 정하는 식단표 작성자의 판단이 뒤에 있을 뿐이다. 함께 움직임은 원인을 증명하지 못한다(6차시의 상관과 인과).</p>
+      <p>(1) 0.56 · 0.56 · <b>0.99</b>(0.556 ÷ 0.558. 두 자리로 반올림한 값끼리 나누면 1.00이 되며, 어느 쪽이든 우연과 같음. 배추김치는 원래 56%의 날에 나온다) (2) 1.00 · <b>9.1</b> · 0.29(규칙에는 방향이 있다) (3) 약 14.5일. "김치류는 거의 매일 나오지만 주력 김치는 하루 한 종류"라는 운영 원칙이 데이터에서 거꾸로 드러난다. (4) 아니다. 두 메뉴를 함께 정하는 식단표 작성자의 판단이 뒤에 있을 뿐이다. 함께 움직임은 원인을 증명하지 못한다(6차시의 상관과 인과).</p>
     </div></details>
   </div>
 
@@ -518,7 +526,7 @@
     <div class="card r"><div class="t1">해석</div><div class="f">이름은 사람이 붙인다</div><div class="d">묶음별 평균 스탯을 읽고 유형 이름을 짓는다. k에 정답은 없다.</div></div>
   </div>
 
-  <h3><span class="step b">예제</span>정규화 없이는 거리가 한쪽 말만 듣는다</h3>
+  <h3><span class="step b">예제</span>정규화 없이는 거리가 한쪽 속성만 반영한다</h3>
   <div class="ex">
     <div class="h">세 타자의 두 스탯입니다. 누가 누구와 가까운지 거리를 계산합니다.</div>
     <table class="tb">
@@ -530,7 +538,7 @@
     <ol class="sol">
       <li>A와 C의 거리 = √((30−28)² + (5−8)²) = √(4 + 9) = √13 ≈ <span class="res">3.6</span></li>
       <li>A와 B의 거리 = √((30−10)² + (5−40)²) = √(400 + 1225) = √1625 ≈ <span class="res">40.3</span></li>
-      <li>A는 C와 가깝습니다(둘 다 거포형). 이 예에서는 두 스탯의 단위가 비슷해 문제가 없지만, 도루 대신 타율(0.3 안팎)이 들어오면 사정이 달라집니다. 타율 차이는 아무리 커도 0.1 정도라 제곱하면 0.01이 되어, 홈런 차이 2의 제곱 4 앞에서 사라집니다. 거리가 홈런 말만 듣게 됩니다. 정규화가 필요한 까닭입니다.</li>
+      <li>A는 C와 가깝습니다(둘 다 거포형). 이 예에서는 두 스탯의 단위가 비슷해 문제가 없지만, 도루 대신 타율(0.3 안팎)이 들어오면 사정이 달라집니다. 타율 차이는 아무리 커도 0.1 정도라 제곱하면 0.01이 되어, 홈런 차이 2의 제곱 4 앞에서 사라집니다. 거리가 홈런 차이만 반영하게 됩니다. 이것이 정규화가 필요한 까닭입니다.</li>
     </ol>
   </div>
 
@@ -546,7 +554,7 @@
     <p>(1) 정규화 전: A–B 거리와 A–C 거리 중 어느 쪽이 가깝습니까? (홈런 차이만 봐도 답이 나옵니다.) (2) 정규화 후: A–C 거리 <span class="fill"></span> B–C 거리 <span class="fill"></span> 이제 C는 누구와 더 가깝습니까? (3) 두 답이 다른 까닭을 한 문장으로.</p>
     <span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in">
-      <p>정규화 값: A(1.00, 0.76) · B(0.40, 1.00) · C(0.90, 0.99). (1) 정규화 전에는 홈런 차이가 거리를 지배해 C는 A(차 3)와 가깝다. (2) A–C = √(0.10² + 0.23²) ≈ <b>0.25</b>, B–C = √(0.50² + 0.01²) ≈ <b>0.50</b>. 여전히 C는 A와 가깝지만, 타율의 차이(A는 낮고 C는 높다)가 거리에 반영되기 시작했다. (3) 정규화 전에는 타율 차이가 제곱하면 0에 가까워 거리에 아무 영향을 주지 못했고, 정규화 후에는 두 속성이 같은 눈금으로 거리에 들어간다.</p>
+      <p>정규화 값: A(1.00, 0.76) · B(0.40, 1.00) · C(0.90, 0.99). (1) 정규화 전에는 홈런 차이가 거리를 지배해 C는 A(차 3)와 가깝다. (2) A–C = √(0.10² + 0.23²) ≈ <b>0.25</b>(표의 반올림 값으로 계산. 반올림 전 값으로 계산하면 0.24), B–C = √(0.50² + 0.01²) ≈ <b>0.50</b>. 여전히 C는 A와 가깝지만, 타율의 차이(A는 낮고 C는 높다)가 거리에 반영되기 시작했다. (3) 정규화 전에는 타율 차이가 제곱하면 0에 가까워 거리에 아무 영향을 주지 못했고, 정규화 후에는 두 속성이 같은 눈금으로 거리에 들어간다.</p>
     </div></details>
   </div>
 
@@ -571,7 +579,7 @@
     <span class="line"></span>
     <p>(3) "거포형·교타형·중장거리형"이라는 이름은 누가, 무엇을 보고 붙였습니까?</p>
     <span class="line"></span>
-    <details class="key"><summary>예시 답</summary><div class="in"><p>(1) 삼진은 수십에서 백 단위, 타율·출루율은 0.3 안팎이다. 차이를 제곱하면 삼진 쪽만 남아 거리가 삼진 말만 듣는다. (2) 두 점수의 차이가 0.006으로 근소하고, 실루엣은 의미를 재지 못한다. 세 묶음의 스탯 프로필이 선명하게 갈려 목적(선수 유형 이해)에 더 맞았다. 점수와 해석을 함께 놓고 판단한 것이다. (3) 사람이, 묶음별 평균 스탯(홈런·도루·삼진·장타율)을 읽고 붙였다. 컴퓨터는 번호(0·1·2)만 준다.</p></div></details>
+    <details class="key"><summary>예시 답</summary><div class="in"><p>(1) 삼진은 수십에서 백 단위, 타율·출루율은 0.3 안팎이다. 차이를 제곱하면 삼진 쪽만 남아 거리가 삼진 차이만 반영한다. (2) 두 점수의 차이가 0.006으로 근소하고, 실루엣은 의미를 재지 못한다. 세 묶음의 스탯 프로필이 선명하게 갈려 목적(선수 유형 이해)에 더 맞았다. 점수와 해석을 함께 놓고 판단한 것이다. (3) 사람이, 묶음별 평균 스탯(홈런·도루·삼진·장타율)을 읽고 붙였다. 컴퓨터는 번호(0·1·2)만 준다.</p></div></details>
   </div>
 
   <div class="rule" style="border-left-color: var(--green); background: var(--green-soft);">
