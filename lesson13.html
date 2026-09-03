@@ -392,6 +392,133 @@ ALTER TABLE guestbook ENABLE ROW LEVEL SECURITY;</pre></div>
     </tbody>
   </table>
   <p><b>기본 키</b>(primary key)는 행 하나를 유일하게 가리키는 열입니다. 같은 이름의 사람이 두 번 글을 남겨도 id가 다르므로 두 행을 구별할 수 있습니다. 갱신과 삭제가 "7번 글"처럼 행 하나를 정확히 가리킬 수 있는 것도 기본 키 덕분입니다. 교과서 31쪽의 설계표에서 "조건" 칸에 적는 내용이 바로 이런 제약입니다.</p>
+  <details class="glossary" open>
+    <summary>🔬 움직여 보기 — 설계표를 채우면 CREATE TABLE 문장이 만들어진다 (교과서 31쪽 탐구활동)</summary>
+    <div class="gin">
+      <p style="margin:10px 0 8px">교과서 31쪽의 쇼핑몰 테이블(사용자·제품·장바구니)을 예시로 불러오거나, 표 이름부터 직접 정해 나만의 표를 설계해 보세요. 속성명을 적고 데이터형과 조건을 고르면 오른쪽 아래에 SQL 문장이 바로 만들어지고, 그 문장을 우리말로 읽은 해석이 함께 나타납니다. 데이터베이스를 실제로 만드는 것이 아니라, 설계표의 한 칸이 SQL의 어느 낱말이 되는지 읽는 연습입니다.</p>
+      <div class="sch" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:0.92rem;margin-bottom:8px">
+        <label>예시 불러오기 <select class="sch-preset"><option value="">직접 설계</option><option value="user">사용자 표</option><option value="product">제품 표</option><option value="cart">장바구니 표</option><option value="guestbook">방명록 표</option></select></label>
+        <label>표 이름 <input class="sch-name" type="text" value="내표" style="width:9em;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-family:var(--mono)"></label>
+        <button type="button" class="sch-add" style="padding:5px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;font-weight:700;cursor:pointer">+ 속성 추가</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="glossary-table sch-table" style="min-width:640px">
+          <thead><tr><th>속성명</th><th>데이터형</th><th>조건</th><th></th></tr></thead>
+          <tbody class="sch-rows"></tbody>
+        </table>
+      </div>
+      <div class="codewrap code" style="margin-top:12px"><span class="label">만들어진 SQL</span><pre class="sch-sql"></pre></div>
+      <div class="callout tip" style="margin-top:10px"><div class="h">💬 이 문장을 우리말로 읽으면</div><ul class="sch-read" style="margin:4px 0 0"></ul></div>
+      <p style="font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">기본 키는 표에 하나만 둡니다. "자동 증가"는 정수 기본 키에만, "지금 시각을 기본값으로"는 날짜·시각 형에만 붙습니다. "다른 표 참조"에 표 이름을 적으면 그 표의 id를 가리키는 외래 키가 됩니다.</p>
+    </div>
+  </details>
+<script>
+(function () {
+  var root = document.querySelector(".sch"); if (!root) return;
+  var TYPES = [["text","문자열"],["integer","정수"],["numeric","소수"],["boolean","참·거짓"],["date","날짜"],["timestamptz","날짜·시각"]];
+  var PRESETS = {
+    user: { name: "사용자", rows: [
+      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "이름", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "이메일", t: "text", pk: 0, nn: 1, uq: 1, ai: 0, df: 0, ref: "" },
+      { n: "가입일시", t: "timestamptz", pk: 0, nn: 0, uq: 0, ai: 0, df: 1, ref: "" } ] },
+    product: { name: "제품", rows: [
+      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "제품명", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "가격", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "재고", t: "integer", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" } ] },
+    cart: { name: "장바구니", rows: [
+      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "사용자id", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "사용자" },
+      { n: "제품id", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "제품" },
+      { n: "수량", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "담은시각", t: "timestamptz", pk: 0, nn: 0, uq: 0, ai: 0, df: 1, ref: "" } ] },
+    guestbook: { name: "guestbook", rows: [
+      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "name", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "message", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "password", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "created_at", t: "timestamptz", pk: 0, nn: 0, uq: 0, ai: 0, df: 1, ref: "" } ] }
+  };
+  var nameEl = root.querySelector(".sch-name"), presetEl = root.querySelector(".sch-preset"), addBtn = root.querySelector(".sch-add");
+  var tbody = document.querySelector(".sch-rows"), sqlEl = document.querySelector(".sch-sql"), readEl = document.querySelector(".sch-read");
+  var rows = [];
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function typeName(t) { for (var i = 0; i < TYPES.length; i++) if (TYPES[i][0] === t) return TYPES[i][1]; return t; }
+  function render() {
+    tbody.innerHTML = "";
+    rows.forEach(function (r, i) {
+      var tr = document.createElement("tr");
+      var opts = TYPES.map(function (t) { return '<option value="' + t[0] + '"' + (r.t === t[0] ? " selected" : "") + '>' + t[1] + '</option>'; }).join("");
+      var canAI = r.t === "integer" && r.pk, canDF = r.t === "timestamptz";
+      tr.innerHTML =
+        '<td><input data-k="n" data-i="' + i + '" type="text" value="' + esc(r.n) + '" placeholder="속성명" style="width:8em;padding:3px 6px;border:1px solid var(--border);border-radius:6px;font-family:var(--mono)"></td>' +
+        '<td><select data-k="t" data-i="' + i + '">' + opts + '</select></td>' +
+        '<td style="white-space:normal;line-height:1.9">' +
+          '<label><input type="checkbox" data-k="pk" data-i="' + i + '"' + (r.pk ? " checked" : "") + '> 기본 키</label> · ' +
+          '<label><input type="checkbox" data-k="nn" data-i="' + i + '"' + (r.nn ? " checked" : "") + (r.pk ? " disabled" : "") + '> 비워 둘 수 없음</label> · ' +
+          '<label><input type="checkbox" data-k="uq" data-i="' + i + '"' + (r.uq ? " checked" : "") + (r.pk ? " disabled" : "") + '> 중복 불가</label> · ' +
+          '<label' + (canAI ? "" : ' style="opacity:.45"') + '><input type="checkbox" data-k="ai" data-i="' + i + '"' + (r.ai && canAI ? " checked" : "") + (canAI ? "" : " disabled") + '> 자동 증가</label> · ' +
+          '<label' + (canDF ? "" : ' style="opacity:.45"') + '><input type="checkbox" data-k="df" data-i="' + i + '"' + (r.df && canDF ? " checked" : "") + (canDF ? "" : " disabled") + '> 지금 시각을 기본값으로</label> · ' +
+          '<label>다른 표 참조 <input data-k="ref" data-i="' + i + '" type="text" value="' + esc(r.ref) + '" placeholder="표 이름" style="width:6em;padding:2px 6px;border:1px solid var(--border);border-radius:6px;font-family:var(--mono)"></label>' +
+        '</td>' +
+        '<td><button type="button" data-del="' + i + '" title="이 속성 지우기" style="border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;padding:2px 8px">✕</button></td>';
+      tbody.appendChild(tr);
+    });
+    build();
+  }
+  function build() {
+    var tn = (nameEl.value || "내표").trim();
+    var lines = [], reads = [], fkLines = [];
+    var pkCount = rows.filter(function (r) { return r.pk; }).length;
+    rows.forEach(function (r) {
+      var n = (r.n || "").trim(); if (!n) return;
+      var parts = [n, r.t];
+      var why = [];
+      if (r.pk) { parts.push("PRIMARY KEY"); why.push("이 표에서 행 하나를 유일하게 가리키는 기본 키"); }
+      if (r.pk && r.t === "integer" && r.ai) { parts.push("GENERATED ALWAYS AS IDENTITY"); why.push("값을 직접 넣지 않아도 1, 2, 3… 자동으로 증가"); }
+      if (!r.pk && r.nn) { parts.push("NOT NULL"); why.push("비워 둘 수 없음"); }
+      if (!r.pk && r.uq) { parts.push("UNIQUE"); why.push("같은 값이 두 번 들어올 수 없음"); }
+      if (r.t === "timestamptz" && r.df) { parts.push("DEFAULT now()"); why.push("값을 넣지 않으면 저장 시각이 자동으로 들어감"); }
+      if (r.ref && r.ref.trim()) { parts.push("REFERENCES " + r.ref.trim() + "(id)"); why.push(r.ref.trim() + " 표의 id를 가리키는 외래 키. 두 표를 잇는 열"); }
+      lines.push("  " + parts.join(" "));
+      reads.push("<b>" + esc(n) + "</b> 열: " + typeName(r.t) + (why.length ? ". " + why.join(". ") + "." : "."));
+    });
+    var sql = lines.length ? "CREATE TABLE " + tn + " (\n" + lines.join(",\n") + "\n);" : "-- 속성을 하나 이상 적어 주세요";
+    sqlEl.textContent = sql;
+    var head = '<li>"' + esc(tn) + '"라는 이름의 표를 새로 만듭니다. 열은 ' + lines.length + '개입니다.</li>';
+    if (pkCount === 0 && lines.length) head += '<li style="color:#c23b3a">기본 키가 없습니다. 행 하나를 가리킬 열을 하나 정해 주세요.</li>';
+    if (pkCount > 1) head += '<li style="color:#c23b3a">기본 키가 ' + pkCount + '개입니다. 이 연습에서는 하나만 둡니다.</li>';
+    readEl.innerHTML = head + reads.map(function (t) { return "<li>" + t + "</li>"; }).join("");
+  }
+  function load(key) {
+    if (!key) { rows = [{ n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" }, { n: "", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" }]; nameEl.value = "내표"; }
+    else { var p = PRESETS[key]; nameEl.value = p.name; rows = p.rows.map(function (r) { return Object.assign({}, r); }); }
+    render();
+  }
+  tbody.addEventListener("input", function (e) {
+    var k = e.target.getAttribute("data-k"), i = +e.target.getAttribute("data-i"); if (!k) return;
+    if (k === "n" || k === "ref") { rows[i][k] = e.target.value; build(); }
+  });
+  tbody.addEventListener("change", function (e) {
+    var k = e.target.getAttribute("data-k"), i = +e.target.getAttribute("data-i"); if (!k) return;
+    if (k === "t") rows[i].t = e.target.value;
+    else if (e.target.type === "checkbox") {
+      rows[i][k] = e.target.checked ? 1 : 0;
+      if (k === "pk" && e.target.checked) { rows.forEach(function (r, j) { if (j !== i) r.pk = 0; }); rows[i].nn = 1; }
+    }
+    if (k === "n" || k === "ref") return;
+    render();
+  });
+  tbody.addEventListener("click", function (e) {
+    var d = e.target.getAttribute("data-del"); if (d === null) return; rows.splice(+d, 1); render();
+  });
+  addBtn.addEventListener("click", function () { if (rows.length < 8) { rows.push({ n: "", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" }); render(); } });
+  nameEl.addEventListener("input", build);
+  presetEl.addEventListener("change", function () { load(presetEl.value); });
+  load("");
+})();
+</script>
 
   <h3>SQL과 내 코드의 대응</h3>
   <p>AI가 짜 준 방명록 코드는 SQL 문장을 직접 쓰지 않고 파이썬 함수로 같은 뜻을 전합니다. 두 표현은 한 줄씩 대응합니다. 코드를 읽다가 막히면 이 표로 SQL 문장으로 되돌려 읽습니다.</p>
@@ -447,8 +574,8 @@ LIMIT 5;</pre></div>
 <script>
 (function () {
   var box = document.querySelector(".sqlb"); if (!box) return;
-  // 연습용 급식 20끼 (열: 날짜, 월, 요일, 식사, 메뉴, 칼로리) — 예시 값
-  var rows = [
+  // 연습용 급식 20끼 (열: 날짜, 월, 요일, 식사, 메뉴, 칼로리) — 예시 값. 아래 SQL 시뮬레이터도 같은 표를 쓴다
+  var rows = window.MEALS20 = [
     ["2025-09-01",9,"월","중식","현미밥|근대된장국|제육볶음|배추김치",887],
     ["2025-09-02",9,"화","중식","쌀밥|순대국|석박지|계란말이",842],
     ["2025-09-03",9,"수","중식","카레라이스|단무지|배추김치|요구르트",905],
@@ -509,6 +636,316 @@ LIMIT 5;</pre></div>
   }
   [g, f, w, o, l].forEach(function (el) { el.addEventListener("change", render); });
   render();
+})();
+</script>
+
+  <h3>실생활 앱에서 SQL이 하는 일 — 인스타그램으로 읽기</h3>
+  <p>인스타그램 같은 앱의 화면 뒤에는 게시물 표(posts), 댓글 표(comments), 사용자 표(users) 같은 테이블이 있고, 화면의 단추 하나를 누를 때마다 SQL 문장 하나가 실행됩니다. 문장을 읽는 순서는 늘 같습니다. <b>어느 표에서(FROM) · 어떤 행을(WHERE) · 무엇을(SELECT) · 어떤 순서로(ORDER BY) · 몇 개(LIMIT)</b>. 아래 표의 계정 이름과 글은 모두 가상의 예입니다.</p>
+  <div style="overflow-x:auto"><table class="daymap" style="min-width:640px">
+    <thead><tr><th>앱에서 하는 일</th><th>뒤에서 실행되는 SQL</th><th>읽는 법</th></tr></thead>
+    <tbody>
+      <tr><td><b>피드를 연다</b></td><td><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</code></td><td>게시물 표에서, 올린 시각이 늦은 것부터, 20개만</td></tr>
+      <tr><td><b>해시태그 #고양이를 검색한다</b></td><td><code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></td><td>해시태그 열에 "#고양이"가 들어 있는 행만</td></tr>
+      <tr><td><b>cat_mong 프로필의 "게시물 4"</b></td><td><code>SELECT COUNT(*) FROM posts WHERE 작성자 = 'cat_mong';</code></td><td>cat_mong이 쓴 행의 개수를 센다</td></tr>
+      <tr><td><b>인기 해시태그 순위</b></td><td><code>SELECT 해시태그, COUNT(*) AS 개수 FROM posts GROUP BY 해시태그 ORDER BY 개수 DESC LIMIT 10;</code></td><td>해시태그별로 묶어 개수를 세고, 많은 순으로 10개</td></tr>
+      <tr><td><b>❤ 좋아요를 누른다</b></td><td><code>UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = 4;</code></td><td>4번 게시물 한 행의 좋아요 값을 1 늘린다</td></tr>
+      <tr><td><b>댓글을 단다</b></td><td><code>INSERT INTO comments (게시물id, 작성자, 댓글) VALUES (4, 'dog_bori', '박스 안이 그렇게 좋아?');</code></td><td>댓글 표에 새 행 하나를 넣는다</td></tr>
+      <tr><td><b>내 게시물을 지운다</b></td><td><code>DELETE FROM posts WHERE id = 4 AND 작성자 = 'cat_mong';</code></td><td>4번이면서 cat_mong이 쓴 행만 지운다. 조건 둘로 남의 글을 지우는 일을 막는다</td></tr>
+    </tbody>
+  </table></div>
+  <p>실제 앱의 표는 수억 행이고 표 여러 개를 이어 붙여 쓰지만(외래 키), 문장의 뼈대는 위와 같습니다. 방명록 실습에서 AI가 짜 준 코드가 한 일도, 인스타그램이 하루에 수십억 번 하는 일도 결국 이 네 동작입니다.</p>
+
+<style>
+@keyframes simIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes simPop { 0% { transform: scale(1); } 40% { transform: scale(1.45); } 100% { transform: scale(1); } }
+@keyframes simOut { to { opacity: 0; transform: translateX(24px); height: 0; } }
+.sim .sim-card { animation: simIn .45s ease both; }
+.sim .sim-dim { transition: opacity .8s ease; }
+.sim .feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 8px; }
+.sim .feed .fc { border: 1px solid var(--border); border-radius: 12px; background: #fff; overflow: hidden; animation: simIn .5s ease both; box-shadow: var(--shadow); }
+.sim .feed .fc .ph { font-size: 64px; text-align: center; padding: 14px 0 6px; background: linear-gradient(135deg, #fff6e0, #fffdf7); }
+.sim .feed .fc .who { font-weight: 800; font-size: .86rem; padding: 6px 10px 0; }
+.sim .feed .fc .tx { font-size: .84rem; padding: 2px 10px 6px; color: var(--text-soft); }
+.sim .feed .fc .lk { font-size: .82rem; padding: 0 10px 10px; color: #c23b3a; font-weight: 700; }
+.sim .heart-pop { display: inline-block; animation: simPop .5s ease; }
+.sim tr.row-in { animation: simIn .5s ease both; }
+.sim tr.row-out { animation: simOut .45s ease forwards; }
+</style>
+  <details class="glossary" open>
+    <summary>🔬 움직여 보기 — SQL 시뮬레이터: 문장을 직접 쓰고, 단계별로 무슨 일이 벌어지는지 본다</summary>
+    <div class="gin">
+      <div class="sim" style="font-size:0.92rem">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 6px">
+          <button type="button" class="sim-tab on" data-tab="read" style="padding:6px 14px;border:1.5px solid var(--accent);border-radius:999px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer">읽기 — SELECT를 단계별로</button>
+          <button type="button" class="sim-tab" data-tab="write" style="padding:6px 14px;border:1.5px solid var(--border);border-radius:999px;background:#fff;font-weight:800;cursor:pointer">쓰기 — 댓글 달기 · 고치기 · 좋아요 · 지우기</button>
+        </div>
+
+        <div class="sim-pane" data-pane="read">
+          <p style="margin:6px 0">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 단추를 누르거나 직접 고쳐 써 보세요. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, "GROUP BY에 없는 열"을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+            <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 표 posts</option><option value="meals">급식 표 meals</option></select></label>
+            <span class="sim-cols" style="font-size:0.85rem;color:var(--text-soft)"></span>
+          </div>
+          <div class="sim-exs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"></div>
+          <textarea class="sim-q" rows="3" spellcheck="false" style="width:100%;box-sizing:border-box;font-family:var(--mono);font-size:0.9rem;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;background:#1c2b26;color:#d7f0ea"></textarea>
+          <div style="margin:8px 0 4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <button type="button" class="sim-run" style="padding:6px 16px;border:1px solid var(--accent);border-radius:8px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer">실행 ▶</button>
+            <span class="sim-msg" style="font-size:0.88rem;color:var(--text-soft)"></span>
+          </div>
+          <div class="sim-steps"></div>
+        </div>
+
+        <div class="sim-pane" data-pane="write" hidden>
+          <p style="margin:6px 0">cat_mong의 4번 게시물 "박스 새로 샀는데 포장지에 들어감 🐱"에 달린 댓글 표(comments)입니다. 우리 방명록 표와 같은 구조입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:8px 0">
+            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff">
+              <div style="font-weight:800;margin-bottom:6px">💬 댓글 달기 — INSERT</div>
+              <input class="w-name" type="text" placeholder="내 계정 이름" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
+              <input class="w-msg" type="text" placeholder="댓글 내용" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
+              <button type="button" class="w-insert" style="padding:5px 12px;border:1px solid var(--green);border-radius:8px;background:var(--green);color:#fff;font-weight:800;cursor:pointer">댓글 달기</button>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff">
+              <div style="font-weight:800;margin-bottom:6px">✏️ 댓글 고치기 — UPDATE</div>
+              <input class="w-uid" type="number" min="1" placeholder="댓글 번호(id)" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
+              <input class="w-umsg" type="text" placeholder="새 댓글 내용" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
+              <button type="button" class="w-update" style="padding:5px 12px;border:1px solid var(--blue);border-radius:8px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer">고치기</button>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff">
+              <div style="font-weight:800;margin-bottom:6px">❤ 좋아요 — UPDATE 좋아요 = 좋아요 + 1</div>
+              <input class="w-lid" type="number" min="1" placeholder="댓글 번호(id)" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
+              <button type="button" class="w-like" style="padding:5px 12px;border:1px solid #e45756;border-radius:8px;background:#fff;color:#c23b3a;font-weight:800;cursor:pointer">❤ 좋아요 누르기</button>
+            </div>
+            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff">
+              <div style="font-weight:800;margin-bottom:6px">🗑 댓글 지우기 — DELETE</div>
+              <input class="w-did" type="number" min="1" placeholder="댓글 번호(id)" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="w-delete" style="padding:5px 12px;border:1px solid var(--red);border-radius:8px;background:var(--red);color:#fff;font-weight:800;cursor:pointer">지우기</button>
+                <button type="button" class="w-delete-all" style="padding:5px 12px;border:1px solid var(--red);border-radius:8px;background:#fff;color:#c23b3a;font-weight:800;cursor:pointer">WHERE 없이 DELETE</button>
+                <button type="button" class="w-reset" style="padding:5px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;font-weight:700;cursor:pointer">처음으로</button>
+              </div>
+            </div>
+          </div>
+          <div style="overflow-x:auto"><table class="glossary-table w-table" style="min-width:560px"><thead><tr><th>id</th><th>작성자</th><th>댓글</th><th>좋아요</th><th>작성시각</th></tr></thead><tbody></tbody></table></div>
+          <div class="codewrap code" style="margin-top:10px"><span class="label">뒤에서 실행된 SQL</span><pre class="w-sql">-- 아직 실행한 문장이 없습니다</pre></div>
+          <p class="w-out" style="font-size:0.9rem;margin:6px 0 0;color:var(--text-soft)"></p>
+        </div>
+      </div>
+    </div>
+  </details>
+<script>
+(function () {
+  var sim = document.querySelector(".sim"); if (!sim) return;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  // ---- 데이터셋 (전부 가상의 예)
+  var DS = {
+    posts: { name: "posts", label: "인스타그램 게시물 표", cols: ["id","작성자","내용","사진","해시태그","좋아요","올린시각"], num: { "id": 1, "좋아요": 1 },
+      rows: [
+        [1,"cat_mong","창가에서 낮잠 3시간째","🐱","#고양이 #낮잠",128,"09-01 12:40"],
+        [2,"dog_bori","산책 가자고 목줄 물고 옴","🐶","#강아지 #산책",164,"09-01 18:05"],
+        [3,"hamzzi_choco","볼주머니에 해바라기씨 12개","🐹","#햄스터 #먹방",95,"09-02 12:35"],
+        [4,"cat_mong","박스 새로 샀는데 포장지에 들어감","🐱","#고양이 #박스",241,"09-02 13:10"],
+        [5,"rabbit_tori","당근보다 상추파","🐰","#토끼 #먹방",57,"09-02 21:30"],
+        [6,"dog_bori","급식실 앞에서 기다리는 중","🐶","#강아지 #학교",77,"09-03 00:12"],
+        [7,"parrot_kiwi","'밥 줘'를 배웠다","🦜","#앵무새 #말하기",152,"09-03 12:38"],
+        [8,"cat_mong","키보드 위가 제일 따뜻함","🐱","#고양이 #공부방해",310,"09-03 16:20"],
+        [9,"hamzzi_choco","쳇바퀴 신기록 갱신","🐹","#햄스터 #운동",33,"09-03 22:01"],
+        [10,"dog_bori","목욕 후 삐침","🐶","#강아지 #목욕",201,"09-04 08:15"],
+        [11,"rabbit_tori","귀 청소 중 포착","🐰","#토끼 #일상",89,"09-04 19:44"],
+        [12,"cat_mong","데이터 과학 과제 옆에서 감독 중","🐱","#고양이 #데이터과학",174,"09-05 12:41"]
+      ],
+      examples: [
+        ["피드 최신순 5개","SELECT 작성자, 사진, 내용, 좋아요 FROM posts ORDER BY 올린시각 DESC LIMIT 5;"],
+        ["#고양이 검색","SELECT 작성자, 사진, 내용 FROM posts WHERE 해시태그 LIKE '%#고양이%';"],
+        ["계정별 게시물 수","SELECT 작성자, COUNT(*) AS 게시물수 FROM posts GROUP BY 작성자 ORDER BY 게시물수 DESC;"],
+        ["좋아요 150 넘는 글","SELECT 사진, 내용, 좋아요 FROM posts WHERE 좋아요 > 150 ORDER BY 좋아요 DESC;"],
+        ["계정별 좋아요 합계","SELECT 작성자, SUM(좋아요) AS 좋아요합 FROM posts GROUP BY 작성자 ORDER BY 좋아요합 DESC LIMIT 3;"],
+        ["오류 재현 · 묶지 않은 열","SELECT 작성자, 내용 FROM posts GROUP BY 작성자;"]
+      ] },
+    meals: { name: "meals", label: "급식 표", cols: ["날짜","월","요일","식사","메뉴","칼로리"], num: { "월": 1, "칼로리": 1 },
+      rows: window.MEALS20 || [],
+      examples: [
+        ["열량 높은 중식 3끼","SELECT 날짜, 메뉴, 칼로리 FROM meals WHERE 식사 = '중식' ORDER BY 칼로리 DESC LIMIT 3;"],
+        ["지우의 문장","SELECT 요일, AVG(칼로리) AS 평균칼로리 FROM meals WHERE 식사 = '중식' GROUP BY 요일 ORDER BY 평균칼로리 DESC;"],
+        ["민수의 오류","SELECT 요일, 날짜 FROM meals WHERE 식사 = '중식' GROUP BY 요일;"],
+        ["배추김치 나온 날 세기","SELECT COUNT(*) AS 일수 FROM meals WHERE 식사 = '중식' AND 메뉴 LIKE '%배추김치%';"]
+      ] }
+  };
+  var cur = DS.posts;
+  // ---- 탭
+  sim.querySelectorAll(".sim-tab").forEach(function (b) {
+    b.addEventListener("click", function () {
+      sim.querySelectorAll(".sim-tab").forEach(function (x) { x.classList.remove("on"); x.style.background = "#fff"; x.style.color = ""; x.style.borderColor = "var(--border)"; });
+      b.classList.add("on"); b.style.background = "var(--accent)"; b.style.color = "#fff"; b.style.borderColor = "var(--accent)";
+      sim.querySelectorAll(".sim-pane").forEach(function (p) { p.hidden = p.getAttribute("data-pane") !== b.getAttribute("data-tab"); });
+    });
+  });
+  // ---- 읽기
+  var q = sim.querySelector(".sim-q"), msg = sim.querySelector(".sim-msg"), steps = sim.querySelector(".sim-steps"), dsel = sim.querySelector(".sim-ds"), exs = sim.querySelector(".sim-exs"), colsEl = sim.querySelector(".sim-cols");
+  function setDS(key) {
+    cur = DS[key]; colsEl.textContent = "열: " + cur.cols.join(" · ") + " (" + cur.rows.length + "행)";
+    exs.innerHTML = cur.examples.map(function (e, i) { return '<button type="button" class="sim-ex" data-i="' + i + '" style="padding:4px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer">예시 ' + (i + 1) + ' · ' + esc(e[0]) + '</button>'; }).join("");
+    q.value = cur.examples[0][1]; run();
+  }
+  exs.addEventListener("click", function (e) { var i = e.target.getAttribute("data-i"); if (i === null) return; q.value = cur.examples[+i][1]; run(); });
+  dsel.addEventListener("change", function () { setDS(dsel.value); });
+  sim.querySelector(".sim-run").addEventListener("click", run);
+  function fail(t) { msg.innerHTML = '<span style="color:#c23b3a;font-weight:700">오류</span> ' + esc(t); steps.innerHTML = ""; }
+  function parse(sql) {
+    var COLS = cur.cols, NUM = cur.num;
+    var s = sql.replace(/;\s*$/, "").replace(/\s+/g, " ").trim();
+    var m = s.match(/^SELECT\s+(.+?)\s+FROM\s+(\S+)(?:\s+WHERE\s+(.+?))?(?:\s+GROUP BY\s+(\S+))?(?:\s+ORDER BY\s+(\S+)(?:\s+(ASC|DESC))?)?(?:\s+LIMIT\s+(\d+))?$/i);
+    if (!m) throw "문장의 뼈대를 읽지 못했습니다. SELECT … FROM " + cur.name + " [WHERE …] [GROUP BY …] [ORDER BY …] [LIMIT …] 순서를 지켰는지, 낱말 사이에 빈칸이 있는지 확인해 보세요.";
+    var p = { select: [], from: m[2], where: [], group: m[4] || null, order: m[5] || null, dir: (m[6] || "ASC").toUpperCase(), limit: m[7] ? +m[7] : null };
+    if (p.from.toLowerCase() !== cur.name) throw '"' + p.from + '" 표는 없습니다. 지금 고른 표의 이름은 ' + cur.name + ' 입니다.';
+    m[1].split(",").forEach(function (part) {
+      part = part.trim(); var a = part.match(/^(.+?)\s+AS\s+(\S+)$/i); var expr = a ? a[1].trim() : part, alias = a ? a[2] : null;
+      var f = expr.match(/^(COUNT|SUM|AVG|MAX|MIN)\((\*|[^)]+)\)$/i);
+      if (f) { var fn = f[1].toUpperCase(), col = f[2].trim(); if (col !== "*" && COLS.indexOf(col) < 0) throw '"' + col + '" 열은 없습니다. 열은 ' + COLS.join(" · ") + ' 입니다.';
+        if (col !== "*" && fn !== "COUNT" && !NUM[col]) throw fn + "(" + col + ")는 계산할 수 없습니다. " + col + "은(는) 숫자 열이 아닙니다.";
+        p.select.push({ fn: fn, col: col, alias: alias || (fn + "(" + col + ")") }); }
+      else if (expr === "*") { COLS.forEach(function (c) { p.select.push({ col: c, alias: c }); }); }
+      else { if (COLS.indexOf(expr) < 0) throw '"' + expr + '" 열은 없습니다. 열은 ' + COLS.join(" · ") + ' 입니다. (오타나 따옴표를 확인하세요)'; p.select.push({ col: expr, alias: alias || expr }); }
+    });
+    if (m[3]) m[3].split(/\s+AND\s+/i).forEach(function (c) {
+      var w = c.trim().match(/^(\S+)\s*(=|>=|<=|>|<|LIKE)\s*('([^']*)'|(-?\d+(?:\.\d+)?))$/i);
+      if (!w) throw 'WHERE 조건 "' + c.trim() + '"을(를) 읽지 못했습니다. 예: 작성자 = \'dg_foodie\', 좋아요 > 100, 해시태그 LIKE \'%#급식%\'';
+      if (COLS.indexOf(w[1]) < 0) throw '"' + w[1] + '" 열은 없습니다.';
+      p.where.push({ col: w[1], op: w[2].toUpperCase(), val: w[4] !== undefined ? w[4] : +w[5] });
+    });
+    if (p.group && COLS.indexOf(p.group) < 0) throw 'GROUP BY의 "' + p.group + '" 열은 없습니다.';
+    var hasAgg = p.select.some(function (x) { return x.fn; });
+    if (p.group) p.select.forEach(function (x) { if (!x.fn && x.col !== p.group) throw '"' + x.col + '" 열은 GROUP BY에 없고 집계 함수로 감싸지도 않았습니다. ' + p.group + '(으)로 묶으면 한 묶음 안에 ' + x.col + ' 값이 여러 개라 한 칸에 넣을 수 없습니다. COUNT(*)나 AVG(…)처럼 집계 함수로 감싸거나 SELECT에서 빼세요. (민수가 만난 바로 그 오류)'; });
+    if (!p.group && hasAgg && p.select.some(function (x) { return !x.fn; })) throw "집계 함수와 보통 열을 함께 쓰려면 GROUP BY로 묶어야 합니다.";
+    if (p.order) { var names = p.select.map(function (x) { return x.alias; }); if (names.indexOf(p.order) < 0 && COLS.indexOf(p.order) < 0) throw 'ORDER BY의 "' + p.order + '"은(는) 결과 열 이름이나 표의 열 이름이어야 합니다.'; }
+    return p;
+  }
+  function passes(r, w) {
+    var COLS = cur.cols; var v = r[COLS.indexOf(w.col)];
+    if (w.op === "LIKE") { var pat = String(w.val), core = pat.replace(/^%|%$/g, ""), sv = String(v); if (pat.charAt(0) === "%" && pat.slice(-1) === "%") return sv.indexOf(core) >= 0; if (pat.charAt(0) === "%") return sv.slice(-core.length) === core; if (pat.slice(-1) === "%") return sv.indexOf(core) === 0; return sv === pat; }
+    if (typeof w.val === "number") v = +v;
+    switch (w.op) { case "=": return v == w.val; case ">": return v > w.val; case "<": return v < w.val; case ">=": return v >= w.val; case "<=": return v <= w.val; }
+    return false;
+  }
+  function agg(fn, col, list) {
+    if (fn === "COUNT") return list.length;
+    var vs = list.map(function (r) { return +r[cur.cols.indexOf(col)]; });
+    if (fn === "SUM") return vs.reduce(function (a, b) { return a + b; }, 0);
+    if (fn === "AVG") return Math.round(vs.reduce(function (a, b) { return a + b; }, 0) / vs.length * 10) / 10;
+    if (fn === "MAX") return Math.max.apply(null, vs);
+    return Math.min.apply(null, vs);
+  }
+  function tbl(headers, body, opt) {
+    opt = opt || {};
+    var h = '<div style="overflow-x:auto"><table class="glossary-table" style="font-size:0.82rem;margin-top:6px"><tr>' + headers.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr>";
+    body.forEach(function (r, i) {
+      var st = ""; if (opt.dim && !opt.dim[i]) st = ' class="sim-dim" style="opacity:.28"';
+      if (opt.color && opt.color[i]) st = ' style="background:' + opt.color[i] + '"';
+      h += "<tr" + st + ">" + r.map(function (v) { return "<td>" + esc(v) + "</td>"; }).join("") + "</tr>";
+    });
+    return h + "</table></div>";
+  }
+  var PALETTE = ["#fff3d6", "#e9f6f5", "#eef3ff", "#fbf4f8", "#eef6e8", "#fdeeee", "#f3f0ff", "#f0f7e6"];
+  function card(n, title, clause, body) {
+    return '<div class="sim-card" style="animation-delay:' + ((n - 1) * 0.18) + 's;border:1px solid var(--border);border-left:5px solid var(--accent);border-radius:10px;padding:10px 12px;margin:10px 0;background:#fff"><div style="font-weight:800"><span style="display:inline-block;background:var(--accent);color:#fff;border-radius:999px;font-size:.74rem;padding:1px 9px;margin-right:6px">' + n + '</span>' + esc(title) + ' <code style="font-size:.8rem">' + esc(clause) + '</code></div>' + body + '</div>';
+  }
+  function run() {
+    var p; try { p = parse(q.value); } catch (e) { fail(e); return; }
+    var COLS = cur.cols, NUM = cur.num, rows = cur.rows;
+    msg.innerHTML = '<span style="color:#3d7a37;font-weight:700">실행 성공</span> 아래 단계를 위에서부터 읽어 보세요.';
+    var html = "", n = 1;
+    html += card(n++, "표를 편다", "FROM " + cur.name, "<p style='margin:4px 0;font-size:.88rem'>" + cur.label + "(" + cur.name + ") " + rows.length + "행 전체가 출발점입니다.</p>" + tbl(COLS, rows));
+    var kept = rows;
+    if (p.where.length) {
+      var mask = rows.map(function (r) { return p.where.every(function (w) { return passes(r, w); }); });
+      kept = rows.filter(function (r, i) { return mask[i]; });
+      html += card(n++, "조건에 맞는 행만 남긴다", "WHERE " + p.where.map(function (w) { return w.col + " " + w.op + " " + (typeof w.val === "number" ? w.val : "'" + w.val + "'"); }).join(" AND "), "<p style='margin:4px 0;font-size:.88rem'>" + rows.length + "행 가운데 " + kept.length + "행이 통과했습니다. 흐린 행은 걸러진 행입니다.</p>" + tbl(COLS, rows, { dim: mask }));
+    }
+    var result;
+    if (p.group) {
+      var gi = COLS.indexOf(p.group), groups = {}, order = [];
+      kept.forEach(function (r) { var k = r[gi]; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+      var colors = kept.map(function (r) { return PALETTE[order.indexOf(r[gi]) % PALETTE.length]; });
+      html += card(n++, "같은 값끼리 묶는다", "GROUP BY " + p.group, "<p style='margin:4px 0;font-size:.88rem'>" + p.group + " 값이 같은 행끼리 " + order.length + "개 묶음이 됩니다(색 띠). 이제부터 한 묶음이 결과의 한 행입니다. 묶음 안에 값이 여러 개인 열은 그대로 쓸 수 없고 집계 함수로 감싸야 합니다.</p>" + tbl(COLS, kept, { color: colors }));
+      result = order.map(function (k) { return p.select.map(function (x) { return x.fn ? agg(x.fn, x.col, groups[k]) : k; }); });
+    } else if (p.select.some(function (x) { return x.fn; })) {
+      result = [p.select.map(function (x) { return agg(x.fn, x.col, kept); })];
+      html += card(n++, "전체를 하나로 집계한다", p.select.map(function (x) { return x.fn + "(" + x.col + ")"; }).join(", "), "<p style='margin:4px 0;font-size:.88rem'>GROUP BY가 없으므로 통과한 " + kept.length + "행 전체가 한 묶음이 되어 결과는 한 행입니다.</p>");
+    } else {
+      result = kept.map(function (r) { return p.select.map(function (x) { return r[COLS.indexOf(x.col)]; }); });
+    }
+    var headers = p.select.map(function (x) { return x.alias; });
+    html += card(n++, "보여 줄 열만 고른다", "SELECT " + headers.join(", "), "<p style='margin:4px 0;font-size:.88rem'>" + (p.group ? "묶음마다 " : "") + headers.length + "개 열만 남깁니다.</p>");
+    if (p.order) {
+      var oi = headers.indexOf(p.order), ci = COLS.indexOf(p.order);
+      if (oi >= 0) result.sort(function (a, b) { var x = a[oi], y = b[oi]; var c = (typeof x === "number" && typeof y === "number") ? x - y : String(x).localeCompare(String(y), "ko"); return p.dir === "DESC" ? -c : c; });
+      else if (!p.group && ci >= 0) { var idx = kept.map(function (r, i) { return i; }); idx.sort(function (i, j) { var x = kept[i][ci], y = kept[j][ci]; var c = NUM[COLS[ci]] ? (+x) - (+y) : String(x).localeCompare(String(y), "ko"); return p.dir === "DESC" ? -c : c; }); result = idx.map(function (i) { return result[i]; }); }
+      html += card(n++, "정렬한다", "ORDER BY " + p.order + " " + p.dir, "<p style='margin:4px 0;font-size:.88rem'>" + p.order + " 기준 " + (p.dir === "DESC" ? "내림차순(큰 것부터, 시각이면 최신부터)" : "오름차순(작은 것부터)") + "으로 줄을 세웁니다.</p>");
+    }
+    if (p.limit !== null) { var before = result.length; result = result.slice(0, p.limit); html += card(n++, "앞에서 몇 행만 자른다", "LIMIT " + p.limit, "<p style='margin:4px 0;font-size:.88rem'>" + before + "행 가운데 앞의 " + result.length + "행만 남깁니다." + (p.order ? " 피드가 '최신 몇 개'만 불러오는 것이 이 두 낱말의 조합입니다." : " ORDER BY가 없으면 어떤 행이 앞에 오는지 보장되지 않습니다.") + "</p>"); }
+    var feed = "";
+    if (cur.name === "posts" && !p.select.some(function (x) { return x.fn; }) && result.length) {
+      var hi = function (c) { return headers.indexOf(c); };
+      feed = '<div style="font-weight:800;margin-top:10px">📱 앱 화면 미리보기</div><div class="feed">' + result.map(function (r, i) {
+        var ph = hi("사진") >= 0 ? r[hi("사진")] : "🐾", who = hi("작성자") >= 0 ? r[hi("작성자")] : "", tx = hi("내용") >= 0 ? r[hi("내용")] : (hi("해시태그") >= 0 ? r[hi("해시태그")] : ""), lk = hi("좋아요") >= 0 ? "❤ " + r[hi("좋아요")] : "";
+        return '<div class="fc" style="animation-delay:' + (0.6 + i * 0.12) + 's"><div class="ph">' + esc(ph) + '</div><div class="who">' + esc(who) + '</div><div class="tx">' + esc(tx) + '</div><div class="lk">' + esc(lk) + '</div></div>';
+      }).join("") + '</div><p style="font-size:.82rem;color:var(--muted);margin:6px 0 0">SELECT에 사진·작성자·내용·좋아요 열이 있으면 카드에 채워집니다. 빠진 열은 카드에도 없습니다.</p>';
+    }
+    html += '<div class="sim-card" style="animation-delay:' + ((n - 1) * 0.18) + 's;border:1.5px solid var(--green);border-radius:10px;padding:10px 12px;margin:10px 0;background:var(--green-soft)"><div style="font-weight:800;color:#3d7a37">최종 결과 · ' + result.length + '행 — 앱 화면에 나타나는 것</div>' + tbl(headers, result) + feed + '</div>';
+    steps.innerHTML = html;
+  }
+  setDS("posts");
+  // ---- 쓰기: 댓글 표 시뮬레이션
+  var W = sim.querySelector('[data-pane="write"]');
+  var START = [[1, "dog_bori", "박스 안이 그렇게 좋아? 🐶", 12, "09-02 13:15"], [2, "hamzzi_choco", "포장지가 더 아늑하지", 8, "09-02 13:22"], [3, "rabbit_tori", "우리 집 상자도 빌려줄게", 5, "09-02 13:40"], [4, "parrot_kiwi", "박스! 박스!", 21, "09-02 14:05"], [5, "cat_mong", "다들 고마워요 😺", 3, "09-02 15:30"]];
+  var gb = START.map(function (r) { return r.slice(); }), nextId = 6, wtb = W.querySelector(".w-table tbody"), wsql = W.querySelector(".w-sql"), wmsg = W.querySelector(".w-out");
+  function now() { var d = new Date(); return ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
+  function drawW(hl, mode) {
+    wtb.innerHTML = gb.length ? gb.map(function (r) {
+      var isH = (hl !== undefined && r[0] === hl), cls = isH && mode === "ins" ? ' class="row-in"' : "";
+      var st = isH ? ' style="background:' + (mode === "upd" ? "#eef3ff" : mode === "like" ? "#fdeeee" : "#eef6e8") + '"' : "";
+      return "<tr" + cls + st + ">" + r.map(function (v, j) { var t = esc(v); if (j === 3) t = (isH && mode === "like" ? '<span class="heart-pop">❤</span> ' : "❤ ") + t; return "<td>" + t + "</td>"; }).join("") + "</tr>";
+    }).join("") : '<tr><td colspan="5" style="text-align:center;color:#c23b3a;font-weight:700">표가 비었습니다 — 행 0개</td></tr>';
+  }
+  function removeRow(id, after) {
+    var trs = wtb.querySelectorAll("tr"), done = false;
+    trs.forEach(function (tr) { if (tr.firstChild && tr.firstChild.textContent === String(id)) { tr.classList.add("row-out"); done = true; setTimeout(after, 420); } });
+    if (!done) after();
+  }
+  function say(sql, text, bad) { wsql.textContent = sql; wmsg.innerHTML = (bad ? '<span style="color:#c23b3a;font-weight:700">주의</span> ' : '<span style="color:#3d7a37;font-weight:700">해석</span> ') + esc(text); }
+  function find(id) { return gb.filter(function (x) { return x[0] === id; })[0]; }
+  W.querySelector(".w-insert").addEventListener("click", function () {
+    var n = W.querySelector(".w-name").value.trim(), m = W.querySelector(".w-msg").value.trim();
+    if (!n || !m) { say("-- 실행하지 않음", "계정 이름과 댓글 내용이 모두 있어야 저장합니다(빈 값 저장 금지 = 데이터 무결성).", true); return; }
+    var id = nextId++; gb.push([id, n, m, 0, now()]); drawW(id, "ins");
+    say("INSERT INTO comments (작성자, 댓글)\nVALUES ('" + n + "', '" + m + "');", "댓글 표에 새 행 하나를 넣습니다. id(" + id + ")·좋아요(0)·작성시각은 직접 넣지 않아도 자동으로 채워집니다. 행이 " + gb.length + "개가 되었습니다. 화면에서는 댓글 하나가 새로 뜹니다.");
+    W.querySelector(".w-name").value = ""; W.querySelector(".w-msg").value = "";
+  });
+  W.querySelector(".w-update").addEventListener("click", function () {
+    var id = +W.querySelector(".w-uid").value, m = W.querySelector(".w-umsg").value.trim();
+    if (!id || !m) { say("-- 실행하지 않음", "댓글 번호(id)와 새 내용을 적어 주세요.", true); return; }
+    var r = find(id), sql = "UPDATE comments SET 댓글 = '" + m + "' WHERE id = " + id + ";";
+    if (!r) { drawW(); say(sql, "id가 " + id + "인 행이 없어 바뀐 행이 0개입니다. 오류는 아니지만 아무 일도 일어나지 않았습니다.", true); return; }
+    r[2] = m; drawW(id, "upd"); say(sql, "id가 " + id + "인 행 하나만 찾아 댓글 열을 바꿉니다. WHERE가 행 하나를 정확히 가리켰습니다. 실제 앱은 여기에 '작성자 = 나' 조건을 하나 더 붙여 남의 댓글을 못 고치게 합니다.");
+  });
+  W.querySelector(".w-like").addEventListener("click", function () {
+    var id = +W.querySelector(".w-lid").value; if (!id) { say("-- 실행하지 않음", "좋아요를 누를 댓글 번호(id)를 적어 주세요.", true); return; }
+    var r = find(id), sql = "UPDATE comments SET 좋아요 = 좋아요 + 1 WHERE id = " + id + ";";
+    if (!r) { drawW(); say(sql, "id가 " + id + "인 행이 없어 바뀐 행이 0개입니다.", true); return; }
+    r[3] += 1; drawW(id, "like"); say(sql, "좋아요 단추 한 번 = UPDATE 한 문장. id가 " + id + "인 행의 좋아요 값을 지금 값에 1을 더한 값으로 바꿉니다(" + (r[3] - 1) + " → " + r[3] + "). 게시물의 ❤ 숫자가 올라가는 원리입니다.");
+  });
+  W.querySelector(".w-delete").addEventListener("click", function () {
+    var id = +W.querySelector(".w-did").value; if (!id) { say("-- 실행하지 않음", "지울 댓글 번호(id)를 적어 주세요.", true); return; }
+    var before = gb.length, sql = "DELETE FROM comments WHERE id = " + id + ";";
+    if (!find(id)) { say(sql, "id가 " + id + "인 행이 없어 지워진 행이 0개입니다.", true); return; }
+    removeRow(id, function () { gb = gb.filter(function (x) { return x[0] !== id; }); drawW(); say(sql, "id가 " + id + "인 행 하나만 지웠습니다. 행이 " + gb.length + "개 남았습니다. 화면에서는 댓글 하나가 사라집니다."); });
+  });
+  W.querySelector(".w-delete-all").addEventListener("click", function () {
+    var before = gb.length;
+    wtb.querySelectorAll("tr").forEach(function (tr, i) { tr.style.animationDelay = (i * 0.08) + "s"; tr.classList.add("row-out"); });
+    setTimeout(function () { gb = []; drawW(); say("DELETE FROM comments;", "WHERE가 없어서 " + before + "행이 전부 지워졌습니다. 조건 없는 삭제·갱신은 표 전체에 적용됩니다. 실제 서비스라면 이 게시물의 댓글이 모두 사라지고 되돌릴 수 없습니다. 여기서는 \"처음으로\"를 누르면 됩니다.", true); }, 450 + before * 80);
+  });
+  W.querySelector(".w-reset").addEventListener("click", function () { gb = START.map(function (r) { return r.slice(); }); nextId = 6; drawW(); say("-- 표를 처음 상태로 되돌렸습니다", "다섯 행이 다시 나타났습니다. 실제 데이터베이스에는 이런 단추가 없으므로 WHERE를 늘 확인합니다."); });
+  drawW();
 })();
 </script>
 
