@@ -425,6 +425,23 @@
   <p>1차시에 배포한 내 포트폴리오 앱에 방명록 페이지를 추가합니다. 방문자가 남긴 글이 수파베이스의 방명록 테이블에 쌓이고, 쌓인 글이 목록으로 나타나는 것이 목표입니다.</p>
 
   <ol class="steps">
+    <li><span class="st">먼저 — 비밀 금고(secrets)에 접속 정보 두 줄 넣기</span><br>
+      선생님이 클래스룸 <b>비공개 게시</b>로 보낸 접속 정보(주소와 키)는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 배포된 내 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸을 열면 2차시에 넣은 KOBIS_KEY 한 줄이 있습니다. 그 아래에 다음 두 줄을 붙여 넣고 저장합니다. 따옴표 안의 값만 클래스룸에서 받은 것으로 바꿉니다.
+      <div class="codewrap code"><span class="label">Secrets에 덧붙일 두 줄</span><pre>SUPABASE_URL = "선생님이 준 프로젝트 주소를 여기에"
+SUPABASE_KEY = "선생님이 준 키를 여기에"</pre></div>
+      <div class="callout warn">
+        <div class="h">⚠️ 이름 세 곳 일치 — 하나라도 다르면 못 찾는다</div>
+        <p>두 이름 <b>SUPABASE_URL</b>·<b>SUPABASE_KEY</b>는 세 곳에 등장하고, 철자가 <b>한 글자까지 똑같아야</b> 합니다. 다르면 앱이 금고에서 값을 찾지 못하고 멈춥니다(KeyError). 키는 짝에게도 보여 주지 않습니다. 학급 전원이 같은 표를 쓰므로, 키가 새면 남이 우리 반 방명록에 마음대로 쓸 수 있습니다.</p>
+        <table class="daymap">
+          <thead><tr><th>어디</th><th>어떤 모습</th></tr></thead>
+          <tbody>
+            <tr><td><b>① 비밀 금고(Secrets)</b></td><td><code>SUPABASE_URL = "…"</code> · <code>SUPABASE_KEY = "…"</code> — 방금 저장한 두 줄</td></tr>
+            <tr><td><b>② 프롬프트</b></td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와"</td></tr>
+            <tr><td><b>③ AI가 준 코드</b></td><td><code>st.secrets["SUPABASE_URL"]</code> · <code>st.secrets["SUPABASE_KEY"]</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </li>
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 앱에 방명록 페이지를 추가해 줘.
 방문자가 이름과 한 줄 소감을 남기면 수파베이스 표에 저장되고,
@@ -432,7 +449,7 @@
 표는 이미 만들어져 있어. 표 이름은 guestbook이고
 열은 name(이름) · message(소감) · created_at(작성 시각) · password(비밀번호)야.
 새 표를 만들지 말고 이 표에 그대로 연결해 줘.
-접속 정보는 비밀 금고에 넣어 줘.
+접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와. 코드에는 절대 쓰지 마.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/13_방명록.py</span><pre># pages/13_방명록.py — 수파베이스 표에 글을 남기고 읽는다
 import streamlit as st
@@ -1166,7 +1183,7 @@ LIMIT 5;</pre></div>
     <tbody>
       <tr><td><b>표 이름과 열 이름</b>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다</td><td>"표 이름은 guestbook이고 열은 name · message · created_at · password야"</td></tr>
       <tr><td><b>새 표를 만들지 말 것</b></td><td>학급 공용 프로젝트에서는 학생이 표를 만들 권한이 없다</td><td>"새 표를 만들지 말고 이 표에 그대로 연결해 줘"</td></tr>
-      <tr><td><b>접속 정보는 비밀 금고에</b></td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td><td>"접속 정보는 비밀 금고에 넣어 줘"</td></tr>
+      <tr><td><b>접속 정보는 비밀 금고에</b></td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와"</td></tr>
       <tr><td><b>무결성 조건</b></td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"빈 칸으로 제출하면 저장하지 말고 안내 문구를 보여 줘"</td></tr>
     </tbody>
   </table>
