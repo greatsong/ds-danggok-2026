@@ -35,8 +35,8 @@
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
       <li><b>두 API 비교</b> — KOBIS와 나이스, 무엇이 같고 무엇이 다른가</li>
-      <li><b>페이지로 나누기</b> — 급식 앱 둘을 한 파일에 덮어쓰지 않고 pages 폴더의 페이지로</li>
-      <li><b>바이브 코딩</b> — 내 포트폴리오 앱에 급식 페이지 추가 + 두 학기 154일 최다 메뉴 TOP 10</li>
+      <li><b>페이지로 나누기</b> — 급식 화면 셋을 한 파일에 덮어쓰지 않고 main.py와 pages 폴더로</li>
+      <li><b>바이브 코딩</b> — 학교를 골라 보는 첫 화면 + 우리 학교 달력별 + 메뉴별(두 학기 154일 최다 메뉴 TOP 10)</li>
       <li><b>기록</b> — 함께 자주 나올 것 같은 메뉴 짝 3개 (12차시에 다시 꺼냅니다)</li>
     </ul>
   </div>
@@ -151,29 +151,22 @@
     <p class="t">→ 2차시에 읽은 문장이 오늘 두 번째로 실물이 된다. 급식 JSON도 row 하나가 표의 행 하나로 바뀐다.</p>
   </div>
 
-  <h2>3. 급식 앱은 여러 개가 된다 — 페이지로 나눈다</h2>
-  <p>오늘 급식 데이터로 만드는 앱은 둘입니다. 하나는 나이스 급식 API로 날짜를 골라 그날 식단·알레르기·칼로리를 보는 오늘의 급식이고, 다른 하나는 미리 쌓아 둔 두 학기 154일 표로 가장 자주 나온 메뉴 TOP 10을 세는 급식 TOP 10입니다. 둘은 종류가 다릅니다. 하나는 API로 그날 것을 실시간으로 받아 오고 다른 하나는 쌓아 둔 표를 집계합니다. 지금까지처럼 main.py 한 파일에 덮어쓰면 먼저 만든 앱이 화면에서 사라집니다. 스트림릿은 앱 폴더 안에 <b>pages</b> 폴더를 두면 그 안의 파일 하나하나가 왼쪽 메뉴의 페이지가 되며, 설정 파일이나 메뉴 코드는 필요하지 않습니다. main.py(4차시 도감 Ⅱ)는 그대로 첫 화면으로 남습니다.</p>
+  <h2>3. 급식 앱은 화면 셋 — 페이지로 나눈다</h2>
+  <p>오늘 급식 데이터로 만드는 화면은 셋입니다. 첫 화면은 학교를 검색해 고르면 그 학교의 그날 급식을 불러오는 화면입니다. 페이지 1은 우리 학교만 달력에서 날짜를 골라 식단·알레르기·칼로리를 보는 화면입니다. 페이지 2는 미리 쌓아 둔 두 학기 154일 표로 가장 자주 나온 메뉴 TOP 10을 세는 화면입니다. 셋은 종류가 다릅니다. 여러 학교 실시간 조회, 우리 학교 날짜별 조회, 우리 학교 메뉴별 집계로 나뉩니다. 한 파일에 차례로 덮어쓰면 먼저 만든 화면이 사라집니다. 첫 화면은 main.py로 만들고, 나머지 둘은 <b>pages</b> 폴더에 파일 하나씩 넣습니다. 스트림릿은 main.py 옆에 pages 폴더를 두면 그 안의 파일 하나하나가 왼쪽 메뉴의 페이지가 됩니다. 설정 파일이나 메뉴 코드는 필요하지 않습니다.</p>
   <table class="daymap">
     <thead><tr><th>규칙</th><th>내용</th></tr></thead>
     <tbody>
       <tr><td><b>폴더 이름</b></td><td>pages로 고정 — 다른 이름은 메뉴로 인식되지 않는다</td></tr>
-      <tr><td><b>메뉴 순서</b></td><td>파일 이름 앞의 숫자가 정한다 (5_오늘의_급식.py → 6_급식_TOP10.py)</td></tr>
-      <tr><td><b>첫 화면</b></td><td>main.py가 그대로 첫 화면이 되어 메뉴 맨 위에 놓인다. 파일 이름에서 앞 숫자와 밑줄을 뗀 것이 메뉴 이름이다</td></tr>
+      <tr><td><b>메뉴 순서</b></td><td>파일 이름 앞의 숫자가 정한다 (1_달력별_급식.py → 2_메뉴별_급식.py)</td></tr>
+      <tr><td><b>첫 화면</b></td><td>main.py가 첫 화면이 되어 메뉴 맨 위에 놓인다. 파일 이름에서 앞 숫자와 밑줄을 뗀 것이 메뉴 이름이다</td></tr>
     </tbody>
   </table>
-  <div class="codewrap code"><span class="label">지금 (4차시 직후)</span><pre>내 저장소/
-├── main.py              ← 4차시 도감 Ⅱ
-└── requirements.txt</pre></div>
   <div class="codewrap code"><span class="label">오늘이 끝나면</span><pre>내 저장소/
-├── main.py              ← 4차시 도감 Ⅱ (첫 화면, 그대로)
+├── main.py              ← 첫 화면: 학교를 골라 급식 보기
 ├── requirements.txt     ← 저장소에 하나. 앱 전체에 적용된다
 └── pages/
-    ├── 5_오늘의_급식.py    ← ①② 하루 조회 (API)
-    └── 6_급식_TOP10.py     ← ③ 두 학기 최다 메뉴 (쌓아 둔 표)</pre></div>
-  <div class="callout tip">
-    <div class="h">💡 앞 차시 앱도 페이지로 되살릴 수 있다</div>
-    <p>1~4차시에 만든 기온·박스오피스·도감 1 앱의 코드는 저장소의 커밋 기록에 그대로 남아 있습니다. 같은 방법으로 pages 폴더에 파일을 만들고 그 코드를 붙여 넣으면 페이지로 되살아납니다. 오늘 꼭 하지 않아도 되며, 시간이 날 때 하면 됩니다.</p>
-  </div>
+    ├── 1_달력별_급식.py    ← 우리 학교, 날짜를 골라 보기 (API)
+    └── 2_메뉴별_급식.py    ← 우리 학교, 두 학기 최다 메뉴 (쌓아 둔 표)</pre></div>
   <div class="callout warn">
     <div class="h">⚠️ 메뉴에 페이지가 안 보일 때 볼 곳</div>
     <ul>
@@ -183,13 +176,102 @@
     </ul>
   </div>
 
-  <h2>4. 실습 — 급식 페이지를 내 앱에 추가한다</h2>
-  <p>내 앱에 첫 급식 페이지를 답니다. 2차시에는 프롬프트를 쓰기 전에 키를 비밀 금고(secrets)에 넣는 단계가 있었지만, 오늘은 <b>넣을 키가 없으므로 그 단계가 통째로 없습니다</b>. 프롬프트 끝에 공식 문서 발췌를 붙이는 요령은 그대로입니다 — AI가 필드 이름을 지어내지 못하게 막는 안전장치입니다.</p>
+  <h2>4. 실습 — 화면 셋을 차례로 만든다</h2>
+  <p>첫 화면(main.py)부터 만듭니다. 2차시에는 프롬프트를 쓰기 전에 키를 비밀 금고(secrets)에 넣는 단계가 있었지만, 오늘은 <b>넣을 키가 없으므로 그 단계가 통째로 없습니다</b>. 프롬프트 끝에 공식 문서 발췌를 붙이는 요령은 그대로입니다 — AI가 필드 이름을 지어내지 못하게 막는 안전장치입니다.</p>
 
   <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 포트폴리오 앱에 '우리 학교 급식' 페이지를 추가해 줘.
-아래에 나이스 교육정보 개방 포털 문서에서 복사한 내용을 붙였어. 이 API는 인증키가 없어도 돼.
+    <li><span class="st">① 샘플 프롬프트 — 첫 화면(main.py): 학교를 골라 급식 보기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>스트림릿 앱(main.py)을 새로 만들어 줘. 제목은 '학교 급식 찾아보기'.
+아래에 나이스 교육정보 개방 포털 문서에서 복사한 내용을 붙였어. 두 API 모두 인증키가 없어도 돼.
+
+- 학교 이름을 입력하면 학교 정보 API로 그 이름이 들어간 학교를 찾아 목록에서 고를 수 있게 해 줘.
+  같은 이름의 학교가 여러 지역에 있으니 지역도 함께 보여 줘.
+- 날짜를 달력에서 고르면, 고른 학교의 그날 중식 메뉴를 보여 줘.
+  메뉴 뒤 괄호 속 숫자는 알레르기 번호니까 떼고 보여 주고, 칼로리도 함께.
+- 학교를 못 찾거나 그날 급식이 없으면 오류 대신 안내 문구를 보여 줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.
+
+──── 아래는 나이스 교육정보 개방 포털 문서에서 복사한 부분 ────
+[학교기본정보] 요청 주소: https://open.neis.go.kr/hub/schoolInfo
+요청변수: Type=json · SCHUL_NM(학교 이름, 일부만 적어도 검색된다)
+응답 구조: schoolInfo의 두 번째 상자 안 row 목록에 학교별로
+  SCHUL_NM(학교명) · ATPT_OFCDC_SC_CODE(교육청 코드) · SD_SCHUL_CODE(학교 코드) · LCTN_SC_NM(지역)
+  ※ 못 찾으면 row 없이 RESULT 상자가 온다. 인증키 없이 한 번에 5건까지 온다.
+[급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo
+요청변수: Type=json · ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE(위에서 찾은 두 코드) · MMEAL_SC_CODE=2(중식) ·
+  MLSV_FROM_YMD, MLSV_TO_YMD(조회 시작일과 끝일, 하이픈 없는 여덟 자리)
+응답 구조: mealServiceDietInfo의 두 번째 상자 안 row 목록에 날짜별로
+  MLSV_YMD(급식일) · DDISH_NM(메뉴 전체 - &lt;br/&gt;로 구분되고, 메뉴 뒤 괄호 숫자는 알레르기 번호) · CAL_INFO(칼로리)
+  ※ 급식이 없는 날은 row가 없고 RESULT 상자가 온다. 오류가 아니다.</pre></div>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 실행하고 관찰한다</span><br>
+      아래는 이 프롬프트로 받은 코드의 한 예입니다. 여러분 화면이 이런 모습이면 성공이고, <b>글자까지 같지 않아도 됩니다</b>.
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">main.py</button></span><button class="copy-btn">복사</button><pre># main.py — 학교를 검색해 고르면 그 학교의 급식을 보여 주는 첫 화면
+import datetime
+import re
+
+import requests
+import streamlit as st
+
+st.set_page_config(page_title="학교 급식 찾아보기", layout="wide")
+st.title("🍚 학교 급식 찾아보기")
+st.write("학교 이름을 검색해 고르면 그 학교의 그날 중식을 보여 줍니다. 왼쪽 메뉴에는 우리 학교만 보는 페이지가 있습니다.")
+
+name = st.text_input("학교 이름", value="당곡고등학교")
+picked = st.date_input("날짜를 고르세요", value=datetime.date.today())
+
+# 1) 학교 이름으로 교육청 코드와 학교 코드를 찾는다 (인증키 없이, 한 번에 5건까지)
+info = requests.get(
+    "https://open.neis.go.kr/hub/schoolInfo",
+    params={"Type": "json", "SCHUL_NM": name},
+    timeout=10,
+).json()
+
+if "schoolInfo" not in info:
+    # 못 찾으면 row 없이 RESULT 상자만 온다 — 오류가 아니다
+    st.warning("그 이름의 학교를 찾지 못했습니다. 이름을 더 정확히 적어 보세요.")
+    st.stop()
+
+schools = info["schoolInfo"][1]["row"]
+labels = [f"{s['SCHUL_NM']} ({s['LCTN_SC_NM']})" for s in schools]
+chosen = schools[labels.index(st.selectbox("학교 고르기", labels))]
+
+# 2) 고른 학교의 그날 중식을 불러온다
+ymd = picked.strftime("%Y%m%d")
+meal = requests.get(
+    "https://open.neis.go.kr/hub/mealServiceDietInfo",
+    params={
+        "Type": "json",
+        "ATPT_OFCDC_SC_CODE": chosen["ATPT_OFCDC_SC_CODE"],
+        "SD_SCHUL_CODE": chosen["SD_SCHUL_CODE"],
+        "MMEAL_SC_CODE": "2",
+        "MLSV_FROM_YMD": ymd,
+        "MLSV_TO_YMD": ymd,
+    },
+    timeout=10,
+).json()
+
+st.subheader(chosen["SCHUL_NM"] + " · " + picked.strftime("%Y년 %m월 %d일") + " 중식")
+if "mealServiceDietInfo" not in meal:
+    # 급식이 없는 날은 row 없이 RESULT 상자만 온다 — 오류가 아니다
+    st.info("급식이 없는 날입니다. (주말·방학·공휴일)")
+else:
+    row = meal["mealServiceDietInfo"][1]["row"][0]
+    for dish in row["DDISH_NM"].split("&lt;br/&gt;"):
+        # 괄호 속 알레르기 번호는 떼고 보여 준다
+        st.markdown("- " + re.sub(r"\s*\([0-9.]+\)", "", dish.strip()))
+    st.metric("칼로리", row["CAL_INFO"])</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+requests
+pandas
+plotly</pre></div>
+      실행되면 세 가지를 관찰합니다. 다른 학교 이름 예를 들어 중앙고를 검색하면 지역이 다른 같은 이름의 학교가 목록에 나오는지 확인합니다. 일요일 날짜를 고르면 오류 대신 안내 문구가 나오는지 확인합니다. 없는 이름을 넣으면 안내 문구가 나오는지 확인합니다. 학교 검색은 인증키 없이 한 번에 5건까지만 옵니다. 이름을 구체적으로 적을수록 원하는 학교가 목록에 들어옵니다.</li>
+    <li><span class="st">깃허브에 올리기 — main.py 교체</span><br>
+      저장소의 main.py를 열어 연필 아이콘으로 전체를 지우고 새 코드를 붙여 넣어 커밋합니다. requirements.txt도 열어 위 네 줄이 다 있는지 확인하고, 없는 줄은 추가해 커밋합니다. 커밋하면 앱이 스스로 다시 배포됩니다(1~3분).</li>
+    <li><span class="st">③ 페이지 1 — 우리 학교 달력별 급식</span><br>
+      첫 화면은 학교를 고르는 화면이므로, 우리 학교만 바로 보는 페이지를 따로 둡니다. 알레르기 번호를 켜고 끌 수 있게 합니다.
+      <div class="codewrap improve"><span class="label">③ 페이지 추가 프롬프트</span><button class="copy-btn">복사</button><pre>pages 폴더에 '우리 학교 달력별 급식' 페이지를 추가해 줘. 파일 이름은 1_달력별_급식.py.
+첫 화면과 같은 급식 API를 쓰되, 이 페이지는 당곡고등학교로 고정해.
 
 - 날짜를 달력에서 고르면 그날 당곡고등학교 중식 메뉴를 카드로 보여 줘.
 - 메뉴 이름 뒤 괄호 속 숫자는 알레르기 번호야. 평소엔 떼고 보여 주되,
@@ -206,10 +288,7 @@
   CAL_INFO(칼로리) · ORPLC_INFO(원산지)
   ※ 급식이 없는 날은 row가 없고 RESULT 상자가 온다. 오류가 아니다.
   ※ 인증키 없이 부를 수 있고, 한 번에 오는 건수에 제한이 있다. 조회 기간은 짧게 잡는다.</pre></div>
-    </li>
-    <li><span class="st">② AI가 준 코드 — 실행하고 관찰한다</span><br>
-      아래는 이 프롬프트로 받은 코드의 한 예입니다. 여러분 화면이 이런 모습이면 성공이고, <b>글자까지 같지 않아도 됩니다</b>.
-      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">pages/5_오늘의_급식.py</button></span><button class="copy-btn">복사</button><pre># pages/5_오늘의_급식.py — 나이스 급식 API로 그날 식단을 보여 주는 페이지
+      <div class="codewrap code"><span class="label">AI가 준 코드 예시 — <button type="button" class="fname">pages/1_달력별_급식.py</button></span><button class="copy-btn">복사</button><pre># pages/1_달력별_급식.py — 나이스 급식 API로 그날 식단을 보여 주는 페이지
 import datetime
 import re
 
@@ -250,13 +329,13 @@ else:
             # 괄호 속 알레르기 번호 떼기
             dish = re.sub(r"\s*\([0-9.]+\)", "", dish)
         st.markdown("- " + dish)
-    st.metric("칼로리", row["CAL_INFO"])</pre></div></li>
-    <li><span class="st">깃허브에 올리기 — pages 폴더에 새 파일로</span><br>
-      저장소에서 <b>Add file → Create new file</b>을 누르고, 파일 이름 칸에 <button type="button" class="fname">pages/5_오늘의_급식.py</button>를 눌러 복사한 이름을 입력합니다. 슬래시(/)를 치는 순간 pages 폴더가 만들어집니다. ②의 코드를 붙여 넣고 커밋합니다. 이모지 없는 이름이 안전하고, 한 글자만 달라도 다른 페이지가 됩니다. 커밋하면 앱이 스스로 다시 배포됩니다(1~3분).
+    st.metric("칼로리", row["CAL_INFO"])</pre></div>
+      받은 코드는 저장소에서 <b>Add file → Create new file</b>을 누르고, 파일 이름 칸에 <button type="button" class="fname">pages/1_달력별_급식.py</button>를 눌러 복사한 이름을 입력해 붙여 넣고 커밋합니다. 슬래시(/)를 치는 순간 pages 폴더가 만들어집니다. 이모지 없는 이름이 안전하고, 한 글자만 달라도 다른 페이지가 됩니다.
       다시 배포되면 세 가지를 관찰합니다. 수업일을 고르면 그날 식단과 칼로리가 나오는지, '알레르기 정보 보기'를 켜면 괄호 숫자가 나타나는지, 그리고 <b>일요일이나 방학 날짜를 골랐을 때</b> 오류 화면 대신 안내 문구가 나오는지. 빈 응답을 앱이 어떻게 받아 내는지가 오늘의 관찰 대상입니다.</li>
-    <li><span class="st">③ 개선 프롬프트 — 하루에서 기간 전체로</span><br>
-      달력 조회는 하루씩만 보여 줍니다. "이 기간 동안 무엇이 가장 자주 나왔나"에 답하려면, 건수 제한이 있는 API 대신 <b>미리 쌓아 둔 표</b>로 갈아탑니다. 3차시에 하루치 API에서 365일 표로 전환했던 것과 같은 장면입니다. 이번에는 앞 페이지를 고치지 않고 <b>두 번째 급식 페이지</b>를 새로 만듭니다.
-      <div class="codewrap improve"><span class="label">③ 프롬프트 개선</span><button class="copy-btn">복사</button><pre>좋아, 급식 페이지를 하나 더 만들어 줘. 앞 페이지는 그대로 두고 새 파일로.
+    <li><span class="st">③ 페이지 2 — 우리 학교 메뉴별 급식 (두 학기 TOP 10)</span><br>
+      달력 조회는 하루씩만 보여 줍니다. "이 기간 동안 무엇이 가장 자주 나왔나"에 답하려면, 건수 제한이 있는 API 대신 <b>미리 쌓아 둔 표</b>로 갈아탑니다. 3차시에 하루치 API에서 365일 표로 전환했던 것과 같은 장면입니다.
+      <div class="codewrap improve"><span class="label">③ 페이지 추가 프롬프트</span><button class="copy-btn">복사</button><pre>pages 폴더에 '우리 학교 메뉴별 급식' 페이지를 하나 더 추가해 줘. 파일 이름은 2_메뉴별_급식.py.
+앞 페이지는 그대로 두고 새 파일로.
 - 2025년 9월부터 2026년 7월까지 두 학기 전체가 궁금해. 이번엔 API 말고 미리 쌓아 둔 표를 써:
   https://raw.githubusercontent.com/greatsong/modudata/main/data/danggok_meals.csv
   우리 학교 급식 기록이야. 열은 날짜(여덟 자리 숫자) · 식사 · 메뉴이고,
@@ -264,7 +343,7 @@ else:
   메뉴 열은 한 날의 메뉴 여러 개가 세로막대 기호로 이어져 있어.
 - 메뉴를 낱개로 나눠서, 이 기간에 가장 자주 나온 메뉴 TOP 10을 가로 막대그래프로 보여 줘.
 - 메뉴마다 154일 중 며칠 나왔는지 일수와 비율을 함께 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">pages 폴더에 두 번째 파일로 만듭니다</p><div class="codewrap code"><span class="label">pages/6_급식_TOP10.py</span><pre># pages/6_급식_TOP10.py — 두 학기 급식 기록에서 최다 등장 메뉴 TOP 10
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">pages 폴더의 두 번째 파일로 만듭니다</p><div class="codewrap code"><span class="label">pages/2_메뉴별_급식.py</span><pre># pages/2_메뉴별_급식.py — 두 학기 급식 기록에서 최다 등장 메뉴 TOP 10
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -294,18 +373,9 @@ fig = px.bar(top10.sort_values("일수"), x="일수", y="메뉴", orientation="h
 st.plotly_chart(fig, width="stretch")
 st.dataframe(top10, hide_index=True)
 st.caption(f"중식 {days}일 기준 · 이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
-      받은 코드는 <b>Add file → Create new file</b>로 <button type="button" class="fname">pages/6_급식_TOP10.py</button>를 만들어 붙여 넣고 커밋합니다. 1~3분 뒤 왼쪽 메뉴에 급식 페이지 둘이 나란히 보이면 성공입니다.
+      받은 코드는 같은 방법으로 <button type="button" class="fname">pages/2_메뉴별_급식.py</button>를 만들어 붙여 넣고 커밋합니다. 1~3분 뒤 왼쪽 메뉴에 달력별·메뉴별 두 페이지가 보이면 성공입니다.
     </li>
   </ol>
-
-  <div class="callout check">
-    <div class="h">✔️ 여기까지 되었는지 확인</div>
-    <ul>
-      <li>날짜를 고르면 그날 식단과 칼로리가 나온다. 알레르기 번호는 켜고 끌 수 있다.</li>
-      <li>일요일 날짜를 골랐을 때 오류 화면 대신 "급식이 없는 날입니다"가 나온다.</li>
-      <li>두 학기 154일 최다 메뉴 TOP 10 가로 막대그래프가 일수·비율과 함께 나온다.</li>
-    </ul>
-  </div>
 
   <h2>5. 발견 — 154일의 1위</h2>
   <p>③의 그래프에서 1위를 확인합니다. 중식 154일을 낱개 메뉴로 나눠 세면(고유 메뉴 453종, 하루 평균 6.8품) 최다 등장 TOP 10은 다음과 같습니다.</p>
@@ -339,7 +409,7 @@ st.caption(f"중식 {days}일 기준 · 이 그래프로 알 수 있는 것: (�
   </div>
 
   <h2>7. 갤러리 — 포트폴리오를 공개한다</h2>
-  <p>앱은 이제 세 화면입니다. 첫 화면인 도감 Ⅱ와 급식 페이지 둘(오늘의 급식, 급식 TOP 10)이 있습니다. 앱 주소를 갤러리에 올리고(주소는 클래스룸 공지 참고), 짝의 앱을 열어 봅니다. 피드백은 두 줄이면 됩니다.</p>
+  <p>앱은 세 화면으로 구성됩니다. 첫 화면은 학교를 골라 보는 급식 화면입니다. 달력별 급식과 메뉴별 급식 화면이 함께 있습니다. 앱 주소를 갤러리에 올리고(주소는 클래스룸 공지 참고) 짝의 앱을 열어 봅니다. 피드백은 두 줄로 작성합니다.</p>
   <ul>
     <li><b>좋았던 것 하나</b> — 내 앱에 없는 화면·문구·아이디어.</li>
     <li><b>궁금한 것 하나</b> — "이 날짜를 고르면 어떻게 되나요?" 같은 물음.</li>
@@ -373,7 +443,7 @@ st.caption(f"중식 {days}일 기준 · 이 그래프로 알 수 있는 것: (�
   <ul class="checklist">
     <li>KOBIS와 나이스 급식 API의 같은 점(다가가는 순서)과 다른 점(키·빈 응답·응답 모양)을 말할 수 있다.</li>
     <li>완성 주소를 주소창에 열어 급식 JSON에서 메뉴·칼로리 값을 찾았다.</li>
-    <li>급식 페이지 둘(오늘의 급식·급식 TOP 10)이 pages 폴더의 파일로 나뉘어 왼쪽 메뉴에 나타났다.</li>
+    <li>첫 화면(학교 검색)과 페이지 둘(달력별·메뉴별)이 main.py와 pages 폴더로 나뉘어 왼쪽 메뉴에 나타났다.</li>
     <li>급식 페이지를 내 앱에 추가했고, 급식이 없는 날의 안내 문구를 확인했다.</li>
     <li>두 학기 154일 최다 메뉴 TOP 10을 만들고 1위와 등장 일수를 확인했다.</li>
     <li>함께 자주 나올 것 같은 메뉴 짝 3개를 기록해 제출했다.</li>

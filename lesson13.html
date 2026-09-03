@@ -6,6 +6,191 @@
 <title>13차시 · 데이터베이스와 수파베이스 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb4">
 <style>/* 3절 SQL: 긴 인라인 코드가 좁은 화면을 넘치지 않도록 */ main code:not(pre code){white-space:normal;word-break:break-all}</style>
+<style>
+/* ===== 13차시 위젯 전용 스타일 — 설계표 조립기(.sch) · 앱 대응표(.app-sql) · SQL 시뮬레이터(.sim) =====
+   셀렉터는 세 루트 아래로만 한정한다. 팔레트는 공용 변수(--accent --gold --teal --blue --violet --green --red)와 어울리는 진한 톤(대비 4.5:1 이상). */
+.sch,.sim,.app-sql-wrap{--w-ink:#2b2418;--w-soft:#6b5836;--w-line:#eadfc4;--w-ring:0 0 0 3px rgba(76,141,246,.38);--w-grad:linear-gradient(120deg,#b45309 0%,#c2417a 55%,#6d3fb5 100%);--w-grad2:linear-gradient(120deg,#1f7f7a 0%,#2f6bd6 100%);--w-shadow:0 2px 10px rgba(120,90,20,.08),0 1px 2px rgba(120,90,20,.06)}
+.sch button,.sim button,.sch select,.sim select,.sch input,.sim input,.sim textarea{font-family:var(--font)}
+.sch button:focus-visible,.sim button:focus-visible,.sch input:focus-visible,.sch select:focus-visible,.sim input:focus-visible,.sim select:focus-visible{outline:none;box-shadow:var(--w-ring)}
+@keyframes simIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes rowIn{from{opacity:0;transform:translateX(-22px) scale(.97)}60%{transform:translateX(4px) scale(1.01)}to{opacity:1;transform:none}}
+@keyframes simOut{to{opacity:0;transform:translateX(48px) scale(.94);height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0}}
+@keyframes simPop{0%{transform:scale(1)}30%{transform:scale(1.7) rotate(-14deg)}55%{transform:scale(.85) rotate(9deg)}75%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes hlFade{from{box-shadow:0 0 0 4px var(--hl,#eadfc4)}to{box-shadow:0 0 0 0 transparent}}
+
+/* ---- 설계표 조립기 ---- */
+.sch{margin:8px 0 4px;font-size:.92rem;color:var(--w-ink)}
+.sch .sch-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:12px 14px;border-radius:16px 16px 0 0;background:var(--w-grad2);color:#fff;box-shadow:var(--w-shadow)}
+.sch .sch-bar label{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:.86rem;letter-spacing:.01em}
+.sch .sch-bar select,.sch .sch-bar input{border:none;border-radius:999px;padding:6px 12px;font-size:.88rem;background:#fff;color:var(--w-ink);min-height:32px;box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+.sch .sch-bar .sch-name{width:9em;font-family:var(--mono)}
+.sch .sch-add{margin-left:auto;border:1.5px solid rgba(255,255,255,.6);border-radius:999px;padding:7px 14px;background:rgba(255,255,255,.16);color:#fff;font-weight:800;font-size:.86rem;cursor:pointer;transition:background .15s,transform .1s}
+.sch .sch-add:hover{background:rgba(255,255,255,.3)}
+.sch .sch-add:active{transform:scale(.96)}
+.sch .sch-scroll{overflow-x:auto;background:#fff;border:1px solid var(--w-line);border-top:none;border-radius:0 0 16px 16px;box-shadow:var(--w-shadow)}
+.sch table.sch-table{min-width:640px;margin:0;border-collapse:separate;border-spacing:0;font-size:.88rem}
+.sch table.sch-table th{background:#fbf6ea;color:var(--w-soft);border:none;border-bottom:1px solid var(--w-line);font-size:.76rem;letter-spacing:.05em;padding:9px 12px}
+.sch table.sch-table td{border:none;border-bottom:1px solid #f3ecd9;padding:9px 12px;vertical-align:middle}
+.sch table.sch-table tr:last-child td{border-bottom:none}
+.sch table.sch-table tbody tr:hover td{background:#fffcf4}
+.sch table.sch-table input[type=text]{width:8em;padding:6px 10px;border:1.5px solid var(--w-line);border-radius:10px;font-family:var(--mono);font-size:.86rem;background:#fffdf7;color:var(--w-ink);transition:border-color .15s,box-shadow .15s}
+.sch table.sch-table input[type=text]:focus{outline:none;border-color:#4c8df6;box-shadow:var(--w-ring)}
+.sch table.sch-table select{padding:6px 28px 6px 10px;border:1.5px solid var(--w-line);border-radius:10px;font-size:.86rem;background:#fffdf7;color:var(--w-ink)}
+/* 조건 칸: JS가 넣는 " · " 구분 문자는 글자 크기 0으로 감추고, 칩(label)만 보이게 한다 */
+.sch table.sch-table td.sch-cond{white-space:normal;font-size:0;line-height:1.5;padding-top:6px;padding-bottom:6px}
+.sch table.sch-table td.sch-cond label{display:inline-flex;align-items:center;gap:6px;margin:3px 4px 3px 0;padding:4px 11px 4px 8px;border-radius:999px;border:1.5px solid var(--w-line);background:#fff;font-size:.8rem;font-weight:700;color:var(--w-soft);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;user-select:none}
+.sch table.sch-table td.sch-cond label:hover{border-color:#3ba6a0}
+.sch table.sch-table td.sch-cond label:active{transform:scale(.97)}
+.sch table.sch-table td.sch-cond label:has(input:checked){background:#e9f6f5;border-color:#1f7f7a;color:#155e5a}
+.sch table.sch-table td.sch-cond label:has(input:focus-visible){box-shadow:var(--w-ring)}
+.sch table.sch-table td.sch-cond label.off{opacity:.45;cursor:not-allowed}
+.sch table.sch-table td.sch-cond input[type=checkbox]{accent-color:#1f7f7a;margin:0;width:15px;height:15px;cursor:inherit}
+.sch table.sch-table td.sch-cond input[type=text]{width:6.5em;padding:2px 8px;border-radius:8px;font-size:.8rem;box-shadow:none}
+.sch table.sch-table td.sch-cond input[type=text]:focus{box-shadow:var(--w-ring)}
+.sch table.sch-table [data-del]{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--w-line);background:#fff;color:#7a6a4a;cursor:pointer;font-size:.85rem;line-height:1;padding:0;transition:background .15s,border-color .15s,color .15s,transform .2s}
+.sch table.sch-table [data-del]:hover{background:var(--red-soft);border-color:var(--red);color:#c23b3a;transform:rotate(90deg)}
+.sch .sch-out{margin-top:14px}
+.sch .sch-out pre{border-radius:14px}
+.sch .sch-tip{margin-top:10px;border-radius:14px}
+.sch .sch-read{margin:4px 0 0;padding-left:1.2em}
+.sch .sch-read li{margin:3px 0}
+
+/* ---- 앱 대응표 ---- */
+.app-sql-wrap{overflow-x:auto;border:1px solid var(--w-line);border-radius:16px;background:#fff;box-shadow:var(--w-shadow);margin:16px 0}
+.app-sql-wrap table.app-sql{min-width:640px;margin:0;font-size:.9rem}
+.app-sql-wrap table.app-sql th{background:var(--w-grad);color:#fff;border:none;font-size:.8rem;letter-spacing:.05em;padding:11px 14px}
+.app-sql-wrap table.app-sql td{border-bottom:1px solid #f3ecd9;padding:12px 14px}
+.app-sql-wrap table.app-sql tr:last-child td{border-bottom:none}
+.app-sql-wrap table.app-sql tr:hover td{background:#fffaf0}
+.app-sql-wrap table.app-sql td:first-child b{display:inline-block;padding:3px 11px;border-radius:999px;background:#fff3d6;color:#7a4a08;font-size:.84rem;line-height:1.5}
+.app-sql-wrap table.app-sql td code{display:inline-block;background:#1b1f2a;color:#e6edf3;border:none;border-radius:8px;padding:5px 10px;font-size:.8rem;line-height:1.55;white-space:normal;word-break:break-all}
+.app-sql-wrap table.app-sql td:last-child{color:var(--w-soft)}
+
+/* ---- SQL 시뮬레이터 ---- */
+.sim{font-size:.92rem;color:var(--w-ink)}
+.sim .sim-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:4px;margin:10px 0 12px;background:#efe6cf;border-radius:16px}
+.sim .sim-tab{flex:1 1 auto;border:none!important;border-radius:12px;padding:9px 14px;background:transparent!important;color:var(--w-soft)!important;font-weight:800;font-size:.88rem;cursor:pointer;transition:background .18s,color .18s,box-shadow .18s,transform .1s}
+.sim .sim-tab:hover{background:rgba(255,255,255,.6)!important}
+.sim .sim-tab:active{transform:scale(.98)}
+.sim .sim-tab.on{background:var(--w-grad)!important;color:#fff!important;box-shadow:0 3px 10px rgba(194,65,122,.3)}
+.sim .sim-intro{margin:6px 0 12px;color:var(--w-soft)}
+.sim .sim-row{display:flex;gap:8px 12px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.sim .sim-row label{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:.88rem}
+.sim .sim-ds{padding:7px 30px 7px 12px;border:1.5px solid var(--w-line);border-radius:999px;font-size:.88rem;background:#fff;color:var(--w-ink);box-shadow:var(--w-shadow)}
+.sim .sim-cols{font-size:.78rem;color:var(--w-soft);background:#fff;border:1px dashed #d9cba3;border-radius:999px;padding:4px 11px}
+.sim .sim-exs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.sim .sim-ex{border:1.5px solid var(--w-line);border-radius:999px;padding:5px 12px;background:#fff;color:var(--w-ink);font-size:.82rem;font-weight:700;cursor:pointer;transition:border-color .15s,color .15s,background .15s,transform .1s,box-shadow .15s}
+.sim .sim-ex:hover{border-color:#c2417a;color:#a2255f;background:#fff5f9;transform:translateY(-1px);box-shadow:0 3px 8px rgba(194,65,122,.18)}
+.sim .sim-ex:active{transform:scale(.97)}
+.sim .sim-editor{position:relative;border-radius:14px;background:#1b1f2a;padding-top:30px;box-shadow:var(--w-shadow);transition:box-shadow .15s}
+.sim .sim-editor::before{content:"";position:absolute;left:14px;top:11px;width:10px;height:10px;border-radius:50%;background:#ff5f57;box-shadow:16px 0 0 #febc2e,32px 0 0 #28c840}
+.sim .sim-editor::after{content:"SQL";position:absolute;right:14px;top:8px;font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.12em;color:#8b95a7}
+.sim .sim-editor:focus-within{box-shadow:var(--w-ring),var(--w-shadow)}
+.sim .sim-q{display:block;width:100%;box-sizing:border-box;resize:vertical;font-family:var(--mono);font-size:.9rem;line-height:1.6;padding:8px 14px 12px;border:none;border-radius:0 0 14px 14px;background:#1b1f2a;color:#e6edf3;caret-color:#f4b400}
+.sim .sim-q:focus{outline:none}
+.sim .sim-runbar{margin:10px 0 6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sim .sim-run{border:none;border-radius:999px;padding:9px 20px;background:var(--w-grad);color:#fff;font-weight:800;font-size:.9rem;cursor:pointer;box-shadow:0 4px 12px rgba(194,65,122,.28);transition:transform .12s,box-shadow .12s}
+.sim .sim-run:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(194,65,122,.36)}
+.sim .sim-run:active{transform:scale(.96)}
+.sim .sim-msg{font-size:.88rem;color:var(--w-soft)}
+/* 단계 카드: 번호 배지 + 왼쪽 컬러 바 + 연결선 */
+.sim .sim-steps{position:relative;margin-top:14px;padding-left:30px}
+.sim .sim-card{position:relative;margin:0 0 16px;padding:12px 14px 12px 16px;border-radius:14px;background:#fff;border:1px solid var(--w-line);border-left:5px solid var(--sc);box-shadow:var(--w-shadow);animation:simIn .45s ease both;--sc:#1f7f7a}
+.sim .sim-card:nth-child(6n+2){--sc:#2f6bd6}
+.sim .sim-card:nth-child(6n+3){--sc:#8a5578}
+.sim .sim-card:nth-child(6n+4){--sc:#b45309}
+.sim .sim-card:nth-child(6n+5){--sc:#c2417a}
+.sim .sim-card:nth-child(6n+6){--sc:#3d7a37}
+.sim .sim-card.sim-final{--sc:#3d7a37;background:linear-gradient(180deg,#f2faee 0%,#fff 70%);border-color:#bfe0b8}
+.sim .sim-card.sim-final .sim-card-h{color:#2f6a2a}
+.sim .sim-card:not(:last-child)::after{content:"";position:absolute;left:-23px;top:40px;bottom:-28px;width:2px;border-radius:2px;background:linear-gradient(var(--sc),#eadfc4)}
+.sim .sim-n{position:absolute;left:-36px;top:8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--sc);color:#fff;font-weight:800;font-size:.8rem;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.sim .sim-card-h{font-weight:800;display:flex;flex-wrap:wrap;align-items:center;gap:6px;line-height:1.4}
+.sim .sim-clause{font-size:.78rem;font-family:var(--mono);background:#1b1f2a;color:#ffd766;border:none;border-radius:6px;padding:2px 8px;white-space:normal;word-break:break-word}
+.sim .sim-p{margin:6px 0 4px;font-size:.88rem;color:var(--w-soft)}
+.sim .sim-scroll{overflow-x:auto;border-radius:10px;border:1px solid #f0e8d4;margin-top:8px;background:#fff}
+.sim table.sim-tbl{font-size:.8rem;margin:0;border-collapse:separate;border-spacing:0}
+.sim table.sim-tbl th{background:#fbf6ea;border:none;border-bottom:1px solid var(--w-line);color:var(--w-soft);font-size:.74rem;letter-spacing:.04em;padding:7px 10px}
+.sim table.sim-tbl td{border:none;border-bottom:1px solid #f5efe0;padding:6px 10px;white-space:nowrap}
+.sim table.sim-tbl tr:last-child td{border-bottom:none}
+.sim .sim-dim{opacity:.28;filter:grayscale(1);transition:opacity .8s ease}
+/* 앱 화면 미리보기: 인스타그램 게시물 카드 */
+.sim .feed-h{font-weight:800;margin-top:16px;display:flex;align-items:center;gap:6px}
+.sim .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:10px}
+.sim .feed .fc{display:flex;flex-direction:column;border:1px solid #efe6d2;border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 4px 14px rgba(120,90,20,.1);animation:simIn .5s ease both;transition:transform .18s,box-shadow .18s}
+.sim .feed .fc:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(120,90,20,.16)}
+.sim .feed .fc .who{order:1;display:flex;align-items:center;gap:8px;padding:9px 10px 7px;font-weight:800;font-size:.82rem;color:var(--w-ink);min-height:44px}
+.sim .feed .fc .who::before{content:"🐾";flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;border:2px solid transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7) border-box}
+.sim .feed .fc .who::after{content:"•••";margin-left:auto;color:#8a7a5a;font-size:.55rem;letter-spacing:1px}
+.sim .feed .fc .ph{order:2;font-size:64px;line-height:1;text-align:center;padding:24px 0;background:linear-gradient(135deg,#fff3d6 0%,#ffe4ec 55%,#ede4fb 100%)}
+.sim .feed .fc .lk{order:3;display:flex;align-items:center;gap:12px;padding:9px 10px 2px;font-size:.84rem;font-weight:800;color:#c23b3a}
+.sim .feed .fc .lk::after{content:"💬  ✈";font-size:.85rem;filter:grayscale(1);opacity:.7;white-space:pre}
+.sim .feed .fc .lk:empty{display:none}
+.sim .feed .fc .tx{order:4;font-size:.82rem;padding:4px 10px 12px;color:var(--w-ink);line-height:1.45}
+.sim .feed-note{font-size:.8rem;color:var(--w-soft);margin:10px 0 0}
+/* 쓰기 탭: 네 동작 카드 */
+.sim .w-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:10px 0 14px}
+.sim .w-card{--c:#3d7a37;--c-soft:#eef6e8;position:relative;display:flex;flex-direction:column;gap:8px;border:1px solid var(--w-line);border-top:4px solid var(--c);border-radius:14px;padding:12px;background:#fff;box-shadow:var(--w-shadow)}
+.sim .w-card.upd{--c:#2f6bd6;--c-soft:#eef3ff}
+.sim .w-card.like{--c:#c2417a;--c-soft:#fff0f5}
+.sim .w-card.del{--c:#c23b3a;--c-soft:#fdeeee}
+.sim .w-card .w-h{font-weight:800;font-size:.9rem;color:var(--c);display:flex;align-items:center;gap:9px;line-height:1.3}
+.sim .w-card .w-ico{flex:none;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--c-soft);font-size:1.05rem}
+.sim .w-card input{width:100%;box-sizing:border-box;padding:8px 11px;border:1.5px solid var(--w-line);border-radius:10px;font-size:.88rem;background:#fffdf7;color:var(--w-ink);transition:border-color .15s,box-shadow .15s}
+.sim .w-card input:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c-soft)}
+.sim .w-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.sim .w-card button{border:1.5px solid var(--c);border-radius:999px;padding:7px 14px;background:var(--c);color:#fff;font-weight:800;font-size:.84rem;cursor:pointer;transition:transform .12s,box-shadow .12s,background .15s}
+.sim .w-card button:hover{box-shadow:0 4px 10px rgba(0,0,0,.14);transform:translateY(-1px)}
+.sim .w-card button:active{transform:scale(.96)}
+.sim .w-card button.ghost{background:#fff;color:var(--c)}
+.sim .w-card .w-reset{border-color:var(--w-line);background:#fff;color:var(--w-soft)}
+/* 댓글 표: 구조는 table, 보이기는 말풍선 목록 */
+.sim .w-table{display:block;width:100%;margin:0;border:none;background:transparent}
+.sim .w-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sim .w-table tbody{display:flex;flex-direction:column;gap:8px}
+.sim .w-table tbody tr{display:grid;grid-template-columns:38px 1fr auto;grid-template-areas:"id who time" "id msg msg" "id lk lk";column-gap:10px;row-gap:2px;align-items:center;padding:10px 12px;border:1px solid #efe6d2;border-radius:14px;background:#fff;box-shadow:var(--w-shadow);overflow:hidden;transition:background .4s,border-color .4s}
+.sim .w-table td{border:none;padding:0;background:transparent;font-size:.86rem;line-height:1.4}
+.sim .w-table td:nth-child(1){grid-area:id;align-self:start;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.78rem;color:#fff;background:linear-gradient(135deg,#c2417a,#6d3fb5)}
+.sim .w-table td:nth-child(1)::before{content:"#";font-size:.7em;opacity:.8;margin-right:1px}
+.sim .w-table td:nth-child(2){grid-area:who;font-weight:800;color:var(--w-ink)}
+.sim .w-table td:nth-child(3){grid-area:msg;background:#f6f1e4;border-radius:4px 14px 14px 14px;padding:8px 12px;margin:2px 0 4px;color:var(--w-ink);white-space:normal;word-break:break-word}
+.sim .w-table td:nth-child(4){grid-area:lk;font-weight:800;color:#c23b3a;font-size:.82rem}
+.sim .w-table td:nth-child(5){grid-area:time;font-size:.74rem;color:var(--w-soft);justify-self:end}
+.sim .w-table tr[data-hl]{animation:hlFade 1.2s ease both}
+.sim .w-table tr[data-hl="ins"]{--hl:#bfe0b8;background:#eef6e8;border-color:#bfe0b8}
+.sim .w-table tr[data-hl="upd"]{--hl:#c5d7fb;background:#eef3ff;border-color:#c5d7fb}
+.sim .w-table tr[data-hl="like"]{--hl:#f7c3d6;background:#fff0f5;border-color:#f7c3d6}
+.sim .w-table tr[data-hl] td:nth-child(3){background:rgba(255,255,255,.85)}
+.sim .w-table tr.w-empty{display:block;text-align:center;padding:18px;border:1.5px dashed var(--red);background:var(--red-soft)}
+.sim .w-table tr.w-empty td{display:block;color:#c23b3a;font-weight:800}
+.sim .heart-pop{display:inline-block;animation:simPop .6s cubic-bezier(.36,.07,.19,.97);color:#e0245e;transform-origin:center}
+.sim tr.row-in{animation:rowIn .5s cubic-bezier(.2,.8,.2,1) both}
+.sim tr.row-out{animation:simOut .45s ease forwards}
+.sim .w-code{margin-top:12px}
+.sim .w-code pre{border-radius:14px}
+.sim .w-out{font-size:.9rem;margin:8px 0 0;color:var(--w-soft);padding:10px 12px;background:#fff;border-radius:12px;border:1px solid var(--w-line);line-height:1.6}
+.sim .w-out:empty{display:none}
+@media (max-width:480px){
+  .sim .sim-steps{padding-left:26px}
+  .sim .sim-n{left:-33px;width:26px;height:26px;font-size:.74rem}
+  .sim .sim-card:not(:last-child)::after{left:-21px}
+  .sim .feed .fc .ph{font-size:56px;padding:18px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  .sch *,.sim *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+@media print{
+  .sch .sch-bar,.app-sql-wrap table.app-sql th,.sim .sim-tab.on,.sim .sim-run,.sim .sim-n,.sim .w-table td:nth-child(1){-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sim .sim-card,.sim .feed .fc,.sim tr.row-in,.sim .heart-pop,.sim .w-table tr[data-hl]{animation:none!important}
+  .sim .sim-editor{background:#fff;border:1px solid #999;padding-top:6px}
+  .sim .sim-editor::before,.sim .sim-editor::after{display:none}
+  .sim .sim-q{background:#fff;color:#000}
+  .sch table.sch-table,.app-sql-wrap table.app-sql{min-width:0}
+  .sim table.sim-tbl td{white-space:normal}
+  .sim .sim-card,.sim .w-card,.sim .feed .fc,.sim .w-table tbody tr{break-inside:avoid;box-shadow:none}
+  .sim .sim-tabs{background:none;border:1px solid #bbb}
+}
+</style>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -396,19 +581,21 @@ ALTER TABLE guestbook ENABLE ROW LEVEL SECURITY;</pre></div>
     <summary>🔬 움직여 보기 — 설계표를 채우면 CREATE TABLE 문장이 만들어진다 (교과서 31쪽 탐구활동)</summary>
     <div class="gin">
       <p style="margin:10px 0 8px">교과서 31쪽의 쇼핑몰 테이블(사용자·제품·장바구니)을 예시로 불러오거나, 표 이름부터 직접 정해 나만의 표를 설계해 보세요. 속성명을 적고 데이터형과 조건을 고르면 오른쪽 아래에 SQL 문장이 바로 만들어지고, 그 문장을 우리말로 읽은 해석이 함께 나타납니다. 데이터베이스를 실제로 만드는 것이 아니라, 설계표의 한 칸이 SQL의 어느 낱말이 되는지 읽는 연습입니다.</p>
-      <div class="sch" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:0.92rem;margin-bottom:8px">
-        <label>예시 불러오기 <select class="sch-preset"><option value="">직접 설계</option><option value="user">사용자 표</option><option value="product">제품 표</option><option value="cart">장바구니 표</option><option value="guestbook">방명록 표</option></select></label>
-        <label>표 이름 <input class="sch-name" type="text" value="내표" style="width:9em;padding:4px 8px;border:1px solid var(--border);border-radius:6px;font-family:var(--mono)"></label>
-        <button type="button" class="sch-add" style="padding:5px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;font-weight:700;cursor:pointer">+ 속성 추가</button>
+      <div class="sch">
+        <div class="sch-bar">
+          <label>예시 불러오기 <select class="sch-preset"><option value="">직접 설계</option><option value="user">사용자 표</option><option value="product">제품 표</option><option value="cart">장바구니 표</option><option value="guestbook">방명록 표</option></select></label>
+          <label>표 이름 <input class="sch-name" type="text" value="내표"></label>
+          <button type="button" class="sch-add">+ 속성 추가</button>
+        </div>
+        <div class="sch-scroll">
+          <table class="glossary-table sch-table">
+            <thead><tr><th>속성명</th><th>데이터형</th><th>조건</th><th></th></tr></thead>
+            <tbody class="sch-rows"></tbody>
+          </table>
+        </div>
+        <div class="codewrap code sch-out"><span class="label">만들어진 SQL</span><pre class="sch-sql"></pre></div>
+        <div class="callout tip sch-tip"><div class="h">💬 이 문장을 우리말로 읽으면</div><ul class="sch-read"></ul></div>
       </div>
-      <div style="overflow-x:auto">
-        <table class="glossary-table sch-table" style="min-width:640px">
-          <thead><tr><th>속성명</th><th>데이터형</th><th>조건</th><th></th></tr></thead>
-          <tbody class="sch-rows"></tbody>
-        </table>
-      </div>
-      <div class="codewrap code" style="margin-top:12px"><span class="label">만들어진 SQL</span><pre class="sch-sql"></pre></div>
-      <div class="callout tip" style="margin-top:10px"><div class="h">💬 이 문장을 우리말로 읽으면</div><ul class="sch-read" style="margin:4px 0 0"></ul></div>
       <p style="font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">기본 키는 표에 하나만 둡니다. "자동 증가"는 정수 기본 키에만, "지금 시각을 기본값으로"는 날짜·시각 형에만 붙습니다. "다른 표 참조"에 표 이름을 적으면 그 표의 id를 가리키는 외래 키가 됩니다.</p>
     </div>
   </details>
@@ -452,17 +639,17 @@ ALTER TABLE guestbook ENABLE ROW LEVEL SECURITY;</pre></div>
       var opts = TYPES.map(function (t) { return '<option value="' + t[0] + '"' + (r.t === t[0] ? " selected" : "") + '>' + t[1] + '</option>'; }).join("");
       var canAI = r.t === "integer" && r.pk, canDF = r.t === "timestamptz";
       tr.innerHTML =
-        '<td><input data-k="n" data-i="' + i + '" type="text" value="' + esc(r.n) + '" placeholder="속성명" style="width:8em;padding:3px 6px;border:1px solid var(--border);border-radius:6px;font-family:var(--mono)"></td>' +
+        '<td><input data-k="n" data-i="' + i + '" type="text" value="' + esc(r.n) + '" placeholder="속성명"></td>' +
         '<td><select data-k="t" data-i="' + i + '">' + opts + '</select></td>' +
-        '<td style="white-space:normal;line-height:1.9">' +
+        '<td class="sch-cond">' +
           '<label><input type="checkbox" data-k="pk" data-i="' + i + '"' + (r.pk ? " checked" : "") + '> 기본 키</label> · ' +
           '<label><input type="checkbox" data-k="nn" data-i="' + i + '"' + (r.nn ? " checked" : "") + (r.pk ? " disabled" : "") + '> 비워 둘 수 없음</label> · ' +
           '<label><input type="checkbox" data-k="uq" data-i="' + i + '"' + (r.uq ? " checked" : "") + (r.pk ? " disabled" : "") + '> 중복 불가</label> · ' +
-          '<label' + (canAI ? "" : ' style="opacity:.45"') + '><input type="checkbox" data-k="ai" data-i="' + i + '"' + (r.ai && canAI ? " checked" : "") + (canAI ? "" : " disabled") + '> 자동 증가</label> · ' +
-          '<label' + (canDF ? "" : ' style="opacity:.45"') + '><input type="checkbox" data-k="df" data-i="' + i + '"' + (r.df && canDF ? " checked" : "") + (canDF ? "" : " disabled") + '> 지금 시각을 기본값으로</label> · ' +
-          '<label>다른 표 참조 <input data-k="ref" data-i="' + i + '" type="text" value="' + esc(r.ref) + '" placeholder="표 이름" style="width:6em;padding:2px 6px;border:1px solid var(--border);border-radius:6px;font-family:var(--mono)"></label>' +
+          '<label' + (canAI ? "" : ' class="off"') + '><input type="checkbox" data-k="ai" data-i="' + i + '"' + (r.ai && canAI ? " checked" : "") + (canAI ? "" : " disabled") + '> 자동 증가</label> · ' +
+          '<label' + (canDF ? "" : ' class="off"') + '><input type="checkbox" data-k="df" data-i="' + i + '"' + (r.df && canDF ? " checked" : "") + (canDF ? "" : " disabled") + '> 지금 시각을 기본값으로</label> · ' +
+          '<label>다른 표 참조 <input data-k="ref" data-i="' + i + '" type="text" value="' + esc(r.ref) + '" placeholder="표 이름"></label>' +
         '</td>' +
-        '<td><button type="button" data-del="' + i + '" title="이 속성 지우기" style="border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;padding:2px 8px">✕</button></td>';
+        '<td><button type="button" data-del="' + i + '" title="이 속성 지우기">✕</button></td>';
       tbody.appendChild(tr);
     });
     build();
@@ -641,7 +828,7 @@ LIMIT 5;</pre></div>
 
   <h3>실생활 앱에서 SQL이 하는 일 — 인스타그램으로 읽기</h3>
   <p>인스타그램 같은 앱의 화면 뒤에는 게시물 표(posts), 댓글 표(comments), 사용자 표(users) 같은 테이블이 있고, 화면의 단추 하나를 누를 때마다 SQL 문장 하나가 실행됩니다. 문장을 읽는 순서는 늘 같습니다. <b>어느 표에서(FROM) · 어떤 행을(WHERE) · 무엇을(SELECT) · 어떤 순서로(ORDER BY) · 몇 개(LIMIT)</b>. 아래 표의 계정 이름과 글은 모두 가상의 예입니다.</p>
-  <div style="overflow-x:auto"><table class="daymap" style="min-width:640px">
+  <div class="app-sql-wrap"><table class="daymap app-sql">
     <thead><tr><th>앱에서 하는 일</th><th>뒤에서 실행되는 SQL</th><th>읽는 법</th></tr></thead>
     <tbody>
       <tr><td><b>피드를 연다</b></td><td><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</code></td><td>게시물 표에서, 올린 시각이 늦은 것부터, 20개만</td></tr>
@@ -655,79 +842,63 @@ LIMIT 5;</pre></div>
   </table></div>
   <p>실제 앱의 표는 수억 행이고 표 여러 개를 이어 붙여 쓰지만(외래 키), 문장의 뼈대는 위와 같습니다. 방명록 실습에서 AI가 짜 준 코드가 한 일도, 인스타그램이 하루에 수십억 번 하는 일도 결국 이 네 동작입니다.</p>
 
-<style>
-@keyframes simIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-@keyframes simPop { 0% { transform: scale(1); } 40% { transform: scale(1.45); } 100% { transform: scale(1); } }
-@keyframes simOut { to { opacity: 0; transform: translateX(24px); height: 0; } }
-.sim .sim-card { animation: simIn .45s ease both; }
-.sim .sim-dim { transition: opacity .8s ease; }
-.sim .feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-top: 8px; }
-.sim .feed .fc { border: 1px solid var(--border); border-radius: 12px; background: #fff; overflow: hidden; animation: simIn .5s ease both; box-shadow: var(--shadow); }
-.sim .feed .fc .ph { font-size: 64px; text-align: center; padding: 14px 0 6px; background: linear-gradient(135deg, #fff6e0, #fffdf7); }
-.sim .feed .fc .who { font-weight: 800; font-size: .86rem; padding: 6px 10px 0; }
-.sim .feed .fc .tx { font-size: .84rem; padding: 2px 10px 6px; color: var(--text-soft); }
-.sim .feed .fc .lk { font-size: .82rem; padding: 0 10px 10px; color: #c23b3a; font-weight: 700; }
-.sim .heart-pop { display: inline-block; animation: simPop .5s ease; }
-.sim tr.row-in { animation: simIn .5s ease both; }
-.sim tr.row-out { animation: simOut .45s ease forwards; }
-</style>
   <details class="glossary" open>
     <summary>🔬 움직여 보기 — SQL 시뮬레이터: 문장을 직접 쓰고, 단계별로 무슨 일이 벌어지는지 본다</summary>
     <div class="gin">
-      <div class="sim" style="font-size:0.92rem">
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 6px">
-          <button type="button" class="sim-tab on" data-tab="read" style="padding:6px 14px;border:1.5px solid var(--accent);border-radius:999px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer">읽기 — SELECT를 단계별로</button>
-          <button type="button" class="sim-tab" data-tab="write" style="padding:6px 14px;border:1.5px solid var(--border);border-radius:999px;background:#fff;font-weight:800;cursor:pointer">쓰기 — 댓글 달기 · 고치기 · 좋아요 · 지우기</button>
+      <div class="sim">
+        <div class="sim-tabs">
+          <button type="button" class="sim-tab on" data-tab="read">읽기 — SELECT를 단계별로</button>
+          <button type="button" class="sim-tab" data-tab="write">쓰기 — 댓글 달기 · 고치기 · 좋아요 · 지우기</button>
         </div>
 
         <div class="sim-pane" data-pane="read">
-          <p style="margin:6px 0">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 단추를 누르거나 직접 고쳐 써 보세요. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, "GROUP BY에 없는 열"을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+          <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 단추를 누르거나 직접 고쳐 써 보세요. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, "GROUP BY에 없는 열"을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
+          <div class="sim-row">
             <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 표 posts</option><option value="meals">급식 표 meals</option></select></label>
-            <span class="sim-cols" style="font-size:0.85rem;color:var(--text-soft)"></span>
+            <span class="sim-cols"></span>
           </div>
-          <div class="sim-exs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"></div>
-          <textarea class="sim-q" rows="3" spellcheck="false" style="width:100%;box-sizing:border-box;font-family:var(--mono);font-size:0.9rem;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;background:#1c2b26;color:#d7f0ea"></textarea>
-          <div style="margin:8px 0 4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <button type="button" class="sim-run" style="padding:6px 16px;border:1px solid var(--accent);border-radius:8px;background:var(--accent);color:#fff;font-weight:800;cursor:pointer">실행 ▶</button>
-            <span class="sim-msg" style="font-size:0.88rem;color:var(--text-soft)"></span>
+          <div class="sim-exs"></div>
+          <div class="sim-editor"><textarea class="sim-q" rows="3" spellcheck="false"></textarea></div>
+          <div class="sim-runbar">
+            <button type="button" class="sim-run">실행 ▶</button>
+            <span class="sim-msg"></span>
           </div>
           <div class="sim-steps"></div>
         </div>
 
         <div class="sim-pane" data-pane="write" hidden>
-          <p style="margin:6px 0">cat_mong의 4번 게시물 "박스 새로 샀는데 포장지에 들어감 🐱"에 달린 댓글 표(comments)입니다. 우리 방명록 표와 같은 구조입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:8px 0">
-            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff">
-              <div style="font-weight:800;margin-bottom:6px">💬 댓글 달기 — INSERT</div>
-              <input class="w-name" type="text" placeholder="내 계정 이름" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
-              <input class="w-msg" type="text" placeholder="댓글 내용" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
-              <button type="button" class="w-insert" style="padding:5px 12px;border:1px solid var(--green);border-radius:8px;background:var(--green);color:#fff;font-weight:800;cursor:pointer">댓글 달기</button>
+          <p class="sim-intro">cat_mong의 4번 게시물 "박스 새로 샀는데 포장지에 들어감 🐱"에 달린 댓글 표(comments)입니다. 우리 방명록 표와 같은 구조입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
+          <div class="w-grid">
+            <div class="w-card ins">
+              <div class="w-h"><span class="w-ico">💬</span> 댓글 달기 — INSERT</div>
+              <input class="w-name" type="text" placeholder="내 계정 이름">
+              <input class="w-msg" type="text" placeholder="댓글 내용">
+              <div class="w-btns"><button type="button" class="w-insert">댓글 달기</button></div>
             </div>
-            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff">
-              <div style="font-weight:800;margin-bottom:6px">✏️ 댓글 고치기 — UPDATE</div>
-              <input class="w-uid" type="number" min="1" placeholder="댓글 번호(id)" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
-              <input class="w-umsg" type="text" placeholder="새 댓글 내용" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
-              <button type="button" class="w-update" style="padding:5px 12px;border:1px solid var(--blue);border-radius:8px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer">고치기</button>
+            <div class="w-card upd">
+              <div class="w-h"><span class="w-ico">✏️</span> 댓글 고치기 — UPDATE</div>
+              <input class="w-uid" type="number" min="1" placeholder="댓글 번호(id)">
+              <input class="w-umsg" type="text" placeholder="새 댓글 내용">
+              <div class="w-btns"><button type="button" class="w-update">고치기</button></div>
             </div>
-            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff">
-              <div style="font-weight:800;margin-bottom:6px">❤ 좋아요 — UPDATE 좋아요 = 좋아요 + 1</div>
-              <input class="w-lid" type="number" min="1" placeholder="댓글 번호(id)" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
-              <button type="button" class="w-like" style="padding:5px 12px;border:1px solid #e45756;border-radius:8px;background:#fff;color:#c23b3a;font-weight:800;cursor:pointer">❤ 좋아요 누르기</button>
+            <div class="w-card like">
+              <div class="w-h"><span class="w-ico">❤</span> 좋아요 — UPDATE 좋아요 = 좋아요 + 1</div>
+              <input class="w-lid" type="number" min="1" placeholder="댓글 번호(id)">
+              <div class="w-btns"><button type="button" class="w-like">❤ 좋아요 누르기</button></div>
             </div>
-            <div style="border:1px solid var(--border);border-radius:10px;padding:10px 12px;background:#fff">
-              <div style="font-weight:800;margin-bottom:6px">🗑 댓글 지우기 — DELETE</div>
-              <input class="w-did" type="number" min="1" placeholder="댓글 번호(id)" style="width:100%;box-sizing:border-box;margin-bottom:6px;padding:5px 8px;border:1px solid var(--border);border-radius:6px">
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <button type="button" class="w-delete" style="padding:5px 12px;border:1px solid var(--red);border-radius:8px;background:var(--red);color:#fff;font-weight:800;cursor:pointer">지우기</button>
-                <button type="button" class="w-delete-all" style="padding:5px 12px;border:1px solid var(--red);border-radius:8px;background:#fff;color:#c23b3a;font-weight:800;cursor:pointer">WHERE 없이 DELETE</button>
-                <button type="button" class="w-reset" style="padding:5px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;font-weight:700;cursor:pointer">처음으로</button>
+            <div class="w-card del">
+              <div class="w-h"><span class="w-ico">🗑</span> 댓글 지우기 — DELETE</div>
+              <input class="w-did" type="number" min="1" placeholder="댓글 번호(id)">
+              <div class="w-btns">
+                <button type="button" class="w-delete">지우기</button>
+                <button type="button" class="w-delete-all ghost">WHERE 없이 DELETE</button>
+                <button type="button" class="w-reset">처음으로</button>
               </div>
             </div>
           </div>
-          <div style="overflow-x:auto"><table class="glossary-table w-table" style="min-width:560px"><thead><tr><th>id</th><th>작성자</th><th>댓글</th><th>좋아요</th><th>작성시각</th></tr></thead><tbody></tbody></table></div>
-          <div class="codewrap code" style="margin-top:10px"><span class="label">뒤에서 실행된 SQL</span><pre class="w-sql">-- 아직 실행한 문장이 없습니다</pre></div>
-          <p class="w-out" style="font-size:0.9rem;margin:6px 0 0;color:var(--text-soft)"></p>
+          <table class="glossary-table w-table"><thead><tr><th>id</th><th>작성자</th><th>댓글</th><th>좋아요</th><th>작성시각</th></tr></thead><tbody></tbody></table>
+          <div class="codewrap code w-code"><span class="label">뒤에서 실행된 SQL</span><pre class="w-sql">-- 아직 실행한 문장이 없습니다</pre></div>
+          <p class="w-out"></p>
         </div>
       </div>
     </div>
@@ -783,7 +954,7 @@ LIMIT 5;</pre></div>
   var q = sim.querySelector(".sim-q"), msg = sim.querySelector(".sim-msg"), steps = sim.querySelector(".sim-steps"), dsel = sim.querySelector(".sim-ds"), exs = sim.querySelector(".sim-exs"), colsEl = sim.querySelector(".sim-cols");
   function setDS(key) {
     cur = DS[key]; colsEl.textContent = "열: " + cur.cols.join(" · ") + " (" + cur.rows.length + "행)";
-    exs.innerHTML = cur.examples.map(function (e, i) { return '<button type="button" class="sim-ex" data-i="' + i + '" style="padding:4px 10px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer">예시 ' + (i + 1) + ' · ' + esc(e[0]) + '</button>'; }).join("");
+    exs.innerHTML = cur.examples.map(function (e, i) { return '<button type="button" class="sim-ex" data-i="' + i + '">예시 ' + (i + 1) + ' · ' + esc(e[0]) + '</button>'; }).join("");
     q.value = cur.examples[0][1]; run();
   }
   exs.addEventListener("click", function (e) { var i = e.target.getAttribute("data-i"); if (i === null) return; q.value = cur.examples[+i][1]; run(); });
@@ -836,9 +1007,9 @@ LIMIT 5;</pre></div>
   }
   function tbl(headers, body, opt) {
     opt = opt || {};
-    var h = '<div style="overflow-x:auto"><table class="glossary-table" style="font-size:0.82rem;margin-top:6px"><tr>' + headers.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr>";
+    var h = '<div class="sim-scroll"><table class="glossary-table sim-tbl"><tr>' + headers.map(function (c) { return "<th>" + esc(c) + "</th>"; }).join("") + "</tr>";
     body.forEach(function (r, i) {
-      var st = ""; if (opt.dim && !opt.dim[i]) st = ' class="sim-dim" style="opacity:.28"';
+      var st = ""; if (opt.dim && !opt.dim[i]) st = ' class="sim-dim"';
       if (opt.color && opt.color[i]) st = ' style="background:' + opt.color[i] + '"';
       h += "<tr" + st + ">" + r.map(function (v) { return "<td>" + esc(v) + "</td>"; }).join("") + "</tr>";
     });
@@ -846,51 +1017,51 @@ LIMIT 5;</pre></div>
   }
   var PALETTE = ["#fff3d6", "#e9f6f5", "#eef3ff", "#fbf4f8", "#eef6e8", "#fdeeee", "#f3f0ff", "#f0f7e6"];
   function card(n, title, clause, body) {
-    return '<div class="sim-card" style="animation-delay:' + ((n - 1) * 0.18) + 's;border:1px solid var(--border);border-left:5px solid var(--accent);border-radius:10px;padding:10px 12px;margin:10px 0;background:#fff"><div style="font-weight:800"><span style="display:inline-block;background:var(--accent);color:#fff;border-radius:999px;font-size:.74rem;padding:1px 9px;margin-right:6px">' + n + '</span>' + esc(title) + ' <code style="font-size:.8rem">' + esc(clause) + '</code></div>' + body + '</div>';
+    return '<div class="sim-card" style="animation-delay:' + ((n - 1) * 0.18) + 's"><div class="sim-card-h"><span class="sim-n">' + n + '</span>' + esc(title) + ' <code class="sim-clause">' + esc(clause) + '</code></div>' + body + '</div>';
   }
   function run() {
     var p; try { p = parse(q.value); } catch (e) { fail(e); return; }
     var COLS = cur.cols, NUM = cur.num, rows = cur.rows;
     msg.innerHTML = '<span style="color:#3d7a37;font-weight:700">실행 성공</span> 아래 단계를 위에서부터 읽어 보세요.';
     var html = "", n = 1;
-    html += card(n++, "표를 편다", "FROM " + cur.name, "<p style='margin:4px 0;font-size:.88rem'>" + cur.label + "(" + cur.name + ") " + rows.length + "행 전체가 출발점입니다.</p>" + tbl(COLS, rows));
+    html += card(n++, "표를 편다", "FROM " + cur.name, "<p class="sim-p">" + cur.label + "(" + cur.name + ") " + rows.length + "행 전체가 출발점입니다.</p>" + tbl(COLS, rows));
     var kept = rows;
     if (p.where.length) {
       var mask = rows.map(function (r) { return p.where.every(function (w) { return passes(r, w); }); });
       kept = rows.filter(function (r, i) { return mask[i]; });
-      html += card(n++, "조건에 맞는 행만 남긴다", "WHERE " + p.where.map(function (w) { return w.col + " " + w.op + " " + (typeof w.val === "number" ? w.val : "'" + w.val + "'"); }).join(" AND "), "<p style='margin:4px 0;font-size:.88rem'>" + rows.length + "행 가운데 " + kept.length + "행이 통과했습니다. 흐린 행은 걸러진 행입니다.</p>" + tbl(COLS, rows, { dim: mask }));
+      html += card(n++, "조건에 맞는 행만 남긴다", "WHERE " + p.where.map(function (w) { return w.col + " " + w.op + " " + (typeof w.val === "number" ? w.val : "'" + w.val + "'"); }).join(" AND "), "<p class="sim-p">" + rows.length + "행 가운데 " + kept.length + "행이 통과했습니다. 흐린 행은 걸러진 행입니다.</p>" + tbl(COLS, rows, { dim: mask }));
     }
     var result;
     if (p.group) {
       var gi = COLS.indexOf(p.group), groups = {}, order = [];
       kept.forEach(function (r) { var k = r[gi]; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
       var colors = kept.map(function (r) { return PALETTE[order.indexOf(r[gi]) % PALETTE.length]; });
-      html += card(n++, "같은 값끼리 묶는다", "GROUP BY " + p.group, "<p style='margin:4px 0;font-size:.88rem'>" + p.group + " 값이 같은 행끼리 " + order.length + "개 묶음이 됩니다(색 띠). 이제부터 한 묶음이 결과의 한 행입니다. 묶음 안에 값이 여러 개인 열은 그대로 쓸 수 없고 집계 함수로 감싸야 합니다.</p>" + tbl(COLS, kept, { color: colors }));
+      html += card(n++, "같은 값끼리 묶는다", "GROUP BY " + p.group, "<p class="sim-p">" + p.group + " 값이 같은 행끼리 " + order.length + "개 묶음이 됩니다(색 띠). 이제부터 한 묶음이 결과의 한 행입니다. 묶음 안에 값이 여러 개인 열은 그대로 쓸 수 없고 집계 함수로 감싸야 합니다.</p>" + tbl(COLS, kept, { color: colors }));
       result = order.map(function (k) { return p.select.map(function (x) { return x.fn ? agg(x.fn, x.col, groups[k]) : k; }); });
     } else if (p.select.some(function (x) { return x.fn; })) {
       result = [p.select.map(function (x) { return agg(x.fn, x.col, kept); })];
-      html += card(n++, "전체를 하나로 집계한다", p.select.map(function (x) { return x.fn + "(" + x.col + ")"; }).join(", "), "<p style='margin:4px 0;font-size:.88rem'>GROUP BY가 없으므로 통과한 " + kept.length + "행 전체가 한 묶음이 되어 결과는 한 행입니다.</p>");
+      html += card(n++, "전체를 하나로 집계한다", p.select.map(function (x) { return x.fn + "(" + x.col + ")"; }).join(", "), "<p class="sim-p">GROUP BY가 없으므로 통과한 " + kept.length + "행 전체가 한 묶음이 되어 결과는 한 행입니다.</p>");
     } else {
       result = kept.map(function (r) { return p.select.map(function (x) { return r[COLS.indexOf(x.col)]; }); });
     }
     var headers = p.select.map(function (x) { return x.alias; });
-    html += card(n++, "보여 줄 열만 고른다", "SELECT " + headers.join(", "), "<p style='margin:4px 0;font-size:.88rem'>" + (p.group ? "묶음마다 " : "") + headers.length + "개 열만 남깁니다.</p>");
+    html += card(n++, "보여 줄 열만 고른다", "SELECT " + headers.join(", "), "<p class="sim-p">" + (p.group ? "묶음마다 " : "") + headers.length + "개 열만 남깁니다.</p>");
     if (p.order) {
       var oi = headers.indexOf(p.order), ci = COLS.indexOf(p.order);
       if (oi >= 0) result.sort(function (a, b) { var x = a[oi], y = b[oi]; var c = (typeof x === "number" && typeof y === "number") ? x - y : String(x).localeCompare(String(y), "ko"); return p.dir === "DESC" ? -c : c; });
       else if (!p.group && ci >= 0) { var idx = kept.map(function (r, i) { return i; }); idx.sort(function (i, j) { var x = kept[i][ci], y = kept[j][ci]; var c = NUM[COLS[ci]] ? (+x) - (+y) : String(x).localeCompare(String(y), "ko"); return p.dir === "DESC" ? -c : c; }); result = idx.map(function (i) { return result[i]; }); }
-      html += card(n++, "정렬한다", "ORDER BY " + p.order + " " + p.dir, "<p style='margin:4px 0;font-size:.88rem'>" + p.order + " 기준 " + (p.dir === "DESC" ? "내림차순(큰 것부터, 시각이면 최신부터)" : "오름차순(작은 것부터)") + "으로 줄을 세웁니다.</p>");
+      html += card(n++, "정렬한다", "ORDER BY " + p.order + " " + p.dir, "<p class="sim-p">" + p.order + " 기준 " + (p.dir === "DESC" ? "내림차순(큰 것부터, 시각이면 최신부터)" : "오름차순(작은 것부터)") + "으로 줄을 세웁니다.</p>");
     }
-    if (p.limit !== null) { var before = result.length; result = result.slice(0, p.limit); html += card(n++, "앞에서 몇 행만 자른다", "LIMIT " + p.limit, "<p style='margin:4px 0;font-size:.88rem'>" + before + "행 가운데 앞의 " + result.length + "행만 남깁니다." + (p.order ? " 피드가 '최신 몇 개'만 불러오는 것이 이 두 낱말의 조합입니다." : " ORDER BY가 없으면 어떤 행이 앞에 오는지 보장되지 않습니다.") + "</p>"); }
+    if (p.limit !== null) { var before = result.length; result = result.slice(0, p.limit); html += card(n++, "앞에서 몇 행만 자른다", "LIMIT " + p.limit, "<p class="sim-p">" + before + "행 가운데 앞의 " + result.length + "행만 남깁니다." + (p.order ? " 피드가 '최신 몇 개'만 불러오는 것이 이 두 낱말의 조합입니다." : " ORDER BY가 없으면 어떤 행이 앞에 오는지 보장되지 않습니다.") + "</p>"); }
     var feed = "";
     if (cur.name === "posts" && !p.select.some(function (x) { return x.fn; }) && result.length) {
       var hi = function (c) { return headers.indexOf(c); };
-      feed = '<div style="font-weight:800;margin-top:10px">📱 앱 화면 미리보기</div><div class="feed">' + result.map(function (r, i) {
+      feed = '<div class="feed-h">📱 앱 화면 미리보기</div><div class="feed">' + result.map(function (r, i) {
         var ph = hi("사진") >= 0 ? r[hi("사진")] : "🐾", who = hi("작성자") >= 0 ? r[hi("작성자")] : "", tx = hi("내용") >= 0 ? r[hi("내용")] : (hi("해시태그") >= 0 ? r[hi("해시태그")] : ""), lk = hi("좋아요") >= 0 ? "❤ " + r[hi("좋아요")] : "";
         return '<div class="fc" style="animation-delay:' + (0.6 + i * 0.12) + 's"><div class="ph">' + esc(ph) + '</div><div class="who">' + esc(who) + '</div><div class="tx">' + esc(tx) + '</div><div class="lk">' + esc(lk) + '</div></div>';
-      }).join("") + '</div><p style="font-size:.82rem;color:var(--muted);margin:6px 0 0">SELECT에 사진·작성자·내용·좋아요 열이 있으면 카드에 채워집니다. 빠진 열은 카드에도 없습니다.</p>';
+      }).join("") + '</div><p class="feed-note">SELECT에 사진·작성자·내용·좋아요 열이 있으면 카드에 채워집니다. 빠진 열은 카드에도 없습니다.</p>';
     }
-    html += '<div class="sim-card" style="animation-delay:' + ((n - 1) * 0.18) + 's;border:1.5px solid var(--green);border-radius:10px;padding:10px 12px;margin:10px 0;background:var(--green-soft)"><div style="font-weight:800;color:#3d7a37">최종 결과 · ' + result.length + '행 — 앱 화면에 나타나는 것</div>' + tbl(headers, result) + feed + '</div>';
+    html += '<div class="sim-card sim-final" style="animation-delay:' + ((n - 1) * 0.18) + 's"><div class="sim-card-h"><span class="sim-n">✓</span>최종 결과 · ' + result.length + '행 — 앱 화면에 나타나는 것</div>' + tbl(headers, result) + feed + '</div>';
     steps.innerHTML = html;
   }
   setDS("posts");
@@ -902,9 +1073,9 @@ LIMIT 5;</pre></div>
   function drawW(hl, mode) {
     wtb.innerHTML = gb.length ? gb.map(function (r) {
       var isH = (hl !== undefined && r[0] === hl), cls = isH && mode === "ins" ? ' class="row-in"' : "";
-      var st = isH ? ' style="background:' + (mode === "upd" ? "#eef3ff" : mode === "like" ? "#fdeeee" : "#eef6e8") + '"' : "";
+      var st = isH ? ' data-hl="' + (mode === "upd" ? "upd" : mode === "like" ? "like" : "ins") + '"' : "";
       return "<tr" + cls + st + ">" + r.map(function (v, j) { var t = esc(v); if (j === 3) t = (isH && mode === "like" ? '<span class="heart-pop">❤</span> ' : "❤ ") + t; return "<td>" + t + "</td>"; }).join("") + "</tr>";
-    }).join("") : '<tr><td colspan="5" style="text-align:center;color:#c23b3a;font-weight:700">표가 비었습니다 — 행 0개</td></tr>';
+    }).join("") : '<tr class="w-empty"><td colspan="5">표가 비었습니다 — 행 0개</td></tr>';
   }
   function removeRow(id, after) {
     var trs = wtb.querySelectorAll("tr"), done = false;
