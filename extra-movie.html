@@ -105,7 +105,7 @@
   rank(순위) · movieNm(영화명) · openDt(개봉일) · audiCnt(그날 관객수) · audiAcc(누적 관객수)
   ※ 숫자 값이 전부 문자열로 온다.
   ※ 과거 날짜는 넉넉히 열려 있다(10년 전 크리스마스도 그날의 TOP 10이 그대로 온다).</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다. ③이 요구하는 ‘개봉 며칠째’ 표시까지 들어 있습니다</p><div class="codewrap code"><span class="label">pages/박스오피스_타임머신.py</span><pre># pages/박스오피스_타임머신.py — 해마다 같은 날짜의 1위를 모아 본다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다. ③이 요구하는 ‘개봉 며칠째’ 표시까지 들어 있습니다</p><div class="codewrap code"><span class="label">pages/92_박스오피스_타임머신.py</span><pre># pages/92_박스오피스_타임머신.py — 해마다 같은 날짜의 1위를 모아 본다
 import datetime
 import streamlit as st
 import pandas as pd
@@ -164,7 +164,7 @@ st.caption(f"{month}월 {day}일 · 최근 10년")</pre></div></details>
       <details class="glossary">
       <summary>🧑‍💻 ② AI가 준 코드 예시 펼쳐 보기</summary>
       <div class="gin">
-      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">pages/5_박스오피스_타임머신.py</button></span><button class="copy-btn">복사</button><pre># 박스오피스 타임머신 — 특정 날짜의 극장가를 해마다 거슬러 본다
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">pages/92_박스오피스_타임머신.py</button></span><button class="copy-btn">복사</button><pre># 박스오피스 타임머신 — 특정 날짜의 극장가를 해마다 거슬러 본다
 import datetime
 
 import pandas as pd
@@ -336,7 +336,7 @@ st.write(f"최근 10년 기준 1위 영화의 평균 관객이 가장 많은 시
 - 그해관객이 1,000만 명을 넘은 영화는 막대 색을 다르게 하고 영화명 옆에 트로피 이모지를 붙여 줘.
 - 화면 아래에 작은 글씨로 "그해관객은 주간 박스오피스 기록으로 계산한 근삿값입니다"라고 표기해 줘.
 - 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/연간_박스오피스_TOP10.py</span><pre># pages/연간_박스오피스_TOP10.py — 해마다 관객 상위 10편
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/92_연간_박스오피스_TOP10.py</span><pre># pages/92_연간_박스오피스_TOP10.py — 해마다 관객 상위 10편
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -398,7 +398,7 @@ st.caption("왜 그 두 해가 낮은지는 직접 해석해 보세요.")</pre><
   없으면 "역대 300위 안에 없는 영화입니다"라고 안내해 줘.
 - 화면 아래에 작은 글씨로 "누적관객은 주간 박스오피스 기록으로 계산한 근삿값입니다"라고 표기해 줘.
 - 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/역대_박스오피스_기록.py</span><pre># pages/역대_박스오피스_기록.py — 누적 관객 상위 300편
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/92_역대_박스오피스_기록.py</span><pre># pages/92_역대_박스오피스_기록.py — 누적 관객 상위 300편
 import streamlit as st
 import pandas as pd
 import plotly.express as px

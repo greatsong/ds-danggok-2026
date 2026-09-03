@@ -109,7 +109,7 @@
       <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a></b> — 지난 1년(365일)의 일별 박스오피스 톱10 기록 3,650행, 영화 301편</li>
       <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a></b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 표에 정리된 216편</li>
     </ul>
-    <p>3·4차시 그래프 도감에서 쓰던 바로 그 두 표입니다 — 오늘은 읽는 데서 나아가 예측의 재료로 사용합니다.</p>
+    <p>3차시의 kobis_daily.csv와 4차시의 kobis_movies.csv, 그래프 도감에서 쓰던 바로 그 두 표입니다 — 오늘은 읽는 데서 나아가 예측의 재료로 사용합니다.</p>
   </div>
 
   <ol class="steps">
@@ -171,7 +171,7 @@ c1.metric("시험용 영화로 잰 점수 (R²)", f"{r2_score(test['total_audi']
 c2.metric("평균 오차", f"{mean_absolute_error(test['total_audi'], pred):,.0f}명")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
-      화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 8차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
+      코드는 <b>pages</b> 폴더에 새 파일로 올려 커밋합니다 — 1~3분 뒤 앱에 새 페이지가 나타납니다. 화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 8차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 변수의 출처를 나눠서 비교한다</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>변수를 "개봉 전에 알 수 있는 것"과 "개봉 후에야 알 수 있는 것"으로 나눠 줘.
 개봉 전 변수만 쓴 경우와 개봉 후 정보까지 넣은 경우의 예측 점수를

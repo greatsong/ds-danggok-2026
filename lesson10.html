@@ -160,7 +160,7 @@
       <tr><td><b>로지스틱 + 첫 주 관객 (반칙)</b></td><td><b>0.985</b></td><td>—</td><td>급등 — 4절에서 정체를 밝힌다</td></tr>
     </tbody>
   </table>
-  <p class="mini">기준선 0.89는 216편 전체에서 센 값이고, 모델의 정확도는 시험용 65편에서 잰 값입니다. 센 대상이 다르므로 소수점까지 맞대어 우열을 가릴 수는 없습니다. 각자 앱에서는 같은 시험용 자료로 기준선과 모델을 나란히 재어 비교합니다.</p>
+  <p class="mini">기준선 0.89는 216편 전체에서 센 값이고, 모델의 정확도는 시험용 65편(7차시와 다른 무작위 분할)에서 잰 값입니다. 센 대상이 다르므로 소수점까지 맞대어 우열을 가릴 수는 없습니다. 각자 앱에서는 같은 시험용 자료로 기준선과 모델을 나란히 재어 비교합니다.</p>
   <div class="callout warn">
     <div class="h">⚠️ 정확도만 보면 놓치는 세 가지</div>
     <ul>
@@ -173,7 +173,7 @@
   <p>내 분류기에서도 같은 장면을 직접 확인합니다. 오늘의 ①②③은 손계산이 중심이므로 화면 실습은 이것 하나입니다.</p>
   <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>내 분류기의 혼동행렬을 그려 주고, '무조건 실패로만 찍는 모델'의
 정확도와 나란히 비교해 줘. 성공 재현율도 함께 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다.</p><div class="codewrap code"><span class="label">pages/10_혼동행렬.py</span><pre># 혼동행렬과 기준선 — 정확도만 보면 놓치는 것
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다. 9차시의 분류 페이지를 고치는 것이 아니라 pages 폴더에 새 페이지(pages/10_혼동행렬.py)로 올립니다.</p><div class="codewrap code"><span class="label">pages/10_혼동행렬.py</span><pre># 혼동행렬과 기준선 — 정확도만 보면 놓치는 것
 import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
