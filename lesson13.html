@@ -426,9 +426,40 @@
 
   <ol class="steps">
     <li><span class="st">먼저 — 비밀 금고(secrets)에 접속 정보 두 줄 넣기</span><br>
-      선생님이 클래스룸 <b>비공개 게시</b>로 보낸 접속 정보(주소와 키)는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 배포된 내 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸을 열면 2차시에 넣은 KOBIS_KEY 한 줄이 있습니다. 그 아래에 다음 두 줄을 붙여 넣고 저장합니다. 따옴표 안의 값만 클래스룸에서 받은 것으로 바꿉니다.
-      <div class="codewrap code"><span class="label">Secrets에 덧붙일 두 줄</span><pre>SUPABASE_URL = "선생님이 준 프로젝트 주소를 여기에"
+      선생님이 클래스룸 <b>비공개 게시</b>로 보낸 접속 정보(주소와 키)는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 배포된 내 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸을 열면 2차시에 넣은 KOBIS_KEY 한 줄이 있습니다. 그 아래에 다음 모양의 두 줄을 붙여 넣고 저장합니다. 아래 상자에 선생님이 준 주소와 키를 넣으면 두 줄이 완성되어 그대로 복사할 수 있습니다.
+      <div class="codewrap code"><span class="label">Secrets에 덧붙일 두 줄의 모양</span><pre>SUPABASE_URL = "선생님이 준 프로젝트 주소를 여기에"
 SUPABASE_KEY = "선생님이 준 키를 여기에"</pre></div>
+      <div class="urlmaker sbmaker">
+        <span class="um-label">🔐 두 줄 만들기 — 선생님이 준 값을 붙여 넣으면 Secrets에 넣을 두 줄이 완성됩니다</span>
+        <input class="sb-url" type="text" placeholder="프로젝트 주소 (https://….supabase.co)" autocomplete="off" spellcheck="false">
+        <input class="sb-key" type="password" placeholder="키 (긴 문자열) — 화면에는 가려서 표시" autocomplete="off" spellcheck="false" style="margin-top:8px">
+        <div class="made sb-made">SUPABASE_URL = "…"
+SUPABASE_KEY = "…"</div>
+        <div class="btns"><button type="button" class="copybtn sb-copy" disabled>두 줄 복사</button><a class="openbtn" href="https://share.streamlit.io" target="_blank" rel="noopener">스트림릿 클라우드 열기 ↗</a></div>
+        <div class="um-note">주소와 키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다. 복사한 두 줄을 <b>Manage app → ⋮ → Settings → Secrets</b> 상자의 KOBIS_KEY 줄 아래에 붙여 넣고 저장합니다. 키는 짝에게도 보여 주지 않습니다.</div>
+      </div>
+<script>
+(function () {
+  var box = document.querySelector(".sbmaker"); if (!box) return;
+  var u = box.querySelector(".sb-url"), k = box.querySelector(".sb-key"), made = box.querySelector(".sb-made"), btn = box.querySelector(".sb-copy");
+  function clean(v) { return v.trim().replace(/^["']|["']$/g, "").replace(/\/+$/, ""); }
+  function lines() { var url = clean(u.value), key = k.value.trim().replace(/^["']|["']$/g, ""); return { url: url, key: key, text: 'SUPABASE_URL = "' + url + '"\nSUPABASE_KEY = "' + key + '"' }; }
+  function render() {
+    var L = lines(); var ok = L.url && L.key;
+    made.textContent = 'SUPABASE_URL = "' + (L.url || "…") + '"\nSUPABASE_KEY = "' + (L.key ? L.key.slice(0, 6) + "…(" + L.key.length + "자)" : "…") + '"';
+    btn.disabled = !ok; btn.textContent = "두 줄 복사"; btn.classList.remove("done");
+    if (L.url && !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(L.url)) made.textContent += "\n-- 주소는 보통 https://영문숫자.supabase.co 꼴입니다. 다시 확인하세요";
+  }
+  u.addEventListener("input", render); k.addEventListener("input", render);
+  btn.addEventListener("click", function () {
+    var t = lines().text;
+    function done() { btn.textContent = "복사됨 ✓ — Secrets 상자에 붙여 넣기"; btn.classList.add("done"); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { window.prompt("아래 두 줄을 복사하세요", t); done(); });
+    else { window.prompt("아래 두 줄을 복사하세요", t); done(); }
+  });
+  render();
+})();
+</script>
       <div class="callout warn">
         <div class="h">⚠️ 이름 세 곳 일치 — 하나라도 다르면 못 찾는다</div>
         <p>두 이름 <b>SUPABASE_URL</b>·<b>SUPABASE_KEY</b>는 세 곳에 등장하고, 철자가 <b>한 글자까지 똑같아야</b> 합니다. 다르면 앱이 금고에서 값을 찾지 못하고 멈춥니다(KeyError). 키는 짝에게도 보여 주지 않습니다. 학급 전원이 같은 표를 쓰므로, 키가 새면 남이 우리 반 방명록에 마음대로 쓸 수 있습니다.</p>
