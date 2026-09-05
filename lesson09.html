@@ -200,10 +200,13 @@ c2.metric("의사결정트리 정확도", f"{accuracy_score(yte, tree.predict(Xt
     <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>의사결정트리로도 만들어서 어떤 질문을 어떤 순서로 던지는지
 그림으로 보여 줘. 두 모델의 정확도를 나란히 비교해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 트리가 던지는 질문의 순서
-st.subheader("트리는 어떤 질문을 먼저 던지나")
-st.code(export_text(tree, feature_names=list(X.columns), max_depth=2))
-st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도는 달라집니다.")</pre></div></details>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 도전 — 모델은 무엇을 보고 맞혔나 (흥행 분류 페이지에 이어 붙일 부분)
+st.subheader("도전 — 모델은 무엇을 보고 맞혔나")
+중요도 = pd.Series(tree.feature_importances_, index=X.columns)
+중요도 = 중요도[중요도 &gt; 0].sort_values(ascending=False).round(3).reset_index()
+중요도.columns = ["변수", "중요도"]
+st.dataframe(중요도, hide_index=True)
+st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보여 줄 뿐, 그것이 원인이라는 뜻은 아닙니다.")</pre></div></details>
     </li>
   </ol>
 
@@ -242,20 +245,13 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
     <h2>5. 도전 — 모델은 무엇을 보고 맞혔나</h2>
   <p>모델에게 무엇을 보고 맞혔는지 물을 수 있으며 이를 <b>특성 중요도</b>라고 합니다. 우리 트리는 개봉일 스크린수를 가장 무겁게 보며 0.476이고 상영횟수 0.277이 뒤를 받치며 장르는 조연입니다.</p>
   <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 트리에게 무엇을 보고 맞혔는지 물어보자.
-- 의사결정트리의 특성 중요도를 큰 순서로 표로 보여 줘. 0인 것은 빼 줘.
-- 개봉일 스크린수가 가장 많은 열 편의 성공률과 전체 216편의 성공률을
-  나란히 지표 카드로 보여 줘.</pre></div>
+- 의사결정트리의 특성 중요도를 큰 순서로 표로 보여 줘. 0인 것은 빼 줘.</pre></div>
   <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 도전 — 모델은 무엇을 보고 맞혔나 (흥행 분류 페이지에 이어 붙일 부분)
 st.subheader("도전 — 모델은 무엇을 보고 맞혔나")
 중요도 = pd.Series(tree.feature_importances_, index=X.columns)
 중요도 = 중요도[중요도 &gt; 0].sort_values(ascending=False).round(3).reset_index()
 중요도.columns = ["변수", "중요도"]
 st.dataframe(중요도, hide_index=True)
-
-상위 = df.nlargest(10, "first_scrn")
-c1, c2 = st.columns(2)
-c1.metric("스크린 상위 10편의 성공률", f"{상위['성공'].mean():.0%}")
-c2.metric("전체 216편의 성공률", f"{df['성공'].mean():.0%}")
 st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보여 줄 뿐, 그것이 원인이라는 뜻은 아닙니다.")</pre></div></details>
   <table class="daymap">
     <thead><tr><th>변수</th><th>중요도 (트리, 깊이 3)</th></tr></thead>
@@ -268,7 +264,7 @@ st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보�
   </table>
   <div class="callout warn">
     <div class="h">⚠️ 영향력은 원인이 아니다</div>
-    <p>중요도는 이 모델이 그렇게 본 것일 뿐이며 모델을 바꾸면 순서가 달라집니다. 랜덤 포레스트에서는 상영횟수가 스크린수보다 앞섭니다. 스크린 상위 열 편의 성공률은 70%이고 전체 216편은 11%로 관계는 분명히 있습니다. 그러나 스크린을 많이 잡아서 흥행했는지 흥행할 것 같아서 스크린을 많이 잡았는지는 이 숫자로 알 수 없습니다. 상관은 인과가 아니며 이는 6차시 상관계수에서 미뤄 둔 경고의 머신러닝판입니다. 14차시에서 이 물음이 편향의 되먹임 고리로 다시 나옵니다.</p>
+    <p>중요도는 이 모델이 그렇게 본 것일 뿐이며 모델을 바꾸면 순서가 달라집니다. 랜덤 포레스트에서는 상영횟수가 스크린수보다 앞섭니다. 스크린을 많이 잡아서 흥행했는지 흥행할 것 같아서 스크린을 많이 잡았는지는 이 숫자로 알 수 없습니다. 상관은 인과가 아니며 이는 6차시 상관계수에서 미뤄 둔 경고의 머신러닝판입니다. 특성 중요도는 무엇을 단서로 삼았는지 알려 주는 힌트일 뿐 원인의 증거가 아닙니다.</p>
   </div>
 
 <h2>6. 개념 정리 — 질문이 모델을 고른다</h2>
