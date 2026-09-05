@@ -209,13 +209,10 @@ c2.metric("의사결정트리 정확도", f"{accuracy_score(yte, tree.predict(Xt
     <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>의사결정트리로도 만들어서 어떤 질문을 어떤 순서로 던지는지
 그림으로 보여 줘. 두 모델의 정확도를 나란히 비교해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 도전 — 모델은 무엇을 보고 맞혔나 (흥행 분류 페이지에 이어 붙일 부분)
-st.subheader("도전 — 모델은 무엇을 보고 맞혔나")
-중요도 = pd.Series(tree.feature_importances_, index=X.columns)
-중요도 = 중요도[중요도 &gt; 0].sort_values(ascending=False).round(3).reset_index()
-중요도.columns = ["변수", "중요도"]
-st.dataframe(중요도, hide_index=True)
-st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보여 줄 뿐, 그것이 원인이라는 뜻은 아닙니다.")</pre></div></details>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 트리가 던지는 질문의 순서
+st.subheader("트리는 어떤 질문을 먼저 던지나")
+st.code(export_text(tree, feature_names=list(X.columns), max_depth=2))
+st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도는 달라집니다.")</pre></div></details>
     </li>
   </ol>
 
