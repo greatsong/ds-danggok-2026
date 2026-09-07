@@ -21,6 +21,12 @@
   #school-finder th,#school-finder td{border:1px solid #f0e2bc;padding:6px 8px;text-align:left;font-size:.9rem}
   #school-finder th{background:#fdf8ef;font-weight:800}
   #school-finder code{background:#fffdf6;border:1px solid #f0e2bc;border-radius:5px;padding:1px 5px}
+  #school-finder .chip,#school-finder .both{font:inherit;cursor:pointer;border:1px solid #f0e2bc;
+    border-radius:6px;background:#fffdf6;padding:3px 8px;font-size:.88rem}
+  #school-finder .chip{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700}
+  #school-finder .both{background:#fdf8ef;white-space:nowrap}
+  #school-finder .chip:hover,#school-finder .both:hover{filter:brightness(.96)}
+  #school-finder .done{background:#eef6e8;border-color:#cfe3c4}
 </style>
 </head>
 <body>
@@ -643,16 +649,50 @@ st.caption(f"중식 {days}일 기준 · 이 그래프로 알 수 있는 것: (�
     });
   }
 
+  function copy(text, el) {
+    var done = function () {
+      var keep = el.textContent;
+      el.textContent = '복사됨';
+      el.classList.add('done');
+      setTimeout(function () { el.textContent = keep; el.classList.remove('done'); }, 1200);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+    } else {
+      fallback(text, done);
+    }
+  }
+
+  function fallback(text, done) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
   function render(rows) {
-    var html = '<table><tr><th>학교</th><th>지역</th><th>교육청 코드</th><th>학교 코드</th></tr>';
+    var html = '<table><tr><th>학교</th><th>지역</th><th>교육청 코드</th><th>학교 코드</th><th></th></tr>';
     rows.forEach(function (r) {
+      var line = r.SCHUL_NM + ': ATPT_OFCDC_SC_CODE=' + r.ATPT_OFCDC_SC_CODE +
+                 ', SD_SCHUL_CODE=' + r.SD_SCHUL_CODE;
       html += '<tr><td>' + esc(r.SCHUL_NM) + '</td><td>' + esc(r.LCTN_SC_NM) +
-              '</td><td><code>' + esc(r.ATPT_OFCDC_SC_CODE) + '</code></td>' +
-              '<td><code>' + esc(r.SD_SCHUL_CODE) + '</code></td></tr>';
+              '</td><td><button type="button" class="chip" data-copy="' + esc(r.ATPT_OFCDC_SC_CODE) + '">' +
+              esc(r.ATPT_OFCDC_SC_CODE) + '</button></td>' +
+              '<td><button type="button" class="chip" data-copy="' + esc(r.SD_SCHUL_CODE) + '">' +
+              esc(r.SD_SCHUL_CODE) + '</button></td>' +
+              '<td><button type="button" class="both" data-copy="' + esc(line) + '">둘 다 복사</button></td></tr>';
     });
     html += '</table><p style="margin:6px 0 0;font-size:.85rem;color:#7a7f95">' +
-            '두 코드를 그대로 프롬프트에 적어 줍니다. 인증키 없이 부르면 한 번에 5건까지만 옵니다.</p>';
+            '코드를 누르면 그 값이, <b>둘 다 복사</b>를 누르면 프롬프트에 붙일 한 줄이 복사됩니다. ' +
+            '인증키 없이 부르면 한 번에 5건까지만 옵니다.</p>';
     out.innerHTML = html;
+    Array.prototype.forEach.call(out.querySelectorAll('[data-copy]'), function (el) {
+      el.addEventListener('click', function () { copy(el.getAttribute('data-copy'), el); });
+    });
   }
 
   function search() {
