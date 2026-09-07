@@ -8,6 +8,20 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
+<style>
+  #school-finder{margin:12px 0 4px}
+  #school-finder .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  #school-finder select,#school-finder input,#school-finder button{
+    font:inherit;padding:7px 10px;border:1px solid #e0d6bb;border-radius:8px;background:#fff;color:inherit}
+  #school-finder input{flex:1 1 190px;min-width:150px}
+  #school-finder button{background:#f4b400;border-color:#e0a300;font-weight:800;cursor:pointer}
+  #school-finder button:hover{filter:brightness(.97)}
+  #school-finder .out{margin-top:10px;font-size:.92rem}
+  #school-finder table{border-collapse:collapse;width:100%;margin-top:6px}
+  #school-finder th,#school-finder td{border:1px solid #f0e2bc;padding:6px 8px;text-align:left;font-size:.9rem}
+  #school-finder th{background:#fdf8ef;font-weight:800}
+  #school-finder code{background:#fffdf6;border:1px solid #f0e2bc;border-radius:5px;padding:1px 5px}
+</style>
 </head>
 <body>
 <div class="topbar"><div class="inner">
@@ -232,6 +246,34 @@
       <div class="callout warn">
         <div class="h">🏫 다른 학교를 넣으려면 — 학교 코드를 찾아 확정한다</div>
         <p>다른 학교를 불러오려면 교육청 코드와 학교 코드 두 가지가 필요합니다. AI는 학교 코드를 알지 못하며, 물어보면 지어낼 수 있으므로 사람이 직접 확인해 확정해야 합니다. 코드를 찾는 방법은 학교기본정보 API에 학교 이름을 넣어 조회하는 것입니다. 주소는 <code>https://open.neis.go.kr/hub/schoolInfo?Type=json&amp;SCHUL_NM=학교이름</code>이며, 줄임말은 검색되지 않아 정식 명칭이 필요하고 같은 이름이 여러 지역에 있으면 교육청 코드로 좁혀야 합니다. 확인한 코드는 프롬프트에 직접 적어 주며, 예를 들어 서울시교육청은 <code>B10</code>, 수도여자고등학교는 <code>7010090</code>, 당곡고등학교는 <code>7010073</code>입니다. 교육청 코드는 아래 표에서 확인할 수 있습니다. 학교 코드는 학교마다 다르고 수가 많아 표로 정리할 수 없습니다.</p>
+      <div class="finder" id="school-finder">
+        <div class="row">
+          <select id="sf-office" aria-label="교육청">
+            <option value="">전체</option>
+            <option value="B10" selected>서울</option>
+            <option value="C10">부산</option>
+            <option value="D10">대구</option>
+            <option value="E10">인천</option>
+            <option value="F10">광주</option>
+            <option value="G10">대전</option>
+            <option value="H10">울산</option>
+            <option value="I10">세종</option>
+            <option value="J10">경기</option>
+            <option value="K10">강원</option>
+            <option value="M10">충북</option>
+            <option value="N10">충남</option>
+            <option value="P10">전북</option>
+            <option value="Q10">전남</option>
+            <option value="R10">경북</option>
+            <option value="S10">경남</option>
+            <option value="T10">제주</option>
+          </select>
+          <input id="sf-name" type="search" placeholder="학교 이름 (정식 명칭)" value="당곡고등학교" aria-label="학교 이름">
+          <button id="sf-go" type="button">코드 찾기</button>
+        </div>
+        <div id="sf-out" class="out" role="status">교육청을 고르고 학교 이름을 넣은 뒤 <b>코드 찾기</b>를 누릅니다.</div>
+      </div>
+
       <table class="daymap" style="margin:10px 0 0">
         <thead><tr><th>지역</th><th>코드</th><th>지역</th><th>코드</th><th>지역</th><th>코드</th></tr></thead>
         <tbody>
@@ -591,5 +633,58 @@ st.caption(f"중식 {days}일 기준 · 이 그래프로 알 수 있는 것: (�
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
+<script>
+// 학교 코드 검색기 — 나이스 학교기본정보 API를 브라우저에서 직접 부른다 (인증키 없이 5건까지).
+(function () {
+  var box = document.getElementById('school-finder');
+  if (!box) return;
+  var office = document.getElementById('sf-office');
+  var name = document.getElementById('sf-name');
+  var go = document.getElementById('sf-go');
+  var out = document.getElementById('sf-out');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  function render(rows) {
+    var html = '<table><tr><th>학교</th><th>지역</th><th>교육청 코드</th><th>학교 코드</th></tr>';
+    rows.forEach(function (r) {
+      html += '<tr><td>' + esc(r.SCHUL_NM) + '</td><td>' + esc(r.LCTN_SC_NM) +
+              '</td><td><code>' + esc(r.ATPT_OFCDC_SC_CODE) + '</code></td>' +
+              '<td><code>' + esc(r.SD_SCHUL_CODE) + '</code></td></tr>';
+    });
+    html += '</table><p style="margin:6px 0 0;font-size:.85rem;color:#7a7f95">' +
+            '두 코드를 그대로 프롬프트에 적어 줍니다. 인증키 없이 부르면 한 번에 5건까지만 옵니다.</p>';
+    out.innerHTML = html;
+  }
+
+  function search() {
+    var q = (name.value || '').trim();
+    if (!q) { out.textContent = '학교 이름을 넣어 주세요.'; return; }
+    out.textContent = '찾는 중…';
+    var url = 'https://open.neis.go.kr/hub/schoolInfo?Type=json&pSize=5&SCHUL_NM=' + encodeURIComponent(q);
+    if (office.value) url += '&ATPT_OFCDC_SC_CODE=' + office.value;
+    fetch(url)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.schoolInfo) {
+          out.innerHTML = '그 이름의 학교를 찾지 못했습니다. 줄임말은 검색되지 않으니 ' +
+                          '<b>정식 명칭</b>으로 적어 보세요. (예: 수도여고 → 수도여자고등학교)';
+          return;
+        }
+        render(d.schoolInfo[1].row);
+      })
+      .catch(function () {
+        out.textContent = '조회에 실패했습니다. 잠시 뒤 다시 눌러 보세요.';
+      });
+  }
+
+  go.addEventListener('click', search);
+  name.addEventListener('keydown', function (e) { if (e.key === 'Enter') search(); });
+})();
+</script>
 </body>
 </html>
