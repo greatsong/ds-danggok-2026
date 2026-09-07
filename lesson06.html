@@ -29,13 +29,13 @@
   </div>
   <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson06-deep.html">🔎 더 자세한 판 보기 →</a></p>
 
-  <p class="lead">1차시에 그래프로 그렸던 서울 기온 데이터로 돌아옵니다. 그때는 과거를 <b>보는</b> 그래프를 만들었다면, 오늘은 미래를 <b>내다보는</b> 직선을 긋습니다. 산점도 위에 가장 잘 맞는 직선 하나를 얹는 것 — 이것이 회귀입니다. 우리가 만드는 첫 예측 모델이기도 합니다.</p>
+  <p class="lead">오늘 다루는 데이터는 서울의 100여 년치 기온 기록입니다. 지금까지의 그래프는 이미 일어난 값을 보여 주었고, 오늘은 아직 재지 않은 값을 <b>계산합니다</b>. 산점도 위에 가장 잘 맞는 직선 하나를 얹는 방법이 회귀입니다. 이 직선이 여러분이 만드는 첫 <b>예측 모델</b>입니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
       <li><b>상관에서 회귀로</b> — 함께 변하는 관계를 수치로 재고, 직선으로 요약한다</li>
-      <li><b>바이브 코딩</b> — 연도 슬라이더로 예상 기온이 나오는 예측기 페이지를 내 앱에 추가</li>
+      <li><b>바이브 코딩</b> — 연도를 고르면 예상 기온이 표시되는 예측기 앱을 만든다</li>
       <li><b>판단</b> — 창을 바꾸면 "서울은 얼마나 더워지는가"의 답이 3배 벌어진다</li>
     </ul>
   </div>
@@ -50,6 +50,88 @@
     <p class="q">"선형 회귀는 두 가지 이상의 속성 사이에 선 모양의 관계가 있다고 가정하고 데이터를 가장 잘 대표하는 선을 찾는 분석 방법이다." <span class="src">(119쪽)</span></p>
     <p class="t">→ 상관은 두 속성이 함께 변하는 <b>정도</b>를 재고, 회귀는 그 관계를 <b>직선 하나로 요약</b>해 예측에 쓴다.</p>
   </div>
+  <h3>회귀라는 이름은 어디서 왔나</h3>
+  <p>회귀(回歸)는 "돌아올 회, 돌아갈 귀"로 되돌아간다는 뜻입니다. 영어 regression도 라틴어 regredi에서 왔고, re는 뒤로, gradi는 걷다를 뜻하므로 의미가 같습니다. 직선을 긋는 계산에 왜 되돌아감이라는 이름이 붙었는지는 1886년 영국의 프랜시스 골턴이 발표한 연구에서 비롯합니다.</p>
+  <p>골턴은 부모 205쌍과 그 자녀 928명의 키를 조사했습니다. 키가 아주 큰 부모의 자녀는 평균적으로 부모보다 작았고, 키가 아주 작은 부모의 자녀는 평균적으로 부모보다 컸습니다. 자녀의 키가 전체 평균 쪽으로 되돌아가는 경향이 있었습니다. 골턴은 이 현상에 <b>평범함으로의 회귀</b>라는 이름을 붙였고, 부모 키와 자녀 키의 산점도에 직선을 그어 그 경향을 나타냈습니다.</p>
+  <svg viewBox="0 0 840 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부모의 키와 자녀의 키를 나타낸 산점도. 두 키가 같다면 나타났을 점선보다 실제 회귀선의 기울기가 완만해, 부모 키가 평균에서 멀수록 자녀 키는 평균 쪽에 더 가깝게 놓인다는 그림" style="max-width:840px;display:block;margin:14px auto 0">
+    <defs>
+      <marker id="l6g-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e45756"/></marker>
+    </defs>
+    <line x1="70" y1="300" x2="612" y2="300" stroke="#c9ccd4" stroke-width="1.5"/>
+    <line x1="70" y1="300" x2="70" y2="52" stroke="#c9ccd4" stroke-width="1.5"/>
+    <line x1="70" y1="180" x2="612" y2="180" stroke="#e3e6ec" stroke-width="1" stroke-dasharray="3 4"/>
+    <line x1="335" y1="300" x2="335" y2="52" stroke="#e3e6ec" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="341" y="64" font-size="12" fill="#9aa0aa">평균</text>
+    <circle cx="223.8" cy="206.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="425.4" cy="162.1" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="214.3" cy="217.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="378.4" cy="146.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="224.5" cy="237.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="399.1" cy="151.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="474.4" cy="119.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="325.8" cy="187.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="308.8" cy="202.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="231.6" cy="209.6" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="348.2" cy="182.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="329.4" cy="176.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="397.9" cy="140.6" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="354.1" cy="207.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="398.8" cy="186.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="319.4" cy="212.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="335.2" cy="194.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="354.4" cy="113.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="330.6" cy="165.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="214.8" cy="221.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="395.2" cy="163.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="368.6" cy="167.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="243.6" cy="197.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="261.2" cy="167.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="289.1" cy="181.2" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="335.2" cy="162.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="280.3" cy="178.1" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="323.7" cy="160.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="391.7" cy="160.2" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="264.1" cy="187.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="377.5" cy="136.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="300.7" cy="180.1" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="381.1" cy="160.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="353.9" cy="170.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="280.6" cy="215.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="299.0" cy="180.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="472.3" cy="120.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="430.7" cy="136.6" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="398.5" cy="157.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="405.1" cy="125.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="305.2" cy="201.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="513.1" cy="121.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="423.2" cy="137.1" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="231.8" cy="166.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="496.3" cy="127.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="403.4" cy="156.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="254.7" cy="206.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="369.0" cy="149.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="399.4" cy="159.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="458.1" cy="156.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="407.0" cy="137.6" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="308.5" cy="221.2" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <line x1="70" y1="300" x2="600" y2="60" stroke="#8a8f99" stroke-width="2" stroke-dasharray="7 5"/>
+    <line x1="85" y1="256" x2="585" y2="104" stroke="#e45756" stroke-width="3"/>
+    <line x1="560" y1="84" x2="560" y2="105" stroke="#e45756" stroke-width="2" marker-end="url(#l6g-ar)"/>
+    <line x1="140" y1="264" x2="140" y2="244" stroke="#e45756" stroke-width="2" marker-end="url(#l6g-ar)"/>
+    <text x="572" y="101" font-size="12.5" fill="#c0392b" paint-order="stroke" stroke="#fffdf7" stroke-width="3.5">평균 쪽으로 내려온다</text>
+    <text x="150" y="252" font-size="12.5" fill="#c0392b" paint-order="stroke" stroke="#fffdf7" stroke-width="3.5">평균 쪽으로 올라온다</text>
+    <line x1="96" y1="76" x2="136" y2="76" stroke="#8a8f99" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="144" y="80" font-size="12.5" font-weight="700" fill="#5a5f68">부모와 자녀의 키가 같다면</text>
+    <line x1="96" y1="100" x2="136" y2="100" stroke="#e45756" stroke-width="3"/>
+    <text x="144" y="104" font-size="12.5" font-weight="700" fill="#c0392b">실제 경향 (회귀선)</text>
+    <text x="335" y="332" font-size="13.5" font-weight="700" fill="#3a3f48" text-anchor="middle">부모의 키 (작다 → 크다)</text>
+    <text x="31" y="180" font-size="13.5" font-weight="700" fill="#3a3f48" transform="rotate(-90 31 180)" text-anchor="middle">자녀의 키</text>
+    <text x="70" y="362" font-size="11.5" fill="#8a8f99">점의 위치는 경향을 나타낸 모식 표기입니다. 골턴이 얻은 회귀선의 기울기는 약 3분의 2였습니다.</text>
+  </svg>
+
+  <p>오늘날 회귀는 되돌아가는 현상과 관계없이, 데이터의 관계를 선으로 요약해 값을 예측하는 방법 전체를 가리킵니다. 방법에 처음 붙은 이름이 그대로 남은 경우입니다. 용어의 이름이 방법의 내용을 모두 설명하지는 않으므로, 이름의 유래를 알아 두면 혼동이 줄어듭니다.</p>
+  <p>평균으로 되돌아가는 현상 자체는 지금도 <b>평균으로의 회귀</b>라는 이름으로 부릅니다. 시험을 유난히 잘 본 학생이 다음 시험에서는 평소 실력에 가까운 점수를 받는 일이 그 예입니다.</p>
+
   <p>순서는 아래 표대로입니다 — 관계가 선 모양이라는 판단이 서야 직선을 긋습니다. 교과서는 예측하려는 값을 <b>종속 변수</b>, 예측에 사용하는 값을 <b>독립 변수</b>, 둘의 관계를 가장 잘 대표하는 선을 <b>회귀선</b>이라고 부릅니다(119쪽). 우리 문제에서는 연도가 독립 변수, 연평균기온이 종속 변수입니다.</p>
   <table class="daymap">
     <thead><tr><th>단계</th><th>도구</th><th>묻는 말</th></tr></thead>
@@ -59,14 +141,49 @@
       <tr><td><b>③ 회귀선</b></td><td>가장 잘 맞는 직선</td><td>이 관계로 새 값을 예측하면 얼마가 나오는가</td></tr>
     </tbody>
   </table>
+  <h3>실제 사례로 보는 상관과 인과</h3>
+  <p>상관계수가 크다는 사실은 두 값이 함께 움직인다는 관찰일 뿐입니다. 이 관찰은 한쪽이 다른 쪽의 원인이라는 뜻을 포함하지 않습니다. 실제로 발표된 분석에서도 이러한 혼동이 자주 일어납니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>관찰된 상관</th><th>실제로는</th></tr></thead>
+    <tbody>
+      <tr><td><b>초콜릿 소비량과<br>노벨상 수상자 수</b></td><td>2012년 한 의학 학술지에 실린 분석에서 23개국을 비교했더니 상관계수가 약 0.79로 나왔다</td><td>국가의 소득 수준이 두 값 모두와 관련이 있다. 초콜릿을 많이 먹어서 수상자가 늘어난 것이 아니다</td></tr>
+      <tr><td><b>출동한 소방관 수와<br>화재 피해액</b></td><td>소방관이 많이 출동한 화재일수록 피해액이 컸다</td><td>불이 크기 때문에 소방관이 많이 출동한 것이다. 원인은 화재의 규모다</td></tr>
+      <tr><td><b>흡연과 폐암</b></td><td>1950년대에 흡연자에게 폐암이 많다는 상관이 보고되었다</td><td>상관을 확인한 뒤에도 여러 검증을 거쳐 1964년에야 원인으로 인정되었다</td></tr>
+    </tbody>
+  </table>
+  <p>상관은 원인을 찾는 출발점이 되지만 그 자체로 증거는 아닙니다. 인과를 주장하려면 상관과 별개로 추가 검증이 필요합니다. 흡연과 폐암은 그 검증을 오랜 기간 거친 사례입니다.</p>
+
   <h3>직선을 읽는 두 숫자 — 기울기와 편향</h3>
   <p>직선 하나는 숫자 두 개로 정해집니다. <b>기울기</b>는 "독립 변수가 1 커질 때 종속 변수가 얼마나 변하는가"입니다. 연도-기온 직선이라면 기울기가 곧 "1년에 몇 도씩 오르는가"이고, 100을 곱하면 뉴스에서 보던 "100년에 몇 도"가 됩니다. 교과서는 기울기를 <b>가중치</b>, 직선의 출발 높이를 <b>편향</b>이라고 부릅니다(119쪽). 숫자 두 개가 100여 년의 데이터를 요약합니다.</p>
   <h3>어느 직선이 "가장 잘 맞는" 직선인가</h3>
   <p>같은 점들 위에도 직선은 무수히 그을 수 있습니다. 교과서 120쪽은 두 후보 직선을 놓고 "실젯값과 예측값의 차이", 곧 <b>오차</b>가 작은 쪽을 고르라고 말합니다. AI의 학습도 원리는 같습니다 — 수많은 직선 가운데 오차가 가장 작은 기울기·편향 조합을 찾아내는 계산입니다. 이 "오차로 판정한다"는 원리는 8차시에 활동지로 직접 손계산합니다. 오늘은 AI에게 계산을 맡기고, 나온 직선을 읽는 데 집중합니다.</p>
-  <div class="callout mini">
-    <div class="h">📝 상관 사례 먼저 모으기</div>
-    <p>실습 전에 생활 속 상관 사례를 폼 Ⅱ-03a·Ⅱ-03b로 모읍니다.</p>
-  </div>
+  <h3>모델과 모델링 — 오늘 만드는 것의 이름</h3>
+  <p>이 단원의 이름이 "Ⅲ. 데이터 모델링과 평가"이고, 교과서가 정리한 데이터 과학 문제 해결 6단계 가운데 네 번째가 모델링하기, 다섯 번째가 모델 평가하기, 여섯 번째가 모델 활용하기입니다(14쪽). 오늘 긋는 직선이 <b>모델</b>이고, 직선을 만드는 과정이 <b>모델링</b>입니다.</p>
+  <p>모델(model)이라는 낱말은 "작은 척도"를 뜻하는 라틴어 modulus에서 나왔고, 건축의 축소 모형을 가리키는 이탈리아어 modello를 거쳐 지금의 뜻이 되었습니다. 건축 모형은 실물의 모든 것을 담지 않습니다. 벽돌의 개수나 배관은 빼고 형태와 비례만 남깁니다. 목적에 필요한 것만 남기고 나머지를 버린 축소판이 모형입니다.</p>
+  <p>데이터 과학의 모델도 같습니다. 서울 기온 데이터에는 하루하루의 날씨와 계절, 관측의 사정이 모두 들어 있지만, 오늘 만드는 모델은 그 가운데 "연도가 1 늘 때 기온이 얼마나 변하는가" 하나만 남깁니다. 100여 년의 기록이 기울기와 편향, 숫자 두 개로 요약됩니다.</p>
+  <table class="daymap">
+    <thead><tr><th>모델링 단계</th><th>하는 일</th><th>오늘의 경우</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 형태 정하기</b></td><td>관계를 어떤 모양으로 요약할지 고른다</td><td>직선 하나로 요약한다</td></tr>
+      <tr><td><b>② 학습</b></td><td>데이터에 가장 잘 맞는 숫자를 찾는다</td><td>오차가 가장 작은 기울기와 편향</td></tr>
+      <tr><td><b>③ 평가</b></td><td>그 모델을 얼마나 믿을 수 있는지 잰다</td><td>예측값과 실젯값의 차이를 수치로 잰다</td></tr>
+    </tbody>
+  </table>
+  <p>데이터에 가장 잘 맞는 숫자를 찾는 계산을 <b>학습</b>이라고 부릅니다. 사람이 기울기를 정해 주는 것이 아니라, 오차가 가장 작아지는 값을 계산으로 찾아냅니다. 이 페이지 첫머리의 "모든 모델은 틀렸다. 다만 일부는 쓸모가 있다"는 말도 여기서 이해됩니다. 모델은 축소판이므로 실제와 어긋나는 부분이 반드시 있습니다. 물어야 할 것은 맞느냐 틀리느냐가 아니라 이 목적에 쓸 만한가입니다.</p>
+
+  <h3>기계학습은 무엇을 배우는가</h3>
+  <p>교과서 11쪽은 데이터 과학을 통계, 데이터 분석, 기계학습 및 관련 방법을 통합하는 학문 분야로 정의합니다. 오늘 한 일은 이 정의 가운데 <b>기계학습</b>에 해당합니다. 기계학습(machine learning)은 기계가 데이터로부터 배운다는 뜻입니다. 기계가 배우는 대상은 모델을 이루는 숫자입니다.</p>
+  <p>기계학습이 나오기 전의 방식과 비교하면 차이가 분명합니다. 예전에는 사람이 규칙을 하나하나 코드로 적어야 했습니다. 이런 조건이면 이렇게 계산하라는 지시를 사람이 전부 정해 주는 방식이었습니다.</p>
+  <p>오늘 실습에서도 기울기를 몇으로 하라고 정해 주지 않습니다. 데이터와 직선으로 요약하라는 형태만 주고, 오차가 가장 작아지는 기울기와 편향은 계산이 찾아냅니다. 이것이 기계학습입니다. 세 낱말은 가리키는 층이 다릅니다.</p>
+  <table class="daymap">
+    <thead><tr><th>낱말</th><th>무엇을 가리키나</th><th>오늘의 경우</th></tr></thead>
+    <tbody>
+      <tr><td><b>기계학습</b></td><td>데이터에서 규칙을 찾는 방법 전체</td><td>직선의 숫자를 계산이 찾게 한 방식</td></tr>
+      <tr><td><b>학습</b></td><td>모델을 이루는 숫자를 찾는 계산</td><td>오차가 가장 작아지는 기울기와 편향을 구한 계산</td></tr>
+      <tr><td><b>모델</b></td><td>학습이 끝나고 남는 결과물</td><td>기울기와 편향으로 정해진 직선</td></tr>
+    </tbody>
+  </table>
+  <p>기계가 학습한다고 해서 사람이 할 일이 없어지지는 않습니다. 어떤 데이터를 사용할지, 믿을 수 없는 값을 어떻게 걸러 낼지, 어떤 형태로 요약할지, 나온 결과를 믿을지는 사람이 판단합니다. 관측일이 300일이 안 되는 해를 걸러 낸 것도 사람의 판단이었습니다.</p>
 
   <h2>2. 실습 — 기온 예측기 만들기 (바이브 코딩)</h2>
   <p>순서를 지킵니다. 직선부터 긋는 것이 아니라, 연도-연평균기온 산점도에서 점들이 선 모양의 추세를 보이는지 먼저 확인합니다. 관계가 보인다는 판단이 서야 직선을 얹을 수 있습니다.</p>
@@ -78,14 +195,14 @@
 
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 스트림릿 앱에 "기온 예측기" 페이지를 추가해 줘.
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.
 서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv)로
 연도별 평균기온을 구하되, 아직 진행 중인 올해와 관측일이 300일이 안 되는 해는 빼 줘.
 남은 연평균기온에 가장 잘 맞는 회귀 직선을 구해서 산점도 위에 그려 주고,
 연도를 슬라이더로 고르면 그 해의 예상 기온이 크게 표시되게 해 줘.
 슬라이더 범위는 1900년부터 2100년까지.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/6_기온_예측기.py</span><pre># pages/6_기온_예측기.py — 연평균기온에 직선을 맞추고 예측한다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 연평균기온에 직선을 맞추고 예측한다
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -93,7 +210,7 @@ import plotly.express as px
 
 DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
 
-st.header("기온 예측기")
+st.title("기온 예측기")
 
 
 @st.cache_data
@@ -116,12 +233,12 @@ year = st.slider("연도를 고르세요", 1900, 2100, 2045)
 st.metric(f"{year}년 예상 연평균기온", f"{a * year + b:.1f}℃")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 직선을 읽는다</span><br>
-      코드는 5차시처럼 <b>pages</b> 폴더에 새 파일로 올려 커밋합니다 — 1~3분 뒤 앱에 새 페이지가 나타납니다. 파일 이름 앞 숫자는 차시 번호입니다. 산점도 위에 직선이 나타납니다. 슬라이더를 내년으로, 2045년으로 옮겨 봅니다. 내가 만든 작은 AI가 미래의 숫자를 내놓습니다. 이 값을 얼마나 믿어야 하는지는 잠시 미뤄 두고, 먼저 직선이 데이터의 추세와 어울리는지 눈으로 확인합니다.</li>
+      받은 코드를 <b>app.py</b> 파일 하나로 저장해 실행합니다. 오늘 앱은 화면이 하나입니다. 산점도 위에 직선이 표시되는지 먼저 확인합니다. 그다음 슬라이더를 내년으로, 2045년으로 옮겨 봅니다. 값이 바로 계산되어 표시됩니다. 이 값을 얼마나 믿을 수 있는지는 뒤에서 다룹니다. 먼저 직선이 점들의 추세와 어울리는지 눈으로 확인합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 기울기를 읽을 수 있는 숫자로</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>직선의 기울기를 "100년에 몇 도 오르는가"로 바꿔 화면에 크게 보여 줘.
 그리고 전체 기간으로 구한 기울기와 최근 20년만으로 구한 기울기를
 나란히 비교해서 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/6_기온_예측기.py에 이어 붙일 부분</span><pre># 기울기를 100년 단위로, 그리고 최근 20년과 비교
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 기울기를 100년 단위로, 그리고 최근 20년과 비교
 recent = yearly[yearly["연도"] &gt;= yearly["연도"].max() - 19]
 a2, _ = np.polyfit(recent["연도"], recent["연평균기온"], 1)
 c1, c2 = st.columns(2)
@@ -199,10 +316,6 @@ st.caption(f"사용한 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['
     <p>둘 다 계산은 정확합니다. 다만 <b>다른 질문에 답하는 직선</b>입니다. 전체 114개 해의 직선은 "지난 한 세기의 평균 추세"를, 최근 20년의 직선은 "요즘의 가파름"을 요약합니다. 같은 2045년을 물어도 예상 기온이 13.9℃와 15.7℃로 갈라집니다. 직선이 내놓는 숫자를 만나면, 그 직선이 <b>어느 창에서 학습되었는지</b>부터 물어야 합니다.</p>
   </div>
   <p>하나 더 시험해 봅니다. 슬라이더를 2100년까지 밀어 보세요. 예측값은 주저 없이 나옵니다. 그러나 직선은 1908~2025년의 데이터로 학습되었습니다. 학습 범위를 한참 벗어난 곳의 값을 직선으로 내다보는 것을 <b>외삽</b>이라 합니다. 외삽을 얼마나 믿어야 하는지 — 이 물음은 8차시에서 다룹니다.</p>
-  <div class="callout check">
-    <div class="h">✔️ 내 앱이 자라고 있다</div>
-    <p>1차시에 배포한 내 포트폴리오 앱에 오늘 "기온 예측기" 페이지가 추가되었습니다. 그래프를 보여 주던 앱이 처음으로 미래의 숫자를 내놓는 앱이 되었습니다. 이 페이지는 8차시에 평가 기능이 붙으며 한 번 더 자랍니다.</p>
-  </div>
 
   <h2>4. 판단 — 상관은 인과가 아니다</h2>
   <div class="tbquote">
@@ -278,7 +391,7 @@ st.caption(f"사용한 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
     <li>산점도 → 상관계수 → 회귀선의 순서와 각 단계가 답하는 질문을 말할 수 있다.</li>
-    <li>연도 슬라이더로 예상 기온이 나오는 예측기 페이지를 내 앱에 추가했다.</li>
+    <li>연도를 고르면 예상 기온이 표시되는 예측기 앱을 만들어 실행했다.</li>
     <li>전체 기간과 최근 20년의 기울기가 +2.60과 +8.14로 갈라지는 이유를 설명할 수 있다.</li>
     <li>상관관계와 인과관계의 차이를 예를 들어 설명할 수 있다.</li>
   </ul>
@@ -291,6 +404,11 @@ st.caption(f"사용한 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['
     <tr><td class="term">선형 회귀</td><td>속성 사이에 선 모양의 관계를 가정하고 가장 잘 대표하는 선을 찾는 분석</td></tr>
     <tr><td class="term">회귀선</td><td>독립 변수와 종속 변수의 관계를 가장 잘 대표하는 직선</td></tr>
     <tr><td class="term">기울기</td><td>독립 변수가 1 커질 때 종속 변수가 변하는 양. 우리 문제에선 "1년에 몇 도"</td></tr>
+    <tr><td class="term">편향</td><td>직선의 출발 높이. 교과서가 부르는 이름이다(119쪽)</td></tr>
+    <tr><td class="term">모델</td><td>데이터에 담긴 관계를 목적에 맞게 요약한 것. 오늘의 모델은 기울기와 편향으로 정해지는 직선</td></tr>
+    <tr><td class="term">모델링</td><td>모델을 만드는 과정. 형태를 정하고, 데이터에 맞는 숫자를 찾고, 얼마나 맞는지 평가한다</td></tr>
+    <tr><td class="term">학습</td><td>오차가 가장 작아지는 기울기와 편향을 계산으로 찾는 것</td></tr>
+    <tr><td class="term">평균으로의 회귀</td><td>극단적인 값 다음에 평균에 가까운 값이 나타나는 경향. 회귀라는 이름의 유래</td></tr>
     <tr><td class="term">인과관계</td><td>상관 중에서 원인과 결과가 검증으로 확인된 관계</td></tr>
     <tr><td class="term">외삽</td><td>학습에 쓴 데이터의 범위 밖(예: 2100년)을 직선으로 내다보는 것. 그 구간의 성적표는 없다</td></tr>
   </table>
