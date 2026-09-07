@@ -34,7 +34,7 @@
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
       <li><b>교과서로 손계산</b> — 158·160쪽 〈개나리 마트〉 해 보기 ① (활동지 문제 1)</li>
-      <li><b>바이브 코딩</b> — 급식 154일에서 규칙을 찾는 페이지를 내 앱에 추가</li>
+      <li><b>바이브 코딩</b> — 급식 154일에서 규칙을 찾는 앱을 만든다</li>
       <li><b>판정</b> — "김치의 배신": 신뢰도가 높아도 우연일 수 있다는 것을 실데이터로</li>
     </ul>
   </div>
@@ -96,13 +96,13 @@
 
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 스트림릿 앱에 "급식 규칙 찾기" 페이지를 추가해 줘.
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"급식 규칙 찾기" 스트림릿 앱을 만들어 줘. 파일 하나로.
 당곡고 급식 데이터(danggok_meals.csv)를 읽어서 하루 식단을 장바구니 하나로 보고,
 함께 자주 나오는 메뉴 쌍을 찾아 줘.
 각 규칙마다 지지도, 신뢰도, 향상도를 표로 보여 주고,
 동시에 나온 횟수가 5회 이상인 규칙만 보이게 해 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다</p><div class="codewrap code"><span class="label">pages/12_급식_규칙_찾기.py</span><pre># pages/12_급식_규칙_찾기.py — 함께 자주 나오는 메뉴 쌍을 찾는다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 함께 자주 나오는 메뉴 쌍을 찾는다
 import streamlit as st
 import pandas as pd
 from itertools import combinations
@@ -143,7 +143,7 @@ st.dataframe(rules, hide_index=True)</pre></div></details>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>향상도가 높은 순서로 정렬하고, 향상도가 1에 가까운 규칙(0.9~1.1)은
 "우연 수준"이라고 따로 표시해 줘.
 그리고 메뉴 이름을 고르면 그 메뉴가 낀 규칙만 모아 볼 수 있게 해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/12_급식_규칙_찾기.py에 이어 붙일 부분</span><pre># 향상도가 1 언저리인 규칙은 따로 표시하고, 메뉴로 좁혀 본다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 향상도가 1 언저리인 규칙은 따로 표시하고, 메뉴로 좁혀 본다
 rules["판정"] = rules["향상도"].apply(lambda v: "우연 수준" if 0.9 &lt;= v &lt;= 1.1 else "")
 메뉴 = st.selectbox("메뉴로 좁혀 보기", ["(전체)"] + sorted(single))
 보기 = rules if 메뉴 == "(전체)" else rules[(rules["조건"] == 메뉴) | (rules["결과"] == 메뉴)]

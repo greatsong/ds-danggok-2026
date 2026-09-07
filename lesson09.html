@@ -143,13 +143,14 @@
   </div>
 
   <h2>3. 실습 — 영화 흥행 분류기 (바이브 코딩)</h2>
-  <p>4차시에 다룬 영화별 표(<a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a>)를 그대로 사용합니다. 7차시의 회귀 페이지 옆에 분류 페이지를 새로 추가합니다.</p>
+  <p>4차시에 다룬 영화별 표(<a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a>)를 그대로 사용합니다. 오늘은 이 데이터로 흥행 분류기 앱을 새로 만듭니다. 화면이 하나인 앱이므로 파일도 하나입니다.</p>
 
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>이 주소의 영화 데이터에 '흥행 성공' 여부 라벨을 붙이고
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"흥행 분류기" 스트림릿 앱을 만들어 줘. 파일 하나로.
+이 주소의 영화 데이터에 '흥행 성공' 여부 라벨을 붙이고
 (기준: 우리 반이 정한 관객 수), 개봉 전에 알 수 있는 정보로
-성공 확률을 알려 주는 분류 모델을 만들어 줘. 정확도도 보여 줘.
+성공 확률을 알려 줘. 정확도도 보여 줘.
 데이터: https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
 열은 movieCd·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·
 first_scrn(개봉일 스크린수)·first_show(개봉일 상영횟수)·first_date(10위권 첫 등장일)·
@@ -158,7 +159,7 @@ first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10이야.
 성공 여부는 total_audi로 정하되, 예측에 쓰는 변수는
 개봉 전에 알 수 있는 것(first_scrn·first_show·genre·nation·개봉 시기)만 써 줘.
 first_week_audi처럼 개봉 후에야 아는 값은 넣지 마.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다.</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py</span><pre># pages/9_흥행_분류.py — 개봉 전 정보로 흥행 성공을 가린다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다.</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 개봉 전 정보로 흥행 성공을 가린다
 import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
@@ -196,11 +197,11 @@ c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(yte, logi.predict(s
 c2.metric("의사결정트리 정확도", f"{accuracy_score(yte, tree.predict(Xte)):.3f}")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 확률을 읽는다</span><br>
-      코드는 <b>pages</b> 폴더에 새 파일로 올려 커밋합니다 — 1~3분 뒤 앱에 새 페이지가 나타납니다. 영화를 하나 고르면 "성공 확률 몇 %"가 나타납니다. 확률이 0.5보다 크면 성공, 작으면 실패로 분류됩니다 — 교과서 136쪽의 문턱 규칙 그대로입니다. 화면에 함께 표시되는 <b>정확도</b>를 기록해 두세요.</li>
+      받은 코드를 <b>app.py</b> 파일 하나로 저장해 실행합니다. 영화를 하나 고르면 "성공 확률 몇 %"가 나타납니다. 확률이 0.5보다 크면 성공, 작으면 실패로 분류됩니다. 교과서 136쪽의 문턱 규칙 그대로입니다. 화면에 함께 표시되는 <b>정확도</b>를 기록해 두세요.</li>
     <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>의사결정트리로도 만들어서 어떤 질문을 어떤 순서로 던지는지
 그림으로 보여 줘. 두 모델의 정확도를 나란히 비교해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 트리가 던지는 질문의 순서
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 트리가 던지는 질문의 순서
 st.subheader("트리는 어떤 질문을 먼저 던지나")
 st.code(export_text(tree, feature_names=list(X.columns), max_depth=2))
 st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도는 달라집니다.")</pre></div></details>
@@ -243,7 +244,7 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
   <p>모델에게 무엇을 보고 맞혔는지 물을 수 있으며 이를 <b>특성 중요도</b>라고 합니다. 우리 트리는 개봉일 스크린수를 가장 무겁게 보며 0.476이고 상영횟수 0.277이 뒤를 받치며 장르는 조연입니다.</p>
   <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 트리에게 무엇을 보고 맞혔는지 물어보자.
 - 의사결정트리의 특성 중요도를 큰 순서로 표로 보여 줘. 0인 것은 빼 줘.</pre></div>
-  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">pages/9_흥행_분류.py에 이어 붙일 부분</span><pre># 도전 — 모델은 무엇을 보고 맞혔나 (흥행 분류 페이지에 이어 붙일 부분)
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 도전 — 모델은 무엇을 보고 맞혔나 (앞 코드 끝에 이어 붙일 부분)
 st.subheader("도전 — 모델은 무엇을 보고 맞혔나")
 중요도 = pd.Series(tree.feature_importances_, index=X.columns)
 중요도 = 중요도[중요도 &gt; 0].sort_values(ascending=False).round(3).reset_index()

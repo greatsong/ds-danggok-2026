@@ -219,13 +219,13 @@
   </div>
   <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson13-deep.html">🔎 더 자세한 판 보기 →</a></p>
 
-  <p class="lead">"내 앱에 방문 소감을 받고 싶다." 이 한 가지 소원에서 오늘 수업이 시작됩니다. 지금까지 우리 앱은 데이터를 <b>읽기만</b> 했습니다 — 방문자가 남긴 글을 저장할 곳이 없었기 때문입니다. 오늘은 CSV 파일로는 안 되는 순간을 확인하고, <b>수파베이스</b>로 내 앱에 방명록을 만듭니다.</p>
+  <p class="lead">"앱에 방문 소감을 받고 싶다." 이 한 가지 소원에서 오늘 수업이 시작됩니다. 지금까지 만든 앱은 데이터를 <b>읽기만</b> 했습니다. 방문자가 남긴 글을 저장할 곳이 없었기 때문입니다. 오늘은 CSV 파일로는 안 되는 순간을 확인하고, <b>수파베이스</b>에 글이 쌓이는 방명록 앱을 새로 만듭니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
       <li><b>개념</b> — 데이터셋 · 데이터베이스 · 테이블, 그리고 CSV로 부족해지는 세 순간</li>
-      <li><b>바이브 코딩</b> — 내 앱에 방명록 페이지를 달아 수파베이스에 글이 쌓이게</li>
+      <li><b>바이브 코딩</b> — 방명록 앱을 새로 만들어 수파베이스에 글이 쌓이게</li>
       <li><b>SQL(읽기 자료)</b> — AI 코드 속 문장의 정체: 읽기 · 쓰기 · 묶어서 세기</li>
       <li><b>팀 프로젝트 예고</b> — 팀 구성 · 데이터로 답할 수 있는 문제 고르기</li>
     </ul>
@@ -420,14 +420,14 @@
     <p>수파베이스(Supabase)는 웹에서 테이블을 만들고 앱과 연결할 수 있는 데이터베이스 서비스입니다. 수업에서는 선생님이 미리 만들어 둔 <b>학급 공용 프로젝트</b>에 접속 정보만 받아 연결합니다. 수업 도입에서 교과서 31쪽 탐구활동의 쇼핑몰 테이블 설계를 수파베이스 화면으로 직접 확인합니다 — 속성 이름, 데이터형, 조건이 교과서의 설계표 그대로 화면에 나타납니다.</p>
   </div>
 
-  <h2>2. 실습 — 내 앱에 방명록 달기 (바이브 코딩)</h2>
+  <h2>2. 실습 — 방명록 앱 만들기 (바이브 코딩)</h2>
   <p class="mini">그림에는 주요 열만 그렸습니다. 실제 표에는 행을 구분하는 id 열과 도전 과제에서 쓰는 비밀번호 열이 더 있습니다.</p>
-  <p>1차시에 배포한 내 포트폴리오 앱에 방명록 페이지를 추가합니다. 방문자가 남긴 글이 수파베이스의 방명록 테이블에 쌓이고, 쌓인 글이 목록으로 나타나는 것이 목표입니다.</p>
+  <p>오늘은 방명록 앱을 새로 만들어 배포합니다. 화면이 하나인 앱이라 파일도 하나입니다. 방문자가 남긴 글이 수파베이스의 방명록 테이블에 쌓이고, 쌓인 글이 목록으로 나타나는 것이 목표입니다.</p>
 
   <ol class="steps">
-    <li><span class="st">먼저 — 비밀 금고(secrets)에 접속 정보 두 줄 넣기</span><br>
-      선생님이 클래스룸 <b>비공개 게시</b>로 보낸 접속 정보(주소와 키)는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 배포된 내 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸을 엽니다. 이미 적힌 줄이 있으면 그대로 두고 맨 아래에 다음 모양의 두 줄을 덧붙여 저장합니다. 아래 상자에 선생님이 준 주소와 키를 넣으면 두 줄이 완성되어 그대로 복사할 수 있습니다.
-      <div class="codewrap code"><span class="label">Secrets에 덧붙일 두 줄의 모양</span><pre>SUPABASE_URL = "선생님이 준 프로젝트 주소를 여기에"
+    <li><span class="st">준비 — 비밀 금고(secrets)에 넣을 접속 정보 두 줄 만들기</span><br>
+      선생님이 클래스룸 <b>비공개 게시</b>로 보낸 접속 정보(주소와 키)는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 아래 상자에 선생님이 준 주소와 키를 넣으면 두 줄이 완성되어 그대로 복사할 수 있습니다. 방명록 앱을 만든 뒤, 그 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸을 엽니다. 새로 만든 앱이라 칸은 비어 있습니다. 복사한 두 줄을 붙여 넣고 저장합니다.
+      <div class="codewrap code"><span class="label">Secrets에 넣을 두 줄의 모양</span><pre>SUPABASE_URL = "선생님이 준 프로젝트 주소를 여기에"
 SUPABASE_KEY = "선생님이 준 키를 여기에"</pre></div>
       <div class="urlmaker sbmaker">
         <span class="um-label">🔐 두 줄 만들기 — 선생님이 준 값을 붙여 넣으면 Secrets에 넣을 두 줄이 완성됩니다</span>
@@ -436,7 +436,7 @@ SUPABASE_KEY = "선생님이 준 키를 여기에"</pre></div>
         <div class="made sb-made">SUPABASE_URL = "…"
 SUPABASE_KEY = "…"</div>
         <div class="btns"><button type="button" class="copybtn sb-copy" disabled>두 줄 복사</button><a class="openbtn" href="https://share.streamlit.io" target="_blank" rel="noopener">스트림릿 클라우드 열기 ↗</a></div>
-        <div class="um-note">주소와 키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다. 복사한 두 줄을 <b>Manage app → ⋮ → Settings → Secrets</b> 상자 맨 아래에 붙여 넣고 저장합니다. 키는 짝에게도 보여 주지 않습니다.</div>
+        <div class="um-note">주소와 키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다. 복사한 두 줄을 배포한 앱의 <b>Manage app → ⋮ → Settings → Secrets</b> 상자에 붙여 넣고 저장합니다. 키는 짝에게도 보여 주지 않습니다.</div>
       </div>
 <script>
 (function () {
@@ -466,7 +466,7 @@ SUPABASE_KEY = "…"</div>
         <table class="daymap">
           <thead><tr><th>어디</th><th>어떤 모습</th></tr></thead>
           <tbody>
-            <tr><td><b>① 비밀 금고(Secrets)</b></td><td><code>SUPABASE_URL = "…"</code> · <code>SUPABASE_KEY = "…"</code> — 방금 저장한 두 줄</td></tr>
+            <tr><td><b>① 비밀 금고(Secrets)</b></td><td><code>SUPABASE_URL = "…"</code> · <code>SUPABASE_KEY = "…"</code> — 앞에서 만든 두 줄</td></tr>
             <tr><td><b>② 프롬프트</b></td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와"</td></tr>
             <tr><td><b>③ AI가 준 코드</b></td><td><code>st.secrets["SUPABASE_URL"]</code> · <code>st.secrets["SUPABASE_KEY"]</code></td></tr>
           </tbody>
@@ -474,7 +474,7 @@ SUPABASE_KEY = "…"</div>
       </div>
     </li>
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>내 앱에 방명록 페이지를 추가해 줘.
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>방문 소감을 받는 방명록 앱을 만들어 줘. 파일 하나로.
 방문자가 이름과 한 줄 소감을 남기면 수파베이스 표에 저장되고,
 저장된 글이 최신순으로 보이게 해 줘.
 표는 이미 만들어져 있어. 표 이름은 guestbook이고
@@ -482,7 +482,7 @@ SUPABASE_KEY = "…"</div>
 새 표를 만들지 말고 이 표에 그대로 연결해 줘.
 접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와. 코드에는 절대 쓰지 마.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/13_방명록.py</span><pre># pages/13_방명록.py — 수파베이스 표에 글을 남기고 읽는다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 수파베이스 표에 글을 남기고 읽는다
 import streamlit as st
 from supabase import create_client
 
@@ -519,7 +519,7 @@ for row in rows:
     st.caption(row["created_at"])</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 직접 남겨 본다</span><br>
-      배포된 내 앱에서 이름과 소감을 남기고, 목록에 나타나는 것을 확인합니다. 그리고 옆자리 친구의 앱에도 한 줄을 남깁니다 — 여러 사람이 <b>동시에</b> 써도 기록이 덮이지 않고 쌓인다는 것을 서로의 화면에서 확인합니다.</li>
+      받은 코드를 app.py 파일 하나로 저장해 새 앱으로 배포합니다. 배포한 방명록 앱에서 이름과 소감을 남기고, 목록에 나타나는 것을 확인합니다. 그리고 옆자리 친구의 앱에도 한 줄을 남깁니다. 여러 사람이 <b>동시에</b> 써도 기록이 덮이지 않고 쌓인다는 것을 서로의 화면에서 확인합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 무결성을 한 줄 챙긴다</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>빈 칸으로 제출하면 저장하지 말고 안내 문구를 보여 줘.</pre></div>
     </li>
@@ -535,7 +535,7 @@ for row in rows:
   <div class="codewrap improve"><span class="label">③ 개선(도전)</span><button class="copy-btn">복사</button><pre>내가 남긴 글 옆에 고치기와 지우기 단추를 달아 줘.
 글을 남길 때 password 열에 저장한 네 자리 비밀번호가
 맞을 때만 고치거나 지울 수 있게 해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">pages/13_방명록.py에 이어 붙일 부분</span><pre># 도전 — 비밀번호가 맞을 때만 고치고 지운다 (방명록 페이지에 이어 붙일 부분)
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 도전 — 비밀번호가 맞을 때만 고치고 지운다 (앞 코드 끝에 이어 붙일 부분)
 for row in rows:
     with st.expander(f"{row['name']} — {row['message']}"):
         확인 = st.text_input("비밀번호", type="password", key=f"pw{row['id']}")
@@ -1286,7 +1286,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
     <li>CSV 파일로 부족해지는 세 순간(동시에 쓰기·계속 쌓기·골라 읽기)을 말할 수 있다.</li>
-    <li>내 앱에 방명록 페이지를 달고, 남긴 글이 목록에 쌓이는 것을 확인했다.</li>
+    <li>방명록 앱을 새로 만들어 배포하고, 남긴 글이 목록에 쌓이는 것을 확인했다.</li>
     <li>친구의 앱에 글을 남겨 "우리의 저장소"가 된 것을 확인했다.</li>
     <li>(읽기 자료) SQL 문장 하나를 읽고 네 동작(생성·읽기·갱신·삭제) 중 어느 것인지 말할 수 있다.</li>
     <li>팀을 구성하고, 데이터 후보를 앞의 두 물음으로 먼저 판단해 주제 카드 초안을 냈다.</li>

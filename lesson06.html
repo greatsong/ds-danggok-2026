@@ -201,6 +201,7 @@
 남은 연평균기온에 가장 잘 맞는 회귀 직선을 구해서 산점도 위에 그려 주고,
 연도를 슬라이더로 고르면 그 해의 예상 기온이 크게 표시되게 해 줘.
 슬라이더 범위는 1900년부터 2100년까지.
+직선을 만든 해의 개수와 시작 연도, 끝 연도를 화면에 적어 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 연평균기온에 직선을 맞추고 예측한다
 import streamlit as st
@@ -228,6 +229,7 @@ a, b = np.polyfit(yearly["연도"], yearly["연평균기온"], 1)   # 기울기,
 fig = px.scatter(yearly, x="연도", y="연평균기온", opacity=0.6)
 fig.add_scatter(x=yearly["연도"], y=a * yearly["연도"] + b, mode="lines", name="회귀 직선")
 st.plotly_chart(fig, width="stretch")
+st.caption(f"직선을 만든 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['연도'].max()}년)")
 
 year = st.slider("연도를 고르세요", 1900, 2100, 2045)
 st.metric(f"{year}년 예상 연평균기온", f"{a * year + b:.1f}℃")</pre></div></details>
@@ -243,10 +245,19 @@ recent = yearly[yearly["연도"] &gt;= yearly["연도"].max() - 19]
 a2, _ = np.polyfit(recent["연도"], recent["연평균기온"], 1)
 c1, c2 = st.columns(2)
 c1.metric("전체 기간 기울기", f"{a * 100:+.2f}℃ / 100년")
-c2.metric("최근 20년 기울기", f"{a2 * 100:+.2f}℃ / 100년")
-st.caption(f"사용한 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['연도'].max()})")</pre></div></details>
+c2.metric("최근 20년 기울기", f"{a2 * 100:+.2f}℃ / 100년")</pre></div></details>
     </li>
   </ol>
+
+  <div class="callout tip">
+    <div class="h">✍️ 화면에 보이는 숫자 적기</div>
+    <p>화면에 보이는 숫자는 언제나 어떤 범위의 데이터에서 나온 값입니다. 그 범위를 적어 두지 않으면 나중에 그 숫자가 어디까지 통하는지 알 수 없습니다. 공책에 그대로 옮겨 적어 두면 다음 차시에서 같은 질문을 다시 만날 때 도움이 됩니다.</p>
+    <ol class="steps">
+      <li>직선을 만드는 데 사용한 해의 개수와 기간</li>
+      <li>내가 슬라이더로 고른 해와 그때 나온 예상 기온</li>
+      <li>그 해가 위의 기간 안쪽인지 바깥쪽인지</li>
+    </ol>
+  </div>
 
   <h2>3. 발견 사건 — 창을 바꾸면 답이 3배 벌어진다</h2>
   <p>③을 실행하면 화면에 기울기 두 개가 나란히 표시됩니다. 학습에 쓰는 기간(창)을 바꿔 가며 재면 다음과 같습니다. 아래 수치는 필터를 적용한 서울 기온 실측값입니다.</p>

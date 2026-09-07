@@ -36,7 +36,7 @@
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
       <li><b>교과서로 손계산</b> — 139~140쪽 토마토 농장 사례와 해 보기 ④ (활동지 2)</li>
-      <li><b>내 모델과 대조</b> — 흥행 분류기의 혼동행렬을 열고 "전부 실패 찍기" 모델과 겨루기</li>
+      <li><b>내 모델과 대조</b> — 흥행 분류기 앱을 새로 만들어 혼동행렬을 확인하고 "전부 실패 찍기" 모델과 비교하기</li>
       <li><b>반칙 판정</b> — 7차시의 의문 회수: 성능 급등의 정체는 레이블 누수</li>
     </ul>
   </div>
@@ -171,10 +171,14 @@
     </ul>
   </div>
 
-  <p>내 분류기에서도 같은 장면을 직접 확인합니다. 오늘의 ①②③은 손계산이 중심이므로 화면 실습은 이것 하나입니다.</p>
-  <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>내 분류기의 혼동행렬을 그려 주고, '무조건 실패로만 찍는 모델'의
-정확도와 나란히 비교해 줘. 성공 재현율도 함께 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다. 9차시의 분류 페이지를 고치는 것이 아니라 pages 폴더에 새 페이지(pages/10_혼동행렬.py)로 올립니다.</p><div class="codewrap code"><span class="label">pages/10_혼동행렬.py</span><pre># 혼동행렬과 기준선 — 정확도만 보면 놓치는 것
+  <p>화면에서도 같은 장면을 직접 확인합니다. 이 차시는 손계산이 중심이므로, 혼동행렬을 보여 주는 앱 하나를 새로 만드는 것으로 실습을 마칩니다. ① 프롬프트 하나만 실행합니다.</p>
+  <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>개봉 전에 알 수 있는 정보로 영화의 흥행 성공을 예측하는 분류기를 만들고,
+그 결과를 혼동행렬로 보여 주는 앱을 만들어 줘. 파일 하나로.
+- 데이터 주소: https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
+- 총 관객 수가 100만 명 이상이면 성공, 그 아래는 실패로 본다
+- '무조건 실패로만 찍는 모델'의 정확도를 내 분류기의 정확도와 나란히 비교해 줘
+- 성공 재현율도 함께 보여 줘</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다. 이 차시의 앱은 화면 하나짜리이므로 파일 하나(app.py)로 만듭니다.</p><div class="codewrap code"><span class="label">app.py</span><pre># 혼동행렬과 기준선 — 정확도만 보면 놓치는 것
 import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
