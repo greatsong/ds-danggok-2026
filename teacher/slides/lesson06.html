@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6차시 슬라이드 · 회귀, 직선을 긋다 — 데이터 과학</title>
+<script src="../../assets/release.js"></script>
+<script src="../../assets/gate.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1219; --bg-accent: #161b26;
+    --ink: #f2f4f8; --ink-dim: #8b93a7;
+    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
+  .slide.on { display: flex; }
+  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
+    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
+  .kicker.blue { color: var(--accent2); }
+  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
+  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
+  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
+  blockquote { font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
+    line-height: 1.5; max-width: 28em; }
+  blockquote::before { content: "\201C"; color: var(--accent); }
+  blockquote::after { content: "\201D"; color: var(--accent); }
+  .facts { margin-top: 1vh; }
+  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
+    padding-left: 1.2em; text-indent: -1.2em; }
+  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
+  .facts b { color: var(--accent2); font-weight: 800; }
+  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
+  .point b { color: var(--accent); }
+  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
+  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
+    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
+    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
+  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
+  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
+  table.mini th { color: var(--accent); font-weight: 800; }
+  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
+  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
+  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
+  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
+  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
+  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
+  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
+  .diagram svg { width: 100%; height: auto; display: block; }
+  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
+  .foot span { white-space: nowrap; }
+  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
+  .dots i.here { background: var(--accent); }
+  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
+    font-size: clamp(11px, 1.1vw, 14px); }
+@media (max-width: 760px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- 1 표지 -->
+<section class="slide chapter on">
+  <div class="kicker">데이터 과학 · 6차시 · Ⅲ. 데이터 모델링과 평가</div>
+  <h1>회귀 — 직선을 긋다</h1>
+  <p class="sub">산점도 위에 가장 잘 맞는 직선 하나를 얹어, 아직 재지 않은 값을 계산한다</p>
+</section>
+
+<!-- 2 상관계수 -->
+<section class="slide">
+  <div class="kicker">개념 · 교과서 70쪽</div>
+  <h2>상관계수</h2>
+  <blockquote style="margin-top:3vh">상관계수는 상관관계의 강도와 방향을 나타내는 정량적인 단위로, 값의 범위는 −1부터 +1 까지이다</blockquote>
+  <p class="point">두 속성이 <b>함께 변하는 정도</b>를 하나의 수치로 잰다</p>
+</section>
+
+<!-- 3 선형 회귀 -->
+<section class="slide">
+  <div class="kicker">개념 · 교과서 119쪽</div>
+  <h2>선형 회귀</h2>
+  <blockquote style="margin-top:3vh">두 가지 이상의 속성 사이에 선 모양의 관계가 있다고 가정하고 데이터를 가장 잘 대표하는 선을 찾는 분석 방법</blockquote>
+  <p class="point">상관은 관계를 <b>재고</b>, 회귀는 그 관계를 <b>직선 하나로 요약</b>해 예측에 사용한다</p>
+</section>
+
+<!-- 4 순서 -->
+<section class="slide">
+  <div class="kicker">원리 · 순서가 있다</div>
+  <h2>산점도 → 상관계수 → 회귀선</h2>
+  <table class="mini">
+    <tr><th>단계</th><th>도구</th><th>묻는 말</th></tr>
+    <tr><td>① 산점도</td><td>점 그래프</td><td>두 속성이 함께 움직이는 모양이 보이는가</td></tr>
+    <tr><td>② 상관계수</td><td>−1 ~ +1</td><td>그 관계가 얼마나 강한가, 방향은 어느 쪽인가</td></tr>
+    <tr><td>③ 회귀선</td><td>가장 잘 맞는 직선</td><td>이 관계로 새 값을 예측하면 얼마가 나오는가</td></tr>
+  </table>
+  <p class="point">관계가 선 모양이라는 판단이 서야 직선을 긋는다</p>
+</section>
+
+<!-- 5 회귀 어원 -->
+<section class="slide">
+  <div class="kicker">개념 · 이름의 유래</div>
+  <h2>회귀(回歸) = 되돌아간다</h2>
+  <ul class="facts">
+    <li>한자 <b>回歸</b> — 돌아올 회, 돌아갈 귀</li>
+    <li>영어 <b>regression</b> — 라틴어 regredi(re 뒤로 + gradi 걷다)</li>
+  </ul>
+  <p class="point">직선을 긋는 계산에 왜 <b>되돌아감</b>이라는 이름이 붙었는가</p>
+</section>
+
+<!-- 6 골턴 -->
+<section class="slide">
+  <div class="kicker">개념 · 1886년 프랜시스 골턴</div>
+  <h2>키가 큰 부모의 자녀는 부모보다 작았다</h2>
+  <ul class="facts">
+    <li>부모 <b>205쌍</b>과 그 자녀 <b>928명</b>의 키를 조사</li>
+    <li>자녀의 키가 전체 <b>평균 쪽으로 되돌아가는</b> 경향</li>
+    <li>골턴이 붙인 이름 — <b>평범함으로의 회귀</b></li>
+  </ul>
+</section>
+
+<!-- 7 골턴 그림 -->
+<section class="slide">
+  <div class="kicker">그림 · 부모의 키와 자녀의 키</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">점선보다 회귀선이 완만하다 — 평균 쪽으로 되돌아간 만큼이다</h2>
+  <div class="diagram"><svg viewBox="0 0 840 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부모의 키와 자녀의 키를 나타낸 산점도. 두 키가 같다면 나타났을 점선보다 실제 회귀선의 기울기가 완만해, 부모 키가 평균에서 멀수록 자녀 키는 평균 쪽에 더 가깝게 놓인다는 그림">
+    <defs>
+      <marker id="l6g-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e45756"/></marker>
+    </defs>
+    <line x1="70" y1="300" x2="612" y2="300" stroke="#c9ccd4" stroke-width="1.5"/>
+    <line x1="70" y1="300" x2="70" y2="52" stroke="#c9ccd4" stroke-width="1.5"/>
+    <line x1="70" y1="180" x2="612" y2="180" stroke="#e3e6ec" stroke-width="1" stroke-dasharray="3 4"/>
+    <line x1="335" y1="300" x2="335" y2="52" stroke="#e3e6ec" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="341" y="64" font-size="12" fill="#9aa0aa">평균</text>
+    <circle cx="223.8" cy="206.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="425.4" cy="162.1" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="214.3" cy="217.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="378.4" cy="146.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="224.5" cy="237.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="399.1" cy="151.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="474.4" cy="119.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="325.8" cy="187.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="308.8" cy="202.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="231.6" cy="209.6" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="348.2" cy="182.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="329.4" cy="176.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="397.9" cy="140.6" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="354.1" cy="207.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="398.8" cy="186.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="319.4" cy="212.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="335.2" cy="194.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="354.4" cy="113.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="330.6" cy="165.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="214.8" cy="221.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="395.2" cy="163.5" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="368.6" cy="167.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="243.6" cy="197.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="261.2" cy="167.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="289.1" cy="181.2" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="335.2" cy="162.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="280.3" cy="178.1" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="323.7" cy="160.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="391.7" cy="160.2" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="264.1" cy="187.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="377.5" cy="136.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="300.7" cy="180.1" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="381.1" cy="160.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="353.9" cy="170.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="280.6" cy="215.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="299.0" cy="180.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="472.3" cy="120.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="430.7" cy="136.6" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="398.5" cy="157.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="405.1" cy="125.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="305.2" cy="201.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="513.1" cy="121.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="423.2" cy="137.1" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="231.8" cy="166.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="496.3" cy="127.8" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="403.4" cy="156.9" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="254.7" cy="206.4" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="369.0" cy="149.0" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="399.4" cy="159.3" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="458.1" cy="156.7" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="407.0" cy="137.6" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <circle cx="308.5" cy="221.2" r="3.6" fill="#4c78a8" opacity=".5"/>
+    <line x1="70" y1="300" x2="600" y2="60" stroke="#8a8f99" stroke-width="2" stroke-dasharray="7 5"/>
+    <line x1="85" y1="256" x2="585" y2="104" stroke="#e45756" stroke-width="3"/>
+    <line x1="560" y1="84" x2="560" y2="105" stroke="#e45756" stroke-width="2" marker-end="url(#l6g-ar)"/>
+    <line x1="140" y1="264" x2="140" y2="244" stroke="#e45756" stroke-width="2" marker-end="url(#l6g-ar)"/>
+    <text x="572" y="101" font-size="12.5" fill="#c0392b" paint-order="stroke" stroke="#fffdf7" stroke-width="3.5">평균 쪽으로 내려온다</text>
+    <text x="150" y="252" font-size="12.5" fill="#c0392b" paint-order="stroke" stroke="#fffdf7" stroke-width="3.5">평균 쪽으로 올라온다</text>
+    <line x1="96" y1="76" x2="136" y2="76" stroke="#8a8f99" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="144" y="80" font-size="12.5" font-weight="700" fill="#5a5f68">부모와 자녀의 키가 같다면</text>
+    <line x1="96" y1="100" x2="136" y2="100" stroke="#e45756" stroke-width="3"/>
+    <text x="144" y="104" font-size="12.5" font-weight="700" fill="#c0392b">실제 경향 (회귀선)</text>
+    <text x="335" y="332" font-size="13.5" font-weight="700" fill="#3a3f48" text-anchor="middle">부모의 키 (작다 → 크다)</text>
+    <text x="31" y="180" font-size="13.5" font-weight="700" fill="#3a3f48" transform="rotate(-90 31 180)" text-anchor="middle">자녀의 키</text>
+    <text x="70" y="362" font-size="11.5" fill="#8a8f99">점의 위치는 경향을 나타낸 모식 표기입니다. 골턴이 얻은 회귀선의 기울기는 약 3분의 2였습니다.</text>
+  </svg></div>
+</section>
+
+<!-- 8 이름만 남았다 -->
+<section class="slide">
+  <div class="kicker">개념 · 오늘의 회귀</div>
+  <h2>지금의 회귀는 되돌아감과 관계가 없다</h2>
+  <p class="point" style="margin-top:2.4vh">데이터의 관계를 <b>선으로 요약해 값을 예측하는 방법 전체</b>를 가리킨다.<br>처음 붙은 이름이 그대로 남은 경우다.</p>
+  <p class="small">평균으로 되돌아가는 현상 자체는 지금도 '평균으로의 회귀'라고 부른다. 시험을 유난히 잘 본 다음에 평소 실력에 가까운 점수가 나오는 일이 그 예다.</p>
+</section>
+
+<!-- 9 상관과 인과 사례 -->
+<section class="slide">
+  <div class="kicker">원리 · 상관은 인과가 아니다</div>
+  <h2>실제로 발표된 분석에서도 일어나는 혼동</h2>
+  <table class="mini">
+    <tr><th>사례</th><th>관찰된 상관</th><th>실제로는</th></tr>
+    <tr><td>초콜릿 소비량과<br>노벨상 수상자 수</td><td>23개국에서 <em>0.79</em></td><td>국가의 소득 수준이 두 값 모두와 관련</td></tr>
+    <tr><td>소방관 수와<br>화재 피해액</td><td>많이 출동할수록 피해액이 컸다</td><td>원인은 화재의 규모다. 방향이 반대다</td></tr>
+    <tr><td>흡연과 폐암</td><td>1950년대에 보고</td><td>검증을 거쳐 <em>1964년</em>에 원인으로 인정</td></tr>
+  </table>
+  <p class="point">상관은 원인을 찾는 <b>출발점</b>이지만 증거는 아니다</p>
+</section>
+
+<!-- 10 기울기와 편향 -->
+<section class="slide">
+  <div class="kicker">원리 · 교과서 119쪽</div>
+  <h2>직선 하나는 숫자 두 개로 정해진다</h2>
+  <ul class="facts">
+    <li><b>기울기</b>(가중치) — 독립 변수가 1 커질 때 종속 변수가 변하는 양</li>
+    <li><b>편향</b> — 직선의 출발 높이</li>
+  </ul>
+  <p class="point">연도-기온 직선의 기울기 × 100 = <b>100년에 몇 도</b></p>
+  <p class="small">예측하려는 값이 종속 변수, 예측에 사용하는 값이 독립 변수다. 우리 문제에서는 연도가 독립 변수, 연평균기온이 종속 변수다.</p>
+</section>
+
+<!-- 11 가장 잘 맞는 직선 -->
+<section class="slide">
+  <div class="kicker">원리 · 교과서 120쪽</div>
+  <h2>무수한 직선 가운데 무엇을 고르는가</h2>
+  <blockquote style="margin-top:3vh">실젯값과 예측값의 차이가 작은 쪽을 고른다</blockquote>
+  <p class="point">이 차이가 <b>오차</b>다. 오차가 가장 작은 기울기와 편향의 조합을 찾는 계산이 학습이다.</p>
+  <p class="small">오차로 판정하는 이 원리는 8차시에 손으로 직접 계산한다.</p>
+</section>
+
+<!-- 12 모델 -->
+<section class="slide">
+  <div class="kicker">개념 · 모델</div>
+  <h2>모델은 목적에 필요한 것만 남긴 축소판</h2>
+  <ul class="facts">
+    <li>라틴어 <b>modulus</b>(작은 척도) → 이탈리아어 <b>modello</b>(건축 축소 모형)</li>
+    <li>건축 모형은 벽돌 개수나 배관을 빼고 <b>형태와 비례</b>만 남긴다</li>
+    <li>기온 데이터에서 오늘 남기는 것은 <b>연도가 1 늘 때 기온이 얼마나 변하는가</b> 하나</li>
+  </ul>
+  <p class="point">100여 년의 기록이 <b>숫자 두 개</b>로 요약된다</p>
+</section>
+
+<!-- 13 모델링 3단계 -->
+<section class="slide">
+  <div class="kicker">원리 · 모델링</div>
+  <h2>모델을 만드는 과정</h2>
+  <table class="mini">
+    <tr><th>단계</th><th>하는 일</th><th>오늘의 경우</th></tr>
+    <tr><td>① 형태 정하기</td><td>관계를 어떤 모양으로 요약할지 고른다</td><td>직선 하나로 요약한다</td></tr>
+    <tr><td>② 학습</td><td>데이터에 가장 잘 맞는 숫자를 찾는다</td><td>오차가 가장 작은 기울기와 편향</td></tr>
+    <tr><td>③ 평가</td><td>얼마나 믿을 수 있는지 잰다</td><td>예측값과 실젯값의 차이를 수치로 잰다</td></tr>
+  </table>
+  <p class="small">교과서 14쪽 6단계 가운데 네 번째가 모델링하기, 다섯 번째가 모델 평가하기, 여섯 번째가 모델 활용하기다.</p>
+</section>
+
+<!-- 14 기계학습 -->
+<section class="slide">
+  <div class="kicker">개념 · 교과서 11쪽</div>
+  <h2>기계학습 — 기계가 데이터로부터 배운다</h2>
+  <table class="mini">
+    <tr><th>낱말</th><th>무엇을 가리키나</th><th>오늘의 경우</th></tr>
+    <tr><td>기계학습</td><td>데이터에서 규칙을 찾는 방법 전체</td><td>직선의 숫자를 계산이 찾게 한 방식</td></tr>
+    <tr><td>학습</td><td>모델을 이루는 숫자를 찾는 계산</td><td>오차가 가장 작아지는 기울기와 편향</td></tr>
+    <tr><td>모델</td><td>학습이 끝나고 남는 결과물</td><td>기울기와 편향으로 정해진 직선</td></tr>
+  </table>
+  <p class="point">예전에는 사람이 규칙을 하나하나 코드로 적었다. 이제는 <b>숫자를 계산이 찾는다.</b></p>
+</section>
+
+<!-- 15 사람의 판단 -->
+<section class="slide">
+  <div class="kicker">원리 · 남는 것</div>
+  <h2>기계가 학습해도 사람이 할 일은 남는다</h2>
+  <ul class="facts">
+    <li>어떤 데이터를 사용할지</li>
+    <li>믿을 수 없는 값을 어떻게 걸러 낼지</li>
+    <li>어떤 형태로 요약할지</li>
+    <li>나온 결과를 믿을지</li>
+  </ul>
+</section>
+
+<!-- 16 데이터의 사정 -->
+<section class="slide">
+  <div class="kicker">실습 · 직선을 긋기 전에</div>
+  <h2>연평균이라 부를 수 없는 값을 걸러 낸다</h2>
+  <ul class="facts">
+    <li>한국전쟁 구간은 관측이 중단되어 기록이 없다</li>
+    <li>1953년은 겨울 31일만 관측되어 연평균이 <b>0.6℃</b>로 나온다</li>
+    <li>기준 — 진행 중인 올해 제외, <b>관측일 300일 미만</b> 제외</li>
+    <li>남은 <b>114개 연도(1908~2025)</b>가 학습 재료가 된다</li>
+  </ul>
+  <p class="point">믿을 수 없는 값을 거르는 것이 전처리다. <b>불리한 값을 고르는 것은 조작이다.</b></p>
+</section>
+
+<!-- 17 프롬프트 -->
+<section class="slide">
+  <div class="kicker">실습 · ① 샘플 프롬프트</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">데이터의 사정을 아는 사람이 쓰는 주문</h2>
+  <div class="prompt">"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.<br>
+서울 기온 데이터로 연도별 평균기온을 구하되, 아직 진행 중인 올해와 관측일이 300일이 안 되는 해는 빼 줘.<br>
+남은 연평균기온에 가장 잘 맞는 회귀 직선을 구해서 산점도 위에 그려 주고,<br>
+연도를 슬라이더로 고르면 그 해의 예상 기온이 크게 표시되게 해 줘.</div>
+  <p class="small">필터 조건 두 개가 프롬프트 안에 들어 있다. 이 조건이 빠지면 계산에 결측이 섞인다.</p>
+</section>
+
+<!-- 18 발견 -->
+<section class="slide">
+  <div class="kicker">발견 · 학습 데이터의 범위를 바꾸면</div>
+  <h2>같은 데이터, 다른 기울기</h2>
+  <table class="mini">
+    <tr><th>학습에 사용한 범위</th><th>기울기 (℃/100년)</th><th>읽기</th></tr>
+    <tr><td>전체 114개 해</td><td><em>+2.60</em></td><td>한 세기를 관통하는 완만한 상승</td></tr>
+    <tr><td>최근 50년</td><td>+3.96</td><td>상승이 빨라지고 있다</td></tr>
+    <tr><td>최근 30년</td><td>+3.82</td><td>데이터가 줄수록 값이 출렁인다</td></tr>
+    <tr><td>최근 20년</td><td><em>+8.14</em></td><td>전체 기간의 3배가 넘는 가파름</td></tr>
+  </table>
+</section>
+
+<!-- 19 두 답 -->
+<section class="slide">
+  <div class="kicker">발견 · 같은 2045년</div>
+  <h2>답이 갈라진다</h2>
+  <div class="split">
+    <div class="card">
+      <div class="t">전체 114개 해로 학습</div>
+      <div class="v">13.9℃</div>
+      <div class="d">지난 한 세기의 평균 추세</div>
+    </div>
+    <div class="card">
+      <div class="t">최근 20년으로 학습</div>
+      <div class="v">15.7℃</div>
+      <div class="d">요즘의 가파름</div>
+    </div>
+  </div>
+  <p class="point">둘 다 계산은 정확하다. <b>다른 질문에 답하는 직선</b>일 뿐이다.</p>
+</section>
+
+<!-- 20 외삽 -->
+<section class="slide">
+  <div class="kicker">원리 · 외삽</div>
+  <h2>학습에 사용한 범위 밖</h2>
+  <p class="point" style="margin-top:2.4vh">직선은 <b>1908~2025년</b>의 데이터로 학습했다.<br>슬라이더를 2100년까지 밀면 값은 주저 없이 나온다.</p>
+  <p class="sub">학습 범위를 한참 벗어난 곳의 값을 직선으로 내다보는 것이 <b style="color:var(--accent)">외삽</b>이다. 그 구간에는 맞는지 확인할 데이터가 없다.</p>
+</section>
+
+<!-- 21 상관과 인과 -->
+<section class="slide">
+  <div class="kicker">판단 · 교과서 72쪽</div>
+  <h2>상관관계와 인과관계</h2>
+  <blockquote style="margin-top:3vh">상관관계가 있는 데이터 속성 중에서 원인과 결과의 관계가 있는 데이터 속성 간 관계를 인과관계라고 한다</blockquote>
+  <p class="point">아이스크림 판매량과 물놀이 사고 건수 뒤에는 <b>여름철 기온</b>이라는 공통 요인이 있다</p>
+  <p class="small">연도-기온의 상관이 강하다는 것도 "시간이 흘러서 더워졌다"는 인과 설명은 아니다. 원인 후보를 밝히는 일은 회귀 바깥의 작업이다.</p>
+</section>
+
+<!-- 22 정리 -->
+<section class="slide">
+  <div class="kicker">정리</div>
+  <h2>오늘 남길 것</h2>
+  <ul class="facts">
+    <li>산점도 → 상관계수 → 회귀선의 <b>순서</b></li>
+    <li>직선은 <b>모델</b>, 숫자를 찾는 계산은 <b>학습</b>, 그 방식이 <b>기계학습</b></li>
+    <li>학습 데이터의 범위가 다르면 기울기가 <b>+2.60과 +8.14</b>로 갈라진다</li>
+    <li>함께 변한다는 관찰은 <b>원인을 증명하지 않는다</b></li>
+  </ul>
+  <p class="point">남은 질문 — 이 직선을 <b>얼마나 믿어야 하는가</b></p>
+</section>
+
+<div class="hint">← → 이동 · Home 처음으로</div>
+<div class="foot">
+  <span>당곡고 데이터 과학 · 6차시</span>
+  <div class="dots" id="dots"></div>
+  <span id="pageno"></span>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+    [...dots.children].forEach((d, k) => d.classList.toggle('here', k === cur));
+    document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  addEventListener('keydown', e => {
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => { if (e.target.closest('a')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  show(0);
+</script>
+</body>
+</html>
