@@ -225,7 +225,19 @@
       </div>
       <div class="callout warn">
         <div class="h">🏫 다른 학교를 넣으려면 — 학교 코드를 찾아 확정한다</div>
-        <p>다른 학교를 불러오려면 교육청 코드와 학교 코드 두 가지가 필요합니다. AI는 학교 코드를 알지 못하며, 물어보면 지어낼 수 있으므로 사람이 직접 확인해 확정해야 합니다. 코드를 찾는 방법은 학교기본정보 API에 학교 이름을 넣어 조회하는 것입니다. 주소는 <code>https://open.neis.go.kr/hub/schoolInfo?Type=json&amp;SCHUL_NM=학교이름</code>이며, 줄임말은 검색되지 않아 정식 명칭이 필요하고 같은 이름이 여러 지역에 있으면 교육청 코드로 좁혀야 합니다. 확인한 코드는 프롬프트에 직접 적어 주며, 예를 들어 서울시교육청은 <code>B10</code>, 수도여자고등학교는 <code>7010090</code>, 당곡고등학교는 <code>7010073</code>입니다.</p>
+        <p>다른 학교를 불러오려면 교육청 코드와 학교 코드 두 가지가 필요합니다. AI는 학교 코드를 알지 못하며, 물어보면 지어낼 수 있으므로 사람이 직접 확인해 확정해야 합니다. 코드를 찾는 방법은 학교기본정보 API에 학교 이름을 넣어 조회하는 것입니다. 주소는 <code>https://open.neis.go.kr/hub/schoolInfo?Type=json&amp;SCHUL_NM=학교이름</code>이며, 줄임말은 검색되지 않아 정식 명칭이 필요하고 같은 이름이 여러 지역에 있으면 교육청 코드로 좁혀야 합니다. 확인한 코드는 프롬프트에 직접 적어 주며, 예를 들어 서울시교육청은 <code>B10</code>, 수도여자고등학교는 <code>7010090</code>, 당곡고등학교는 <code>7010073</code>입니다. 교육청 코드는 아래 표에서 확인할 수 있습니다. 학교 코드는 학교마다 다르고 수가 많아 표로 정리할 수 없습니다.</p>
+      <table class="daymap" style="margin:10px 0 0">
+        <thead><tr><th>지역</th><th>코드</th><th>지역</th><th>코드</th><th>지역</th><th>코드</th></tr></thead>
+        <tbody>
+          <tr><td>서울</td><td><code>B10</code></td><td>부산</td><td><code>C10</code></td><td>대구</td><td><code>D10</code></td></tr>
+          <tr><td>인천</td><td><code>E10</code></td><td>광주</td><td><code>F10</code></td><td>대전</td><td><code>G10</code></td></tr>
+          <tr><td>울산</td><td><code>H10</code></td><td>세종</td><td><code>I10</code></td><td>경기</td><td><code>J10</code></td></tr>
+          <tr><td>강원</td><td><code>K10</code></td><td>충북</td><td><code>M10</code></td><td>충남</td><td><code>N10</code></td></tr>
+          <tr><td>전북</td><td><code>P10</code></td><td>전남</td><td><code>Q10</code></td><td>경북</td><td><code>R10</code></td></tr>
+          <tr><td>경남</td><td><code>S10</code></td><td>제주</td><td><code>T10</code></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <p class="mini" style="margin:6px 0 0">코드는 알파벳 한 글자에 10을 붙인 꼴입니다. <code>L</code>과 <code>O</code>는 쓰지 않습니다.</p>
       </div>
     </li>
   </ol>
