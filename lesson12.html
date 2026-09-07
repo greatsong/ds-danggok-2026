@@ -25,16 +25,16 @@
 
   <div class="quote">
     <div class="q">"바늘 가는 데 실 간다."</div>
-    <span class="by">속담 — 바늘이 가면 실이 따라오지만, 실이 간다고 바늘이 오지는 않습니다. 오늘 급식 154일에서 이런 짝을 찾고, 정말 짝인지 우연인지 가려냅니다</span>
+    <span class="by">속담 — 바늘이 가면 실이 따라오지만, 실이 간다고 바늘이 오지는 않습니다. 오늘 급식 184일에서 이런 짝을 찾고, 정말 짝인지 우연인지 가려냅니다</span>
   </div>
 
-  <p class="lead">"제육볶음이 나오는 날, 국은 무엇이 나올까?" 오늘은 교과서의 세 숫자 — <b>지지도·신뢰도·향상도</b> — 를 손으로 계산한 뒤, 같은 기준으로 <b>당곡고 중식 154일</b>을 분석합니다. 교과서에서 익힌 판정 기준이 우리 학교 실제 식단에서도 그대로 확인됩니다.</p>
+  <p class="lead">"제육볶음이 나오는 날, 국은 무엇이 나올까?" 오늘은 교과서의 세 숫자 — <b>지지도·신뢰도·향상도</b> — 를 손으로 계산한 뒤, 같은 기준으로 <b>당곡고 중식 184일</b>을 분석합니다. 교과서에서 익힌 판정 기준이 우리 학교 실제 식단에서도 그대로 확인됩니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
       <li><b>교과서로 손계산</b> — 158·160쪽 〈개나리 마트〉 해 보기 ① (활동지 문제 1)</li>
-      <li><b>바이브 코딩</b> — 급식 154일에서 규칙을 찾는 앱을 만든다</li>
+      <li><b>바이브 코딩</b> — 급식 184일에서 규칙을 찾는 앱을 만든다</li>
       <li><b>판정</b> — "김치의 배신": 신뢰도가 높아도 우연일 수 있다는 것을 실데이터로</li>
     </ul>
   </div>
@@ -70,52 +70,73 @@
     <p>두 규칙 모두 그럴듯해 보이지만, 향상도를 구하면 판단이 달라집니다. 교과서의 표가 미리 마련해 둔 장치입니다. 이 판정 기준을 가지고 우리 학교 급식으로 넘어갑니다.</p>
   </div>
 
-  <h2>3. 실습 — 급식 154일에서 규칙 찾기 (바이브 코딩)</h2>
-  <p>5차시에 급식 API를 처음 만나며 <b>"함께 자주 나올 것 같은 메뉴 짝 3개"</b>를 각자 기록해 두었습니다. 그 예상 목록을 지금 꺼냅니다 — 오늘 찾을 실제 규칙과 하나씩 대조할 것입니다. 데이터는 한 학기치를 모은 고정 데이터(<a href="https://github.com/greatsong/modudata/blob/main/data/danggok_meals.csv" target="_blank" rel="noopener"><code>danggok_meals.csv</code></a> — 중식 154일, 메뉴 453종 · 원출처: 나이스 급식식단정보 API)를 씁니다. 먼저, 파일 속 하루가 어떻게 장바구니 1건이 되는지 살펴봅니다.</p>
+  <h2>3. 실습 — 급식 184일에서 규칙 찾기 (바이브 코딩)</h2>
+  <p>5차시 개인 미션 설문에 <b>"함께 자주 나올 것 같은 메뉴 짝 3개"</b>를 각자 적어 두었습니다. 그 예상 목록을 지금 꺼냅니다. 오늘 찾을 실제 규칙과 하나씩 대조할 것입니다. 데이터는 5차시에 발급받은 인증키로 급식 API에서 다시 받습니다. 기간은 그때와 같은 2025년 9월 1일부터 2026년 9월 30일까지이고, 중식 184일에 메뉴 498종입니다. 기간이 고정이라 언제 실행해도 같은 수치가 나옵니다. 먼저, 하루가 어떻게 장바구니 1건이 되는지 살펴봅니다.</p>
   <div class="specimen-row" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
     <div class="specimen st">
-      <div class="tag">원본 — danggok_meals.csv의 하루</div>
+      <div class="tag">원본 — 급식 API가 준 하루</div>
       <div class="body">
         <div style="overflow-x:auto;width:100%">
           <table class="minitable">
-            <thead><tr><th>날짜</th><th>식사</th><th>메뉴</th></tr></thead>
+            <thead><tr><th>MLSV_YMD</th><th>DDISH_NM</th></tr></thead>
             <tbody>
-              <tr><td>20250902</td><td>중식</td><td>친환경현미밥|근대된장국|오이상추무침|제육볶음|…</td></tr>
+              <tr><td>20250902</td><td>친환경현미밥 &lt;br/&gt;근대된장국 (5.6)&lt;br/&gt;오이상추무침 (6.13)&lt;br/&gt;제육볶음 (6.10.13)&lt;br/&gt;…</td></tr>
             </tbody>
           </table>
         </div>
       </div>
-      <div class="note">메뉴 이름 뒤에 <b>(자율)·(대)·(소스)</b>처럼 괄호가 붙은 것이 섞여 있습니다. 이대로 세면 "아이스크림(컵)"과 "아이스크림"이 다른 메뉴로 갈라집니다.</div>
+      <div class="note">괄호가 두 가지 섞여 있습니다. 숫자는 알레르기 번호이고, <b>(자율)·(대)·(소스)</b>처럼 글자가 든 것도 있습니다. 이대로 세면 "아이스크림(컵)"과 "아이스크림"이 다른 메뉴로 갈라집니다.</div>
     </div>
     <div class="specimen semi">
       <div class="tag">변환 — 장바구니 1건</div>
       <div class="body"><pre class="mini">{ 친환경현미밥, 근대된장국, 제육볶음, … }</pre></div>
-      <div class="note"><b>하루 식단이 장바구니 1건, 메뉴 하나가 상품 하나.</b> 하루가 장바구니 하나이므로 중식 154일이 곧 장바구니 154건입니다. 괄호를 지우면 메뉴 종류는 453종에서 451종으로 줄어듭니다.</div>
+      <div class="note"><b>하루 식단이 장바구니 1건, 메뉴 하나가 상품 하나.</b> 하루가 장바구니 하나이므로 중식 184일이 곧 장바구니 184건입니다. 괄호를 지우면 메뉴 종류는 498종에서 494종으로 줄어듭니다.</div>
     </div>
   </div>
 
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"급식 규칙 찾기" 스트림릿 앱을 만들어 줘. 파일 하나로.
-당곡고 급식 데이터(danggok_meals.csv)를 읽어서 하루 식단을 장바구니 하나로 보고,
+당곡고 급식을 나이스 급식 API로 받아서 하루 식단을 장바구니 하나로 보고,
 함께 자주 나오는 메뉴 쌍을 찾아 줘.
+- 인증키는 비밀 금고에 NEIS_API_KEY라는 이름으로 넣어 뒀어. 코드에 직접 적지 말고 거기서 꺼내 써.
+- 기간은 2025년 9월 1일부터 2026년 9월 30일까지, 중식만. 한 번에 받을 행 수(pSize)는 1000으로.
+- 메뉴는 한 덩어리 글자로 오니까 &lt;br/&gt; 기준으로 나누고, 괄호는 전부 떼서 세 줘.
 각 규칙마다 지지도, 신뢰도, 향상도를 표로 보여 주고,
 동시에 나온 횟수가 5회 이상인 규칙만 보이게 해 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 함께 자주 나오는 메뉴 쌍을 찾는다
-import streamlit as st
-import pandas as pd
-from itertools import combinations
+import re
 from collections import Counter
+from itertools import combinations
 
-DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/danggok_meals.csv"
+import pandas as pd
+import requests
+import streamlit as st
 
 
 @st.cache_data
 def load_baskets():
-    df = pd.read_csv(DATA_URL)
-    df = df[df["식사"] == "중식"]
-    return [sorted(set(m.strip() for m in row.split("|"))) for row in df["메뉴"]]
+    res = requests.get(
+        "https://open.neis.go.kr/hub/mealServiceDietInfo",
+        params={
+            "Type": "json",
+            "KEY": st.secrets["NEIS_API_KEY"],   # 인증키 — 비밀 금고에서 꺼낸다
+            "pSize": 1000,
+            "ATPT_OFCDC_SC_CODE": "B10",
+            "SD_SCHUL_CODE": "7010073",
+            "MMEAL_SC_CODE": "2",                # 중식만
+            "MLSV_FROM_YMD": "20250901",
+            "MLSV_TO_YMD": "20260930",
+        },
+        timeout=20,
+    ).json()
+    baskets = []
+    for row in res["mealServiceDietInfo"][1]["row"]:
+        dishes = row["DDISH_NM"].split("&lt;br/&gt;")
+        # 괄호를 전부 떼야 "아이스크림(컵)"과 "아이스크림"이 한 메뉴로 세어진다
+        baskets.append(sorted({re.sub(r"\([^)]*\)", "", d).strip() for d in dishes if d.strip()}))
+    return baskets
 
 
 baskets = load_baskets()
@@ -157,99 +178,99 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
   </div>
 
   <h2>4. 발견 사건 — 김치의 배신</h2>
-  <p>실제로 실행하면 다음과 같은 규칙들이 나타납니다. 아래 수치는 당곡고 중식 154일(2025-09~2026-07)에서 계산된 값입니다.</p>
+  <p>실제로 실행하면 다음과 같은 규칙들이 나타납니다. 아래 수치는 당곡고 중식 184일(2025-09~2026-09)에서 계산된 값입니다.</p>
   <table class="daymap">
     <thead><tr><th>규칙</th><th>등장</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr></thead>
     <tbody>
-      <tr><td><b>제육볶음 → 배추김치</b></td><td>9일 · 86일</td><td>5일</td><td><b>0.56</b></td><td><b>0.99</b></td><td>우연과 같음 — 배추김치는 원래 56%의 날에 나온다</td></tr>
-      <tr><td><b>순대국 → 석박지</b></td><td>5일 · 17일</td><td>5일</td><td><b>1.00</b></td><td><b>9.1</b></td><td>진짜 짝꿍 — 순대국이 나온 날은 예외 없이 석박지</td></tr>
-      <tr><td><b>배추김치 ↔ 깍두기</b></td><td>86일 · 26일</td><td><b>0일</b></td><td>0</td><td>0</td><td>음의 연관 — 우연이면 약 14.5일 겹쳤어야 한다</td></tr>
+      <tr><td><b>제육볶음 → 배추김치</b></td><td>10일 · 102일</td><td>6일</td><td><b>0.60</b></td><td><b>1.08</b></td><td>우연과 같음 — 배추김치는 원래 55%의 날에 나온다</td></tr>
+      <tr><td><b>순대국 → 석박지</b></td><td>5일 · 20일</td><td>5일</td><td><b>1.00</b></td><td><b>9.2</b></td><td>진짜 짝꿍 — 순대국이 나온 날은 예외 없이 석박지</td></tr>
+      <tr><td><b>배추김치 ↔ 깍두기</b></td><td>102일 · 32일</td><td><b>0일</b></td><td>0</td><td>0</td><td>음의 연관 — 우연이면 약 17.7일 겹쳤어야 한다</td></tr>
     </tbody>
   </table>
   <div style="overflow-x:auto;margin:18px 0 4px">
-    <svg viewBox="0 0 800 360" style="min-width:680px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="중식 154일 위에 두 메뉴의 등장일을 비례 폭 띠로 그려, 같은 겹침 5일이 분모에 따라 우연(향상도 0.99)과 진짜 짝꿍(향상도 9.1)으로 갈리는 구조를 나타낸 그림">
+    <svg viewBox="0 0 800 360" style="min-width:680px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="중식 184일 위에 두 메뉴의 등장일을 비례 폭 띠로 그려, 비슷한 크기의 겹침이 분모에 따라 우연(향상도 1.08)과 진짜 짝꿍(향상도 9.2)으로 갈리는 구조를 나타낸 그림">
       <!-- 패널 1 · 제육볶음 → 배추김치 -->
       <text x="30" y="32" font-size="14.5" font-weight="800" fill="#2b2d3a">제육볶음 → 배추김치 — <tspan fill="#e45756">우연과 같음</tspan></text>
       <rect x="30" y="46" width="440" height="88" rx="8" fill="#fdf8ef" stroke="#f0e2bc"/>
-      <text x="462" y="62" text-anchor="end" font-size="11" fill="#9b8c66">중식 154일 전체</text>
-      <rect x="34" y="70" width="26" height="20" fill="#e8930c"/>
+      <text x="462" y="62" text-anchor="end" font-size="11" fill="#9b8c66">중식 184일 전체</text>
+      <rect x="34" y="70" width="24" height="20" fill="#e8930c"/>
       <rect x="34" y="70" width="14" height="20" fill="#e45756"/>
-      <text x="68" y="85" font-size="12" font-weight="800" fill="#e8930c">제육볶음 9일</text>
-      <rect x="34" y="100" width="246" height="20" fill="#f4b400"/>
+      <text x="66" y="85" font-size="12" font-weight="800" fill="#e8930c">제육볶음 10일</text>
+      <rect x="34" y="100" width="242" height="20" fill="#f4b400"/>
       <rect x="34" y="100" width="14" height="20" fill="#e45756"/>
-      <text x="288" y="115" font-size="12" font-weight="800" fill="#a97a00">배추김치 86일</text>
+      <text x="284" y="115" font-size="12" font-weight="800" fill="#a97a00">배추김치 102일</text>
       <line x1="41" y1="122" x2="41" y2="140" stroke="#e45756" stroke-width="1.5" stroke-dasharray="3 3"/>
-      <text x="34" y="154" font-size="12" font-weight="800" fill="#e45756">겹침 5일</text>
-      <text x="488" y="80" font-size="12" fill="#2b2d3a">신뢰도 = 동시 5일 ÷ 제육볶음 9일 = 0.56</text>
-      <text x="488" y="104" font-size="12" fill="#2b2d3a">기본 등장률 = 배추김치 86일 ÷ 154일 = 0.56</text>
-      <text x="488" y="128" font-size="12" font-weight="800" fill="#e45756">향상도 = 0.56 ÷ 0.56 = 0.99 — 우연의 눈금 1</text>
+      <text x="34" y="154" font-size="12" font-weight="800" fill="#e45756">겹침 6일</text>
+      <text x="488" y="80" font-size="12" fill="#2b2d3a">신뢰도 = 동시 6일 ÷ 제육볶음 10일 = 0.60</text>
+      <text x="488" y="104" font-size="12" fill="#2b2d3a">기본 등장률 = 배추김치 102일 ÷ 184일 = 0.55</text>
+      <text x="488" y="128" font-size="12" font-weight="800" fill="#e45756">향상도 = 0.60 ÷ 0.55 = 1.08 — 우연의 눈금 1</text>
       <!-- 패널 2 · 순대국 → 석박지 -->
       <text x="30" y="194" font-size="14.5" font-weight="800" fill="#2b2d3a">순대국 → 석박지 — <tspan fill="#54a24b">진짜 짝꿍</tspan></text>
       <rect x="30" y="208" width="440" height="88" rx="8" fill="#fdf8ef" stroke="#f0e2bc"/>
-      <text x="462" y="224" text-anchor="end" font-size="11" fill="#9b8c66">중식 154일 전체</text>
-      <rect x="34" y="232" width="14" height="20" fill="#e45756" stroke="#3ba6a0" stroke-width="2"/>
-      <text x="56" y="247" font-size="12" font-weight="800" fill="#3ba6a0">순대국 5일 — 띠 전체가 겹침</text>
-      <rect x="34" y="262" width="49" height="20" fill="#b279a2"/>
-      <rect x="34" y="262" width="14" height="20" fill="#e45756"/>
-      <text x="91" y="277" font-size="12" font-weight="800" fill="#b279a2">석박지 17일</text>
-      <line x1="41" y1="284" x2="41" y2="302" stroke="#e45756" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <text x="462" y="224" text-anchor="end" font-size="11" fill="#9b8c66">중식 184일 전체</text>
+      <rect x="34" y="232" width="12" height="20" fill="#e45756" stroke="#3ba6a0" stroke-width="2"/>
+      <text x="54" y="247" font-size="12" font-weight="800" fill="#3ba6a0">순대국 5일 — 띠 전체가 겹침</text>
+      <rect x="34" y="262" width="47" height="20" fill="#b279a2"/>
+      <rect x="34" y="262" width="12" height="20" fill="#e45756"/>
+      <text x="89" y="277" font-size="12" font-weight="800" fill="#b279a2">석박지 20일</text>
+      <line x1="40" y1="284" x2="40" y2="302" stroke="#e45756" stroke-width="1.5" stroke-dasharray="3 3"/>
       <text x="34" y="316" font-size="12" font-weight="800" fill="#e45756">겹침 5일</text>
       <text x="488" y="242" font-size="12" fill="#2b2d3a">신뢰도 = 5 ÷ 5 = 1.00</text>
-      <text x="488" y="266" font-size="12" fill="#2b2d3a">기본 등장률 = 17 ÷ 154 ≈ 0.11</text>
-      <text x="488" y="290" font-size="12" font-weight="800" fill="#54a24b">향상도 = 1.00 ÷ 0.11 ≈ 9.1</text>
+      <text x="488" y="266" font-size="12" fill="#2b2d3a">기본 등장률 = 20 ÷ 184 ≈ 0.11</text>
+      <text x="488" y="290" font-size="12" font-weight="800" fill="#54a24b">향상도 = 1.00 ÷ 0.11 ≈ 9.2</text>
     </svg>
   </div>
-  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">같은 겹침 5일인데 판정이 갈리는 까닭 — 나누는 수가 다르기 때문입니다.</p>
+  <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:4px 0 18px">겹침은 6일과 5일로 비슷한데 판정이 갈리는 까닭은 나누는 수가 다르다는 데 있습니다.</p>
   <div class="callout warn">
     <div class="h">⚠️ 세 장면이 말하는 것</div>
     <ul>
-      <li><b>신뢰도 0.56은 배신한다</b> — "절반 넘게 같이 나온다"가 아무 정보도 아닐 수 있다. 2절 교과서 손계산에서 만난 판정과 정확히 같은 구조다.</li>
-      <li><b>규칙에는 방향이 있다</b> — 순대국→석박지는 1.00이지만, 석박지→순대국은 0.29다.</li>
+      <li><b>신뢰도 0.60은 배신한다</b> — "절반 넘게 같이 나온다"가 아무 정보도 아닐 수 있다. 2절 교과서 손계산에서 만난 판정과 정확히 같은 구조다.</li>
+      <li><b>규칙에는 방향이 있다</b> — 순대국→석박지는 1.00이지만, 석박지→순대국은 0.25다.</li>
       <li><b>같이 안 나오는 것도 규칙이다</b> — 동시 0회에서 "주력 김치는 하루 한 종류"라는 급식실의 운영 원칙이 역으로 드러난다.</li>
     </ul>
   </div>
-  <p>이제 5차시에 적어 둔 예상 짝 3개를 오늘의 규칙 표와 대조합니다. 예상이 실제 규칙으로 확인됐는지, 아니면 신뢰도만 높고 향상도는 1 근처인 겉보기였는지 — 어느 쪽이든 <b>세 지표로 판정 근거를 말할 수 있으면</b> 성공입니다(Ⅲ-04d 과제의 재료가 됩니다).</p>
+  <p>이제 5차시 설문에 적어 둔 예상 짝 3개를 오늘의 규칙 표와 대조합니다. 예상이 실제 규칙으로 확인됐는지, 아니면 신뢰도만 높고 향상도는 1 근처인 겉보기였는지 — 어느 쪽이든 <b>세 지표로 판정 근거를 말할 수 있으면</b> 성공입니다(Ⅲ-04d 과제의 재료가 됩니다).</p>
 
   <h2>5. 손 활동지 ② — 실측 수치를 내 손으로</h2>
   <div class="callout mini">
     <div class="h">✍️ 활동지 문제 4~6 (당곡고 실측)</div>
-    <p>위 표의 수치를 활동지에서 직접 계산해 확인합니다. 제육볶음 9일, 배추김치 86일, 동시 5일 — 나눗셈 세 번이면 화면의 0.99가 내 계산과 일치하는지 확인할 수 있습니다. AI가 계산한 숫자를 <b>스스로 검산할 수 있는 사람</b>이 됩니다.</p>
+    <p>위 표의 수치를 활동지에서 직접 계산해 확인합니다. 제육볶음 10일, 배추김치 102일, 동시 6일입니다. 나눗셈 세 번이면 화면의 1.08이 내 계산과 일치하는지 확인할 수 있습니다. AI가 계산한 숫자를 <b>스스로 검산할 수 있는 사람</b>이 됩니다.</p>
   </div>
   <h2>6. 개념 정리 — 교과서와 급식이 만난 자리</h2>
-  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>"함께 잘 나옴"은 지지도·신뢰도가 말해 주고, "정말 관련 있음"은 기본 등장률을 걷어 낸 향상도가 판정한다.</b> 교과서의 가상 마트에서 손으로 익힌 판정 기준이, 우리 학교 급식 154일에서 김치의 배신과 순대국의 짝꿍으로 다시 나타났습니다. 8차시의 R²(평균 모델과 비교하기), 10차시의 기준선(다수 찍기와 비교하기), 오늘의 향상도(우연과 비교하기)는 모두 같은 습관의 세 이름입니다.</p>
-  <p>하나 더. 향상도 9.1은 "순대국이 석박지를 나오게 만든다"는 인과의 증명이 아닙니다. 두 메뉴를 함께 정하는 <b>식단표 작성자의 판단</b>이 뒤에 있을 뿐입니다. 함께 움직임이 원인을 증명하지 못한다는 6차시의 결론이 여기서도 성립합니다.</p>
+  <p>오늘 배운 것을 한 줄로 줄이면 이렇습니다. <b>"함께 잘 나옴"은 지지도·신뢰도가 말해 주고, "정말 관련 있음"은 기본 등장률을 걷어 낸 향상도가 판정한다.</b> 교과서의 가상 마트에서 손으로 익힌 판정 기준이, 우리 학교 급식 184일에서 김치의 배신과 순대국의 짝꿍으로 다시 나타났습니다. 8차시의 R²(평균 모델과 비교하기), 10차시의 기준선(다수 찍기와 비교하기), 오늘의 향상도(우연과 비교하기)는 모두 같은 습관의 세 이름입니다.</p>
+  <p>하나 더. 향상도 9.2는 "순대국이 석박지를 나오게 만든다"는 인과의 증명이 아닙니다. 두 메뉴를 함께 정하는 <b>식단표 작성자의 판단</b>이 뒤에 있을 뿐입니다. 함께 움직임이 원인을 증명하지 못한다는 6차시의 결론이 여기서도 성립합니다.</p>
 
   <h2>7. 확인 문제</h2>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 당곡고 154일에서 제육볶음 9일, 배추김치 86일, 동시 5일이다. "제육볶음 → 배추김치"의 신뢰도와 향상도를 손으로 계산한 뒤, 판정을 골라 보세요.</div>
+    <div class="qq"><span class="qn">문제 1</span> 당곡고 184일에서 제육볶음 10일, 배추김치 102일, 동시 6일이다. "제육볶음 → 배추김치"의 신뢰도와 향상도를 손으로 계산한 뒤, 판정을 골라 보세요.</div>
     <div class="qitem">
       <div class="qopts qopts-col">
         <button class="opt">진짜 짝꿍이다 — 제육볶음이 나온 날의 절반 넘게 배추김치가 같이 나오므로</button>
-        <button class="opt" data-ok="1">우연과 같다 — 배추김치는 원래 154일 중 86일, 56%의 날에 나온다</button>
+        <button class="opt" data-ok="1">우연과 같다 — 배추김치는 원래 184일 중 102일, 55%의 날에 나온다</button>
         <button class="opt">음의 연관이다 — 향상도가 1보다 작으므로</button>
       </div>
-      <div class="fb">신뢰도 = 5÷9 ≈ 0.56, 향상도 = 0.56÷(86÷154) ≈ 0.99. 향상도 1은 A의 등장이 B를 내다보는 데 아무 정보도 주지 않는다는 뜻입니다.</div>
+      <div class="fb">신뢰도 = 6÷10 = 0.60, 향상도 = 0.60÷(102÷184) ≈ 1.08. 향상도 1은 A의 등장이 B를 내다보는 데 아무 정보도 주지 않는다는 뜻입니다.</div>
     </div>
     <details class="reveal"><summary>계산 펼쳐 보기</summary>
-      <p>신뢰도 = 동시 5일 ÷ 제육볶음 9일 ≈ 0.56. 배추김치의 기본 등장률 = 86 ÷ 154 ≈ 0.56. 향상도 = 0.56 ÷ 0.56 ≈ <b>0.99</b> — 사실상 1이므로 우연과 같다. 음의 연관은 향상도가 1보다 뚜렷이 작은 경우로, 동시 0회인 배추김치 ↔ 깍두기가 그 예다.</p>
+      <p>신뢰도 = 동시 6일 ÷ 제육볶음 10일 = 0.60. 배추김치의 기본 등장률 = 102 ÷ 184 ≈ 0.55. 향상도 = 0.60 ÷ 0.55 ≈ <b>1.08</b> — 사실상 1이므로 우연과 같다. 음의 연관은 향상도가 1보다 뚜렷이 작은 경우로, 동시 0회인 배추김치 ↔ 깍두기가 그 예다.</p>
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> "순대국 → 석박지"의 신뢰도는 1.00, "석박지 → 순대국"의 신뢰도는 0.29다. 급식실 게시판에 "석박지가 나오는 날은 순대국이 나온다"라고 써 붙여도 될까요?</div>
+    <div class="qq"><span class="qn">문제 2</span> "순대국 → 석박지"의 신뢰도는 1.00, "석박지 → 순대국"의 신뢰도는 0.25다. 급식실 게시판에 "석박지가 나오는 날은 순대국이 나온다"라고 써 붙여도 될까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
         <button class="opt">써 붙여도 된다 — 순대국 → 석박지의 신뢰도가 1.00이므로</button>
-        <button class="opt">써 붙여도 된다 — 두 메뉴의 향상도가 9.1로 충분히 높으므로</button>
-        <button class="opt" data-ok="1">안 된다 — 그 문장의 방향인 석박지 → 순대국의 신뢰도는 5÷17 ≈ 0.29에 불과하다</button>
+        <button class="opt">써 붙여도 된다 — 두 메뉴의 향상도가 9.2로 충분히 높으므로</button>
+        <button class="opt" data-ok="1">안 된다 — 그 문장의 방향인 석박지 → 순대국의 신뢰도는 5÷20 = 0.25에 불과하다</button>
       </div>
-      <div class="fb">규칙에는 방향이 있습니다. 석박지가 나온 17일 중 순대국은 5일뿐이므로, 게시판 문장은 열 번 중 일곱 번 틀립니다.</div>
+      <div class="fb">규칙에는 방향이 있습니다. 석박지가 나온 20일 중 순대국은 5일뿐이므로, 게시판 문장은 열 번 중 일곱 번 틀립니다.</div>
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 어느 쌍의 향상도가 154로 나왔다(학기 전체에서 동시 등장 1회, 각자 등장도 1회씩). 향상도 9.1인 순대국·석박지보다 17배 강한 규칙이라 말할 수 있을까요?</div>
+    <div class="qq"><span class="qn">문제 3</span> 어느 쌍의 향상도가 184로 나왔다(학기 전체에서 동시 등장 1회, 각자 등장도 1회씩). 향상도 9.2인 순대국·석박지보다 20배 강한 규칙이라 말할 수 있을까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">말할 수 있다 — 향상도는 우연 대비 배율이므로 154는 9.1보다 17배 강한 끌림이다</button>
+        <button class="opt">말할 수 있다 — 향상도는 우연 대비 배율이므로 184는 9.2보다 20배 강한 끌림이다</button>
         <button class="opt">말할 수 없다 — 향상도가 100을 넘는 값은 계산 오류이기 때문이다</button>
         <button class="opt" data-ok="1">말할 수 없다 — 동시 등장 1회는 우연일 가능성을 배제할 수 없고, 등장 횟수가 적을수록 향상도는 과장된다</button>
       </div>
@@ -261,7 +282,7 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
   <ul class="checklist">
     <li>지지도·신뢰도·향상도의 분모가 각각 무엇인지 말할 수 있다.</li>
     <li>교과서 해 보기 ①의 두 규칙을 손으로 계산하고 판정했다.</li>
-    <li>급식 154일에서 향상도 상위 규칙과 "우연 수준" 규칙을 찾았다.</li>
+    <li>급식 184일에서 향상도 상위 규칙과 "우연 수준" 규칙을 찾았다.</li>
     <li>신뢰도가 높아도 향상도가 1이면 관련 없다는 것을 예를 들어 설명할 수 있다.</li>
   </ul>
 
