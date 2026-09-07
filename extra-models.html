@@ -173,7 +173,7 @@
   <p>이제 배운 모델을 전부 한 무대에 세웁니다. 9~10차시와 같은 문제 — <a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a>(영화진흥위원회 KOBIS 원출처, 216편)로 흥행 성공을 분류 — 에 다섯 모델을 같은 조건으로 학습시키고, 성적을 한 표에서 비교합니다. 4차시 멀티페이지 앱에 페이지 하나를 추가하는 방식입니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>스트림릿 멀티페이지 앱에 추가할 새 페이지를 만들어 줘. 제목은 '모델 오디션'.
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"모델 오디션" 스트림릿 앱을 만들어 줘. 파일 하나로.
 - 데이터는 이 주소에서 불러와:
   https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
   1년간 박스오피스 10위권에 든 영화 216편의 요약표야. 열은
@@ -189,7 +189,7 @@
   맨 위에 "전부 실패로 찍는 기준선" 행을 넣어 줘.
 - 표 아래에 '내가 고른 모델과 그 이유'를 적는 글상자를 만들어 줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새 페이지 파일로 올립니다. XGBoost는 설치돼 있을 때만 오디션에 참가합니다</p><div class="codewrap code"><span class="label">pages/93_모델_오디션.py</span><pre># pages/93_모델_오디션.py — 같은 문제에 다섯 모델을 세운다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다. XGBoost는 설치돼 있을 때만 오디션에 참가합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 같은 문제에 다섯 모델을 세운다
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -249,7 +249,7 @@ def 한판(seed):
 
 st.subheader("한 번 나눠 본 결과")
 st.dataframe(한판(42), hide_index=True)</pre></div></details>
-      코드를 받으면 4차시처럼 <b>pages</b> 폴더에 새 파일로 올려 커밋합니다. 파일 이름은 <button type="button" class="fname">pages/93_모델_오디션.py</button>를 눌러 그대로 복사해 쓰세요. requirements.txt에 <b>xgboost</b>가 새로 추가되었는지 확인하고, 없으면 한 줄 추가해 커밋합니다.</li>
+      받은 코드를 <button type="button" class="fname">app.py</button> 파일 하나로 저장해 실행합니다. requirements.txt에 <b>xgboost</b>를 넣었는지 확인합니다.</li>
     <li><span class="st">② 성적표 읽기 — 표가 뜨면 절반, 읽어야 완성</span><br>
       화면에 여섯 줄짜리 성적표(기준선 + 다섯 모델)가 뜨면 성공입니다. 읽는 순서는 10차시 그대로입니다. 첫째, <b>기준선(약 89%)을 넘지 못한 모델</b>부터 지웁니다 — 정확도가 높아 보여도 기준선 아래면 다수결만 못한 것입니다. 둘째, 남은 모델끼리는 <b>재현율</b>을 봅니다 — 정작 잡고 싶은 성공작을 몇이나 잡았는지. 셋째, 표에 없는 것도 하나 고려합니다 — 그 모델의 판단을 <b>설명할 수 있는가</b>(트리는 보여 주고, 숲은 감춥니다).</li>
     <li><span class="st">③ 개선 프롬프트 — 성적이 우연인지 확인한다</span>
@@ -257,7 +257,7 @@ st.dataframe(한판(42), hide_index=True)</pre></div></details>
 - 학습용/시험용을 나누는 방법을 바꿔 가며 같은 학습을 5번 반복하고,
   모델별 점수의 평균과 최고·최저 폭을 표에 함께 보여 줘.
 - 한 번의 성적만 보고 고르면 우연에 속을 수 있으니까.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">모델 오디션 페이지에 이어 붙일 부분</span><pre># 나누는 방법을 바꿔 가며 다섯 번
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 나누는 방법을 바꿔 가며 다섯 번
 st.subheader("다섯 번 반복한 결과")
 쌓기 = pd.concat([한판(s) for s in range(5)])
 요약 = (쌓기.groupby("모델")["정확도"].agg(평균="mean", 최저="min", 최고="max").round(3)

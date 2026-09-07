@@ -45,7 +45,7 @@
   <ol class="steps">
     <li><span class="st">1단계 — 날짜 하나 불러 보기</span><br>
       먼저 날짜 하나를 불러 응답의 모양을 확인합니다. 2차시에서 쓴 것과 같은 주소에 조건만 바꾸어 요청합니다.
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>스트림릿 앱에 새 페이지를 추가해 줘. 제목은 '영화 가설 검증'.
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"영화 가설 검증" 스트림릿 앱을 만들어 줘. 파일 하나로.
 - KOBIS 일별 박스오피스 API를 부르는데, 날짜를 내가 정할 수 있게 해 줘.
   월과 일을 숫자로 입력받아서 그 날짜의 10위권을 표로 보여 줘.
 - 인증키는 2차시처럼 비밀 금고에 둔 KOBIS_KEY를 써 줘.
@@ -77,7 +77,7 @@
 - 아래에는 장르를 골라 그 장르들이 차지한 관객 비율을 보여 주는 칸을 만들어 줘.</pre></div>
       <details class="sample">
         <summary>선생님이 실행해 확인한 예시 코드</summary>
-        <div class="codewrap code"><span class="label">pages/91_영화_가설검증.py</span><pre># pages/91_영화_가설검증.py — 날짜를 정해 여러 해의 박스오피스를 모으고 장르로 확인한다
+        <div class="codewrap code"><span class="label">app.py</span><pre># app.py — 날짜를 정해 여러 해의 박스오피스를 모으고 장르로 확인한다
 import streamlit as st
 import pandas as pd
 import requests

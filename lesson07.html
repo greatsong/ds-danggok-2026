@@ -253,7 +253,7 @@ st.caption("점수가 갑자기 뛰면 실력이 아니라 반칙 신호일 수 
   '열기'라는 새 열을 만들어 줘. 한 번 상영에 몇 명이 들었는지야.
 - 개봉 전 변수 세 개만 쓴 경우와 거기에 열기를 더한 경우의 R²를 나란히 보여 줘.
 - 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
-  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 도전 — 단서를 하나 만들어 넣으면 (영화 흥행 예측 페이지에 이어 붙일 부분)
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 도전 — 단서를 하나 만들어 넣으면 (app.py에 이어 붙일 부분)
 st.subheader("도전 — 단서를 하나 만들어 넣으면")
 daily = pd.read_csv(DAILY, dtype={"영화코드": str})
 daily["날짜"] = daily["날짜"].astype(str)
