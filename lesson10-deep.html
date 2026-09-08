@@ -173,7 +173,7 @@
 - 총 관객 수가 100만 명 이상이면 성공, 그 아래는 실패로 본다
 - '무조건 실패로만 찍는 모델'의 정확도를 내 분류기의 정확도와 나란히 비교해 줘
 - 성공 재현율도 함께 보여 줘</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다. 이 차시의 앱은 화면 하나짜리이므로 파일 하나(app.py)로 만듭니다.</p><div class="codewrap code"><span class="label">app.py</span><pre># 혼동행렬과 기준선 — 정확도만 보면 놓치는 것
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">이 코드처럼 열 편 중 앞 세 편을 시험용으로 떼면 본문 표와 다른 값이 나옵니다. 학습용과 시험용을 나눈 방식이 다르기 때문입니다. 이 차시의 앱은 화면 하나짜리이므로 파일 하나(main.py)로 만듭니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># 혼동행렬과 기준선 — 정확도만 보면 놓치는 것
 import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LogisticRegression

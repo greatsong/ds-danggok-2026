@@ -108,7 +108,7 @@
   rank(순위) · movieNm(영화명) · openDt(개봉일) · audiCnt(그날 관객수) · audiAcc(누적 관객수)
   ※ 숫자 값이 전부 문자열로 온다.
   ※ 과거 날짜는 넉넉히 열려 있다(10년 전 크리스마스도 그날의 TOP 10이 그대로 온다).</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다. ③이 요구하는 ‘개봉 며칠째’ 표시까지 들어 있습니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 해마다 같은 날짜의 1위를 모아 본다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다. ③이 요구하는 ‘개봉 며칠째’ 표시까지 들어 있습니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 해마다 같은 날짜의 1위를 모아 본다
 import datetime
 import streamlit as st
 import pandas as pd
@@ -164,7 +164,7 @@ st.caption(f"{month}월 {day}일 · 최근 10년")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 예시 — 이런 모습이면 성공</span><br>
       아래는 같은 프롬프트로 받아 실제로 실행해 확인한 코드 예시입니다. <b>여러분이 받은 코드가 글자까지 같지 않아도 됩니다</b> — 프리셋 버튼 세 개, 연도별 1위 카드, 막대그래프가 뜨면 성공입니다. 크리스마스 기준으로 올해(2026년) 카드는 "집계 전"으로 표시되고, 지난 10년의 1위가 카드로 줄지어 나타납니다.
-      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">app.py</button></span><button class="copy-btn">복사</button><pre># 박스오피스 타임머신 — 특정 날짜의 극장가를 해마다 거슬러 본다
+      <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">main.py</button></span><button class="copy-btn">복사</button><pre># 박스오피스 타임머신 — 특정 날짜의 극장가를 해마다 거슬러 본다
 import datetime
 
 import pandas as pd
@@ -297,7 +297,7 @@ if records:
   개봉 첫 주의 신작이 1위인 해와, 오래 버틴 영화가 1위인 해를 구분해 보고 싶어.
 - 세 시즌(크리스마스·광복절·어린이날)의 연도별 1위 관객수 평균을 구해서,
   어느 시즌이 가장 큰 대목인지 한 문장과 숫자로 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 세 시즌 비교 — app.py에 이어 붙일 부분
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 세 시즌 비교 — main.py에 이어 붙일 부분
 시즌 = {"크리스마스": (12, 25), "광복절": (8, 15), "어린이날": (5, 5)}
 평균 = {}
 for 이름, (m, d) in 시즌.items():
@@ -335,7 +335,7 @@ st.write(f"최근 10년 기준 1위 영화의 평균 관객이 가장 많은 시
 - 그해관객이 1,000만 명을 넘은 영화는 막대 색을 다르게 하고 영화명 옆에 트로피 이모지를 붙여 줘.
 - 화면 아래에 작은 글씨로 "그해관객은 주간 박스오피스 기록으로 계산한 근삿값입니다"라고 표기해 줘.
 - 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 해마다 관객 상위 10편
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 해마다 관객 상위 10편
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -365,7 +365,7 @@ st.dataframe(one[["순위", "영화명", "그해관객", "개봉일"]], hide_ind
 - 연도별 1위 영화의 그해관객을 2004년부터 지금까지 선 그래프로 이어 그려 줘.
   "그 해 1위가 얼마나 컸는가"의 23년 흐름이 보이게.
 - 선 그래프에서 가장 낮은 두 해를 자동으로 찾아 표시해 줘. 왜 낮은지는 내가 해석할게.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 해마다 1위가 얼마나 컸는가
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 해마다 1위가 얼마나 컸는가
 st.subheader("해마다 1위 영화의 관객 (23년)")
 top1 = df[df["순위"] == 1].sort_values("연도")
 fig2 = px.line(top1, x="연도", y="그해관객", markers=True, hover_name="영화명")
@@ -397,7 +397,7 @@ st.caption("왜 그 두 해가 낮은지는 직접 해석해 보세요.")</pre><
   없으면 "역대 300위 안에 없는 영화입니다"라고 안내해 줘.
 - 화면 아래에 작은 글씨로 "누적관객은 주간 박스오피스 기록으로 계산한 근삿값입니다"라고 표기해 줘.
 - 초보자용 한국어 주석을 달고 페이지 파일 전체 코드를 한 번에 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 누적 관객 상위 300편
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 누적 관객 상위 300편
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -439,7 +439,7 @@ if 찾기:
   천만 영화가 한 편도 없는 해도 0으로 표시해 줘.
 - 300편 전체로 누적관객의 히스토그램을 그려 줘. 역대 기록이라는 게
   소수의 초대형 영화와 다수의 나머지로 이루어져 있다는 게 보이게.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 연도별 천만 편수와 기록의 분포
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 연도별 천만 편수와 기록의 분포
 st.subheader("연도별 천만 영화 편수")
 천만 = df[df["누적관객"] &gt;= 10_000_000]
 years = range(int(df["개봉연도"].min()), int(df["개봉연도"].max()) + 1)

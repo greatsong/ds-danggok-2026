@@ -189,7 +189,7 @@
   맨 위에 "전부 실패로 찍는 기준선" 행을 넣어 줘.
 - 표 아래에 '내가 고른 모델과 그 이유'를 적는 글상자를 만들어 줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다. XGBoost는 설치돼 있을 때만 오디션에 참가합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 같은 문제에 다섯 모델을 세운다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다. XGBoost는 설치돼 있을 때만 오디션에 참가합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 같은 문제에 다섯 모델을 세운다
 import streamlit as st
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -249,7 +249,7 @@ def 한판(seed):
 
 st.subheader("한 번 나눠 본 결과")
 st.dataframe(한판(42), hide_index=True)</pre></div></details>
-      받은 코드를 <button type="button" class="fname">app.py</button> 파일 하나로 저장해 실행합니다. requirements.txt에 <b>xgboost</b>를 넣었는지 확인합니다.</li>
+      받은 코드를 <button type="button" class="fname">main.py</button> 파일 하나로 저장해 실행합니다. requirements.txt에 <b>xgboost</b>를 넣었는지 확인합니다.</li>
     <li><span class="st">② 성적표 읽기 — 표가 뜨면 절반, 읽어야 완성</span><br>
       화면에 여섯 줄짜리 성적표(기준선 + 다섯 모델)가 뜨면 성공입니다. 읽는 순서는 10차시 그대로입니다. 첫째, <b>기준선(약 89%)을 넘지 못한 모델</b>부터 지웁니다 — 정확도가 높아 보여도 기준선 아래면 다수결만 못한 것입니다. 둘째, 남은 모델끼리는 <b>재현율</b>을 봅니다 — 정작 잡고 싶은 성공작을 몇이나 잡았는지. 셋째, 표에 없는 것도 하나 고려합니다 — 그 모델의 판단을 <b>설명할 수 있는가</b>(트리는 보여 주고, 숲은 감춥니다).</li>
     <li><span class="st">③ 개선 프롬프트 — 성적이 우연인지 확인한다</span>
@@ -257,7 +257,7 @@ st.dataframe(한판(42), hide_index=True)</pre></div></details>
 - 학습용/시험용을 나누는 방법을 바꿔 가며 같은 학습을 5번 반복하고,
   모델별 점수의 평균과 최고·최저 폭을 표에 함께 보여 줘.
 - 한 번의 성적만 보고 고르면 우연에 속을 수 있으니까.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 나누는 방법을 바꿔 가며 다섯 번
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 나누는 방법을 바꿔 가며 다섯 번
 st.subheader("다섯 번 반복한 결과")
 쌓기 = pd.concat([한판(s) for s in range(5)])
 요약 = (쌓기.groupby("모델")["정확도"].agg(평균="mean", 최저="min", 최고="max").round(3)

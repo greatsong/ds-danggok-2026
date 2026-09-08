@@ -200,7 +200,7 @@
 연도별 평균기온을 구하되, 아직 진행 중인 올해는 빼 줘.
 관측일이 300일이 안 되는 해를 뺄지 말지 고르는 스위치를 달아 줘.
 스위치를 켠 경우와 끈 경우의 R² 점수를 화면에 나란히 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 관측일 필터를 켜고 끄며 R²가 어떻게 달라지는지 본다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 관측일 필터를 켜고 끄며 R²가 어떻게 달라지는지 본다
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -250,7 +250,7 @@ st.caption(f"지금 쓰는 해: {len(used)}개 · 뺀 해: {len(all_years) - len
   시험용에서 평균 몇 도나 빗나가는지와 2050년 예측값을 한 표로 보여 줘.
 - 반드시 학습에 안 쓴 시험용으로 채점해 줘.
   연도 숫자가 커서 고차 곡선이 불안하면 연도를 작은 수로 바꿔서 계산해 줘.</pre></div>
-  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 도전 — 직선 대신 곡선을 쓰면 (app.py 끝에 이어 붙일 부분)
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 직선 대신 곡선을 쓰면 (main.py 끝에 이어 붙일 부분)
 import numpy as np
 
 st.subheader("도전 — 직선 대신 곡선을 쓰면")

@@ -484,7 +484,7 @@ SUPABASE_KEY = "…"</div>
 새 표를 만들지 말고 이 표에 그대로 연결해 줘.
 접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와. 코드에는 절대 쓰지 마.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라서, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 수파베이스 표에 글을 남기고 읽는다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라서, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 수파베이스 표에 글을 남기고 읽는다
 import streamlit as st
 from supabase import create_client
 
@@ -521,7 +521,7 @@ for row in rows:
     st.caption(row["created_at"])</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 직접 남겨 본다</span><br>
-      받은 코드를 app.py 파일 하나로 저장해 새 앱으로 배포합니다. 배포한 방명록 앱에서 이름과 소감을 남기고, 목록에 나타나는 것을 확인합니다. 그리고 옆자리 친구의 앱에도 한 줄을 남깁니다. 여러 사람이 <b>동시에</b> 써도 기록이 덮이지 않고 쌓인다는 것을 서로의 화면에서 확인합니다.</li>
+      받은 코드를 main.py 파일 하나로 저장해 새 앱으로 배포합니다. 배포한 방명록 앱에서 이름과 소감을 남기고, 목록에 나타나는 것을 확인합니다. 그리고 옆자리 친구의 앱에도 한 줄을 남깁니다. 여러 사람이 <b>동시에</b> 써도 기록이 덮이지 않고 쌓인다는 것을 서로의 화면에서 확인합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 무결성을 한 줄 챙긴다</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>빈 칸으로 제출하면 저장하지 말고 안내 문구를 보여 줘.</pre></div>
     </li>
@@ -537,7 +537,7 @@ for row in rows:
   <div class="codewrap improve"><span class="label">③ 개선(도전)</span><button class="copy-btn">복사</button><pre>내가 남긴 글 옆에 고치기와 지우기 단추를 달아 줘.
 글을 남길 때 password 열에 저장한 네 자리 비밀번호가
 맞을 때만 고치거나 지울 수 있게 해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라서, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 도전 — 비밀번호가 맞을 때만 고치고 지운다 (앞 코드 끝에 이어 붙일 부분)
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라서, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 비밀번호가 맞을 때만 고치고 지운다 (앞 코드 끝에 이어 붙일 부분)
 for row in rows:
     with st.expander(f"{row['name']} — {row['message']}"):
         확인 = st.text_input("비밀번호", type="password", key=f"pw{row['id']}")

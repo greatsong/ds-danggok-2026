@@ -524,7 +524,7 @@ SELECT COUNT(*) AS 대결기록수 FROM public.menu_duels;</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 한 판을 끝까지 해 본다</span><br>
       배포한 뒤 한 판을 끝까지 진행합니다. 8강 네 번, 4강 두 번, 결승 한 번으로 <b>일곱 번</b>을 고르면 우승 반찬이 나옵니다. 표에는 일곱 행이 쌓입니다. 두 번째 판을 시작하면 대진표가 다시 섞여 다른 상대를 만납니다.
-      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">파일 하나로 저장합니다. 실제 공유 저장은 아래 두 기기 확인 절차로 점검합니다.</p><div class="codewrap code"><span class="label">app.py</span><button class="copy-btn">복사</button><pre># app.py — 반찬 월드컵 8강. 대결 한 번이 표의 한 행이 된다.
+      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">파일 하나로 저장합니다. 실제 공유 저장은 아래 두 기기 확인 절차로 점검합니다.</p><div class="codewrap code"><span class="label">main.py</span><button class="copy-btn">복사</button><pre># main.py — 반찬 월드컵 8강. 대결 한 번이 표의 한 행이 된다.
 import random
 import uuid
 
@@ -618,7 +618,7 @@ menu_duels에 저장된 전체 기록을 대상으로, 반찬별 대결 수·승
 기록 수와 참여 인원은 다르며, 진행 중에 남긴 대결도 집계에 포함된다고 표시해 줘.
 한 판이 끝난 화면에서도 분석을 볼 수 있게 하고 결과를 다시 불러오는 단추를 넣어 줘.
 기록이 아직 없을 때와 조회에 실패했을 때를 구분해 안내해 줘.</pre></div>
-      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다. 실제 데이터베이스의 저장·조회 결과는 배포 후 확인합니다.</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># app.py에 이어 붙일 부분 — 학급의 대결 기록을 분석한다
+      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다. 실제 데이터베이스의 저장·조회 결과는 배포 후 확인합니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># main.py에 이어 붙일 부분 — 학급의 대결 기록을 분석한다
 import pandas as pd
 import plotly.express as px
 
@@ -675,8 +675,8 @@ st.caption("조회 도중 들어온 새 기록은 다시 불러오면 반영됩�
   <h3>앱 배포 — 같은 대결 기록을 함께 모읍니다</h3>
   <p>기본 실습은 모둠별 앱 하나로 진행합니다. 교사 또는 준비 담당자는 Supabase·GitHub·Streamlit Community Cloud 계정으로 준비하고, 친구들은 배포된 앱 주소를 엽니다. 각자 앱을 만들더라도 같은 프로젝트의 menu_duels 표에 연결해야 기록이 합쳐집니다.</p>
   <ol class="steps">
-    <li><span class="st">1. 파일을 저장합니다</span><br>이번 앱용 GitHub 저장소에 app.py와 requirements.txt를 같은 폴더에 올립니다. app.py에는 ② 예시 코드와 ③ 분석 코드를 순서대로 넣습니다. requirements.txt에는 <code>streamlit</code>, <code>supabase</code>, <code>pandas</code>, <code>plotly</code>를 각각 한 줄씩 적습니다. SQL과 접속 정보는 이 파일에 넣지 않습니다.</li>
-    <li><span class="st">2. 앱을 배포합니다</span><br><a href="https://share.streamlit.io" target="_blank" rel="noopener">Streamlit Community Cloud</a>에 GitHub 계정으로 로그인하고 Create app에서 저장소·브랜치·실행 파일 app.py를 선택합니다. Advanced settings의 Secrets에 준비한 접속 정보 두 줄을 저장한 뒤 Deploy를 누릅니다.</li>
+    <li><span class="st">1. 파일을 저장합니다</span><br>이번 앱용 GitHub 저장소에 main.py와 requirements.txt를 같은 폴더에 올립니다. main.py에는 ② 예시 코드와 ③ 분석 코드를 순서대로 넣습니다. requirements.txt에는 <code>streamlit</code>, <code>supabase</code>, <code>pandas</code>, <code>plotly</code>를 각각 한 줄씩 적습니다. SQL과 접속 정보는 이 파일에 넣지 않습니다.</li>
+    <li><span class="st">2. 앱을 배포합니다</span><br><a href="https://share.streamlit.io" target="_blank" rel="noopener">Streamlit Community Cloud</a>에 GitHub 계정으로 로그인하고 Create app에서 저장소·브랜치·실행 파일 main.py를 선택합니다. Advanced settings의 Secrets에 준비한 접속 정보 두 줄을 저장한 뒤 Deploy를 누릅니다.</li>
     <li><span class="st">3. 주소를 공유합니다</span><br>두 반찬과 선택 단추가 나타나는지 확인합니다. 공유 설정에서 친구가 접근할 수 있게 하고 배포된 앱 주소를 전달합니다. Supabase 관리 화면이나 GitHub 코드 주소는 참여 주소가 아닙니다.</li>
   </ol>
   <p class="mini">화면이 달라졌다면 <a href="https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app" target="_blank" rel="noopener">Streamlit 배포 안내</a>를 확인합니다.</p>

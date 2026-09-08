@@ -127,7 +127,7 @@
    first_scrn(첫 관측일 스크린수)·first_show(첫 관측일 상영횟수)·first_date(10위권 첫 등장일)·
    peak(성수기 개봉이면 1, 아니면 0 — 1월·7월·12월이 성수기)·
    first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 여러 변수로 총 관객을 예측한다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 여러 변수로 총 관객을 예측한다
 import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -171,11 +171,11 @@ c1.metric("시험용 영화로 잰 점수 (R²)", f"{r2_score(test['total_audi']
 c2.metric("평균 오차", f"{mean_absolute_error(test['total_audi'], pred):,.0f}명")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
-      받은 코드를 <b>app.py</b> 파일 하나로 저장해 실행합니다. 화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(계산법은 8차시에 살펴봅니다). 첫 관측일 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
+      받은 코드를 <b>main.py</b> 파일 하나로 저장해 실행합니다. 화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(계산법은 8차시에 살펴봅니다). 첫 관측일 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 변수의 출처를 나눠서 비교한다</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>기본 변수 세 가지를 쓴 경우와 첫 주 관객 수까지 추가한 경우의 예측 점수를 나란히 보여 줘.
 이 데이터는 사후 집계값이므로 실제 개봉 전 예측 성능이 아니라는 안내도 표시해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 기본 변수와 첫 주 관객 수 추가 비교
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 기본 변수와 첫 주 관객 수 추가 비교
 st.subheader("기본 변수만 vs 첫 주 관객 추가")
 결과 = []
 for 이름, 변수 in [("기본 변수만", list(기본.values())),
@@ -256,7 +256,7 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
   '상영당 관객 수'라는 새 열을 만들어 줘. 한 번 상영에 몇 명이 들었는지야.
 - 기본 변수 세 개만 쓴 경우와 거기에 상영당 관객 수를 더한 경우의 R²를 나란히 보여 줘.
 - 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
-  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 도전 — 단서를 하나 만들어 넣으면 (app.py에 이어 붙일 부분)
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 단서를 하나 만들어 넣으면 (main.py에 이어 붙일 부분)
 st.subheader("도전 — 상영당 관객 수 만들기")
 st.caption("예측 시점: 각 영화의 첫 관측일 집계가 끝난 뒤")
 daily = pd.read_csv(DAILY, dtype={"영화코드": str})

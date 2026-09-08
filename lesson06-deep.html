@@ -207,7 +207,7 @@
 슬라이더 범위는 1900년부터 2100년까지.
 직선을 만든 해의 개수와 시작 연도, 끝 연도를 화면에 적어 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 연평균기온에 직선을 맞추고 예측한다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 연평균기온에 직선을 맞추고 예측한다
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -239,12 +239,12 @@ year = st.slider("연도를 고르세요", 1900, 2100, 2045)
 st.metric(f"{year}년 예상 연평균기온", f"{a * year + b:.1f}℃")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 직선을 읽는다</span><br>
-      받은 코드를 <b>app.py</b> 파일 하나로 저장해 실행합니다. 오늘 앱은 화면이 하나입니다. 산점도 위에 직선이 표시되는지 먼저 확인합니다. 그다음 슬라이더를 내년으로, 2045년으로 옮겨 봅니다. 값이 바로 계산되어 표시됩니다. 이 값을 얼마나 믿을 수 있는지는 뒤에서 다룹니다. 먼저 직선이 점들의 추세와 어울리는지 눈으로 확인합니다.</li>
+      받은 코드를 <b>main.py</b> 파일 하나로 저장해 실행합니다. 오늘 앱은 화면이 하나입니다. 산점도 위에 직선이 표시되는지 먼저 확인합니다. 그다음 슬라이더를 내년으로, 2045년으로 옮겨 봅니다. 값이 바로 계산되어 표시됩니다. 이 값을 얼마나 믿을 수 있는지는 뒤에서 다룹니다. 먼저 직선이 점들의 추세와 어울리는지 눈으로 확인합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 기울기를 읽을 수 있는 숫자로</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>직선의 기울기를 "100년에 몇 도 오르는가"로 바꿔 화면에 크게 보여 줘.
 그리고 전체 기간으로 구한 기울기와 최근 20년만으로 구한 기울기를
 나란히 비교해서 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 기울기를 100년 단위로, 그리고 최근 20년과 비교
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 기울기를 100년 단위로, 그리고 최근 20년과 비교
 recent = yearly[yearly["연도"] &gt;= yearly["연도"].max() - 19]
 a2, _ = np.polyfit(recent["연도"], recent["연평균기온"], 1)
 c1, c2 = st.columns(2)
