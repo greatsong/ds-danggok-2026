@@ -80,7 +80,7 @@
   </table>
   <div class="callout warn">
     <div class="h">⚠️ 전체 건수와 실제로 받은 건수를 비교하세요</div>
-    <p>교재 작성 당시 2025년 9월부터 2026년 9월까지의 중식을 조회하니 전체 건수는 184건으로 표시되었지만, 인증키 없이 받은 목록에는 5건만 있었습니다. 오류가 표시되지 않아도 일부 자료만 받았을 수 있습니다. 응답의 전체 건수와 목록 길이를 비교하고, 더 많은 자료가 필요하면 3절의 인증키 안내를 따릅니다.</p>
+    <p>교재 작성 당시 2025년 9월부터 2026년 9월까지의 중식을 조회하니 전체 건수는 184건으로 표시되었지만, 인증키 없이 받은 목록에는 5건만 있었습니다. 오류가 표시되지 않아도 일부 자료만 받았을 수 있습니다. 한 번에 받을 행 수를 늘리는 항목도 인증키가 없으면 무시되어 언제나 첫 5건만 옵니다. 응답의 전체 건수와 목록 길이를 비교하고, 더 많은 자료가 필요하면 3절의 인증키 안내를 따릅니다.</p>
   </div>
 
   <h2>2. 요청 주소를 열고 급식 JSON 읽기</h2>
@@ -176,7 +176,7 @@
   </div>
 
   <h2>3. 인증키 — 없어도 되지만, 넓게 보려면 팀당 하나</h2>
-  <p>조회할 급식일이 적으면 인증키 없이 시작할 수 있습니다. 여러 달의 자료가 필요하면 팀당 인증키 한 개를 준비해 사용합니다. 인증키를 발급받아도 요청당 건수 제한이 있으므로, 요청한 자료를 모두 받았는지 확인해야 합니다.</p>
+  <p>조회할 급식일이 적으면 인증키 없이 시작할 수 있습니다. 여러 달의 자료가 필요하면 팀당 인증키 한 개를 준비해 사용합니다. 인증키를 붙이면 이 기간의 184건이 한 번에 옵니다. 다만 한 번에 받을 수 있는 행 수에는 상한이 있으므로, 그보다 많은 자료를 물을 때는 전체 건수와 받은 개수를 비교해 나눠 받습니다.</p>
   <ol class="steps">
     <li><span class="st">① 회원 가입</span><br>
       <a href="https://open.neis.go.kr/" target="_blank" rel="noopener">나이스 교육정보 개방 포털</a>에 회원 가입을 합니다.</li>
@@ -195,7 +195,7 @@
 <span style="color:#54a24b">&amp;ATPT_OFCDC_SC_CODE=B10&amp;SD_SCHUL_CODE=7010073</span> <span style="color:#9b8c66">← 조건 — 교육청·학교</span>
 <span style="color:#e8930c">&amp;MLSV_FROM_YMD=20250901&amp;MLSV_TO_YMD=20260930</span>  <span style="color:#9b8c66">← 조건 — 2025년 9월~2026년 9월</span>
 <span style="color:#e8930c">&amp;pSize=1000</span>                                   <span style="color:#9b8c66">← 한 번에 받을 행 수</span></pre></div>
-    <div class="note">인증키는 Secrets 설정에서 읽어 KEY 항목으로 전달합니다. pSize는 한 번에 요청할 행 수입니다. 전체 건수보다 적게 받았다면 다음 페이지도 요청합니다.</div>
+    <div class="note">인증키는 Secrets 설정에서 읽어 KEY 항목으로 전달합니다. pSize는 한 번에 요청할 행 수이고 상한은 1000입니다. 키가 없으면 pSize와 pIndex가 무시되어 언제나 첫 5건만 온다(실측). 전체 건수가 pSize보다 많을 때만 다음 쪽을 이어서 요청합니다.</div>
   </div>
   <div class="callout tip">
     <div class="h">💡 선생님 키</div>
@@ -228,10 +228,13 @@
   ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증키 없이 한 번에 5건까지 온다.
 [급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo
 요청변수: Type=json · ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE(위에서 찾은 두 코드) · MMEAL_SC_CODE=2(중식) ·
-  MLSV_FROM_YMD, MLSV_TO_YMD(조회 시작일과 끝일, 하이픈 없는 여덟 자리)
-응답 구조: mealServiceDietInfo의 두 번째 상자 안 row 목록에 날짜별로
+  MLSV_FROM_YMD, MLSV_TO_YMD(조회 시작일과 끝일, 하이픈 없는 여덟 자리) ·
+  pSize(한 번에 받을 행 수, 상한 1000) · pIndex(쪽 번호, 1부터)
+응답 구조: mealServiceDietInfo의 첫 번째 상자 head의 list_total_count에 조건에 맞는 전체 건수가 오고,
+  두 번째 상자 안 row 목록에 날짜별로
   MLSV_YMD(급식일) · DDISH_NM(메뉴 전체 - &lt;br/&gt;로 구분되고, 메뉴 뒤 괄호 숫자는 알레르기 번호) · CAL_INFO(칼로리)
-  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.</pre></div>
+  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.
+  ※ 인증키가 없으면 pSize와 pIndex가 무시되어 언제나 첫 5건만 온다.</pre></div>
     </li>
     <li><span class="st">④ 만들고, 다른 팀이 쓸 수 있게 공개한다</span><br>
       조건 세 가지는 모든 팀 공통이며, 나머지는 팀 재량입니다.
@@ -240,7 +243,7 @@
         <ul>
 
       <li><b>그래프 작성</b> — 3차시와 4차시에 사용한 plotly로 그래프를 그립니다.</li>
-      <li><b>학교 선택</b> — 당곡고등학교를 기본값으로 두고, 세 학교 이상을 선택 후보로 제공합니다. 여러 학교를 동시에 비교할지는 팀의 질문에 따라 정합니다.</li>
+      <li><b>학교 선택과 비교</b> — 당곡고등학교를 기본값으로 두고 학교를 <b>세 곳 이상 한 번에</b> 고를 수 있게 하고, 고른 학교를 함께 비교하는 화면을 적어도 하나 만듭니다. 모든 화면이 비교일 필요는 없습니다.</li>
       <li><b>앱 주소 정리</b> — 앱 주소를 알아보기 쉽게 정리하여 다른 학생이 그대로 열어 사용할 수 있게 합니다.</li>
     
         </ul>
@@ -320,10 +323,13 @@
   ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증키 없이 한 번에 5건까지 온다.
 [급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo
 요청변수: Type=json · ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE(위에서 찾은 두 코드) · MMEAL_SC_CODE=2(중식) ·
-  MLSV_FROM_YMD, MLSV_TO_YMD(조회 시작일과 끝일, 하이픈 없는 여덟 자리)
-응답 구조: mealServiceDietInfo의 두 번째 상자 안 row 목록에 날짜별로
+  MLSV_FROM_YMD, MLSV_TO_YMD(조회 시작일과 끝일, 하이픈 없는 여덟 자리) ·
+  pSize(한 번에 받을 행 수, 상한 1000) · pIndex(쪽 번호, 1부터)
+응답 구조: mealServiceDietInfo의 첫 번째 상자 head의 list_total_count에 조건에 맞는 전체 건수가 오고,
+  두 번째 상자 안 row 목록에 날짜별로
   MLSV_YMD(급식일) · DDISH_NM(메뉴 전체 - &lt;br/&gt;로 구분되고, 메뉴 뒤 괄호 숫자는 알레르기 번호) · CAL_INFO(칼로리)
-  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.</pre></div>
+  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.
+  ※ 인증키가 없으면 pSize와 pIndex가 무시되어 언제나 첫 5건만 온다.</pre></div>
     <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">main.py</button></span><button class="copy-btn">복사</button><pre># main.py — 학교를 검색해 고르면 그 학교의 급식을 보여 주는 첫 화면
 import datetime
 import re
@@ -406,8 +412,8 @@ plotly</pre></div>
 첫 화면과 같은 급식 API를 쓰되, 이 페이지는 당곡고등학교로 고정해.
 
 - 날짜를 달력에서 고르면 그날 당곡고등학교 중식 메뉴를 카드로 보여 줘.
-- 메뉴 이름 뒤 괄호 속 숫자는 알레르기 번호야. 평소엔 떼고 보여 주되,
-  '알레르기 정보 보기'를 켜면 번호와 함께 보이게 해 줘.
+- 메뉴 이름 뒤 괄호 속 숫자는 알레르기 번호야. '알레르기 정보 보기' 스위치를 두고
+  기본값은 켜 둬. 스위치를 끄면 번호를 떼고 보여 줘.
 - 그날의 칼로리도 함께 보여 줘.
 - 주말이나 방학처럼 급식이 없는 날은 오류 대신 "급식이 없는 날입니다"라고 안내해 줘.
 - 화면을 보기 좋게: 날짜와 알레르기 스위치는 나란히, 메뉴 가짓수와 칼로리는 큰 숫자 카드로,
@@ -500,7 +506,7 @@ st.title("🥇 조회 기간의 최다 등장 메뉴")
 
 
 @st.cache_data
-def load_lunch(frm, to):
+def load_lunch(frm, to, api_key):
     days = {}
     page = 1
     received = 0
@@ -508,7 +514,7 @@ def load_lunch(frm, to):
         response = requests.get(
             "https://open.neis.go.kr/hub/mealServiceDietInfo",
             params={
-                "Type": "json", "KEY": st.secrets["NEIS_API_KEY"],
+                "Type": "json", "KEY": api_key,
                 "pSize": 1000, "pIndex": page,
                 "ATPT_OFCDC_SC_CODE": "B10", "SD_SCHUL_CODE": "7010073",
                 "MMEAL_SC_CODE": "2", "MLSV_FROM_YMD": frm, "MLSV_TO_YMD": to,
@@ -525,7 +531,7 @@ def load_lunch(frm, to):
         total = next(item["list_total_count"] for item in head if "list_total_count" in item)
         rows = res["mealServiceDietInfo"][1]["row"]
         if not rows:
-            raise ValueError("전체 건수보다 받은 행 수가 적습니다.")
+            raise ValueError(f"전체 {total}건인데 받은 행이 없습니다. 인증키를 확인해 주세요.")
         for row in rows:
             # 원본은 유지하고, 빈도 집계용 메뉴 이름에서만 알레르기 번호를 제거한다.
             dishes = [re.sub(r"\s*\([0-9.]+\)", "", d).strip() for d in row["DDISH_NM"].split("&lt;br/&gt;")]
@@ -533,11 +539,22 @@ def load_lunch(frm, to):
         received += len(rows)
         if received &gt;= total:
             return days
+        if len(rows) &lt; 1000:
+            # 더 받을 쪽이 없는데 전체 건수에 못 미친다 — 인증키 없이 부른 경우다
+            raise ValueError(
+                f"전체 {total}건 가운데 {received}건만 받았습니다. 인증키를 확인해 주세요."
+            )
         page += 1
 
 
 try:
-    meals = load_lunch("20250901", "20260930")
+    api_key = st.secrets["NEIS_API_KEY"]
+except Exception:
+    st.error("Secrets 설정에 NEIS_API_KEY가 없습니다. 3절의 인증키 안내를 확인해 주세요.")
+    st.stop()
+
+try:
+    meals = load_lunch("20250901", "20260930", api_key)
 except (requests.RequestException, ValueError) as error:
     st.error(str(error))
     st.stop()
@@ -608,7 +625,7 @@ st.caption(f"중식 {days}일 기준 · 이 그래프로 알 수 있는 것: (�
       <tr><td>10</td><td>친환경흑미밥</td><td>12일</td><td>7%</td></tr>
     </tbody>
   </table>
-  <p>이 집계에서 상위 10개 메뉴는 모두 밥과 김치입니다. 제육볶음은 10일 등장해 상위 10개에 포함되지 않았습니다. 배추김치는 184일 중 102일, 약 55%의 급식일에 등장했습니다. <b>급식일 기준 이틀에 하루꼴</b>입니다. 메뉴별 비율은 각 메뉴가 등장한 날의 비율이므로, 여러 메뉴의 비율을 더해도 100%가 되지는 않습니다.</p>
+  <p>이 집계에서 상위 10개 메뉴는 모두 밥과 김치입니다. 가장 자주 나온 반찬 요리인 제육볶음도 10일에 그쳐 상위 10개에 들지 못했습니다. 배추김치는 184일 중 102일, 약 55%의 급식일에 등장했습니다. <b>급식일 기준 이틀에 하루꼴</b>입니다. 메뉴별 비율은 각 메뉴가 등장한 날의 비율이므로, 여러 메뉴의 비율을 더해도 100%가 되지는 않습니다.</p>
 
   <h2>6. 확인 문제</h2>
   <div class="quiz">
