@@ -334,3 +334,31 @@ details.sample summary { cursor: pointer; display: inline-block; font-size: 0.85
 details.sample summary::-webkit-details-marker { display: none; }
 details.sample summary::before { content: "▸ "; }
 details.sample[open] summary::before { content: "▾ "; }
+
+/* ── 인터랙티브 위젯(6차시) ── */
+/* 슬라이드용 위젯(.widget/.wctl/.wbtn/.wout)을 교재의 밝은 배경에 맞춰 다시 씀.
+   마크업: figure.interactive > .widget(svg + .wctl) + figcaption  */
+.interactive { margin: 22px 0; padding: 10px 10px 12px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.interactive .widget { color: #1c2230; }
+.interactive .widget svg { width: 100%; height: auto; display: block; }
+.interactive .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 10px; padding: 0 4px; font-size: 0.9rem; font-weight: 700; color: #1c2230; line-height: 1.5; }
+.interactive .wctl label { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.interactive .wctl input[type="range"] { width: clamp(120px, 40%, 240px); margin: 0; accent-color: #2b7fd6; cursor: pointer; }
+.interactive .wbtn { font-family: var(--font); font-size: 0.88rem; font-weight: 700; line-height: 1.4; color: #1c2230; background: #fff; border: 1.5px solid var(--border); border-radius: 999px; padding: 6px 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+.interactive .wbtn:hover { border-color: #2b7fd6; }
+.interactive .wbtn:focus-visible { outline: 2px solid #2b7fd6; outline-offset: 2px; }
+.interactive .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+.interactive .wout { margin-left: auto; text-align: right; color: #b07a00; font-weight: 800; font-variant-numeric: tabular-nums; }
+.interactive figcaption { margin: 8px 4px 0; font-size: 0.86rem; line-height: 1.6; color: var(--text-soft); }
+.interactive figcaption::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #2b7fd6; margin-right: 7px; vertical-align: 1px; }
+@media (max-width: 600px) {
+  .interactive { padding: 8px 8px 10px; }
+  .interactive .wctl { flex-direction: column; align-items: stretch; gap: 8px; }
+  .interactive .wctl label { white-space: normal; }
+  .interactive .wctl input[type="range"] { flex: 1; width: auto; min-width: 0; }
+  .interactive .wbtn { font-size: 0.84rem; }
+  .interactive .wout { margin-left: 0; text-align: left; }
+}
+@media print {
+  .interactive { box-shadow: none; break-inside: avoid; }
+}
