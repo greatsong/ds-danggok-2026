@@ -440,6 +440,104 @@
   <p>이 단원의 이름이 "Ⅲ. 데이터 모델링과 평가"이고, 교과서가 정리한 데이터 과학 문제 해결 6단계 가운데 네 번째가 모델링하기, 다섯 번째가 모델 평가하기, 여섯 번째가 모델 활용하기입니다(14쪽). 오늘 긋는 직선이 <b>모델</b>이며, 직선을 만드는 과정이 <b>모델링</b>입니다.</p>
   <p>모델(model)이라는 낱말은 "작은 척도"를 뜻하는 라틴어 modulus에서 나왔고, 건축의 축소 모형을 가리키는 이탈리아어 modello를 거쳐 지금의 뜻이 되었습니다. 건축 모형은 실물의 모든 것을 담지 않습니다. 벽돌의 개수나 배관은 빼고 형태와 비례만 남깁니다. 목적에 필요한 것만 남기고 나머지를 버린 축소판이 모형입니다.</p>
   <p>데이터 과학의 모델도 이와 같습니다. 서울 기온 데이터에는 하루하루의 날씨와 계절, 관측의 사정이 모두 들어 있지만, 오늘 만드는 모델은 그 가운데 "연도가 1 늘 때 기온이 얼마나 변하는가" 하나만 남깁니다. 100여 년의 기록이 기울기와 편향, 숫자 두 개로 요약됩니다.</p>
+  <figure class="interactive" data-fig="model">
+    <div class="widget" data-w="model">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="모델의 뜻 · 건축 모형(비유)과 기온 모델(실제)의 같은 단계 · 버튼 ①~④ → 단계 전환">
+  <!-- 왼쪽 패널(x 0~300): 건축 축소 모형(비유) -->
+  <text x="150" y="18" font-size="15" fill="#6b7385" text-anchor="middle">건축 모형(비유)</text>
+  <g class="bd-base">
+    <line x1="36" y1="232" x2="276" y2="232" stroke="#b9b3a5" stroke-width="1"/>
+    <rect x="60" y="72" width="120" height="160" fill="#f3ead6" stroke="#6b7385" stroke-width="1.2"/>
+    <path d="M60 82H180M60 92H180M60 102H180M60 112H180M60 122H180M60 132H180M60 142H180M60 152H180M60 162H180M60 172H180M60 182H180M60 192H180M60 202H180M60 212H180M60 222H180" stroke="#d9c9ad" stroke-width="1" fill="none"/>
+    <path d="M70 72v160M90 72v160M110 72v160M130 72v160M150 72v160M170 72v160" stroke="#d9c9ad" stroke-width="1" stroke-dasharray="10 10" fill="none"/>
+    <path d="M80 72v160M100 72v160M120 72v160M140 72v160M160 72v160" stroke="#d9c9ad" stroke-width="1" stroke-dasharray="10 10" stroke-dashoffset="10" fill="none"/>
+    <polygon points="54,72 120,52 186,72" fill="#6b7385"/>
+    <rect x="75" y="82" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M85 82v20M75 92h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="110" y="82" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M120 82v20M110 92h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="145" y="82" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M155 82v20M145 92h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="75" y="138" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M85 138v20M75 148h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="110" y="138" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M120 138v20M110 148h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="145" y="138" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M155 138v20M145 148h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="108" y="194" width="24" height="38" fill="#b07a00"/><circle cx="127" cy="214" r="1.6" fill="#fff"/>
+  </g>
+  <g class="bd-extra">
+    <polygon points="150,54 162,54 162,64.7 150,61.1" fill="#6b7385"/>
+    <path d="M173 232V78h-6" stroke="#6b7385" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <rect x="88" y="166" width="64" height="20" rx="3" fill="#fff" stroke="#b07a00" stroke-width="1"/>
+    <text x="120" y="181" font-size="14" fill="#b07a00" text-anchor="middle">○○상회</text>
+    <rect x="238" y="200" width="8" height="32" fill="#b07a00" opacity=".8"/>
+    <circle cx="228" cy="194" r="16" fill="#2f9e5f" opacity=".75"/>
+    <circle cx="256" cy="194" r="16" fill="#2f9e5f" opacity=".75"/>
+    <circle cx="242" cy="180" r="24" fill="#2f9e5f" opacity=".75"/>
+    <path d="M76 83h5v18h-5zM89 83h5v18h-5zM111 83h5v18h-5zM124 83h5v18h-5zM146 83h5v18h-5zM159 83h5v18h-5zM76 139h5v18h-5zM89 139h5v18h-5zM111 139h5v18h-5zM124 139h5v18h-5zM146 139h5v18h-5zM159 139h5v18h-5z" fill="#b07a00" opacity=".5"/>
+  </g>
+  <g class="bd-outline" style="display:none" fill="none" stroke="#b9b3a5" stroke-width="2">
+    <polyline points="54,72 120,52 186,72"/>
+    <rect x="60" y="72" width="120" height="160"/>
+    <rect x="75" y="82" width="20" height="20"/><rect x="110" y="82" width="20" height="20"/><rect x="145" y="82" width="20" height="20"/>
+    <rect x="75" y="138" width="20" height="20"/><rect x="110" y="138" width="20" height="20"/><rect x="145" y="138" width="20" height="20"/>
+    <rect x="108" y="194" width="24" height="38"/>
+  </g>
+  <g class="bd-dims" style="display:none">
+    <path d="M124 52H200M184 232H200M60 232v18M180 232v18" stroke="#b9b3a5" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+    <path d="M196 52V232M190 52h12M190 232h12M60 246H180M60 242v8M180 242v8" stroke="#b07a00" stroke-width="1.2" fill="none"/>
+    <text x="204" y="136" font-size="14" fill="#1c2230">높이 : 너비</text>
+    <text x="204" y="156" font-size="14" fill="#1c2230">= <tspan font-weight="700" fill="#b07a00">3 : 2</tspan></text>
+    <path d="M85 128H155M85 124v8M120 124v8M155 124v8" stroke="#b07a00" stroke-width="1.2" fill="none"/>
+    <text x="120" y="116" font-size="14" fill="#1c2230" text-anchor="middle">창 간격 <tspan font-weight="700" fill="#b07a00">1 : 1</tspan></text>
+  </g>
+  <text class="llabel" x="150" y="270" font-size="14" fill="#1c2230" text-anchor="middle">실물: 벽돌·배관·간판·나무까지 전부</text>
+
+  <!-- 오른쪽 패널(x 320~720): 서울 연평균기온(실제) · 그림 영역 x 376~696, y 36~218 -->
+  <text x="520" y="18" font-size="15" fill="#6b7385" text-anchor="middle">기온 모델(오늘)</text>
+  <g class="yax1">
+    <line x1="376" y1="151.8" x2="696" y2="151.8" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="376" y1="85.6" x2="696" y2="85.6" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="366" y="221" font-size="14" fill="#6b7385" text-anchor="end">−20</text>
+    <text x="366" y="156.8" font-size="14" fill="#6b7385" text-anchor="end">0</text>
+    <text x="366" y="90.6" font-size="14" fill="#6b7385" text-anchor="end">20</text>
+  </g>
+  <g class="yax2" style="display:none">
+    <line x1="376" y1="192" x2="696" y2="192" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="376" y1="140" x2="696" y2="140" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="376" y1="88" x2="696" y2="88" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="376" y1="36" x2="696" y2="36" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="366" y="197" font-size="14" fill="#6b7385" text-anchor="end">10</text>
+    <text x="366" y="145" font-size="14" fill="#6b7385" text-anchor="end">12</text>
+    <text x="366" y="93" font-size="14" fill="#6b7385" text-anchor="end">14</text>
+    <text x="366" y="41" font-size="14" fill="#6b7385" text-anchor="end">16</text>
+  </g>
+  <line x1="376" y1="218" x2="696" y2="218" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="376" y1="36" x2="376" y2="218" stroke="#6b7385" stroke-width="1.2"/>
+  <path d="M381.5 218v5M490.9 218v5M627.6 218v5M696 218v5" stroke="#6b7385" stroke-width="1.2" fill="none"/>
+  <text x="381.5" y="238" font-size="14" fill="#6b7385" text-anchor="middle">1910</text>
+  <text x="490.9" y="238" font-size="14" fill="#6b7385" text-anchor="middle">1950</text>
+  <text x="627.6" y="238" font-size="14" fill="#6b7385" text-anchor="middle">2000</text>
+  <text x="696" y="238" font-size="14" fill="#6b7385" text-anchor="middle">2025</text>
+  <text x="366" y="24" font-size="14" fill="#6b7385" text-anchor="end">℃</text>
+  <text x="712" y="256" font-size="14" fill="#6b7385" text-anchor="end">연도</text>
+  <g class="bands"></g>
+  <g class="pts1"></g>
+  <g class="pts2" style="display:none"></g>
+  <line class="fitline" style="display:none" x1="376" y1="184.2" x2="696" y2="105.2" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+  <g class="numbox" style="display:none">
+    <rect x="386" y="40" width="184" height="50" rx="8" fill="#fff" fill-opacity=".9" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="398" y="61" font-size="14" fill="#1c2230">기울기 <tspan class="nb-slope" font-weight="700" fill="#2b7fd6">+2.60℃/100년</tspan></text>
+    <text x="398" y="83" font-size="14" fill="#1c2230">편향(1908년 높이) <tspan class="nb-bias" font-weight="700" fill="#2b7fd6">10.3℃</tspan></text>
+  </g>
+  <text class="rlabel" x="520" y="270" font-size="14" fill="#1c2230" text-anchor="middle">하루하루의 기록 41,639일: 날씨·계절·관측 사정 전부</text>
+  <text x="360" y="292" font-size="15" fill="#1c2230" text-anchor="middle">목적에 필요한 것만 남긴 축소판 = 모델</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-step="1">① 실물</button>
+  <button class="wbtn" type="button" data-step="2">② 세부 빼기</button>
+  <button class="wbtn" type="button" data-step="3">③ 형태와 비례</button>
+  <button class="wbtn" type="button" data-step="4">④ 숫자 두 개</button>
+</div>
+</div>
+    <figcaption>단계를 넘기면 건축 모형과 기온 데이터가 나란히 단순해져, 41,639일의 기록이 114개 연평균과 직선을 거쳐 기울기와 편향에 이릅니다.</figcaption>
+  </figure>
+
   <table class="daymap">
     <thead><tr><th>모델링 단계</th><th>하는 일</th><th>오늘의 경우</th></tr></thead>
     <tbody>
@@ -618,6 +716,7 @@
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.
 서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.
+이 파일의 열 이름은 날짜, 지점, 평균기온, 최저기온, 최고기온이고, 인코딩은 UTF-8이야.
 수업의 기준 기간은 2025년까지야. 그 이후 자료와 관측일이 300일이 안 되는 해는 빼 줘.
 산점도와 상관계수를 보여 주고, 남은 연평균기온에 맞춘 회귀 직선을 함께 표시해 줘.
 그래프는 plotly로 그려 줘.

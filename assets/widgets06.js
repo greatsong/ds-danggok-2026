@@ -1323,7 +1323,150 @@ function initW_corr(root, D) {
   });
   render();
 }
-  const WIDGET_INIT = {corr: initW_corr, slopebias: initW_slopebias, procedure: initW_procedure, galton: initW_galton, error: initW_error, modeling3: initW_modeling3, mlLayers: initW_mlLayers, range: initW_range, predict2045: initW_predict2045, extrapolation: initW_extrapolation, causation: initW_causation};
+function initW_model(root, D) {
+  // 연도별 일평균기온의 최솟값·최댓값 [[연도, 최솟값, 최댓값], …] 114개 — 단계 ①의 세로 띠
+  var RANGE = [
+    [1908,-10.4,27.5],[1909,-10.7,29.7],[1910,-15.4,28.4],[1911,-15.6,28.7],[1912,-12.7,28.4],[1913,-15.9,27.0],
+    [1914,-10.3,30.2],[1915,-19.2,28.9],[1916,-16.1,27.4],[1917,-15.8,28.2],[1918,-14.4,29.6],[1919,-13.7,30.3],
+    [1920,-14.7,28.1],[1921,-8.8,29.6],[1922,-15.0,29.6],[1923,-16.1,29.1],[1924,-13.0,30.6],[1925,-12.4,28.5],
+    [1926,-13.4,28.4],[1927,-15.3,29.1],[1928,-15.1,28.4],[1929,-11.6,30.4],[1930,-12.2,30.7],[1931,-18.9,29.2],
+    [1932,-9.9,30.8],[1933,-14.2,29.8],[1934,-13.9,28.5],[1935,-13.1,28.2],[1936,-16.4,27.7],[1937,-11.7,29.7],
+    [1938,-14.5,29.0],[1939,-14.3,31.0],[1940,-14.0,28.6],[1941,-15.9,27.6],[1942,-13.9,30.0],[1943,-14.0,30.1],
+    [1944,-10.7,30.6],[1945,-13.5,29.5],[1946,-12.3,29.2],[1947,-13.8,27.1],[1948,-12.9,27.5],[1949,-11.1,30.4],
+    [1954,-8.4,28.4],[1955,-12.4,27.9],[1956,-12.0,30.3],[1957,-13.6,27.0],[1958,-15.7,28.3],[1959,-16.4,29.5],
+    [1960,-13.1,28.6],[1961,-12.9,30.0],[1962,-8.6,29.6],[1963,-15.5,28.5],[1964,-12.4,29.8],[1965,-15.3,27.6],
+    [1966,-13.3,29.7],[1967,-15.2,30.2],[1968,-12.2,28.0],[1969,-12.8,27.8],[1970,-14.9,29.5],[1971,-12.9,28.4],
+    [1972,-8.3,31.1],[1973,-13.5,30.6],[1974,-11.2,28.9],[1975,-8.6,29.7],[1976,-14.7,27.1],[1977,-12.8,29.6],
+    [1978,-12.4,31.6],[1979,-10.5,28.2],[1980,-12.9,25.5],[1981,-12.2,30.5],[1982,-10.3,29.6],[1983,-10.0,28.9],
+    [1984,-12.1,29.5],[1985,-13.0,29.7],[1986,-16.4,27.9],[1987,-11.5,26.5],[1988,-8.9,30.5],[1989,-7.7,29.9],
+    [1990,-14.0,29.9],[1991,-11.1,29.1],[1992,-6.7,28.4],[1993,-7.9,26.6],[1994,-8.7,33.1],[1995,-7.6,29.3],
+    [1996,-9.5,29.8],[1997,-9.7,30.4],[1998,-11.9,27.7],[1999,-9.3,29.9],[2000,-8.7,29.1],[2001,-15.5,30.0],
+    [2002,-9.9,30.4],[2003,-12.8,27.0],[2004,-14.3,30.4],[2005,-10.2,30.2],[2006,-11.7,29.5],[2007,-6.4,28.7],
+    [2008,-9.0,30.1],[2009,-10.8,29.1],[2010,-13.2,29.2],[2011,-14.5,28.9],[2012,-13.7,31.8],[2013,-13.2,29.3],
+    [2014,-9.0,31.4],[2015,-9.8,30.4],[2016,-14.4,31.2],[2017,-9.4,31.4],[2018,-14.8,33.7],[2019,-7.9,31.6],
+    [2020,-10.9,30.2],[2021,-14.9,31.7],[2022,-11.8,30.9],[2023,-14.7,30.9],[2024,-11.7,31.8],[2025,-9.7,32.8]
+  ];
+
+  // 좌표계 — 오른쪽 패널 그림 영역 x 376~696(연도 1908~2025), y 36~218
+  var X0 = 1908, X1 = 2025, PX0 = 376, PX1 = 696, PY1 = 36, PY0 = 218;
+  function px(x) { return PX0 + (x - X0) / (X1 - X0) * (PX1 - PX0); }
+  function pyA(y) { return PY0 - (y + 20) / 55 * (PY0 - PY1); }   // 단계 ① 축 −20~35℃
+  function pyB(y) { return PY0 - (y - 9) / 7 * (PY0 - PY1); }      // 단계 ②~④ 축 9~16℃
+
+  // 최소제곱: a = Σ(x−x̄)(y−ȳ) / Σ(x−x̄)², b = ȳ − a·x̄
+  function fit(P) {
+    var n = P.length, sx = 0, sy = 0, i;
+    for (i = 0; i < n; i++) { sx += P[i][0]; sy += P[i][1]; }
+    var mx = sx / n, my = sy / n, num = 0, den = 0;
+    for (i = 0; i < n; i++) {
+      num += (P[i][0] - mx) * (P[i][1] - my);
+      den += (P[i][0] - mx) * (P[i][0] - mx);
+    }
+    var a = num / den;
+    return { a: a, b: my - a * mx };
+  }
+  var f = fit(D);
+  var slopeTxt = (f.a >= 0 ? '+' : '') + (f.a * 100).toFixed(2);   // 기울기 ℃/100년
+  var bias1908 = f.a * X0 + f.b;                                     // 편향 = 직선의 1908년 높이
+
+  // 그리기 — 세로 띠(①), 연평균 점(① 축 · ②~④ 축), 회귀선, 숫자 두 개
+  var i, x, s = '';
+  for (i = 0; i < RANGE.length; i++) {
+    x = px(RANGE[i][0]).toFixed(1);
+    s += '<line x1="' + x + '" y1="' + pyA(RANGE[i][2]).toFixed(1) + '" x2="' + x + '" y2="' + pyA(RANGE[i][1]).toFixed(1) + '" stroke="#b9b3a5" stroke-width="2" opacity=".6"/>';
+  }
+  root.querySelector('.bands').innerHTML = s;
+  function dots(py) {
+    var d = '', j;
+    for (j = 0; j < D.length; j++) {
+      d += '<circle cx="' + px(D[j][0]).toFixed(1) + '" cy="' + py(D[j][1]).toFixed(1) + '" r="3.5" fill="#2b7fd6" opacity=".55"/>';
+    }
+    return d;
+  }
+  root.querySelector('.pts1').innerHTML = dots(pyA);
+  root.querySelector('.pts2').innerHTML = dots(pyB);
+  var ln = root.querySelector('.fitline');
+  ln.setAttribute('x1', px(X0).toFixed(1)); ln.setAttribute('y1', pyB(f.a * X0 + f.b).toFixed(1));
+  ln.setAttribute('x2', px(X1).toFixed(1)); ln.setAttribute('y2', pyB(f.a * X1 + f.b).toFixed(1));
+  root.querySelector('.nb-slope').textContent = slopeTxt + '℃/100년';
+  root.querySelector('.nb-bias').textContent = bias1908.toFixed(1) + '℃';
+
+  // 단계별 표시 요소 — 새로 나타나는 요소만 300ms 페이드, 사라지는 요소는 즉시
+  var G = {}, NAMES = ['extra', 'base', 'outline', 'dims', 'yax1', 'yax2', 'bands', 'pts1', 'pts2', 'fitline', 'numbox'];
+  var SEL = { extra: '.bd-extra', base: '.bd-base', outline: '.bd-outline', dims: '.bd-dims', yax1: '.yax1', yax2: '.yax2',
+              bands: '.bands', pts1: '.pts1', pts2: '.pts2', fitline: '.fitline', numbox: '.numbox' };
+  for (i = 0; i < NAMES.length; i++) G[NAMES[i]] = root.querySelector(SEL[NAMES[i]]);
+  var VIS = {
+    1: ['extra', 'base', 'yax1', 'bands', 'pts1'],
+    2: ['base', 'yax2', 'pts2'],
+    3: ['outline', 'yax2', 'pts2', 'fitline'],
+    4: ['outline', 'dims', 'yax2', 'pts2', 'fitline', 'numbox']
+  };
+  var LABEL = {
+    1: ['실물: 벽돌·배관·간판·나무까지 전부', '하루하루의 기록 41,639일: 날씨·계절·관측 사정 전부'],
+    2: ['목적과 무관한 것부터 뺌', '한 해를 값 하나로: 연평균 114개'],
+    3: ['형태와 비례만 남음', '관계의 형태: 직선 하나'],
+    4: ['모형 = 비례를 담은 숫자 몇 개', '모델 = 관계를 담은 숫자 두 개']
+  };
+  var lLabel = root.querySelector('.llabel'), rLabel = root.querySelector('.rlabel');
+  var btns = root.querySelectorAll('.wbtn');
+  var pts2Circles = G.pts2.querySelectorAll('circle');
+  function setDotOpacity(v) { for (var j = 0; j < pts2Circles.length; j++) pts2Circles[j].setAttribute('opacity', v); }
+
+  // 페이드 — 이름별 진행 상태를 한 rAF 루프에서 같이 진행. 도중에 다시 눌러도 깨지지 않음
+  var anims = {}, raf = 0, DUR = 300;
+  function loop(ts) {
+    var k, a, p, any = false;
+    for (k in anims) {
+      a = anims[k];
+      if (a.t0 === null) a.t0 = ts;
+      p = Math.min(1, (ts - a.t0) / DUR);
+      G[k].style.opacity = String(p);
+      if (p >= 1) delete anims[k]; else any = true;
+    }
+    raf = any ? requestAnimationFrame(loop) : 0;
+  }
+  function show(name, fade) {
+    G[name].style.display = '';
+    if (fade) {
+      G[name].style.opacity = '0';
+      anims[name] = { t0: null };
+      if (!raf) raf = requestAnimationFrame(loop);
+    } else {
+      delete anims[name];
+      G[name].style.opacity = '1';
+    }
+  }
+  function hide(name) {
+    G[name].style.display = 'none';
+    delete anims[name];
+  }
+
+  var cur = 0;
+  function has(list, name) { return list.indexOf(name) >= 0; }
+  function setStep(st, instant) {
+    if (st === cur || !VIS[st]) return;   // 같은 버튼 재클릭 → 아무 일도 없음
+    var prev = VIS[cur] || [], next = VIS[st], j, name, was, now;
+    for (j = 0; j < NAMES.length; j++) {
+      name = NAMES[j]; was = has(prev, name); now = has(next, name);
+      if (now && !was) show(name, !instant);
+      else if (!now && was) hide(name);
+    }
+    setDotOpacity(st >= 3 ? '.25' : '.55');
+    lLabel.textContent = LABEL[st][0];
+    rLabel.textContent = LABEL[st][1];
+    for (j = 0; j < btns.length; j++) btns[j].classList.toggle('on', Number(btns[j].getAttribute('data-step')) === st);
+    cur = st;
+  }
+  for (i = 0; i < NAMES.length; i++) if (!has(VIS[1], NAMES[i])) hide(NAMES[i]);
+  for (i = 0; i < btns.length; i++) {
+    (function (b) {
+      b.addEventListener('click', function () { setStep(Number(b.getAttribute('data-step')), false); });
+    })(btns[i]);
+  }
+  setStep(1, true);
+}
+  const WIDGET_INIT = {model: initW_model, corr: initW_corr, slopebias: initW_slopebias, procedure: initW_procedure, galton: initW_galton, error: initW_error, modeling3: initW_modeling3, mlLayers: initW_mlLayers, range: initW_range, predict2045: initW_predict2045, extrapolation: initW_extrapolation, causation: initW_causation};
   function initWidgets(scope) { (scope || document).querySelectorAll('.widget[data-w]').forEach(el => { if (el.dataset.ready) return; const f = WIDGET_INIT[el.dataset.w]; if (f) { f(el, window.SEOUL_YEARLY); el.dataset.ready = '1'; } }); }
   window.initWidgets = initWidgets;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => initWidgets()); else initWidgets();
