@@ -98,6 +98,11 @@
   .btnlink:hover { filter: brightness(1.08); }
 
   td.bad { color: #b42318; font-weight: 700; }
+  .starbox { background: #fffaf0; border: 1px solid #f6dfa6; border-radius: 14px; padding: 16px 20px; margin: 20px 0; }
+  .starbox .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .starbox p { margin: 12px 0 0; font-size: .92rem; color: #5a5346; }
+  .btnlink.star { background: #f4b400; color: #4a3500; }
+  #star-count { font-weight: 700; opacity: .85; }
   .neis-result { margin-top: 12px; }
   .neis-result table { margin: 0; font-size: .9rem; }
   .neis-result .msg { background: var(--code-bg); color: var(--code-ink); border-radius: 10px; padding: 12px 14px; font-size: .9rem; }
@@ -127,6 +132,14 @@
 
 <h1>우리 학교 교재로 <span class="a">만들기</span></h1>
 <p class="lead">이 교재는 누구나 복사해 자기 학교 수업에 맞게 고쳐 쓸 수 있습니다. 깃허브를 처음 쓰는 선생님도 따라 할 수 있도록 화면 그림과 함께 순서를 적었습니다. 명령어는 몰라도 됩니다. 웹 브라우저 안에서 끝까지 진행할 수 있습니다.</p>
+
+<div class="starbox">
+  <div class="btns">
+    <a class="btnlink star" href="https://github.com/greatsong/ds-danggok-2026" target="_blank" rel="noopener">⭐ 별 하나 눌러 두기<span id="star-count"></span></a>
+    <a class="btnlink" href="https://github.com/greatsong/ds-danggok-2026/fork" target="_blank" rel="noopener">⑂ 포크하기</a>
+  </div>
+  <p>포크하실 때 별을 한 번 눌러 주시면, 다른 선생님이 이 교재를 더 쉽게 찾고 만든 사람도 사용 현황을 알 수 있습니다. 별을 누르지 않아도 포크와 사용에는 아무 지장이 없습니다.</p>
+</div>
 
 <div class="card ok">
   <div class="h">✅ 이 문서를 끝까지 따라 하면</div>
@@ -544,6 +557,19 @@ function copyText(text, btn, label) {
     navigator.clipboard.writeText(text).then(done).catch(fallback);
   } else { fallback(); }
 }
+
+// ⓪ 지금 별 개수 — 실패하면 아무것도 표시하지 않는다
+(async function () {
+  try {
+    var res = await fetch('https://api.github.com/repos/greatsong/ds-danggok-2026');
+    if (!res.ok) return;
+    var data = await res.json();
+    var el = document.getElementById('star-count');
+    if (el && typeof data.stargazers_count === 'number') {
+      el.textContent = ' · 지금 ' + data.stargazers_count + '개';
+    }
+  } catch (e) {}
+})();
 
 // ① 내 교재 주소
 (function () {
