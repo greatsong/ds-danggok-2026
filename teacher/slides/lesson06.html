@@ -58,6 +58,17 @@
   .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
   .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
   .diagram.short svg { max-height: var(--dh, 40vh); }
+  /* 인터랙티브 위젯 — 밝은 상자 안 */
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
+          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
+  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
+          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
   .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
   .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
   .foot span { white-space: nowrap; }
@@ -631,7 +642,7 @@
 <section class="slide">
   <div class="kicker">6-17 · 원리</div>
   <h2>외삽</h2>
-  <p class="point" style="margin-top:2.4vh">직선은 1908~2025년 데이터로 학습. 슬라이더를 2100년까지 밀면 값은 나옴</p>
+  <p class="point" style="margin-top:2.4vh">직선은 1908~2025년 데이터로 학습. 슬라이더로 2100년을 선택해도 값은 나옴</p>
   <p class="sub">학습 범위를 벗어난 곳의 값을 직선으로 내다보는 것 = 외삽. 맞는지 확인할 데이터가 없음</p>
 </section>
 
@@ -671,7 +682,7 @@
   <p class="point">이 직선을 얼마나 믿을 수 있는가</p>
 </section>
 
-<div class="hint">← → 이동 · Home 처음으로</div>
+<div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
 <div class="foot">
   <span>당곡고 데이터 과학 · 6차시</span>
   <div class="dots" id="dots"></div>
@@ -690,11 +701,12 @@
     document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
   }
   addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
     if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
     if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
     if (e.key === 'Home') show(0);
   });
-  addEventListener('click', e => { if (e.target.closest('a')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  addEventListener('click', e => { if (e.target.closest('a, .widget')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
   show(0);
 </script>
 </body>

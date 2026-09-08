@@ -1,0 +1,304 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>modeling3 harness</title>
+<style>
+  body { background:#0f1420; color:#e8e6e0; font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; margin:0; padding:24px; }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; max-width: 1000px; }
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh; font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px; padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
+</style></head><body>
+<div class="diagram">
+<div class="widget" data-w="modeling3">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서울 연평균기온 산점도 위에서 모델링 세 단계 — ① 형태 정하기, ② 학습, ③ 평가">
+<div class="widget" data-w="modeling3">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서울 연평균기온 산점도 위에서 모델링 세 단계 — ① 형태 정하기, ② 학습, ③ 평가">
+  <!-- 격자·축 -->
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="56" y1="229.1" x2="456" y2="229.1"/>
+    <line x1="56" y1="159.4" x2="456" y2="159.4"/>
+    <line x1="56" y1="89.7" x2="456" y2="89.7"/>
+    <line x1="56" y1="20" x2="456" y2="20"/>
+  </g>
+  <line x1="56" y1="264" x2="456" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="56" y1="20" x2="56" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <g font-size="14" fill="#6b7385">
+    <text x="48" y="234" text-anchor="end">10</text>
+    <text x="48" y="164" text-anchor="end">12</text>
+    <text x="48" y="95" text-anchor="end">14</text>
+    <text x="48" y="25" text-anchor="end">16</text>
+    <text x="56" y="13" text-anchor="middle">℃</text>
+    <text x="62.8" y="282" text-anchor="middle">1910</text>
+    <text x="199.6" y="282" text-anchor="middle">1950</text>
+    <text x="370.6" y="282" text-anchor="middle">2000</text>
+    <text x="456" y="282" text-anchor="middle">2025</text>
+    <text x="462" y="259">연도</text>
+  </g>
+
+  <!-- ① 후보 형태 셋 — 곡선·계단은 흐리게, 직선(회귀선)만 진하게 -->
+  <g class="shapes">
+    <path class="shape-curve" d="" fill="none" stroke="#b9b3a5" stroke-width="2" opacity=".8"/>
+    <path class="shape-stair" d="" fill="none" stroke="#b9b3a5" stroke-width="2" opacity=".8"/>
+    <line x1="66" y1="34" x2="94" y2="34" stroke="#1c2230" stroke-width="2.5"/>
+    <text x="102" y="39" font-size="14" font-weight="700" fill="#1c2230">직선 → 선택</text>
+    <path d="M66,58 Q80,58 94,48" fill="none" stroke="#b9b3a5" stroke-width="2"/>
+    <text x="102" y="59" font-size="14" fill="#6b7385">곡선</text>
+    <path d="M66,78 h9 v-5 h10 v-5 h9" fill="none" stroke="#b9b3a5" stroke-width="2"/>
+    <text x="102" y="79" font-size="14" fill="#6b7385">계단</text>
+  </g>
+
+  <!-- ② 회색 후보 직선 8개 -->
+  <g class="cands" display="none"></g>
+
+  <!-- 회귀선(최소제곱) -->
+  <line class="fitline" x1="0" y1="0" x2="0" y2="0" stroke="#1c2230" stroke-width="2.5"/>
+
+  <!-- 산점도 -->
+  <g class="pts"></g>
+
+  <!-- ③ 2023·2024·2025 오차 선분 -->
+  <g class="resid" display="none"></g>
+
+  <!-- 패널 구분선 -->
+  <line x1="482" y1="20" x2="482" y2="264" stroke="#e3ddcf" stroke-width="1"/>
+
+  <!-- 패널 ① -->
+  <g data-pnl="1">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#2b7fd6">① 형태 정하기</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">관계를 어떤 모양으로</text>
+    <text x="496" y="86" font-size="14" fill="#1c2230">요약할지</text>
+    <text x="496" y="116" font-size="16" font-weight="700" fill="#1c2230">→ 직선 하나</text>
+    <line x1="496" y1="136" x2="712" y2="136" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="496" y="162" font-size="14" fill="#6b7385">후보: 직선 · 곡선 · 계단</text>
+    <text x="496" y="184" font-size="14" fill="#6b7385">이번 모델 = 직선</text>
+    <text x="496" y="204" font-size="14" fill="#6b7385">남은 일 = 기울기·편향 찾기</text>
+  </g>
+
+  <!-- 패널 ② -->
+  <g data-pnl="2" display="none">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#b07a00">② 학습</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">데이터에 가장 잘 맞는</text>
+    <text x="496" y="86" font-size="14" fill="#1c2230">숫자 찾기</text>
+    <text x="496" y="116" font-size="14" font-weight="700" fill="#1c2230">→ 제곱오차 합이 가장 작은</text>
+    <text x="496" y="136" font-size="14" font-weight="700" fill="#1c2230">기울기·편향</text>
+    <line x1="496" y1="152" x2="712" y2="152" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="496" y="176" font-size="14" fill="#6b7385">제곱오차 합</text>
+    <text class="sse" x="496" y="208" font-size="26" font-weight="700" fill="#b07a00">0.0</text>
+    <text class="slope learned" x="496" y="238" font-size="15" fill="#1c2230" opacity="0"></text>
+    <text class="bias learned" x="496" y="258" font-size="15" fill="#1c2230" opacity="0"></text>
+  </g>
+
+  <!-- 패널 ③ -->
+  <g data-pnl="3" display="none">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#2f9e5f">③ 평가</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">얼마나 믿을 수 있는지</text>
+    <text x="496" y="90" font-size="14" font-weight="700" fill="#1c2230">→ 예측값과 실젯값의 차이</text>
+    <line x1="496" y1="104" x2="712" y2="104" stroke="#e3ddcf" stroke-width="1"/>
+    <text y="122" font-size="14" fill="#6b7385"><tspan x="496">연도</tspan><tspan x="590" text-anchor="end">실젯값</tspan><tspan x="652" text-anchor="end">예측값</tspan><tspan x="712" text-anchor="end">차이</tspan></text>
+    <g class="tbl"></g>
+    <text x="496" y="214" font-size="14" fill="#6b7385">차이 = 실젯값 − 예측값</text>
+    <text x="496" y="234" font-size="14" fill="#6b7385">빨간 선분 = 세 해의 차이</text>
+  </g>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-step="1">① 형태 정하기</button>
+  <button class="wbtn" type="button" data-step="2">② 학습</button>
+  <button class="wbtn" type="button" data-step="3">③ 평가</button>
+</div>
+</div>
+</div>
+<script>
+function initW_modeling3(root, D) {
+  // 좌표계 — 산점도 폭 480(x 56~456), 설명 패널 x 496~712
+  const X0 = 1908, X1 = 2025, Y0 = 9, Y1 = 16;
+  const PX0 = 56, PX1 = 456, PY0 = 20, PY1 = 264;
+  const sx = x => PX0 + (x - X0) / (X1 - X0) * (PX1 - PX0);
+  const sy = y => PY1 - (y - Y0) / (Y1 - Y0) * (PY1 - PY0);
+  const f1 = v => v.toFixed(1);
+  const signed = (v, d) => (v < 0 ? '−' : '+') + Math.abs(v).toFixed(d);
+
+  // --calc-start
+  // 최소제곱: a = Σ(x−x̄)(y−ȳ) / Σ(x−x̄)², b = ȳ − a·x̄
+  function fit(P) {
+    const n = P.length;
+    let sxx = 0, syy = 0;
+    for (const [x, y] of P) { sxx += x; syy += y; }
+    const mx = sxx / n, my = syy / n;
+    let num = 0, den = 0;
+    for (const [x, y] of P) { num += (x - mx) * (y - my); den += (x - mx) * (x - mx); }
+    const a = num / den;
+    return { a, b: my - a * mx, mx, my };
+  }
+  // 제곱오차 합 Σ(실젯값 − 예측값)²
+  function sse(P, a, b) {
+    let s = 0;
+    for (const [x, y] of P) { const e = y - (a * x + b); s += e * e; }
+    return s;
+  }
+  // 완만한 곡선 후보 — 2차식 최소제곱(u = x − 1967), 3×3 정규방정식을 크래머 공식으로 풂
+  function quadFit(P) {
+    const c = 1967;
+    let S0 = 0, S1 = 0, S2 = 0, S3 = 0, S4 = 0, T0 = 0, T1 = 0, T2 = 0;
+    for (const [x, y] of P) {
+      const u = x - c, u2 = u * u;
+      S0 += 1; S1 += u; S2 += u2; S3 += u2 * u; S4 += u2 * u2;
+      T0 += y; T1 += u * y; T2 += u2 * y;
+    }
+    const det = (m) => m[0] * (m[4] * m[8] - m[5] * m[7]) - m[1] * (m[3] * m[8] - m[5] * m[6]) + m[2] * (m[3] * m[7] - m[4] * m[6]);
+    const M = [S0, S1, S2, S1, S2, S3, S2, S3, S4];
+    const d = det(M);
+    const p0 = det([T0, S1, S2, T1, S2, S3, T2, S3, S4]) / d;
+    const p1 = det([S0, T0, S2, S1, T1, S3, S2, T2, S4]) / d;
+    const p2 = det([S0, S1, T0, S1, S2, T1, S2, S3, T2]) / d;
+    return x => { const u = x - c; return p0 + p1 * u + p2 * u * u; };
+  }
+  // 계단 후보 — 구간별 평균
+  function stairs(P, cuts) {
+    const lo = [X0, ...cuts], hi = [...cuts, X1 + 1];
+    return lo.map((l, i) => {
+      const seg = P.filter(([x]) => x >= l && x < hi[i]);
+      const m = seg.reduce((s, [, y]) => s + y, 0) / seg.length;
+      return [l, Math.min(hi[i], X1), m];
+    });
+  }
+  // 직선을 그림 범위(x 1908~2025, y 9~16) 안으로 자르기
+  function clip(a, b) {
+    const y1 = a * X0 + b, y2 = a * X1 + b;
+    let t0 = 0, t1 = 1;
+    if (y2 !== y1) {
+      const tA = (Y0 - y1) / (y2 - y1), tB = (Y1 - y1) / (y2 - y1);
+      t0 = Math.max(0, Math.min(tA, tB)); t1 = Math.min(1, Math.max(tA, tB));
+    }
+    if (t0 >= t1) return null;
+    return [X0 + (X1 - X0) * t0, y1 + (y2 - y1) * t0, X0 + (X1 - X0) * t1, y1 + (y2 - y1) * t1];
+  }
+  // --calc-end
+
+  const F = fit(D);
+  const S_LS = sse(D, F.a, F.b);
+  // ② 후보 8개 — [기울기(℃/년), x̄에서의 높이 − ȳ]. 편향은 b = c − a·x̄
+  const CAND = [[0, 0], [0.008, 0.7], [0.015, -0.6], [0.02, 0.35], [0.033, -0.3], [0.04, 0.45], [0.048, 0.1], [0.03, -0.9]]
+    .map(([a, dc]) => { const b = (F.my + dc) - a * F.mx; return { a, b, s: sse(D, a, b) }; })
+    .sort((p, q) => q.s - p.s);
+
+  const lineAttr = (a, b) => {
+    const c = clip(a, b);
+    if (!c) return 'x1="0" y1="0" x2="0" y2="0"';
+    return `x1="${sx(c[0]).toFixed(1)}" y1="${sy(c[1]).toFixed(1)}" x2="${sx(c[2]).toFixed(1)}" y2="${sy(c[3]).toFixed(1)}"`;
+  };
+
+  // 산점도
+  root.querySelector('.pts').innerHTML = D.map(([x, y]) =>
+    `<circle cx="${sx(x).toFixed(1)}" cy="${sy(y).toFixed(1)}" r="3.5" fill="#2b7fd6" opacity=".55"/>`).join('');
+
+  // ① 후보 형태 — 곡선·계단(흐리게)
+  const q = quadFit(D);
+  let curve = '';
+  for (let x = X0; x <= X1; x += 1) curve += (x === X0 ? 'M' : 'L') + sx(x).toFixed(1) + ',' + sy(q(x)).toFixed(1);
+  root.querySelector('.shape-curve').setAttribute('d', curve);
+  const st = stairs(D, [1950, 1990]);
+  let stair = '';
+  st.forEach(([l, h, m], i) => {
+    stair += (i === 0 ? 'M' : 'L') + sx(l).toFixed(1) + ',' + sy(m).toFixed(1) + 'L' + sx(h).toFixed(1) + ',' + sy(m).toFixed(1);
+  });
+  root.querySelector('.shape-stair').setAttribute('d', stair);
+
+  // 회귀선(최소제곱) — 단계에 따라 색만 바뀜
+  const fitEl = root.querySelector('.fitline');
+  const la = lineAttr(F.a, F.b);
+  la.match(/(\w+)="([^"]+)"/g).forEach(kv => { const m = kv.match(/(\w+)="([^"]+)"/); fitEl.setAttribute(m[1], m[2]); });
+
+  // ② 회색 후보 직선 8개
+  const candG = root.querySelector('.cands');
+  candG.innerHTML = CAND.map(c => `<line ${lineAttr(c.a, c.b)} stroke="#b9b3a5" stroke-width="1.5" opacity="1"/>`).join('');
+  const candEls = Array.from(candG.querySelectorAll('line'));
+
+  // ③ 2023·2024·2025 오차 선분 + 표
+  const EVAL = [2023, 2024, 2025].map(yr => {
+    const y = D.find(d => d[0] === yr)[1];
+    const p = F.a * yr + F.b;
+    return { yr, y, p, d: y - p };
+  });
+  root.querySelector('.resid').innerHTML = EVAL.map(e =>
+    `<line x1="${sx(e.yr).toFixed(1)}" y1="${sy(e.y).toFixed(1)}" x2="${sx(e.yr).toFixed(1)}" y2="${sy(e.p).toFixed(1)}" stroke="#d64545" stroke-width="2"/>`
+  ).join('') + EVAL.map(e =>
+    `<circle cx="${sx(e.yr).toFixed(1)}" cy="${sy(e.y).toFixed(1)}" r="4" fill="#d64545" stroke="#f7f3e8" stroke-width="1.2"/>`
+  ).join('') + '<text x="440" y="72" font-size="14" fill="#d64545" text-anchor="end">2023~2025</text>';
+  root.querySelector('.tbl').innerHTML = EVAL.map((e, i) =>
+    `<text y="${142 + i * 22}" font-size="15" fill="#1c2230"><tspan x="496">${e.yr}</tspan><tspan x="590" text-anchor="end">${f1(e.y)}</tspan><tspan x="652" text-anchor="end">${f1(e.p)}</tspan><tspan x="712" text-anchor="end" fill="#d64545" font-weight="700">${signed(e.d, 1)}</tspan></text>`
+  ).join('');
+
+  // ② 패널 숫자
+  const sseEl = root.querySelector('.sse');
+  const resEls = Array.from(root.querySelectorAll('.learned'));
+  root.querySelector('.slope').textContent = '기울기 ' + signed(F.a * 100, 2) + ' ℃/100년';
+  root.querySelector('.bias').textContent = '편향 ' + signed(F.b, 1).replace('+', '');
+
+  const groups = {
+    shapes: root.querySelector('.shapes'),
+    cands: candG,
+    resid: root.querySelector('.resid')
+  };
+  const panels = Array.from(root.querySelectorAll('[data-pnl]'));
+  const btns = Array.from(root.querySelectorAll('.wbtn'));
+  const showG = (el, on) => el.setAttribute('display', on ? 'inline' : 'none');
+
+  let raf = 0;
+  function stopAnim() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+
+  function setFit(color, w) { fitEl.setAttribute('stroke', color); fitEl.setAttribute('stroke-width', w); }
+
+  // ② 학습 — 후보가 차례로 사라지고 제곱오차 합이 최솟값으로 내려감(600ms)
+  function runLearn() {
+    stopAnim();
+    const n = CAND.length, DUR = 600, step = DUR / (n + 1);
+    const V = CAND.map(c => c.s).concat([S_LS]);
+    candEls.forEach(el => el.setAttribute('opacity', '1'));
+    setFit('#b9b3a5', 1.5);
+    resEls.forEach(el => el.setAttribute('opacity', '0'));
+    sseEl.textContent = f1(V[0]);
+    let t0 = 0;
+    const frame = ts => {
+      if (!t0) t0 = ts;
+      const t = Math.min(DUR, ts - t0);
+      candEls.forEach((el, i) => {
+        const o = Math.max(0, Math.min(1, ((i + 1) * step - t) / step));
+        el.setAttribute('opacity', o.toFixed(2));
+      });
+      const k = Math.min(n, Math.floor(t / step));
+      const u = Math.max(0, Math.min(1, (t - k * step) / step));
+      const v = k >= n ? S_LS : V[k] + (V[k + 1] - V[k]) * u;
+      sseEl.textContent = f1(v);
+      if (t >= n * step) {
+        setFit('#2b7fd6', 2.5);
+        const o = Math.min(1, (t - n * step) / step);
+        resEls.forEach(el => el.setAttribute('opacity', o.toFixed(2)));
+      }
+      if (t < DUR) raf = requestAnimationFrame(frame); else raf = 0;
+    };
+    raf = requestAnimationFrame(frame);
+  }
+
+  function setStep(s) {
+    stopAnim();
+    btns.forEach(b => b.classList.toggle('on', +b.dataset.step === s));
+    panels.forEach(p => showG(p, +p.dataset.pnl === s));
+    showG(groups.shapes, s === 1);
+    showG(groups.cands, s === 2);
+    showG(groups.resid, s === 3);
+    if (s === 1) { setFit('#1c2230', 2.5); }
+    else if (s === 2) { runLearn(); }
+    else {
+      setFit('#2b7fd6', 2.5);
+      sseEl.textContent = f1(S_LS);
+      resEls.forEach(el => el.setAttribute('opacity', '1'));
+    }
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => setStep(+b.dataset.step)));
+  setStep(1);
+}
+const D = [[1908,10.427],[1909,10.609],[1910,10.412],[1911,10.655],[1912,10.124],[1913,10.086],[1914,12.029],[1915,10.898],[1916,10.911],[1917,9.859],[1918,10.54],[1919,11.151],[1920,11.408],[1921,10.969],[1922,10.873],[1923,10.699],[1924,11.07],[1925,10.787],[1926,10.557],[1927,11.068],[1928,11.126],[1929,11.49],[1930,11.794],[1931,10.956],[1932,11.676],[1933,10.586],[1934,10.2],[1935,11.269],[1936,9.778],[1937,11.455],[1938,11.013],[1939,11.781],[1940,10.772],[1941,11.223],[1942,10.973],[1943,11.723],[1944,10.892],[1945,10.438],[1946,11.388],[1947,9.656],[1948,11.758],[1949,11.7],[1954,11.488],[1955,11.513],[1956,10.113],[1957,10.516],[1958,11.637],[1959,12.08],[1960,12.105],[1961,12.455],[1962,11.757],[1963,11.313],[1964,12.221],[1965,11.396],[1966,11.578],[1967,11.676],[1968,11.788],[1969,10.928],[1970,11.422],[1971,11.551],[1972,11.917],[1973,12.097],[1974,11.155],[1975,12.52],[1976,11.48],[1977,12.373],[1978,12.45],[1979,12.507],[1980,10.824],[1981,11.227],[1982,12.559],[1983,12.454],[1984,11.597],[1985,11.618],[1986,11.306],[1987,11.986],[1988,12.121],[1989,13.011],[1990,12.839],[1991,12.398],[1992,12.501],[1993,12.085],[1994,13.612],[1995,12.267],[1996,12.258],[1997,12.957],[1998,13.836],[1999,13.257],[2000,12.714],[2001,12.86],[2002,12.914],[2003,12.87],[2004,13.352],[2005,12.139],[2006,13.062],[2007,13.283],[2008,12.964],[2009,12.953],[2010,12.141],[2011,12.082],[2012,12.269],[2013,12.564],[2014,13.4],[2015,13.622],[2016,13.593],[2017,13.073],[2018,13.002],[2019,13.599],[2020,13.272],[2021,13.752],[2022,13.296],[2023,14.109],[2024,14.875],[2025,14.15]];
+initW_modeling3(document.querySelector('.widget[data-w="modeling3"]'), D);
+</script></body></html>
