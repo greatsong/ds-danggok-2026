@@ -50,6 +50,12 @@
   .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
   .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
   .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
+  .withimg .txt { flex: 1 1 0; min-width: 0; }
+  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
+  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
+  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
   .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
   .diagram svg { width: 100%; height: auto; display: block; }
   .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
@@ -118,11 +124,11 @@
 <section class="slide">
   <div class="kicker">개념 · 1886년 프랜시스 골턴</div>
   <h2>평범함으로의 회귀</h2>
-  <ul class="facts">
+  <div class="withimg"><div class="txt"><ul class="facts">
     <li>부모 205쌍, 자녀 928명의 키 조사</li>
     <li>키가 아주 큰 부모의 자녀는 부모보다 작고, 아주 작은 부모의 자녀는 부모보다 큼</li>
     <li>자녀 키가 전체 평균 쪽으로 되돌아가는 경향에 붙인 이름</li>
-  </ul>
+  </ul></div><img src="img/galton_1890.jpg" alt="1890년 무렵의 프랜시스 골턴 옆모습 사진"></div><p class="src">사진: 1890년경, 위키미디어 공용</p>
 </section>
 
 <!-- 7 골턴 그림 -->
@@ -227,6 +233,22 @@
   <p class="point">상관은 원인을 찾는 출발점, 증거는 아님</p>
 </section>
 
+<!-- 9-2 그림: 초콜릿과 노벨상 -->
+<section class="slide">
+  <div class="kicker">그림 · 초콜릿 소비량과 노벨상 수상자 수</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">23개국, 상관계수 0.79</h2>
+  <div class="shot tall"><img src="img/choco_nobel_flags.jpg" alt="가로축 1인당 초콜릿 소비량, 세로축 인구 1천만 명당 노벨상 수상자 수. 스위스와 스웨덴이 오른쪽 위, 중국과 브라질이 왼쪽 아래에 국기로 표시된 산점도"></div>
+  <p class="src">Messerli(2012) · 그림: EU 데이터 시각화 가이드</p>
+</section>
+
+<!-- 9-3 그림: 공통 요인 -->
+<section class="slide">
+  <div class="kicker">그림 · 공통 요인</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">국민소득이라는 공통 요인</h2>
+  <div class="shot wide"><img src="img/choco_nobel_gdp.jpg" alt="같은 나라들을 가로축 1인당 국민소득으로 다시 그린 산점도 두 개. 왼쪽은 노벨상 수상자 수, 오른쪽은 초콜릿 소비량. 둘 다 오른쪽 위로 향한다"></div>
+  <p class="src">왼쪽: 국민소득과 노벨상 수상자 수 · 오른쪽: 국민소득과 초콜릿 소비량 · 둘 다 양의 상관 · EU 데이터 시각화 가이드</p>
+</section>
+
 <!-- 10 기울기와 편향 -->
 <section class="slide">
   <div class="kicker">원리 · 교과서 119쪽</div>
@@ -252,12 +274,12 @@
 <section class="slide">
   <div class="kicker">개념 · 모델</div>
   <h2>목적에 필요한 것만 남긴 축소판</h2>
-  <ul class="facts">
+  <div class="withimg"><div class="txt"><ul class="facts">
     <li>라틴어 modulus(작은 척도) → 이탈리아어 modello(건축 축소 모형)</li>
     <li>건축 모형: 벽돌 개수·배관은 빼고 형태와 비례만</li>
     <li>기온 데이터에서 남기는 것: 연도 1 증가당 기온 변화 하나</li>
   </ul>
-  <p class="point">100여 년의 기록이 숫자 두 개로</p>
+  <p class="point">100여 년의 기록이 숫자 두 개로</p></div><img src="img/arch_model.jpg" alt="박물관에 전시된 건축 축소 모형들. 돔 건물과 나선 계단의 형태와 비례만 남긴 목재 모형"></div><p class="src">사진: 쿠퍼 휴잇 박물관의 건축 모형, 위키미디어 공용</p>
 </section>
 
 <!-- 13 모델링 3단계 -->
