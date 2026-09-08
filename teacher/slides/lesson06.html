@@ -112,71 +112,66 @@
 <section class="slide">
   <div class="kicker">6-3 · 원리</div>
   <h2>회귀 분석의 절차</h2>
-  <div class="diagram"><svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="분석의 순서 — 산점도, 상관계수, 회귀선 흐름도">
-<defs>
-<marker id="s4-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8a8f99"/></marker>
-</defs>
-
+  <div class="diagram"><div class="widget" data-w="procedure">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="회귀 분석의 절차: 산점도 → 상관계수 → 회귀선, 서울 연평균기온 1908~2025">
+<!-- 격자 -->
+<g stroke="#e3ddcf" stroke-width="1">
+<line x1="56" y1="20" x2="470" y2="20"/>
+<line x1="56" y1="89.7" x2="470" y2="89.7"/>
+<line x1="56" y1="159.4" x2="470" y2="159.4"/>
+<line x1="56" y1="229.1" x2="470" y2="229.1"/>
+</g>
+<!-- 축 -->
+<path d="M56,20 V264 H470" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+<g font-size="14" fill="#6b7385">
+<text x="48" y="25" text-anchor="end">16</text>
+<text x="48" y="94.7" text-anchor="end">14</text>
+<text x="48" y="164.4" text-anchor="end">12</text>
+<text x="48" y="234.1" text-anchor="end">10</text>
+<text x="60" y="14">℃</text>
+<text x="72.8" y="284" text-anchor="middle">1910</text>
+<text x="207.5" y="284" text-anchor="middle">1950</text>
+<text x="375.7" y="284" text-anchor="middle">2000</text>
+<text x="459.9" y="284" text-anchor="middle">2025</text>
+<text x="476" y="269">연도</text>
+</g>
+<!-- 진행 표시 -->
+<text x="62" y="44" font-size="14" fill="#b9b3a5"><tspan class="pstep" data-s="1">① 산점도</tspan><tspan> → </tspan><tspan class="pstep" data-s="2">② 상관계수</tspan><tspan> → </tspan><tspan class="pstep" data-s="3">③ 회귀선</tspan></text>
+<!-- 캡션 -->
+<text class="cap" x="62" y="72" font-size="18" font-weight="700" fill="#b07a00">함께 움직이는 모양?</text>
 <!-- ① 산점도 -->
-<rect x="20" y="12" width="190" height="134" rx="8" fill="none" stroke="#4c78a8" stroke-width="2.5"/>
-<text x="115" y="38" text-anchor="middle" font-size="16" font-weight="700" fill="#2b2d3a">① 산점도</text>
-<text x="115" y="60" text-anchor="middle" font-size="14" fill="#2b2d3a">점 그래프</text>
-<path d="M62,72 V136 H168" fill="none" stroke="#8a8f99" stroke-width="1"/>
-<g fill="#4c78a8">
-<circle cx="75" cy="124" r="4"/>
-<circle cx="88" cy="118" r="4"/>
-<circle cx="100" cy="108" r="4"/>
-<circle cx="112" cy="112" r="4"/>
-<circle cx="125" cy="96" r="4"/>
-<circle cx="140" cy="90" r="4"/>
-<circle cx="155" cy="80" r="4"/>
-</g>
-<line x1="115" y1="148" x2="115" y2="156" stroke="#4c78a8" stroke-width="1.5"/>
-<text x="115" y="170" text-anchor="middle" font-size="14" fill="#2b2d3a">함께 움직이는 모양이 보이는가</text>
-
-<!-- 화살표 1 -->
-<line x1="214" y1="79" x2="260" y2="79" stroke="#8a8f99" stroke-width="2" marker-end="url(#s4-arrow)"/>
-
-<!-- ② 상관계수 -->
-<rect x="265" y="12" width="190" height="134" rx="8" fill="none" stroke="#f4b400" stroke-width="2.5"/>
-<text x="360" y="38" text-anchor="middle" font-size="16" font-weight="700" fill="#2b2d3a">② 상관계수</text>
-<text x="360" y="60" text-anchor="middle" font-size="14" fill="#2b2d3a">−1 ~ +1</text>
-<text x="416" y="94" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">r = 0.8</text>
-<line x1="290" y1="112" x2="430" y2="112" stroke="#dfe2e8" stroke-width="6" stroke-linecap="round"/>
-<line x1="360" y1="112" x2="416" y2="112" stroke="#f4b400" stroke-width="6" stroke-linecap="round"/>
-<path d="M290,104 V120 M360,104 V120 M430,104 V120" stroke="#8a8f99" stroke-width="1.5"/>
-<circle cx="416" cy="112" r="6" fill="#f4b400" stroke="#2b2d3a" stroke-width="1.5"/>
-<text x="290" y="136" text-anchor="middle" font-size="12" fill="#8a8f99">−1</text>
-<text x="360" y="136" text-anchor="middle" font-size="12" fill="#8a8f99">0</text>
-<text x="430" y="136" text-anchor="middle" font-size="12" fill="#8a8f99">+1</text>
-<line x1="360" y1="148" x2="360" y2="156" stroke="#f4b400" stroke-width="1.5"/>
-<text x="360" y="170" text-anchor="middle" font-size="14" fill="#2b2d3a">얼마나 강한가, 방향은</text>
-
-<!-- 화살표 2 -->
-<line x1="459" y1="79" x2="505" y2="79" stroke="#8a8f99" stroke-width="2" marker-end="url(#s4-arrow)"/>
-
+<g class="pts" fill="#2b7fd6" opacity=".55"></g>
 <!-- ③ 회귀선 -->
-<rect x="510" y="12" width="190" height="134" rx="8" fill="none" stroke="#e45756" stroke-width="2.5"/>
-<text x="605" y="38" text-anchor="middle" font-size="16" font-weight="700" fill="#2b2d3a">③ 회귀선</text>
-<text x="605" y="60" text-anchor="middle" font-size="14" fill="#2b2d3a">가장 잘 맞는 직선</text>
-<path d="M552,72 V136 H658" fill="none" stroke="#8a8f99" stroke-width="1"/>
-<g fill="#4c78a8">
-<circle cx="565" cy="124" r="3.5"/>
-<circle cx="578" cy="118" r="3.5"/>
-<circle cx="590" cy="108" r="3.5"/>
-<circle cx="602" cy="112" r="3.5"/>
-<circle cx="615" cy="96" r="3.5"/>
-<circle cx="630" cy="90" r="3.5"/>
-<circle cx="645" cy="80" r="3.5"/>
+<g class="st3" visibility="hidden" opacity="0">
+<line class="rline" x1="56" y1="264" x2="470" y2="264" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+<rect x="512" y="154" width="200" height="110" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1.2"/>
+<text x="528" y="178" font-size="14" font-weight="700" fill="#1c2230">③ 회귀선</text>
+<line x1="616" y1="173" x2="696" y2="173" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+<text x="528" y="206" font-size="14" fill="#6b7385">기울기</text>
+<text class="slope" x="612" y="244" text-anchor="middle" font-size="22" font-weight="700" fill="#2b7fd6">+2.60℃/100년</text>
 </g>
-<line x1="558" y1="128" x2="656" y2="74" stroke="#e45756" stroke-width="2.5" stroke-linecap="round"/>
-<line x1="605" y1="148" x2="605" y2="156" stroke="#e45756" stroke-width="1.5"/>
-<text x="605" y="170" text-anchor="middle" font-size="14" fill="#2b2d3a">새 값을 예측하면 얼마인가</text>
-
-<!-- 맨 아래 한 줄 -->
-<line x1="20" y1="194" x2="700" y2="194" stroke="#dfe2e8" stroke-width="1"/>
-<text x="360" y="226" text-anchor="middle" font-size="16" font-weight="700" fill="#c0392b">관계가 선 모양이라는 판단이 선 뒤에 직선</text>
-</svg></div>
+<!-- ② 상관계수 -->
+<g class="st2" visibility="hidden" opacity="0">
+<rect x="512" y="20" width="200" height="118" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1.2"/>
+<text x="528" y="44" font-size="14" font-weight="700" fill="#1c2230">② 상관계수</text>
+<text class="rval" x="612" y="80" text-anchor="middle" font-size="26" font-weight="700" fill="#b07a00">r = +0.84</text>
+<line x1="536" y1="106" x2="688" y2="106" stroke="#e3ddcf" stroke-width="6" stroke-linecap="round"/>
+<line class="rfill" x1="612" y1="106" x2="612" y2="106" stroke="#b07a00" stroke-width="6" stroke-linecap="round"/>
+<path d="M536,99 V113 M612,99 V113 M688,99 V113" stroke="#6b7385" stroke-width="1.2"/>
+<circle class="rdot" cx="612" cy="106" r="5.5" fill="#b07a00" stroke="#1c2230" stroke-width="1.2"/>
+<g font-size="14" fill="#6b7385" text-anchor="middle">
+<text x="536" y="130">−1</text>
+<text x="612" y="130">0</text>
+<text x="688" y="130">+1</text>
+</g>
+</g>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-s="1">① 산점도</button>
+<button class="wbtn" type="button" data-s="2">② 상관계수</button>
+<button class="wbtn" type="button" data-s="3">③ 회귀선</button>
+</div>
+</div></div>
   
 </section>
 
@@ -203,81 +198,152 @@
 <section class="slide">
   <div class="kicker">6-5 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">골턴의 발견 — 부모와 자녀의 키 분포</h2>
-  <div class="diagram"><svg viewBox="0 0 840 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부모의 키와 자녀의 키를 나타낸 산점도. 두 키가 같다면 나타났을 점선보다 실제 회귀선의 기울기가 완만해, 부모 키가 평균에서 멀수록 자녀 키는 평균 쪽에 더 가깝게 놓인다는 그림">
-    <defs>
-      <marker id="l6g-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e45756"/></marker>
-    </defs>
-    <line x1="70" y1="300" x2="612" y2="300" stroke="#c9ccd4" stroke-width="1.5"/>
-    <line x1="70" y1="300" x2="70" y2="52" stroke="#c9ccd4" stroke-width="1.5"/>
-    <line x1="70" y1="180" x2="612" y2="180" stroke="#e3e6ec" stroke-width="1" stroke-dasharray="3 4"/>
-    <line x1="335" y1="300" x2="335" y2="52" stroke="#e3e6ec" stroke-width="1" stroke-dasharray="3 4"/>
-    <text x="341" y="64" font-size="12" fill="#9aa0aa">평균</text>
-    <circle cx="223.8" cy="206.8" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="425.4" cy="162.1" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="214.3" cy="217.8" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="378.4" cy="146.5" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="224.5" cy="237.5" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="399.1" cy="151.8" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="474.4" cy="119.5" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="325.8" cy="187.9" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="308.8" cy="202.5" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="231.6" cy="209.6" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="348.2" cy="182.4" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="329.4" cy="176.7" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="397.9" cy="140.6" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="354.1" cy="207.4" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="398.8" cy="186.9" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="319.4" cy="212.0" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="335.2" cy="194.4" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="354.4" cy="113.0" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="330.6" cy="165.7" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="214.8" cy="221.8" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="395.2" cy="163.5" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="368.6" cy="167.9" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="243.6" cy="197.3" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="261.2" cy="167.7" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="289.1" cy="181.2" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="335.2" cy="162.3" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="280.3" cy="178.1" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="323.7" cy="160.0" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="391.7" cy="160.2" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="264.1" cy="187.3" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="377.5" cy="136.7" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="300.7" cy="180.1" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="381.1" cy="160.8" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="353.9" cy="170.9" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="280.6" cy="215.3" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="299.0" cy="180.0" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="472.3" cy="120.3" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="430.7" cy="136.6" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="398.5" cy="157.4" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="405.1" cy="125.9" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="305.2" cy="201.9" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="513.1" cy="121.4" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="423.2" cy="137.1" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="231.8" cy="166.3" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="496.3" cy="127.8" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="403.4" cy="156.9" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="254.7" cy="206.4" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="369.0" cy="149.0" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="399.4" cy="159.3" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="458.1" cy="156.7" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="407.0" cy="137.6" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <circle cx="308.5" cy="221.2" r="3.6" fill="#4c78a8" opacity=".5"/>
-    <line x1="70" y1="300" x2="600" y2="60" stroke="#8a8f99" stroke-width="2" stroke-dasharray="7 5"/>
-    <line x1="85" y1="256" x2="585" y2="104" stroke="#e45756" stroke-width="3"/>
-    <line x1="560" y1="84" x2="560" y2="105" stroke="#e45756" stroke-width="2" marker-end="url(#l6g-ar)"/>
-    <line x1="140" y1="264" x2="140" y2="244" stroke="#e45756" stroke-width="2" marker-end="url(#l6g-ar)"/>
-    <text x="572" y="101" font-size="12.5" fill="#c0392b" paint-order="stroke" stroke="#fffdf7" stroke-width="3.5">평균 쪽으로 내려온다</text>
-    <text x="150" y="252" font-size="12.5" fill="#c0392b" paint-order="stroke" stroke="#fffdf7" stroke-width="3.5">평균 쪽으로 올라온다</text>
-    <line x1="96" y1="76" x2="136" y2="76" stroke="#8a8f99" stroke-width="2" stroke-dasharray="7 5"/>
-    <text x="144" y="80" font-size="12.5" font-weight="700" fill="#5a5f68">부모와 자녀의 키가 같다면</text>
-    <line x1="96" y1="100" x2="136" y2="100" stroke="#e45756" stroke-width="3"/>
-    <text x="144" y="104" font-size="12.5" font-weight="700" fill="#c0392b">실제 경향 (회귀선)</text>
-    <text x="335" y="332" font-size="13.5" font-weight="700" fill="#3a3f48" text-anchor="middle">부모의 키 (작다 → 크다)</text>
-    <text x="31" y="180" font-size="13.5" font-weight="700" fill="#3a3f48" transform="rotate(-90 31 180)" text-anchor="middle">자녀의 키</text>
-    <text x="70" y="362" font-size="11.5" fill="#8a8f99">점의 위치는 경향을 나타낸 모식 표기입니다. 골턴이 얻은 회귀선의 기울기는 약 3분의 2였습니다.</text>
-  </svg></div>
+  <div class="diagram"><div class="widget" data-w="galton">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부모 키와 자녀 키의 산점도. 부모와 같은 키를 나타내는 점선보다 회귀선의 기울기가 완만해, 선택한 부모 키에서 예측 자녀 키가 전체 평균 쪽에 놓이는 정도를 보여주는 그림">
+  <!-- 격자 -->
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="97.4" y1="20" x2="97.4" y2="296"/>
+    <line x1="180.3" y1="20" x2="180.3" y2="296"/>
+    <line x1="263.1" y1="20" x2="263.1" y2="296"/>
+    <line x1="346" y1="20" x2="346" y2="296"/>
+    <line x1="56" y1="256.6" x2="346" y2="256.6"/>
+    <line x1="56" y1="177.7" x2="346" y2="177.7"/>
+    <line x1="56" y1="98.9" x2="346" y2="98.9"/>
+    <line x1="56" y1="20" x2="346" y2="20"/>
+  </g>
+  <!-- 축 -->
+  <line x1="56" y1="296" x2="346" y2="296" stroke="#b9b3a5" stroke-width="1.5"/>
+  <line x1="56" y1="20" x2="56" y2="296" stroke="#b9b3a5" stroke-width="1.5"/>
+  <!-- 눈금 -->
+  <g font-size="14" fill="#6b7385">
+    <text x="97.4" y="316" text-anchor="middle">160</text>
+    <text x="180.3" y="316" text-anchor="middle">170</text>
+    <text x="263.1" y="316" text-anchor="middle">180</text>
+    <text x="346" y="316" text-anchor="middle">190</text>
+    <text x="50" y="261.6" text-anchor="end">160</text>
+    <text x="50" y="182.7" text-anchor="end">170</text>
+    <text x="50" y="103.9" text-anchor="end">180</text>
+    <text x="50" y="25" text-anchor="end">190</text>
+    <text x="201" y="335" text-anchor="middle">부모 평균 키 (cm)</text>
+    <text x="20" y="158" text-anchor="middle" transform="rotate(-90 20 158)">자녀 키 (cm)</text>
+  </g>
+  <!-- 배경 점 70개: 결정적 수열 u(i)=((i+1)·m+20 mod p)/(p−1) 3개 합으로 만든 종 모양 산포(초기화 함수와 같은 식) -->
+  <g class="pts" fill="#2b7fd6" opacity=".55">
+    <circle cx="337.7" cy="78.4" r="3.5"/>
+    <circle cx="235.0" cy="171.4" r="3.5"/>
+    <circle cx="121.5" cy="199.8" r="3.5"/>
+    <circle cx="242.4" cy="154.1" r="3.5"/>
+    <circle cx="246.6" cy="109.9" r="3.5"/>
+    <circle cx="132.2" cy="210.0" r="3.5"/>
+    <circle cx="254.0" cy="164.3" r="3.5"/>
+    <circle cx="140.5" cy="264.5" r="3.5"/>
+    <circle cx="261.5" cy="147.7" r="3.5"/>
+    <circle cx="264.8" cy="102.8" r="3.5"/>
+    <circle cx="151.3" cy="131.2" r="3.5"/>
+    <circle cx="272.3" cy="158.0" r="3.5"/>
+    <circle cx="276.4" cy="113.1" r="3.5"/>
+    <circle cx="162.9" cy="141.4" r="3.5"/>
+    <circle cx="166.2" cy="168.3" r="3.5"/>
+    <circle cx="288.0" cy="123.3" r="3.5"/>
+    <circle cx="174.5" cy="151.7" r="3.5"/>
+    <circle cx="177.8" cy="106.7" r="3.5"/>
+    <circle cx="181.9" cy="134.3" r="3.5"/>
+    <circle cx="302.9" cy="89.4" r="3.5"/>
+    <circle cx="189.4" cy="188.8" r="3.5"/>
+    <circle cx="192.7" cy="144.6" r="3.5"/>
+    <circle cx="196.9" cy="172.2" r="3.5"/>
+    <circle cx="200.2" cy="127.2" r="3.5"/>
+    <circle cx="204.3" cy="154.8" r="3.5"/>
+    <circle cx="207.6" cy="109.9" r="3.5"/>
+    <circle cx="211.8" cy="137.5" r="3.5"/>
+    <circle cx="215.9" cy="165.1" r="3.5"/>
+    <circle cx="219.2" cy="192.7" r="3.5"/>
+    <circle cx="105.7" cy="220.3" r="3.5"/>
+    <circle cx="226.7" cy="103.6" r="3.5"/>
+    <circle cx="230.8" cy="130.4" r="3.5"/>
+    <circle cx="117.3" cy="230.5" r="3.5"/>
+    <circle cx="238.3" cy="113.8" r="3.5"/>
+    <circle cx="241.6" cy="140.7" r="3.5"/>
+    <circle cx="128.1" cy="240.8" r="3.5"/>
+    <circle cx="249.9" cy="195.9" r="3.5"/>
+    <circle cx="253.2" cy="79.1" r="3.5"/>
+    <circle cx="139.7" cy="179.3" r="3.5"/>
+    <circle cx="260.7" cy="134.3" r="3.5"/>
+    <circle cx="147.1" cy="161.9" r="3.5"/>
+    <circle cx="151.3" cy="189.5" r="3.5"/>
+    <circle cx="272.3" cy="72.0" r="3.5"/>
+    <circle cx="158.7" cy="244.0" r="3.5"/>
+    <circle cx="162.1" cy="128.0" r="3.5"/>
+    <circle cx="283.9" cy="82.3" r="3.5"/>
+    <circle cx="170.3" cy="110.7" r="3.5"/>
+    <circle cx="173.7" cy="210.0" r="3.5"/>
+    <circle cx="177.8" cy="165.1" r="3.5"/>
+    <circle cx="181.1" cy="192.7" r="3.5"/>
+    <circle cx="185.3" cy="148.5" r="3.5"/>
+    <circle cx="188.6" cy="175.3" r="3.5"/>
+    <circle cx="192.7" cy="131.2" r="3.5"/>
+    <circle cx="196.0" cy="158.8" r="3.5"/>
+    <circle cx="200.2" cy="113.8" r="3.5"/>
+    <circle cx="86.7" cy="285.7" r="3.5"/>
+    <circle cx="207.6" cy="169.0" r="3.5"/>
+    <circle cx="211.8" cy="195.9" r="3.5"/>
+    <circle cx="215.1" cy="79.9" r="3.5"/>
+    <circle cx="101.6" cy="251.8" r="3.5"/>
+    <circle cx="222.5" cy="134.3" r="3.5"/>
+    <circle cx="226.7" cy="161.9" r="3.5"/>
+    <circle cx="230.0" cy="117.0" r="3.5"/>
+    <circle cx="234.1" cy="216.4" r="3.5"/>
+    <circle cx="237.5" cy="172.2" r="3.5"/>
+    <circle cx="241.6" cy="127.2" r="3.5"/>
+    <circle cx="128.1" cy="155.6" r="3.5"/>
+    <circle cx="249.1" cy="110.7" r="3.5"/>
+    <circle cx="253.2" cy="137.5" r="3.5"/>
+    <circle cx="256.5" cy="93.3" r="3.5"/>
+  </g>
+  <!-- 기준선 3개: 전체 평균 · 부모와 같은 키 · 회귀선 -->
+  <line x1="56" y1="154.1" x2="346" y2="154.1" stroke="#b9b3a5" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <line x1="56" y1="296" x2="346" y2="20" stroke="#6b7385" stroke-width="2" stroke-dasharray="7 5"/>
+  <line x1="56" y1="246.3" x2="346" y2="66.9" stroke="#2b7fd6" stroke-width="2.5"/>
+  <!-- 선택한 부모 키 -->
+  <line class="guide" x1="304.6" y1="20" x2="304.6" y2="296" stroke="#b9b3a5" stroke-width="1.2"/>
+  <line class="arr" x1="304.6" y1="59.4" x2="304.6" y2="78.5" stroke="#b07a00" stroke-width="2.5"/>
+  <polygon class="arrh" points="304.6,85.5 299.6,78.5 309.6,78.5" fill="#b07a00"/>
+  <circle class="p-same" cx="304.6" cy="59.4" r="5.5" fill="#b9b3a5" stroke="#6b7385" stroke-width="1.5"/>
+  <circle class="p-pred" cx="304.6" cy="92.5" r="6" fill="#2b7fd6" stroke="#f7f3e8" stroke-width="2"/>
+  <text class="lbl" x="273.5" y="81" text-anchor="end" font-size="14" font-weight="700" fill="#b07a00" paint-order="stroke" stroke="#f7f3e8" stroke-width="4" stroke-linejoin="round">평균 쪽으로 4.2 cm</text>
+  <!-- 범례 -->
+  <g font-size="14" fill="#1c2230">
+    <line x1="362" y1="30" x2="388" y2="30" stroke="#6b7385" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="394" y="35">부모와 같은 키</text>
+    <line x1="362" y1="56" x2="388" y2="56" stroke="#2b7fd6" stroke-width="2.5"/>
+    <text x="394" y="61">회귀선</text>
+    <line x1="362" y1="82" x2="388" y2="82" stroke="#b9b3a5" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <text x="394" y="87">전체 평균 173</text>
+  </g>
+  <!-- 수치 패널 -->
+  <rect x="504" y="20" width="208" height="240" rx="10" fill="#fdfbf5" stroke="#e3ddcf"/>
+  <g font-size="14" fill="#6b7385">
+    <text x="518" y="54">부모 키</text>
+    <text x="518" y="100">같은 키라면</text>
+    <text x="518" y="146">예측 자녀 키</text>
+    <text x="518" y="192">차이</text>
+    <line x1="518" y1="214" x2="698" y2="214" stroke="#e3ddcf"/>
+    <text x="518" y="242">기울기 0.65 → 약 3분의 2</text>
+  </g>
+  <text x="698" y="54" text-anchor="end"><tspan class="v-parent" font-size="24" font-weight="700" fill="#1c2230">185</tspan><tspan font-size="14" fill="#6b7385"> cm</tspan></text>
+  <text class="v-same" x="698" y="100" text-anchor="end" font-size="20" fill="#6b7385">185.0</text>
+  <text class="v-pred" x="698" y="146" text-anchor="end" font-size="24" font-weight="700" fill="#2b7fd6">180.8</text>
+  <text class="v-diff" x="698" y="192" text-anchor="end" font-size="18" font-weight="700" fill="#b07a00">4.2 → 평균 쪽</text>
+  <text x="712" y="335" text-anchor="end" font-size="14" fill="#6b7385">골턴 1886의 경향을 근사한 모식도</text>
+</svg>
+<div class="wctl">
+  <label>부모 키 <input type="range" min="155" max="190" step="1" value="185"></label>
+  <span class="wout">185 cm</span>
+  <button class="wbtn" type="button" data-v="160">작은 부모 160</button>
+  <button class="wbtn" type="button" data-v="173">평균 173</button>
+  <button class="wbtn on" type="button" data-v="185">큰 부모 185</button>
+</div>
+</div></div>
 </section>
 
 <!-- 8 이름만 남았다 -->
@@ -366,7 +432,38 @@
   <div class="kicker">6-9 · 교과서 120쪽</div>
   <h2>최적 직선의 기준 — 오차</h2>
   <blockquote style="margin-top:3vh">실젯값과 예측값의 차이가 작은 쪽을 고른다</blockquote>
-  <div class="diagram"><svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="점 7개와 후보 직선 두 개, 후보 B에 대한 세로 오차 선분과 오차의 정의"><defs><marker id="s13-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f99"/></marker></defs><line x1="60" y1="240" x2="455" y2="240" stroke="#8a8f99" stroke-width="1.5" marker-end="url(#s13-arrow)"/><line x1="60" y1="240" x2="60" y2="32" stroke="#8a8f99" stroke-width="1.5" marker-end="url(#s13-arrow)"/><text x="452" y="258" font-size="13" fill="#8a8f99" text-anchor="middle">x</text><text x="46" y="40" font-size="13" fill="#8a8f99" text-anchor="middle">y</text><line x1="70" y1="206" x2="440" y2="100" stroke="#8a8f99" stroke-width="2" stroke-dasharray="7 5"/><text x="448" y="105" font-size="14" font-weight="700" fill="#8a8f99">후보 A</text><line x1="70" y1="216" x2="440" y2="68" stroke="#e45756" stroke-width="2.5"/><text x="448" y="73" font-size="14" fill="#2b2d3a"><tspan fill="#c0392b" font-weight="700">후보 B</tspan> (오차가 더 작음)</text><g stroke="#e45756" stroke-width="1.5"><line x1="100" y1="192" x2="100" y2="204"/><line x1="150" y1="196" x2="150" y2="184"/><line x1="200" y1="150" x2="200" y2="164"/><line x1="250" y1="153" x2="250" y2="144"/><line x1="300" y1="109" x2="300" y2="124"/><line x1="350" y1="117" x2="350" y2="104"/><line x1="400" y1="76" x2="400" y2="84"/></g><text x="193" y="162" font-size="12" fill="#c0392b" text-anchor="end">오차</text><g fill="#4c78a8"><circle cx="100" cy="192" r="5"/><circle cx="150" cy="196" r="5"/><circle cx="200" cy="150" r="5"/><circle cx="250" cy="153" r="5"/><circle cx="300" cy="109" r="5"/><circle cx="350" cy="117" r="5"/><circle cx="400" cy="76" r="5"/></g><rect x="482" y="24" width="216" height="30" rx="6" fill="none" stroke="#dfe2e8" stroke-width="1.5"/><text x="590" y="44" font-size="15" font-weight="700" fill="#2b2d3a" text-anchor="middle">오차 = 실젯값 − 예측값</text><text x="590" y="128" font-size="13" fill="#8a8f99" text-anchor="middle">세로 선분 하나의 뜻</text><line x1="505" y1="212" x2="690" y2="188" stroke="#e45756" stroke-width="2"/><text x="690" y="182" font-size="12" fill="#e45756" text-anchor="end">예측 직선</text><line x1="600" y1="150" x2="600" y2="200" stroke="#e45756" stroke-width="1.5"/><circle cx="600" cy="200" r="4" fill="#f7f3e8" stroke="#e45756" stroke-width="1.5"/><circle cx="600" cy="150" r="5" fill="#4c78a8"/><text x="590" y="154" font-size="13" fill="#2b2d3a" text-anchor="end">실젯값</text><text x="590" y="180" font-size="13" font-weight="700" fill="#c0392b" text-anchor="end">오차</text><text x="600" y="222" font-size="13" fill="#2b2d3a" text-anchor="middle">예측값</text><line x1="60" y1="262" x2="660" y2="262" stroke="#dfe2e8" stroke-width="1.5"/><text x="360" y="286" font-size="15" font-weight="700" fill="#2b2d3a" text-anchor="middle">오차가 가장 작은 기울기·편향 조합을 찾는 계산 <tspan fill="#c0392b">= 학습</tspan></text><text x="360" y="308" font-size="12" fill="#8a8f99" text-anchor="middle">(교과서 120쪽 · 오차 판정 손계산은 8차시)</text></svg></div>
+  <div class="diagram" style="--wh:40vh"><div class="widget" data-w="error">
+<svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="최근 20년 서울 연평균기온 산점도 위 예측 직선, 각 점의 오차 선분, 제곱오차 합">
+<g stroke="#e3ddcf" stroke-width="1"><line x1="56" y1="156.5" x2="500" y2="156.5"/><line x1="56" y1="113.0" x2="500" y2="113.0"/><line x1="56" y1="69.5" x2="500" y2="69.5"/><line x1="56" y1="26.0" x2="500" y2="26.0"/></g>
+<line x1="56" y1="200" x2="500" y2="200" stroke="#b9b3a5" stroke-width="1.5"/>
+<line x1="56" y1="26" x2="56" y2="200" stroke="#b9b3a5" stroke-width="1.5"/>
+<g font-size="14" fill="#6b7385" text-anchor="end"><text x="48" y="205.0">11</text><text x="48" y="161.5">12</text><text x="48" y="118.0">13</text><text x="48" y="74.5">14</text><text x="48" y="31.0">15</text></g>
+<text x="48" y="14" font-size="14" fill="#6b7385" text-anchor="end">℃</text>
+<g font-size="14" fill="#6b7385" text-anchor="middle"><text x="56.0" y="219">2006</text><text x="149.5" y="219">2010</text><text x="266.3" y="219">2015</text><text x="383.2" y="219">2020</text><text x="500.0" y="219">2025</text></g>
+<text x="500" y="237" font-size="14" fill="#6b7385" text-anchor="end">연도</text>
+<g data-dyn><line x1="56.0" y1="117.3" x2="500.0" y2="95.9" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/><line x1="56.0" y1="110.3" x2="56.0" y2="117.3" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="79.4" y1="100.7" x2="79.4" y2="116.2" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="102.7" y1="114.6" x2="102.7" y2="115.1" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="126.1" y1="115.0" x2="126.1" y2="114.0" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="149.5" y1="150.4" x2="149.5" y2="112.8" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="172.8" y1="152.9" x2="172.8" y2="111.7" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="196.2" y1="144.8" x2="196.2" y2="110.6" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="219.6" y1="132.0" x2="219.6" y2="109.4" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="242.9" y1="95.6" x2="242.9" y2="108.3" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="266.3" y1="85.9" x2="266.3" y2="107.2" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="289.7" y1="87.2" x2="289.7" y2="106.0" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="313.1" y1="109.8" x2="313.1" y2="104.9" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="336.4" y1="112.9" x2="336.4" y2="103.8" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="359.8" y1="86.9" x2="359.8" y2="102.6" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="383.2" y1="101.2" x2="383.2" y2="101.5" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="406.5" y1="80.3" x2="406.5" y2="100.4" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="429.9" y1="100.1" x2="429.9" y2="99.3" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="453.3" y1="64.8" x2="453.3" y2="98.1" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="476.6" y1="31.4" x2="476.6" y2="97.0" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="500.0" y1="63.0" x2="500.0" y2="95.9" stroke="#d64545" stroke-width="2" opacity=".85"/><circle cx="56.0" cy="110.3" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="79.4" cy="100.7" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="102.7" cy="114.6" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="126.1" cy="115.0" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="149.5" cy="150.4" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="172.8" cy="152.9" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="196.2" cy="144.8" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="219.6" cy="132.0" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="242.9" cy="95.6" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="266.3" cy="85.9" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="289.7" cy="87.2" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="313.1" cy="109.8" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="336.4" cy="112.9" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="359.8" cy="86.9" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="383.2" cy="101.2" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="406.5" cy="80.3" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="429.9" cy="100.1" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="453.3" cy="64.8" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="476.6" cy="31.4" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="500.0" cy="63.0" r="3.5" fill="#2b7fd6" opacity=".55"/></g>
+<rect x="524" y="24" width="172" height="84" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+<text x="536" y="44" font-size="14" fill="#6b7385">제곱오차 합</text>
+<text x="684" y="72" font-size="24" font-weight="700" fill="#d64545" text-anchor="end" data-t="sse">7.03</text>
+<text x="536" y="98" font-size="14" fill="#6b7385">최소</text>
+<text x="684" y="98" font-size="16" font-weight="700" fill="#2f9e5f" text-anchor="end" data-t="min">4.76</text>
+<circle cx="544" cy="130" r="3.5" fill="#2b7fd6" opacity=".55"/>
+<text x="556" y="135" font-size="14" fill="#1c2230">실젯값(점)</text>
+<line x1="536" y1="152" x2="552" y2="152" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+<text x="556" y="157" font-size="14" fill="#1c2230">예측 직선(모델)</text>
+<line x1="544" y1="167" x2="544" y2="181" stroke="#d64545" stroke-width="2" opacity=".85"/>
+<text x="556" y="179" font-size="14" fill="#1c2230">오차(세로 선분)</text>
+<text x="536" y="206" font-size="14" fill="#1c2230">기울기 <tspan font-weight="700" data-t="a">+2.60</tspan> ℃/100년</text>
+<text x="536" y="226" font-size="14" fill="#1c2230">편향(출발 높이) <tspan font-weight="700" data-t="h">12.9</tspan>℃</text>
+<text x="278" y="253" font-size="14" fill="#6b7385" text-anchor="middle">오차 = 실젯값 − 예측값 · 제곱해서 더한 값이 작을수록 잘 맞는 직선</text>
+</svg>
+<div class="wctl">
+<label>기울기 <input type="range" min="-5" max="20" step="0.1" value="2.6" data-k="a"> <span data-v="a">+2.60 ℃/100년</span></label>
+<label>편향(출발 높이) <input type="range" min="11" max="15" step="0.1" value="12.9" data-k="h"> <span data-v="h">12.9℃</span></label>
+<button class="wbtn" type="button" data-act="best">최적 직선</button>
+<span class="wout">제곱오차 합 7.03 · 최소 4.76</span>
+</div>
+</div></div>
 </section>
 
 <!-- 12 모델 -->
@@ -385,60 +482,101 @@
 <section class="slide">
   <div class="kicker">6-11 · 원리</div>
   <h2>모델링의 단계</h2>
-  <div class="diagram"><svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="모델링의 세 단계 흐름도: ① 형태 정하기, ② 학습, ③ 평가. 평가가 나쁘면 학습으로 되돌아가는 되돌이 화살표 포함">
-  <defs>
-    <marker id="s15-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8a8f99"/></marker>
-    <marker id="s15-arrow-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#e45756"/></marker>
-  </defs>
+  <div class="diagram"><div class="widget" data-w="modeling3">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서울 연평균기온 산점도 위에서 모델링 세 단계 — ① 형태 정하기, ② 학습, ③ 평가">
+  <!-- 격자·축 -->
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="56" y1="229.1" x2="456" y2="229.1"/>
+    <line x1="56" y1="159.4" x2="456" y2="159.4"/>
+    <line x1="56" y1="89.7" x2="456" y2="89.7"/>
+    <line x1="56" y1="20" x2="456" y2="20"/>
+  </g>
+  <line x1="56" y1="264" x2="456" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="56" y1="20" x2="56" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <g font-size="14" fill="#6b7385">
+    <text x="48" y="234" text-anchor="end">10</text>
+    <text x="48" y="164" text-anchor="end">12</text>
+    <text x="48" y="95" text-anchor="end">14</text>
+    <text x="48" y="25" text-anchor="end">16</text>
+    <text x="56" y="13" text-anchor="middle">℃</text>
+    <text x="62.8" y="282" text-anchor="middle">1910</text>
+    <text x="199.6" y="282" text-anchor="middle">1950</text>
+    <text x="370.6" y="282" text-anchor="middle">2000</text>
+    <text x="456" y="282" text-anchor="middle">2025</text>
+    <text x="478" y="259" text-anchor="end">연도</text>
+  </g>
 
-  <!-- ① 형태 정하기 -->
-  <rect x="22" y="30" width="196" height="162" rx="8" fill="#ffffff"/>
-  <path d="M30,30 h180 a8,8 0 0 1 8,8 v20 h-196 v-20 a8,8 0 0 1 8,-8 z" fill="#4c78a8" fill-opacity="0.22"/>
-  <rect x="22" y="30" width="196" height="162" rx="8" fill="none" stroke="#4c78a8" stroke-width="2"/>
-  <text x="120" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">① 형태 정하기</text>
-  <text x="120" y="77" text-anchor="middle" font-size="13" fill="#8a8f99">하는 일</text>
-  <text x="120" y="96" text-anchor="middle" font-size="14" fill="#2b2d3a">관계를 어떤 모양으로</text>
-  <text x="120" y="114" text-anchor="middle" font-size="14" fill="#2b2d3a">요약할지</text>
-  <line x1="36" y1="125" x2="204" y2="125" stroke="#dfe2e8" stroke-width="1"/>
-  <text x="120" y="143" text-anchor="middle" font-size="13" fill="#8a8f99">오늘의 경우</text>
-  <text x="120" y="171" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">직선 하나</text>
+  <!-- ① 후보 형태 셋 — 곡선·계단은 흐리게, 직선(회귀선)만 진하게 -->
+  <g class="shapes">
+    <path class="shape-curve" d="" fill="none" stroke="#b9b3a5" stroke-width="2" opacity=".8"/>
+    <path class="shape-stair" d="" fill="none" stroke="#b9b3a5" stroke-width="2" opacity=".8"/>
+    <line x1="66" y1="34" x2="94" y2="34" stroke="#1c2230" stroke-width="2.5"/>
+    <text x="102" y="39" font-size="14" font-weight="700" fill="#1c2230">직선 → 선택</text>
+    <path d="M66,58 Q80,58 94,48" fill="none" stroke="#b9b3a5" stroke-width="2"/>
+    <text x="102" y="59" font-size="14" fill="#6b7385">곡선</text>
+    <path d="M66,78 h9 v-5 h10 v-5 h9" fill="none" stroke="#b9b3a5" stroke-width="2"/>
+    <text x="102" y="79" font-size="14" fill="#6b7385">계단</text>
+  </g>
 
-  <!-- ② 학습 -->
-  <rect x="252" y="30" width="196" height="162" rx="8" fill="#ffffff"/>
-  <path d="M260,30 h180 a8,8 0 0 1 8,8 v20 h-196 v-20 a8,8 0 0 1 8,-8 z" fill="#f4b400" fill-opacity="0.22"/>
-  <rect x="252" y="30" width="196" height="162" rx="8" fill="none" stroke="#f4b400" stroke-width="2"/>
-  <text x="350" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">② 학습</text>
-  <text x="350" y="77" text-anchor="middle" font-size="13" fill="#8a8f99">하는 일</text>
-  <text x="350" y="96" text-anchor="middle" font-size="14" fill="#2b2d3a">데이터에 가장 잘 맞는</text>
-  <text x="350" y="114" text-anchor="middle" font-size="14" fill="#2b2d3a">숫자 찾기</text>
-  <line x1="266" y1="125" x2="434" y2="125" stroke="#dfe2e8" stroke-width="1"/>
-  <text x="350" y="143" text-anchor="middle" font-size="13" fill="#8a8f99">오늘의 경우</text>
-  <text x="350" y="162" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">오차가 가장 작은</text>
-  <text x="350" y="180" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">기울기와 편향</text>
+  <!-- ② 회색 후보 직선 8개 -->
+  <g class="cands" display="none"></g>
 
-  <!-- ③ 평가 -->
-  <rect x="502" y="30" width="196" height="162" rx="8" fill="#ffffff"/>
-  <path d="M510,30 h180 a8,8 0 0 1 8,8 v20 h-196 v-20 a8,8 0 0 1 8,-8 z" fill="#54a24b" fill-opacity="0.22"/>
-  <rect x="502" y="30" width="196" height="162" rx="8" fill="none" stroke="#54a24b" stroke-width="2"/>
-  <text x="600" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">③ 평가</text>
-  <text x="600" y="77" text-anchor="middle" font-size="13" fill="#8a8f99">하는 일</text>
-  <text x="600" y="105" text-anchor="middle" font-size="14" fill="#2b2d3a">얼마나 믿을 수 있는지 재기</text>
-  <line x1="516" y1="125" x2="684" y2="125" stroke="#dfe2e8" stroke-width="1"/>
-  <text x="600" y="143" text-anchor="middle" font-size="13" fill="#8a8f99">오늘의 경우</text>
-  <text x="600" y="171" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">예측값과 실젯값의 차이</text>
+  <!-- 회귀선(최소제곱) -->
+  <line class="fitline" x1="0" y1="0" x2="0" y2="0" stroke="#1c2230" stroke-width="2.5"/>
 
-  <!-- 앞으로 가는 화살표 -->
-  <line x1="221" y1="118" x2="249" y2="118" stroke="#8a8f99" stroke-width="2" marker-end="url(#s15-arrow)"/>
-  <line x1="451" y1="118" x2="499" y2="118" stroke="#8a8f99" stroke-width="2" marker-end="url(#s15-arrow)"/>
+  <!-- 산점도 -->
+  <g class="pts"></g>
 
-  <!-- 되돌이 화살표 (③ → ②) -->
-  <path d="M502,100 C502,78 484,78 452,78" fill="none" stroke="#e45756" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#s15-arrow-back)"/>
-  <text x="477" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#c0392b">다시</text>
+  <!-- ③ 2023·2024·2025 오차 선분 -->
+  <g class="resid" display="none"></g>
 
-  <!-- 교과서 대응 -->
-  <line x1="22" y1="212" x2="698" y2="212" stroke="#dfe2e8" stroke-width="1"/>
-  <text x="360" y="236" text-anchor="middle" font-size="13" fill="#2b2d3a"><tspan fill="#8a8f99">교과서 14쪽 6단계 중</tspan> ④ 모델링하기 · ⑤ 모델 평가하기 · ⑥ 모델 활용하기</text>
-</svg></div>
+  <!-- 패널 구분선 -->
+  <line x1="482" y1="20" x2="482" y2="264" stroke="#e3ddcf" stroke-width="1"/>
+
+  <!-- 패널 ① -->
+  <g data-pnl="1">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#2b7fd6">① 형태 정하기</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">관계를 어떤 모양으로</text>
+    <text x="496" y="86" font-size="14" fill="#1c2230">요약할지</text>
+    <text x="496" y="116" font-size="16" font-weight="700" fill="#1c2230">→ 직선 하나</text>
+    <line x1="496" y1="136" x2="712" y2="136" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="496" y="162" font-size="14" fill="#6b7385">후보: 직선 · 곡선 · 계단</text>
+    <text x="496" y="184" font-size="14" fill="#6b7385">이번 모델 = 직선</text>
+    <text x="496" y="204" font-size="14" fill="#6b7385">남은 일 = 기울기·편향 찾기</text>
+  </g>
+
+  <!-- 패널 ② -->
+  <g data-pnl="2" display="none">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#b07a00">② 학습</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">데이터에 가장 잘 맞는</text>
+    <text x="496" y="86" font-size="14" fill="#1c2230">숫자 찾기</text>
+    <text x="496" y="116" font-size="14" font-weight="700" fill="#1c2230">→ 제곱오차 합이 가장 작은</text>
+    <text x="496" y="136" font-size="14" font-weight="700" fill="#1c2230">기울기·편향</text>
+    <line x1="496" y1="152" x2="712" y2="152" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="496" y="176" font-size="14" fill="#6b7385">제곱오차 합</text>
+    <text class="sse" x="496" y="208" font-size="26" font-weight="700" fill="#b07a00">0.0</text>
+    <text class="slope learned" x="496" y="238" font-size="15" fill="#1c2230" opacity="0"></text>
+    <text class="bias learned" x="496" y="258" font-size="15" fill="#1c2230" opacity="0"></text>
+  </g>
+
+  <!-- 패널 ③ -->
+  <g data-pnl="3" display="none">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#2f9e5f">③ 평가</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">얼마나 믿을 수 있는지</text>
+    <text x="496" y="90" font-size="14" font-weight="700" fill="#1c2230">→ 예측값과 실젯값의 차이</text>
+    <line x1="496" y1="104" x2="712" y2="104" stroke="#e3ddcf" stroke-width="1"/>
+    <text y="122" font-size="14" fill="#6b7385"><tspan x="496">연도</tspan><tspan x="590" text-anchor="end">실젯값</tspan><tspan x="652" text-anchor="end">예측값</tspan><tspan x="712" text-anchor="end">차이</tspan></text>
+    <g class="tbl"></g>
+    <text x="496" y="214" font-size="14" fill="#6b7385">차이 = 실젯값 − 예측값</text>
+    <text x="496" y="234" font-size="14" fill="#6b7385">빨간 선분 = 세 해의 차이</text>
+  </g>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-step="1">① 형태 정하기</button>
+  <button class="wbtn" type="button" data-step="2">② 학습</button>
+  <button class="wbtn" type="button" data-step="3">③ 평가</button>
+</div>
+</div></div>
   
 </section>
 
@@ -446,45 +584,46 @@
 <section class="slide">
   <div class="kicker">6-12 · 교과서 11쪽</div>
   <h2>기계학습·학습·모델의 층위</h2>
-  <div class="diagram"><svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="기계학습·학습·모델의 층위 — 기계학습 안에 학습, 학습의 결과가 모델">
-  <defs>
-    <marker id="s16-arrow" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L8,4 L0,8 Z" fill="#2b2d3a"/>
-    </marker>
-    <marker id="s16-arrow-gray" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L8,4 L0,8 Z" fill="#8a8f99"/>
-    </marker>
-  </defs>
-
-  <!-- 예전 방식 → 지금 (바깥 왼쪽 위) -->
-  <rect x="12" y="10" width="324" height="34" rx="6" fill="#8a8f99" fill-opacity="0.08" stroke="#8a8f99" stroke-width="1.5"/>
-  <text x="174" y="32" font-size="13" text-anchor="middle" fill="#2b2d3a">예전 방식 — 사람이 규칙을 하나하나 코드로</text>
-  <line x1="342" y1="27" x2="362" y2="27" stroke="#8a8f99" stroke-width="2" marker-end="url(#s16-arrow-gray)"/>
-  <rect x="372" y="10" width="214" height="34" rx="6" fill="#4c78a8" fill-opacity="0.08" stroke="#4c78a8" stroke-width="1.5"/>
-  <text x="479" y="32" font-size="13" text-anchor="middle" fill="#2b2d3a">지금 — 숫자를 계산이 찾음</text>
-
-  <!-- 기계학습 (바깥 큰 상자) -->
-  <rect x="12" y="56" width="696" height="230" rx="14" fill="none" stroke="#4c78a8" stroke-width="2"/>
-  <text x="28" y="82" font-size="16" font-weight="700" fill="#2b2d3a"><tspan fill="#4c78a8">기계학습</tspan> — 데이터에서 규칙을 찾는 방법 전체</text>
-  <text x="28" y="103" font-size="13" fill="#8a8f99">오늘의 경우 · <tspan fill="#c0392b">직선의 숫자를 계산이 찾게 한 방식</tspan></text>
-
-  <!-- 학습 (노랑) -->
-  <rect x="52" y="132" width="270" height="70" rx="8" fill="#f4b400" fill-opacity="0.18" stroke="#f4b400" stroke-width="2"/>
-  <text x="187" y="158" font-size="16" font-weight="700" text-anchor="middle" fill="#2b2d3a">학습</text>
-  <text x="187" y="184" font-size="14" text-anchor="middle" fill="#2b2d3a">모델을 이루는 숫자를 찾는 계산</text>
-  <text x="187" y="226" font-size="12" text-anchor="middle" fill="#8a8f99">오늘의 경우</text>
-  <text x="187" y="248" font-size="14" text-anchor="middle" fill="#c0392b">오차가 가장 작아지는 기울기와 편향</text>
-
-  <!-- 학습 → 모델 -->
-  <line x1="326" y1="167" x2="392" y2="167" stroke="#2b2d3a" stroke-width="2" marker-end="url(#s16-arrow)"/>
-
-  <!-- 모델 (초록) -->
-  <rect x="398" y="132" width="270" height="70" rx="8" fill="#54a24b" fill-opacity="0.16" stroke="#54a24b" stroke-width="2"/>
-  <text x="533" y="158" font-size="16" font-weight="700" text-anchor="middle" fill="#2b2d3a">모델</text>
-  <text x="533" y="184" font-size="14" text-anchor="middle" fill="#2b2d3a">학습이 끝나고 남는 결과물</text>
-  <text x="533" y="226" font-size="12" text-anchor="middle" fill="#8a8f99">오늘의 경우</text>
-  <text x="533" y="248" font-size="14" text-anchor="middle" fill="#c0392b">기울기와 편향으로 정해진 직선</text>
-</svg></div>
+  <div class="diagram"><div class="widget" data-w="mlLayers">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="기계학습·학습·모델의 층위 · 겹상자 클릭 → 설명 전환">
+  <g class="layer" data-k="ml" style="cursor:pointer">
+    <rect class="lbox" x="12" y="12" width="376" height="276" rx="14" fill="#fff" fill-opacity=".4" stroke="#b9b3a5" stroke-width="1.5" style="transition:stroke .25s,stroke-width .25s"/>
+    <text class="lname" x="28" y="40" font-size="18" fill="#6b7385">기계학습</text>
+    <text class="ltag" x="112" y="40" font-size="14" fill="#b9b3a5">방법 전체</text>
+  </g>
+  <g class="layer" data-k="learn" style="cursor:pointer">
+    <rect class="lbox" x="40" y="58" width="320" height="214" rx="10" fill="#fff" fill-opacity=".4" stroke="#b9b3a5" stroke-width="1.5" style="transition:stroke .25s,stroke-width .25s"/>
+    <text class="lname" x="56" y="86" font-size="18" fill="#6b7385">학습</text>
+    <text class="ltag" x="104" y="86" font-size="14" fill="#b9b3a5">숫자를 찾는 계산</text>
+  </g>
+  <g class="layer" data-k="model" style="cursor:pointer">
+    <rect class="lbox" x="68" y="104" width="264" height="152" rx="8" fill="#fff" fill-opacity=".4" stroke="#2b7fd6" stroke-width="3" style="transition:stroke .25s,stroke-width .25s"/>
+    <text class="lname" x="84" y="132" font-size="18" font-weight="700" fill="#2b7fd6">모델</text>
+    <text class="ltag" x="132" y="132" font-size="14" fill="#1c2230">남는 결과물</text>
+    <g class="mini" pointer-events="none">
+      <line x1="140" y1="144" x2="140" y2="222" stroke="#e3ddcf" stroke-width="1"/>
+      <line x1="140" y1="222" x2="260" y2="222" stroke="#e3ddcf" stroke-width="1"/>
+      <g class="dots"></g>
+      <line class="mline" x1="140" y1="207.3" x2="260" y2="173.4" stroke="#2b7fd6" stroke-width="2"/>
+      <text class="mcap" x="200" y="246" font-size="14" text-anchor="middle" fill="#6b7385">기울기 +2.60 ℃/100년</text>
+    </g>
+  </g>
+  <rect x="420" y="12" width="288" height="276" rx="14" fill="#fff" fill-opacity=".5" stroke="#e3ddcf" stroke-width="1"/>
+  <text x="440" y="38" font-size="14" fill="#6b7385">선택한 낱말</text>
+  <text class="p-title" x="440" y="68" font-size="24" font-weight="700" fill="#2b7fd6">모델</text>
+  <line x1="440" y1="82" x2="688" y2="82" stroke="#e3ddcf" stroke-width="1"/>
+  <text x="440" y="108" font-size="14" fill="#6b7385">무엇을 가리키나</text>
+  <text class="p-what" x="440" y="132" font-size="16" fill="#1c2230"><tspan x="440" dy="0">학습이 끝나고 남는</tspan><tspan x="440" dy="22">결과물</tspan></text>
+  <text x="440" y="190" font-size="14" fill="#6b7385">오늘의 경우</text>
+  <text class="p-today" x="440" y="214" font-size="16" fill="#b07a00"><tspan x="440" dy="0">기울기와 편향으로 정해진</tspan><tspan x="440" dy="22">직선</tspan></text>
+  <text x="440" y="272" font-size="14" fill="#b9b3a5">상자·버튼 클릭 → 설명 전환</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn" type="button" data-k="ml">기계학습</button>
+  <button class="wbtn" type="button" data-k="learn">학습</button>
+  <button class="wbtn on" type="button" data-k="model">모델</button>
+</div>
+</div></div>
   
 </section>
 
@@ -538,103 +677,119 @@
 <section class="slide">
   <div class="kicker">6-16 · 발견</div>
   <h2>학습 범위와 기울기의 관계</h2>
-  <div class="diagram"><svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 범위별 기울기 비교 막대 그래프: 전체 114개 해 +2.60, 최근 50년 +3.96, 최근 30년 +3.82, 최근 20년 +8.14 ℃/100년">
-  <!-- 비율 메모 (오른쪽 위) -->
-  <rect x="456" y="12" width="252" height="30" rx="6" fill="none" stroke="#dfe2e8" stroke-width="1.5"/>
-  <text x="468" y="32" font-size="14" font-weight="700" fill="#c0392b">최근 20년 ÷ 전체 = 3.1배</text>
-
-  <!-- 행 1: 전체 114개 해 -->
-  <text x="140" y="79" font-size="14" font-weight="700" fill="#2b2d3a" text-anchor="end">전체 114개 해</text>
-  <rect x="150" y="61" width="117" height="26" rx="3" fill="#4c78a8"/>
-  <text x="275" y="79" font-size="15" font-weight="700" fill="#4c78a8">+2.60<tspan font-size="13" font-weight="400" fill="#8a8f99"> ℃/100년</tspan></text>
-
-  <!-- 행 2: 최근 50년 -->
-  <text x="140" y="125" font-size="14" fill="#2b2d3a" text-anchor="end">최근 50년</text>
-  <rect x="150" y="107" width="178" height="26" rx="3" fill="#8a8f99"/>
-  <text x="336" y="125" font-size="15" font-weight="700" fill="#2b2d3a">+3.96<tspan font-size="13" font-weight="400" fill="#8a8f99"> ℃/100년</tspan></text>
-
-  <!-- 행 3: 최근 30년 -->
-  <text x="140" y="171" font-size="14" fill="#2b2d3a" text-anchor="end">최근 30년</text>
-  <rect x="150" y="153" width="172" height="26" rx="3" fill="#8a8f99"/>
-  <text x="330" y="171" font-size="15" font-weight="700" fill="#2b2d3a">+3.82<tspan font-size="13" font-weight="400" fill="#8a8f99"> ℃/100년</tspan></text>
-
-  <!-- 행 4: 최근 20년 -->
-  <text x="140" y="217" font-size="14" font-weight="700" fill="#2b2d3a" text-anchor="end">최근 20년</text>
-  <rect x="150" y="199" width="366" height="26" rx="3" fill="#e45756"/>
-  <text x="524" y="217" font-size="15" font-weight="700" fill="#c0392b">+8.14<tspan font-size="13" font-weight="400" fill="#8a8f99"> ℃/100년</tspan></text>
-
-  <!-- 축 (0~9) -->
-  <line x1="150" y1="236" x2="560" y2="236" stroke="#8a8f99" stroke-width="1.2"/>
-  <line x1="150" y1="236" x2="150" y2="241" stroke="#8a8f99" stroke-width="1.2"/>
-  <line x1="285" y1="236" x2="285" y2="241" stroke="#8a8f99" stroke-width="1.2"/>
-  <line x1="420" y1="236" x2="420" y2="241" stroke="#8a8f99" stroke-width="1.2"/>
-  <line x1="555" y1="236" x2="555" y2="241" stroke="#8a8f99" stroke-width="1.2"/>
-  <text x="150" y="254" font-size="13" fill="#8a8f99" text-anchor="middle">0</text>
-  <text x="285" y="254" font-size="13" fill="#8a8f99" text-anchor="middle">3</text>
-  <text x="420" y="254" font-size="13" fill="#8a8f99" text-anchor="middle">6</text>
-  <text x="555" y="254" font-size="13" fill="#8a8f99" text-anchor="middle">9</text>
-  <text x="568" y="254" font-size="13" fill="#8a8f99">(℃/100년)</text>
-
-  <!-- 아래 한 줄 -->
-  <text x="360" y="284" font-size="15" fill="#2b2d3a" text-anchor="middle">같은 데이터, 학습에 사용한 범위만 다름</text>
-</svg></div>
+  <div class="diagram"><div class="widget" data-w="range">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 시작 연도에 따라 달라지는 회귀선의 기울기와 2045년 예측값">
+  <!-- 학습 구간 배경 띠 -->
+  <rect class="band" x="56" y="20" width="546.6" height="244" fill="#2b7fd6" fill-opacity=".08"/>
+  <!-- 격자 -->
+  <line x1="56" y1="229.1" x2="696" y2="229.1" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="159.4" x2="696" y2="159.4" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="89.7" x2="696" y2="89.7" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="20" x2="696" y2="20" stroke="#e3ddcf" stroke-width="1"/>
+  <!-- 축 -->
+  <line x1="56" y1="264" x2="696" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="56" y1="20" x2="56" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="65.3" y1="264" x2="65.3" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="252.2" y1="264" x2="252.2" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="485.8" y1="264" x2="485.8" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="602.6" y1="264" x2="602.6" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="696" y1="264" x2="696" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <!-- 눈금 라벨 -->
+  <text x="65.3" y="279" font-size="14" fill="#6b7385" text-anchor="middle">1910</text>
+  <text x="252.2" y="279" font-size="14" fill="#6b7385" text-anchor="middle">1950</text>
+  <text x="485.8" y="279" font-size="14" fill="#6b7385" text-anchor="middle">2000</text>
+  <text x="602.6" y="279" font-size="14" fill="#6b7385" text-anchor="middle">2025</text>
+  <text x="694" y="279" font-size="14" fill="#6b7385" text-anchor="middle">2045</text>
+  <text text-anchor="end" x="712" y="293" font-size="14" fill="#6b7385">연도</text>
+  <text x="48" y="233.5" font-size="14" fill="#6b7385" text-anchor="end">10</text>
+  <text x="48" y="163.9" font-size="14" fill="#6b7385" text-anchor="end">12</text>
+  <text x="48" y="94.2" font-size="14" fill="#6b7385" text-anchor="end">14</text>
+  <text x="48" y="24.5" font-size="14" fill="#6b7385" text-anchor="end">16</text>
+  <text x="48" y="13" font-size="14" fill="#6b7385" text-anchor="end">℃</text>
+  <!-- 산점도 (JS가 D로 채움) -->
+  <g class="pts"></g>
+  <!-- 회귀선: 학습 구간 실선 + 2045년까지 점선 외삽 -->
+  <line class="fit-solid" x1="56.0" y1="218.0" x2="602.6" y2="112.0" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+  <line class="fit-dash" x1="602.6" y1="112.0" x2="696.0" y2="93.8" stroke="#2b7fd6" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/>
+  <!-- 2045년 예측값 표지 -->
+  <circle class="mark" cx="696.0" cy="93.8" r="5" fill="#fff" stroke="#b07a00" stroke-width="2.5"/>
+  <text class="mark-label" x="688" y="84.8" font-size="14" font-weight="700" fill="#b07a00" text-anchor="end">13.9℃</text>
+  <!-- 결과 상자 (오른쪽 상단: 1998·2019·2021·2023~2025 점과 회귀선을 피한 x 364~578, y 20~88) -->
+  <rect x="364" y="20" width="214" height="68" rx="6" fill="#fff" fill-opacity=".92" stroke="#e3ddcf" stroke-width="1"/>
+  <text class="box-n" x="374" y="38" font-size="15" fill="#1c2230">학습 114개 해(1908~2025)</text>
+  <text x="374" y="59" font-size="15" fill="#1c2230">기울기 <tspan class="box-slope" font-weight="700" fill="#2b7fd6">+2.60℃/100년</tspan></text>
+  <text x="374" y="80" font-size="15" fill="#1c2230">2045년 <tspan class="box-pred" font-weight="700" fill="#b07a00">13.9℃</tspan></text>
+  <!-- 범례 (오른쪽 아래 빈 영역) -->
+  <circle cx="386" cy="248" r="3.5" fill="#2b7fd6" opacity=".55"/>
+  <text x="394" y="253" font-size="14" fill="#6b7385">학습 데이터</text>
+  <circle cx="482" cy="248" r="3.5" fill="#b9b3a5" opacity=".6"/>
+  <text x="490" y="253" font-size="14" fill="#6b7385">학습 제외</text>
+  <line x1="562" y1="248" x2="584" y2="248" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="590" y="253" font-size="14" fill="#6b7385">회귀선</text>
+  <line x1="644" y1="248" x2="666" y2="248" stroke="#2b7fd6" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/>
+  <text x="672" y="253" font-size="14" fill="#6b7385">외삽</text>
+</svg>
+<div class="wctl">
+  <label>학습 시작 연도 <input type="range" min="1908" max="2006" step="1" value="1908"></label>
+  <button class="wbtn on" type="button" data-start="1908">전체</button>
+  <button class="wbtn" type="button" data-start="1976">최근 50년</button>
+  <button class="wbtn" type="button" data-start="1996">최근 30년</button>
+  <button class="wbtn" type="button" data-start="2006">최근 20년</button>
+  <span class="wout">학습 1908~2025 · 기울기 +2.60℃/100년</span>
+</div>
+</div></div>
 </section>
 
 <!-- 19 두 답 -->
 <section class="slide">
   <div class="kicker">6-16 · 발견</div>
   <h2>학습 범위와 예측값 — 2045년 예측</h2>
-  <div class="diagram"><svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 산점도 위에서 학습 기간이 다른 회귀 직선 두 개가 2045년 예측값 13.9도와 15.7도로 갈라지는 그림">
-    <defs>
-      <marker id="l7w-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto-start-reverse"><path d="M0,0 L9,4.5 L0,9 z" fill="#6b6350"/></marker>
-    </defs>
-    <!-- 배경 — 학습 범위 안/밖 -->
-    <rect x="60" y="40" width="390" height="290" fill="#faf3dd"/>
-    <rect x="450" y="40" width="250" height="290" fill="#ffffff"/>
-    <rect x="60" y="40" width="640" height="290" fill="none" stroke="#f0e2bc" stroke-width="1.5"/>
-    <text x="255" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#a08c5a">학습에 쓴 범위 (1908~2025)</text>
-    <text x="575" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#b0a78f">학습 범위 밖 — 8차시에서 다시</text>
-    <!-- 축 제목 -->
-    <text x="60" y="28" text-anchor="start" font-size="11" fill="#8a8069">연평균기온(℃)</text>
-    <text x="700" y="368" text-anchor="end" font-size="11" fill="#8a8069">연도</text>
-    <!-- 산점도 (모식 표기) -->
-    <g fill="#c4bba6">
-      <circle cx="65" cy="326" r="3.5"/><circle cx="79" cy="308" r="3.5"/><circle cx="93" cy="320" r="3.5"/><circle cx="107" cy="302" r="3.5"/>
-      <circle cx="121" cy="314" r="3.5"/><circle cx="135" cy="296" r="3.5"/><circle cx="149" cy="309" r="3.5"/><circle cx="163" cy="291" r="3.5"/>
-      <circle cx="177" cy="305" r="3.5"/><circle cx="191" cy="285" r="3.5"/><circle cx="205" cy="298" r="3.5"/><circle cx="219" cy="280" r="3.5"/>
-      <circle cx="233" cy="292" r="3.5"/><circle cx="247" cy="271" r="3.5"/><circle cx="261" cy="287" r="3.5"/><circle cx="275" cy="266" r="3.5"/>
-      <circle cx="289" cy="281" r="3.5"/><circle cx="303" cy="261" r="3.5"/><circle cx="317" cy="274" r="3.5"/><circle cx="331" cy="255" r="3.5"/>
-      <circle cx="345" cy="270" r="3.5"/><circle cx="359" cy="248" r="3.5"/><circle cx="373" cy="263" r="3.5"/><circle cx="387" cy="250" r="3.5"/>
-      <circle cx="401" cy="244" r="3.5"/><circle cx="415" cy="236" r="3.5"/><circle cx="429" cy="228" r="3.5"/><circle cx="443" cy="220" r="3.5"/>
-    </g>
-    <!-- y 눈금 안내선 (13.9 · 15.7) -->
-    <line x1="60" y1="227" x2="517" y2="227" stroke="#f4b400" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
-    <line x1="60" y1="179" x2="517" y2="179" stroke="#e8930c" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
-    <text x="54" y="231" text-anchor="end" font-size="11" fill="#a97f00">13.9</text>
-    <text x="54" y="183" text-anchor="end" font-size="11" fill="#b25f00">15.7</text>
-    <!-- 회귀 직선 2개 -->
-    <line x1="60" y1="321" x2="700" y2="189" stroke="#f4b400" stroke-width="3"/>
-    <line x1="383" y1="266" x2="700" y2="61" stroke="#e8930c" stroke-width="3"/>
-    <text x="605" y="258" text-anchor="middle" font-size="12.5" font-weight="800" fill="#a97f00">전체 114개 해 · +2.60℃/100년</text>
-    <text x="585" y="88" text-anchor="middle" font-size="12.5" font-weight="800" fill="#b25f00">최근 20년 · +8.14℃/100년</text>
-    <!-- 2045년 세로 점선과 두 교점 -->
-    <line x1="517" y1="70" x2="517" y2="330" stroke="#8a8069" stroke-width="1.5" stroke-dasharray="4 4"/>
-    <circle cx="517" cy="227" r="5" fill="#f4b400" stroke="#ffffff" stroke-width="1.5"/>
-    <circle cx="517" cy="179" r="5" fill="#e8930c" stroke="#ffffff" stroke-width="1.5"/>
-    <line x1="538" y1="187" x2="538" y2="219" stroke="#6b6350" stroke-width="1.8" marker-start="url(#l7w-ar)" marker-end="url(#l7w-ar)"/>
-    <text x="548" y="183" text-anchor="start" font-size="12" font-weight="800" fill="#b25f00">15.7℃</text>
-    <text x="548" y="234" text-anchor="start" font-size="12" font-weight="800" fill="#a97f00">13.9℃</text>
-    <text x="548" y="208" text-anchor="start" font-size="12" font-weight="700" fill="#6b6350">같은 2045년, 두 답</text>
-    <!-- x 눈금 -->
-    <g stroke="#c9c0a8" stroke-width="1.5">
-      <line x1="60" y1="330" x2="60" y2="336"/><line x1="200" y1="330" x2="200" y2="336"/><line x1="367" y1="330" x2="367" y2="336"/>
-      <line x1="450" y1="330" x2="450" y2="336"/><line x1="517" y1="330" x2="517" y2="336"/><line x1="700" y1="330" x2="700" y2="336"/>
-    </g>
-    <g font-size="11" fill="#8a8069" text-anchor="middle">
-      <text x="60" y="350">1908</text><text x="200" y="350">1950</text><text x="367" y="350">2000</text>
-      <text x="450" y="350">2025</text><text x="517" y="350" font-weight="800" fill="#6b6350">2045</text><text x="692" y="350">2100</text>
-    </g>
-  </svg></div>
+  <div class="diagram" style="--wh:40vh"><div class="widget" data-w="predict2045">
+<svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 범위별 회귀선과 2045년 예측값 비교">
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="56" y1="210.8" x2="596" y2="210.8"/>
+    <line x1="56" y1="156.3" x2="596" y2="156.3"/>
+    <line x1="56" y1="101.8" x2="596" y2="101.8"/>
+    <line x1="56" y1="47.3" x2="596" y2="47.3"/>
+  </g>
+  <g stroke="#b9b3a5" stroke-width="1.5">
+    <line x1="56" y1="20" x2="56" y2="238"/>
+    <line x1="56" y1="238" x2="596" y2="238"/>
+    <line x1="63.6" y1="238" x2="63.6" y2="243"/>
+    <line x1="215.7" y1="238" x2="215.7" y2="243"/>
+    <line x1="405.9" y1="238" x2="405.9" y2="243"/>
+    <line x1="500.9" y1="238" x2="500.9" y2="243"/>
+    <line x1="577" y1="238" x2="577" y2="243"/>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="end">
+    <text x="48" y="24">℃</text>
+    <text x="48" y="52">16</text>
+    <text x="48" y="106.5">14</text>
+    <text x="48" y="161">12</text>
+    <text x="48" y="215.5">10</text>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="middle">
+    <text x="63.6" y="256">1910</text>
+    <text x="215.7" y="256">1950</text>
+    <text x="405.9" y="256">2000</text>
+    <text x="500.9" y="256">2025</text>
+    <text x="577" y="256" font-weight="700" fill="#1c2230">2045</text>
+  </g>
+  <text x="604" y="256" font-size="14" fill="#6b7385">연도</text>
+  <line x1="577" y1="24" x2="577" y2="238" stroke="#6b7385" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <g class="pts"></g>
+  <g class="lines"></g>
+  <g class="labels"></g>
+  <g class="legend"></g>
+  <text x="360" y="275" font-size="14" fill="#6b7385" text-anchor="middle">둘 다 계산은 정확 · 다른 질문에 답하는 직선</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-range="all" aria-pressed="true">전체</button>
+  <button class="wbtn" type="button" data-range="50" aria-pressed="false">최근 50년</button>
+  <button class="wbtn" type="button" data-range="30" aria-pressed="false">최근 30년</button>
+  <button class="wbtn on" type="button" data-range="20" aria-pressed="true">최근 20년</button>
+</div>
+</div></div>
   <p class="point">둘 다 계산은 정확. <b>다른 질문에 답하는 직선</b></p>
 </section>
 
@@ -642,7 +797,67 @@
 <section class="slide">
   <div class="kicker">6-17 · 원리</div>
   <h2>외삽</h2>
-  <p class="point" style="margin-top:2.4vh">직선은 1908~2025년 데이터로 학습. 슬라이더로 2100년을 선택해도 값은 나옴</p>
+  <div class="diagram" style="--wh:40vh"><div class="widget" data-w="extrapolation">
+<svg viewBox="0 0 720 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서울 연평균기온 산점도, 전체 회귀선(1908~2025 실선·2025~2100 점선), 선택 연도의 예측값과 학습 범위 밖 음영 그림">
+  <!-- 학습 범위 밖(2025~2100) 음영 -->
+  <rect class="shade" x="446" y="20" width="250" height="224" fill="#b9b3a5" opacity="0.22"/>
+  <line class="shade-edge" x1="446" y1="20" x2="446" y2="244" stroke="#b9b3a5" stroke-width="1" stroke-dasharray="3 3"/>
+  <text class="shade-txt" font-size="14" fill="#6b7385" text-anchor="middle"><tspan x="608" y="206">확인할</tspan><tspan x="608" y="224">데이터 없음</tspan></text>
+  <!-- 격자 -->
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="56" y1="219.1" x2="696" y2="219.1"/>
+    <line x1="56" y1="169.3" x2="696" y2="169.3"/>
+    <line x1="56" y1="119.6" x2="696" y2="119.6"/>
+    <line x1="56" y1="69.8" x2="696" y2="69.8"/>
+  </g>
+  <!-- 축 -->
+  <line x1="56" y1="20" x2="56" y2="244" stroke="#b9b3a5" stroke-width="1.5"/>
+  <line x1="56" y1="244" x2="696" y2="244" stroke="#b9b3a5" stroke-width="1.5"/>
+  <g stroke="#b9b3a5" stroke-width="1.5">
+    <line x1="62.7" y1="244" x2="62.7" y2="249"/>
+    <line x1="196" y1="244" x2="196" y2="249"/>
+    <line x1="362.7" y1="244" x2="362.7" y2="249"/>
+    <line x1="446" y1="244" x2="446" y2="249"/>
+    <line x1="696" y1="244" x2="696" y2="249"/>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="middle">
+    <text x="62.7" y="260">1910</text>
+    <text x="196" y="260">1950</text>
+    <text x="362.7" y="260">2000</text>
+    <text x="446" y="260">2025</text>
+    <text x="696" y="260">2100</text>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="end">
+    <text x="48" y="223.6">10</text>
+    <text x="48" y="173.8">12</text>
+    <text x="48" y="124.1">14</text>
+    <text x="48" y="74.3">16</text>
+    <text x="48" y="24">℃</text>
+    <text x="712" y="282">연도</text>
+  </g>
+  <text class="legend" x="56" y="282" font-size="14" fill="#6b7385">회귀선 · 학습 데이터 1908~2025 · 기울기 +2.60℃/100년</text>
+  <!-- 산점도 114개 점(초기값, JS가 같은 값으로 다시 채움) -->
+  <g class="pts" fill="#2b7fd6" opacity="0.55"><circle cx="56.00" cy="208.48" r="3.5"/><circle cx="59.33" cy="203.95" r="3.5"/><circle cx="62.67" cy="208.86" r="3.5"/><circle cx="66.00" cy="202.81" r="3.5"/><circle cx="69.33" cy="216.02" r="3.5"/><circle cx="72.67" cy="216.97" r="3.5"/><circle cx="76.00" cy="168.61" r="3.5"/><circle cx="79.33" cy="196.76" r="3.5"/><circle cx="82.67" cy="196.44" r="3.5"/><circle cx="86.00" cy="222.62" r="3.5"/><circle cx="89.33" cy="205.67" r="3.5"/><circle cx="92.67" cy="190.46" r="3.5"/><circle cx="96.00" cy="184.07" r="3.5"/><circle cx="99.33" cy="194.99" r="3.5"/><circle cx="102.67" cy="197.38" r="3.5"/><circle cx="106.00" cy="201.71" r="3.5"/><circle cx="109.33" cy="192.48" r="3.5"/><circle cx="112.67" cy="199.52" r="3.5"/><circle cx="116.00" cy="205.25" r="3.5"/><circle cx="119.33" cy="192.53" r="3.5"/><circle cx="122.67" cy="191.09" r="3.5"/><circle cx="126.00" cy="182.03" r="3.5"/><circle cx="129.33" cy="174.46" r="3.5"/><circle cx="132.67" cy="195.32" r="3.5"/><circle cx="136.00" cy="177.40" r="3.5"/><circle cx="139.33" cy="204.53" r="3.5"/><circle cx="142.67" cy="214.13" r="3.5"/><circle cx="146.00" cy="187.53" r="3.5"/><circle cx="149.33" cy="224.64" r="3.5"/><circle cx="152.67" cy="182.90" r="3.5"/><circle cx="156.00" cy="193.90" r="3.5"/><circle cx="159.33" cy="174.78" r="3.5"/><circle cx="162.67" cy="199.90" r="3.5"/><circle cx="166.00" cy="188.67" r="3.5"/><circle cx="169.33" cy="194.89" r="3.5"/><circle cx="172.67" cy="176.23" r="3.5"/><circle cx="176.00" cy="196.91" r="3.5"/><circle cx="179.33" cy="208.21" r="3.5"/><circle cx="182.67" cy="184.57" r="3.5"/><circle cx="186.00" cy="227.67" r="3.5"/><circle cx="189.33" cy="175.36" r="3.5"/><circle cx="192.67" cy="176.80" r="3.5"/><circle cx="209.33" cy="182.08" r="3.5"/><circle cx="212.67" cy="181.45" r="3.5"/><circle cx="216.00" cy="216.30" r="3.5"/><circle cx="219.33" cy="206.27" r="3.5"/><circle cx="222.67" cy="178.37" r="3.5"/><circle cx="226.00" cy="167.34" r="3.5"/><circle cx="229.33" cy="166.72" r="3.5"/><circle cx="232.67" cy="158.01" r="3.5"/><circle cx="236.00" cy="175.38" r="3.5"/><circle cx="239.33" cy="186.43" r="3.5"/><circle cx="242.67" cy="163.83" r="3.5"/><circle cx="246.00" cy="184.37" r="3.5"/><circle cx="249.33" cy="179.84" r="3.5"/><circle cx="252.67" cy="177.40" r="3.5"/><circle cx="256.00" cy="174.61" r="3.5"/><circle cx="259.33" cy="196.01" r="3.5"/><circle cx="262.67" cy="183.72" r="3.5"/><circle cx="266.00" cy="180.51" r="3.5"/><circle cx="269.33" cy="171.40" r="3.5"/><circle cx="272.67" cy="166.92" r="3.5"/><circle cx="276.00" cy="190.36" r="3.5"/><circle cx="279.33" cy="156.39" r="3.5"/><circle cx="282.67" cy="182.28" r="3.5"/><circle cx="286.00" cy="160.05" r="3.5"/><circle cx="289.33" cy="158.13" r="3.5"/><circle cx="292.67" cy="156.71" r="3.5"/><circle cx="296.00" cy="198.60" r="3.5"/><circle cx="299.33" cy="188.57" r="3.5"/><circle cx="302.67" cy="155.42" r="3.5"/><circle cx="306.00" cy="158.03" r="3.5"/><circle cx="309.33" cy="179.36" r="3.5"/><circle cx="312.67" cy="178.84" r="3.5"/><circle cx="316.00" cy="186.61" r="3.5"/><circle cx="319.33" cy="169.68" r="3.5"/><circle cx="322.67" cy="166.32" r="3.5"/><circle cx="326.00" cy="144.17" r="3.5"/><circle cx="329.33" cy="148.45" r="3.5"/><circle cx="332.67" cy="159.43" r="3.5"/><circle cx="336.00" cy="156.86" r="3.5"/><circle cx="339.33" cy="167.22" r="3.5"/><circle cx="342.67" cy="129.21" r="3.5"/><circle cx="346.00" cy="162.69" r="3.5"/><circle cx="349.33" cy="162.91" r="3.5"/><circle cx="352.67" cy="145.51" r="3.5"/><circle cx="356.00" cy="123.64" r="3.5"/><circle cx="359.33" cy="138.05" r="3.5"/><circle cx="362.67" cy="151.56" r="3.5"/><circle cx="366.00" cy="147.93" r="3.5"/><circle cx="369.33" cy="146.58" r="3.5"/><circle cx="372.67" cy="147.68" r="3.5"/><circle cx="376.00" cy="135.68" r="3.5"/><circle cx="379.33" cy="165.87" r="3.5"/><circle cx="382.67" cy="142.90" r="3.5"/><circle cx="386.00" cy="137.40" r="3.5"/><circle cx="389.33" cy="145.34" r="3.5"/><circle cx="392.67" cy="145.61" r="3.5"/><circle cx="396.00" cy="165.82" r="3.5"/><circle cx="399.33" cy="167.29" r="3.5"/><circle cx="402.67" cy="162.64" r="3.5"/><circle cx="406.00" cy="155.30" r="3.5"/><circle cx="409.33" cy="134.49" r="3.5"/><circle cx="412.67" cy="128.96" r="3.5"/><circle cx="416.00" cy="129.69" r="3.5"/><circle cx="419.33" cy="142.63" r="3.5"/><circle cx="422.67" cy="144.39" r="3.5"/><circle cx="426.00" cy="129.54" r="3.5"/><circle cx="429.33" cy="137.67" r="3.5"/><circle cx="432.67" cy="125.73" r="3.5"/><circle cx="436.00" cy="137.08" r="3.5"/><circle cx="439.33" cy="116.84" r="3.5"/><circle cx="442.67" cy="97.78" r="3.5"/><circle cx="446.00" cy="115.82" r="3.5"/></g>
+  <!-- 전체 최소제곱 직선: 학습 범위 실선 + 범위 밖 점선 -->
+  <line class="fit-solid" x1="56" y1="211.1" x2="446" y2="135.4" stroke="#2b7fd6" stroke-width="2.5"/>
+  <line class="fit-dash" x1="446" y1="135.4" x2="696" y2="86.9" stroke="#2b7fd6" stroke-width="2.5" stroke-dasharray="7 5"/>
+  <!-- 선택 연도 -->
+  <line class="vline" x1="512.7" y1="50" x2="512.7" y2="244" stroke="#6b7385" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <circle class="apt" cx="512.7" cy="122.5" r="6.5" fill="none" stroke="#1c2230" stroke-width="2" visibility="hidden"/>
+  <circle class="ppt" cx="512.7" cy="122.5" r="5" fill="#d64545" stroke="#ffffff" stroke-width="1.5"/>
+  <text class="lab" x="504.7" y="44" font-size="16" font-weight="700" fill="#1c2230" text-anchor="end">2045년 예측 13.9℃</text>
+  <!-- 배지 -->
+  <rect class="badge-r" x="646" y="22" width="50" height="22" rx="11" fill="#d64545"/>
+  <text class="badge-t" x="671" y="38" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">외삽</text>
+</svg>
+<div class="wctl">
+  <label>연도 <input type="range" min="1908" max="2100" step="1" value="2045"></label>
+  <button class="wbtn" type="button" data-year="2025">2025년</button>
+  <button class="wbtn on" type="button" data-year="2045">2045년</button>
+  <button class="wbtn" type="button" data-year="2100">2100년</button>
+  <span class="wout">2045년 → 예측값 13.9℃</span>
+</div>
+</div></div>
   <p class="sub">학습 범위를 벗어난 곳의 값을 직선으로 내다보는 것 = 외삽. 맞는지 확인할 데이터가 없음</p>
 </section>
 
@@ -651,26 +866,41 @@
   <div class="kicker">6-18 · 교과서 72쪽</div>
   <h2>상관관계와 인과관계의 정의</h2>
   <blockquote style="margin-top:3vh">상관관계가 있는 데이터 속성 중에서 원인과 결과의 관계가 있는 데이터 속성 간 관계를 인과관계라고 한다</blockquote>
-  <div class="diagram short"><svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="여름철 기온이라는 공통 요인이 아이스크림 판매량과 물놀이 사고 건수에 각각 영향을 주어 상관이 생기지만 둘 사이에 원인 관계는 없다는 구조 그림">
-    <defs>
-      <marker id="l7c-gr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#54a24b"/></marker>
-    </defs>
-    <rect x="185" y="16" width="190" height="52" rx="12" fill="#fdf3d8" stroke="#f4b400" stroke-width="2"/>
-    <text x="280" y="38" text-anchor="middle" font-size="15" font-weight="800" fill="#5a4300">여름철 기온</text>
-    <text x="280" y="57" text-anchor="middle" font-size="11.5" fill="#a08c5a">공통 요인</text>
-    <line x1="238" y1="70" x2="152" y2="124" stroke="#54a24b" stroke-width="2.5" marker-end="url(#l7c-gr)"/>
-    <line x1="322" y1="70" x2="408" y2="124" stroke="#54a24b" stroke-width="2.5" marker-end="url(#l7c-gr)"/>
-    <text x="172" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3d7a36">영향</text>
-    <text x="388" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3d7a36">영향</text>
-    <rect x="30" y="130" width="190" height="48" rx="12" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
-    <text x="125" y="159" text-anchor="middle" font-size="14" font-weight="800" fill="#4a4434">아이스크림 판매량</text>
-    <rect x="340" y="130" width="190" height="48" rx="12" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
-    <text x="435" y="159" text-anchor="middle" font-size="14" font-weight="800" fill="#4a4434">물놀이 사고 건수</text>
-    <line x1="226" y1="154" x2="334" y2="154" stroke="#9b937e" stroke-width="2" stroke-dasharray="5 5"/>
-    <text x="280" y="140" text-anchor="middle" font-size="11.5" fill="#6b6350">함께 오르내림 — 상관</text>
-    <path d="M271 145 L289 163 M289 145 L271 163" stroke="#e45756" stroke-width="3.5" stroke-linecap="round"/>
-    <text x="280" y="202" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">원인 관계는 아님</text>
-  </svg></div>
+  <div class="diagram short" style="--wh:34vh"><div class="widget" data-w="causation">
+<svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="공통 요인 구조: 여름철 기온 → 아이스크림 판매량·물놀이 사고 건수, 두 값의 상관과 원인 아님 표시">
+  <rect x="166" y="14" width="180" height="50" rx="10" fill="#ffffff" stroke="#b9b3a5" stroke-width="2" data-el="top-box"/>
+  <text x="256" y="45" text-anchor="middle" font-size="17" font-weight="700" fill="#6b7385" data-el="top-text">여름철 기온</text>
+  <rect x="24" y="140" width="184" height="50" rx="10" fill="#ffffff" stroke="#e3ddcf" stroke-width="2"/>
+  <text x="116" y="171" text-anchor="middle" font-size="16" font-weight="700" fill="#1c2230">아이스크림 판매량</text>
+  <rect x="304" y="140" width="184" height="50" rx="10" fill="#ffffff" stroke="#e3ddcf" stroke-width="2"/>
+  <text x="396" y="171" text-anchor="middle" font-size="16" font-weight="700" fill="#1c2230">물놀이 사고 건수</text>
+  <g data-layer="1" style="visibility:visible;opacity:1">
+    <line x1="224" y1="165" x2="288" y2="165" stroke="#6b7385" stroke-width="2" stroke-dasharray="5 4"/>
+    <polygon points="214,165 224,160 224,170" fill="#6b7385"/>
+    <polygon points="298,165 288,160 288,170" fill="#6b7385"/>
+    <text x="256" y="128" text-anchor="middle" font-size="14" fill="#6b7385">함께 늘어남 · 상관</text>
+  </g>
+  <g data-layer="2" style="visibility:hidden;opacity:0">
+    <line x1="222" y1="66" x2="154.1" y2="128.5" stroke="#2b7fd6" stroke-width="2.5"/>
+    <polygon points="146,136 150.4,124.5 157.8,132.6" fill="#2b7fd6"/>
+    <line x1="290" y1="66" x2="357.9" y2="128.5" stroke="#2b7fd6" stroke-width="2.5"/>
+    <polygon points="366,136 354.2,132.6 361.6,124.5" fill="#2b7fd6"/>
+    <text x="256" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#2b7fd6">공통 요인</text>
+  </g>
+  <g data-layer="3" style="visibility:hidden;opacity:0">
+    <path d="M247 156 L265 174 M265 156 L247 174" stroke="#d64545" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <text x="256" y="214" text-anchor="middle" font-size="14" font-weight="700" fill="#d64545">원인 아님</text>
+  </g>
+  <line x1="516" y1="18" x2="516" y2="212" stroke="#e3ddcf" stroke-width="1.5"/>
+  <text x="528" y="92" font-size="14" fill="#6b7385" data-el="p-head">① 관찰</text>
+  <text x="528" y="124" font-size="17" font-weight="700" fill="#1c2230" data-el="p-line">두 값이 함께 변함</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-step="1">① 관찰</button>
+  <button class="wbtn" type="button" data-step="2">② 원인</button>
+  <button class="wbtn" type="button" data-step="3">③ 결론</button>
+</div>
+</div></div>
   <p class="small">연도-기온의 상관이 강해도 "시간이 흘러서 더워졌다"는 인과 설명은 아님. 원인 규명은 회귀 바깥의 작업</p>
 </section>
 
@@ -689,6 +919,1057 @@
   <span id="pageno"></span>
 </div>
 
+<script>
+  // 서울 연평균기온(관측일 300일 이상, 1908~2025) — 교재 6차시와 같은 기준
+  window.SEOUL_YEARLY = [[1908,10.427],[1909,10.609],[1910,10.412],[1911,10.655],[1912,10.124],[1913,10.086],[1914,12.029],[1915,10.898],[1916,10.911],[1917,9.859],[1918,10.54],[1919,11.151],[1920,11.408],[1921,10.969],[1922,10.873],[1923,10.699],[1924,11.07],[1925,10.787],[1926,10.557],[1927,11.068],[1928,11.126],[1929,11.49],[1930,11.794],[1931,10.956],[1932,11.676],[1933,10.586],[1934,10.2],[1935,11.269],[1936,9.778],[1937,11.455],[1938,11.013],[1939,11.781],[1940,10.772],[1941,11.223],[1942,10.973],[1943,11.723],[1944,10.892],[1945,10.438],[1946,11.388],[1947,9.656],[1948,11.758],[1949,11.7],[1954,11.488],[1955,11.513],[1956,10.113],[1957,10.516],[1958,11.637],[1959,12.08],[1960,12.105],[1961,12.455],[1962,11.757],[1963,11.313],[1964,12.221],[1965,11.396],[1966,11.578],[1967,11.676],[1968,11.788],[1969,10.928],[1970,11.422],[1971,11.551],[1972,11.917],[1973,12.097],[1974,11.155],[1975,12.52],[1976,11.48],[1977,12.373],[1978,12.45],[1979,12.507],[1980,10.824],[1981,11.227],[1982,12.559],[1983,12.454],[1984,11.597],[1985,11.618],[1986,11.306],[1987,11.986],[1988,12.121],[1989,13.011],[1990,12.839],[1991,12.398],[1992,12.501],[1993,12.085],[1994,13.612],[1995,12.267],[1996,12.258],[1997,12.957],[1998,13.836],[1999,13.257],[2000,12.714],[2001,12.86],[2002,12.914],[2003,12.87],[2004,13.352],[2005,12.139],[2006,13.062],[2007,13.283],[2008,12.964],[2009,12.953],[2010,12.141],[2011,12.082],[2012,12.269],[2013,12.564],[2014,13.4],[2015,13.622],[2016,13.593],[2017,13.073],[2018,13.002],[2019,13.599],[2020,13.272],[2021,13.752],[2022,13.296],[2023,14.109],[2024,14.875],[2025,14.15]];
+function initW_procedure(root, D) {
+  // 좌표 변환: x 연도 1905~2028 → 56~470, y 기온 9~16℃ → 20~264
+  const X0 = 56, X1 = 470, Y0 = 20, Y1 = 264;
+  const sx = yr => X0 + (yr - 1905) / (2028 - 1905) * (X1 - X0);
+  const sy = t => Y0 + (16 - t) / (16 - 9) * (Y1 - Y0);
+
+  // 통계: 최소제곱 기울기 a, 편향 b, 피어슨 상관계수 r
+  const n = D.length;
+  let mx = 0, my = 0;
+  for (const [x, y] of D) { mx += x; my += y; }
+  mx /= n; my /= n;
+  let sxy = 0, sxx = 0, syy = 0;
+  for (const [x, y] of D) {
+    const dx = x - mx, dy = y - my;
+    sxy += dx * dy; sxx += dx * dx; syy += dy * dy;
+  }
+  const a = sxy / sxx, b = my - a * mx;
+  const r = sxy / Math.sqrt(sxx * syy);
+  const signed = v => (v < 0 ? '−' : '+') + Math.abs(v).toFixed(2);
+
+  // 요소
+  const q = s => root.querySelector(s);
+  const pts = q('.pts'), cap = q('.cap');
+  const g2 = q('.st2'), g3 = q('.st3');
+  const rfill = q('.rfill'), rdot = q('.rdot');
+  const rline = q('.rline');
+  const steps = Array.from(root.querySelectorAll('.pstep'));
+  const btns = Array.from(root.querySelectorAll('.wbtn'));
+  const CAP = { 1: '함께 움직이는 모양?', 2: '얼마나 강한가, 방향은?', 3: '새 값을 예측하면?' };
+
+  // ① 산점도(114개 점)
+  pts.innerHTML = D.map(([x, y]) =>
+    '<circle cx="' + sx(x).toFixed(1) + '" cy="' + sy(y).toFixed(1) + '" r="3.5"/>').join('');
+
+  // ② 상관계수: 값과 눈금 막대(−1 → 536, 0 → 612, +1 → 688)
+  q('.rval').textContent = 'r = ' + signed(r);
+  const RX = 612 + r * 76;
+
+  // ③ 회귀선(전체 114개 해): 1908~2025 구간
+  const yr0 = D[0][0], yr1 = D[n - 1][0];
+  const lx1 = sx(yr0), ly1 = sy(a * yr0 + b), lx2 = sx(yr1), ly2 = sy(a * yr1 + b);
+  const L = Math.hypot(lx2 - lx1, ly2 - ly1);
+  rline.setAttribute('x1', lx1.toFixed(1)); rline.setAttribute('y1', ly1.toFixed(1));
+  rline.setAttribute('x2', lx2.toFixed(1)); rline.setAttribute('y2', ly2.toFixed(1));
+  rline.setAttribute('stroke-dasharray', L + ' ' + L);
+  q('.slope').textContent = signed(a * 100) + '℃/100년';
+
+  // 단계 전환 상태
+  let cur = 0, seq = 0;
+  const ease = t => 1 - (1 - t) * (1 - t);
+
+  function setGauge(k) {            // k: 0~1 진행률
+    rfill.setAttribute('x2', (612 + (RX - 612) * k).toFixed(1));
+    rdot.setAttribute('cx', (612 + (RX - 612) * k).toFixed(1));
+  }
+  function setLine(k) {
+    rline.setAttribute('stroke-dashoffset', (L * (1 - k)).toFixed(1));
+  }
+
+  function setStage(s) {
+    if (s === cur) return;
+    const prev = cur;
+    cur = s;
+    btns.forEach(bt => bt.classList.toggle('on', +bt.dataset.s === s));
+    steps.forEach(t => {
+      const k = +t.dataset.s;
+      t.setAttribute('fill', k <= s ? '#1c2230' : '#b9b3a5');
+      t.setAttribute('font-weight', k === s ? '700' : '400');
+    });
+    cap.textContent = CAP[s];
+    g2.setAttribute('visibility', s >= 2 ? 'visible' : 'hidden');
+    g3.setAttribute('visibility', s >= 3 ? 'visible' : 'hidden');
+
+    // 새로 켜진 단계만 애니메이션, 이미 켜진 단계는 완성 상태로 고정
+    const new2 = s >= 2 && prev < 2, new3 = s >= 3 && prev < 3;
+    if (s >= 2 && !new2) { g2.setAttribute('opacity', '1'); setGauge(1); }
+    if (s >= 3 && !new3) { g3.setAttribute('opacity', '1'); setLine(1); }
+    if (!new2 && !new3) { seq++; return; }
+
+    const token = ++seq;
+    const DUR = 500;
+    let t0 = 0;
+    if (new2) { g2.setAttribute('opacity', '0'); setGauge(0); }
+    if (new3) { g3.setAttribute('opacity', '0'); setLine(0); }
+    const frame = ts => {
+      if (token !== seq) return;
+      if (!t0) t0 = ts;
+      const k = Math.min(1, (ts - t0) / DUR), e = ease(k);
+      if (new2) { g2.setAttribute('opacity', Math.min(1, k * 2).toFixed(2)); setGauge(e); }
+      if (new3) { g3.setAttribute('opacity', Math.min(1, k * 2).toFixed(2)); setLine(e); }
+      if (k < 1) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+
+  btns.forEach(bt => bt.addEventListener('click', () => setStage(+bt.dataset.s)));
+  setStage(1);
+}
+
+function initW_galton(root, D) {
+  var NS = 'http://www.w3.org/2000/svg';
+  var X0 = 56, X1 = 346, Y0 = 20, Y1 = 296, LO = 155, HI = 190;
+  var SL = (Y1 - Y0) / (X1 - X0); // '부모와 같은 키' 점선의 화면 기울기(px/px)
+  function X(v) { return X0 + (v - LO) / (HI - LO) * (X1 - X0); }
+  function Y(v) { return Y1 - (v - LO) / (HI - LO) * (Y1 - Y0); }
+  function f1(n) { return n.toFixed(1); }
+  function r1(n) { return Math.round(n * 10) / 10; }
+
+  // 배경 점 70개 — 결정적 수열(소수 곱셈 나머지 3개 합으로 종 모양 근사), 기울기 0.65 근방 산포
+  // html에 같은 좌표가 이미 들어 있으면 건너뜀(초기 화면이 스크립트 없이도 완성되도록)
+  var g = root.querySelector('.pts');
+  if (g && !g.firstElementChild) {
+    var u = function (i, m, p) { return (((i + 1) * m + 20) % p) / (p - 1); };
+    for (var i = 0; i < 70; i++) {
+      var nx = u(i, 7919, 97) + u(i, 104729, 89) + u(i, 15485863, 83) - 1.5;
+      var ny = u(i, 32452843, 79) + u(i, 49979687, 73) + u(i, 67867967, 71) - 1.5;
+      var px = Math.max(156, Math.min(189, 173 + 14 * nx));
+      var py = Math.max(156, Math.min(189, 173 + 0.65 * (px - 173) + 9 * ny));
+      var c = root.ownerDocument.createElementNS(NS, 'circle');
+      c.setAttribute('cx', X(r1(px)).toFixed(1));
+      c.setAttribute('cy', Y(r1(py)).toFixed(1));
+      c.setAttribute('r', '3.5');
+      g.appendChild(c);
+    }
+  }
+
+  var sl = root.querySelector('input[type=range]');
+  var out = root.querySelector('.wout');
+  var btns = root.querySelectorAll('.wbtn');
+  var guide = root.querySelector('.guide');
+  var pSame = root.querySelector('.p-same');
+  var pPred = root.querySelector('.p-pred');
+  var arr = root.querySelector('.arr');
+  var arrh = root.querySelector('.arrh');
+  var lbl = root.querySelector('.lbl');
+  var vParent = root.querySelector('.v-parent');
+  var vSame = root.querySelector('.v-same');
+  var vPred = root.querySelector('.v-pred');
+  var vDiff = root.querySelector('.v-diff');
+  var ym = Y(173); // 전체 평균 수평선
+
+  function render() {
+    var x = +sl.value;
+    // 회귀선 y = 173 + 0.65(x − 173). 0.1 cm 단위 정수로 계산해 표시값끼리 어긋나지 않게 함
+    var pred10 = Math.round(1730 + 6.5 * (x - 173));
+    var diff10 = Math.abs(x * 10 - pred10);
+    var pred = pred10 / 10, diff = diff10 / 10;
+    var gx = X(x), ys = Y(x), ye = Y(pred);
+    guide.setAttribute('x1', gx); guide.setAttribute('x2', gx);
+    pSame.setAttribute('cx', gx); pSame.setAttribute('cy', ys);
+    pPred.setAttribute('cx', gx); pPred.setAttribute('cy', ye);
+    var d = ye - ys; // 양수면 아래(자녀 키가 부모보다 작음)
+    // 화살표: 회색 점 중심 → 파랑 점 가장자리. 두 점이 가까우면(24px 미만) 머리를 그릴 자리가 없어 생략
+    var show = Math.abs(d) >= 24;
+    if (show) {
+      var s = d > 0 ? 1 : -1;
+      var tip = ye - s * 7, base = tip - s * 7;
+      arr.setAttribute('x1', gx); arr.setAttribute('x2', gx);
+      arr.setAttribute('y1', ys); arr.setAttribute('y2', base);
+      arrh.setAttribute('points', gx + ',' + tip + ' ' + (gx - 5) + ',' + base + ' ' + (gx + 5) + ',' + base);
+    }
+    arr.setAttribute('visibility', show ? 'visible' : 'hidden');
+    arrh.setAttribute('visibility', show ? 'visible' : 'hidden');
+    // 라벨: 173 이상이면 안내선 왼쪽, 미만이면 오른쪽. 점선(y=x)이 글자 상자를 지나지 않도록
+    // 안내선과의 간격 t를 두 점 간격에서 계산하고, 전체 평균선과 겹치면 선 밖으로 옮김
+    var half = Math.abs(d) / 2, mid = (ys + ye) / 2;
+    var t = Math.max(12, (half + 13) / SL);
+    var left = x >= 173;
+    var b = mid + 5;
+    if (left) b = Math.min(b, ym - 7); else b = Math.max(b, ym + 18);
+    lbl.setAttribute('x', (left ? gx - t : gx + t).toFixed(1));
+    lbl.setAttribute('text-anchor', left ? 'end' : 'start');
+    lbl.setAttribute('y', b.toFixed(1));
+    lbl.textContent = diff10 === 0 ? '평균과 같음' : '평균 쪽으로 ' + f1(diff) + ' cm';
+    vParent.textContent = x;
+    vSame.textContent = f1(x);
+    vPred.textContent = f1(pred);
+    vDiff.textContent = diff10 === 0 ? '0 → 평균과 같음' : f1(diff) + ' → 평균 쪽';
+    out.textContent = x + ' cm';
+    for (var k = 0; k < btns.length; k++) {
+      if (+btns[k].getAttribute('data-v') === x) btns[k].classList.add('on');
+      else btns[k].classList.remove('on');
+    }
+  }
+  sl.addEventListener('input', render);
+  for (var k = 0; k < btns.length; k++) {
+    btns[k].addEventListener('click', function () {
+      sl.value = this.getAttribute('data-v');
+      render();
+    });
+  }
+  render();
+}
+
+function initW_error(root, D) {
+  // 최근 20년(2006~2025)만 사용
+  var P = D.slice(-20);
+  var X0 = P[0][0], X1 = P[P.length - 1][0];
+  var YMIN = 11, YMAX = 15;
+  var L = 56, R = 500, T = 26, B = 200;
+
+  function sx(x) { return L + (x - X0) / (X1 - X0) * (R - L); }
+  function sy(y) { return B - (y - YMIN) / (YMAX - YMIN) * (B - T); }
+  function f1(v) { return v.toFixed(1); }
+
+  // 최소제곱: a = Σ(x−x̄)(y−ȳ) / Σ(x−x̄)², b = ȳ − a·x̄
+  function fit(pts) {
+    var n = pts.length, mx = 0, my = 0, sxy = 0, sxx = 0, i;
+    for (i = 0; i < n; i++) { mx += pts[i][0]; my += pts[i][1]; }
+    mx /= n; my /= n;
+    for (i = 0; i < n; i++) {
+      sxy += (pts[i][0] - mx) * (pts[i][1] - my);
+      sxx += (pts[i][0] - mx) * (pts[i][0] - mx);
+    }
+    var a = sxy / sxx;
+    return { a: a, b: my - a * mx };
+  }
+
+  // 제곱오차 합: a100 = 기울기(℃/100년), h = 2006년 위치의 직선 높이
+  function sse(a100, h) {
+    var a = a100 / 100, s = 0, e, i;
+    for (i = 0; i < P.length; i++) {
+      e = P[i][1] - (h + a * (P[i][0] - X0));
+      s += e * e;
+    }
+    return s;
+  }
+
+  function fmtA(a100) {
+    var v = Math.abs(a100).toFixed(2);
+    return (a100 < 0 && v !== '0.00' ? '−' : '+') + v;
+  }
+
+  var full = fit(D), best = fit(P);
+  // 초기값: 전체 114개 해 직선(+2.60)을 최근 20년에 얹은 상태
+  var init = { a: Math.round(full.a * 100 * 100) / 100, h: Math.round((full.b + full.a * X0) * 10) / 10 };
+  // 최적: 20점 최소제곱 직선(+8.14)
+  var opt = { a: best.a * 100, h: best.b + best.a * X0 };
+  var minS = sse(opt.a, opt.h);
+  var st = { a: init.a, h: init.h };
+
+  var dyn = root.querySelector('svg [data-dyn]');
+  var tSse = root.querySelector('[data-t="sse"]');
+  var tMin = root.querySelector('[data-t="min"]');
+  var tA = root.querySelector('[data-t="a"]');
+  var tH = root.querySelector('[data-t="h"]');
+  var vA = root.querySelector('[data-v="a"]');
+  var vH = root.querySelector('[data-v="h"]');
+  var sA = root.querySelector('input[data-k="a"]');
+  var sH = root.querySelector('input[data-k="h"]');
+  var btn = root.querySelector('.wbtn[data-act="best"]');
+  var out = root.querySelector('.wout');
+
+  function atBest() { return st.a === opt.a && st.h === opt.h; }
+
+  function render() {
+    var a = st.a / 100, i, x, y, yp, ypc, s = '';
+    // 예측 직선(그림 범위 안으로 자름)
+    var xs = X0, xe = X1, lo, hi, xa, xb;
+    if (a === 0) {
+      if (st.h < YMIN || st.h > YMAX) xs = xe = null;
+    } else {
+      xa = X0 + (YMIN - st.h) / a; xb = X0 + (YMAX - st.h) / a;
+      lo = Math.min(xa, xb); hi = Math.max(xa, xb);
+      xs = Math.max(X0, lo); xe = Math.min(X1, hi);
+      if (!(xs < xe)) xs = xe = null;
+    }
+    if (xs !== null) {
+      s += '<line x1="' + f1(sx(xs)) + '" y1="' + f1(sy(st.h + a * (xs - X0))) +
+           '" x2="' + f1(sx(xe)) + '" y2="' + f1(sy(st.h + a * (xe - X0))) +
+           '" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>';
+    }
+    // 오차 선분(실젯값 → 예측값, 세로)
+    for (i = 0; i < P.length; i++) {
+      x = P[i][0]; y = P[i][1];
+      yp = st.h + a * (x - X0);
+      ypc = Math.max(YMIN, Math.min(YMAX, yp));
+      s += '<line x1="' + f1(sx(x)) + '" y1="' + f1(sy(y)) + '" x2="' + f1(sx(x)) + '" y2="' + f1(sy(ypc)) +
+           '" stroke="#d64545" stroke-width="2" opacity=".85"/>';
+    }
+    // 실젯값(점)
+    for (i = 0; i < P.length; i++) {
+      s += '<circle cx="' + f1(sx(P[i][0])) + '" cy="' + f1(sy(P[i][1])) + '" r="3.5" fill="#2b7fd6" opacity=".55"/>';
+    }
+    dyn.innerHTML = s;
+
+    var S = sse(st.a, st.h), isBest = atBest();
+    var sTxt = S.toFixed(2), mTxt = minS.toFixed(2);
+    tSse.textContent = sTxt;
+    tSse.setAttribute('fill', isBest ? '#2f9e5f' : '#d64545');
+    tMin.textContent = mTxt;
+    tA.textContent = fmtA(st.a);
+    tH.textContent = f1(st.h);
+    vA.textContent = fmtA(st.a) + ' ℃/100년';
+    vH.textContent = f1(st.h) + '℃';
+    out.textContent = '제곱오차 합 ' + sTxt + ' · 최소 ' + mTxt;
+    if (isBest) btn.classList.add('on'); else btn.classList.remove('on');
+  }
+
+  function syncSliders() {
+    sA.value = String(Math.round(st.a * 10) / 10);
+    sH.value = String(Math.round(st.h * 10) / 10);
+  }
+
+  var anim = null;
+  function stopAnim() { if (anim !== null) { cancelAnimationFrame(anim); anim = null; } }
+
+  function onSlide() {
+    stopAnim();
+    st.a = parseFloat(sA.value);
+    st.h = parseFloat(sH.value);
+    render();
+  }
+  sA.addEventListener('input', onSlide);
+  sH.addEventListener('input', onSlide);
+
+  // 최적 직선: 현재 직선에서 20점 최소제곱 직선으로 500ms 이동
+  btn.addEventListener('click', function () {
+    stopAnim();
+    if (atBest()) { render(); return; }
+    var from = { a: st.a, h: st.h }, t0 = null;
+    function step(ts) {
+      if (t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0) / 500), e = 1 - Math.pow(1 - k, 3);
+      if (k >= 1) {
+        st.a = opt.a; st.h = opt.h; anim = null;
+      } else {
+        st.a = from.a + (opt.a - from.a) * e;
+        st.h = from.h + (opt.h - from.h) * e;
+        anim = requestAnimationFrame(step);
+      }
+      syncSliders();
+      render();
+    }
+    anim = requestAnimationFrame(step);
+  });
+
+  syncSliders();
+  render();
+}
+
+function initW_modeling3(root, D) {
+  // 좌표계 — 산점도 폭 480(x 56~456), 설명 패널 x 496~712
+  const X0 = 1908, X1 = 2025, Y0 = 9, Y1 = 16;
+  const PX0 = 56, PX1 = 456, PY0 = 20, PY1 = 264;
+  const sx = x => PX0 + (x - X0) / (X1 - X0) * (PX1 - PX0);
+  const sy = y => PY1 - (y - Y0) / (Y1 - Y0) * (PY1 - PY0);
+  const f1 = v => v.toFixed(1);
+  const signed = (v, d) => (v < 0 ? '−' : '+') + Math.abs(v).toFixed(d);
+
+  // --calc-start
+  // 최소제곱: a = Σ(x−x̄)(y−ȳ) / Σ(x−x̄)², b = ȳ − a·x̄
+  function fit(P) {
+    const n = P.length;
+    let sxx = 0, syy = 0;
+    for (const [x, y] of P) { sxx += x; syy += y; }
+    const mx = sxx / n, my = syy / n;
+    let num = 0, den = 0;
+    for (const [x, y] of P) { num += (x - mx) * (y - my); den += (x - mx) * (x - mx); }
+    const a = num / den;
+    return { a, b: my - a * mx, mx, my };
+  }
+  // 제곱오차 합 Σ(실젯값 − 예측값)²
+  function sse(P, a, b) {
+    let s = 0;
+    for (const [x, y] of P) { const e = y - (a * x + b); s += e * e; }
+    return s;
+  }
+  // 완만한 곡선 후보 — 2차식 최소제곱(u = x − 1967), 3×3 정규방정식을 크래머 공식으로 풂
+  function quadFit(P) {
+    const c = 1967;
+    let S0 = 0, S1 = 0, S2 = 0, S3 = 0, S4 = 0, T0 = 0, T1 = 0, T2 = 0;
+    for (const [x, y] of P) {
+      const u = x - c, u2 = u * u;
+      S0 += 1; S1 += u; S2 += u2; S3 += u2 * u; S4 += u2 * u2;
+      T0 += y; T1 += u * y; T2 += u2 * y;
+    }
+    const det = (m) => m[0] * (m[4] * m[8] - m[5] * m[7]) - m[1] * (m[3] * m[8] - m[5] * m[6]) + m[2] * (m[3] * m[7] - m[4] * m[6]);
+    const M = [S0, S1, S2, S1, S2, S3, S2, S3, S4];
+    const d = det(M);
+    const p0 = det([T0, S1, S2, T1, S2, S3, T2, S3, S4]) / d;
+    const p1 = det([S0, T0, S2, S1, T1, S3, S2, T2, S4]) / d;
+    const p2 = det([S0, S1, T0, S1, S2, T1, S2, S3, T2]) / d;
+    return x => { const u = x - c; return p0 + p1 * u + p2 * u * u; };
+  }
+  // 계단 후보 — 구간별 평균
+  function stairs(P, cuts) {
+    const lo = [X0, ...cuts], hi = [...cuts, X1 + 1];
+    return lo.map((l, i) => {
+      const seg = P.filter(([x]) => x >= l && x < hi[i]);
+      const m = seg.reduce((s, [, y]) => s + y, 0) / seg.length;
+      return [l, Math.min(hi[i], X1), m];
+    });
+  }
+  // 직선을 그림 범위(x 1908~2025, y 9~16) 안으로 자르기
+  function clip(a, b) {
+    const y1 = a * X0 + b, y2 = a * X1 + b;
+    let t0 = 0, t1 = 1;
+    if (y2 !== y1) {
+      const tA = (Y0 - y1) / (y2 - y1), tB = (Y1 - y1) / (y2 - y1);
+      t0 = Math.max(0, Math.min(tA, tB)); t1 = Math.min(1, Math.max(tA, tB));
+    }
+    if (t0 >= t1) return null;
+    return [X0 + (X1 - X0) * t0, y1 + (y2 - y1) * t0, X0 + (X1 - X0) * t1, y1 + (y2 - y1) * t1];
+  }
+  // --calc-end
+
+  const F = fit(D);
+  const S_LS = sse(D, F.a, F.b);
+  // ② 후보 8개 — [기울기(℃/년), x̄에서의 높이 − ȳ]. 편향은 b = c − a·x̄
+  const CAND = [[0, 0], [0.008, 0.7], [0.015, -0.6], [0.02, 0.35], [0.033, -0.3], [0.04, 0.45], [0.048, 0.1], [0.03, -0.9]]
+    .map(([a, dc]) => { const b = (F.my + dc) - a * F.mx; return { a, b, s: sse(D, a, b) }; })
+    .sort((p, q) => q.s - p.s);
+
+  // 직선(a, b) → 화면 좌표 [x1, y1, x2, y2]
+  const lineXY = (a, b) => {
+    const c = clip(a, b);
+    if (!c) return ['0', '0', '0', '0'];
+    return [sx(c[0]).toFixed(1), sy(c[1]).toFixed(1), sx(c[2]).toFixed(1), sy(c[3]).toFixed(1)];
+  };
+  const lineAttr = (a, b) => {
+    const [x1, y1, x2, y2] = lineXY(a, b);
+    return `x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"`;
+  };
+
+  // 산점도
+  root.querySelector('.pts').innerHTML = D.map(([x, y]) =>
+    `<circle cx="${sx(x).toFixed(1)}" cy="${sy(y).toFixed(1)}" r="3.5" fill="#2b7fd6" opacity=".55"/>`).join('');
+
+  // ① 후보 형태 — 곡선·계단(흐리게)
+  const q = quadFit(D);
+  let curve = '';
+  for (let x = X0; x <= X1; x += 1) curve += (x === X0 ? 'M' : 'L') + sx(x).toFixed(1) + ',' + sy(q(x)).toFixed(1);
+  root.querySelector('.shape-curve').setAttribute('d', curve);
+  const st = stairs(D, [1950, 1990]);
+  let stair = '';
+  st.forEach(([l, h, m], i) => {
+    stair += (i === 0 ? 'M' : 'L') + sx(l).toFixed(1) + ',' + sy(m).toFixed(1) + 'L' + sx(h).toFixed(1) + ',' + sy(m).toFixed(1);
+  });
+  root.querySelector('.shape-stair').setAttribute('d', stair);
+
+  // 회귀선(최소제곱) — 단계에 따라 색만 바뀜
+  const fitEl = root.querySelector('.fitline');
+  lineXY(F.a, F.b).forEach((v, i) => fitEl.setAttribute(['x1', 'y1', 'x2', 'y2'][i], v));
+
+  // ② 회색 후보 직선 8개
+  const candG = root.querySelector('.cands');
+  candG.innerHTML = CAND.map(c => `<line ${lineAttr(c.a, c.b)} stroke="#b9b3a5" stroke-width="1.5" opacity="1"/>`).join('');
+  const candEls = Array.from(candG.querySelectorAll('line'));
+
+  // ③ 2023·2024·2025 오차 선분 + 표
+  // 차이는 표에 보이는 소수 1자리 값끼리 뺀 값(표 안에서 실젯값 − 예측값 = 차이가 그대로 성립)
+  const EVAL = [2023, 2024, 2025].map(yr => {
+    const y = D.find(d => d[0] === yr)[1];
+    const p = F.a * yr + F.b;
+    return { yr, y, p, d: Math.round((+f1(y) - +f1(p)) * 10) / 10 };
+  });
+  root.querySelector('.resid').innerHTML = EVAL.map(e =>
+    `<line x1="${sx(e.yr).toFixed(1)}" y1="${sy(e.y).toFixed(1)}" x2="${sx(e.yr).toFixed(1)}" y2="${sy(e.p).toFixed(1)}" stroke="#d64545" stroke-width="2"/>`
+  ).join('') + EVAL.map(e =>
+    `<circle cx="${sx(e.yr).toFixed(1)}" cy="${sy(e.y).toFixed(1)}" r="4" fill="#d64545" stroke="#f7f3e8" stroke-width="1.2"/>`
+  ).join('') + '<text x="440" y="72" font-size="14" fill="#d64545" text-anchor="end">2023~2025</text>';
+  root.querySelector('.tbl').innerHTML = EVAL.map((e, i) =>
+    `<text y="${142 + i * 22}" font-size="15" fill="#1c2230"><tspan x="496">${e.yr}</tspan><tspan x="590" text-anchor="end">${f1(e.y)}</tspan><tspan x="652" text-anchor="end">${f1(e.p)}</tspan><tspan x="712" text-anchor="end" fill="#d64545" font-weight="700">${signed(e.d, 1)}</tspan></text>`
+  ).join('');
+
+  // ② 패널 숫자
+  const sseEl = root.querySelector('.sse');
+  const resEls = Array.from(root.querySelectorAll('.learned'));
+  root.querySelector('.slope').textContent = '기울기 ' + signed(F.a * 100, 2) + ' ℃/100년';
+  root.querySelector('.bias').textContent = '편향 ' + signed(F.b, 1).replace('+', '');
+
+  const groups = {
+    shapes: root.querySelector('.shapes'),
+    cands: candG,
+    resid: root.querySelector('.resid')
+  };
+  const panels = Array.from(root.querySelectorAll('[data-pnl]'));
+  const btns = Array.from(root.querySelectorAll('.wbtn'));
+  const showG = (el, on) => el.setAttribute('display', on ? 'inline' : 'none');
+
+  let raf = 0;
+  function stopAnim() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+
+  function setFit(color, w) { fitEl.setAttribute('stroke', color); fitEl.setAttribute('stroke-width', w); }
+
+  // ② 학습 — 후보가 차례로 사라지고 제곱오차 합이 최솟값으로 내려감(600ms)
+  function runLearn() {
+    stopAnim();
+    const n = CAND.length, DUR = 600, step = DUR / (n + 1);
+    const V = CAND.map(c => c.s).concat([S_LS]);
+    candEls.forEach(el => el.setAttribute('opacity', '1'));
+    setFit('#b9b3a5', 1.5);
+    resEls.forEach(el => el.setAttribute('opacity', '0'));
+    sseEl.textContent = f1(V[0]);
+    let t0 = 0;
+    const frame = ts => {
+      if (!t0) t0 = ts;
+      const t = Math.min(DUR, ts - t0);
+      candEls.forEach((el, i) => {
+        const o = Math.max(0, Math.min(1, ((i + 1) * step - t) / step));
+        el.setAttribute('opacity', o.toFixed(2));
+      });
+      const k = Math.min(n, Math.floor(t / step));
+      const u = Math.max(0, Math.min(1, (t - k * step) / step));
+      const v = k >= n ? S_LS : V[k] + (V[k + 1] - V[k]) * u;
+      sseEl.textContent = f1(v);
+      if (t >= n * step) {
+        setFit('#2b7fd6', 2.5);
+        const o = Math.min(1, (t - n * step) / step);
+        resEls.forEach(el => el.setAttribute('opacity', o.toFixed(2)));
+      }
+      if (t < DUR) raf = requestAnimationFrame(frame); else raf = 0;
+    };
+    raf = requestAnimationFrame(frame);
+  }
+
+  function setStep(s) {
+    stopAnim();
+    btns.forEach(b => b.classList.toggle('on', +b.dataset.step === s));
+    panels.forEach(p => showG(p, +p.dataset.pnl === s));
+    showG(groups.shapes, s === 1);
+    showG(groups.cands, s === 2);
+    showG(groups.resid, s === 3);
+    if (s === 1) { setFit('#1c2230', 2.5); }
+    else if (s === 2) { runLearn(); }
+    else {
+      setFit('#2b7fd6', 2.5);
+      sseEl.textContent = f1(S_LS);
+      resEls.forEach(el => el.setAttribute('opacity', '1'));
+    }
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => setStep(+b.dataset.step)));
+  setStep(1);
+}
+
+function initW_mlLayers(root, D) {
+  var BLUE = '#2b7fd6', GRAY = '#b9b3a5', SUB = '#6b7385', TEXT = '#1c2230';
+  var INFO = {
+    ml:    { name: '기계학습', what: ['데이터에서 규칙을 찾는', '방법 전체'],   today: ['직선의 숫자를 계산이', '찾게 한 방식'] },
+    learn: { name: '학습',     what: ['모델을 이루는 숫자를', '찾는 계산'],     today: ['제곱오차 합이 가장 작은', '기울기와 편향'] },
+    model: { name: '모델',     what: ['학습이 끝나고 남는', '결과물'],         today: ['기울기와 편향으로 정해진', '직선'] }
+  };
+
+  // 최소제곱 회귀선: a = Σ(x−x̄)(y−ȳ) / Σ(x−x̄)², b = ȳ − a·x̄
+  function fit(data) {
+    var n = data.length, sx = 0, sy = 0, i;
+    for (i = 0; i < n; i++) { sx += data[i][0]; sy += data[i][1]; }
+    var mx = sx / n, my = sy / n, num = 0, den = 0;
+    for (i = 0; i < n; i++) {
+      num += (data[i][0] - mx) * (data[i][1] - my);
+      den += (data[i][0] - mx) * (data[i][0] - mx);
+    }
+    var a = num / den;
+    return { a: a, b: my - a * mx };
+  }
+
+  // '모델' 상자 안 미니 산점도 + 회귀선 (폭 120: x 140~260, y 144~222)
+  var PX0 = 140, PX1 = 260, PY0 = 222, PY1 = 144;
+  var X0 = 1908, X1 = 2025, Y0 = 9, Y1 = 16;
+  function px(x) { return PX0 + (x - X0) / (X1 - X0) * (PX1 - PX0); }
+  function py(y) { return PY0 - (y - Y0) / (Y1 - Y0) * (PY0 - PY1); }
+  var f = fit(D), dots = '', i;
+  for (i = 0; i < D.length; i++) {
+    dots += '<circle cx="' + px(D[i][0]).toFixed(1) + '" cy="' + py(D[i][1]).toFixed(1) + '" r="1.6" fill="#2b7fd6" opacity=".55"/>';
+  }
+  root.querySelector('.dots').innerHTML = dots;
+  var ln = root.querySelector('.mline');
+  ln.setAttribute('x1', px(X0).toFixed(1)); ln.setAttribute('y1', py(f.a * X0 + f.b).toFixed(1));
+  ln.setAttribute('x2', px(X1).toFixed(1)); ln.setAttribute('y2', py(f.a * X1 + f.b).toFixed(1));
+  var s100 = f.a * 100;
+  root.querySelector('.mcap').textContent = '기울기 ' + (s100 >= 0 ? '+' : '') + s100.toFixed(2) + ' ℃/100년';
+
+  // 선택 상태: 층 테두리·낱말 색 + 오른쪽 설명 패널 + 조작 버튼
+  var layers = root.querySelectorAll('.layer');
+  var btns = root.querySelectorAll('.wbtn');
+  var pTitle = root.querySelector('.p-title');
+  var pWhat = root.querySelector('.p-what').querySelectorAll('tspan');
+  var pToday = root.querySelector('.p-today').querySelectorAll('tspan');
+  function select(k) {
+    var info = INFO[k] || INFO.model, j, on, box, name, tag;
+    if (!INFO[k]) k = 'model';
+    for (j = 0; j < layers.length; j++) {
+      on = layers[j].getAttribute('data-k') === k;
+      box = layers[j].querySelector('.lbox');
+      name = layers[j].querySelector('.lname');
+      tag = layers[j].querySelector('.ltag');
+      box.style.stroke = on ? BLUE : GRAY;
+      box.style.strokeWidth = on ? '3' : '1.5';
+      name.style.fill = on ? BLUE : SUB;
+      name.style.fontWeight = on ? '700' : '400';
+      tag.style.fill = on ? TEXT : GRAY;
+    }
+    for (j = 0; j < btns.length; j++) {
+      btns[j].classList.toggle('on', btns[j].getAttribute('data-k') === k);
+    }
+    pTitle.textContent = info.name;
+    pWhat[0].textContent = info.what[0];  pWhat[1].textContent = info.what[1];
+    pToday[0].textContent = info.today[0]; pToday[1].textContent = info.today[1];
+  }
+  function bind(list) {
+    for (var j = 0; j < list.length; j++) {
+      (function (el) {
+        el.addEventListener('click', function () { select(el.getAttribute('data-k')); });
+      })(list[j]);
+    }
+  }
+  bind(layers);
+  bind(btns);
+  select('model');
+}
+
+function initW_range(root, D) {
+  // 좌표계: x 1908~2045 → 56~696, y 9~16℃ → 264~20
+  const X0 = 56, X1 = 696, Y0 = 20, Y1 = 264;
+  const YR0 = 1908, YR1 = 2045, T0 = 9, T1 = 16;
+  const LAST = 2025, TARGET = 2045;
+  const sx = yr => X0 + (yr - YR0) / (YR1 - YR0) * (X1 - X0);
+  const sy = t => Y1 - (t - T0) / (T1 - T0) * (Y1 - Y0);
+
+  // 최소제곱: a = Σ(x−x̄)(y−ȳ) / Σ(x−x̄)², b = ȳ − a·x̄
+  function fit(pts) {
+    const n = pts.length;
+    let sumX = 0, sumY = 0;
+    for (const p of pts) { sumX += p[0]; sumY += p[1]; }
+    const mx = sumX / n, my = sumY / n;
+    let sxy = 0, sxx = 0;
+    for (const p of pts) { sxy += (p[0] - mx) * (p[1] - my); sxx += (p[0] - mx) * (p[0] - mx); }
+    const a = sxy / sxx;
+    return { a: a, b: my - a * mx, n: n };
+  }
+  function fmtSlope(a) {
+    const s = (a * 100).toFixed(2);
+    return (s.charAt(0) === '-' ? '' : '+') + s + '℃/100년';
+  }
+
+  const q = sel => root.querySelector(sel);
+  const slider = q('input[type=range]');
+  const wout = q('.wout');
+  const btns = Array.prototype.slice.call(root.querySelectorAll('.wbtn[data-start]'));
+  const band = q('.band');
+  const solid = q('.fit-solid');
+  const dash = q('.fit-dash');
+  const mark = q('.mark');
+  const markLabel = q('.mark-label');
+  const boxN = q('.box-n');
+  const boxSlope = q('.box-slope');
+  const boxPred = q('.box-pred');
+  const ptsG = q('.pts');
+
+  // 산점도 점 114개 생성 (D 순서 그대로)
+  ptsG.innerHTML = D.map(d =>
+    '<circle cx="' + sx(d[0]).toFixed(1) + '" cy="' + sy(d[1]).toFixed(1) + '" r="3.5" fill="#2b7fd6" opacity=".55"/>'
+  ).join('');
+  const circles = Array.prototype.slice.call(ptsG.querySelectorAll('circle'));
+
+  function setLine(el, f, yrA, yrB) {
+    el.setAttribute('x1', sx(yrA).toFixed(1));
+    el.setAttribute('y1', sy(f.a * yrA + f.b).toFixed(1));
+    el.setAttribute('x2', sx(yrB).toFixed(1));
+    el.setAttribute('y2', sy(f.a * yrB + f.b).toFixed(1));
+  }
+
+  function update(start) {
+    const pts = D.filter(d => d[0] >= start);
+    const f = fit(pts);
+    const pred = f.a * TARGET + f.b;
+
+    // 학습 구간 띠
+    band.setAttribute('x', sx(start).toFixed(1));
+    band.setAttribute('width', (sx(LAST) - sx(start)).toFixed(1));
+
+    // 점: 학습 구간 진하게, 이전 회색 흐림
+    circles.forEach((c, i) => {
+      const on = D[i][0] >= start;
+      c.setAttribute('fill', on ? '#2b7fd6' : '#b9b3a5');
+      c.setAttribute('opacity', on ? '.55' : '.45');
+    });
+
+    // 회귀선 실선(학습 구간) + 점선(2045년까지 외삽)
+    setLine(solid, f, start, LAST);
+    setLine(dash, f, LAST, TARGET);
+
+    // 2045년 예측값 표지
+    const my = sy(pred);
+    mark.setAttribute('cx', sx(TARGET).toFixed(1));
+    mark.setAttribute('cy', my.toFixed(1));
+    markLabel.setAttribute('y', (my - 9).toFixed(1));
+    markLabel.textContent = pred.toFixed(1) + '℃';
+
+    // 결과 상자 · 조작 줄
+    boxN.textContent = '학습 ' + f.n + '개 해(' + start + '~' + LAST + ')';
+    boxSlope.textContent = fmtSlope(f.a);
+    boxPred.textContent = pred.toFixed(1) + '℃';
+    wout.textContent = '학습 ' + start + '~' + LAST + ' · 기울기 ' + fmtSlope(f.a);
+
+    btns.forEach(b => b.classList.toggle('on', Number(b.getAttribute('data-start')) === start));
+  }
+
+  slider.addEventListener('input', () => update(Number(slider.value)));
+  btns.forEach(b => b.addEventListener('click', () => {
+    const s = Number(b.getAttribute('data-start'));
+    slider.value = String(s);
+    update(s);
+  }));
+
+  update(Number(slider.value));
+}
+
+function initW_predict2045(root, D) {
+  var NS = 'http://www.w3.org/2000/svg';
+  var PL = 56, PR = 596, PT = 20, PB = 238;
+  var X0 = 1908, X1 = 2050, Y0 = 9, Y1 = 17, LAST = 2025, TARGET = 2045, GAP = 18;
+  var RANGES = [
+    { key: 'all', name: '전체', from: 1908, color: '#2b7fd6', on: true },
+    { key: '50', name: '최근 50년', from: 1976, color: '#2f9e5f', on: false },
+    { key: '30', name: '최근 30년', from: 1996, color: '#b07a00', on: false },
+    { key: '20', name: '최근 20년', from: 2006, color: '#d64545', on: true }
+  ];
+  var svg = root.querySelector('svg');
+  var doc = svg.ownerDocument;
+  var gPts = root.querySelector('.pts');
+  var gLines = root.querySelector('.lines');
+  var gLabels = root.querySelector('.labels');
+  var gLegend = root.querySelector('.legend');
+  var buttons = Array.prototype.slice.call(root.querySelectorAll('.wbtn'));
+
+  function sx(yr) { return PL + (yr - X0) / (X1 - X0) * (PR - PL); }
+  function sy(t) { return PB - (t - Y0) / (Y1 - Y0) * (PB - PT); }
+  function r1(v) { return Math.round(v * 10) / 10; }
+  function el(tag, attrs, text) {
+    var e = doc.createElementNS(NS, tag), k;
+    for (k in attrs) if (Object.prototype.hasOwnProperty.call(attrs, k)) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function clear(g) { while (g.firstChild) g.removeChild(g.firstChild); }
+
+  // 최소제곱: a = Σ(x−x̄)(y−ȳ) / Σ(x−x̄)², b = ȳ − a·x̄  (from 이후 연도만 학습 데이터)
+  function fit(from) {
+    var n = 0, mx = 0, my = 0, sxy = 0, sxx = 0, i, x, y;
+    for (i = 0; i < D.length; i++) if (D[i][0] >= from) { n++; mx += D[i][0]; my += D[i][1]; }
+    mx /= n; my /= n;
+    for (i = 0; i < D.length; i++) if (D[i][0] >= from) {
+      x = D[i][0] - mx; y = D[i][1] - my;
+      sxy += x * y; sxx += x * x;
+    }
+    var a = sxy / sxx;
+    return { a: a, b: my - a * mx, n: n };
+  }
+  function fmtSlope(a) { var s = (a * 100).toFixed(2); return (a >= 0 ? '+' : '') + s + '℃/100년'; }
+
+  // 라벨 세로 간격 벌리기(오름차순 입력, 최소 간격 gap, 범위 lo~hi)
+  function spread(ys, gap, lo, hi) {
+    var out = ys.slice(), n = out.length, k, i, d;
+    for (k = 0; k < 60; k++) {
+      for (i = 1; i < n; i++) {
+        d = gap - (out[i] - out[i - 1]);
+        if (d > 0) { out[i - 1] -= d / 2; out[i] += d / 2; }
+      }
+      for (i = 0; i < n; i++) out[i] = Math.min(hi, Math.max(lo, out[i]));
+    }
+    return out;
+  }
+
+  RANGES.forEach(function (r) { var f = fit(r.from); r.a = f.a; r.b = f.b; r.n = f.n; r.pred = f.b + f.a * TARGET; });
+
+  // 산점도(114개 점, 회색 옅게) — 한 번만 그림
+  D.forEach(function (d) {
+    gPts.appendChild(el('circle', { cx: r1(sx(d[0])), cy: r1(sy(d[1])), r: 3.5, fill: '#b9b3a5', opacity: 0.7 }));
+  });
+
+  // 범례(범위 · 학습 연도 · 기울기) — 플롯 오른쪽 상단. 상자 x 190~486: 2023·2024·2025년 점(x≥493)과 켜진 직선(y>96)을 피함
+  var LX = 190, LW = 296, LY0 = 22, ROW = 18;
+  gLegend.appendChild(el('rect', { x: LX, y: LY0, width: LW, height: ROW * RANGES.length + 2, rx: 6, fill: '#f7f3e8', 'fill-opacity': 0.92, stroke: '#e3ddcf', 'stroke-width': 1 }));
+  RANGES.forEach(function (r, i) {
+    var base = LY0 + 14 + ROW * i;
+    r.legSwatch = el('line', { x1: LX + 8, y1: base - 5, x2: LX + 24, y2: base - 5, 'stroke-width': 3, 'stroke-linecap': 'round' });
+    r.legName = el('text', { x: LX + 30, y: base, 'font-size': 14 }, r.name);
+    r.legYears = el('text', { x: LX + 104, y: base, 'font-size': 14 }, r.from + '~' + LAST);
+    r.legSlope = el('text', { x: LX + LW - 6, y: base, 'font-size': 14, 'text-anchor': 'end' }, fmtSlope(r.a));
+    gLegend.appendChild(r.legSwatch); gLegend.appendChild(r.legName); gLegend.appendChild(r.legYears); gLegend.appendChild(r.legSlope);
+  });
+
+  function render() {
+    clear(gLines); clear(gLabels);
+    var on = RANGES.filter(function (r) { return r.on; });
+    var xe = sx(TARGET), xl = sx(LAST);
+
+    // 직선: 학습 범위(실선) → 2025~2045 연장(파선)
+    on.forEach(function (r) {
+      var y0 = sy(r.b + r.a * r.from), y1 = sy(r.b + r.a * LAST), y2 = sy(r.pred);
+      gLines.appendChild(el('line', { x1: r1(sx(r.from)), y1: r1(y0), x2: r1(xl), y2: r1(y1), stroke: r.color, 'stroke-width': 2.5, 'stroke-linecap': 'round' }));
+      gLines.appendChild(el('line', { x1: r1(xl), y1: r1(y1), x2: r1(xe), y2: r1(y2), stroke: r.color, 'stroke-width': 2.5, 'stroke-dasharray': '7 5' }));
+    });
+
+    // 2045년 값 라벨: 선 끝 오른쪽, 18 미만으로 가까우면 위아래로 벌림
+    var items = on.map(function (r) { return { r: r, y: sy(r.pred) }; })
+      .sort(function (p, q) { return p.y - q.y; });
+    var ys = spread(items.map(function (it) { return it.y; }), GAP, PT + 10, PB - 10);
+    items.forEach(function (it, i) {
+      var ly = ys[i];
+      if (Math.abs(ly - it.y) > 3) {
+        gLabels.appendChild(el('line', { x1: r1(xe + 5), y1: r1(it.y), x2: r1(xe + 10), y2: r1(ly), stroke: it.r.color, 'stroke-width': 1.2, opacity: 0.7 }));
+      }
+      gLabels.appendChild(el('circle', { cx: r1(xe), cy: r1(it.y), r: 4.5, fill: it.r.color, stroke: '#ffffff', 'stroke-width': 1.5 }));
+      gLabels.appendChild(el('text', { x: r1(xe + 12), y: r1(ly + 5), 'font-size': 15, 'font-weight': 700, fill: it.r.color }, it.r.name + ' ' + it.r.pred.toFixed(1) + '℃'));
+    });
+
+    // 범례·버튼 켜짐 상태
+    RANGES.forEach(function (r) {
+      var c = r.on ? r.color : '#b9b3a5';
+      r.legSwatch.setAttribute('stroke', c);
+      r.legName.setAttribute('fill', c);
+      r.legYears.setAttribute('fill', r.on ? '#6b7385' : '#b9b3a5');
+      r.legSlope.setAttribute('fill', r.on ? '#1c2230' : '#b9b3a5');
+    });
+    buttons.forEach(function (btn) {
+      var r = byKey(btn.getAttribute('data-range'));
+      if (!r) return;
+      btn.classList.toggle('on', r.on);
+      btn.setAttribute('aria-pressed', r.on ? 'true' : 'false');
+    });
+  }
+  function byKey(key) { for (var i = 0; i < RANGES.length; i++) if (RANGES[i].key === key) return RANGES[i]; return null; }
+
+  buttons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var r = byKey(btn.getAttribute('data-range'));
+      if (!r) return;
+      r.on = !r.on;
+      render();
+    });
+  });
+
+  render();
+}
+
+function initW_extrapolation(root, D) {
+  // 좌표계: x 1908~2100, y 9~18℃ / 여백 왼 56·오 24·위 20·아래 36
+  var X0 = 1908, X1 = 2100, T0 = 9, T1 = 18;
+  var L = 56, R = 696, TOP = 20, BOT = 244;
+  var TRAIN_END = 2025;                       // 학습 범위 끝
+  var SHADE_L = 446, SHADE_R = 696;           // 음영 구간(2025~2100)의 화면 x
+  var BADGE_R = 696, BADGE_Y = 22, BADGE_H = 22;
+
+  function X(year) { return L + (year - X0) / (X1 - X0) * (R - L); }
+  function Y(t) { return BOT - (t - T0) / (T1 - T0) * (BOT - TOP); }
+  function r1(v) { return v.toFixed(1); }
+  function r2(v) { return v.toFixed(2); }
+  function fit(rows) {                         // 최소제곱: a = Σ(x−x̄)(y−ȳ)/Σ(x−x̄)², b = ȳ − a·x̄
+    var n = rows.length, sx = 0, sy = 0, i;
+    for (i = 0; i < n; i++) { sx += rows[i][0]; sy += rows[i][1]; }
+    var mx = sx / n, my = sy / n, num = 0, den = 0;
+    for (i = 0; i < n; i++) { num += (rows[i][0] - mx) * (rows[i][1] - my); den += (rows[i][0] - mx) * (rows[i][0] - mx); }
+    var a = num / den;
+    return { a: a, b: my - a * mx };
+  }
+  function estW(s, fs) {                       // 글자 폭 추정(겹침 회피용): 한글·기호 1em, 숫자·영문 0.6em
+    var w = 0, c;
+    for (var i = 0; i < s.length; i++) {
+      c = s.charCodeAt(i);
+      if (c === 32 || c === 46) w += 0.28;
+      else if (c === 183) w += 0.4;
+      else if (c >= 0x1100) w += 1.0;
+      else w += 0.6;
+    }
+    return w * fs;
+  }
+  function q(sel) { return root.querySelector(sel); }
+  function setA(el, name, v) { el.setAttribute(name, v); }
+
+  var f = fit(D);
+  var byYear = {};
+  for (var k = 0; k < D.length; k++) byYear[D[k][0]] = D[k][1];
+  function pred(year) { return f.a * year + f.b; }
+
+  // 산점도 114개 점(정적 초기값과 같은 좌표로 다시 채움)
+  var pts = '';
+  for (var j = 0; j < D.length; j++) {
+    pts += '<circle cx="' + r2(X(D[j][0])) + '" cy="' + r2(Y(D[j][1])) + '" r="3.5"/>';
+  }
+  q('.pts').innerHTML = pts;
+
+  // 전체 직선: 1908~2025 실선, 2025~2100 점선
+  var solid = q('.fit-solid'), dash = q('.fit-dash');
+  setA(solid, 'x1', r2(X(X0))); setA(solid, 'y1', r2(Y(pred(X0))));
+  setA(solid, 'x2', r2(X(TRAIN_END))); setA(solid, 'y2', r2(Y(pred(TRAIN_END))));
+  setA(dash, 'x1', r2(X(TRAIN_END))); setA(dash, 'y1', r2(Y(pred(TRAIN_END))));
+  setA(dash, 'x2', r2(X(X1))); setA(dash, 'y2', r2(Y(pred(X1))));
+  var slope = f.a * 100;
+  q('.legend').textContent = '회귀선 · 학습 데이터 ' + X0 + '~' + TRAIN_END + ' · 기울기 ' + (slope >= 0 ? '+' : '') + r2(slope) + '℃/100년';
+
+  var shade = q('.shade'), shadeEdge = q('.shade-edge'), shadeTxt = q('.shade-txt');
+  var shadeSpans = shadeTxt.querySelectorAll('tspan');
+  var vline = q('.vline'), ppt = q('.ppt'), apt = q('.apt'), lab = q('.lab');
+  var badgeR = q('.badge-r'), badgeT = q('.badge-t');
+  var slider = q('input[type=range]'), out = q('.wout');
+  var btns = root.querySelectorAll('.wbtn[data-year]');
+
+  function render(year) {
+    var outside = year > TRAIN_END;
+    var xs = X(year), p = pred(year), ys = Y(p);
+    var actual = byYear[year];
+    var hasActual = !outside && actual !== undefined;
+
+    // 세로선 + 직선 위 점
+    setA(vline, 'x1', r2(xs)); setA(vline, 'x2', r2(xs));
+    setA(ppt, 'cx', r2(xs)); setA(ppt, 'cy', r2(ys));
+    setA(ppt, 'fill', outside ? '#d64545' : '#2f9e5f');
+    if (hasActual) {
+      setA(apt, 'cx', r2(xs)); setA(apt, 'cy', r2(Y(actual)));
+      setA(apt, 'visibility', 'visible');
+    } else {
+      setA(apt, 'visibility', 'hidden');
+    }
+
+    // 음영 + '확인할 데이터 없음'(세로선 반대편에 배치)
+    var vis = outside ? 'visible' : 'hidden';
+    setA(shade, 'visibility', vis); setA(shadeEdge, 'visibility', vis); setA(shadeTxt, 'visibility', vis);
+    if (outside) {
+      var mid = (SHADE_L + SHADE_R) / 2;
+      var cx = xs <= mid ? (xs + 8 + SHADE_R) / 2 : (SHADE_L + xs - 8) / 2;
+      for (var s = 0; s < shadeSpans.length; s++) setA(shadeSpans[s], 'x', r2(cx));
+    }
+
+    // 배지
+    var badgeText = outside ? '외삽' : '학습 범위 안';
+    var badgeW = Math.round(estW(badgeText, 14) + 22);
+    var badgeX = BADGE_R - badgeW;
+    badgeT.textContent = badgeText;
+    setA(badgeR, 'x', badgeX); setA(badgeR, 'width', badgeW);
+    setA(badgeR, 'fill', outside ? '#d64545' : '#2f9e5f');
+    setA(badgeT, 'x', r2(badgeX + badgeW / 2));
+
+    // 라벨(위쪽 띠, 세로선 옆·배지와 겹치지 않게)
+    var text;
+    if (outside) text = year + '년 예측 ' + r1(p) + '℃';
+    else if (hasActual) text = year + '년 실젯값 ' + r1(actual) + ' · 예측값 ' + r1(p);
+    else text = year + '년 예측값 ' + r1(p);            // 결측 연도(1950~1953): 예측값만
+    var w = estW(text, 16);
+    var limitR = badgeX - 12;
+    if (xs + 8 + w <= limitR) {
+      setA(lab, 'text-anchor', 'start'); setA(lab, 'x', r2(xs + 8));
+    } else {
+      setA(lab, 'text-anchor', 'end'); setA(lab, 'x', r2(Math.min(xs - 8, limitR)));
+    }
+    lab.textContent = text;
+
+    // 조작 줄
+    out.textContent = year + '년 → 예측값 ' + r1(p) + '℃';
+    for (var b = 0; b < btns.length; b++) {
+      btns[b].classList.toggle('on', Number(btns[b].getAttribute('data-year')) === year);
+    }
+  }
+
+  slider.addEventListener('input', function () { render(Number(slider.value)); });
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function (ev) {
+      var y = Number(ev.currentTarget.getAttribute('data-year'));
+      slider.value = y;
+      render(y);
+    });
+  }
+  render(Number(slider.value));
+}
+
+function initW_causation(root, D) {
+  var HEAD = ['', '① 관찰', '② 원인', '③ 결론'];
+  var LINE = ['', '두 값이 함께 변함', '기온이 둘 다 끌어올림', '상관 ≠ 인과'];
+  var COLOR = ['', '#1c2230', '#2b7fd6', '#d64545'];
+  var layers = [null,
+    root.querySelector('[data-layer="1"]'),
+    root.querySelector('[data-layer="2"]'),
+    root.querySelector('[data-layer="3"]')];
+  var topBox = root.querySelector('[data-el="top-box"]');
+  var topText = root.querySelector('[data-el="top-text"]');
+  var pHead = root.querySelector('[data-el="p-head"]');
+  var pLine = root.querySelector('[data-el="p-line"]');
+  var btns = root.querySelectorAll('.wbtn[data-step]');
+  var cur = 1;
+  var raf = 0;
+  var tmr = 0;
+  var active = [];
+
+  // 진행 중인 페이드를 즉시 완료 처리(재클릭·타이머 보호용)
+  function settle() {
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    if (tmr) { clearTimeout(tmr); tmr = 0; }
+    for (var i = 0; i < active.length; i++) {
+      if (active[i].style.visibility !== 'hidden') active[i].style.opacity = '1';
+    }
+    active = [];
+  }
+
+  function fadeIn(els) {
+    settle();
+    if (!els.length) return;
+    active = els;
+    for (var j = 0; j < els.length; j++) {
+      els[j].style.opacity = '0';
+      els[j].style.visibility = 'visible';
+    }
+    var t0 = null;
+    function tick(ts) {
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / 300);
+      for (var i = 0; i < els.length; i++) els[i].style.opacity = String(p);
+      if (p < 1) raf = requestAnimationFrame(tick); else settle();
+    }
+    raf = requestAnimationFrame(tick);
+    tmr = setTimeout(settle, 400);
+  }
+
+  function show(step) {
+    var fresh = [];
+    for (var k = 1; k <= 3; k++) {
+      if (k <= step) {
+        if (k > cur || layers[k].style.visibility === 'hidden') fresh.push(layers[k]);
+      } else {
+        layers[k].style.visibility = 'hidden';
+        layers[k].style.opacity = '0';
+      }
+    }
+    fadeIn(fresh);
+    var lit = step >= 2;
+    topBox.setAttribute('stroke', lit ? '#b07a00' : '#b9b3a5');
+    topText.setAttribute('fill', lit ? '#1c2230' : '#6b7385');
+    pHead.textContent = HEAD[step];
+    pLine.textContent = LINE[step];
+    pLine.setAttribute('fill', COLOR[step]);
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].classList.toggle('on', Number(btns[i].getAttribute('data-step')) === step);
+    }
+    cur = step;
+  }
+
+  for (var i = 0; i < btns.length; i++) {
+    btns[i].addEventListener('click', function (e) {
+      show(Number(e.currentTarget.getAttribute('data-step')));
+    });
+  }
+  show(1);
+}
+  const WIDGET_INIT = {procedure: initW_procedure, galton: initW_galton, error: initW_error, modeling3: initW_modeling3, mlLayers: initW_mlLayers, range: initW_range, predict2045: initW_predict2045, extrapolation: initW_extrapolation, causation: initW_causation};
+  document.querySelectorAll('.widget[data-w]').forEach(el => { const f = WIDGET_INIT[el.dataset.w]; if (f) f(el, window.SEOUL_YEARLY); });
+</script>
 <script>
   const slides = [...document.querySelectorAll('.slide')];
   const dots = document.getElementById('dots');
