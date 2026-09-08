@@ -25,23 +25,25 @@
 
   <div class="quote">
     <div class="q">"예측은 매우 어렵다. 특히 미래에 관해서는."</div>
-    <span class="by">닐스 보어에게 전해지는 말 — 개봉 전 정보만으로 흥행을 맞히는 일이 꼭 그렇습니다</span>
+    <span class="by">닐스 보어에게 전해지는 말 · 예측에 필요한 정보와 한계를 살펴봅니다.</span>
   </div>
   <p style="text-align:right;font-size:.85rem;margin:-4px 0 14px"><a href="lesson07-deep.html">🔎 더 자세한 판 보기 →</a></p>
 
-  <p class="lead">6차시의 직선은 독립 변수가 연도 하나였습니다. 그런데 영화 관객 수는 하나의 요인으로 정해지지 않습니다. 오늘은 2~4차시에 다뤄 온 박스오피스 데이터로 <b>변수 여러 개짜리 회귀</b>를 만들고, 변수를 넣고 빼며 예측 점수가 어떻게 달라지는지 관찰합니다. 그 과정에서 수업 후반에 다시 만나게 될 중요한 사건 하나를 확인합니다.</p>
+  <p class="lead">6차시에는 연도 하나로 기온을 예측했습니다. 오늘은 영화 데이터를 이용해 여러 변수를 사용하는 <b>다중 선형회귀</b>를 만듭니다. 변수를 바꿀 때 점수가 어떻게 달라지는지 관찰하고, 개봉 전 예측에 사용할 수 있는 정보인지 판단합니다.</p>
+
+  <p class="mini">수업 예시의 재현을 위해 데이터 버전을 고정했습니다. 기온은 2025년까지, 영화는 2025년 9월~2026년 8월 자료를 기준으로 합니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>변수 발상</b> — 관객 수를 미리 맞히려면 무엇을 알아야 하는가 (폼 Ⅲ-01a)</li>
+      <li><b>변수 발상</b> — 관객 수를 미리 맞히려면 무엇을 알아야 하는지 폼 Ⅲ-01a에 적는다</li>
       <li><b>바이브 코딩</b> — 변수를 골라 끼우는 총 관객 수 예측 앱을 만든다</li>
-      <li><b>발견</b> — 변수를 더했는데 점수가 내려가고, 어떤 변수 하나에 0.90으로 급등하는 두 사건</li>
+      <li><b>발견</b> — 변수 조합별 점수를 비교하고, 그 정보를 알 수 있는 시점을 확인한다</li>
     </ul>
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>영화사는 개봉 전에 상영관 수를 정해야 하고, 투자사는 제작 단계에서 흥행을 가늠해야 합니다. 배달 앱은 시간대별 수요를, 편의점은 발주량을 여러 요인으로 예측합니다. 현실의 예측 문제는 대부분 "요인이 여러 개"이고, 그래서 실무에서 쓰이는 회귀는 대부분 오늘 배우는 다중 회귀입니다.</p>
+  <p>영화의 흥행을 미리 가늠하려면 여러 정보를 함께 살펴봐야 합니다. 이번 수업에서는 변수가 늘어날 때 예측이 어떻게 달라지는지 확인합니다. 특히 <b>예측하려는 시점에 알 수 있는 정보인지</b>가 중요합니다.</p>
 
   <h2>1. 개념 이해 — 직선에서 평면으로</h2>
   <div class="tbquote">
@@ -50,9 +52,9 @@
     <p class="q">"학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다." <span class="src">(112쪽)</span></p>
     <p class="t">→ 독립 변수가 여러 개면 다중 회귀. 그리고 모델의 점수는 학습에 쓰지 않은 문제(테스트 데이터)로 매겨야 믿을 수 있다.</p>
   </div>
-  <p>단순 회귀가 "쪽수 → 독서 시간"처럼 독립 변수 하나로 직선을 그었다면, 다중 회귀는 독립 변수마다 가중치를 하나씩 두고 이를 모두 더해 예측합니다. 변수가 둘이면 직선 대신 평면이 되고, 셋 이상이면 그림으로 그릴 수는 없지만 원리는 같습니다. <b>각 변수의 가중치</b>를 보면 어느 요인이 예측에 크게 기여하는지도 알 수 있습니다.</p>
+  <p>단순 선형회귀는 독립 변수 하나로 예측합니다. 다중 선형회귀는 여러 독립 변수에 각각 가중치를 곱한 뒤 더하고, 절편을 더해 예측합니다. 독립 변수가 둘이면 관계를 평면으로 나타낼 수 있습니다. 가중치는 다른 변수의 값이 같을 때 해당 변수가 1 증가하면 예측값이 얼마나 달라지는지를 나타냅니다. <b>변수의 단위가 다르면 가중치 크기만으로 중요도를 비교할 수 없습니다.</b></p>
   <h3>점수는 처음 보는 문제로 매긴다</h3>
-  <p>변수가 늘어난 만큼, 점수를 매기는 규칙도 분명히 해 둡니다. 학습에 쓴 영화로 점수를 재면, 모델이 규칙을 이해한 것인지 답을 외운 것인지 구분할 수 없습니다. 시험 범위의 기출문제를 그대로 시험에 내는 것과 같습니다. 그래서 데이터의 일부를 <b>테스트 데이터</b>로 미리 떼어 두고, 학습이 끝난 뒤 이 "처음 보는 영화들"로 점수를 잽니다. 오늘 화면에 뜨는 점수는 전부 이 방식으로 계산한 값입니다.</p>
+  <p>학습 자료에서 높은 점수를 얻었다고 새로운 영화도 잘 예측하는 것은 아닙니다. 일부 영화를 <b>테스트 데이터</b>로 먼저 떼어 두고, 나머지 영화로 학습한 뒤 테스트 자료에서 점수를 계산합니다. 변수 조합을 비교할 때는 같은 분할을 사용합니다.</p>
   <div style="overflow-x:auto;margin:18px 0">
     <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="216편을 영화 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 학습 150편으로 가중치를 학습한 뒤 테스트 66편으로 점수를 재는 구조">
       <defs>
@@ -83,29 +85,29 @@
       <text x="472" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">점수(R²)</text>
     </svg>
   </div>
-  <p>우리 데이터에는 지난 1년 극장가를 지나간 영화들이 담겨 있고, 그중 영화별 표에 정리된 <b>216편</b>이 오늘의 학습 재료입니다. 변수 후보는 "언제 알 수 있는 값인가"를 기준으로 이렇게 나뉩니다.</p>
+  <p>수업용 일별 자료는 2025년 9월 1일~2026년 8월 31일의 박스오피스 상위 10위 기록입니다. 영화별 표의 216편으로 실습합니다. <b>개봉 전에 흥행을 예측하려면 어떤 정보가 필요한가</b>를 생각하며 다음 구분을 확인합니다.</p>
   <table class="daymap">
     <thead><tr><th>구분</th><th>변수 예</th><th>알 수 있는 시점</th></tr></thead>
     <tbody>
-      <tr><td><b>개봉 전 변수</b></td><td>첫날 스크린 수 · 상영횟수 · 성수기 여부 · 장르 · 국적</td><td>개봉일에 이미 확정</td></tr>
-      <tr><td><b>개봉 후 변수</b></td><td>첫 주 관객 수 · 누적 관객 수</td><td>개봉하고 시간이 지나야 확정</td></tr>
+      <tr><td><b>개봉 전 확보할 정보</b></td><td>개봉 예정일 · 장르 · 국적 · 예정 스크린 수와 상영 횟수</td><td>예측 시점에 실제로 확보했는지 확인합니다.</td></tr>
+      <tr><td><b>개봉 후 집계 정보</b></td><td>첫 관측일의 스크린 수·상영 횟수 · 첫 주 관객 수 · 누적 관객 수</td><td>해당 집계가 끝난 뒤 알 수 있습니다.</td></tr>
     </tbody>
   </table>
-  <p>이 구분이 오늘 수업의 복선입니다. 지금은 당연해 보이지만, 실습 후반에 이 경계선이 점수를 가르는 결정적인 기준이 됩니다.</p>
+  <p><b>수업 자료의 한계:</b> 파일의 first_scrn과 first_show는 개봉 전 계획값이 아니라, 일별 자료에서 각 영화가 10위권에 처음 등장한 날의 집계값과 일치합니다. 216편 중 75편은 그날이 개봉일과 다릅니다. 따라서 아래에서는 이를 <b>기본 변수</b>라고 부르며 교육용 비교에 사용합니다. 이 자료로 얻은 점수를 실제 개봉 전 예측 성능으로 해석해서는 안 됩니다. 실제 서비스를 만들려면 예측 시점에 확보한 자료로 다시 검증해야 합니다.</p>
   <div class="callout mini">
     <div class="h">📝 변수 발상부터 — 폼 Ⅲ-01a</div>
     <p>교과서 106쪽 해 보기 ①은 태풍의 진로를 예측하려면 어떤 데이터가 필요한지 묻습니다. 같은 발상을 영화로 옮겨 봅니다. "총 관객 수를 미리 맞히려면 무엇을 알아야 하는가" — 개봉 시기, 장르, 상영관 수, 전작의 성적, 출연 배우… 떠오르는 후보를 폼 Ⅲ-01a에 적고 시작합니다.</p>
   </div>
 
   <h2>2. 실습 — 총 관객 수 예측기 (바이브 코딩)</h2>
-  <p>4차시 산점도에서 질문 하나를 남겨 두었습니다 — 스크린을 많이 받은 영화가 관객도 많다면, <b>이 점들 위에 직선을 긋고 새 영화의 관객 수를 미리 맞힐 수 있지 않을까?</b> 오늘 그 질문에 답합니다. 실습은 모두가 같은 공통 스냅샷으로 진행합니다.</p>
+  <p>4차시에 살펴본 영화 자료를 이용해 예측 앱을 새로 만듭니다. 먼저 기본 변수의 조합을 바꾸어 결과를 비교하고, 첫 주 관객 수를 추가한 결과를 살펴봅니다. 데이터에 실제로 들어 있는 값과 개봉 전에 사용할 수 있는 값을 구분해 기록합니다.</p>
   <div class="callout mini">
     <div class="h">📦 오늘의 데이터</div>
     <ul>
-      <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a></b> — 지난 1년(365일)의 일별 박스오피스 톱10 기록 3,650행, 영화 301편</li>
-      <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a></b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 표에 정리된 216편</li>
+      <li><b><a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a></b> — 지난 1년(365일)의 일별 박스오피스 톱10 기록 3,650행, 영화 301편</li>
+      <li><b><a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a></b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 표에 정리된 216편</li>
     </ul>
-    <p>3차시의 kobis_daily.csv와 4차시의 kobis_movies.csv, 그래프 도감에서 쓰던 바로 그 두 표입니다 — 오늘은 읽는 데서 나아가 예측의 재료로 사용합니다.</p>
+    <p>앞서 살펴본 두 표를 예측의 재료로 사용합니다. 이 수업은 영화별 표에 기록된 <code>total_audi</code>를 예측 대상으로 삼습니다. 수집 기간과 상위 10위 기록에 제한된 자료이므로, 모든 영화의 최종 흥행 성적을 완전하게 담았다고 가정해서는 안 됩니다.</p>
   </div>
 
   <ol class="steps">
@@ -118,11 +120,11 @@
 예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.
 학습에 쓴 영화 편수와 점수를 잰 영화 편수를 화면에 적어 줘.
 두 표는 이 주소에서 불러와. 영화코드(movieCd) 열이 같은 영화를 가리켜.
-- https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv
+- https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_daily.csv
   (열: 날짜(여덟 자리 숫자)·순위·영화코드·영화명·일관객·누적관객·스크린수·상영횟수)
-- https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
+- https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv
   (열: movieCd(영화코드)·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·
-   first_scrn(개봉일 스크린수)·first_show(개봉일 상영횟수)·first_date(10위권 첫 등장일)·
+   first_scrn(첫 관측일 스크린수)·first_show(첫 관측일 상영횟수)·first_date(10위권 첫 등장일)·
    peak(성수기 개봉이면 1, 아니면 0 — 1월·7월·12월이 성수기)·
    first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><pre># app.py — 여러 변수로 총 관객을 예측한다
@@ -131,10 +133,11 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score, mean_absolute_error
 
-DAILY = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv"
-MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+DAILY = "https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_daily.csv"
+MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv"
 
 st.header("영화 흥행 예측")
+st.caption("사후 집계 자료를 사용한 교육용 비교입니다. 실제 개봉 전 예측 성능을 뜻하지 않습니다.")
 
 
 @st.cache_data
@@ -152,11 +155,11 @@ is_test = df.index % 10 &lt; 3
 train, test = df[~is_test], df[is_test]
 st.caption(f"학습 {len(train)}편 · 시험 {len(test)}편")
 
-전 = {"개봉일 스크린수": "first_scrn", "개봉일 상영횟수": "first_show", "성수기 개봉": "peak"}
-후 = {"첫 주 관객": "first_week_audi"}
+기본 = {"첫 관측일 스크린수": "first_scrn", "첫 관측일 상영횟수": "first_show", "성수기 개봉": "peak"}
+추가 = {"첫 주 관객": "first_week_audi"}
 
 st.subheader("변수 고르기")
-picked = [col for name, col in {**전, **후}.items() if st.checkbox(name, value=col in 전.values())]
+picked = [col for name, col in {**기본, **추가}.items() if st.checkbox(name, value=col in 기본.values())]
 if not picked:
     st.warning("변수를 하나 이상 골라 주세요.")
     st.stop()
@@ -168,26 +171,25 @@ c1.metric("시험용 영화로 잰 점수 (R²)", f"{r2_score(test['total_audi']
 c2.metric("평균 오차", f"{mean_absolute_error(test['total_audi'], pred):,.0f}명")</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
-      받은 코드를 <b>app.py</b> 파일 하나로 저장해 실행합니다. 화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(정체는 8차시에 손으로 계산합니다). 첫날 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
+      받은 코드를 <b>app.py</b> 파일 하나로 저장해 실행합니다. 화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(계산법은 8차시에 살펴봅니다). 첫 관측일 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 변수의 출처를 나눠서 비교한다</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>변수를 "개봉 전에 알 수 있는 것"과 "개봉 후에야 알 수 있는 것"으로 나눠 줘.
-개봉 전 변수만 쓴 경우와 개봉 후 정보까지 넣은 경우의 예측 점수를
-나란히 비교해서, 차이가 한눈에 보이게 해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 개봉 전 변수만 쓴 경우와 개봉 후 정보까지
-st.subheader("개봉 전 정보만 vs 개봉 후 정보까지")
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>기본 변수 세 가지를 쓴 경우와 첫 주 관객 수까지 추가한 경우의 예측 점수를 나란히 보여 줘.
+이 데이터는 사후 집계값이므로 실제 개봉 전 예측 성능이 아니라는 안내도 표시해 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 기본 변수와 첫 주 관객 수 추가 비교
+st.subheader("기본 변수만 vs 첫 주 관객 추가")
 결과 = []
-for 이름, 변수 in [("개봉 전 정보만", list(전.values())),
-                ("개봉 후 정보까지", list(전.values()) + list(후.values()))]:
+for 이름, 변수 in [("기본 변수만", list(기본.values())),
+                ("첫 주 관객 추가", list(기본.values()) + list(추가.values()))]:
     m = LinearRegression().fit(train[변수], train["total_audi"])
     결과.append({"쓴 변수": 이름, "R²": round(r2_score(test["total_audi"], m.predict(test[변수])), 3)})
 st.dataframe(pd.DataFrame(결과), hide_index=True)
-st.caption("점수가 갑자기 뛰면 실력이 아니라 반칙 신호일 수 있습니다.")</pre></div></details>
+st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개봉 전 예측 성능을 뜻하지 않습니다.")</pre></div></details>
     </li>
   </ol>
 
   <div class="callout tip">
     <div class="h">💡 프롬프트가 하는 일과 내가 하는 일</div>
-    <p>모델을 만드는 계산 — 표 합치기, 가중치 찾기, 테스트 데이터 떼어 두기 — 는 전부 AI의 몫입니다. 우리가 한 일은 파일 이름을 지정하고, <b>변수를 고르는 권한</b>과 <b>점수를 재는 조건</b>을 정한 것입니다. 어떤 변수를 켜고 끌지, 나온 점수를 어떻게 읽을지는 도구가 대신해 주지 않습니다. 그것이 오늘 수업의 본론입니다.</p>
+    <p>AI를 활용해 표를 결합하고 모델을 학습하는 코드를 작성합니다. 사용할 자료, 변수, 평가 조건은 우리가 정합니다. 생성된 코드가 요구 사항을 지키는지 확인하고, 점수를 해석하는 일도 필요합니다.</p>
   </div>
 
   <div class="callout tip">
@@ -200,10 +202,10 @@ st.caption("점수가 갑자기 뛰면 실력이 아니라 반칙 신호일 수 
     </ol>
   </div>
 
-  <h2>3. 발견 사건 — 내려가는 점수, 치솟는 점수</h2>
-  <p>③을 실행하면 다음과 같은 결과가 나타납니다. 분석 대상 216편을 영화 코드 순으로 정렬해 10편 중 3편(66편)을 테스트로 떼어 두고, 나머지 150편으로 학습한 뒤 <b>떼어 둔 66편으로</b> 잰 점수입니다.</p>
+  <h2>3. 결과 비교 — 변수 조합과 예측 시점</h2>
+  <p>각 변수 조합을 실행하면 아래 결과를 비교할 수 있습니다. 영화 코드 순으로 정렬한 216편에서 10편마다 앞의 3편을 테스트 자료로 지정했습니다. 학습 150편, 테스트 66편이며 모든 조합에 같은 분할을 사용합니다. 이는 수업 결과를 재현하기 위한 분할로, 미래 개봉작의 예측 성능을 보장하는 검증은 아닙니다.</p>
   <div style="overflow-x:auto;margin:18px 0">
-    <svg viewBox="0 0 680 264" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="변수 조합별 테스트 점수 막대 그림 — 첫날 스크린 수만 0.31, 개봉 전 변수 3종 0.24로 하락, 첫 주 관객 수를 더하면 0.90으로 급등하며 데이터 누수 경계선을 넘는다">
+    <svg viewBox="0 0 680 264" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="변수 조합별 테스트 점수 막대 그림 — 첫 관측일 스크린 수만 0.31, 기본 변수 3종 0.24로 하락, 첫 주 관객 수를 더하면 0.90으로 급등하며 데이터 누수 경계선을 넘는다">
       <defs>
         <pattern id="hatch8" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
           <rect width="8" height="8" fill="#e45756"/>
@@ -218,16 +220,16 @@ st.caption("점수가 갑자기 뛰면 실력이 아니라 반칙 신호일 수 
       <text x="240" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0</text>
       <text x="440" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0.5</text>
       <text x="640" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">1.0</text>
-      <text x="228" y="61" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">첫날 스크린 수만</text>
+      <text x="228" y="61" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">첫 관측일 스크린 수만</text>
       <rect x="240" y="44" width="124" height="26" fill="#f4b400"/>
       <text x="372" y="61" font-size="12.5" font-weight="800" fill="#2b2d3a">0.31</text>
-      <text x="228" y="97" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">개봉 전 변수 3종</text>
+      <text x="228" y="97" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">기본 변수 3종</text>
       <text x="228" y="112" text-anchor="end" font-size="10.5" fill="#7a7f95">(스크린+상영횟수+성수기)</text>
       <rect x="240" y="86" width="96" height="26" fill="#f4b400"/>
       <text x="344" y="103" font-size="12.5" font-weight="800" fill="#2b2d3a">0.24</text>
       <text x="384" y="103" font-size="12.5" font-weight="800" fill="#e8930c">↓ 더 넣었는데 하락</text>
       <line x1="16" y1="128" x2="664" y2="128" stroke="#e45756" stroke-width="1.5" stroke-dasharray="7 5"/>
-      <text x="340" y="144" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">여기부터 개봉 후 정보 — 예측 시점에 알 수 있는가?</text>
+      <text x="340" y="144" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">첫 주 관객 수 추가 — 개봉 전에 알 수 있는가?</text>
       <text x="228" y="171" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">3종 + 첫 주 관객 수</text>
       <rect x="240" y="154" width="360" height="26" fill="url(#hatch8)" stroke="#e45756"/>
       <text x="608" y="171" font-size="12.5" font-weight="800" fill="#e45756">0.90</text>
@@ -238,66 +240,68 @@ st.caption("점수가 갑자기 뛰면 실력이 아니라 반칙 신호일 수 
   <div class="callout warn">
     <div class="h">⚠️ 두 장면을 나눠서 읽어야 한다</div>
     <ul>
-      <li><b>장면 1 — 예측의 겸손, 그리고 이상한 하락.</b> 개봉 전에 알 수 있는 변수로는 0.3 안팎 — 흥행은 개봉 전 정보만으로 3분의 1도 설명되지 않는다. 게다가 변수를 둘 더 넣자 점수가 오히려 0.24로 <b>내려갔다</b>. 학습 데이터에서는 변수가 많을수록 점수가 오르지만, 처음 보는 영화 앞에서는 외운 것이 통하지 않는다 — 교과서 134쪽이 과대적합이라 부르는 현상의 예고편이다(8차시에서 다시 만난다).</li>
-      <li><b>장면 2 — 급등의 정체.</b> 첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보라 0.90 급등은 실력이 아니라 정답 일부를 미리 본 결과다 — 이렇게 미래 정보가 새어 들어와 점수를 부풀리는 현상을 <b>데이터 누수</b>라 부르고, 10차시 분류 평가에서 다시 만나 정면으로 해부한다.</li>
+      <li><b>비교 1: 변수를 추가해도 테스트 점수는 낮아질 수 있습니다.</b> 기본 변수 조합에서 R²가 0.31에서 0.24로 낮아졌습니다. 이 결과만으로 흥행 전반의 예측 가능성이나 과대적합을 단정할 수는 없습니다. 학습 점수와 테스트 점수를 함께 살펴보고, 자료 분할을 바꿔도 같은 결과인지 확인해야 합니다.</li>
+      <li><b>비교 2: 사용할 수 없는 정보가 점수를 높일 수 있습니다.</b> 첫 주 관객 수를 추가하면 R²가 0.90으로 높아집니다. 이 값은 개봉 전에는 알 수 없으므로 개봉 전 성능으로 해석할 수 없습니다. 예측 시점에 알 수 없는 정보를 사용해 평가가 부풀려지는 문제를 데이터 누수라고 합니다.</li>
     </ul>
   </div>
   <div class="callout tip">
     <div class="h">💡 그렇다면 0.90은 쓸모없는 숫자인가</div>
-    <p>아닙니다. 질문이 달라지면 정당한 변수가 됩니다. "개봉 1주가 지난 시점에서 남은 흥행을 전망한다"는 문제라면 첫 주 관객은 그 시점에 알 수 있는 값이므로 반칙이 아닙니다. 변수의 좋고 나쁨은 변수 자체가 아니라 <b>문제의 시점 설정</b>이 결정합니다.</p>
+    <p>예측 시점이 달라지면 사용할 수 있는 정보도 달라집니다. 개봉 첫 주의 집계가 끝난 뒤 전체 관객 수를 전망한다면, 그때 확정된 첫 주 관객 수는 사용할 수 있습니다. 다만 예측 시점에 확보한 자료만 사용하고, 새로운 영화에서도 같은 방식으로 평가해야 합니다.</p>
   </div>
     <h2>4. 도전 — 단서를 하나 만들어 넣으면</h2>
-  <p>점수를 올리는 길이 더 센 모델만은 아닙니다. 모델에게 줄 단서를 직접 하나 만들어 주는 방법이 있습니다. 첫날 관객 수를 상영 횟수로 나눈 상영당 관객은 한 번 상영에 몇 명이 들었나 곧 그 영화의 열기를 뜻합니다. 같은 스크린 수라도 좌석이 차는 영화와 비는 영화는 운명이 다릅니다.</p>
-  <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 단서를 하나 만들어 보자.
+  <p>이번 도전에서는 <b>예측 시점을 해당 영화의 첫 관측일 집계가 끝난 뒤로 바꿉니다.</b> 첫 관측일은 수업 자료에서 영화가 10위권에 처음 등장한 날입니다. 그날의 관객 수를 상영 횟수로 나누어 <b>상영당 관객 수</b>라는 특성을 만듭니다. 한 번 상영에 평균 몇 명이 관람했는지를 뜻하며, 좌석 수를 고려한 좌석 점유율과는 다릅니다. 이 값은 개봉 전 예측에 사용할 수 없습니다.</p>
+  <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 첫 관측일의 집계가 끝난 시점에서 예측한다고 가정해 줘.
+그 시점에 알 수 있는 정보로 새 특성을 만들어 보자.
 - 박스오피스 표에서 영화마다 10위권에 처음 든 날의 일관객을 상영횟수로 나눠
-  '열기'라는 새 열을 만들어 줘. 한 번 상영에 몇 명이 들었는지야.
-- 개봉 전 변수 세 개만 쓴 경우와 거기에 열기를 더한 경우의 R²를 나란히 보여 줘.
+  '상영당 관객 수'라는 새 열을 만들어 줘. 한 번 상영에 몇 명이 들었는지야.
+- 기본 변수 세 개만 쓴 경우와 거기에 상영당 관객 수를 더한 경우의 R²를 나란히 보여 줘.
 - 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
   <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><pre># 도전 — 단서를 하나 만들어 넣으면 (app.py에 이어 붙일 부분)
-st.subheader("도전 — 단서를 하나 만들어 넣으면")
+st.subheader("도전 — 상영당 관객 수 만들기")
+st.caption("예측 시점: 각 영화의 첫 관측일 집계가 끝난 뒤")
 daily = pd.read_csv(DAILY, dtype={"영화코드": str})
 daily["날짜"] = daily["날짜"].astype(str)
 첫날 = daily.sort_values("날짜").groupby("영화코드").first()          # 10위권에 처음 든 날
-첫날["열기"] = 첫날["일관객"] / 첫날["상영횟수"]                       # 한 번 상영에 몇 명이 들었나
-df2 = df.join(첫날[["열기"]], on="movieCd")
+첫날["상영당 관객 수"] = 첫날["일관객"] / 첫날["상영횟수"]                       # 한 번 상영에 몇 명이 들었나
+df2 = df.join(첫날[["상영당 관객 수"]], on="movieCd")
 train2, test2 = df2[~is_test], df2[is_test]
 
 비교 = []
-for 이름, 변수 in [("개봉 전 정보만", list(전.values())),
-                ("+ 첫날 열기(상영당 관객)", list(전.values()) + ["열기"])]:
+for 이름, 변수 in [("기본 변수만", list(기본.values())),
+                ("+ 첫 관측일 상영당 관객 수", list(기본.values()) + ["상영당 관객 수"])]:
     m2 = LinearRegression().fit(train2[변수], train2["total_audi"])
     비교.append({"쓴 변수": 이름, "R²": round(r2_score(test2["total_audi"], m2.predict(test2[변수])), 3)})
 st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
   <table class="daymap">
     <thead><tr><th>쓴 변수</th><th>R²</th></tr></thead>
     <tbody>
-      <tr><td>개봉 전 세 가지</td><td>0.240</td></tr>
-      <tr><td><b>+ 첫날 열기(상영당 관객)</b></td><td><b>0.529</b></td></tr>
+      <tr><td>기본 변수 세 가지</td><td>0.240</td></tr>
+      <tr><td><b>+ 첫 관측일 상영당 관객 수</b></td><td><b>0.529</b></td></tr>
     </tbody>
   </table>
-  <p>개봉 전 세 가지만 쓰면 R²는 0.240입니다. 첫날 열기 하나를 더하면 0.529가 됩니다. 모델은 그대로인데 단서 하나를 만들어 준 것만으로 점수가 두 배 넘게 오르며 이것이 <b>특성 만들기</b>입니다. 실제 분석에서는 어떤 모델을 쓰느냐보다 어떤 단서를 주느냐가 결과를 가르는 일이 많습니다.</p>
+  <p>같은 테스트 자료에서 기본 변수만 사용한 R²는 0.240이고, 첫 관측일의 상영당 관객 수를 추가하면 0.529입니다. 기존 열을 조합해 새 변수를 만드는 것을 <b>특성 만들기</b>라고 합니다. R²가 높아졌다는 결과를 예측 성능이 두 배가 되었다고 해석해서는 안 됩니다. 이번 비교는 첫 관측일 집계 이후라는 시점에서 읽어야 합니다.</p>
 
 
 <h2>5. 개념 정리 — 좋은 점수가 좋은 모델인가</h2>
-  <p>오늘 배운 것을 정리합니다. 다중 회귀는 여러 독립 변수에 가중치를 매겨 종속 변수를 예측하는 도구이고, 점수는 학습에 쓰지 않은 데이터로 매겨야 믿을 수 있습니다. 그리고 실측 데이터가 보여 준 두 숫자 — 0.24와 0.90 — 는 서로 다른 교훈을 남겼습니다. 낮은 점수는 흥행이 원래 미리 알기 어려운 일임을 보여 주고, 급등한 점수는 성적이 갑자기 오르면 반칙부터 의심해야 한다는 경고입니다. 수업을 시작하며 폼 Ⅲ-01a에 적었던 변수 후보 중 "개봉 후에야 알 수 있는 것"이 섞여 있었는지 표시해 보면, 오늘의 발견이 더 분명해집니다.</p>
-  <p>그런데 우리는 아직 이 점수의 정체를 모릅니다. 0.24는 무엇의 0.24이고, 1에 가깝다는 것은 정확히 무슨 뜻일까요. 6차시의 기온 직선은 얼마나 믿을 만한 걸까요. 다음 시간, 계산기 하나 들고 이 점수를 <b>손으로 직접</b> 계산해 봅니다.</p>
+  <p>다중 선형회귀는 여러 독립 변수로 수치를 예측합니다. 새로운 자료에서의 성능을 확인하려면 학습과 평가 자료를 나누어야 합니다. 변수 조합에 따라 점수가 달라져도, 높은 점수만으로 유용한 모델이라고 판단할 수는 없습니다. <b>변수의 의미와 정보를 알 수 있는 시점</b>을 확인합니다. 이번 자료의 기본 변수에도 사후 집계값이 있으므로, 결과는 실제 개봉 전 성능을 뜻하지 않습니다.</p>
+  <p>다음 시간에는 R²를 손으로 계산하며 무엇을 기준으로 비교하는 값인지 살펴봅니다. 오늘 기록한 변수 조합과 점수, 평가 조건을 다음 시간에 함께 사용합니다.</p>
 
   <h2>6. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 단순 선형회귀와 다중 선형회귀의 차이를 우리 수업의 두 예측기(기온·영화)를 들어 설명해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수·상영횟수·성수기 여부 등 여러 독립 변수에 각각 가중치를 두어 총 관객 수를 예측하는 다중 선형회귀다. 영향을 주는 요인이 여러 개일 때 다중 회귀를 사용한다.</p>
+      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수, 상영 횟수, 성수기 여부 등 여러 독립 변수를 사용하는 다중 선형회귀다. 두 방법 모두 예측하려는 값은 수치다.</p>
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 개봉 전 변수 3종의 테스트 점수는 0.24, 첫 주 관객 수를 더하면 0.90이었습니다. 이 급등을 "모델이 좋아졌다"라고 결론지으면 안 되는 이유는 무엇일까요?</div>
+    <div class="qq"><span class="qn">문제 2</span> 기본 변수 3종의 테스트 점수는 0.24, 첫 주 관객 수를 더하면 0.90이었습니다. 이 급등을 "모델이 좋아졌다"라고 결론지으면 안 되는 이유는 무엇일까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
         <button class="opt">테스트 영화가 66편뿐이라 어떤 점수도 신뢰할 수 없기 때문이다</button>
-        <button class="opt" data-ok="1">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보이므로 — 점수 급등은 실력이 아니라 데이터 누수의 신호다</button>
+        <button class="opt" data-ok="1">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보이므로 — 이를 개봉 전 예측 성능으로 해석할 수 없다</button>
         <button class="opt">R²가 0.5를 넘으면 항상 과대적합으로 판정하기 때문이다</button>
       </div>
-      <div class="fb">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보입니다. 총 관객과 사실상 같은 정보를 담은 변수가 새어 들어와 점수를 부풀린 것이므로, 급등은 예측 실력의 향상이 아니라 데이터 누수의 신호이고, 개봉 전 예측이라는 문제 설정에서는 이 모델을 쓸 수 없습니다. 66편 채점 방식 자체는 0.24를 잴 때도 똑같이 쓰였으므로 문제는 표본 수가 아니고, R²에 절대 문턱도 없습니다 — 판단 기준은 점수의 크기가 아니라 변수의 시점입니다.</div>
+      <div class="fb">첫 주 관객 수는 개봉 전에는 알 수 없는 정보입니다. 이 값으로 높아진 점수를 개봉 전 예측 성능으로 해석할 수 없습니다. 기본 변수에도 사후 집계값이 있으므로 0.24 역시 실제 개봉 전 성능을 뜻하지 않습니다. 점수의 크기와 함께 정보의 시점을 확인해야 합니다.</div>
     </div>
   </div>
   <div class="quiz">
@@ -306,16 +310,16 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
       <div class="qopts qopts-col">
         <button class="opt">안 된다 — 한 번 누수로 판정된 변수는 어떤 문제 설정에서도 쓸 수 없다</button>
         <button class="opt">안 된다 — 점수를 0.90까지 끌어올리는 변수는 그 자체로 의심 대상이므로 빼야 한다</button>
-        <button class="opt" data-ok="1">써도 된다 — 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아니다</button>
+        <button class="opt" data-ok="1">써도 된다. 첫 주 집계가 완료된 시점에는 이미 확보한 정보이기 때문이다</button>
       </div>
-      <div class="fb">판단 기준은 "예측하는 시점에 그 변수의 값을 알 수 있는가" 한 가지입니다. 개봉 1주 후 시점에는 첫 주 관객 수가 이미 확정된 과거 정보이므로 반칙이 아닙니다. 변수의 좋고 나쁨은 변수 자체가 아니라 문제의 시점 설정이 정하며, 높은 점수가 곧 반칙인 것도 아닙니다.</div>
+      <div class="fb">개봉 첫 주의 집계가 완료된 뒤라면 첫 주 관객 수를 사용할 수 있습니다. 높은 점수 자체가 데이터 누수를 뜻하지는 않습니다. 실제 서비스에서도 예측 시점에 확보한 자료만 사용하고, 학습과 평가 자료를 올바르게 분리해야 합니다.</div>
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 4</span> 열기를 더했을 때 R²가 0.240에서 0.529로 올랐습니다. 이때 바뀐 것은 무엇입니까?</div>
+    <div class="qq"><span class="qn">문제 4</span> 상영당 관객 수를 더했을 때 R²가 0.240에서 0.529로 올랐습니다. 이때 바뀐 것은 무엇입니까?</div>
     <div class="qitem">
       <div class="qopts qopts-col"><button class="opt">모델을 더 센 것으로 바꿨다</button><button class="opt" data-ok="1">모델은 그대로 두고 단서(특성) 하나를 만들어 더했다</button><button class="opt">시험용 영화를 학습에 함께 넣었다</button></div>
-      <div class="fb">모델은 같은 선형회귀입니다. 바뀐 것은 모델에게 준 단서 하나이며, 이렇게 데이터에서 새 단서를 만드는 일이 <b>특성 만들기</b>입니다. 실제 분석에서는 어떤 모델을 쓰느냐보다 어떤 단서를 주느냐가 결과를 가르는 일이 많습니다.</div>
+      <div class="fb">모델의 종류와 자료 분할은 유지하고 새 특성을 추가했습니다. 첫 관측일의 관객 수와 상영 횟수를 조합한 특성입니다. 이 비교에서는 예측 시점도 첫 관측일 집계 이후로 정했습니다.</div>
     </div>
   </div>
 
@@ -323,8 +327,8 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
   <ul class="checklist">
     <li>다중 선형회귀가 무엇인지 독립 변수와 가중치로 설명할 수 있다.</li>
     <li>변수를 골라 끼우는 총 관객 수 예측 앱을 만들어 실행했다.</li>
-    <li>개봉 전 변수만으로는 점수가 0.3 안팎에 머무는 이유를 말할 수 있다.</li>
-    <li>0.90으로의 급등이 왜 실력이 아니라 누수 신호인지 설명할 수 있다.</li>
+    <li>기본 변수의 의미를 확인하고 점수를 실제 개봉 전 성능으로 해석할 수 없는 이유를 말할 수 있다.</li>
+    <li>첫 주 관객 수를 개봉 전 예측에 사용할 수 없는 이유를 설명할 수 있다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
@@ -332,10 +336,10 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
     <tr><th>용어</th><th>뜻</th></tr>
     <tr><td class="term">다중 선형 회귀</td><td>여러 개의 독립 변수로 종속 변수를 예측하는 회귀 분석</td></tr>
     <tr><td class="term">독립 변수 / 종속 변수</td><td>예측에 사용하는 값 / 예측하려는 값</td></tr>
-    <tr><td class="term">가중치</td><td>각 독립 변수가 예측에 기여하는 크기</td></tr>
+    <tr><td class="term">가중치</td><td>다른 변수의 값이 같을 때 해당 변수가 1 증가하면 예측값이 변하는 양입니다.</td></tr>
     <tr><td class="term">훈련 데이터 / 테스트 데이터</td><td>모델을 학습시키는 데이터 / 점수를 매기기 위해 따로 떼어 둔 데이터</td></tr>
     <tr><td class="term">데이터 누수</td><td>예측 시점에 알 수 없는 정보가 변수로 새어 들어와 점수를 부풀리는 것</td></tr>
-      <tr><td class="term">특성 만들기</td><td>이미 있는 열을 조합해 모델에게 줄 새 단서를 만드는 일. 첫날 관객÷상영횟수로 만든 '열기'가 그 예</td></tr>
+      <tr><td class="term">특성 만들기</td><td>이미 있는 열을 조합해 모델에게 줄 새 단서를 만드는 일. 첫날 관객÷상영횟수로 만든 '상영당 관객 수'가 그 예</td></tr>
 </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
