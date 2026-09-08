@@ -163,11 +163,12 @@
 서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.
 수업의 기준 기간은 2025년까지야. 그 이후 자료와 관측일이 300일이 안 되는 해는 빼 줘.
 산점도와 상관계수를 보여 주고, 남은 연평균기온에 맞춘 회귀 직선을 함께 표시해 줘.
+그래프는 plotly로 그려 줘.
 연도를 슬라이더로 고르면 그 해의 예상 기온이 크게 표시되게 해 줘.
 슬라이더 범위는 1900년부터 2100년까지.
 직선을 만든 해의 개수와 시작 연도, 끝 연도를 화면에 적어 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 연평균기온에 직선을 맞추고 예측한다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 연평균기온에 직선을 맞추고 예측한다
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -200,7 +201,11 @@ st.metric("연도와 연평균기온의 상관계수", f"{yearly['연도'].corr(
 year = st.slider("연도를 고르세요", 1900, 2100, 2045)
 st.metric(f"{year}년 예상 연평균기온", f"{a * year + b:.1f}℃")
 if year &lt; yearly["연도"].min() or year &gt; yearly["연도"].max():
-    st.info("학습 범위 밖의 외삽값입니다. 실제 미래 기온을 보장하지 않습니다.")</pre></div></details>
+    st.info("학습 범위 밖의 외삽값입니다. 실제 미래 기온을 보장하지 않습니다.")</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+numpy
+plotly</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 직선을 읽는다</span><br>
       받은 코드를 <b>main.py</b> 파일 하나로 저장해 실행합니다. 오늘 앱은 화면이 하나입니다. 산점도 위에 직선이 표시되는지 먼저 확인합니다. 그다음 슬라이더를 내년으로, 2045년으로 옮겨 봅니다. 값이 바로 계산되어 표시됩니다. 이 값을 얼마나 믿을 수 있는지는 뒤에서 다룹니다. 먼저 직선이 점들의 추세와 어울리는지 눈으로 확인합니다.</li>
