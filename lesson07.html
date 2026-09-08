@@ -36,9 +36,9 @@
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li>관객 수 예측에 필요한 정보를 떠올려 폼 Ⅲ-01a에 적습니다.</li>
-      <li>변수를 선택해 영화 관객 수를 예측하는 앱을 만듭니다.</li>
-      <li>변수 조합별 점수를 비교하고, 정보를 알 수 있는 시점을 확인합니다.</li>
+      <li><b>변수 발상</b> — 관객 수를 미리 맞히려면 무엇을 알아야 하는지 폼 Ⅲ-01a에 적는다</li>
+      <li><b>바이브 코딩</b> — 변수를 골라 끼우는 총 관객 수 예측 앱을 만든다</li>
+      <li><b>발견</b> — 변수 조합별 점수를 비교하고, 그 정보를 알 수 있는 시점을 확인한다</li>
     </ul>
   </div>
 
@@ -104,8 +104,8 @@
   <div class="callout mini">
     <div class="h">📦 오늘의 데이터</div>
     <ul>
-      <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a></b> — 지난 1년(365일)의 일별 박스오피스 톱10 기록 3,650행, 영화 301편</li>
-      <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a></b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 표에 정리된 216편</li>
+      <li><b><a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a></b> — 지난 1년(365일)의 일별 박스오피스 톱10 기록 3,650행, 영화 301편</li>
+      <li><b><a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a></b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 분석 대상은 표에 정리된 216편</li>
     </ul>
     <p>앞서 살펴본 두 표를 예측의 재료로 사용합니다. 이 수업은 영화별 표에 기록된 <code>total_audi</code>를 예측 대상으로 삼습니다. 수집 기간과 상위 10위 기록에 제한된 자료이므로, 모든 영화의 최종 흥행 성적을 완전하게 담았다고 가정해서는 안 됩니다.</p>
   </div>
@@ -284,13 +284,13 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
 
 <h2>5. 개념 정리 — 좋은 점수가 좋은 모델인가</h2>
   <p>다중 선형회귀는 여러 독립 변수로 수치를 예측합니다. 새로운 자료에서의 성능을 확인하려면 학습과 평가 자료를 나누어야 합니다. 변수 조합에 따라 점수가 달라져도, 높은 점수만으로 유용한 모델이라고 판단할 수는 없습니다. <b>변수의 의미와 정보를 알 수 있는 시점</b>을 확인합니다. 이번 자료의 기본 변수에도 사후 집계값이 있으므로, 결과는 실제 개봉 전 성능을 뜻하지 않습니다.</p>
-  <p>다음 시간에는 R²를 손으로 계산하며 무엇을 기준으로 비교하는 값인지 살펴봅니다. 오늘 기록한 변수 조합과 점수, 평가 조건을 함께 가져오세요.</p>
+  <p>다음 시간에는 R²를 손으로 계산하며 무엇을 기준으로 비교하는 값인지 살펴봅니다. 오늘 기록한 변수 조합과 점수, 평가 조건을 다음 시간에 함께 사용합니다.</p>
 
   <h2>6. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 단순 선형회귀와 다중 선형회귀의 차이를 우리 수업의 두 예측기(기온·영화)를 들어 설명해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀입니다. 영화 예측기는 스크린 수, 상영 횟수, 성수기 여부 등 여러 독립 변수를 사용하는 다중 선형회귀입니다. 두 방법 모두 예측하려는 값은 수치입니다.</p>
+      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수, 상영 횟수, 성수기 여부 등 여러 독립 변수를 사용하는 다중 선형회귀다. 두 방법 모두 예측하려는 값은 수치다.</p>
     </details>
   </div>
   <div class="quiz">
