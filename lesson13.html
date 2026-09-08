@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>13차시 · 데이터베이스와 수파베이스 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb4">
-<style>/* 3절 SQL: 긴 인라인 코드가 좁은 화면을 넘치지 않도록 */ main code:not(pre code){white-space:normal;word-break:break-all}</style>
+<style>/* 긴 열 이름과 설계표를 좁은 화면에서도 읽을 수 있도록 */
+main{overflow-wrap:anywhere}
+main code:not(pre code){white-space:normal;word-break:break-all}
+main .daymap{display:block;max-width:100%;overflow-x:auto}
+</style>
 <style>
 /* ===== 13차시 위젯 전용 스타일 — 설계표 조립기(.sch) · 앱 대응표(.app-sql) · SQL 시뮬레이터(.sim) =====
    셀렉터는 세 루트 아래로만 한정한다. 팔레트는 공용 변수(--accent --gold --teal --blue --violet --green --red)와 어울리는 진한 톤(대비 4.5:1 이상). */
@@ -264,14 +268,14 @@
       <text x="258" y="224" text-anchor="middle" font-size="10.5" fill="#a05f06">(교과서 27쪽)</text>
       <!-- 오른쪽: 데이터베이스 -->
       <rect x="360" y="26" width="500" height="214" rx="16" fill="#fffdf6" stroke="#f4b400" stroke-width="2.5"/>
-      <text x="382" y="56" font-size="14" font-weight="800" fill="#5a4300">데이터베이스 — 우리 학급 수파베이스 프로젝트</text>
+      <text x="382" y="56" font-size="14" font-weight="800" fill="#5a4300">데이터베이스 — 수파베이스 프로젝트 안의 저장소</text>
       <!-- 대결 기록 테이블 -->
       <text x="388" y="90" font-size="12.5" font-weight="800" fill="#16635e">대결 기록 테이블</text>
       <rect x="388" y="98" width="60" height="24" fill="#d8edec" stroke="#f0e2bc"/>
       <rect x="448" y="98" width="90" height="24" fill="#d8edec" stroke="#f0e2bc"/>
       <rect x="538" y="98" width="80" height="24" fill="#d8edec" stroke="#f0e2bc"/>
-      <text x="418" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">표 번호</text>
-      <text x="493" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">선택 메뉴</text>
+      <text x="418" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">기록 번호</text>
+      <text x="493" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">승리 반찬</text>
       <text x="578" y="114" text-anchor="middle" font-size="11" font-weight="800" fill="#16635e">작성 시각</text>
       <rect x="388" y="122" width="60" height="22" fill="#ffffff" stroke="#f0e2bc"/>
       <rect x="448" y="122" width="90" height="22" fill="#ffffff" stroke="#f0e2bc"/>
@@ -303,6 +307,7 @@
       <text x="735" y="188" text-anchor="middle" font-size="10.5" fill="#7a7f95">공통 수업에서 사용한 것</text>
     </svg>
   </div>
+  <p class="mini">위 그림의 대결 기록 표는 일부 열만 보여 줍니다. 실제로는 판 번호·라운드·겨룬 두 반찬도 함께 저장합니다.</p>
   <p>여러 사람이 파일 사본을 주고받거나 파일 전체를 덮어쓰는 방식은 아래와 같은 문제가 생길 수 있습니다. 데이터베이스는 동시 처리, 조건 검색, 제약과 접근 권한을 관리하는 기능을 제공합니다. 이 기능들도 앱과 데이터베이스에 올바르게 설정해야 합니다.</p>
   <table class="daymap">
     <thead><tr><th>부족해지는 순간</th><th>CSV 파일이라면</th><th>데이터베이스라면</th></tr></thead>
@@ -348,7 +353,7 @@
     <rect x="322" y="160" width="216" height="22" fill="#d8edec" stroke="#8fc7c3"/>
     <text x="430" y="175" text-anchor="middle" font-size="11.5" font-weight="700" fill="#16635e">B의 표 · …</text>
   </g>
-  <text class="csvdb-red" opacity="1" x="672" y="150" text-anchor="middle" font-size="13" font-weight="800" fill="#e45756">A의 표이 사라졌다</text>
+  <text class="csvdb-red" opacity="1" x="672" y="150" text-anchor="middle" font-size="13" font-weight="800" fill="#e45756">A의 기록이 사라졌다</text>
   <!-- 아래 레인: 데이터베이스 테이블 -->
   <rect x="10" y="250" width="780" height="196" rx="14" fill="#fffdf6" stroke="#f0e2bc" stroke-width="1.5"/>
   <text x="26" y="276" font-size="14" font-weight="800" fill="#3ba6a0">데이터베이스 테이블</text>
@@ -417,13 +422,13 @@
   <p>교과서 26쪽의 무결성 유지·보안 강화·체계적 관리 등의 이점을 실습과 연결해 봅니다. 기록의 변경 이력을 보존하려면 별도의 이력 관리나 백업 설정도 필요합니다. 데이터를 생성·읽기·갱신·삭제하는 네 동작을 <b>CRUD</b>라고 합니다. 월드컵 앱에서는 생성과 읽기·집계를, 아래 SQL 시뮬레이터에서는 갱신과 삭제를 연습합니다.</p>
   <div class="callout tip">
     <div class="h">💡 수파베이스 — 우리가 쓸 데이터베이스</div>
-    <p>Supabase는 PostgreSQL 데이터베이스와 API·인증 등의 기능을 제공합니다. 이번에는 <b>교사 또는 모둠 대표 한 명</b>이 연습용 프로젝트와 대결 기록 표를 준비합니다. 다른 학생은 같은 프로젝트에 연결합니다. 아래 준비 절차부터 따라가면 실제로 여러 기기의 표를 한곳에 저장하고 집계할 수 있습니다.</p>
+    <p>Supabase는 PostgreSQL 데이터베이스와 API·인증 등의 기능을 제공합니다. 이번에는 <b>교사 또는 모둠 대표 한 명</b>이 연습용 프로젝트와 대결 기록 표를 준비합니다. 다른 학생은 같은 프로젝트에 연결합니다. 아래 준비 절차부터 따라가면 실제로 여러 기기의 대결 기록을 한곳에 저장하고 집계할 수 있습니다.</p>
   </div>
 
   <h2>2. 실습 — 반찬 월드컵과 대결 기록 분석 (바이브 코딩)</h2>
-  <p class="mini">대결 한 번이 한 행입니다. <code>game_id</code>(한 판을 묶는 번호) · <code>round</code>(라운드) · <code>left_menu</code> · <code>right_menu</code> · <code>winner</code> · <code>created_at</code>만 저장하며 이름·학번·비밀번호는 받지 않습니다.</p>
+  <p class="mini">대결 한 번이 한 행입니다. <code>id</code>(기록 번호) · <code>game_id</code>(한 판을 묶는 번호) · <code>round</code>(라운드) · <code>left_menu</code> · <code>right_menu</code> · <code>winner</code> · <code>created_at</code>만 저장하며 이름·학번·비밀번호는 받지 않습니다.</p>
   <p>오늘 실습에서는 좋아하는 반찬을 1대1로 겨루는 8강 토너먼트를 만듭니다. 한 판은 8강 네 번, 4강 두 번, 결승 한 번으로 모두 일곱 번 선택합니다. 각 대결의 결과는 표의 한 행으로 저장되며, 이 행들은 학급이 함께 쓰는 데이터베이스에 쌓입니다. 판이 쌓이면 학급 전체의 대결 기록이 되고, 이 기록을 뒤에서 분석합니다.</p>
-  <p>5차시에서 배운 급식 API 집계 방법을 적용하여 후보를 선정합니다. 조회 기간은 2025년 9월부터 2026년 9월까지이며, 중식 184일 동안의 자료를 대상으로 합니다. 밥과 김치와 국과 후식을 걸러 낸 뒤 남은 주요리 가운데 자주 나온 여덟 가지를 후보로 정합니다. 조회 기간이 고정되어 있어 누가 언제 뽑아도 같은 여덟 가지가 나옵니다.</p>
+  <p>5차시에서 배운 급식 API 집계 방법을 적용하여 후보를 선정합니다. 조회 기간은 2025년 9월부터 2026년 9월까지이며, 중식 184일 동안의 자료를 대상으로 합니다. 밥과 김치와 국과 후식을 걸러 낸 뒤 남은 주요리 가운데 자주 나온 여덟 가지를 후보로 정합니다. 아래 후보는 수업에 사용할 목록으로 고정합니다. 같은 기간을 다시 조회해도 원자료가 수정되거나 반찬 이름 정리·제외 기준이 다르면 결과가 달라질 수 있으므로, 비교할 때는 같은 저장본과 처리 기준을 사용합니다.</p>
   <table class="daymap">
     <thead><tr><th>#</th><th>반찬</th><th>등장</th><th>#</th><th>반찬</th><th>등장</th></tr></thead>
     <tbody>
@@ -442,7 +447,7 @@
     <li><span class="st">2. 대결 기록 표와 권한을 준비합니다</span><br>
       만든 프로젝트의 <b>SQL Editor</b>에서 새 쿼리를 엽니다. <a href="#vote-db-setup">3절의 ‘SQL · 표 만들기’ 코드 전체</a>를 복사해 붙여 넣고 <b>Run</b>을 누릅니다. 표 생성부터 권한 정책까지 한 번만 실행합니다. 이미 표가 있다는 오류가 나오면 반복 실행하거나 기존 표를 지우지 말고, 올바른 연습용 프로젝트를 열었는지 먼저 확인합니다.</li>
     <li><span class="st">3. 준비 결과를 확인합니다</span><br>
-      <b>Table Editor</b>에서 public 스키마의 <b>menu_duels</b>를 엽니다. id·menu·created_at 세 열과 RLS 활성화 상태를 확인합니다. 새로 만든 표는 0행입니다. SQL 실행 중 오류가 있었다면 그대로 앱 연결로 넘어가지 않습니다.</li>
+      <b>Table Editor</b>에서 public 스키마의 <b>menu_duels</b>를 엽니다. id·game_id·round·left_menu·right_menu·winner·created_at 일곱 열과 RLS 활성화 상태를 확인합니다. 새로 만든 표는 0행입니다. SQL 실행 중 오류가 있었다면 그대로 앱 연결로 넘어가지 않습니다.</li>
     <li><span class="st">4. 같은 프로젝트의 주소와 키를 복사합니다</span><br>
       프로젝트의 <b>Connect</b>에서 Project URL과 publishable 키를 확인합니다. 키는 <b>Settings → API Keys</b>에서도 찾을 수 있습니다. 사용할 값은 <code>https://…supabase.co</code> 형식의 프로젝트 주소와 <code>sb_publishable_…</code> 키입니다. DB 연결 문자열이나 DB 비밀번호를 넣지 않습니다. secret·service_role 키도 사용하지 않습니다. 준비 담당자가 직접 앱을 배포하거나, 앱을 만들 학생에게 이 두 값을 전달합니다.</li>
   </ol>
@@ -503,34 +508,23 @@ SUPABASE_KEY = "…"</div>
 8강 토너먼트로 진행해 줘. 판을 시작할 때 후보 순서를 섞고, 두 반찬을 나란히 보여 준 뒤 하나를 고르게 해.
 이긴 반찬만 다음 라운드로 올려서 8강 네 번, 4강 두 번, 결승 한 번으로 모두 일곱 번 고르게 해 줘.
 이름·학번·비밀번호는 받지 마.
-고를 때마다 교사가 준비한 menu_duels 표에 한 행씩 추가해 줘.
+서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 menu_duels 표에 대결을 한 행씩 저장해 줘.
 열은 game_id(한 판을 묶는 번호), round(8강·4강·결승), left_menu, right_menu, winner야.
 id와 created_at은 데이터베이스가 자동으로 채워.
 새 표를 만들지 말고 이 표에 연결해 줘. 수정·삭제 기능은 넣지 마.
 접속 정보는 비밀 금고의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘.
 판이 끝나면 우승 반찬을 보여 주고, 다시 시작하는 단추를 넣어 줘.
-저장에 실패하면 성공한 것처럼 넘어가지 말고 안내해 줘.
+저장 결과를 확인하지 못하면 대결을 진행하지 말고 재선택을 잠근 뒤 확인이 필요하다고 안내해 줘.
 필요한 라이브러리 목록도 함께 알려 줘.</pre></div>
-      <details class="sample"><summary>선생님용 — 표 만들기 SQL</summary><p class="mini">수업 전에 한 번만 실행합니다</p><div class="codewrap code"><span class="label">Supabase SQL Editor</span><pre>-- 선생님이 미리 실행합니다 (Supabase → SQL Editor)
-create table menu_duels (
-  id bigserial primary key,
-  game_id text not null,
-  round text not null,
-  left_menu text not null,
-  right_menu text not null,
-  winner text not null,
-  created_at timestamptz default now()
-);
-
-alter table menu_duels enable row level security;
-
--- 학생 앱은 추가와 읽기만 할 수 있습니다. 수정·삭제 권한은 주지 않습니다.
-create policy "누구나 추가" on menu_duels for insert to anon with check (true);
-create policy "누구나 읽기" on menu_duels for select to anon using (true);</pre></div></details>
+      <details class="sample"><summary>준비 확인 — 만든 표의 열과 행 수 읽기</summary><p class="mini">표 생성은 <a href="#vote-db-setup">3절의 SQL</a>로 한 번만 합니다. 아래는 생성 뒤 확인하는 조회 코드입니다.</p><div class="codewrap code"><span class="label">SQL · 준비 확인</span><pre>SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_schema = 'public' AND table_name = 'menu_duels'
+ORDER BY ordinal_position;
+SELECT COUNT(*) AS 대결기록수 FROM public.menu_duels;</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 한 판을 끝까지 해 본다</span><br>
       배포한 뒤 한 판을 끝까지 진행합니다. 8강 네 번, 4강 두 번, 결승 한 번으로 <b>일곱 번</b>을 고르면 우승 반찬이 나옵니다. 표에는 일곱 행이 쌓입니다. 두 번째 판을 시작하면 대진표가 다시 섞여 다른 상대를 만납니다.
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">app.py</span><button class="copy-btn">복사</button><pre># app.py — 반찬 월드컵 8강. 대결 한 번이 표의 한 행이 된다.
+      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">파일 하나로 저장합니다. 실제 공유 저장은 아래 두 기기 확인 절차로 점검합니다.</p><div class="codewrap code"><span class="label">app.py</span><button class="copy-btn">복사</button><pre># app.py — 반찬 월드컵 8강. 대결 한 번이 표의 한 행이 된다.
 import random
 import uuid
 
@@ -560,10 +554,11 @@ except Exception:
 def new_game():
     order = MENUS[:]
     random.shuffle(order)                      # 대진표를 판마다 섞는다
-    st.session_state.game_id = uuid.uuid4().hex[:8]
+    st.session_state.game_id = uuid.uuid4().hex
     st.session_state.queue = order             # 이번 라운드에서 겨룰 차례
     st.session_state.winners = []              # 이번 라운드에서 이긴 반찬
     st.session_state.size = len(order)         # 이번 라운드의 크기 (8·4·2)
+    st.session_state.save_pending = False
 
 
 if "queue" not in st.session_state:
@@ -575,20 +570,8 @@ if not st.session_state.queue and len(st.session_state.winners) &gt; 1:
     st.session_state.winners = []
     st.session_state.size = len(st.session_state.queue)
 
-if not st.session_state.queue:                 # 결승까지 끝났다
-    st.success("우승: " + st.session_state.winners[0])
-    if st.button("다시 하기"):
-        new_game()
-        st.rerun()
-    st.stop()
-
-left, right = st.session_state.queue[0], st.session_state.queue[1]
-round_name = ROUND[st.session_state.size]
-st.subheader(round_name)
-col_l, col_r = st.columns(2)
-
-
-def choose(winner):
+def choose(winner, left, right, round_name):
+    st.session_state.save_pending = True
     try:
         db.table("menu_duels").insert({
             "game_id": st.session_state.game_id,
@@ -598,36 +581,65 @@ def choose(winner):
             "winner": winner,
         }).execute()
     except Exception:
-        st.warning("저장하지 못했습니다. 다시 누르기 전에 선생님에게 확인하세요.")
-        return
+        # 통신 오류여도 DB에는 저장되었을 수 있어 재제출을 잠근다
+        st.rerun()
+    st.session_state.save_pending = False
     st.session_state.winners.append(winner)
     st.session_state.queue = st.session_state.queue[2:]
     st.rerun()
 
 
-if col_l.button(left, use_container_width=True):
-    choose(left)
-if col_r.button(right, use_container_width=True):
-    choose(right)</pre></div></details>
+if not st.session_state.queue:                 # 결승까지 끝났다
+    st.success("우승: " + st.session_state.winners[0])
+    if st.button("다시 하기"):
+        new_game()
+        st.rerun()
+else:
+    left, right = st.session_state.queue[0], st.session_state.queue[1]
+    round_name = ROUND[st.session_state.size]
+    st.subheader(round_name)
+    if st.session_state.save_pending:
+        st.warning("저장 결과를 확인하지 못했습니다. 재선택을 잠갔습니다. 선생님에게 확인하세요.")
+    col_l, col_r = st.columns(2)
+    if col_l.button(left, use_container_width=True, disabled=st.session_state.save_pending):
+        choose(left, left, right, round_name)
+    if col_r.button(right, use_container_width=True, disabled=st.session_state.save_pending):
+        choose(right, left, right, round_name)
+
+st.caption("판 번호: " + st.session_state.game_id)
+st.caption("반복 참여를 막지는 않습니다. 저장 결과 확인이 필요하면 이 판 번호를 준비 담당자에게 알려 주세요.")</pre></div></details>
     </li>
     <li><span class="st">③ 개선 프롬프트 — 학급의 대결 기록을 분석한다</span>
-      <p>한 판이 끝나면 우승 반찬 하나가 남습니다. 우승만으로는 그 반찬이 정말 인기 있는지 알 수 없습니다. 토너먼트에서는 이긴 반찬만 다음 라운드로 올라갑니다. 그 결과 인기 있는 반찬일수록 겨룬 횟수가 많아집니다. 따라서 이긴 횟수가 아니라 겨룬 횟수로 나눈 비율이 필요합니다. 이 비율을 승률이라고 합니다.</p>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>앞 코드에 학급 전체의 대결 기록을 분석하는 부분을 이어 붙여 줘.
-menu_duels 표를 모두 읽어서 반찬마다 겨룬 횟수와 이긴 횟수를 세 줘.
-겨룬 횟수는 left_menu와 right_menu 양쪽을 모두 세는 거야.
-승률은 이긴 횟수를 겨룬 횟수로 나눈 값이고, 백분율로 보여 줘.
-결승에서 이긴 횟수도 우승 횟수로 함께 세 줘.
-표는 승률이 높은 순서로 정렬하고, 승률 막대그래프도 plotly로 그려 줘.
-기록이 아직 없으면 오류 대신 안내 문구를 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># app.py에 이어 붙일 부분 — 학급의 대결 기록을 분석한다
+      <p>한 판이 끝나면 우승 반찬 하나가 남습니다. 우승만으로는 그 반찬이 정말 인기 있는지 알 수 없습니다. 토너먼트에서는 이긴 반찬만 다음 라운드로 올라갑니다. 그 결과 다음 라운드에 진출한 반찬은 겨룬 횟수가 많아집니다. 승리 수와 함께 이긴 횟수를 겨룬 횟수로 나눈 비율인 승률을 살펴봅니다. 승률도 상대와 대진표의 영향을 받으므로 학급 전체의 선호 비율로 해석하지 않습니다.</p>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>이 앱에 학급 전체의 대결 기록을 분석하는 화면을 추가해 줘.
+menu_duels에 저장된 전체 기록을 대상으로, 반찬별 대결 수·승리 수·승률·우승 횟수를 비교하게 해 줘.
+모든 후보를 표시하고 대결 기록이 없는 후보의 승률은 아직 알 수 없다고 안내해 줘.
+승률은 백분율로 보여 주고 높은 순서의 표와 막대그래프로 비교해 줘.
+기록 수와 참여 인원은 다르며, 진행 중에 남긴 대결도 집계에 포함된다고 표시해 줘.
+한 판이 끝난 화면에서도 분석을 볼 수 있게 하고 결과를 다시 불러오는 단추를 넣어 줘.
+기록이 아직 없을 때와 조회에 실패했을 때를 구분해 안내해 줘.</pre></div>
+      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다. 실제 데이터베이스의 저장·조회 결과는 배포 후 확인합니다.</p><div class="codewrap code"><span class="label">app.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># app.py에 이어 붙일 부분 — 학급의 대결 기록을 분석한다
 import pandas as pd
 import plotly.express as px
 
 st.divider()
 st.subheader("학급 대결 기록")
 
+st.button("결과 새로 불러오기")
 try:
-    records = db.table("menu_duels").select("round,left_menu,right_menu,winner").execute().data
+    # 조회 시작 때의 마지막 id까지만, 빠짐없이 나누어 읽는다
+    latest = db.table("menu_duels").select("id").order("id", desc=True).limit(1).execute().data
+    upper = latest[0]["id"] if latest else 0
+    records = []
+    after = 0
+    while after &lt; upper:
+        page = (db.table("menu_duels")
+                .select("id,game_id,round,left_menu,right_menu,winner")
+                .gt("id", after).lte("id", upper).order("id").limit(500).execute().data)
+        if not page:
+            raise RuntimeError("마지막 기록까지 조회하지 못했습니다.")
+        records.extend(page)
+        after = page[-1]["id"]
 except Exception:
     st.error("기록을 불러오지 못했습니다.")
     st.stop()
@@ -642,28 +654,49 @@ fought = pd.concat([duels["left_menu"], duels["right_menu"]]).value_counts()
 won = duels["winner"].value_counts()
 champion = duels[duels["round"] == "결승"]["winner"].value_counts()
 
-board = pd.DataFrame({"겨룬 횟수": fought, "이긴 횟수": won, "우승": champion}).fillna(0).astype(int)
-board["승률(%)"] = (board["이긴 횟수"] / board["겨룬 횟수"] * 100).round(0).astype(int)
+board = pd.DataFrame({"겨룬 횟수": fought, "이긴 횟수": won, "우승": champion}).reindex(MENUS).fillna(0).astype(int)
+board["승률(%)"] = (board["이긴 횟수"] / board["겨룬 횟수"].where(board["겨룬 횟수"] &gt; 0) * 100).round(1)
 board = board.sort_values("승률(%)", ascending=False).reset_index(names="반찬")
 
-st.caption("대결 " + str(len(duels)) + "번 · 판 " + str(duels.shape[0] // 7) + "판 기준")
+st.caption("대결 " + str(len(duels)) + "번 · 기록이 있는 판 " + str(duels["game_id"].nunique()) + "개")
+st.caption("결승 기록이 있는 판 " + str(duels.loc[duels["round"] == "결승", "game_id"].nunique()) + "개 · 진행 중 기록도 포함합니다.")
+st.caption("대결이 없는 후보의 승률은 비어 있습니다. 대결 수와 판 수는 참여 인원이 아닙니다.")
 st.dataframe(board, hide_index=True, width="stretch")
 
-fig = px.bar(board.sort_values("승률(%)"), x="승률(%)", y="반찬", orientation="h",
+fig = px.bar(board.dropna(subset=["승률(%)"]).sort_values("승률(%)"), x="승률(%)", y="반찬", orientation="h",
              text="승률(%)", color="승률(%)", color_continuous_scale="Oranges",
              title="반찬별 승률")
 fig.update_layout(coloraxis_showscale=False, yaxis_title="")
-st.plotly_chart(fig, width="stretch")</pre></div></details>
+st.plotly_chart(fig, width="stretch")
+st.caption("조회 도중 들어온 새 기록은 다시 불러오면 반영됩니다. 승률은 대진표와 반복 참여의 영향을 받습니다.")</pre></div></details>
     </li>
   </ol>
 
+  <h3>앱 배포 — 같은 대결 기록을 함께 모읍니다</h3>
+  <p>기본 실습은 모둠별 앱 하나로 진행합니다. 교사 또는 준비 담당자는 Supabase·GitHub·Streamlit Community Cloud 계정으로 준비하고, 친구들은 배포된 앱 주소를 엽니다. 각자 앱을 만들더라도 같은 프로젝트의 menu_duels 표에 연결해야 기록이 합쳐집니다.</p>
+  <ol class="steps">
+    <li><span class="st">1. 파일을 저장합니다</span><br>이번 앱용 GitHub 저장소에 app.py와 requirements.txt를 같은 폴더에 올립니다. app.py에는 ② 예시 코드와 ③ 분석 코드를 순서대로 넣습니다. requirements.txt에는 <code>streamlit</code>, <code>supabase</code>, <code>pandas</code>, <code>plotly</code>를 각각 한 줄씩 적습니다. SQL과 접속 정보는 이 파일에 넣지 않습니다.</li>
+    <li><span class="st">2. 앱을 배포합니다</span><br><a href="https://share.streamlit.io" target="_blank" rel="noopener">Streamlit Community Cloud</a>에 GitHub 계정으로 로그인하고 Create app에서 저장소·브랜치·실행 파일 app.py를 선택합니다. Advanced settings의 Secrets에 준비한 접속 정보 두 줄을 저장한 뒤 Deploy를 누릅니다.</li>
+    <li><span class="st">3. 주소를 공유합니다</span><br>두 반찬과 선택 단추가 나타나는지 확인합니다. 공유 설정에서 친구가 접근할 수 있게 하고 배포된 앱 주소를 전달합니다. Supabase 관리 화면이나 GitHub 코드 주소는 참여 주소가 아닙니다.</li>
+  </ol>
+  <p class="mini">화면이 달라졌다면 <a href="https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app" target="_blank" rel="noopener">Streamlit 배포 안내</a>를 확인합니다.</p>
+  <h3>완료 확인 — 두 기기에서 한 판씩 마칩니다</h3>
+  <ol>
+    <li>다른 친구들의 참여를 잠시 멈추고 현재 대결 기록 수를 적습니다. 서로 다른 두 기기에서 같은 앱 주소를 엽니다.</li>
+    <li>각 기기에서 일곱 번을 골라 우승 반찬이 나타나는지 확인합니다. 두 판 번호도 적습니다. 저장 확인 안내가 나오면 성공으로 간주하지 않습니다.</li>
+    <li>두 화면에서 결과 새로 불러오기를 누릅니다. 대결 기록 수가 이전보다 14 늘었는지 확인합니다.</li>
+    <li>준비 담당자는 Table Editor에서 두 판 번호를 각각 찾아 일곱 행씩 있는지, 8강 네 행·4강 두 행·결승 한 행인지 확인합니다. 앱을 다시 열고 조회해도 기록이 유지되는지 확인합니다.</li>
+  </ol>
+  <p>이 절차로 배포·공유 저장·조회 연결을 점검합니다. 같은 사람이 여러 판을 할 수 있으므로 참여 인원을 검증한 것은 아닙니다. 결과는 자동 갱신되지 않으며 다시 불러와 확인합니다.</p>
+  <div class="callout tip"><div class="h">막혔을 때 확인합니다</div><p>연결 오류는 같은 프로젝트의 주소·publishable 키와 Secrets 이름을 확인합니다. 표·권한 오류는 준비 SQL의 실행 결과를 확인하며, RLS를 끄거나 관리자 키를 넣어 해결하지 않습니다. 저장 결과가 불확실하면 반복 제출하지 말고 판 번호로 최근 기록을 확인합니다. 조회만 실패했다면 결과를 다시 불러옵니다. 라이브러리 오류는 requirements.txt의 네 줄을 확인합니다.</p></div>
+
   <div class="callout warn">
-    <div class="h">⚠️ 발견 — 이긴 횟수로 줄을 세우면 안 된다</div>
-    <p>대결 기록에서 반찬마다 겨룬 횟수가 다릅니다. 미리 돌려 본 모의 실험에서는 많은 쪽이 적은 쪽의 1.3배에서 1.8배였습니다. 이긴 반찬만 다음 라운드로 올라가 다시 겨루므로 그렇습니다. 이긴 횟수로 순위를 매기면 많이 올라간 반찬이 유리해집니다. 8차시 R²는 평균값 기준과 비교한 값이고, 12차시 향상도는 우연과 비교한 값입니다. 오늘은 이긴 횟수를 무엇으로 나눈 값인지 확인합니다.</p>
+    <div class="h">⚠️ 발견 — 승리 수와 승률을 함께 읽는다</div>
+    <p>다음 라운드로 진출한 반찬은 다시 겨루므로 반찬마다 대결 수가 다릅니다. 승리 수와 승률을 함께 비교하면서 분모가 무엇인지 확인합니다. 8차시 R²는 평균값으로 예측한 기준과 비교한 값이며, 12차시 향상도는 결론 메뉴의 전체 등장률을 기준으로 비교한 값입니다. 승률도 대진 상대·라운드·반복 참여의 영향을 받습니다. 대결 수로 나누었다고 공정한 순위나 학급 전체의 선호 비율이 보장되지는 않습니다.</p>
   </div>
   <div class="callout tip">
     <div class="h">💡 판단 — 대결 기록 수는 참여 인원이 아니다</div>
-    <p>이 앱은 사람을 구별하지 않으며, 이름과 학번을 받지 않습니다. 한 사람이 여러 판을 할 수도 있습니다. 그래서 대결 기록의 수는 참여 인원이 아닙니다. 여러 판을 한 사람의 취향이 결과를 더 크게 움직입니다. 이 한계를 알고 결과를 읽는 것이 오늘의 태도입니다.</p>
+    <p>이 앱은 사람을 구별하지 않으며, 이름과 학번을 받지 않습니다. 한 사람이 여러 판을 할 수도 있습니다. 저장 결과가 불확실할 때의 잠금도 현재 접속에서만 유지되므로 새로 접속하거나 다른 기기를 사용한 재제출까지 막지는 못합니다. 그래서 대결 기록의 수는 참여 인원이 아닙니다. 여러 판을 한 사람의 취향이 결과를 더 크게 움직입니다. 이 한계를 알고 결과를 읽는 것이 오늘의 태도입니다.</p>
   </div>
 
   <h2>3. SQL — 테이블을 다루는 언어</h2>
@@ -711,19 +744,24 @@ DELETE FROM votes_practice WHERE id = 7;</pre></div>
   <table class="daymap">
     <thead><tr><th>속성명</th><th>설명</th><th>데이터형</th><th>조건</th></tr></thead>
     <tbody>
-      <tr><td><b>id</b></td><td>표 번호</td><td>정수</td><td>자동 증가 · 기본 키</td></tr>
-      <tr><td><b>menu</b></td><td>선택한 메뉴</td><td>문자열</td><td>NULL 불가 · 세 후보 중 하나</td></tr>
+      <tr><td><b>id</b></td><td>기록 번호</td><td>정수</td><td>자동 증가 · 기본 키</td></tr>
+      <tr><td><b>game_id</b></td><td>한 판을 묶는 번호</td><td>문자열</td><td>NULL·빈 값 불가</td></tr>
+      <tr><td><b>round</b></td><td>대결 라운드</td><td>문자열</td><td>8강·4강·결승 중 하나</td></tr>
+      <tr><td><b>left_menu · right_menu</b></td><td>겨룬 두 반찬</td><td>문자열</td><td>여덟 후보 중 서로 다른 반찬 · NULL 불가</td></tr>
+      <tr><td><b>winner</b></td><td>이긴 반찬</td><td>문자열</td><td>겨룬 두 반찬 중 하나 · NULL 불가</td></tr>
       <tr><td><b>created_at</b></td><td>저장 시각</td><td>날짜·시각</td><td>현재 시각을 기본값으로 사용</td></tr>
     </tbody>
   </table>
   <div class="codewrap code"><span class="label">SQL · 표 만들기</span><pre>-- 준비 담당자가 별도 연습용 프로젝트의 SQL Editor에서 한 번 실행합니다.
 CREATE TABLE public.menu_duels (
   id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  game_id text NOT NULL,
+  game_id text NOT NULL CHECK (length(btrim(game_id)) &gt; 0),
   round text NOT NULL CHECK (round IN ('8강', '4강', '결승')),
-  left_menu text NOT NULL,
-  right_menu text NOT NULL,
+  left_menu text NOT NULL CHECK (left_menu IN ('제육볶음', '간장찜닭', '가자미순살튀김', '돈육불백', '미트볼데리야끼볶음', '수육', '진미채고추장볶음', '치즈떡닭갈비')),
+  right_menu text NOT NULL CHECK (right_menu IN ('제육볶음', '간장찜닭', '가자미순살튀김', '돈육불백', '미트볼데리야끼볶음', '수육', '진미채고추장볶음', '치즈떡닭갈비')),
   winner text NOT NULL,
+  CHECK (left_menu &lt;&gt; right_menu),
+  CHECK (winner IN (left_menu, right_menu)),
   created_at timestamptz NOT NULL DEFAULT now()
 );
 ALTER TABLE public.menu_duels ENABLE ROW LEVEL SECURITY;
@@ -741,12 +779,12 @@ CREATE POLICY "insert_practice_votes" ON public.menu_duels
   <table class="daymap">
     <thead><tr><th>설계표의 항목</th><th>SQL에서</th><th>예</th></tr></thead>
     <tbody>
-      <tr><td><b>속성명</b></td><td>열 이름</td><td>id, menu, created_at</td></tr>
+      <tr><td><b>속성명</b></td><td>열 이름</td><td>id, game_id, round, left_menu, right_menu, winner, created_at</td></tr>
       <tr><td><b>데이터형</b></td><td>text(문자열) · integer/bigint(정수) · numeric(소수) · boolean(참/거짓) · timestamptz(날짜·시각)</td><td>관객 수는 bigint, 타율은 numeric</td></tr>
       <tr><td><b>조건</b></td><td>NOT NULL(NULL 불가) · PRIMARY KEY(기본 키) · UNIQUE(중복 불가) · DEFAULT(기본값)</td><td>이메일은 UNIQUE</td></tr>
     </tbody>
   </table>
-  <p><b>기본 키</b>는 행을 유일하게 구분하는 열 또는 열의 조합입니다. 이 표에서는 자동으로 부여되는 id가 기본 키입니다. 같은 반찬이 여러 번 이겨도 각 행의 id는 다릅니다. NOT NULL은 NULL을 막지만 빈 문자열까지 막지는 않으므로, menu에는 세 후보 중 하나만 허용하는 CHECK 제약도 둡니다.</p>
+  <p><b>기본 키</b>는 행을 유일하게 구분하는 열 또는 열의 조합입니다. 이 표에서는 자동으로 부여되는 id가 기본 키입니다. 같은 반찬이 여러 번 이겨도 각 행의 id는 다릅니다. NOT NULL은 NULL을 막지만 빈 문자열까지 막지는 않습니다. 그래서 판 번호는 빈 값을 막고, 두 반찬은 서로 다른 후보이며 승자는 그 둘 중 하나인지 CHECK 제약으로 검사합니다. 이 제약만으로 대진표 전체의 올바름이나 실제 참여자를 확인할 수는 없습니다.</p>
   <details class="glossary" open>
     <summary>🔬 움직여 보기 — 설계표를 채우면 CREATE TABLE 문장이 만들어진다 (교과서 31쪽 탐구활동)</summary>
     <div class="gin">
@@ -766,7 +804,7 @@ CREATE POLICY "insert_practice_votes" ON public.menu_duels
         <div class="codewrap code sch-out"><span class="label">만들어진 SQL</span><pre class="sch-sql"></pre></div>
         <div class="callout tip sch-tip"><div class="h">💬 이 문장을 우리말로 읽으면</div><ul class="sch-read"></ul></div>
       </div>
-      <p style="font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">이 조립기는 기본 키를 열 하나로 지정하는 단순한 연습 도구입니다. menu의 CHECK 조건과 접근 권한 정책까지 만들지는 않으므로 실제 준비에는 위 설계 SQL을 함께 봅니다. 자동 증가·참조 등의 선택을 바꾸며 SQL 표현을 읽어 봅니다.</p>
+      <p style="font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">이 조립기는 기본 키를 열 하나로 지정하는 단순한 연습 도구입니다. 여러 열을 함께 검사하는 CHECK 조건과 접근 권한 정책까지 만들지는 않으므로 실제 준비에는 위 설계 SQL을 함께 봅니다. 자동 증가·참조 등의 선택을 바꾸며 SQL 표현을 읽어 봅니다.</p>
     </div>
   </details>
 <script>
@@ -792,6 +830,9 @@ CREATE POLICY "insert_practice_votes" ON public.menu_duels
       { n: "담은시각", t: "timestamptz", pk: 0, nn: 0, uq: 0, ai: 0, df: 1, ref: "" } ] },
     menu_duels: { name: "menu_duels", rows: [
       { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "game_id", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "left_menu", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "right_menu", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
       { n: "round", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
       { n: "winner", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
       { n: "created_at", t: "timestamptz", pk: 0, nn: 1, uq: 0, ai: 0, df: 1, ref: "" } ] }
@@ -881,8 +922,8 @@ CREATE POLICY "insert_practice_votes" ON public.menu_duels
   <div style="overflow-x:auto"><table class="daymap" style="min-width:560px">
     <thead><tr><th>동작</th><th>SQL</th><th>월드컵 앱 코드(파이썬)</th></tr></thead>
     <tbody>
-      <tr><td><b>읽기</b></td><td>SELECT menu FROM menu_duels</td><td><code>db.table("menu_duels").select("winner")</code></td></tr>
-      <tr><td><b>생성</b></td><td>INSERT INTO menu_duels (game_id, round, left_menu, right_menu, winner) VALUES (…)</td><td><code>db.table("menu_duels").insert({"winner": winner})</code></td></tr>
+      <tr><td><b>읽기</b></td><td>SELECT winner FROM menu_duels</td><td><code>db.table("menu_duels").select("winner")</code></td></tr>
+      <tr><td><b>생성</b></td><td>INSERT INTO menu_duels (game_id, round, left_menu, right_menu, winner) VALUES (…)</td><td><code>db.table("menu_duels").insert({"game_id": game_id, "round": round_name, "left_menu": left, "right_menu": right, "winner": winner})</code></td></tr>
       <tr><td><b>갱신 (읽기 예시)</b></td><td>UPDATE votes_practice SET menu = … WHERE id = 7</td><td><code>db.table("votes_practice").update({…}).eq("id", 7)</code></td></tr>
       <tr><td><b>삭제 (읽기 예시)</b></td><td>DELETE FROM votes_practice WHERE id = 7</td><td><code>db.table("votes_practice").delete().eq("id", 7)</code></td></tr>
     </tbody>
@@ -1332,7 +1373,7 @@ LIMIT 5;</pre></div>
       <tr><td><b>표 이름과 열 이름</b>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다</td><td>"표 이름은 menu_duels이고 열은 id · game_id · round · left_menu · right_menu · winner · created_at이야"</td></tr>
       <tr><td><b>새 표를 만들지 말 것</b></td><td>학급 공용 프로젝트에서는 학생이 표를 만들 권한이 없다</td><td>"새 표를 만들지 말고 이 표에 그대로 연결해 줘"</td></tr>
       <tr><td><b>접속 정보는 비밀 금고에</b></td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와"</td></tr>
-      <tr><td><b>무결성 조건</b></td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"후보 메뉴를 고르지 않으면 저장하지 마"</td></tr>
+      <tr><td><b>무결성 조건</b></td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"서로 다른 두 후보 중 하나를 골랐을 때만 대결을 저장해 줘"</td></tr>
     </tbody>
   </table>
   <p>팀 프로젝트에서도 앱의 목적, 실제 표의 구조, 접속 정보의 이름, 허용된 입력과 동작을 알려 줍니다. 코드를 받은 뒤에는 저장한 값과 조회·집계 결과가 맞는지 작은 예로 확인합니다.</p>
@@ -1354,7 +1395,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 174쪽</span></div>
     <p class="q">"데이터 과학은 다양한 분야의 문제를 해결하고 의사 결정을 지원하는 데 큰 도움이 되지만, 모든 문제를 해결할 수 있는 것은 아니다." <span class="src">(174쪽)</span></p>
-    <p class="t">→ 그래서 주제를 고를 때는 세 가지를 차례로 묻는다 — 데이터가 <b>충분히 있는가</b> · 그 데이터가 문제 해결에 <b>적합한가</b> · 법적·윤리적으로 <b>올바른가</b>.</p>
+    <p class="t">→ 주제를 고를 때는 데이터가 <b>충분히 있는지</b>, 그 데이터가 문제 해결에 <b>적합한지</b>, 법적·윤리적으로 <b>올바르게 사용할 수 있는지</b>를 차례로 확인합니다.</p>
   </div>
   <p>세 번째 물음의 기준 네 가지(개인정보 · 출처 · 이용 약관 · 편향)는 다음 시간 데이터 윤리에서 세웁니다. 오늘 고른 후보는 다음 시간에 그 기준으로 다시 점검합니다. 데이터가 아무리 많아도 윤리 관문을 통과하지 못하면 프로젝트 주제가 될 수 없습니다. 프로젝트의 5주 흐름, 팀 저장소, 개인의 몫은 <a href="project.html">팀 프로젝트 안내</a>에 정리되어 있습니다. 팀에서는 다음 순서로 주제 카드를 만듭니다.</p>
   <ul>
@@ -1363,7 +1404,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     <li><b>데이터 후보 3개</b> — 각 후보를 앞의 두 물음으로 먼저 판단해 보기 (교과서 176쪽 탐구활동). 세 번째 물음은 다음 시간에</li>
   </ul>
   <h2>5. 개념 정리 — 파일에서 공동 저장소로</h2>
-  <p>데이터베이스는 여러 사람이 데이터를 저장·조회하고 함께 관리할 수 있게 합니다. 오늘은 한 표를 저장하는 작업과 메뉴별 집계를 구분하고, 앱의 검사와 데이터베이스 제약·권한이 각각 어떤 역할을 하는지 확인했습니다. 데이터의 목적에 맞는 표를 설계하는 일이 앱 개발의 출발점입니다.</p>
+  <p>데이터베이스는 여러 사람이 데이터를 저장·조회하고 함께 관리할 수 있게 합니다. 오늘은 한 대결을 저장하는 작업과 반찬별 집계를 구분하고, 앱의 검사와 데이터베이스 제약·권한이 각각 어떤 역할을 하는지 확인했습니다. 데이터의 목적에 맞는 표를 설계하는 일이 앱 개발의 출발점입니다.</p>
   <p>1차시에 질문 던지기로 시작한 공통 수업이 이제 한 시간 남았습니다. 질문을 세우고 첫 앱을 배포하고(1차시), API로 데이터를 구해 오고(2·5차시), 그래프로 데이터를 읽고(3·4차시), 회귀·분류·군집·연관의 네 가지 틀로 모델을 만들고 평가했으며(6~12차시), 오늘 여럿이 함께 쓰는 저장소까지 갖췄습니다. 다음 시간에는 이 전 과정을 윤리의 기준으로 점검하고 공통 수업을 마무리합니다.</p>
 
   <h2>6. 확인 문제</h2>
