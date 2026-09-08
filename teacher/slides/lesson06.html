@@ -57,7 +57,8 @@
   .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
   .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
   .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
-  .diagram svg { width: 100%; height: auto; display: block; }
+  .diagram.short svg { max-height: var(--dh, 40vh); }
+  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
   .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
   .foot span { white-space: nowrap; }
   .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
@@ -75,55 +76,111 @@
 
 <!-- 1 표지 -->
 <section class="slide chapter on">
-  <div class="kicker">데이터 과학 · 6차시 · Ⅲ. 데이터 모델링과 평가</div>
-  <h1>회귀 — 직선을 긋다</h1>
-  <p class="sub">산점도 위 가장 잘 맞는 직선으로 관측되지 않은 값을 예측</p>
+  <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 제6강</div>
+  <h1>회귀 분석</h1>
+  <p class="sub">직선을 이용한 관계의 요약과 예측</p>
 </section>
 
 <!-- 2 상관계수 -->
 <section class="slide">
-  <div class="kicker">개념 · 교과서 70쪽</div>
-  <h2>상관계수</h2>
+  <div class="kicker">6-1 · 교과서 70쪽</div>
+  <h2>상관계수의 정의</h2>
   <blockquote style="margin-top:3vh">상관계수는 상관관계의 강도와 방향을 나타내는 정량적인 단위로, 값의 범위는 −1부터 +1 까지이다</blockquote>
   <p class="point">두 속성이 함께 변하는 정도를 수치 하나로</p>
 </section>
 
 <!-- 3 선형 회귀 -->
 <section class="slide">
-  <div class="kicker">개념 · 교과서 119쪽</div>
-  <h2>선형 회귀</h2>
+  <div class="kicker">6-2 · 교과서 119쪽</div>
+  <h2>선형 회귀의 정의</h2>
   <blockquote style="margin-top:3vh">두 가지 이상의 속성 사이에 선 모양의 관계가 있다고 가정하고 데이터를 가장 잘 대표하는 선을 찾는 분석 방법</blockquote>
   <p class="point">상관은 관계의 정도, 회귀는 직선으로 요약해 예측</p>
 </section>
 
 <!-- 4 순서 -->
 <section class="slide">
-  <div class="kicker">원리 · 순서</div>
-  <h2>산점도 → 상관계수 → 회귀선</h2>
-  <table class="mini">
-    <tr><th>단계</th><th>도구</th><th>묻는 말</th></tr>
-    <tr><td>①산점도</td><td>점 그래프</td><td>함께 움직이는 모양이 보이는가</td></tr>
-    <tr><td>②상관계수</td><td>−1 ~ +1</td><td>얼마나 강한가, 방향은</td></tr>
-    <tr><td>③회귀선</td><td>가장 잘 맞는 직선</td><td>새 값을 예측하면 얼마인가</td></tr>
-  </table>
-  <p class="point">관계가 선 모양이라는 판단이 선 뒤에 직선</p>
+  <div class="kicker">6-3 · 원리</div>
+  <h2>회귀 분석의 절차</h2>
+  <div class="diagram"><svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="분석의 순서 — 산점도, 상관계수, 회귀선 흐름도">
+<defs>
+<marker id="s4-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8a8f99"/></marker>
+</defs>
+
+<!-- ① 산점도 -->
+<rect x="20" y="12" width="190" height="134" rx="8" fill="none" stroke="#4c78a8" stroke-width="2.5"/>
+<text x="115" y="38" text-anchor="middle" font-size="16" font-weight="700" fill="#2b2d3a">① 산점도</text>
+<text x="115" y="60" text-anchor="middle" font-size="14" fill="#2b2d3a">점 그래프</text>
+<path d="M62,72 V136 H168" fill="none" stroke="#8a8f99" stroke-width="1"/>
+<g fill="#4c78a8">
+<circle cx="75" cy="124" r="4"/>
+<circle cx="88" cy="118" r="4"/>
+<circle cx="100" cy="108" r="4"/>
+<circle cx="112" cy="112" r="4"/>
+<circle cx="125" cy="96" r="4"/>
+<circle cx="140" cy="90" r="4"/>
+<circle cx="155" cy="80" r="4"/>
+</g>
+<line x1="115" y1="148" x2="115" y2="156" stroke="#4c78a8" stroke-width="1.5"/>
+<text x="115" y="170" text-anchor="middle" font-size="14" fill="#2b2d3a">함께 움직이는 모양이 보이는가</text>
+
+<!-- 화살표 1 -->
+<line x1="214" y1="79" x2="260" y2="79" stroke="#8a8f99" stroke-width="2" marker-end="url(#s4-arrow)"/>
+
+<!-- ② 상관계수 -->
+<rect x="265" y="12" width="190" height="134" rx="8" fill="none" stroke="#f4b400" stroke-width="2.5"/>
+<text x="360" y="38" text-anchor="middle" font-size="16" font-weight="700" fill="#2b2d3a">② 상관계수</text>
+<text x="360" y="60" text-anchor="middle" font-size="14" fill="#2b2d3a">−1 ~ +1</text>
+<text x="416" y="94" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">r = 0.8</text>
+<line x1="290" y1="112" x2="430" y2="112" stroke="#dfe2e8" stroke-width="6" stroke-linecap="round"/>
+<line x1="360" y1="112" x2="416" y2="112" stroke="#f4b400" stroke-width="6" stroke-linecap="round"/>
+<path d="M290,104 V120 M360,104 V120 M430,104 V120" stroke="#8a8f99" stroke-width="1.5"/>
+<circle cx="416" cy="112" r="6" fill="#f4b400" stroke="#2b2d3a" stroke-width="1.5"/>
+<text x="290" y="136" text-anchor="middle" font-size="12" fill="#8a8f99">−1</text>
+<text x="360" y="136" text-anchor="middle" font-size="12" fill="#8a8f99">0</text>
+<text x="430" y="136" text-anchor="middle" font-size="12" fill="#8a8f99">+1</text>
+<line x1="360" y1="148" x2="360" y2="156" stroke="#f4b400" stroke-width="1.5"/>
+<text x="360" y="170" text-anchor="middle" font-size="14" fill="#2b2d3a">얼마나 강한가, 방향은</text>
+
+<!-- 화살표 2 -->
+<line x1="459" y1="79" x2="505" y2="79" stroke="#8a8f99" stroke-width="2" marker-end="url(#s4-arrow)"/>
+
+<!-- ③ 회귀선 -->
+<rect x="510" y="12" width="190" height="134" rx="8" fill="none" stroke="#e45756" stroke-width="2.5"/>
+<text x="605" y="38" text-anchor="middle" font-size="16" font-weight="700" fill="#2b2d3a">③ 회귀선</text>
+<text x="605" y="60" text-anchor="middle" font-size="14" fill="#2b2d3a">가장 잘 맞는 직선</text>
+<path d="M552,72 V136 H658" fill="none" stroke="#8a8f99" stroke-width="1"/>
+<g fill="#4c78a8">
+<circle cx="565" cy="124" r="3.5"/>
+<circle cx="578" cy="118" r="3.5"/>
+<circle cx="590" cy="108" r="3.5"/>
+<circle cx="602" cy="112" r="3.5"/>
+<circle cx="615" cy="96" r="3.5"/>
+<circle cx="630" cy="90" r="3.5"/>
+<circle cx="645" cy="80" r="3.5"/>
+</g>
+<line x1="558" y1="128" x2="656" y2="74" stroke="#e45756" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="605" y1="148" x2="605" y2="156" stroke="#e45756" stroke-width="1.5"/>
+<text x="605" y="170" text-anchor="middle" font-size="14" fill="#2b2d3a">새 값을 예측하면 얼마인가</text>
+
+<!-- 맨 아래 한 줄 -->
+<line x1="20" y1="194" x2="700" y2="194" stroke="#dfe2e8" stroke-width="1"/>
+<text x="360" y="226" text-anchor="middle" font-size="16" font-weight="700" fill="#c0392b">관계가 선 모양이라는 판단이 선 뒤에 직선</text>
+</svg></div>
+  
 </section>
 
 <!-- 5 회귀 어원 -->
 <section class="slide">
-  <div class="kicker">개념 · 이름의 유래</div>
-  <h2>회귀(回歸)</h2>
-  <ul class="facts">
-    <li>回歸: 돌아올 회, 돌아갈 귀</li>
-    <li>regression: 라틴어 regredi(re 뒤로 + gradi 걷다)</li>
-  </ul>
-  <p class="point">직선을 긋는 계산에 왜 되돌아감이라는 이름인가</p>
+  <div class="kicker">6-4 · 개념</div>
+  <h2>회귀의 어원과 유래</h2>
+  <div class="diagram"><svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="회귀의 어원: 한자 回歸와 영어 regression 모두 되돌아감이라는 뜻"><defs><marker id="s5-arrow" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8a8f99"/></marker></defs><text x="180" y="102" text-anchor="middle" font-size="64" font-weight="700" fill="#4c78a8">回歸</text><text x="180" y="140" text-anchor="middle" font-size="15" fill="#2b2d3a">돌아올 <tspan font-weight="700" fill="#4c78a8">회</tspan> · 돌아갈 <tspan font-weight="700" fill="#4c78a8">귀</tspan></text><text x="360" y="94" text-anchor="middle" font-size="40" fill="#8a8f99">=</text><text x="360" y="140" text-anchor="middle" font-size="16" font-weight="700" fill="#2b2d3a">되돌아감</text><text x="540" y="98" text-anchor="middle" font-size="32" font-weight="700" fill="#4c78a8">regression</text><text x="540" y="140" text-anchor="middle" font-size="15" fill="#2b2d3a"><tspan font-weight="700" fill="#4c78a8">re</tspan><tspan fill="#8a8f99">(뒤로)</tspan> + <tspan font-weight="700" fill="#4c78a8">gradi</tspan><tspan fill="#8a8f99">(걷다)</tspan></text><line x1="497" y1="167" x2="519" y2="167" stroke="#8a8f99" stroke-width="2" marker-end="url(#s5-arrow)"/><text x="529" y="172" font-size="15" font-weight="700" fill="#4c78a8">regredi</text><line x1="40" y1="198" x2="680" y2="198" stroke="#dfe2e8" stroke-width="1.5"/><text x="360" y="234" text-anchor="middle" font-size="16" font-weight="700" fill="#c0392b">직선을 긋는 계산에 왜 되돌아감이라는 이름인가</text></svg></div>
+  
 </section>
 
 <!-- 6 골턴 -->
 <section class="slide">
-  <div class="kicker">개념 · 1886년 프랜시스 골턴</div>
-  <h2>평범함으로의 회귀</h2>
+  <div class="kicker">6-5 · 개념</div>
+  <h2>골턴의 발견(1886) — 평범함으로의 회귀</h2>
   <div class="withimg"><div class="txt"><ul class="facts">
     <li>부모 205쌍, 자녀 928명의 키 조사</li>
     <li>키가 아주 큰 부모의 자녀는 부모보다 작고, 아주 작은 부모의 자녀는 부모보다 큼</li>
@@ -133,8 +190,8 @@
 
 <!-- 7 골턴 그림 -->
 <section class="slide">
-  <div class="kicker">그림 · 부모의 키와 자녀의 키</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">부모와 자녀 키가 같다면 그어질 점선보다 완만한 회귀선, 그 차이만큼 평균 쪽으로</h2>
+  <div class="kicker">6-5 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">골턴의 발견 — 부모와 자녀의 키 분포</h2>
   <div class="diagram"><svg viewBox="0 0 840 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부모의 키와 자녀의 키를 나타낸 산점도. 두 키가 같다면 나타났을 점선보다 실제 회귀선의 기울기가 완만해, 부모 키가 평균에서 멀수록 자녀 키는 평균 쪽에 더 가깝게 놓인다는 그림">
     <defs>
       <marker id="l6g-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e45756"/></marker>
@@ -214,16 +271,16 @@
 
 <!-- 8 이름만 남았다 -->
 <section class="slide">
-  <div class="kicker">개념 · 오늘의 회귀</div>
-  <h2>되돌아감과 무관해진 이름</h2>
+  <div class="kicker">6-6 · 개념</div>
+  <h2>오늘날의 회귀</h2>
   <p class="point" style="margin-top:2.4vh">데이터의 관계를 선으로 요약해 값을 예측하는 방법 전체</p>
   <p class="small">평균으로 되돌아가는 현상은 지금도 '평균으로의 회귀'라 부름. 예: 시험을 유난히 잘 본 다음 평소 점수</p>
 </section>
 
 <!-- 9 상관과 인과 사례 -->
 <section class="slide">
-  <div class="kicker">원리 · 상관은 인과가 아니다</div>
-  <h2>실제로 발표된 분석의 혼동</h2>
+  <div class="kicker">6-7 · 원리</div>
+  <h2>상관과 인과의 구분</h2>
   <table class="mini">
     <tr><th>사례</th><th>관찰된 상관</th><th>실제로는</th></tr>
     <tr><td>초콜릿 소비량과 노벨상 수상자 수</td><td>23개국에서 0.79</td><td>국가의 소득 수준이 두 값 모두와 관련</td></tr>
@@ -235,45 +292,76 @@
 
 <!-- 9-2 그림: 초콜릿과 노벨상 -->
 <section class="slide">
-  <div class="kicker">그림 · 초콜릿 소비량과 노벨상 수상자 수</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">23개국, 상관계수 0.79</h2>
+  <div class="kicker">6-7 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">사례 — 초콜릿 소비량과 노벨상 수상자 수</h2>
   <div class="shot tall"><img src="img/choco_nobel_flags.jpg" alt="가로축 1인당 초콜릿 소비량, 세로축 인구 1천만 명당 노벨상 수상자 수. 스위스와 스웨덴이 오른쪽 위, 중국과 브라질이 왼쪽 아래에 국기로 표시된 산점도"></div>
   <p class="src">Messerli(2012) · 그림: EU 데이터 시각화 가이드</p>
 </section>
 
 <!-- 9-3 그림: 공통 요인 -->
 <section class="slide">
-  <div class="kicker">그림 · 공통 요인</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">국민소득이라는 공통 요인</h2>
+  <div class="kicker">6-7 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">사례 — 공통 요인으로서의 국민소득</h2>
   <div class="shot wide"><img src="img/choco_nobel_gdp.jpg" alt="같은 나라들을 가로축 1인당 국민소득으로 다시 그린 산점도 두 개. 왼쪽은 노벨상 수상자 수, 오른쪽은 초콜릿 소비량. 둘 다 오른쪽 위로 향한다"></div>
   <p class="src">왼쪽: 국민소득과 노벨상 수상자 수 · 오른쪽: 국민소득과 초콜릿 소비량 · 둘 다 양의 상관 · EU 데이터 시각화 가이드</p>
 </section>
 
 <!-- 10 기울기와 편향 -->
 <section class="slide">
-  <div class="kicker">원리 · 교과서 119쪽</div>
-  <h2>직선을 정하는 숫자 두 개</h2>
-  <ul class="facts">
-    <li>기울기(가중치): 독립 변수 1 증가 시 종속 변수의 변화량</li>
-    <li>편향: 직선의 출발 높이</li>
-  </ul>
-  <p class="point">연도-기온 직선의 기울기 × 100 = 100년에 몇 도</p>
-  <p class="small">예측하려는 값이 종속 변수, 예측에 쓰는 값이 독립 변수. 연도가 독립, 연평균기온이 종속</p>
+  <div class="kicker">6-8 · 교과서 119쪽</div>
+  <h2>기울기와 편향</h2>
+  <div class="diagram"><svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="기울기와 편향 — 직선을 정하는 숫자 두 개">
+  <defs>
+    <marker id="s12-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#2b2d3a"/>
+    </marker>
+  </defs>
+
+  <!-- 좌표축 -->
+  <line x1="60" y1="260" x2="440" y2="260" stroke="#2b2d3a" stroke-width="1.5" marker-end="url(#s12-arrow)"/>
+  <line x1="80" y1="280" x2="80" y2="40" stroke="#2b2d3a" stroke-width="1.5" marker-end="url(#s12-arrow)"/>
+  <text x="440" y="282" text-anchor="end" font-size="14" fill="#2b2d3a">독립 변수(연도)</text>
+  <text x="90" y="44" font-size="14" fill="#2b2d3a">종속 변수(연평균기온)</text>
+
+  <!-- 회귀 직선 -->
+  <line x1="55" y1="203.6" x2="430" y2="75" stroke="#4c78a8" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- 기울기 삼각형 (가로 1, 세로 상승분) -->
+  <polygon points="240,140.1 340,140.1 340,105.9" fill="#f4b400" fill-opacity="0.35" stroke="#f4b400" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M332,140.1 L332,132.1 L340,132.1" fill="none" stroke="#8a8f99" stroke-width="1"/>
+  <text x="290" y="158" text-anchor="middle" font-size="14" fill="#2b2d3a">1</text>
+  <text x="348" y="128" font-size="14" font-weight="700" fill="#4c78a8">기울기</text>
+  <text x="310" y="178" font-size="14" fill="#2b2d3a"><tspan font-weight="700" fill="#4c78a8">기울기(가중치)</tspan> — 독립 변수 1 증가 시 변화량</text>
+
+  <!-- 편향 점 (세로축과 만나는 점) -->
+  <circle cx="80" cy="195" r="6" fill="#e45756" stroke="#ffffff" stroke-width="1.5"/>
+  <line x1="86" y1="200" x2="104" y2="222" stroke="#8a8f99" stroke-width="1"/>
+  <text x="106" y="236" font-size="14" fill="#2b2d3a"><tspan font-weight="700" fill="#e45756">편향</tspan> — 직선의 출발 높이</text>
+
+  <!-- 식 -->
+  <rect x="460" y="22" width="240" height="36" rx="6" fill="#ffffff" stroke="#dfe2e8"/>
+  <text x="580" y="46" text-anchor="middle" font-size="16" font-weight="700" fill="#2b2d3a">y = <tspan fill="#4c78a8">기울기</tspan> × x + <tspan fill="#e45756">편향</tspan></text>
+
+  <!-- 아래 한 줄 -->
+  <line x1="40" y1="292" x2="680" y2="292" stroke="#dfe2e8" stroke-width="1"/>
+  <text x="360" y="313" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">연도-기온 직선의 기울기 × 100 = <tspan fill="#c0392b">100년에 몇 도</tspan></text>
+</svg></div>
+  
+  
 </section>
 
 <!-- 11 가장 잘 맞는 직선 -->
 <section class="slide">
-  <div class="kicker">원리 · 교과서 120쪽</div>
-  <h2>무수한 직선 가운데 고르는 기준</h2>
+  <div class="kicker">6-9 · 교과서 120쪽</div>
+  <h2>최적 직선의 기준 — 오차</h2>
   <blockquote style="margin-top:3vh">실젯값과 예측값의 차이가 작은 쪽을 고른다</blockquote>
-  <p class="point">그 차이 = 오차. 오차가 가장 작은 기울기·편향 조합을 찾는 계산 = 학습</p>
-  <p class="small">오차 판정 원리는 8차시 손계산</p>
+  <div class="diagram"><svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="점 7개와 후보 직선 두 개, 후보 B에 대한 세로 오차 선분과 오차의 정의"><defs><marker id="s13-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8f99"/></marker></defs><line x1="60" y1="240" x2="455" y2="240" stroke="#8a8f99" stroke-width="1.5" marker-end="url(#s13-arrow)"/><line x1="60" y1="240" x2="60" y2="32" stroke="#8a8f99" stroke-width="1.5" marker-end="url(#s13-arrow)"/><text x="452" y="258" font-size="13" fill="#8a8f99" text-anchor="middle">x</text><text x="46" y="40" font-size="13" fill="#8a8f99" text-anchor="middle">y</text><line x1="70" y1="206" x2="440" y2="100" stroke="#8a8f99" stroke-width="2" stroke-dasharray="7 5"/><text x="448" y="105" font-size="14" font-weight="700" fill="#8a8f99">후보 A</text><line x1="70" y1="216" x2="440" y2="68" stroke="#e45756" stroke-width="2.5"/><text x="448" y="73" font-size="14" fill="#2b2d3a"><tspan fill="#c0392b" font-weight="700">후보 B</tspan> (오차가 더 작음)</text><g stroke="#e45756" stroke-width="1.5"><line x1="100" y1="192" x2="100" y2="204"/><line x1="150" y1="196" x2="150" y2="184"/><line x1="200" y1="150" x2="200" y2="164"/><line x1="250" y1="153" x2="250" y2="144"/><line x1="300" y1="109" x2="300" y2="124"/><line x1="350" y1="117" x2="350" y2="104"/><line x1="400" y1="76" x2="400" y2="84"/></g><text x="193" y="162" font-size="12" fill="#c0392b" text-anchor="end">오차</text><g fill="#4c78a8"><circle cx="100" cy="192" r="5"/><circle cx="150" cy="196" r="5"/><circle cx="200" cy="150" r="5"/><circle cx="250" cy="153" r="5"/><circle cx="300" cy="109" r="5"/><circle cx="350" cy="117" r="5"/><circle cx="400" cy="76" r="5"/></g><rect x="482" y="24" width="216" height="30" rx="6" fill="none" stroke="#dfe2e8" stroke-width="1.5"/><text x="590" y="44" font-size="15" font-weight="700" fill="#2b2d3a" text-anchor="middle">오차 = 실젯값 − 예측값</text><text x="590" y="128" font-size="13" fill="#8a8f99" text-anchor="middle">세로 선분 하나의 뜻</text><line x1="505" y1="212" x2="690" y2="188" stroke="#e45756" stroke-width="2"/><text x="690" y="182" font-size="12" fill="#e45756" text-anchor="end">예측 직선</text><line x1="600" y1="150" x2="600" y2="200" stroke="#e45756" stroke-width="1.5"/><circle cx="600" cy="200" r="4" fill="#f7f3e8" stroke="#e45756" stroke-width="1.5"/><circle cx="600" cy="150" r="5" fill="#4c78a8"/><text x="590" y="154" font-size="13" fill="#2b2d3a" text-anchor="end">실젯값</text><text x="590" y="180" font-size="13" font-weight="700" fill="#c0392b" text-anchor="end">오차</text><text x="600" y="222" font-size="13" fill="#2b2d3a" text-anchor="middle">예측값</text><line x1="60" y1="262" x2="660" y2="262" stroke="#dfe2e8" stroke-width="1.5"/><text x="360" y="286" font-size="15" font-weight="700" fill="#2b2d3a" text-anchor="middle">오차가 가장 작은 기울기·편향 조합을 찾는 계산 <tspan fill="#c0392b">= 학습</tspan></text><text x="360" y="308" font-size="12" fill="#8a8f99" text-anchor="middle">(교과서 120쪽 · 오차 판정 손계산은 8차시)</text></svg></div>
 </section>
 
 <!-- 12 모델 -->
 <section class="slide">
-  <div class="kicker">개념 · 모델</div>
-  <h2>목적에 필요한 것만 남긴 축소판</h2>
+  <div class="kicker">6-10 · 개념</div>
+  <h2>모델의 정의</h2>
   <div class="withimg"><div class="txt"><ul class="facts">
     <li>라틴어 modulus(작은 척도) → 이탈리아어 modello(건축 축소 모형)</li>
     <li>건축 모형: 벽돌 개수·배관은 빼고 형태와 비례만</li>
@@ -284,34 +372,115 @@
 
 <!-- 13 모델링 3단계 -->
 <section class="slide">
-  <div class="kicker">원리 · 모델링</div>
-  <h2>모델을 만드는 세 단계</h2>
-  <table class="mini">
-    <tr><th>단계</th><th>하는 일</th><th>오늘의 경우</th></tr>
-    <tr><td>①형태 정하기</td><td>관계를 어떤 모양으로 요약할지</td><td>직선 하나</td></tr>
-    <tr><td>②학습</td><td>데이터에 가장 잘 맞는 숫자 찾기</td><td>오차가 가장 작은 기울기와 편향</td></tr>
-    <tr><td>③평가</td><td>얼마나 믿을 수 있는지 재기</td><td>예측값과 실젯값의 차이</td></tr>
-  </table>
-  <p class="small">교과서 14쪽 6단계 가운데 네 번째 모델링하기, 다섯 번째 모델 평가하기, 여섯 번째 모델 활용하기</p>
+  <div class="kicker">6-11 · 원리</div>
+  <h2>모델링의 단계</h2>
+  <div class="diagram"><svg viewBox="0 0 720 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="모델링의 세 단계 흐름도: ① 형태 정하기, ② 학습, ③ 평가. 평가가 나쁘면 학습으로 되돌아가는 되돌이 화살표 포함">
+  <defs>
+    <marker id="s15-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#8a8f99"/></marker>
+    <marker id="s15-arrow-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#e45756"/></marker>
+  </defs>
+
+  <!-- ① 형태 정하기 -->
+  <rect x="22" y="30" width="196" height="162" rx="8" fill="#ffffff"/>
+  <path d="M30,30 h180 a8,8 0 0 1 8,8 v20 h-196 v-20 a8,8 0 0 1 8,-8 z" fill="#4c78a8" fill-opacity="0.22"/>
+  <rect x="22" y="30" width="196" height="162" rx="8" fill="none" stroke="#4c78a8" stroke-width="2"/>
+  <text x="120" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">① 형태 정하기</text>
+  <text x="120" y="77" text-anchor="middle" font-size="13" fill="#8a8f99">하는 일</text>
+  <text x="120" y="96" text-anchor="middle" font-size="14" fill="#2b2d3a">관계를 어떤 모양으로</text>
+  <text x="120" y="114" text-anchor="middle" font-size="14" fill="#2b2d3a">요약할지</text>
+  <line x1="36" y1="125" x2="204" y2="125" stroke="#dfe2e8" stroke-width="1"/>
+  <text x="120" y="143" text-anchor="middle" font-size="13" fill="#8a8f99">오늘의 경우</text>
+  <text x="120" y="171" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">직선 하나</text>
+
+  <!-- ② 학습 -->
+  <rect x="252" y="30" width="196" height="162" rx="8" fill="#ffffff"/>
+  <path d="M260,30 h180 a8,8 0 0 1 8,8 v20 h-196 v-20 a8,8 0 0 1 8,-8 z" fill="#f4b400" fill-opacity="0.22"/>
+  <rect x="252" y="30" width="196" height="162" rx="8" fill="none" stroke="#f4b400" stroke-width="2"/>
+  <text x="350" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">② 학습</text>
+  <text x="350" y="77" text-anchor="middle" font-size="13" fill="#8a8f99">하는 일</text>
+  <text x="350" y="96" text-anchor="middle" font-size="14" fill="#2b2d3a">데이터에 가장 잘 맞는</text>
+  <text x="350" y="114" text-anchor="middle" font-size="14" fill="#2b2d3a">숫자 찾기</text>
+  <line x1="266" y1="125" x2="434" y2="125" stroke="#dfe2e8" stroke-width="1"/>
+  <text x="350" y="143" text-anchor="middle" font-size="13" fill="#8a8f99">오늘의 경우</text>
+  <text x="350" y="162" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">오차가 가장 작은</text>
+  <text x="350" y="180" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">기울기와 편향</text>
+
+  <!-- ③ 평가 -->
+  <rect x="502" y="30" width="196" height="162" rx="8" fill="#ffffff"/>
+  <path d="M510,30 h180 a8,8 0 0 1 8,8 v20 h-196 v-20 a8,8 0 0 1 8,-8 z" fill="#54a24b" fill-opacity="0.22"/>
+  <rect x="502" y="30" width="196" height="162" rx="8" fill="none" stroke="#54a24b" stroke-width="2"/>
+  <text x="600" y="49" text-anchor="middle" font-size="15" font-weight="700" fill="#2b2d3a">③ 평가</text>
+  <text x="600" y="77" text-anchor="middle" font-size="13" fill="#8a8f99">하는 일</text>
+  <text x="600" y="105" text-anchor="middle" font-size="14" fill="#2b2d3a">얼마나 믿을 수 있는지 재기</text>
+  <line x1="516" y1="125" x2="684" y2="125" stroke="#dfe2e8" stroke-width="1"/>
+  <text x="600" y="143" text-anchor="middle" font-size="13" fill="#8a8f99">오늘의 경우</text>
+  <text x="600" y="171" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">예측값과 실젯값의 차이</text>
+
+  <!-- 앞으로 가는 화살표 -->
+  <line x1="221" y1="118" x2="249" y2="118" stroke="#8a8f99" stroke-width="2" marker-end="url(#s15-arrow)"/>
+  <line x1="451" y1="118" x2="499" y2="118" stroke="#8a8f99" stroke-width="2" marker-end="url(#s15-arrow)"/>
+
+  <!-- 되돌이 화살표 (③ → ②) -->
+  <path d="M502,100 C502,78 484,78 452,78" fill="none" stroke="#e45756" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#s15-arrow-back)"/>
+  <text x="477" y="68" text-anchor="middle" font-size="13" font-weight="700" fill="#c0392b">다시</text>
+
+  <!-- 교과서 대응 -->
+  <line x1="22" y1="212" x2="698" y2="212" stroke="#dfe2e8" stroke-width="1"/>
+  <text x="360" y="236" text-anchor="middle" font-size="13" fill="#2b2d3a"><tspan fill="#8a8f99">교과서 14쪽 6단계 중</tspan> ④ 모델링하기 · ⑤ 모델 평가하기 · ⑥ 모델 활용하기</text>
+</svg></div>
+  
 </section>
 
 <!-- 14 기계학습 -->
 <section class="slide">
-  <div class="kicker">개념 · 교과서 11쪽</div>
-  <h2>기계학습 — 기계가 데이터로부터 배움</h2>
-  <table class="mini">
-    <tr><th>낱말</th><th>무엇을 가리키나</th><th>오늘의 경우</th></tr>
-    <tr><td>기계학습</td><td>데이터에서 규칙을 찾는 방법 전체</td><td>직선의 숫자를 계산이 찾게 한 방식</td></tr>
-    <tr><td>학습</td><td>모델을 이루는 숫자를 찾는 계산</td><td>오차가 가장 작아지는 기울기와 편향</td></tr>
-    <tr><td>모델</td><td>학습이 끝나고 남는 결과물</td><td>기울기와 편향으로 정해진 직선</td></tr>
-  </table>
-  <p class="point">예전: 사람이 규칙을 하나하나 코드로. 지금: 숫자를 계산이 찾음</p>
+  <div class="kicker">6-12 · 교과서 11쪽</div>
+  <h2>기계학습·학습·모델의 층위</h2>
+  <div class="diagram"><svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="기계학습·학습·모델의 층위 — 기계학습 안에 학습, 학습의 결과가 모델">
+  <defs>
+    <marker id="s16-arrow" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#2b2d3a"/>
+    </marker>
+    <marker id="s16-arrow-gray" viewBox="0 0 8 8" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#8a8f99"/>
+    </marker>
+  </defs>
+
+  <!-- 예전 방식 → 지금 (바깥 왼쪽 위) -->
+  <rect x="12" y="10" width="324" height="34" rx="6" fill="#8a8f99" fill-opacity="0.08" stroke="#8a8f99" stroke-width="1.5"/>
+  <text x="174" y="32" font-size="13" text-anchor="middle" fill="#2b2d3a">예전 방식 — 사람이 규칙을 하나하나 코드로</text>
+  <line x1="342" y1="27" x2="362" y2="27" stroke="#8a8f99" stroke-width="2" marker-end="url(#s16-arrow-gray)"/>
+  <rect x="372" y="10" width="214" height="34" rx="6" fill="#4c78a8" fill-opacity="0.08" stroke="#4c78a8" stroke-width="1.5"/>
+  <text x="479" y="32" font-size="13" text-anchor="middle" fill="#2b2d3a">지금 — 숫자를 계산이 찾음</text>
+
+  <!-- 기계학습 (바깥 큰 상자) -->
+  <rect x="12" y="56" width="696" height="230" rx="14" fill="none" stroke="#4c78a8" stroke-width="2"/>
+  <text x="28" y="82" font-size="16" font-weight="700" fill="#2b2d3a"><tspan fill="#4c78a8">기계학습</tspan> — 데이터에서 규칙을 찾는 방법 전체</text>
+  <text x="28" y="103" font-size="13" fill="#8a8f99">오늘의 경우 · <tspan fill="#c0392b">직선의 숫자를 계산이 찾게 한 방식</tspan></text>
+
+  <!-- 학습 (노랑) -->
+  <rect x="52" y="132" width="270" height="70" rx="8" fill="#f4b400" fill-opacity="0.18" stroke="#f4b400" stroke-width="2"/>
+  <text x="187" y="158" font-size="16" font-weight="700" text-anchor="middle" fill="#2b2d3a">학습</text>
+  <text x="187" y="184" font-size="14" text-anchor="middle" fill="#2b2d3a">모델을 이루는 숫자를 찾는 계산</text>
+  <text x="187" y="226" font-size="12" text-anchor="middle" fill="#8a8f99">오늘의 경우</text>
+  <text x="187" y="248" font-size="14" text-anchor="middle" fill="#c0392b">오차가 가장 작아지는 기울기와 편향</text>
+
+  <!-- 학습 → 모델 -->
+  <line x1="326" y1="167" x2="392" y2="167" stroke="#2b2d3a" stroke-width="2" marker-end="url(#s16-arrow)"/>
+
+  <!-- 모델 (초록) -->
+  <rect x="398" y="132" width="270" height="70" rx="8" fill="#54a24b" fill-opacity="0.16" stroke="#54a24b" stroke-width="2"/>
+  <text x="533" y="158" font-size="16" font-weight="700" text-anchor="middle" fill="#2b2d3a">모델</text>
+  <text x="533" y="184" font-size="14" text-anchor="middle" fill="#2b2d3a">학습이 끝나고 남는 결과물</text>
+  <text x="533" y="226" font-size="12" text-anchor="middle" fill="#8a8f99">오늘의 경우</text>
+  <text x="533" y="248" font-size="14" text-anchor="middle" fill="#c0392b">기울기와 편향으로 정해진 직선</text>
+</svg></div>
+  
 </section>
 
 <!-- 15 사람의 판단 -->
 <section class="slide">
-  <div class="kicker">원리 · 남는 일</div>
-  <h2>기계가 학습해도 사람이 정하는 것</h2>
+  <div class="kicker">6-13 · 원리</div>
+  <h2>사람이 판단하는 것</h2>
   <ul class="facts">
     <li>어떤 데이터를 쓸지</li>
     <li>믿을 수 없는 값을 어떻게 걸러 낼지</li>
@@ -322,21 +491,31 @@
 
 <!-- 16 데이터의 사정 -->
 <section class="slide">
-  <div class="kicker">실습 · 직선을 긋기 전에</div>
-  <h2>연평균이라 부를 수 없는 값 걸러 내기</h2>
+  <div class="kicker">6-14 · 실습</div>
+  <h2>전처리 — 관측일 기준 필터</h2>
   <ul class="facts">
     <li>한국전쟁 구간: 관측 중단, 기록 없음</li>
-    <li>1953년: 겨울 31일만 관측, 연평균 0.6℃</li>
     <li>기준: 진행 중인 올해 제외, 관측일 300일 미만 제외</li>
-    <li>남은 114개 연도(1908~2025)가 학습 재료</li>
   </ul>
-  <p class="point">믿을 수 없는 값을 거르는 것 = 전처리. 결론에 불리한 값을 고르는 것 = 조작</p>
+  <div class="diagram short" style="--dh:36vh"><svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서울 기온 데이터의 연도별 유효 관측일 수 막대. 대부분 360일 안팎이고 한국전쟁 구간은 비거나 짧으며 1953년은 31일뿐이다. 300일 기준선 아래 막대는 빨간색, 기준을 넘는 114개 해가 학습 재료">
+  <line x1="60" y1="250" x2="700" y2="250" stroke="#c9ccd4" stroke-width="1.5"/>
+  <line x1="60" y1="69.7" x2="700" y2="69.7" stroke="#e45756" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="700" y="63.7" font-size="12" font-weight="700" fill="#c0392b" text-anchor="end">관측일 300일 기준</text>
+  <rect x="60.0" y="194.7" width="4.7" height="55.3" fill="#e45756" opacity="0.95"/><rect x="65.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="70.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="76.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="81.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="86.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="92.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="97.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="102.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="108.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="113.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="118.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="124.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="129.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="134.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="140.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="145.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="150.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="156.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="161.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="166.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="172.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="177.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="182.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="188.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="193.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="198.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="204.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="209.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="214.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="220.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="225.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="230.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="236.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="241.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="246.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="252.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="257.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="262.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="268.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="273.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="278.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="284.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="289.3" y="103.9" width="4.7" height="146.1" fill="#e45756" opacity="0.95"/><rect x="294.7" y="250.0" width="4.7" height="0.0" fill="#e45756" opacity="0.95"/><rect x="300.0" y="250.0" width="4.7" height="0.0" fill="#e45756" opacity="0.95"/><rect x="305.3" y="231.4" width="4.7" height="18.6" fill="#e45756" opacity="0.95"/><rect x="310.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="316.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="321.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="326.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="332.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="337.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="342.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="348.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="353.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="358.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="364.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="369.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="374.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="380.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="385.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="390.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="396.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="401.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="406.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="412.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="417.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="422.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="428.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="433.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="438.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="444.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="449.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="454.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="460.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="465.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="470.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="476.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="481.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="486.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="492.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="497.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="502.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="508.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="513.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="518.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="524.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="529.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="534.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="540.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="545.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="550.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="556.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="561.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="566.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="572.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="577.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="582.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="588.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="593.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="598.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="604.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="609.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="614.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="620.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="625.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="630.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="636.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="641.3" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="646.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="652.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="657.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="662.7" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="668.0" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="673.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="678.7" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="684.0" y="30.0" width="4.7" height="220.0" fill="#4c78a8" opacity="0.55"/><rect x="689.3" y="30.6" width="4.7" height="219.4" fill="#4c78a8" opacity="0.55"/><rect x="694.7" y="99.7" width="4.7" height="150.3" fill="#e45756" opacity="0.95"/>
+  <text x="308.0" y="223.4" font-size="12" font-weight="700" fill="#c0392b" text-anchor="middle">1953년 · 31일</text>
+  <text x="294.7" y="268" font-size="11.5" fill="#8a8f99" text-anchor="middle">한국전쟁</text>
+  <text x="68.0" y="284" font-size="11.5" fill="#8a8f99" text-anchor="middle">1908</text><text x="185.3" y="284" font-size="11.5" fill="#8a8f99" text-anchor="middle">1930</text><text x="398.7" y="284" font-size="11.5" fill="#8a8f99" text-anchor="middle">1970</text><text x="505.3" y="284" font-size="11.5" fill="#8a8f99" text-anchor="middle">1990</text><text x="612.0" y="284" font-size="11.5" fill="#8a8f99" text-anchor="middle">2010</text><text x="692.0" y="284" font-size="11.5" fill="#8a8f99" text-anchor="middle">2025</text>
+  <text x="52" y="34.6" font-size="11" fill="#8a8f99" text-anchor="end">365일</text>
+  <text x="52" y="73.7" font-size="11" fill="#8a8f99" text-anchor="end">300일</text>
+  <text x="52" y="254" font-size="11" fill="#8a8f99" text-anchor="end">0</text>
+  <text x="60" y="292" font-size="11.5" fill="#8a8f99">기준을 넘는 파란 막대 114개 해(1908~2025)가 학습 재료 · 빨간 막대는 제외</text>
+</svg></div>
 </section>
 
 <!-- 17 프롬프트 -->
 <section class="slide">
-  <div class="kicker">실습 · ① 샘플 프롬프트</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">데이터의 사정이 들어 있는 프롬프트</h2>
+  <div class="kicker">6-15 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성</h2>
   <div class="prompt">"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.<br>
 서울 기온 데이터로 연도별 평균기온을 구하되, 아직 진행 중인 올해와 관측일이 300일이 안 되는 해는 빼 줘.<br>
 남은 연평균기온에 가장 잘 맞는 회귀 직선을 구해서 산점도 위에 그려 주고,<br>
@@ -346,63 +525,149 @@
 
 <!-- 18 발견 -->
 <section class="slide">
-  <div class="kicker">발견 · 학습 데이터의 범위</div>
-  <h2>같은 데이터, 다른 기울기</h2>
-  <table class="mini">
-    <tr><th>학습에 사용한 범위</th><th>기울기 (℃/100년)</th><th>읽기</th></tr>
-    <tr><td>전체 114개 해</td><td>+2.60</td><td>한 세기를 관통하는 완만한 상승</td></tr>
-    <tr><td>최근 50년</td><td>+3.96</td><td>상승이 빨라짐</td></tr>
-    <tr><td>최근 30년</td><td>+3.82</td><td>데이터가 줄수록 값이 출렁임</td></tr>
-    <tr><td>최근 20년</td><td>+8.14</td><td>전체 기간의 3배가 넘는 가파름</td></tr>
-  </table>
+  <div class="kicker">6-16 · 발견</div>
+  <h2>학습 범위와 기울기의 관계</h2>
+  <div class="diagram"><svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 범위별 기울기 비교 막대 그래프: 전체 114개 해 +2.60, 최근 50년 +3.96, 최근 30년 +3.82, 최근 20년 +8.14 ℃/100년">
+  <!-- 비율 메모 (오른쪽 위) -->
+  <rect x="456" y="12" width="252" height="30" rx="6" fill="none" stroke="#dfe2e8" stroke-width="1.5"/>
+  <text x="468" y="32" font-size="14" font-weight="700" fill="#c0392b">최근 20년 ÷ 전체 = 3.1배</text>
+
+  <!-- 행 1: 전체 114개 해 -->
+  <text x="140" y="79" font-size="14" font-weight="700" fill="#2b2d3a" text-anchor="end">전체 114개 해</text>
+  <rect x="150" y="61" width="117" height="26" rx="3" fill="#4c78a8"/>
+  <text x="275" y="79" font-size="15" font-weight="700" fill="#4c78a8">+2.60<tspan font-size="13" font-weight="400" fill="#8a8f99"> ℃/100년</tspan></text>
+
+  <!-- 행 2: 최근 50년 -->
+  <text x="140" y="125" font-size="14" fill="#2b2d3a" text-anchor="end">최근 50년</text>
+  <rect x="150" y="107" width="178" height="26" rx="3" fill="#8a8f99"/>
+  <text x="336" y="125" font-size="15" font-weight="700" fill="#2b2d3a">+3.96<tspan font-size="13" font-weight="400" fill="#8a8f99"> ℃/100년</tspan></text>
+
+  <!-- 행 3: 최근 30년 -->
+  <text x="140" y="171" font-size="14" fill="#2b2d3a" text-anchor="end">최근 30년</text>
+  <rect x="150" y="153" width="172" height="26" rx="3" fill="#8a8f99"/>
+  <text x="330" y="171" font-size="15" font-weight="700" fill="#2b2d3a">+3.82<tspan font-size="13" font-weight="400" fill="#8a8f99"> ℃/100년</tspan></text>
+
+  <!-- 행 4: 최근 20년 -->
+  <text x="140" y="217" font-size="14" font-weight="700" fill="#2b2d3a" text-anchor="end">최근 20년</text>
+  <rect x="150" y="199" width="366" height="26" rx="3" fill="#e45756"/>
+  <text x="524" y="217" font-size="15" font-weight="700" fill="#c0392b">+8.14<tspan font-size="13" font-weight="400" fill="#8a8f99"> ℃/100년</tspan></text>
+
+  <!-- 축 (0~9) -->
+  <line x1="150" y1="236" x2="560" y2="236" stroke="#8a8f99" stroke-width="1.2"/>
+  <line x1="150" y1="236" x2="150" y2="241" stroke="#8a8f99" stroke-width="1.2"/>
+  <line x1="285" y1="236" x2="285" y2="241" stroke="#8a8f99" stroke-width="1.2"/>
+  <line x1="420" y1="236" x2="420" y2="241" stroke="#8a8f99" stroke-width="1.2"/>
+  <line x1="555" y1="236" x2="555" y2="241" stroke="#8a8f99" stroke-width="1.2"/>
+  <text x="150" y="254" font-size="13" fill="#8a8f99" text-anchor="middle">0</text>
+  <text x="285" y="254" font-size="13" fill="#8a8f99" text-anchor="middle">3</text>
+  <text x="420" y="254" font-size="13" fill="#8a8f99" text-anchor="middle">6</text>
+  <text x="555" y="254" font-size="13" fill="#8a8f99" text-anchor="middle">9</text>
+  <text x="568" y="254" font-size="13" fill="#8a8f99">(℃/100년)</text>
+
+  <!-- 아래 한 줄 -->
+  <text x="360" y="284" font-size="15" fill="#2b2d3a" text-anchor="middle">같은 데이터, 학습에 사용한 범위만 다름</text>
+</svg></div>
 </section>
 
 <!-- 19 두 답 -->
 <section class="slide">
-  <div class="kicker">발견 · 같은 2045년</div>
-  <h2>학습 범위에 따라 갈라지는 예측값</h2>
-  <div class="split">
-    <div class="card">
-      <div class="t">전체 114개 해로 학습</div>
-      <div class="v">13.9℃</div>
-      <div class="d">지난 한 세기의 평균 추세</div>
-    </div>
-    <div class="card">
-      <div class="t">최근 20년으로 학습</div>
-      <div class="v">15.7℃</div>
-      <div class="d">요즘의 가파름</div>
-    </div>
-  </div>
+  <div class="kicker">6-16 · 발견</div>
+  <h2>학습 범위와 예측값 — 2045년 예측</h2>
+  <div class="diagram"><svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 산점도 위에서 학습 기간이 다른 회귀 직선 두 개가 2045년 예측값 13.9도와 15.7도로 갈라지는 그림">
+    <defs>
+      <marker id="l7w-ar" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto-start-reverse"><path d="M0,0 L9,4.5 L0,9 z" fill="#6b6350"/></marker>
+    </defs>
+    <!-- 배경 — 학습 범위 안/밖 -->
+    <rect x="60" y="40" width="390" height="290" fill="#faf3dd"/>
+    <rect x="450" y="40" width="250" height="290" fill="#ffffff"/>
+    <rect x="60" y="40" width="640" height="290" fill="none" stroke="#f0e2bc" stroke-width="1.5"/>
+    <text x="255" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#a08c5a">학습에 쓴 범위 (1908~2025)</text>
+    <text x="575" y="58" text-anchor="middle" font-size="12" font-weight="700" fill="#b0a78f">학습 범위 밖 — 8차시에서 다시</text>
+    <!-- 축 제목 -->
+    <text x="60" y="28" text-anchor="start" font-size="11" fill="#8a8069">연평균기온(℃)</text>
+    <text x="700" y="368" text-anchor="end" font-size="11" fill="#8a8069">연도</text>
+    <!-- 산점도 (모식 표기) -->
+    <g fill="#c4bba6">
+      <circle cx="65" cy="326" r="3.5"/><circle cx="79" cy="308" r="3.5"/><circle cx="93" cy="320" r="3.5"/><circle cx="107" cy="302" r="3.5"/>
+      <circle cx="121" cy="314" r="3.5"/><circle cx="135" cy="296" r="3.5"/><circle cx="149" cy="309" r="3.5"/><circle cx="163" cy="291" r="3.5"/>
+      <circle cx="177" cy="305" r="3.5"/><circle cx="191" cy="285" r="3.5"/><circle cx="205" cy="298" r="3.5"/><circle cx="219" cy="280" r="3.5"/>
+      <circle cx="233" cy="292" r="3.5"/><circle cx="247" cy="271" r="3.5"/><circle cx="261" cy="287" r="3.5"/><circle cx="275" cy="266" r="3.5"/>
+      <circle cx="289" cy="281" r="3.5"/><circle cx="303" cy="261" r="3.5"/><circle cx="317" cy="274" r="3.5"/><circle cx="331" cy="255" r="3.5"/>
+      <circle cx="345" cy="270" r="3.5"/><circle cx="359" cy="248" r="3.5"/><circle cx="373" cy="263" r="3.5"/><circle cx="387" cy="250" r="3.5"/>
+      <circle cx="401" cy="244" r="3.5"/><circle cx="415" cy="236" r="3.5"/><circle cx="429" cy="228" r="3.5"/><circle cx="443" cy="220" r="3.5"/>
+    </g>
+    <!-- y 눈금 안내선 (13.9 · 15.7) -->
+    <line x1="60" y1="227" x2="517" y2="227" stroke="#f4b400" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
+    <line x1="60" y1="179" x2="517" y2="179" stroke="#e8930c" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
+    <text x="54" y="231" text-anchor="end" font-size="11" fill="#a97f00">13.9</text>
+    <text x="54" y="183" text-anchor="end" font-size="11" fill="#b25f00">15.7</text>
+    <!-- 회귀 직선 2개 -->
+    <line x1="60" y1="321" x2="700" y2="189" stroke="#f4b400" stroke-width="3"/>
+    <line x1="383" y1="266" x2="700" y2="61" stroke="#e8930c" stroke-width="3"/>
+    <text x="605" y="258" text-anchor="middle" font-size="12.5" font-weight="800" fill="#a97f00">전체 114개 해 · +2.60℃/100년</text>
+    <text x="585" y="88" text-anchor="middle" font-size="12.5" font-weight="800" fill="#b25f00">최근 20년 · +8.14℃/100년</text>
+    <!-- 2045년 세로 점선과 두 교점 -->
+    <line x1="517" y1="70" x2="517" y2="330" stroke="#8a8069" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <circle cx="517" cy="227" r="5" fill="#f4b400" stroke="#ffffff" stroke-width="1.5"/>
+    <circle cx="517" cy="179" r="5" fill="#e8930c" stroke="#ffffff" stroke-width="1.5"/>
+    <line x1="538" y1="187" x2="538" y2="219" stroke="#6b6350" stroke-width="1.8" marker-start="url(#l7w-ar)" marker-end="url(#l7w-ar)"/>
+    <text x="548" y="183" text-anchor="start" font-size="12" font-weight="800" fill="#b25f00">15.7℃</text>
+    <text x="548" y="234" text-anchor="start" font-size="12" font-weight="800" fill="#a97f00">13.9℃</text>
+    <text x="548" y="208" text-anchor="start" font-size="12" font-weight="700" fill="#6b6350">같은 2045년, 두 답</text>
+    <!-- x 눈금 -->
+    <g stroke="#c9c0a8" stroke-width="1.5">
+      <line x1="60" y1="330" x2="60" y2="336"/><line x1="200" y1="330" x2="200" y2="336"/><line x1="367" y1="330" x2="367" y2="336"/>
+      <line x1="450" y1="330" x2="450" y2="336"/><line x1="517" y1="330" x2="517" y2="336"/><line x1="700" y1="330" x2="700" y2="336"/>
+    </g>
+    <g font-size="11" fill="#8a8069" text-anchor="middle">
+      <text x="60" y="350">1908</text><text x="200" y="350">1950</text><text x="367" y="350">2000</text>
+      <text x="450" y="350">2025</text><text x="517" y="350" font-weight="800" fill="#6b6350">2045</text><text x="692" y="350">2100</text>
+    </g>
+  </svg></div>
   <p class="point">둘 다 계산은 정확. <b>다른 질문에 답하는 직선</b></p>
 </section>
 
 <!-- 20 외삽 -->
 <section class="slide">
-  <div class="kicker">원리 · 외삽</div>
-  <h2>학습에 사용한 범위 밖</h2>
+  <div class="kicker">6-17 · 원리</div>
+  <h2>외삽</h2>
   <p class="point" style="margin-top:2.4vh">직선은 1908~2025년 데이터로 학습. 슬라이더를 2100년까지 밀면 값은 나옴</p>
   <p class="sub">학습 범위를 벗어난 곳의 값을 직선으로 내다보는 것 = 외삽. 맞는지 확인할 데이터가 없음</p>
 </section>
 
 <!-- 21 상관과 인과 -->
 <section class="slide">
-  <div class="kicker">판단 · 교과서 72쪽</div>
-  <h2>상관관계와 인과관계</h2>
+  <div class="kicker">6-18 · 교과서 72쪽</div>
+  <h2>상관관계와 인과관계의 정의</h2>
   <blockquote style="margin-top:3vh">상관관계가 있는 데이터 속성 중에서 원인과 결과의 관계가 있는 데이터 속성 간 관계를 인과관계라고 한다</blockquote>
-  <p class="point">아이스크림 판매량과 물놀이 사고 건수 뒤에는 여름철 기온이라는 공통 요인</p>
+  <div class="diagram short"><svg viewBox="0 0 560 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="여름철 기온이라는 공통 요인이 아이스크림 판매량과 물놀이 사고 건수에 각각 영향을 주어 상관이 생기지만 둘 사이에 원인 관계는 없다는 구조 그림">
+    <defs>
+      <marker id="l7c-gr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#54a24b"/></marker>
+    </defs>
+    <rect x="185" y="16" width="190" height="52" rx="12" fill="#fdf3d8" stroke="#f4b400" stroke-width="2"/>
+    <text x="280" y="38" text-anchor="middle" font-size="15" font-weight="800" fill="#5a4300">여름철 기온</text>
+    <text x="280" y="57" text-anchor="middle" font-size="11.5" fill="#a08c5a">공통 요인</text>
+    <line x1="238" y1="70" x2="152" y2="124" stroke="#54a24b" stroke-width="2.5" marker-end="url(#l7c-gr)"/>
+    <line x1="322" y1="70" x2="408" y2="124" stroke="#54a24b" stroke-width="2.5" marker-end="url(#l7c-gr)"/>
+    <text x="172" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3d7a36">영향</text>
+    <text x="388" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#3d7a36">영향</text>
+    <rect x="30" y="130" width="190" height="48" rx="12" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+    <text x="125" y="159" text-anchor="middle" font-size="14" font-weight="800" fill="#4a4434">아이스크림 판매량</text>
+    <rect x="340" y="130" width="190" height="48" rx="12" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+    <text x="435" y="159" text-anchor="middle" font-size="14" font-weight="800" fill="#4a4434">물놀이 사고 건수</text>
+    <line x1="226" y1="154" x2="334" y2="154" stroke="#9b937e" stroke-width="2" stroke-dasharray="5 5"/>
+    <text x="280" y="140" text-anchor="middle" font-size="11.5" fill="#6b6350">함께 오르내림 — 상관</text>
+    <path d="M271 145 L289 163 M289 145 L271 163" stroke="#e45756" stroke-width="3.5" stroke-linecap="round"/>
+    <text x="280" y="202" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">원인 관계는 아님</text>
+  </svg></div>
   <p class="small">연도-기온의 상관이 강해도 "시간이 흘러서 더워졌다"는 인과 설명은 아님. 원인 규명은 회귀 바깥의 작업</p>
 </section>
 
 <!-- 22 정리 -->
 <section class="slide">
   <div class="kicker">정리</div>
-  <h2>6차시 핵심</h2>
-  <ul class="facts">
-    <li>순서: 산점도 → 상관계수 → 회귀선</li>
-    <li>직선 = 모델, 숫자를 찾는 계산 = 학습, 그 방식 = 기계학습</li>
-    <li>학습 데이터의 범위에 따라 기울기 +2.60 ↔ +8.14</li>
-    <li>함께 변한다는 관찰 ≠ 원인의 증명</li>
-  </ul>
+  <h2>제6강 요약</h2>
+  <div class="split" style="margin-top:2.6vh"><div class="card"><div class="t">순서</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">순서: 산점도 → 상관계수 → 회귀선</div></div><div class="card"><div class="t">이름</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">직선 = 모델, 숫자를 찾는 계산 = 학습, 그 방식 = 기계학습</div></div><div class="card"><div class="t">범위</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">학습 데이터의 범위에 따라 기울기 +2.60 ↔ +8.14</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">함께 변한다는 관찰 ≠ 원인의 증명</div></div></div>
   <p class="point">이 직선을 얼마나 믿을 수 있는가</p>
 </section>
 
