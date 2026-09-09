@@ -1,0 +1,619 @@
+<!-- 13차시 슬라이드 — system/slides/template.html 뼈대. 원본 교재: web/lesson13.html
+     (템플릿 주석) 슬라이드 템플릿 — system/LESSON_PACKAGE_STANDARD.md 5절. 6차시(2026-09-09) 뼈대. {중괄호}는 슬롯.
+     규칙: 개조식·~다 종결 금지·격식 제목(kicker "N-M · 성격/쪽수")·프롬프트 장은 교재 ① 원문·위젯은 assets/widgetsNN.js 공용·1280×720 넘침 0 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>13차시 슬라이드 · 데이터베이스와 수파베이스 — 데이터 과학</title>
+<script src="../../assets/release.js"></script>
+<script src="../../assets/gate.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1219; --bg-accent: #161b26;
+    --ink: #f2f4f8; --ink-dim: #8b93a7;
+    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
+  .slide.on { display: flex; }
+  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
+    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
+  .kicker.blue { color: var(--accent2); }
+  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
+  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
+  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
+  blockquote { font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
+    line-height: 1.5; max-width: 28em; }
+  blockquote::before { content: "\201C"; color: var(--accent); }
+  blockquote::after { content: "\201D"; color: var(--accent); }
+  .facts { margin-top: 1vh; }
+  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
+    padding-left: 1.2em; text-indent: -1.2em; }
+  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
+  .facts b { color: var(--accent2); font-weight: 800; }
+  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
+  .point b { color: var(--accent); }
+  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
+  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
+    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
+    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
+  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
+  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
+  table.mini th { color: var(--accent); font-weight: 800; }
+  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
+  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
+  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
+  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
+  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
+  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
+  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
+  .withimg .txt { flex: 1 1 0; min-width: 0; }
+  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
+  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
+  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
+  .diagram.short svg { max-height: var(--dh, 40vh); }
+  /* 교과서 인용문·프롬프트 원문 — 원문 블록에는 인라인 스타일을 두지 않는다 */
+  .q-lg blockquote { margin-top: 3vh; }
+  .q-md blockquote { margin-top: 2.4vh; font-size: clamp(16px, 1.9vw, 26px); max-width: 34em; }
+  .q-md blockquote + blockquote { font-size: clamp(15px, 1.7vw, 23px); }
+  .q-sm blockquote { margin-top: 2.2vh; font-size: clamp(16px, 1.9vw, 27px); max-width: 34em; }
+  .p-prompt .prompt { font-size: clamp(10px, 1.05vw, 15px); line-height: 1.5; max-width: 58em;
+    margin-top: 1.6vh; padding: 2vh 1.6vw; }
+  .p-improve .prompt { font-size: clamp(11px, 1.2vw, 17px); line-height: 1.55; max-width: 52em;
+    margin-top: 1.8vh; padding: 2.2vh 1.8vw; }
+  .p-sql .prompt { font-size: clamp(10px, 1.05vw, 15px); line-height: 1.6; max-width: 56em;
+    margin-top: 2vh; padding: 1.6vh 1.4vw; }
+  .p-sql2 .prompt { font-size: clamp(10px, 1.05vw, 15px); line-height: 1.6; max-width: 58em;
+    margin-top: 1.8vh; padding: 1.6vh 1.4vw; }
+  /* 인터랙티브 위젯 — 밝은 상자 안 */
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
+          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
+  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
+          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
+  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
+  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
+  .foot span { white-space: nowrap; }
+  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
+  .dots i.here { background: var(--accent); }
+  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
+    font-size: clamp(11px, 1.1vw, 14px); }
+@media (max-width: 760px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- 1 표지 -->
+<section class="slide chapter on">
+  <div class="kicker">데이터 과학 · Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 제13강</div>
+  <h1>데이터베이스와 수파베이스</h1>
+  <p class="sub">여럿이 함께 쓰는 저장소와 대결 기록의 집계</p>
+</section>
+
+<!-- 2 데이터셋 -->
+<section class="slide q-lg">
+  <div class="kicker">13-1 · 교과서 25쪽</div>
+  <h2>데이터셋의 정의</h2>
+  <blockquote>데이터셋(dataset)이란 하나의 주제에 대한 여러 데이터들이 모인 집합(set)을 말한다</blockquote>
+  <p class="point">급식 CSV는 데이터셋을 담은 한 가지 형태</p>
+</section>
+
+<!-- 3 데이터베이스·테이블 -->
+<section class="slide q-md">
+  <div class="kicker">13-2 · 교과서 26·27쪽</div>
+  <h2>데이터베이스와 테이블의 정의</h2>
+  <blockquote>데이터베이스(database)는 여러 사람이 공유하여 사용하기 위해 통합 관리되는 데이터의 집합으로, 데이터베이스 시스템을 사용하면 대규모의 데이터를 효율적으로 저장하고 검색하며, 업데이트하고 관리할 수 있다</blockquote>
+  <blockquote>데이터베이스에는 여러 종류의 데이터셋이 들어가는데, 이때 각각의 데이터셋은 표 형태로 저장되며 이를 테이블(table)이라고 한다</blockquote>
+  <p class="point" style="margin-top:2.6vh">수파베이스 프로젝트 안의 저장소가 데이터베이스 · 그 안의 대결 기록 표 <b>menu_duels</b>가 테이블</p>
+</section>
+
+<!-- 4 CSV의 한계 -->
+<section class="slide">
+  <div class="kicker">13-3 · 원리</div>
+  <h2>CSV로 부족해지는 세 순간</h2>
+  <table class="mini" style="font-size:clamp(13px,1.5vw,21px)">
+    <tr><th>부족해지는 순간</th><th>CSV 파일이라면</th><th>데이터베이스라면</th></tr>
+    <tr><td>동시에 쓰기</td><td>같은 원본의 사본을 각각 수정해 덮어쓰면 한쪽 변경을 잃을 수 있음</td><td>동시 입력을 처리하며 각 대결 기록을 새 행으로 저장</td></tr>
+    <tr><td>계속 쌓기</td><td>새 기록을 추가하고 충돌을 처리할 프로그램이 필요</td><td>추가 명령으로 기록을 누적하고 제약을 검사</td></tr>
+    <tr><td>골라 읽기</td><td>필터링 코드를 만들거나 파일을 열어 찾음</td><td>조건에 맞는 행을 서버에서 검색해 가져옴</td></tr>
+  </table>
+  <p class="point">파일로도 가능하나 동시 입력·검색·접근 권한 관리가 복잡함</p>
+</section>
+
+<!-- 5 실제 사례 1 -->
+<section class="slide">
+  <div class="kicker">13-4 · 실제 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">엑셀 파일 한 장의 한계 — 확진자 15,841명 누락</h2>
+  <ul class="facts" style="font-size:clamp(14px,1.6vw,22px)">
+    <li style="font-size:inherit;margin:1.4vh 0">옛 XLS 서식은 한 시트 약 <b>65,000행</b> 한도 · 검사 한 건이 여러 행 · 서식 하나가 약 <b>1,400명분</b>에서 가득 참</li>
+    <li style="font-size:inherit;margin:1.4vh 0">한도를 넘긴 결과는 저장되지 않음 · 확진자 <b>15,841명</b> 누락 · 접촉자 추적 지연</li>
+  </ul>
+  <div class="shot wide"><img src="img/lesson13_case1.jpg" style="max-height:36vh" alt="9월 25일부터 10월 2일까지 날짜별 신규 확진자 수 막대그래프. 옅은 색은 처음 발표된 수, 진한 색은 나중에 추가된 누락분"></div>
+  <p class="src">그래프: 보고 문제 이후 추가된 날짜별 확진자 수 · 출처 Gov.uk 대시보드·잉글랜드 공중보건국 · BBC News 2020년 10월 5일</p>
+</section>
+
+<!-- 6 수파베이스·CRUD -->
+<section class="slide">
+  <div class="kicker">13-5 · 개념</div>
+  <h2>수파베이스와 네 동작(CRUD)</h2>
+  <ul class="facts">
+    <li>수파베이스 — PostgreSQL 데이터베이스와 API·인증 기능을 갖춘 서비스</li>
+    <li>준비 담당 — 교사 또는 모둠 대표 한 명이 연습용 프로젝트와 대결 기록 표를 준비 · 다른 학생은 같은 프로젝트에 연결</li>
+    <li>CRUD — 생성·읽기·갱신·삭제 네 동작</li>
+    <li>월드컵 앱에서는 생성과 읽기·집계 · 갱신과 삭제는 별도 연습용 표에서만</li>
+  </ul>
+  <p class="point">파일은 한도를 넘으면 조용히 사라지고, 데이터베이스는 제약을 어기면 오류로 알림</p>
+</section>
+
+<!-- 7 후보 여덟 -->
+<section class="slide">
+  <div class="kicker">13-6 · 실습</div>
+  <h2>수업 후보 여덟 반찬</h2>
+  <table class="mini" style="font-size:clamp(14px,1.7vw,24px)">
+    <tr><th>#</th><th>반찬</th><th>등장</th><th>#</th><th>반찬</th><th>등장</th></tr>
+    <tr><td>1</td><td>제육볶음</td><td>10일</td><td>2</td><td>간장찜닭</td><td>7일</td></tr>
+    <tr><td>3</td><td>가자미순살튀김</td><td>6일</td><td>4</td><td>돈육불백</td><td>6일</td></tr>
+    <tr><td>5</td><td>미트볼데리야끼볶음</td><td>5일</td><td>6</td><td>수육</td><td>5일</td></tr>
+    <tr><td>7</td><td>진미채고추장볶음</td><td>5일</td><td>8</td><td>치즈떡닭갈비</td><td>5일</td></tr>
+  </table>
+  <p class="small">5차시 급식 API 집계 적용 · 조회 기간 2025년 9월~2026년 9월 · 중식 <b>184일</b> 대상 · 밥·김치·국·후식을 걸러 낸 뒤 남은 주요리에서 선정<br>8위와 9위(치즈불닭)가 5일로 같아 가나다순으로 결정 · 동점 처리 기준을 미리 정해 두어야 결과가 사람마다 달라지지 않음</p>
+</section>
+
+<!-- 8 위젯: 후보 선정 -->
+<section class="slide">
+  <div class="kicker">13-7 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">제외 기준과 후보 여덟의 선정</h2>
+  <div class="diagram" style="--wh:42vh"><div class="widget" data-w="menu8pick">
+<svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="중식 184일 등장 일수 상위 목록: 제외 기준 다섯 종을 켜고 끄면 회색 처리와 순위가 바뀌고, 수업 후보 여덟에는 파란 점이 붙음">
+<text x="8" y="18" font-size="14" font-weight="800" fill="#1c2230">중식 184일 · 등장 일수 상위</text>
+<text class="hright" x="712" y="18" text-anchor="end" font-size="12" fill="#6b7385"></text>
+<g class="legend" display="none">
+<circle cx="630" cy="34.6" r="3" fill="#2b7fd6"/>
+<text x="712" y="38" text-anchor="end" font-size="10" fill="#2b7fd6">수업 후보 여덟</text>
+</g>
+<!-- 목록 · 최대 14행 · y = 46 + i*19 -->
+<g class="rows"></g>
+<!-- 회색이 아닌 항목의 여덟 번째 아래 -->
+<g class="cut" display="none">
+<line x1="8" y1="185" x2="712" y2="185" stroke="#b07a00" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="712" y="181" text-anchor="end" font-size="10" fill="#b07a00">등장 일수만으로 자른 여덟</text>
+</g>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-cat="밥" aria-pressed="true">밥류</button>
+<button class="wbtn on" type="button" data-cat="김치" aria-pressed="true">김치류</button>
+<button class="wbtn on" type="button" data-cat="국" aria-pressed="true">국·찌개류</button>
+<button class="wbtn on" type="button" data-cat="곁" aria-pressed="true">곁반찬(나물·무침·샐러드·김)</button>
+<button class="wbtn on" type="button" data-cat="후식" aria-pressed="true">후식·음료</button>
+<button class="wbtn" type="button" data-pick="1" aria-pressed="false">수업 후보 여덟 표시</button>
+<span class="wout"></span>
+</div>
+</div></div>
+  <p class="small">중식 184일 기록에서 5일 이상 등장한 마흔아홉 종을 등장 일수 순으로 표시 · 다섯 분류를 모두 걸러 내면 열세 종 · 그 가운데 일곱 항목이 5일로 같아 등장 일수만으로는 여덟 번째를 정할 수 없음 · 등장 일수는 후보를 정한 기준일 뿐 학생의 선호도가 아님</p>
+</section>
+
+<!-- 9 준비 절차 -->
+<section class="slide">
+  <div class="kicker">13-8 · 실습</div>
+  <h2>준비 절차 — 프로젝트·표·권한·키</h2>
+  <ul class="facts" style="font-size:clamp(15px,1.8vw,25px)">
+    <li style="font-size:inherit">수파베이스 대시보드에서 New project로 연습용 프로젝트 생성 · DB 비밀번호는 앱에 넣을 API 키와 다른 값</li>
+    <li style="font-size:inherit">SQL Editor에서 3절 ‘SQL · 표 만들기’ 코드 전체를 한 번만 실행 · 표 생성부터 권한 정책까지</li>
+    <li style="font-size:inherit">Table Editor에서 public 스키마의 <b>menu_duels</b> 확인 · 일곱 열과 RLS 활성화 · 새 표는 0행</li>
+    <li style="font-size:inherit">Connect에서 Project URL과 publishable 키 복사 · DB 연결 문자열·DB 비밀번호·secret·service_role 키는 사용하지 않음</li>
+  </ul>
+</section>
+
+<!-- 10 이름 세 곳 일치 -->
+<section class="slide">
+  <div class="kicker">13-9 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">이름 세 곳 일치 — 비밀 금고·프롬프트·코드</h2>
+  <table class="mini" style="font-size:clamp(13px,1.5vw,21px)">
+    <tr><th>어디</th><th>어떤 모습</th></tr>
+    <tr><td>① 비밀 금고(Secrets)</td><td>SUPABASE_URL = "…" · SUPABASE_KEY = "…"</td></tr>
+    <tr><td>② 프롬프트</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘"</td></tr>
+    <tr><td>③ AI가 준 코드</td><td>st.secrets["SUPABASE_URL"] · st.secrets["SUPABASE_KEY"]</td></tr>
+  </table>
+  <p class="point" style="margin-top:2.6vh">철자가 하나만 달라도 찾지 못함</p>
+  <p class="small" style="margin-top:1.6vh">이 실습에는 publishable 키 또는 기존 anon 키 사용 · 공개 가능한 키를 숨기는 것만으로 데이터를 보호할 수 없고, 실제 허용 동작은 데이터베이스의 권한과 RLS 정책으로 결정</p>
+</section>
+
+<!-- 11 샘플 프롬프트 -->
+<section class="slide p-prompt">
+  <div class="kicker">13-10 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성</h2>
+  <div class="prompt">반찬 월드컵 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로.<br>
+후보는 제육볶음·간장찜닭·가자미순살튀김·돈육불백·미트볼데리야끼볶음·수육·진미채고추장볶음·치즈떡닭갈비 여덟 가지야.<br>
+8강 토너먼트로 진행해 줘. 판을 시작할 때 후보 순서를 섞고, 두 반찬을 나란히 보여 준 뒤 하나를 고르게 해.<br>
+이긴 반찬만 다음 라운드로 올려서 8강 네 번, 4강 두 번, 결승 한 번으로 모두 일곱 번 고르게 해 줘.<br>
+이름·학번·비밀번호는 받지 마.<br>
+서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘.<br>
+표 이름은 menu_duels이고 public 스키마에 있어. 표 이름에 스키마 이름을 붙여 쓰지는 마.<br>
+이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야.<br>
+id는 자동으로 늘어나는 정수이고 created_at은 저장 시각이 기본값이라 앱이 넣지 않아.<br>
+앱이 채우는 열은 game_id(한 판을 묶는 문자열), round('8강'·'4강'·'결승' 가운데 하나), left_menu, right_menu, winner 다섯이고 모두 문자열이야.<br>
+새 표를 만들지 말고 이 표에 그대로 연결해 줘. 수정·삭제 기능은 넣지 마.<br>
+접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘.<br>
+판이 끝나면 우승 반찬을 보여 주고, 다시 시작하는 단추를 넣어 줘.<br>
+저장 결과를 확인하지 못하면 대결을 진행하지 말고 재선택을 잠근 뒤 확인이 필요하다고 안내해 줘.<br>
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
+  <p class="small" style="margin-top:1.8vh">교재 ①과 같은 문장 · 표·열 이름, 새 표 금지, 비밀 금고, 무결성 조건이 프롬프트 안에 있음</p>
+</section>
+
+<!-- 12 개선 프롬프트 -->
+<section class="slide p-improve">
+  <div class="kicker">13-11 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">개선 프롬프트 — 학급 대결 기록 분석</h2>
+  <div class="prompt">이 앱에 학급 전체의 대결 기록을 분석하는 화면을 추가해 줘.<br>
+menu_duels에 저장된 전체 기록을 대상으로 해. id, game_id, round, left_menu, right_menu, winner 여섯 열을 읽어서 반찬별 대결 수·승리 수·승률·우승 횟수를 비교하게 해 줘.<br>
+대결 수는 left_menu와 right_menu 양쪽을 모두 세고, 우승 횟수는 round가 '결승'인 행의 winner를 세어 줘.<br>
+모든 후보를 표시하고 대결 기록이 없는 후보의 승률은 아직 알 수 없다고 안내해 줘.<br>
+승률은 백분율로 보여 주고 높은 순서의 표와 가로 막대그래프로 비교해 줘.<br>
+그래프는 plotly로 그려 줘.<br>
+집계에 사용한 대결 기록 수와 판 수를 화면에 적어 줘. 기록 수와 참여 인원은 다르며, 진행 중에 남긴 대결도 집계에 들어간다고 표시해 줘.<br>
+한 판이 끝난 화면에서도 분석을 볼 수 있게 하고 결과를 다시 불러오는 단추를 넣어 줘.<br>
+기록이 아직 없을 때와 조회에 실패했을 때를 구분해 안내해 줘.<br>
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
+  <p class="small" style="margin-top:1.8vh">교재 ③과 같은 문장 · main.py와 requirements.txt 두 파일 · requirements.txt는 streamlit·supabase·pandas·plotly 네 줄</p>
+</section>
+
+<!-- 13 배포와 완료 확인 -->
+<section class="slide">
+  <div class="kicker">13-12 · 실습</div>
+  <h2>배포와 완료 확인</h2>
+  <ul class="facts" style="font-size:clamp(14px,1.7vw,23px)">
+    <li style="font-size:inherit;margin:1.8vh 0">GitHub 저장소에 main.py와 requirements.txt를 같은 폴더에 저장 · SQL과 접속 정보는 코드 파일에 넣지 않음</li>
+    <li style="font-size:inherit;margin:1.8vh 0">스트림릿 커뮤니티 클라우드의 Create app에서 저장소·브랜치·main.py 선택 · Advanced settings의 Secrets에 두 줄 저장 후 Deploy</li>
+    <li style="font-size:inherit;margin:1.8vh 0">완료 확인 — 참여를 잠시 멈추고 현재 대결 기록 수 기록 · 서로 다른 두 기기에서 각각 일곱 번 선택 · 판 번호 두 개 기록</li>
+    <li style="font-size:inherit;margin:1.8vh 0">두 화면에서 결과 새로 불러오기 · 대결 기록 수가 이전보다 <b>14</b> 증가 확인 · Table Editor에서 판 번호별로 일곱 행씩, 8강 네 행·4강 두 행·결승 한 행 확인</li>
+  </ul>
+  <p class="small" style="margin-top:1.8vh">이 절차로 배포·공유 저장·조회 연결을 점검 · 참여 인원을 검증한 것은 아님</p>
+</section>
+
+<!-- 14 위젯: 28칸 -->
+<section class="slide">
+  <div class="kicker">13-13 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">한 판에서 채워지는 칸 — 28칸 가운데 일곱</h2>
+  <div class="diagram" style="--wh:42vh"><div class="widget" data-w="duel28">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="반찬 여덟 가지의 쌍 28칸 격자와 반찬별 승률 표. 한 판에서 채워지는 칸이 일곱 칸이라는 점과 대진표에 따라 우승 반찬이 달라지는 모습을 나타낸 그림">
+  <rect class="champbg" x="508" y="3" width="204" height="22" rx="5" fill="#fff3cf" opacity="0" style="transition:opacity 150ms ease"/>
+  <text class="obs" x="8" y="21" font-size="15" font-weight="800" fill="#b07a00">관측 0 / 28</text>
+  <text class="champ" x="712" y="20" text-anchor="end" font-size="12" font-weight="700" fill="#1c2230">이번 판 우승 · —</text>
+  <line x1="360" y1="36" x2="360" y2="322" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="368" y1="58" x2="712" y2="58" stroke="#e3ddcf" stroke-width="1"/>
+  <text x="368" y="52" font-size="10" font-weight="700" fill="#6b7385">반찬</text>
+  <text x="566" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">대결 수</text>
+  <text x="618" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승리 수</text>
+  <text x="676" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승률</text>
+  <text x="712" y="40" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">리그</text>
+  <text x="712" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승률</text>
+  <g class="collab"></g>
+  <g class="rowlab"></g>
+  <g class="cells"></g>
+  <rect class="foc" x="0" y="0" width="30" height="30" rx="3" fill="none" stroke="#b07a00" stroke-width="2" opacity="0" pointer-events="none"/>
+  <g class="tbl"></g>
+  <text x="8" y="300" font-size="10" fill="#6b7385">칸 = 두 반찬의 대결 · 가운데 숫자 = 승자 번호</text>
+  <text x="8" y="316" font-size="10" fill="#6b7385">진하기 · 오른쪽 아래 숫자 = 같은 쌍의 대결 횟수</text>
+  <text x="368" y="300" font-size="10" fill="#6b7385">리그 승률 = 이긴 쌍 수 / 답한 쌍 수</text>
+  <text x="368" y="316" font-size="10" fill="#6b7385">28칸 완성 → 분모 7 고정</text>
+</svg>
+<div class="wctl pick"><span class="pmsg">한 판 진행 · 일곱 번 선택</span></div>
+<div class="wctl">
+<button class="wbtn" type="button" data-act="play">한 판 진행</button>
+<button class="wbtn" type="button" data-act="redraw">대진표 다시 뽑기</button>
+<button class="wbtn" type="button" data-act="fill">남은 칸 채우기</button>
+<button class="wbtn" type="button" data-act="reset">처음으로</button>
+<span class="wout">관측 0 / 28 · 미관측 28칸</span>
+</div>
+</div></div>
+  <p class="small">격자 28칸 가운데 한 판에서 채워지는 칸은 일곱 칸 · 대진표를 다시 뽑으면 같은 답에서도 우승 반찬이 바뀜 · 급식 등장 일수는 후보를 정한 기준일 뿐 선호도가 아님</p>
+</section>
+
+<!-- 15 발견 -->
+<section class="slide">
+  <div class="kicker">13-14 · 발견</div>
+  <h2>승리 수와 승률을 함께 읽는 이유</h2>
+  <ul class="facts" style="font-size:clamp(15px,1.8vw,25px)">
+    <li style="font-size:inherit">다음 라운드로 진출한 반찬은 다시 겨루므로 반찬마다 대결 수가 다름</li>
+    <li style="font-size:inherit">승률 = 이긴 횟수 ÷ 겨룬 횟수 · 승리 수와 함께 비교하며 분모가 무엇인지 확인</li>
+    <li style="font-size:inherit">8차시 R²는 평균값으로 예측한 기준과 비교한 값 · 12차시 향상도는 결론 메뉴의 전체 등장률을 기준으로 비교한 값</li>
+    <li style="font-size:inherit">승률도 대진 상대·라운드·반복 참여의 영향을 받음</li>
+  </ul>
+  <p class="point" style="margin-top:2.4vh">대결 수로 나누었다고 공정한 순위나 학급 전체의 선호 비율이 보장되지는 않음</p>
+</section>
+
+<!-- 16 위젯: 순위 교차 -->
+<section class="slide">
+  <div class="kicker">13-15 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">대진표에 따라 달라지는 순위</h2>
+  <div class="diagram" style="--wh:38vh"><div class="widget" data-w="rankcross13">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="리그 승률 순위와 한 판 지표 순위를 교차선으로 이은 비교 표">
+  <text class="ttlL" x="8" y="24" font-size="12" font-weight="800" fill="#1c2230">리그 승률 · 분모 7</text>
+  <text class="ttlR" x="470" y="24" font-size="12" font-weight="800" fill="#1c2230">한 판 승리 수</text>
+  <line x1="8" y1="32" x2="250" y2="32" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="470" y1="32" x2="712" y2="32" stroke="#e3ddcf" stroke-width="1"/>
+  <g fill="none">
+    <path class="lnk" d="M254,44 C330,44 390,74 466,74" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,134 C330,134 390,164 466,164" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,164 C330,164 390,194 466,194" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,194 C330,194 390,104 466,104" stroke="#d64545" stroke-width="2.2"/>
+    <path class="lnk" d="M254,74 C330,74 390,44 466,44" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,224 C330,224 390,224 466,224" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,254 C330,254 390,254 466,254" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,104 C330,104 390,134 466,134" stroke="#b9b3a5" stroke-width="1.2"/>
+  </g>
+  <g class="rowL" transform="translate(0,48)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">1</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">제육볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.71</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">10</text>
+  </g>
+  <g class="rowL" transform="translate(0,138)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">4</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">간장찜닭</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">7</text>
+  </g>
+  <g class="rowL" transform="translate(0,168)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">5</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">가자미순살튀김</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+  </g>
+  <g class="rowL" transform="translate(0,198)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">6</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">돈육불백</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+  </g>
+  <g class="rowL" transform="translate(0,78)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">2</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">미트볼데리야끼볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.57</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,228)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">7</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">수육</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,258)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">8</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">진미채고추장볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,108)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">3</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">치즈떡닭갈비</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.57</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowR" transform="translate(0,78)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">10</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">제육볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">2 / 3</text>
+  </g>
+  <g class="rowR" transform="translate(0,168)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">7</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">간장찜닭</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,198)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">가자미순살튀김</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,108)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">돈육불백</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">1 / 2</text>
+  </g>
+  <g class="rowR" transform="translate(0,48)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">미트볼데리야끼볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">3 / 3</text>
+  </g>
+  <g class="rowR" transform="translate(0,228)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">수육</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,258)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">진미채고추장볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,138)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">치즈떡닭갈비</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">1 / 2</text>
+  </g>
+  <text x="360" y="286" font-size="10" text-anchor="middle" fill="#6b7385">굵은 붉은 선 = 순위차 2 이상 · 원 안 숫자 = 중식 등장 일수</text>
+</svg>
+<div class="wctl">
+  <label>대진 번호 <input class="wslider" type="range" min="1" max="315" step="1" value="1"></label>
+  <button class="wbtn wmetric on" type="button" data-m="wins">한 판 승리 수</button>
+  <button class="wbtn wmetric" type="button" data-m="rate">한 판 승률</button>
+  <button class="wbtn wmetric" type="button" data-m="champ">우승 횟수 · 315판 합계</button>
+  <button class="wbtn wans on" type="button" data-a="A">예시 답 A · 엇갈린 반</button>
+  <button class="wbtn wans" type="button" data-a="B">예시 답 B · 일관된 반</button>
+  <button class="wbtn wans wmine" type="button" data-a="M" disabled>내 격자 답 (28칸 완성 후)</button>
+  <span class="wout">대진 1 · 순위가 바뀐 반찬 6종 · 최대 순위차 3 · 이번 판 우승 미트볼데리야끼볶음</span>
+</div>
+</div></div>
+  <p class="small" style="margin-top:1.6vh">예시 학급 답 한 묶음으로 315가지 대진을 모두 계산한 결과 · 대진 번호를 바꾸면 한 판 승리 수와 승률 순위가 달라지지만 분모가 7로 같은 리그 승률 순위는 그대로 · 수업 뒤에는 menu_duels의 실제 기록으로 같은 표를 만들어 비교</p>
+</section>
+
+<!-- 17 판단 -->
+<section class="slide">
+  <div class="kicker">13-16 · 판단</div>
+  <h2>대결 기록 수와 참여 인원의 구분</h2>
+  <ul class="facts" style="font-size:clamp(15px,1.8vw,25px)">
+    <li style="font-size:inherit">앱은 사람을 구별하지 않으며 이름과 학번을 받지 않음</li>
+    <li style="font-size:inherit">한 사람이 여러 판을 진행할 수 있음</li>
+    <li style="font-size:inherit">저장 결과가 불확실할 때의 잠금은 현재 접속에서만 유지 · 새 접속이나 다른 기기의 재제출까지 막지는 못함</li>
+    <li style="font-size:inherit">여러 판을 진행한 사람의 취향이 결과를 더 크게 움직임</li>
+  </ul>
+  <p class="point" style="margin-top:2.4vh">대결 기록의 수는 <b>참여 인원이 아님</b></p>
+</section>
+
+<!-- 18 실제 사례 2 -->
+<section class="slide">
+  <div class="kicker">13-17 · 실제 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">챗봇 아레나의 대결 기록과 승률표</h2>
+  <div class="withimg"><div class="txt"><ul class="facts" style="font-size:clamp(14px,1.6vw,21px)">
+    <li style="font-size:inherit;margin:1.8vh 0">2023년 4월 시작 · 같은 질문에 두 AI가 답한 내용을 나란히 보여 주고 사람이 더 나은 쪽을 고르는 방식</li>
+    <li style="font-size:inherit;margin:1.8vh 0">2024년 3월 공개 논문 기준 <b>9만여 명</b>이 약 <b>24만 건</b> 투표 · 대상 모델 50개 초과</li>
+    <li style="font-size:inherit;margin:1.8vh 0">대결 한 건이 한 행으로 저장 · 그 행들을 모델 쌍별로 묶어 세면 승률표</li>
+  </ul>
+  <p class="point" style="margin-top:2.2vh;font-size:clamp(15px,1.7vw,23px)">반찬 월드컵과 같은 구조 — 저장은 <b>INSERT</b>, 집계는 <b>GROUP BY·COUNT</b></p></div><img src="img/lesson13_case2.png" style="max-height:46vh" alt="가로축과 세로축에 모델 이름을 놓은 승률 행렬. 각 칸은 비기지 않은 대결에서 세로축 모델이 가로축 모델을 이긴 비율이며, 파란색일수록 높고 붉은색일수록 낮음"></div>
+  <p class="src">그림: 비긴 경기를 제외한 모델 간 승률 행렬 · Chiang 외, 「Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference」, arXiv:2403.04132(2024), 그림 2</p>
+</section>
+
+<!-- 19 SELECT -->
+<section class="slide p-sql">
+  <div class="kicker">13-18 · 읽기 자료</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">읽기 — SELECT 한 문장의 네 낱말</h2>
+  <table class="mini" style="font-size:clamp(13px,1.5vw,21px)">
+    <tr><th>낱말</th><th>뜻</th><th>우리말로 읽으면</th></tr>
+    <tr><td>SELECT</td><td>가져올 열 고르기 · *는 모든 열</td><td>"메뉴와 저장 시각을 보여 줘"</td></tr>
+    <tr><td>FROM</td><td>어느 테이블에서 가져올지</td><td>"대결 기록 표에서"</td></tr>
+    <tr><td>WHERE</td><td>조건에 맞는 행만 남기기</td><td>"제육볶음을 선택한 표만"</td></tr>
+    <tr><td>ORDER BY</td><td>정렬 기준 · DESC는 내림차순, ASC는 오름차순</td><td>"최근 대결부터"</td></tr>
+  </table>
+  <div class="prompt">SELECT id, winner, created_at FROM menu_duels ORDER BY created_at DESC, id DESC LIMIT 20;<br>
+SELECT * FROM menu_duels WHERE winner = '제육볶음';</div>
+  <p class="small" style="margin-top:1.6vh">대문자로 쓴 낱말이 명령어 · 나머지가 테이블 이름과 열 이름</p>
+</section>
+
+<!-- 20 설계표 → CREATE TABLE -->
+<section class="slide">
+  <div class="kicker">13-19 · 교과서 31쪽</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">설계표에서 CREATE TABLE로</h2>
+  <table class="mini" style="font-size:clamp(12px,1.35vw,19px)">
+    <tr><th>속성명</th><th>설명</th><th>데이터형</th><th>조건</th></tr>
+    <tr><td>id</td><td>기록 번호</td><td>정수</td><td>자동 증가 · 기본 키</td></tr>
+    <tr><td>game_id</td><td>한 판을 묶는 번호</td><td>문자열</td><td>NULL·빈 값 불가</td></tr>
+    <tr><td>round</td><td>대결 라운드</td><td>문자열</td><td>8강·4강·결승 중 하나</td></tr>
+    <tr><td>left_menu · right_menu</td><td>겨룬 두 반찬</td><td>문자열</td><td>여덟 후보 중 서로 다른 반찬 · NULL 불가</td></tr>
+    <tr><td>winner</td><td>이긴 반찬</td><td>문자열</td><td>겨룬 두 반찬 중 하나 · NULL 불가</td></tr>
+    <tr><td>created_at</td><td>저장 시각</td><td>날짜·시각</td><td>현재 시각을 기본값으로 사용</td></tr>
+  </table>
+  <p class="point" style="margin-top:2.2vh;font-size:clamp(15px,1.8vw,25px)">설계표의 한 칸이 SQL의 한 낱말 — 속성명은 열 이름, 데이터형은 text·bigint·timestamptz, 조건은 NOT NULL·PRIMARY KEY·CHECK·DEFAULT</p>
+  <p class="small" style="margin-top:1.4vh">기본 키는 행을 유일하게 구분하는 열 또는 열의 조합 · NOT NULL은 NULL을 막지만 빈 문자열까지 막지는 않으므로 판 번호는 CHECK로 빈 값을 검사</p>
+</section>
+
+<!-- 21 GROUP BY -->
+<section class="slide p-sql2">
+  <div class="kicker">13-20 · 읽기 자료</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">묶어서 세기 — GROUP BY와 집계</h2>
+  <ul class="facts" style="font-size:clamp(14px,1.6vw,22px)">
+    <li style="font-size:inherit;margin:1.6vh 0">COUNT(*) — 조건에 맞는 행의 개수 · SUM·AVG·MAX·MIN — 묶음마다 합계·평균·최댓값·최솟값</li>
+    <li style="font-size:inherit;margin:1.6vh 0">LIKE '%배추김치%' — 문자열 안에 "배추김치"가 들어 있는 행 · %는 "무엇이든"</li>
+    <li style="font-size:inherit;margin:1.6vh 0">GROUP BY — 같은 값끼리 묶음 · AS — 결과 열에 붙일 이름 · LIMIT — 앞에서 몇 행만</li>
+    <li style="font-size:inherit;margin:1.6vh 0">묶은 열이 아닌 열은 한 칸에 값이 여러 개이므로 집계 함수로 감싸야 함</li>
+  </ul>
+  <div class="prompt">SELECT 요일, COUNT(*) AS 일수, AVG(칼로리) AS 평균칼로리 FROM meals WHERE 식사 = '중식' GROUP BY 요일 ORDER BY 평균칼로리 DESC LIMIT 5;</div>
+  <p class="small" style="margin-top:1.4vh">교재의 급식 표 예시는 12차시 184일 저장본에 연습용 열량 값을 붙인 가정 · 배추김치가 나온 중식은 102일 · 금요일 34일 912kcal, 화요일 39일 852kcal도 연습용 수치</p>
+</section>
+
+<!-- 22 AI에게 알려 줄 네 가지 -->
+<section class="slide">
+  <div class="kicker">13-21 · 원리</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">AI에게 데이터베이스를 주문할 때 알려 줄 네 가지</h2>
+  <table class="mini" style="font-size:clamp(11px,1.25vw,17px)">
+    <tr><th>알려 줄 것</th><th>왜</th><th>①의 문장</th></tr>
+    <tr><td>표 이름과 열 이름<br>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없음 · 이름이 한 글자만 달라도 저장되지 않음</td><td>"표 이름은 menu_duels이고 public 스키마에 있어. 이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야"</td></tr>
+    <tr><td>새 표를 만들지 말 것</td><td>학급 공용 프로젝트에서 학생에게 표 생성 권한 없음</td><td>"새 표를 만들지 말고 이 표에 그대로 연결해 줘"</td></tr>
+    <tr><td>접속 정보는 비밀 금고에</td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나감</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘"</td></tr>
+    <tr><td>무결성 조건</td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘"</td></tr>
+  </table>
+  <p class="point" style="margin-top:2.2vh;font-size:clamp(15px,1.8vw,25px)">네 가지 모두 2절의 ① 샘플 프롬프트 안에 있음</p>
+</section>
+
+<!-- 23 팀 프로젝트 예고 -->
+<section class="slide q-sm">
+  <div class="kicker">13-22 · 교과서 174쪽</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">팀 프로젝트 예고 — 데이터로 답할 수 있는 문제</h2>
+  <blockquote>데이터 과학은 다양한 분야의 문제를 해결하고 의사 결정을 지원하는 데 큰 도움이 되지만, 모든 문제를 해결할 수 있는 것은 아니다</blockquote>
+  <ul class="facts" style="font-size:clamp(14px,1.6vw,22px);margin-top:1.6vh">
+    <li style="font-size:inherit;margin:1.6vh 0">주제 판단의 세 물음 — 데이터가 충분히 있는지 · 그 데이터가 문제 해결에 적합한지 · 법적·윤리적으로 올바르게 사용할 수 있는지</li>
+    <li style="font-size:inherit;margin:1.6vh 0">세 번째 물음의 기준 네 가지(개인정보·출처·이용 약관·편향)는 14차시 데이터 윤리에서 수립</li>
+    <li style="font-size:inherit;margin:1.6vh 0">오늘의 준비 — 팀 구성(2~3인) · 회귀·분류·군집·연관 가운데 팀의 질문에 맞는 틀 고르기 · 데이터 후보 3개를 앞의 두 물음으로 판단(교과서 176쪽 탐구활동)</li>
+  </ul>
+</section>
+
+<!-- 24 정리 -->
+<section class="slide">
+  <div class="kicker">정리</div>
+  <h2>제13강 요약</h2>
+  <div class="split" style="margin-top:2.2vh;gap:2vw"><div class="card" style="padding:1.8vh 1.6vw;min-width:13em"><div class="t">구조</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">데이터셋을 표로 담은 것이 테이블, 테이블을 통합 관리하는 것이 데이터베이스</div></div><div class="card" style="padding:1.8vh 1.6vw;min-width:13em"><div class="t">저장</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">대결 한 번이 한 행 · 한 판은 8강 네 번·4강 두 번·결승 한 번으로 일곱 행</div></div><div class="card" style="padding:1.8vh 1.6vw;min-width:13em"><div class="t">집계</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">승리 수와 승률을 함께 · 분모인 겨룬 횟수는 대진표와 라운드에 따라 달라짐</div></div><div class="card" style="padding:1.8vh 1.6vw;min-width:13em"><div class="t">판단</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">대결 기록 수는 참여 인원이 아님</div></div></div>
+  <p class="point">다음 시간 — 윤리의 기준으로 전 과정 점검</p>
+</section>
+
+<div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
+<div class="foot">
+  <span>당곡고 데이터 과학 · 13차시</span>
+  <div class="dots" id="dots"></div>
+  <span id="pageno"></span>
+</div>
+
+<script src="../../assets/widgets13.js"></script>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+    [...dots.children].forEach((d, k) => d.classList.toggle('here', k === cur));
+    document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => { if (e.target.closest('a, .widget')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  show(0);
+</script>
+</body>
+</html>

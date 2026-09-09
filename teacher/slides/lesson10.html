@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10차시 슬라이드 · 혼동행렬 — 데이터 과학</title>
+<script src="../../assets/release.js"></script>
+<script src="../../assets/gate.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1219; --bg-accent: #161b26;
+    --ink: #f2f4f8; --ink-dim: #8b93a7;
+    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
+  .slide.on { display: flex; }
+  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
+    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
+  .kicker.blue { color: var(--accent2); }
+  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
+  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
+  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
+  blockquote { font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
+    line-height: 1.5; max-width: 28em; }
+  blockquote::before { content: "\201C"; color: var(--accent); }
+  blockquote::after { content: "\201D"; color: var(--accent); }
+  .facts { margin-top: 1vh; }
+  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
+    padding-left: 1.2em; text-indent: -1.2em; }
+  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
+  .facts b { color: var(--accent2); font-weight: 800; }
+  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
+  .point b { color: var(--accent); }
+  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
+  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
+    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
+    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
+  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
+  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
+  table.mini th { color: var(--accent); font-weight: 800; }
+  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
+  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
+  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
+  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
+  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
+  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
+  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
+  .withimg .txt { flex: 1 1 0; min-width: 0; }
+  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
+  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
+  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
+  .diagram.short svg { max-height: var(--dh, 40vh); }
+  /* 인터랙티브 위젯 — 밝은 상자 안 */
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
+          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
+  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
+          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
+  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
+  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
+  .foot span { white-space: nowrap; }
+  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
+  .dots i.here { background: var(--accent); }
+  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
+    font-size: clamp(11px, 1.1vw, 14px); }
+@media (max-width: 760px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- 1 표지 -->
+<section class="slide chapter on">
+  <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 제10강</div>
+  <h1>혼동행렬</h1>
+  <p class="sub">네 칸으로 나눈 판정과 지표의 선택</p>
+</section>
+
+<!-- 2 오분류표의 정의 -->
+<section class="slide">
+  <div class="kicker">10-1 · 교과서 139쪽</div>
+  <h2>오분류표의 정의</h2>
+  <blockquote style="margin-top:3vh">오분류표란 각각의 실제 클래스와 예측 결과를 행렬로 나타낸 것이다</blockquote>
+  <p class="point">실제 범주와 예측 범주를 교차해 나타낸 표</p>
+  <p class="small">이 차시의 양성은 기록된 관객 수 100만 명 이상인 성공, 음성은 기준 미달 · 실제 흑자·적자 구분이 아님</p>
+</section>
+
+<!-- 3 정확도의 한계 -->
+<section class="slide">
+  <div class="kicker">10-2 · 교과서 139쪽</div>
+  <h2>정확도의 한계</h2>
+  <blockquote style="margin-top:2.4vh;font-size:clamp(18px,2.1vw,30px)">정확도는 전체 데이터 중 실제와 같게 예측한 데이터의 비율을 나타내며, 레이블별 분포가 균일하지 않은 경우 정확도로 모델을 평가하는 것은 부적절하다</blockquote>
+  <ul class="facts" style="margin-top:2vh">
+    <li>중요한 메일을 스팸으로 분류하는 오류와 스팸을 받은편지함에 남기는 오류는 영향이 서로 다름</li>
+    <li>정확도는 두 오류를 구분하지 않음</li>
+    <li>9차시 분류기의 기록 — 정확도 <b>0.924</b>와 <b>0.939</b></li>
+  </ul>
+  <p class="point" style="margin-top:2.4vh">어떤 오류를 줄일지 판단하려면 혼동행렬과 여러 지표가 함께 필요</p>
+</section>
+
+<!-- 4 네 칸의 이름 -->
+<section class="slide">
+  <div class="kicker">10-3 · 원리</div>
+  <h2>네 칸의 이름</h2>
+  <table class="mini" style="margin-top:2.4vh;font-size:clamp(15px,1.7vw,24px)">
+    <tr><th>칸</th><th>우리말로</th><th>영화라면</th></tr>
+    <tr><td>TP</td><td>양성 예측 · 실제 양성</td><td>성공이라 예측했고 실제로 성공</td></tr>
+    <tr><td>FP</td><td>양성 예측 · 실제 음성</td><td>성공이라 예측했지만 실제는 기준 미달</td></tr>
+    <tr><td>FN</td><td>음성 예측 · 실제 양성</td><td>기준 미달로 예측했지만 실제는 성공 (놓친 성공작)</td></tr>
+    <tr><td>TN</td><td>음성 예측 · 실제 음성</td><td>기준 미달로 예측했고 실제로 기준 미달</td></tr>
+  </table>
+  <p class="point" style="margin-top:2.4vh">앞의 True·False는 예측의 맞고 틀림, 뒤의 Positive·Negative는 성공·기준 미달 예측</p>
+  <p class="small" style="margin-top:1.6vh">영어 약자보다 우리말 표현이 먼저</p>
+</section>
+
+<!-- 5 세 지표의 계산 -->
+<section class="slide">
+  <div class="kicker">10-4 · 교과서 140쪽</div>
+  <h2>세 지표의 계산</h2>
+  <table class="mini" style="margin-top:2.6vh">
+    <tr><th>지표</th><th>계산 (140쪽 공식)</th><th>묻는 말</th></tr>
+    <tr><td>정확도</td><td>(TP+TN) ÷ 전체</td><td>전체 중 얼마나 맞혔는가</td></tr>
+    <tr><td>정밀도</td><td>TP ÷ (TP+FP)</td><td>"성공"이라 말한 것 중 진짜 성공은 얼마인가</td></tr>
+    <tr><td>재현율</td><td>TP ÷ (TP+FN)</td><td>실제 성공작 중 얼마나 잡아냈는가</td></tr>
+  </table>
+  <p class="point" style="margin-top:2.6vh">정밀도는 <b>예측 양성</b>, 재현율은 <b>실제 양성</b>이 분모</p>
+  <p class="small" style="margin-top:1.6vh">분모가 0이면 계산 불가 · 코드에서 0으로 표시하는 경우는 계산을 위한 처리로 구분</p>
+</section>
+
+<!-- 6 그림: 분모의 범위 -->
+<section class="slide">
+  <div class="kicker">10-4 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">지표가 분모로 삼는 범위</h2>
+  <div class="diagram" style="--wh:42vh">    <div class="widget" data-w="matrix">
+  <svg viewBox="0 0 720 300" role="img" aria-label="혼동행렬 네 칸과 정확도·정밀도·재현율. 지표를 고르면 분모 범위가 테두리로 켜지고, 사례를 바꾸면 네 칸의 수와 세 값이 함께 바뀜">
+    <text class="mx-case" x="24" y="22" font-size="14" fill="#6b7385"></text>
+    <text class="mx-h" data-k="0" x="222" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-h" data-k="1" x="366" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-r" data-k="0" x="144" y="76" text-anchor="end" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-r" data-k="1" x="144" y="138" text-anchor="end" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-rs" data-k="0" x="144" y="96" text-anchor="end" font-size="14" fill="#6b7385"></text>
+    <text class="mx-rs" data-k="1" x="144" y="158" text-anchor="end" font-size="14" fill="#6b7385"></text>
+    <rect x="150" y="46" width="144" height="62" fill="#54a24b" fill-opacity="0.16" stroke="#f0e2bc"></rect>
+    <rect x="294" y="46" width="144" height="62" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+    <rect x="150" y="108" width="144" height="62" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+    <rect x="294" y="108" width="144" height="62" fill="#3ba6a0" fill-opacity="0.15" stroke="#f0e2bc"></rect>
+    <text x="160" y="68" font-size="14" font-weight="800" fill="#2f6d2a">TP</text>
+    <text x="304" y="68" font-size="14" font-weight="800" fill="#b23c3c">FN</text>
+    <text x="160" y="130" font-size="14" font-weight="800" fill="#b23c3c">FP</text>
+    <text x="304" y="130" font-size="14" font-weight="800" fill="#23706b">TN</text>
+    <text class="mx-v" data-k="tp" x="222" y="92" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="fn" x="366" y="92" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="fp" x="222" y="154" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="tn" x="366" y="154" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-cs" data-k="0" x="222" y="190" text-anchor="middle" font-size="14" fill="#6b7385"></text>
+    <text class="mx-cs" data-k="1" x="366" y="190" text-anchor="middle" font-size="14" fill="#6b7385"></text>
+    <rect class="mx-num" data-k="tn" x="294" y="108" width="144" height="62" fill="none" stroke="#23706b" stroke-width="2" opacity="0"></rect>
+    <rect class="mx-num" data-k="tp" x="150" y="46" width="144" height="62" fill="none" stroke="#2f6d2a" stroke-width="2"></rect>
+    <rect class="mx-den" x="150" y="46" width="144" height="124" rx="2" fill="none" stroke="#e8930c" stroke-width="3"></rect>
+    <g class="mx-m" data-m="acc">
+      <text x="462" y="62" font-size="14" font-weight="700" fill="#1c2230">정확도 = (TP + TN) ÷ 전체</text>
+      <text class="mx-sub" x="462" y="82" font-size="14" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="64" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="92" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="92" width="0" height="8" rx="4" fill="#b07a00"></rect>
+    </g>
+    <g class="mx-m" data-m="prec">
+      <text x="462" y="120" font-size="14" font-weight="700" fill="#1c2230">정밀도 = TP ÷ (TP + FP)</text>
+      <text class="mx-sub" x="462" y="140" font-size="14" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="122" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="150" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="150" width="0" height="8" rx="4" fill="#b07a00"></rect>
+    </g>
+    <g class="mx-m" data-m="rec">
+      <text x="462" y="178" font-size="14" font-weight="700" fill="#1c2230">재현율 = TP ÷ (TP + FN)</text>
+      <text class="mx-sub" x="462" y="198" font-size="14" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="180" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="208" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="208" width="0" height="8" rx="4" fill="#b07a00"></rect>
+    </g>
+    <text class="mx-cap" x="24" y="232" font-size="14" font-weight="700" fill="#1c2230"></text>
+    <text x="24" y="258" font-size="14" fill="#6b7385">정밀도 · 재현율 → 분자 같음 · 분모 다름</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-case="tomato" aria-pressed="true">토마토 200개</button>
+    <button class="wbtn" type="button" data-case="A" aria-pressed="false">모델 A</button>
+    <button class="wbtn" type="button" data-case="B" aria-pressed="false">모델 B</button>
+    <button class="wbtn" type="button" data-m="acc" aria-pressed="false">정확도</button>
+    <button class="wbtn on" type="button" data-m="prec" aria-pressed="true">정밀도</button>
+    <button class="wbtn" type="button" data-m="rec" aria-pressed="false">재현율</button>
+    <button class="wbtn" type="button" data-act="reveal" aria-pressed="false">값 확인</button>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.6vh">활동지 문제 1과 문제 4의 세 행렬 · 지표 버튼을 누르면 그 지표가 분모로 삼는 범위가 테두리로 켜짐 · 손계산 뒤 값 확인</p>
+</section>
+
+<!-- 7 활동지 문제 1 -->
+<section class="slide">
+  <div class="kicker">10-5 · 활동</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">활동지 2 문제 1 — 토마토 농장</h2>
+  <ul class="facts" style="margin-top:2vh">
+    <li>교과서 139~140쪽 해 보기 ④ · 토마토 농장 사례 — 과일 이미지를 토마토인지 아닌지 분류한 결과가 본문에 있음</li>
+    <li>활동지에서 오분류표 네 칸 채움 · 정밀도·재현율·정확도 순 계산</li>
+    <li>마지막 물음 "정밀도가 낮으면 이 농장에 무슨 일이 벌어지는가"까지 문장으로 작성</li>
+    <li>같은 계산 폼 Ⅲ-02d에 기록</li>
+  </ul>
+  <p class="small">문제 2~5는 영화와 스팸 필터 · 혼동행렬 채우고 기준 모델과 비교 뒤 놓친 성공작과 잘못 추천한 영화의 비용 토의</p>
+</section>
+
+<!-- 8 지표 선택의 기준 -->
+<section class="slide">
+  <div class="kicker">10-6 · 교과서 140쪽</div>
+  <h2>지표 선택의 기준</h2>
+  <blockquote style="margin-top:2.4vh;font-size:clamp(19px,2.3vw,32px)">문제 상황에 따라 적합한 성능 지표가 다르므로, 상황에 맞는 지표를 선택해야 한다</blockquote>
+  <ul class="facts" style="margin-top:1.6vh">
+    <li>확률 문턱값을 낮추면 양성으로 예측하는 대상이 늘어남</li>
+    <li>같은 예측 확률에서 재현율은 유지되거나 높아지지만, 정밀도가 항상 낮아지지는 않음</li>
+    <li>분야 이름이 아니라 문제의 목적과 오류의 영향이 선택의 근거</li>
+  </ul>
+  <p class="point" style="margin-top:2.2vh">지표 선택은 계산이 아니라 판단</p>
+</section>
+
+<!-- 9 그림: 문턱값 -->
+<section class="slide">
+  <div class="kicker">10-6 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">문턱값과 네 칸</h2>
+  <div class="diagram" style="--wh:48vh">    <div class="widget" data-w="threshold">
+  <svg viewBox="0 0 720 400" role="img" aria-label="시험용 영화 66편을 예측 확률 높은 순으로 늘어놓고 문턱값을 옮기면 혼동행렬 네 칸과 정확도·정밀도·재현율이 함께 바뀌는 그림">
+    <g class="dots"></g>
+    <line x1="36" y1="134" x2="700" y2="134" stroke="#e3ddcf" stroke-width="1.2"/>
+    <g class="ticks"></g>
+    <line class="thline" x1="46.06" y1="34" x2="46.06" y2="130" stroke="#1c2230" stroke-width="2"/>
+    <text x="44" y="46" font-size="14" font-weight="700" fill="#6b7385" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">실제 성공 6편</text>
+    <text x="44" y="98" font-size="14" font-weight="700" fill="#6b7385" paint-order="stroke" stroke="#ffffff" stroke-width="3" stroke-linejoin="round">실제 기준 미달 60편</text>
+    <text class="thlab" x="52.06" y="28" text-anchor="start" font-size="14" font-weight="800" fill="#1c2230">문턱값 0.50</text>
+    <text class="zleft" x="36" y="28" text-anchor="end" font-size="14" fill="#6b7385" opacity="0">← 성공 예측</text>
+    <text class="zright" x="139.06" y="28" text-anchor="start" font-size="14" fill="#6b7385">기준 미달 예측 →</text>
+    <text x="222" y="192" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230">예측: 성공</text>
+    <text x="366" y="192" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230">예측: 기준 미달</text>
+    <text x="144" y="228" text-anchor="end" font-size="14" font-weight="800" fill="#1c2230">실제: 성공</text>
+    <text x="144" y="276" text-anchor="end" font-size="14" font-weight="800" fill="#1c2230">실제: 기준 미달</text>
+    <rect x="150" y="200" width="144" height="48" fill="#54a24b" fill-opacity="0.16" stroke="#f0e2bc"/>
+    <rect x="294" y="200" width="144" height="48" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"/>
+    <rect x="150" y="248" width="144" height="48" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"/>
+    <rect x="294" y="248" width="144" height="48" fill="#3ba6a0" fill-opacity="0.15" stroke="#f0e2bc"/>
+    <text x="158" y="220" font-size="14" font-weight="800" fill="#2f6d2a">TP</text>
+    <text x="302" y="220" font-size="14" font-weight="800" fill="#b23c3c">FN</text>
+    <text x="158" y="268" font-size="14" font-weight="800" fill="#b23c3c">FP</text>
+    <text x="302" y="268" font-size="14" font-weight="800" fill="#23706b">TN</text>
+    <text class="nTP" x="222" y="238" text-anchor="middle" font-size="22" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">1</text>
+    <text class="nFN" x="366" y="238" text-anchor="middle" font-size="22" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">5</text>
+    <text class="nFP" x="222" y="286" text-anchor="middle" font-size="22" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">0</text>
+    <text class="nTN" x="366" y="286" text-anchor="middle" font-size="22" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">60</text>
+    <text class="blab" x="700" y="180" text-anchor="end" font-size="14" fill="#6b7385">기준 모델 0.909</text>
+    <text x="470" y="208" font-size="14" font-weight="700" fill="#1c2230">정확도</text>
+    <rect x="470" y="218" width="230" height="8" rx="4" fill="#e3ddcf"/>
+    <rect class="bar0" x="470" y="218" width="212.58" height="8" rx="4" fill="#b07a00"/>
+    <line class="bline" x1="679.1" y1="214" x2="679.1" y2="230" stroke="#6b7385" stroke-width="1.2" stroke-dasharray="3 2"/>
+    <text class="val0" x="700" y="208" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums">0.924</text>
+    <text x="470" y="248" font-size="14" font-weight="700" fill="#1c2230">정밀도</text>
+    <rect x="470" y="258" width="230" height="8" rx="4" fill="#e3ddcf"/>
+    <rect class="bar1" x="470" y="258" width="230.00" height="8" rx="4" fill="#b07a00"/>
+    <text class="val1" x="700" y="248" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums">1.000</text>
+    <text x="470" y="288" font-size="14" font-weight="700" fill="#1c2230">재현율</text>
+    <rect x="470" y="298" width="230" height="8" rx="4" fill="#e3ddcf"/>
+    <rect class="bar2" x="470" y="298" width="38.33" height="8" rx="4" fill="#b07a00"/>
+    <text class="val2" x="700" y="288" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums">0.167</text>
+    <rect class="card0" x="24" y="320" width="331" height="56" rx="6" fill="#fdf8ea" stroke="#f0e2bc" stroke-width="1"/>
+    <text x="38" y="344" font-size="14" font-weight="700" fill="#1c2230">투자자 · 성공 예측을 믿고 투자</text>
+    <text class="c0txt" x="38" y="366" font-size="14" fill="#6b7385">미기록</text>
+    <rect class="card1" x="365" y="320" width="331" height="56" rx="6" fill="#fdf8ea" stroke="#f0e2bc" stroke-width="1"/>
+    <text x="379" y="344" font-size="14" font-weight="700" fill="#1c2230">발굴팀 · 성공작을 놓치지 않기</text>
+    <text class="c1txt" x="379" y="366" font-size="14" fill="#6b7385">미기록</text>
+  </svg>
+  <div class="wctl">
+    <label>문턱값 <input class="thr" type="range" min="0" max="0.75" step="0.01" value="0.50"></label>
+    <button class="wbtn on" type="button" data-th="0.50" aria-pressed="true" aria-label="문턱값 0.50">0.50</button>
+    <button class="wbtn" type="button" data-th="0.24" aria-pressed="false" aria-label="문턱값 0.24">0.24</button>
+    <button class="wbtn" type="button" data-th="0.22" aria-pressed="false" aria-label="문턱값 0.22">0.22</button>
+    <button class="wbtn" type="button" data-th="0.06" aria-pressed="false" aria-label="문턱값 0.06">0.06</button>
+    <button class="wbtn" type="button" data-th="0.02" aria-pressed="false" aria-label="문턱값 0.02">0.02</button>
+    <button class="wbtn" type="button" data-th="0.70" aria-pressed="false" aria-label="문턱값 0.70">0.70</button>
+    <button class="wbtn" type="button" data-slot="inv" aria-pressed="false">투자자로 기록</button>
+    <button class="wbtn" type="button" data-slot="scout" aria-pressed="false">발굴팀으로 기록</button>
+    <button class="wbtn" type="button" data-act="clear">기록 지우기</button>
+    <span class="wout">문턱값 0.50</span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh">9차시 로지스틱 회귀가 시험용 66편에 매긴 예측 확률 · 가장 낮은 확률 0.001 · 두 입장에서 각각 문턱값 기록</p>
+</section>
+
+<!-- 10 실사례 표 -->
+<section class="slide">
+  <div class="kicker">10-7 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">지표 선택이 갈린 두 현장</h2>
+  <table class="mini" style="margin-top:2.2vh;font-size:clamp(13px,1.4vw,20px)">
+    <tr><th>사례</th><th>무엇을 예측·분류했나</th><th>이 차시 개념과의 연결</th></tr>
+    <tr><td>재범 위험 점수<br>COMPAS<br>미국 2016</td><td>법원이 보석·형량 판단의 참고 자료로 사용 · 프로퍼블리카가 플로리다주 브라워드 카운티 피고인 <em>7,214명</em>의 점수와 2년간 실제 재범 여부를 대조 · 위험 순위를 맞게 매긴 비율 63.6%</td><td>FP와 FN을 집단별로 나눠 계산한 사례 · 위양성률 FP÷(FP+TN), 위음성률 FN÷(FN+TP)</td></tr>
+    <tr><td>애플워치<br>심방세동 알림<br>2019</td><td>애플과 스탠퍼드 대학이 참가자 <em>419,297명</em>을 대상으로 불규칙 맥박 알림을 확인 · 알림 2,161명(0.52%) · 패치 분석이 가능했던 450명 중 심방세동 확인 34%</td><td>알림을 양성 예측으로 보면 분모가 예측 양성(TP+FP)이므로 34%가 정밀도 · 알림을 받지 않은 사람은 패치를 착용하지 않아 FN을 셀 수 없어 재현율은 계산 불가</td></tr>
+  </table>
+  <p class="point" style="margin-top:2vh;font-size:clamp(17px,2vw,28px)">무엇을 더 심각한 오류로 볼지는 계산 결과가 아니라 사람이 정함</p>
+  <p class="src">ProPublica, Machine Bias(2016) · Apple Heart Study, NEJM 381:1909(2019)</p>
+</section>
+
+<!-- 11 그림: COMPAS -->
+<section class="slide">
+  <div class="kicker">10-7 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">사례 — COMPAS 위험 점수의 분포</h2>
+  <div class="shot wide"><img src="img/lesson10_case1.png" alt="프로퍼블리카가 공개한 COMPAS 위험 점수 분포 막대그래프 두 장. 흑인 피고인은 1점부터 10점까지 고르게 퍼져 있고, 백인 피고인은 낮은 점수에 몰려 있습니다."></div>
+  <p class="src">출처 ProPublica, Machine Bias(2016) · 브라워드 카운티 피고인 7,214명의 COMPAS 위험 점수 분포</p>
+  <p class="small" style="margin-top:1.2vh">재범하지 않았는데 고위험으로 분류된 비율 흑인 44.85% · 백인 23.45% / 재범했는데 저위험으로 분류된 비율 흑인 27.99% · 백인 47.72%</p>
+</section>
+
+<!-- 12 그림: 애플워치 -->
+<section class="slide">
+  <div class="kicker">10-7 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">사례 — 애플워치 알림과 정밀도</h2>
+  <div class="shot wide"><img src="img/lesson10_case2.jpg" alt="애플워치의 불규칙 맥박 알림 화면 사진과 참가자 419,297명, 알림 2,161명, 분석 가능 450명, 심방세동 확인 34%로 이어지는 단계별 수치."></div>
+  <p class="src">사진 Apple 뉴스룸(2018) · 수치 Apple Heart Study, NEJM 381:1909(2019)</p>
+  <p class="small" style="margin-top:1.2vh">알림 2,161명 가운데 분석 가능 450명 · 심방세동 확인 34% = 정밀도 · 재현율은 이 연구로 계산 불가</p>
+</section>
+
+<!-- 13 기준 모델 -->
+<section class="slide">
+  <div class="kicker">10-8 · 비교</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">다수 범주만 예측하는 기준 모델</h2>
+  <ul class="facts" style="margin-top:2vh">
+    <li>전체 영화 <b>216편</b> 중 성공 라벨 <b>23편</b></li>
+    <li>전부 기준 미달로 예측하면 193편을 맞혀 전체 자료의 정확도 약 <b>89%</b></li>
+    <li>공정한 비교의 조건 — 같은 시험용 자료</li>
+    <li>다음 표의 기준은 9차시 코드의 시험용 <b>66편</b> · 실제 성공 6편, 기준 미달 60편</li>
+  </ul>
+  <p class="point">성공작을 한 편도 찾지 않고 얻은 정확도</p>
+</section>
+
+<!-- 14 네 모델 비교표 -->
+<section class="slide">
+  <div class="kicker">10-8 · 비교</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">같은 시험용 66편의 네 모델</h2>
+  <table class="mini" style="margin-top:2.4vh;font-size:clamp(14px,1.6vw,23px)">
+    <tr><th>모델</th><th>정확도</th><th>성공 재현율</th><th>판정</th></tr>
+    <tr><td>전부 기준 미달로 예측<br>(기준 모델)</td><td><em>0.909</em></td><td>0.000 (0/6)</td><td>60편을 맞히지만 성공작을 전부 놓침</td></tr>
+    <tr><td>로지스틱 회귀</td><td>0.924</td><td>0.167 (1/6)</td><td>61편을 맞히고 성공작 1편을 찾음</td></tr>
+    <tr><td>의사결정트리 (깊이 3)</td><td>0.939</td><td>0.333 (2/6)</td><td>62편을 맞히고 성공작 2편을 찾음</td></tr>
+    <tr><td>로지스틱 + 첫 주 관객</td><td><em>0.955</em></td><td>0.500 (3/6)</td><td>개봉 전 예측의 개선으로 해석할 수 없음</td></tr>
+  </table>
+  <p class="small" style="margin-top:1.8vh">영화 코드 순 정렬 후 열 편 중 앞 세 편 시험용 고정 · 양성 기준 관객 100만 명, 확률 문턱값 0.5 · 성공작 6편이므로 한 편 차이로 재현율 약 0.167 변동 · 이 표의 성능을 다른 영화 전체로 일반화 불가</p>
+</section>
+
+<!-- 15 그림: 한 편씩 -->
+<section class="slide">
+  <div class="kicker">10-8 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">한 편씩 쌓아 본 두 모델</h2>
+  <div class="diagram" style="--wh:48vh">    <div class="widget" data-w="walk">
+  <svg viewBox="0 0 720 350" role="img" aria-label="시험용 영화 66편을 한 편씩 넘기며, 전부 기준 미달로 예측하는 기준 모델과 선택한 분류기의 혼동행렬·정확도·찾아낸 성공작 수를 나란히 쌓아 비교하는 그림">
+    <rect x="40" y="10" width="640" height="48" rx="8" fill="#fff" stroke="#e3ddcf"></rect>
+    <text class="bw-head" x="54" y="40" font-size="16" font-weight="700" fill="#1c2230">66번째 · 정동원 팬콘서트 필름 : 다…</text>
+    <rect class="bw-badge" x="548" y="21" width="124" height="26" rx="13" fill="#f1efe8" stroke="#d8d3c4" opacity="1"></rect>
+    <text class="bw-badget" x="610" y="39" text-anchor="middle" font-size="14" font-weight="700" fill="#1c2230" opacity="1">실제 기준 미달</text>
+    <g class="bw-panel" data-s="0">
+      <rect x="40" y="68" width="316" height="218" rx="10" fill="#fff" stroke="#e3ddcf"></rect>
+      <text class="bw-pt" x="50" y="92" font-size="15" font-weight="800" fill="#1c2230">기준 모델 · 전부 기준 미달 예측</text>
+      <text x="190" y="118" text-anchor="middle" font-size="14" fill="#6b7385">예측 성공</text>
+      <text x="294" y="118" text-anchor="middle" font-size="14" fill="#6b7385">예측 기준 미달</text>
+      <text x="134" y="152" text-anchor="end" font-size="14" fill="#6b7385">실제 성공</text>
+      <text x="134" y="200" text-anchor="end" font-size="14" fill="#6b7385">실제 기준 미달</text>
+      <g class="bw-cell" data-k="tp">
+        <rect x="140" y="126" width="100" height="44" fill="#54a24b" fill-opacity="0.16" stroke="#f0e2bc"></rect>
+        <text x="147" y="143" font-size="14" font-weight="700" fill="#2f6d2a">TP</text>
+        <text class="bw-n" data-k="tp" x="190" y="162" text-anchor="middle" font-size="20" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">0</text>
+      </g>
+      <g class="bw-cell" data-k="fn">
+        <rect x="244" y="126" width="100" height="44" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+        <text x="251" y="143" font-size="14" font-weight="700" fill="#b23c3c">FN</text>
+        <text class="bw-n" data-k="fn" x="294" y="162" text-anchor="middle" font-size="20" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">6</text>
+      </g>
+      <g class="bw-cell" data-k="fp">
+        <rect x="140" y="174" width="100" height="44" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+        <text x="147" y="191" font-size="14" font-weight="700" fill="#b23c3c">FP</text>
+        <text class="bw-n" data-k="fp" x="190" y="210" text-anchor="middle" font-size="20" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">0</text>
+      </g>
+      <g class="bw-cell" data-k="tn">
+        <rect x="244" y="174" width="100" height="44" fill="#3ba6a0" fill-opacity="0.15" stroke="#f0e2bc"></rect>
+        <text x="251" y="191" font-size="14" font-weight="700" fill="#23706b">TN</text>
+        <text class="bw-n" data-k="tn" x="294" y="210" text-anchor="middle" font-size="20" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">60</text>
+      </g>
+      <text class="bw-hit" x="50" y="230" font-size="14" font-weight="700" fill="#1c2230">맞힌 편수 60/66</text>
+      <text class="bw-acc" x="50" y="254" font-size="15" font-weight="800" fill="#1c2230">정확도 0.909</text>
+      <text class="bw-rec" x="50" y="278" font-size="14" font-weight="700" fill="#1c2230">찾아낸 성공작 0/6 · 재현율 0.000</text>
+      <rect x="190" y="245" width="126" height="9" rx="4.5" fill="#ece7d8"></rect>
+      <rect class="bw-fill" x="190" y="245" width="114.5" height="9" rx="4.5" fill="#b07a00"></rect>
+      <text class="bw-under" x="190" y="253" font-size="14" fill="#9a8b6a" opacity="0">◀ 0.90 미만</text>
+    </g>
+    <g class="bw-panel" data-s="1">
+      <rect x="364" y="68" width="316" height="218" rx="10" fill="#fff" stroke="#e3ddcf"></rect>
+      <text class="bw-pt" x="374" y="92" font-size="15" font-weight="800" fill="#1c2230">로지스틱 회귀</text>
+      <text class="bw-warn" x="374" y="110" font-size="14" fill="#b23c3c"></text>
+      <text x="514" y="118" text-anchor="middle" font-size="14" fill="#6b7385">예측 성공</text>
+      <text x="618" y="118" text-anchor="middle" font-size="14" fill="#6b7385">예측 기준 미달</text>
+      <text x="458" y="152" text-anchor="end" font-size="14" fill="#6b7385">실제 성공</text>
+      <text x="458" y="200" text-anchor="end" font-size="14" fill="#6b7385">실제 기준 미달</text>
+      <g class="bw-cell" data-k="tp">
+        <rect x="464" y="126" width="100" height="44" fill="#54a24b" fill-opacity="0.16" stroke="#f0e2bc"></rect>
+        <text x="471" y="143" font-size="14" font-weight="700" fill="#2f6d2a">TP</text>
+        <text class="bw-n" data-k="tp" x="514" y="162" text-anchor="middle" font-size="20" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">1</text>
+      </g>
+      <g class="bw-cell" data-k="fn">
+        <rect x="568" y="126" width="100" height="44" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+        <text x="575" y="143" font-size="14" font-weight="700" fill="#b23c3c">FN</text>
+        <text class="bw-n" data-k="fn" x="618" y="162" text-anchor="middle" font-size="20" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">5</text>
+      </g>
+      <g class="bw-cell" data-k="fp">
+        <rect x="464" y="174" width="100" height="44" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+        <text x="471" y="191" font-size="14" font-weight="700" fill="#b23c3c">FP</text>
+        <text class="bw-n" data-k="fp" x="514" y="210" text-anchor="middle" font-size="20" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">0</text>
+      </g>
+      <g class="bw-cell" data-k="tn">
+        <rect x="568" y="174" width="100" height="44" fill="#3ba6a0" fill-opacity="0.15" stroke="#f0e2bc"></rect>
+        <text x="575" y="191" font-size="14" font-weight="700" fill="#23706b">TN</text>
+        <text class="bw-n" data-k="tn" x="618" y="210" text-anchor="middle" font-size="20" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums">60</text>
+      </g>
+      <text class="bw-hit" x="374" y="230" font-size="14" font-weight="700" fill="#1c2230">맞힌 편수 61/66</text>
+      <text class="bw-acc" x="374" y="254" font-size="15" font-weight="800" fill="#1c2230">정확도 0.924</text>
+      <text class="bw-rec" x="374" y="278" font-size="14" font-weight="700" fill="#1c2230">찾아낸 성공작 1/6 · 재현율 0.167</text>
+      <rect x="514" y="245" width="126" height="9" rx="4.5" fill="#ece7d8"></rect>
+      <rect class="bw-fill" x="514" y="245" width="116.5" height="9" rx="4.5" fill="#2b7fd6"></rect>
+      <text class="bw-under" x="514" y="253" font-size="14" fill="#9a8b6a" opacity="0">◀ 0.90 미만</text>
+    </g>
+    <g class="bw-band">
+      <rect class="bw-tile" data-i="0" x="40.0" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="1" x="49.7" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="2" x="59.4" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="3" x="69.1" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="4" x="78.8" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="5" x="88.5" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="6" x="98.2" y="298" width="7.7" height="16" rx="1.5" fill="#e45756"></rect>
+      <rect class="bw-tile" data-i="7" x="107.9" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="8" x="117.6" y="298" width="7.7" height="16" rx="1.5" fill="#e45756"></rect>
+      <rect class="bw-tile" data-i="9" x="127.3" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="10" x="137.0" y="298" width="7.7" height="16" rx="1.5" fill="#e45756"></rect>
+      <rect class="bw-tile" data-i="11" x="146.7" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="12" x="156.4" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="13" x="166.1" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="14" x="175.8" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="15" x="185.5" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="16" x="195.2" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="17" x="204.8" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="18" x="214.5" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="19" x="224.2" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="20" x="233.9" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="21" x="243.6" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="22" x="253.3" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="23" x="263.0" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="24" x="272.7" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="25" x="282.4" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="26" x="292.1" y="298" width="7.7" height="16" rx="1.5" fill="#54a24b"></rect>
+      <rect class="bw-tile" data-i="27" x="301.8" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="28" x="311.5" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="29" x="321.2" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="30" x="330.9" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="31" x="340.6" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="32" x="350.3" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="33" x="360.0" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="34" x="369.7" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="35" x="379.4" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="36" x="389.1" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="37" x="398.8" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="38" x="408.5" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="39" x="418.2" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="40" x="427.9" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="41" x="437.6" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="42" x="447.3" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="43" x="457.0" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="44" x="466.7" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="45" x="476.4" y="298" width="7.7" height="16" rx="1.5" fill="#e45756"></rect>
+      <rect class="bw-tile" data-i="46" x="486.1" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="47" x="495.8" y="298" width="7.7" height="16" rx="1.5" fill="#e45756"></rect>
+      <rect class="bw-tile" data-i="48" x="505.5" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="49" x="515.2" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="50" x="524.8" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="51" x="534.5" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="52" x="544.2" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="53" x="553.9" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="54" x="563.6" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="55" x="573.3" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="56" x="583.0" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="57" x="592.7" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="58" x="602.4" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="59" x="612.1" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="60" x="621.8" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="61" x="631.5" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="62" x="641.2" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="63" x="650.9" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="64" x="660.6" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4"></rect>
+      <rect class="bw-tile" data-i="65" x="670.3" y="298" width="7.7" height="16" rx="1.5" fill="#d8d3c4" stroke="#1c2230" stroke-width="1.6"></rect>
+    </g>
+    <text x="40" y="336" font-size="14" fill="#6b7385">회색 기준 미달 · 빨강 놓친 성공작 · 초록 찾아낸 성공작 · 굵은 테두리 현재 편</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-m="logit" aria-pressed="true">로지스틱 회귀</button>
+    <button class="wbtn" type="button" data-m="tree" aria-pressed="false">의사결정트리</button>
+    <button class="wbtn" type="button" data-m="week" aria-pressed="false">+ 첫 주 관객 (개봉 전 사용 불가)</button>
+    <button class="wbtn" type="button" data-step="1">한 편</button>
+    <button class="wbtn" type="button" data-step="10">열 편</button>
+    <button class="wbtn" type="button" data-step="end">끝까지</button>
+    <button class="wbtn" type="button" data-step="reset">처음으로</button>
+    <label>진행 <input class="bw-range" type="range" min="0" max="66" step="1" value="66"></label>
+    <button class="wbtn on" type="button" data-ax="zero" aria-pressed="true">0부터</button>
+    <button class="wbtn" type="button" data-ax="zoom" aria-pressed="false">0.90부터</button>
+    <span class="wout">정확도 0.909 · 0.924 · 성공작 0/6 · 1/6</span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh">진행 위치 27번째에서 두 모델 판정 처음 갈라짐 · 그 전 26편에서는 기준 모델과 분류기의 네 칸 완전히 같음</p>
+</section>
+
+<!-- 16 그림: 성공 편수 -->
+<section class="slide">
+  <div class="kicker">10-9 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">성공 편수와 기준 모델의 정확도</h2>
+  <div class="diagram" style="--wh:44vh">    <div class="widget" data-w="dial">
+  <svg viewBox="0 0 720 300" role="img" aria-label="시험용 66편 중 성공작 수를 바꾸면 다수 범주를 그대로 예측하는 기준 모델의 정확도·재현율·정밀도가 어떻게 달라지는지, 무작위 50 대 50 모델과 비교해 보여 주는 그림">
+    <text class="dl-title" x="40" y="26" font-size="14" font-weight="700" fill="#6b7385"></text>
+    <g class="dl-grid"></g>
+    <text class="dl-base" x="40" y="244" font-size="15" font-weight="800" fill="#1c2230"></text>
+    <text x="40" y="268" font-size="14" fill="#6b7385">무작위 50:50 · 정확도 0.500 · 재현율 0.500</text>
+    <rect class="dl-panel" x="390" y="32" width="290" height="236" rx="10" fill="#fff" stroke="#e3ddcf"></rect>
+    <g class="dl-m" data-m="acc">
+      <text x="404" y="62" font-size="14" font-weight="700" fill="#1c2230">정확도</text>
+      <rect x="404" y="76" width="262" height="10" rx="5" fill="#ece7d8"></rect>
+      <rect class="dl-bar" x="404" y="76" width="0" height="10" rx="5" fill="#b07a00"></rect>
+      <line x1="535" y1="71" x2="535" y2="91" stroke="#6b7385" stroke-width="1.2" stroke-dasharray="3 3"></line>
+      <text x="535" y="66" text-anchor="middle" font-size="14" fill="#6b7385">무작위 0.500</text>
+      <text class="dl-val" x="666" y="62" text-anchor="end" font-size="24" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <text class="dl-note" x="404" y="98" font-size="14" fill="#9a8b6a"></text>
+    </g>
+    <g class="dl-m" data-m="rec">
+      <text x="404" y="140" font-size="14" font-weight="700" fill="#1c2230">재현율</text>
+      <rect x="404" y="154" width="262" height="10" rx="5" fill="#ece7d8"></rect>
+      <rect class="dl-bar" x="404" y="154" width="0" height="10" rx="5" fill="#b07a00"></rect>
+      <line x1="535" y1="149" x2="535" y2="169" stroke="#6b7385" stroke-width="1.2" stroke-dasharray="3 3"></line>
+      <text x="535" y="144" text-anchor="middle" font-size="14" fill="#6b7385">무작위 0.500</text>
+      <text class="dl-val" x="666" y="140" text-anchor="end" font-size="24" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <text class="dl-note" x="404" y="176" font-size="14" fill="#9a8b6a"></text>
+    </g>
+    <g class="dl-m" data-m="prec">
+      <text x="404" y="218" font-size="14" font-weight="700" fill="#1c2230">정밀도</text>
+      <rect x="404" y="232" width="262" height="10" rx="5" fill="#ece7d8"></rect>
+      <rect class="dl-bar" x="404" y="232" width="0" height="10" rx="5" fill="#b07a00"></rect>
+      <text class="dl-val" x="666" y="218" text-anchor="end" font-size="24" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <text class="dl-note" x="404" y="254" font-size="14" fill="#9a8b6a"></text>
+    </g>
+    <text class="dl-cap" x="40" y="292" font-size="14" fill="#6b7385"></text>
+  </svg>
+  <div class="wctl">
+    <label>성공 편수 <input class="dl-range" type="range" min="0" max="66" step="1" value="6"></label>
+    <button class="wbtn on" type="button" data-k="6" aria-pressed="true">6편 (실제 자료)</button>
+    <button class="wbtn" type="button" data-k="1" aria-pressed="false">1편</button>
+    <button class="wbtn" type="button" data-k="33" aria-pressed="false">33편</button>
+    <button class="wbtn" type="button" data-k="40" aria-pressed="false">40편</button>
+    <span class="wout"></span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh">성공 편수 1편으로 줄이면 아무것도 찾지 않는 기준 모델의 정확도 0.985로 상승 · 치우친 자료에서 정확도 높게 나오는 구조</p>
+</section>
+
+<!-- 17 프롬프트 1/2 -->
+<section class="slide">
+  <div class="kicker">10-10 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (1/2)</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.25vw,17px);line-height:1.6;max-width:46em;margin-top:2vh">"흥행 채점표" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로 해 줘.<br>
+영화 데이터로 관객 수 기준 충족 여부를 예측하는 분류기를 만들고, 그 결과를 혼동행렬로 보여 줘.<br>
+데이터: https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv<br>
+이 파일의 열 이름은 movieCd, movieNm, openDt, genre, nation, first_scrn, first_show, first_date, peak, first_week_audi, total_audi, days_in_top10이고, 인코딩은 UTF-8이야.<br>
+주소에 적힌 고정 커밋이 수업 기준 시점이야. 최신 자료로 바꾸지 말아 줘.<br>
+total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 봐 줘.<br>
+기본 입력은 first_scrn, first_show, peak, genre, nation 다섯 열만 쓰고, total_audi와 days_in_top10은 입력에서 제외해 줘.<br>
+first_scrn과 first_show는 10위권에 처음 관측된 날의 집계라 개봉 전 정보가 아니야.</div>
+  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 데이터 주소·열 이름·인코딩·고정 커밋·양성 기준·입력 제한이 프롬프트 안에 있음</p>
+</section>
+
+<!-- 18 프롬프트 2/2 -->
+<section class="slide">
+  <div class="kicker">10-10 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (2/2)</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.25vw,17px);line-height:1.6;max-width:46em;margin-top:2vh">영화 코드 순으로 정렬하고 열 편 중 앞 세 편을 시험용으로 고정해 줘.<br>
+학습과 표준화의 기준 계산에는 시험용 자료를 쓰지 말아 줘.<br>
+first_week_audi를 더한 비교 모델도 만들고, 개봉 전에는 사용할 수 없는 값이라고 표시해 줘.<br>
+'무조건 기준 미달로만 찍는 모델'과 로지스틱 회귀, 깊이 3 의사결정트리의 정확도·정밀도·성공 재현율을 한 표에 나란히 보여 줘.<br>
+고른 모델의 혼동행렬 네 칸을 표와 히트맵으로 보여 주고, 그래프는 plotly로 그려 줘.<br>
+학습에 쓴 영화 편수와 시험용 편수, 시험용 성공작 편수를 화면에 적어 줘.<br>
+개봉 전 예측 성능이 아니라 기록된 자료의 분류 연습임을 표시해 줘.<br>
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
+  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 두 장을 이으면 교재 ① 원문 전체 · main.py와 requirements.txt 두 파일로 저장</p>
+</section>
+
+<!-- 19 레이블 누수 -->
+<section class="slide">
+  <div class="kicker">10-11 · 원리</div>
+  <h2>레이블 누수</h2>
+  <ul class="facts" style="margin-top:1.4vh;">
+    <li style="margin:1.8vh 0">7차시 — 첫 주 관객 수 추가 시 테스트 R² 약 <b>0.24</b>에서 <b>0.90</b>으로 상승</li>
+    <li style="margin:1.8vh 0">이번 분류 예제 — 같은 시험용 자료에서 정확도 <b>0.924 → 0.955</b></li>
+    <li style="margin:1.8vh 0">개봉 전 흥행 예측이라는 목표에서 첫 주 관객 수는 사용할 수 없는 미래 정보</li>
+    <li style="margin:1.8vh 0">총 관객 수와 관련이 높다는 사실 자체는 누수의 이유가 아님 · 예측 시점에 확보할 수 없는 값을 학습·평가에 쓴 것이 핵심</li>
+    <li style="margin:1.8vh 0">first_scrn·first_show도 첫 관측일 집계이므로 개봉 전 확보로 보기 어려움</li>
+  </ul>
+  <p class="point" style="margin-top:2vh">판정 기준은 점수의 크기가 아니라 입력의 수집 시점</p>
+  <p class="small" style="margin-top:1.2vh">활동지 문제 6 — 예측 시점을 먼저 적고 변수별 사용 가능 여부를 판단</p>
+</section>
+
+<!-- 20 정확도만 보면 -->
+<section class="slide">
+  <div class="kicker">10-12 · 판단</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">정확도만 보면 놓치는 세 가지</h2>
+  <ul class="facts" style="margin-top:1.8vh">
+    <li><b>기준 모델과 비교</b> — 90.9%는 성공작을 한 편도 찾지 않고 얻은 정확도 · 높은 정확도만으로 목적 달성 판단 불가</li>
+    <li><b>오류의 종류 확인</b> — 로지스틱 회귀는 92.4%를 맞혔으나 성공작 6편 중 5편 놓침 · 성공작 발굴이 목적이면 이 한계 함께 확인</li>
+    <li><b>입력의 수집 시점 확인</b> — 점수가 올랐다는 사실만으로 개선인지 누수인지 판정 불가</li>
+  </ul>
+  <p class="point">기준 모델보다 정확도가 낮아도 중요한 오류를 줄이는 모델은 유용</p>
+  <p class="small">시험용 자료를 보고 반복해 모델을 고르면 평가가 그 자료에 맞춰짐 · 이번 비교는 탐색 결과로 기록, 적용 전 별도 자료로 검증</p>
+</section>
+
+<!-- 21 확인 문제 -->
+<section class="slide">
+  <div class="kicker">10-13 · 확인</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">확인 문제 — 기준 모델의 성적</h2>
+  <p class="point" style="margin-top:2vh;font-size:clamp(17px,2vw,28px)">영화 216편 중 성공작이 23편 · 전부 "기준 미달"로만 찍는 모델의 성적</p>
+  <table class="mini" style="margin-top:2.2vh;font-size:clamp(14px,1.6vw,23px)">
+    <tr><th>물음</th><th>선택지</th><th>정답과 계산</th></tr>
+    <tr><td>(a) 정확도</td><td>0.11 / <em>0.89</em> / 1.00</td><td>기준 미달 193편 전부 맞히므로 193÷216 ≈ 0.89</td></tr>
+    <tr><td>(b) 성공 재현율</td><td>0.89 / 1.00 / <em>0.00</em></td><td>실제 성공작 23편 중 잡아낸 것 0편, 0÷23 = 0.00</td></tr>
+  </table>
+  <p class="point" style="margin-top:2.4vh">정확도 0.89와 재현율 0.00의 공존</p>
+</section>
+
+<!-- 22 확인 문제 2·3 -->
+<section class="slide">
+  <div class="kicker">10-13 · 확인</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">확인 문제 — 정확도와 레이블 누수</h2>
+  <table class="mini" style="margin-top:2.2vh;font-size:clamp(14px,1.6vw,23px)">
+    <tr><th>물음</th><th>답</th><th>근거</th></tr>
+    <tr><td>정확도 0.924만으로<br>성공작 발굴의 충분함 판단</td><td style="white-space:nowrap"><em>불가</em></td><td>시험용 66편 중 기준 미달 60편 · 전부 기준 미달로 예측해도 0.909 · 재현율 1÷6 ≈ 0.167도 함께 보고</td></tr>
+    <tr><td>첫 주 관객 수를 넣어 오른 점수<br>= 개봉 전 예측 성능의 개선</td><td style="white-space:nowrap"><em>아님</em></td><td>개봉 전에는 알 수 없는 미래 정보가 섞인 레이블 누수 · 판단 기준은 점수의 크기가 아니라 입력의 확보 시점</td></tr>
+  </table>
+</section>
+
+<!-- 23 정리 -->
+<section class="slide">
+  <div class="kicker">정리</div>
+  <h2>제10강 요약</h2>
+  <div class="split" style="margin-top:2.6vh">
+    <div class="card"><div class="t">표</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">실제 범주와 예측 범주를 교차한 네 칸</div></div>
+    <div class="card"><div class="t">분모</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">정확도 전체 · 정밀도 예측 양성 · 재현율 실제 양성</div></div>
+    <div class="card"><div class="t">기준선</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">시험용 66편 · 기준 모델 0.909 · 성공 재현율 0/6</div></div>
+    <div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">오류의 종류와 입력의 수집 시점 확인</div></div>
+  </div>
+  <p class="point">어떤 오류를 줄일지 정하는 일은 데이터 밖의 판단</p>
+</section>
+
+<div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
+<div class="foot">
+  <span>당곡고 데이터 과학 · 10차시</span>
+  <div class="dots" id="dots"></div>
+  <span id="pageno"></span>
+</div>
+
+<script src="../../assets/widgets10.js"></script>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+    [...dots.children].forEach((d, k) => d.classList.toggle('here', k === cur));
+    document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => { if (e.target.closest('a, .widget')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  show(0);
+</script>
+</body>
+</html>

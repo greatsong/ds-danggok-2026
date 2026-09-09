@@ -1,0 +1,575 @@
+<!-- 9차시 슬라이드 · 분류 — system/slides/template.html 뼈대. 교재 web/lesson09.html의 인용·표·수치·위젯 조각을 사용 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9차시 슬라이드 · 분류 — 데이터 과학</title>
+<script src="../../assets/release.js"></script>
+<script src="../../assets/gate.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1219; --bg-accent: #161b26;
+    --ink: #f2f4f8; --ink-dim: #8b93a7;
+    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
+  .slide.on { display: flex; }
+  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
+    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
+  .kicker.blue { color: var(--accent2); }
+  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
+  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
+  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
+  blockquote { font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
+    line-height: 1.5; max-width: 28em; }
+  blockquote::before { content: "\201C"; color: var(--accent); }
+  blockquote::after { content: "\201D"; color: var(--accent); }
+  .facts { margin-top: 1vh; }
+  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
+    padding-left: 1.2em; text-indent: -1.2em; }
+  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
+  .facts b { color: var(--accent2); font-weight: 800; }
+  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
+  .point b { color: var(--accent); }
+  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
+  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
+    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
+    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
+  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
+  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
+  table.mini th { color: var(--accent); font-weight: 800; }
+  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
+  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
+  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
+  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
+  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
+  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
+  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
+  .withimg .txt { flex: 1 1 0; min-width: 0; }
+  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
+  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
+  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
+  .diagram.short svg { max-height: var(--dh, 40vh); }
+  /* 인터랙티브 위젯 — 밝은 상자 안 */
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
+          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
+  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
+          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
+  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
+  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
+  .foot span { white-space: nowrap; }
+  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
+  .dots i.here { background: var(--accent); }
+  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
+    font-size: clamp(11px, 1.1vw, 14px); }
+@media (max-width: 760px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- 1 표지 -->
+<section class="slide chapter on">
+  <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 제9강</div>
+  <h1>분류</h1>
+  <p class="sub">로지스틱 회귀와 의사결정트리를 이용한 범주 예측</p>
+</section>
+
+<!-- 2 분류가 답하는 질문 -->
+<section class="slide">
+  <div class="kicker">9-1 · 개념</div>
+  <h2>분류가 답하는 질문</h2>
+  <ul class="facts">
+    <li>스팸 메일 필터 — 스팸인가, 아닌가</li>
+    <li>감염병 검사 — 양성인가, 음성인가</li>
+    <li>답의 형태가 숫자가 아니라 두 범주 중 하나</li>
+  </ul>
+  <p class="point">문제를 받았을 때 <b>회귀인지 분류인지</b> 가려내는 것이 첫 단계</p>
+</section>
+
+<!-- 3 이진 분류의 정의 -->
+<section class="slide">
+  <div class="kicker">9-2 · 교과서 135쪽</div>
+  <h2>이진 분류의 정의</h2>
+  <blockquote style="margin-top:3vh">분류 모델 중 이진 분류는 어떤 특성을 '띤다' 또는 '띠지 않는다' 두 가지 경우의 수 중 하나로 예측하는 것을 말한다</blockquote>
+  <p class="small">범주가 두 개면 이진 분류, 세 개 이상이면 다중 분류 · 오늘의 성공·기준 미달은 이진 분류</p>
+</section>
+
+<!-- 4 회귀와 분류의 구분 -->
+<section class="slide">
+  <div class="kicker">9-3 · 원리</div>
+  <h2>회귀와 분류의 구분</h2>
+  <table class="mini">
+    <tr><th>구분</th><th>묻는 말</th><th>답의 형태</th><th>영화 데이터라면</th></tr>
+    <tr><td>회귀 (6~8차시)</td><td>얼마나?</td><td>연속적인 숫자</td><td>총 관객 수는 몇 명일까</td></tr>
+    <tr><td>분류 (오늘)</td><td>어느 쪽?</td><td>정해진 범주 중 하나</td><td>흥행에 성공할까, 못 할까</td></tr>
+  </table>
+  <p class="point">같은 영화 데이터라도 <b>묻는 형태</b>가 모델을 정함</p>
+</section>
+
+<!-- 5 로지스틱 회귀의 정의 -->
+<section class="slide">
+  <div class="kicker">9-4 · 교과서 135·136쪽</div>
+  <h2>로지스틱 회귀의 정의</h2>
+  <blockquote style="margin-top:2.6vh">로지스틱 회귀는 선형 회귀 모델을 로지스틱 함수와 결합하여 각 범주에 해당할 확률을 바탕으로 분류하는 방법이다</blockquote>
+  <blockquote style="margin-top:2.2vh;font-size:clamp(18px,2.1vw,30px)">… 출력값이 0.5보다 크면 양성, 작으면 음성으로 분류한다</blockquote>
+  <p class="small">이 실습의 문턱값은 0.5 · 이상이면 양성(성공), 미만이면 음성(기준 미달)</p>
+</section>
+
+<!-- 6 확률의 추정과 문턱값 -->
+<section class="slide">
+  <div class="kicker">9-5 · 원리</div>
+  <h2>확률의 추정과 문턱값</h2>
+  <ul class="facts">
+    <li>입력 변수의 가중합에 시그모이드 함수를 적용해 양성일 확률을 추정</li>
+    <li>선형 회귀를 먼저 학습한 뒤 출력을 바꾸는 방식이 아님 · 분류에 맞게 가중치를 학습</li>
+    <li>추정 확률에 문턱값을 적용해 범주를 결정</li>
+    <li>관객 수로 정답을 만드는 <b>라벨 기준</b>과 <b>문턱값</b>은 서로 다름</li>
+  </ul>
+  <p class="point">이름에는 회귀가 들어 있으나 하는 일은 <b>분류</b></p>
+  <p class="small">의사결정트리도 확률을 추정할 수 있으나 이 시간에는 조건에 따라 가지가 나뉘는 판단 과정에 주목</p>
+</section>
+
+<!-- 7 시그모이드 곡선 -->
+<section class="slide">
+  <div class="kicker">9-6 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">시그모이드 곡선 위의 시험용 66편</h2>
+  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="sigmoidPath">
+<svg viewBox="0 0 720 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="시험용 66편의 가중합과 추정 확률을 시그모이드 곡선 위에 나타낸 그림. 문턱값 슬라이더를 옮기면 성공으로 예측하는 편수와 정확도가 바뀜">
+  <!-- 축선: 본판 가로·세로, 확률 띠 세로 -->
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="56" y1="268" x2="556" y2="268"/>
+    <line x1="56" y1="44" x2="56" y2="268"/>
+    <line x1="600" y1="44" x2="600" y2="268"/>
+  </g>
+  <!-- 성공으로 예측 영역(확률 띠) -->
+  <rect class="zone" x="600" y="44" width="92" height="112" fill="#2f9e5f" opacity="0.10"/>
+  <!-- 확률 1 점근선 -->
+  <line x1="56" y1="44" x2="556" y2="44" stroke="#b9b3a5" stroke-width="1" stroke-dasharray="5 4"/>
+  <!-- 축 이름 -->
+  <g font-size="15" fill="#6b7385">
+    <text x="306" y="32" text-anchor="middle">가중합 축 → 시그모이드 곡선</text>
+    <text x="646" y="32" text-anchor="middle">확률 축</text>
+  </g>
+  <!-- 점근선 설명 -->
+  <g font-size="14" fill="#6b7385">
+    <text class="note1" x="156" y="62">확률 1 = 닿지 않는 선</text>
+    <text class="note2" x="156" y="82">σ(5)=0.9933 · σ(10)=0.99995</text>
+  </g>
+  <!-- 가중합 눈금 -->
+  <g font-size="14" fill="#6b7385" text-anchor="middle">
+    <text x="131" y="286">−6</text>
+    <text x="231" y="286">−4</text>
+    <text x="331" y="286">−2</text>
+    <text x="431" y="286">0</text>
+    <text x="531" y="286">2</text>
+  </g>
+  <!-- 확률 눈금 -->
+  <g font-size="14" fill="#6b7385" text-anchor="end">
+    <text x="48" y="273">0</text>
+    <text x="48" y="161">0.5</text>
+    <text x="48" y="49">1</text>
+  </g>
+  <!-- 시그모이드 곡선 -->
+  <polyline class="curve" fill="none" stroke="#6b7385" stroke-width="2.5" points=""/>
+  <!-- 66편: 본판 점 · 띠 착지 점 · 클릭 히트원 -->
+  <g class="mpts"></g>
+  <g class="bpts"></g>
+  <g class="hits"></g>
+  <!-- 문턱선과 라벨 -->
+  <line class="tline" x1="56" y1="156" x2="692" y2="156" stroke="#d64545" stroke-width="2"/>
+  <text class="zlab" x="604" y="60" font-size="14" fill="#2f9e5f">성공으로 예측</text>
+  <text class="tlab" x="60" y="148" font-size="14" fill="#d64545">문턱값 0.50</text>
+  <!-- 수치 줄과 선택 줄 -->
+  <g font-size="15" fill="#1c2230">
+    <text class="n1" x="56" y="304">맞힌 편수 61/66</text>
+    <text class="n2" x="232" y="304">정확도 0.924</text>
+    <text class="n3" x="376" y="304">성공으로 예측 1편</text>
+    <text class="n4" x="536" y="304">기준 미달로 예측 65편</text>
+    <text class="sel" x="56" y="326">점을 눌러 한 편의 확률 확인</text>
+  </g>
+</svg>
+<div class="wctl">
+  <label>문턱값 <input type="range" class="thr" min="0.05" max="0.95" step="0.05" value="0.5"></label>
+  <button class="wbtn" type="button" data-k="path">경로 따라가기</button>
+  <button class="wbtn" type="button" data-k="top">확률이 가장 높은 영화</button>
+  <button class="wbtn" type="button" data-k="miss">확률은 낮고 실제는 성공</button>
+</div>
+</div></div>
+  <p class="small">시험용 66편 · 라벨 기준 100만 명 · 확률은 4절 표와 같은 모델에서 미리 계산해 저장한 값</p>
+</section>
+
+<!-- 8 챌린저호 -->
+<section class="slide">
+  <div class="kicker">9-7 · 사례</div>
+  <h2>챌린저호 O-링과 로지스틱 회귀</h2>
+  <ul class="facts">
+    <li>1986년 1월 28일 발사 73초 만에 공중분해, 승무원 7명 사망</li>
+    <li>사고 이전 23회 발사에 기온과 O-링 손상 여부 기록 · 손상은 그중 7회</li>
+    <li>입력은 발사 당시 기온(화씨) 하나, 예측은 손상 있음·없음 두 범주</li>
+    <li>달랄 연구진(1989, JASA) · 화씨 31도에서 파손 확률 최소 13%, 화씨 60도로 연기했다면 최소 2%</li>
+  </ul>
+  <p class="point">기록된 최저 기온은 화씨 53도 · 발사 예정 기온 31도는 <b>자료 바깥</b></p>
+  <p class="src">Dalal, Fowlkes &amp; Hoadley (1989), JASA 84(408)</p>
+</section>
+
+<!-- 9 챌린저호 그림 -->
+<section class="slide">
+  <div class="kicker">9-7 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">발사 기온과 O-링 손상 확률</h2>
+  <div class="shot wide"><img style="max-height:58vh" src="img/lesson09_case1.png" alt="발사 기온과 O-링 손상 여부의 산점도 위에 로지스틱 회귀 곡선을 그린 그래프. 손상 있음 7회는 빨간 점, 손상 없음 16회는 회색 점이며 화씨 53도 아래는 자료가 없는 구간으로 음영 처리되어 있다"></div>
+  <p class="src">자료는 사고 이전 23회 발사의 O-링 기록 · 곡선은 이 자료로 수업용 재계산 · 확률 계산은 Dalal 외(1989, JASA)</p>
+</section>
+
+<!-- 10 레이블의 정의 -->
+<section class="slide">
+  <div class="kicker">9-8 · 교과서 138쪽</div>
+  <h2>레이블의 정의</h2>
+  <blockquote style="margin-top:3vh">레이블은 모델이 예측하고자 하는 정답 값을 의미한다</blockquote>
+  <p class="point">영화 표에는 관객 수만 있고 <b>"성공/기준 미달"</b> 열이 없음</p>
+  <p class="small">수업의 정의 — 기록된 누적 관객 수 100만 명 이상이면 성공(1), 미만이면 기준 미달(0) · 제작비·수익 자료가 없으므로 실제 흑자·적자와 무관</p>
+</section>
+
+<!-- 11 성공 기준선 -->
+<section class="slide">
+  <div class="kicker">9-9 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">성공 기준선의 결정</h2>
+  <div class="diagram" style="--wh:36vh">    <div class="widget" data-w="labelline">
+  <svg viewBox="0 0 720 348" role="img" aria-label="216편의 관객 수 분포와 성공 기준선. 기준선을 옮기면 성공 라벨 편수와 경계에 걸린 두 편이 바뀌고, 이유를 적어야 정확도가 공개되는 그림">
+    <text x="56" y="26" text-anchor="start" font-size="15" font-weight="800" fill="#1c2230">216편의 관객 수 분포 · 가로축 로그</text>
+    <g class="bars"></g>
+    <line x1="56" y1="214" x2="430" y2="214" stroke="#e3ddcf" stroke-width="1.5"/>
+    <text x="56" y="234" text-anchor="middle" font-size="14" fill="#6b7385">1천</text>
+    <text x="144" y="234" text-anchor="middle" font-size="14" fill="#6b7385">1만</text>
+    <text x="232" y="234" text-anchor="middle" font-size="14" fill="#6b7385">10만</text>
+    <text x="320" y="234" text-anchor="middle" font-size="14" fill="#6b7385">100만</text>
+    <text x="408" y="234" text-anchor="middle" font-size="14" fill="#6b7385">1000만</text>
+    <line class="thrline" x1="320" y1="60" x2="320" y2="222" stroke="#d64545" stroke-width="2"/>
+    <rect class="thrhandle" x="315" y="46" width="10" height="16" rx="3" fill="#d64545"/>
+
+    <g class="bpanel">
+      <rect x="452" y="40" width="244" height="92" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+      <text class="b1" x="464" y="66" font-size="15" font-weight="800" fill="#1c2230"></text>
+      <text class="b2" x="464" y="90" font-size="14" fill="#6b7385"></text>
+      <text class="b3" x="464" y="116" font-size="14" font-weight="800" fill="#b07a00"></text>
+    </g>
+
+    <g class="cpanel">
+      <rect x="452" y="144" width="244" height="112" rx="6" fill="#fff" stroke="#2b7fd6" stroke-width="2"/>
+      <text x="464" y="168" font-size="14" font-weight="800" fill="#6b7385">시험용 66편 정확도</text>
+      <text x="464" y="196" font-size="14" fill="#1c2230">로지스틱 회귀</text>
+      <text class="clog" x="684" y="196" text-anchor="end" font-size="17" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <text x="464" y="222" font-size="14" fill="#1c2230">의사결정트리</text>
+      <text class="ctree" x="684" y="222" text-anchor="end" font-size="17" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <text x="464" y="246" font-size="14" fill="#6b7385">학습용 150편 · 문턱값 0.5</text>
+    </g>
+    <g class="cover">
+      <rect x="452" y="144" width="244" height="112" rx="6" fill="#fff" opacity="0.92"/>
+      <text class="cv1" x="574" y="188" text-anchor="middle" font-size="14" font-weight="800" fill="#d64545"></text>
+      <text class="cv2" x="574" y="212" text-anchor="middle" font-size="14" fill="#6b7385"></text>
+    </g>
+
+    <line x1="56" y1="270" x2="696" y2="270" stroke="#e3ddcf" stroke-width="1"/>
+    <text class="dhead" x="56" y="290" font-size="14" font-weight="800" fill="#6b7385"></text>
+    <circle cx="62" cy="308" r="5" fill="#b07a00"/>
+    <text class="dhi" x="76" y="312" font-size="14" fill="#1c2230"></text>
+    <circle cx="62" cy="330" r="5" fill="#b9b3a5"/>
+    <text class="dlo" x="76" y="334" font-size="14" fill="#1c2230"></text>
+  </svg>
+  <div class="wctl">
+    <label>성공 기준 <input type="range" class="thr" min="0" max="9" step="1" value="5"> <span class="wv">100만 명</span></label>
+    <button class="wbtn" type="button" data-r="언론이 쓰는 흥행 기준">언론이 쓰는 흥행 기준</button>
+    <button class="wbtn" type="button" data-r="216편 중 10% 안팎">216편 중 10% 안팎</button>
+    <button class="wbtn" type="button" data-r="우리 반의 체감 대흥행">우리 반의 체감 대흥행</button>
+    <button class="wbtn" type="button" data-r="성공 라벨 수 확보">성공 라벨 수 확보</button>
+    <input type="text" class="wtxt" maxlength="40" placeholder="직접 입력 · 8자 이상">
+    <button class="wbtn wgo" type="button" disabled>내 기준 제출</button>
+    <span class="wout"></span>
+  </div>
+</div></div>
+  <p class="small">기준선을 옮기면 성공 라벨 수와 경계의 영화가 바뀜 · 정확도는 기준을 제출해야 공개, 기준을 다시 옮기면 '다시 학습' 필요</p>
+</section>
+
+<!-- 12 입력의 집계 시점 -->
+<section class="slide">
+  <div class="kicker">9-10 · 실습</div>
+  <h2>입력의 집계 시점 확인</h2>
+  <ul class="facts">
+    <li>분석 대상 216편 — 2025년 9월부터 2026년 7월까지 개봉</li>
+    <li>입력 다섯 — first_scrn · first_show · peak · genre · nation</li>
+    <li>first_scrn·first_show는 개봉일이 아니라 일별 10위권에 처음 관측된 날의 집계값</li>
+    <li>first_week_audi · total_audi · days_in_top10은 입력에서 제외</li>
+  </ul>
+  <p class="point">기록된 자료의 <b>분류 연습</b>이며 개봉 전 예측 성능의 검증이 아님</p>
+  <p class="small">미래에 알게 되는 값을 빼 달라는 문장만으로 누수를 막을 수는 없음 · 10차시로 이어짐</p>
+</section>
+
+<!-- 13 샘플 프롬프트 1 -->
+<section class="slide">
+  <div class="kicker">9-11 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 — 자료와 라벨</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">"흥행 분류기" 스트림릿 앱을 파일 하나로 만들어 줘.<br>
+데이터: https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv<br>
+이 파일의 열 이름은 movieCd, movieNm, openDt, genre, nation, first_scrn, first_show, first_date, peak, first_week_audi, total_audi, days_in_top10이고, 인코딩은 UTF-8이야.<br>
+수업의 분석 대상은 2025년 9월부터 2026년 7월까지 개봉한 216편이야.<br>
+total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 분류해 줘.<br>
+기준은 50만·100만·300만 명 중 고를 수 있게 해 줘.<br>
+입력은 first_scrn·first_show·peak·genre·nation을 사용해 줘.<br>
+first_scrn·first_show는 개봉일이 아니라 10위권에 처음 관측된 날의 집계야.<br>
+first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
+  <p class="small">교재 ①과 같은 문장 · 데이터 주소·열 이름 전체·인코딩·라벨 기준·입력 목록이 프롬프트 안에 있음</p>
+</section>
+
+<!-- 14 샘플 프롬프트 2 -->
+<section class="slide">
+  <div class="kicker">9-11 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 — 분할과 화면</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">영화 코드 순으로 정렬해 열 편 중 앞 세 편을 시험용으로 고정하고,<br>
+학습용으로만 학습과 표준화를 해 줘. 두 모델은 같은 시험용 자료로 평가해 줘.<br>
+학습용과 시험용의 영화 편수를 화면에 적어 줘.<br>
+시험용 자료로 계산한 정확도를 화면에 표시해 줘.<br>
+시험용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.<br>
+확률이 0.5 이상이면 성공으로 분류하고 실제 라벨도 함께 보여 줘.<br>
+시험용 영화의 추정 확률을 높은 순으로 막대그래프로 그리고,<br>
+문턱값 0.5 선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘.<br>
+영화 제목이 겹치지 않게 가로축 글자를 기울여 줘.<br>
+그래프는 plotly로 그려 줘.<br>
+이 코드의 평가는 기록된 자료의 분류 연습이며, 개봉 전 예측 성능이 아님을 표시해 줘.<br>
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
+  <p class="small">학습용 150편 · 시험용 66편 · main.py와 requirements.txt 두 파일로 저장</p>
+</section>
+
+<!-- 15 개선 프롬프트 -->
+<section class="slide">
+  <div class="kicker">9-12 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">개선 프롬프트 — 같은 문제를 트리에게</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">의사결정트리로도 만들어서 어떤 질문을 어떤 순서로 던지는지<br>
+그림으로 보여 줘. 두 모델의 정확도를 나란히 비교해 줘.</div>
+  <p class="small">교재 ③과 같은 문장 · 앞 코드 끝에 이어 붙임 · 트리 그림에서 먼저 던진 질문을 읽고 정확도를 기록</p>
+</section>
+
+<!-- 16 두 모델 비교 -->
+<section class="slide">
+  <div class="kicker">9-13 · 원리</div>
+  <h2>두 모델이 답하는 방식</h2>
+  <table class="mini">
+    <tr><th>모델</th><th>답하는 방식</th><th>정확도 (기준 100만, 동일 시험용 66편)</th></tr>
+    <tr><td>로지스틱 회귀</td><td>0~1 사이의 성공 확률</td><td><em>0.924</em></td></tr>
+    <tr><td>의사결정트리</td><td>질문의 순서(규칙)</td><td><em>0.939</em></td></tr>
+  </table>
+  <p class="small">같은 학습용 150편·시험용 66편 사용 · 시험용 자료는 학습과 표준화의 기준 계산에서 제외 · 이 자료·분할·설정에서 얻은 값</p>
+</section>
+
+<!-- 17 두 다이얼 -->
+<section class="slide">
+  <div class="kicker">9-14 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">라벨 기준과 문턱값의 두 다이얼</h2>
+  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="twoDials">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="위는 실제 관객 수, 아래는 추정 확률. 같은 66편을 두 층에 나란히 놓고 라벨 기준선과 문턱선을 각각 움직이는 그림">
+<!-- 위 = 정답 층: 가로축 누적 관객 수 로그 척도(10^3~10^7.25 → 72~676) -->
+<text x="56" y="32" font-size="15" fill="#6b7385">정답 층 · 가로축 누적 관객 수(명)</text>
+<rect x="56" y="40" width="640" height="92" fill="#b07a00" opacity=".06"/>
+<g font-size="14" fill="#6b7385" text-anchor="middle">
+<text x="72" y="150">1천</text>
+<text x="214.1" y="150">1만</text>
+<text x="356.2" y="150">10만</text>
+<text x="498.4" y="150">100만</text>
+<text x="640.5" y="150">1000만</text>
+</g>
+<g class="dotT"></g>
+<line class="lline" x1="498.4" y1="40" x2="498.4" y2="132" stroke="#b07a00" stroke-width="2.5"/>
+<text class="ltext" x="506.4" y="56" font-size="14" fill="#b07a00">라벨 기준 100만 명</text>
+<!-- 아래 = 예측 층: 가로축 추정 확률 0~1 선형(72~676) -->
+<text x="56" y="188" font-size="15" fill="#6b7385">예측 층 · 가로축 추정 확률(단위 없음)</text>
+<rect x="56" y="196" width="640" height="92" fill="#2b7fd6" opacity=".05"/>
+<rect class="grn" x="374" y="196" width="302" height="92" fill="#2f9e5f" opacity=".10"/>
+<g font-size="14" fill="#6b7385" text-anchor="middle">
+<text x="72" y="306">0</text>
+<text x="223" y="306">0.25</text>
+<text x="374" y="306">0.5</text>
+<text x="525" y="306">0.75</text>
+<text x="676" y="306">1</text>
+</g>
+<g class="dotB"></g>
+<line class="tline" x1="374" y1="196" x2="374" y2="288" stroke="#d64545" stroke-width="2.5"/>
+<text class="ttext" x="382" y="212" font-size="14" fill="#2f9e5f">성공으로 예측</text>
+<g font-size="15" fill="#1c2230">
+<text class="n1" x="56" y="326">전체 216편 중 성공 23편</text>
+<text class="n2" x="249.8" y="326">시험 66편 중 성공 라벨 6편</text>
+<text class="n3" x="461.2" y="326">정확도 0.924</text>
+<text class="n4" x="582.4" y="326">성공으로 예측 1편</text>
+</g>
+</svg>
+<div class="wctl">
+<span>라벨 기준</span>
+<button class="wbtn" type="button" data-th="500000">50만 명</button>
+<button class="wbtn on" type="button" data-th="1000000">100만 명</button>
+<button class="wbtn" type="button" data-th="3000000">300만 명</button>
+<label>문턱값 <input type="range" class="thr" min="0.05" max="0.95" step="0.05" value="0.5"></label>
+</div>
+</div></div>
+  <p class="small">라벨 기준 3종의 학습 결과는 미리 계산해 저장한 값 · 교재 3절 예시 코드와 같은 자료·분할·설정</p>
+</section>
+
+<!-- 18 기준선과 정확도 -->
+<section class="slide">
+  <div class="kicker">9-15 · 발견</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">기준선과 정확도의 엇갈림</h2>
+  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="labelcurve">
+  <svg viewBox="0 0 720 252" role="img" aria-label="성공 기준 열 지점의 두 모델 정확도 꺾은선과 시험용 성공 라벨 편수 막대. 기준을 올릴수록 정확도는 오르고 성공 라벨은 줄어드는 엇갈림">
+    <g stroke="#e3ddcf" stroke-width="1" stroke-dasharray="4 4">
+      <line x1="84" y1="186" x2="624" y2="186"/>
+      <line x1="84" y1="125" x2="624" y2="125"/>
+      <line x1="84" y1="64" x2="624" y2="64"/>
+    </g>
+    <g font-size="14" text-anchor="end" fill="#6b7385">
+      <text x="68" y="191">0.70</text>
+      <text x="68" y="130">0.85</text>
+      <text x="68" y="69">1.00</text>
+    </g>
+    <line class="sel" x1="384" y1="60" x2="384" y2="226" stroke="#d64545" stroke-width="1.5" stroke-dasharray="5 4"/>
+    <g class="bars"></g>
+    <g class="curves"></g>
+    <g font-size="14" text-anchor="middle" fill="#6b7385">
+      <text x="84" y="246">10만</text>
+      <text x="144" y="246">20만</text>
+      <text x="204" y="246">30만</text>
+      <text x="264" y="246">50만</text>
+      <text x="324" y="246">70만</text>
+      <text x="384" y="246">100만</text>
+      <text x="444" y="246">150만</text>
+      <text x="504" y="246">200만</text>
+      <text x="564" y="246">300만</text>
+      <text x="624" y="246">500만</text>
+    </g>
+    <text class="read" x="56" y="26" text-anchor="start" font-size="15" font-weight="800" fill="#1c2230">기준 100만 명 · 로지스틱 0.924 · 트리 0.939 · <tspan class="readk" fill="#1c2230">시험용 성공 라벨 6편</tspan></text>
+    <g font-size="14" fill="#6b7385">
+      <circle cx="493.5" cy="22" r="4.5" fill="#2b7fd6"/>
+      <text x="503" y="26">로지스틱 회귀</text>
+      <circle cx="600" cy="22" r="4.5" fill="#b07a00"/>
+      <text x="609.5" y="26">의사결정트리</text>
+      <rect x="489" y="38" width="12" height="12" fill="#b9b3a5"/>
+      <text x="507" y="48">시험용 성공 라벨 편수</text>
+    </g>
+    <g class="hits"></g>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn" type="button" data-d="-1">◀ 낮은 기준</button>
+    <button class="wbtn" type="button" data-d="1">높은 기준 ▶</button>
+  </div>
+</div></div>
+  <p class="small">기준을 올릴수록 정확도는 대체로 오르지만 20만 명에서는 내려감 · 시험용 66편의 성공 라벨은 15편에서 1편으로 감소(회색 막대)</p>
+  <p class="point" style="margin-top:1.6vh">모델의 종류는 같고, <b>사람이 정한 기준 하나</b>가 결과를 바꾼 것</p>
+</section>
+
+<!-- 19 특성 중요도 -->
+<section class="slide">
+  <div class="kicker">9-16 · 도전</div>
+  <h2>특성 중요도 — 모델이 삼은 단서</h2>
+  <table class="mini">
+    <tr><th>변수</th><th>중요도 (트리, 깊이 3)</th></tr>
+    <tr><td>첫 관측일 스크린 수</td><td><em>0.476</em></td></tr>
+    <tr><td>첫 관측일 상영 횟수</td><td>0.277</td></tr>
+    <tr><td>장르 · 판타지</td><td>0.131</td></tr>
+    <tr><td>장르 · 드라마</td><td>0.116</td></tr>
+  </table>
+  <p class="point">중요도는 <b>단서의 무게</b>일 뿐 인과관계의 증거가 아님</p>
+  <p class="small">스크린을 많이 확보해 관객이 늘었는지, 흥행을 기대해 스크린을 많이 배정했는지는 이 값으로 구분 불가 · 자료와 설정이 바뀌면 중요도 배분도 달라짐</p>
+</section>
+
+<!-- 20 타이타닉 -->
+<section class="slide">
+  <div class="kicker">9-17 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">타이타닉 생존 트리와 질문의 순서</h2>
+  <div class="withimg"><div class="txt"><ul class="facts">
+    <li>1912년 4월 15일 침몰, 승선 2,200명 이상, 생존자 약 710명</li>
+    <li>입력은 성별, 나이, 동승한 형제자매와 배우자 수</li>
+    <li>첫 질문 성별 — 여성 승객의 생존 확률 0.73, 전체의 36%</li>
+    <li>두 번째 질문 나이 9.5세 — 9.5세를 넘는 남성 승객은 전체의 61%, 생존 확률 0.17</li>
+  </ul></div><img src="img/lesson09_case2.jpg" alt="타이타닉 승객의 생존을 예측하는 의사결정트리. 맨 위 마디는 성별, 그 아래는 나이 9.5세, 그 아래는 동승한 형제자매·배우자 수 3명으로 갈라지며 끝마디마다 생존 확률과 해당 마디의 비율이 적혀 있다"></div>
+  <p class="src">위키백과 'Decision tree learning'의 타이타닉 생존 트리(Gilgoldm, 2020, CC BY-SA 4.0) · 끝마디의 두 숫자는 생존 확률과 해당 마디의 비율</p>
+  <p class="point" style="margin-top:1.4vh">첫 질문이 성별인 것은 <b>당시 구조 순서가 자료에 남은 결과</b> · 원인 규명이 아님</p>
+</section>
+
+<!-- 21 확인 1 -->
+<section class="slide">
+  <div class="kicker">9-18 · 확인</div>
+  <h2>회귀와 분류의 판별</h2>
+  <table class="mini">
+    <tr><th>물음</th><th>답</th></tr>
+    <tr><td>(가) 이 영화의 총 관객 수는 몇 명이 될까</td><td><em>회귀</em> — 연속적인 숫자를 예측</td></tr>
+    <tr><td>(나) 이 영화의 기록된 관객 수는 100만 명 이상일까</td><td><em>이진 분류</em> — 100만 명 이상·미만 두 범주</td></tr>
+    <tr><td>(다) 이 메일은 스팸인가</td><td><em>이진 분류</em> — 스팸·정상 두 범주</td></tr>
+  </table>
+  <p class="small">다중 분류는 교과서 135쪽의 책 장르처럼 범주가 셋 이상일 때</p>
+</section>
+
+<!-- 22 확인 2 -->
+<section class="slide">
+  <div class="kicker">9-19 · 확인</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">특성 중요도의 해석</h2>
+  <p class="point" style="margin-top:2vh">첫 관측일 스크린 수가 0.476으로 1위 · 이 결과에서 끌어낼 수 있는 말은</p>
+  <ul class="facts">
+    <li>스크린 확보가 흥행 성공의 원인으로 밝혀짐</li>
+    <li><b>이 모델이 스크린 수를 가장 큰 단서로 삼음 · 원인 여부는 이 숫자로 판단 불가</b> (정답)</li>
+    <li>스크린 수가 1위이므로 장르는 흥행과 무관</li>
+  </ul>
+  <p class="small">기대작에 스크린을 몰아주는 결정이 먼저였을 수도 있음</p>
+</section>
+
+<!-- 23 정리 -->
+<section class="slide">
+  <div class="kicker">정리</div>
+  <h2>제9강 요약</h2>
+  <div class="split" style="margin-top:2.6vh"><div class="card"><div class="t">문제</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">묻는 말이 "얼마나"면 회귀, "어느 쪽"이면 분류</div></div><div class="card"><div class="t">확률</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">로지스틱 회귀는 확률을 추정하고 문턱값 0.5로 범주를 결정</div></div><div class="card"><div class="t">규칙</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">의사결정트리는 질문의 순서로 답함 · 같은 66편에서 0.924 ↔ 0.939</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">라벨 기준도 사람의 판단, 특성 중요도는 원인의 증거가 아님</div></div></div>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px);margin-top:2.6vh">다음 시간 — 항상 다수 범주로 예측하는 기준 모델과의 비교, 성공작을 찾아낸 비율</p>
+</section>
+
+<div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
+<div class="foot">
+  <span>당곡고 데이터 과학 · 9차시</span>
+  <div class="dots" id="dots"></div>
+  <span id="pageno"></span>
+</div>
+
+<script src="../../assets/widgets09.js"></script>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+    [...dots.children].forEach((d, k) => d.classList.toggle('here', k === cur));
+    document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => { if (e.target.closest('a, .widget')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  show(0);
+</script>
+</body>
+</html>

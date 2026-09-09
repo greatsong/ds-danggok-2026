@@ -1,0 +1,484 @@
+<!-- 7차시 슬라이드 · system/slides/template.html 뼈대
+     원본 템플릿 주석: — system/LESSON_PACKAGE_STANDARD.md 5절. 6차시(2026-09-09) 뼈대. {중괄호}는 슬롯.
+     규칙: 개조식·~다 종결 금지·격식 제목(kicker "N-M · 성격/쪽수")·프롬프트 장은 교재 ① 원문·위젯은 assets/widgetsNN.js 공용·1280×720 넘침 0 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7차시 슬라이드 · 다중 선형회귀 — 데이터 과학</title>
+<script src="../../assets/release.js"></script>
+<script src="../../assets/gate.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1219; --bg-accent: #161b26;
+    --ink: #f2f4f8; --ink-dim: #8b93a7;
+    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
+  .slide.on { display: flex; }
+  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
+    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
+  .kicker.blue { color: var(--accent2); }
+  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
+  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
+  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
+  blockquote { font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
+    line-height: 1.5; max-width: 28em; }
+  blockquote::before { content: "\201C"; color: var(--accent); }
+  blockquote::after { content: "\201D"; color: var(--accent); }
+  .facts { margin-top: 1vh; }
+  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
+    padding-left: 1.2em; text-indent: -1.2em; }
+  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
+  .facts b { color: var(--accent2); font-weight: 800; }
+  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
+  .point b { color: var(--accent); }
+  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
+  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
+    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
+    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
+  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
+  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
+  table.mini th { color: var(--accent); font-weight: 800; }
+  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
+  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
+  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
+  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
+  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
+  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
+  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
+  .withimg .txt { flex: 1 1 0; min-width: 0; }
+  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
+  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
+  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
+  .diagram.short svg { max-height: var(--dh, 40vh); }
+  /* 인터랙티브 위젯 — 밝은 상자 안 */
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
+          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
+  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
+          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
+  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
+  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
+  .foot span { white-space: nowrap; }
+  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
+  .dots i.here { background: var(--accent); }
+  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
+    font-size: clamp(11px, 1.1vw, 14px); }
+@media (max-width: 760px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+<section class="slide cover chapter">
+  <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 제7강</div>
+  <h1>다중 선형회귀</h1>
+  <p class="sub">여러 변수의 가중치와 예측 시점의 판단 — 영화 흥행 예측</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-1 · 교과서 128쪽</div>
+  <h2>다중 선형 회귀의 정의</h2>
+  <blockquote>다중 선형 회귀(multiple linear regression)는 영향을 미치는 요인이 여러 개인 경우에 종속 변수를 설명하기 위해 여러 개의 독립 변수를 이용하는 회귀 분석이다.</blockquote>
+  <p class="src">『데이터 과학』 128쪽</p>
+  <p class="point">독립 변수가 여러 개 → <b>다중 회귀</b></p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-2 · 원리</div>
+  <h2>직선에서 평면으로 — 가중치의 뜻</h2>
+  <ul class="facts"><li>단순 선형회귀 — 독립 변수 하나로 예측</li><li>다중 선형회귀 — 여러 독립 변수에 각각 <b>가중치</b>를 곱해 더한 뒤 절편을 더함</li><li>독립 변수가 둘 — 관계를 <b>평면</b>으로 표현</li><li>가중치 — 다른 변수의 값이 같을 때 그 변수가 1 늘면 달라지는 예측값의 변화량</li><li>단위가 다른 변수 — 가중치 크기만으로 중요도 비교 불가</li></ul>
+  <p class="point">가중치의 <b>크기</b>와 변수의 <b>중요도</b>는 별개</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-3 · 위젯</div>
+  <h2 style="font-size:clamp(22px,2.6vw,34px)">가중치를 직접 움직이는 계산판</h2>
+  <div class="diagram" style="--wh:44vh;margin-top:1.4vh;padding:1.2vh 1vw"><div class="widget" data-w="wplane">
+<svg viewBox="0 0 720 400" role="img" aria-label="가중치 세 개를 슬라이더로 바꾸면 다섯 편의 예측값과 오차 제곱합, 그리고 성수기 0과 1의 두 단면 직선이 함께 달라지는 계산판">
+  <text class="eq" x="20" y="28" font-size="15" font-weight="800" fill="#1c2230">예측 = 1.00×스크린 + 0.00×성수기 + 0.00</text>
+
+  <g font-size="14" fill="#6b7385">
+    <text x="20" y="80">영화</text>
+    <text x="200" y="64" text-anchor="end">스크린</text>
+    <text x="200" y="80" text-anchor="end">(100관)</text>
+    <text x="258" y="80" text-anchor="end">성수기</text>
+    <text x="322" y="64" text-anchor="end">실제</text>
+    <text x="322" y="80" text-anchor="end">(만명)</text>
+    <text x="380" y="80" text-anchor="end">예측</text>
+    <text x="428" y="80" text-anchor="end">오차²</text>
+  </g>
+  <line x1="20" y1="90" x2="428" y2="90" stroke="#e3ddcf" stroke-width="1.2"/>
+
+  <g class="rows" font-size="15" fill="#1c2230"></g>
+
+  <line x1="20" y1="262" x2="428" y2="262" stroke="#e3ddcf" stroke-width="1.2"/>
+  <text x="20" y="286" font-size="15" font-weight="800" fill="#1c2230">오차 제곱합</text>
+  <rect x="20" y="300" width="300" height="14" rx="7" fill="#e3ddcf"/>
+  <rect class="bar" x="20" y="300" width="0" height="14" rx="7" fill="#b07a00"/>
+  <polyline class="saw" points="318,302 310,304.5 318,307 310,309.5 318,312" fill="none" stroke="#e3ddcf" stroke-width="2.4" visibility="hidden"/>
+  <text class="sse" x="330" y="316" font-size="22" font-weight="800" fill="#b07a00">245.8</text>
+  <text class="refsse" x="20" y="338" font-size="14" fill="#6b7385">최소제곱 정답 114.63</text>
+  <text x="20" y="360" font-size="14" fill="#6b7385">단위가 다른 가중치 · 크기 비교 불가</text>
+  <text x="20" y="380" font-size="14" fill="#6b7385">스크린 1단위 = 100관 · 성수기 1단위 = 있음/없음</text>
+
+  <text x="452" y="28" font-size="15" font-weight="800" fill="#1c2230">평면의 두 단면</text>
+  <text x="452" y="48" font-size="14" fill="#6b7385">성수기 0 / 성수기 1</text>
+  <text x="452" y="64" font-size="14" fill="#6b7385">총 관객(만명)</text>
+  <line x1="470" y1="70" x2="470" y2="290" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="466" y1="290" x2="706" y2="290" stroke="#6b7385" stroke-width="1.2"/>
+  <g font-size="14" fill="#6b7385">
+    <text x="470" y="308" text-anchor="middle">3</text>
+    <text x="562" y="308" text-anchor="middle">5</text>
+    <text x="700" y="308" text-anchor="middle">8</text>
+    <text x="464" y="295" text-anchor="end">0</text>
+    <text x="464" y="195" text-anchor="end">10</text>
+    <text x="464" y="95" text-anchor="end">20</text>
+    <text x="585" y="330" text-anchor="middle">스크린(100관)</text>
+    <text x="452" y="352">실선 · 성수기 0 / 점선 · 성수기 1</text>
+    <text x="452" y="374">같은 기울기, 다른 절편</text>
+  </g>
+  <g class="dots"></g>
+  <line class="ref" x1="0" y1="0" x2="0" y2="0" stroke="#b9b3a5" stroke-width="2" visibility="hidden"/>
+  <line class="l0" x1="0" y1="0" x2="0" y2="0" stroke="#2b7fd6" stroke-width="2.4"/>
+  <line class="l1" x1="0" y1="0" x2="0" y2="0" stroke="#b07a00" stroke-width="2.4" stroke-dasharray="6 4"/>
+  <g class="marks" fill="#6b7385"></g>
+  <text class="reflab" x="474" y="86" font-size="14" fill="#6b7385" visibility="hidden">성수기 빼고 구한 직선 1.83</text>
+</svg>
+<div class="wctl">
+  <label>w₁ 스크린(만명/100관) <input type="range" class="s1" min="-1" max="4" step="0.01" value="1"> <span class="v1">1.00</span></label>
+  <label>w₂ 성수기(만명) <input type="range" class="s2" min="-8" max="4" step="0.01" value="0"> <span class="v2">0.00</span></label>
+  <label>b 절편(만명) <input type="range" class="s3" min="0" max="6" step="0.01" value="0"> <span class="v3">0.00</span></label>
+  <button class="wbtn bfix" type="button" aria-pressed="false">성수기 가중치 0 고정</button>
+  <button class="wbtn bbest" type="button">최소제곱 정답</button>
+  <button class="wbtn bref" type="button" aria-pressed="false">따로 구한 직선 겹치기</button>
+  <span class="wout fixnote"></span>
+</div>
+</div></div>
+  <p class="small" style="margin-top:1vh">학습 150편 중 다섯 편으로 만든 축소판 · 슬라이더 셋을 옮기면 예측값·오차 제곱합·두 단면 직선이 함께 변화</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-4 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">변수 하나 — 산점도 위의 직선</h2>
+  <div class="diagram" style="--wh:40vh;margin-top:1.8vh;padding:1.4vh 1vw"><div class="sit" data-sit="s02-line-one-var" data-h="0.37"><div class="plot"><img src="../../img/lesson07_sit_s02-line-one-var.png" alt="가로축 첫 관측일 스크린 수, 세로축 총 관객 수 산점도 위에 회귀 직선 하나가 그려진 그림" style="max-height:40vh;width:auto;max-width:100%;display:block;margin:0 auto"></div></div></div>
+  <ul class="facts" style="font-size:clamp(15px,1.75vw,24px)"><li style="font-size:inherit;margin:1.4vh 0">기울기 932 — 스크린 수 1관 증가 시 예측 관객 932명 증가</li><li style="font-size:inherit;margin:1.4vh 0">점이 왼쪽 아래에 몰림 — 오른쪽 끝 구간의 직선은 여섯 편만 보고 그은 것임</li><li style="font-size:inherit;margin:1.4vh 0">시험용 66편 중 62편에서 예측이 실제보다 큼</li></ul>
+  <p class="small" style="margin-top:1.4vh">변수 하나 — 예측은 직선 하나 · 한 영화의 예측값은 그 영화의 스크린 수에서 직선까지 올라간 높이 · 실험실 상황 2</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-5 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">변수 둘 — 3차원 산점도 위의 평면</h2>
+  <div class="diagram" style="--wh:46vh;margin-top:1.4vh;padding:1.2vh 1vw"><div class="sit" data-sit="s03-plane-two-var" data-h="0.44"><div class="plot"><img src="../../img/lesson07_sit_s03-plane-two-var.png" alt="스크린 수와 상영 횟수를 바닥 두 축, 총 관객 수를 높이 축으로 둔 3차원 산점도와 반투명 회귀 평면" style="max-height:40vh;width:auto;max-width:100%;display:block;margin:0 auto"></div></div></div>
+  <ul class="facts" style="font-size:clamp(14px,1.6vw,22px)"><li style="font-size:inherit;margin:1vh 0">스크린 수 계수 −4,385 — 변수 하나만 썼을 때의 +932와 부호 반대</li><li style="font-size:inherit;margin:1vh 0">변수를 하나 더 넣었으나 평가 R² 0.313 → 0.243, 음수 예측 5편 발생</li></ul>
+  <p class="small" style="margin-top:1.4vh">변수 둘 — 예측은 평면 · 바닥면 좌표 (스크린 수, 상영 횟수)에서 평면까지 올라간 높이 · 실험실 상황 3</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-6 · 원리</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">평면의 단면 — 다른 변수가 같을 때</h2>
+  <div class="diagram" style="--wh:40vh;margin-top:1.8vh;padding:1.4vh 1vw"><div class="sit" data-sit="s04-slice-hold" data-h="0.37"><div class="plot"><img src="../../img/lesson07_sit_s04-slice-hold.png" alt="상영 횟수를 한 값에 고정해 회귀 평면을 세로로 자른 단면 직선과, 변수 하나로 구한 직선을 함께 그린 그림" style="max-height:40vh;width:auto;max-width:100%;display:block;margin:0 auto"></div></div></div>
+  <ul class="facts" style="font-size:clamp(15px,1.75vw,24px)"><li style="font-size:inherit;margin:1.4vh 0">상영 횟수를 한 값에 고정한 단면 — 직선 하나, 기울기 −4,385로 고정, 절편만 이동</li><li style="font-size:inherit;margin:1.4vh 0">−4,385 — 상영 횟수가 같은 영화끼리 비교할 때의 값, 상영 횟수를 함께 늘리는 상황에는 미적용</li><li style="font-size:inherit;margin:1.4vh 0">점선(변수 하나) 상승 · 실선(변수 둘) 하강 — 같은 데이터에서 두 부호가 모두 나타남</li></ul>
+  <p class="small" style="margin-top:1.4vh">단면 직선의 기울기 = &lsquo;다른 변수의 값이 같을 때&rsquo;의 계수 · 실험실 상황 4</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-7 · 교과서 112쪽</div>
+  <h2>평가 자료 분리의 이유</h2>
+  <blockquote>학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다.</blockquote>
+  <p class="src">『데이터 과학』 112쪽</p>
+  <p class="point">모델의 점수 — 학습에 쓰지 않은 문제(<b>테스트 데이터</b>)로 측정</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-8 · 원리</div>
+  <h2>학습 150편과 테스트 66편</h2>
+  <ul class="facts"><li>분석 대상 216편 — 영화 코드 순 정렬</li><li>10편마다 앞의 3편을 테스트로 분리 — 테스트 66편, 학습 150편</li><li>학습 150편으로 가중치 학습 · 테스트 66편으로 점수(R²) 측정</li><li>모든 변수 조합에 같은 분할 적용</li></ul>
+  <p class="small">수업 결과 재현을 위한 분할 · 미래 개봉작의 예측 성능을 보장하는 검증과 별개</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-9 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">테스트 자료를 먼저 떼어 두는 구조</h2>
+  <div class="diagram short" style="--dh:34vh"><svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="216편을 영화 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 학습 150편으로 가중치를 학습한 뒤 테스트 66편으로 점수를 재는 구조">
+      <defs>
+        <marker id="arGold8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+        <marker id="arTeal8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+        <g id="blk8">
+          <rect x="0" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="10" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="20" y="0" width="9" height="24" fill="#3ba6a0"/>
+          <rect x="30" y="0" width="9" height="24" fill="#f4b400"/><rect x="40" y="0" width="9" height="24" fill="#f4b400"/><rect x="50" y="0" width="9" height="24" fill="#f4b400"/><rect x="60" y="0" width="9" height="24" fill="#f4b400"/><rect x="70" y="0" width="9" height="24" fill="#f4b400"/><rect x="80" y="0" width="9" height="24" fill="#f4b400"/><rect x="90" y="0" width="9" height="24" fill="#f4b400"/>
+        </g>
+      </defs>
+      <text x="20" y="20" font-size="12.5" font-weight="800" fill="#2b2d3a">분석 대상 216편 · 영화 코드 순 정렬</text>
+      <use href="#blk8" x="20" y="30"/><use href="#blk8" x="128" y="30"/><use href="#blk8" x="236" y="30"/><use href="#blk8" x="344" y="30"/><use href="#blk8" x="452" y="30"/><use href="#blk8" x="560" y="30"/>
+      <text x="674" y="48" font-size="15" font-weight="800" fill="#7a7f95">…</text>
+      <rect x="20" y="72" width="13" height="13" fill="#3ba6a0"/>
+      <text x="40" y="83" font-size="12" fill="#2b2d3a">테스트 66편 — 학습에 쓰지 않음</text>
+      <rect x="256" y="72" width="13" height="13" fill="#f4b400"/>
+      <text x="276" y="83" font-size="12" fill="#2b2d3a">학습 150편</text>
+      <text x="20" y="123" font-size="12.5" font-weight="800" fill="#2b2d3a">학습 150편</text>
+      <line x1="112" y1="118" x2="180" y2="118" stroke="#f4b400" stroke-width="2.5" marker-end="url(#arGold8)"/>
+      <rect x="188" y="102" width="168" height="32" rx="8" fill="#fff8e6" stroke="#f4b400"/>
+      <text x="272" y="123" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">모델 — 가중치 학습</text>
+      <text x="20" y="163" font-size="12.5" font-weight="800" fill="#2b2d3a">테스트 66편</text>
+      <line x1="112" y1="158" x2="180" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
+      <rect x="188" y="142" width="190" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
+      <text x="283" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">처음 보는 영화로 예측</text>
+      <line x1="384" y1="158" x2="414" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
+      <rect x="420" y="142" width="104" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
+      <text x="472" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">점수(R²)</text>
+    </svg></div>
+  <p class="small">교재 1절 그림과 같은 구조 · 모든 변수 조합에 같은 분할 적용</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-10 · 자료</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">정보를 알 수 있는 시점의 구분</h2>
+  <table class="mini" style="font-size:clamp(14px,1.6vw,22px)">
+    <thead><tr><th>구분</th><th>변수 예</th><th>알 수 있는 시점</th></tr></thead>
+    <tbody>
+      <tr><td>개봉 전 확보할 정보</td><td>개봉 예정일 · 장르 · 국적 · 예정 스크린 수와 상영 횟수</td><td>예측 시점의 확보 여부 확인</td></tr>
+      <tr><td>개봉 후 집계 정보</td><td>첫 관측일의 스크린 수·상영 횟수 · 첫 주 관객 수 · 누적 관객 수</td><td>해당 집계가 끝난 뒤 확인 가능</td></tr>
+    </tbody>
+  </table>
+  <p class="small">수업 자료의 한계 — first_scrn·first_show는 개봉 전 계획값이 아니라 10위권 첫 등장일의 집계값 · 216편 중 75편은 그날이 개봉일과 다름 · 이 자료의 점수를 실제 개봉 전 예측 성능으로 해석하지 않음</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-11 · 활동</div>
+  <h2>변수 발상 — 폼 Ⅲ-01a</h2>
+  <ul class="facts"><li>교과서 106쪽 해 보기 ① — 태풍의 진로 예측에 필요한 데이터</li><li>같은 발상을 영화로 이동 — 총 관객 수를 미리 맞히기 위해 필요한 정보</li><li>후보 예 — 개봉 시기 · 장르 · 상영관 수 · 전작의 성적 · 출연 배우</li><li>떠오른 후보를 폼 Ⅲ-01a에 기록한 뒤 실습 시작</li></ul>
+  <p class="small">교재 1절 끝 콜아웃 &lsquo;변수 발상부터&rsquo;와 같은 활동</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-12 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 ① — 만들 것</h2>
+  <div class="prompt">"영화 흥행 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.<br>
+박스오피스 데이터(kobis_daily.csv)와 영화 정보 표(kobis_movies.csv)를 합쳐서<br>
+영화의 총 관객 수를 예측하는 다중 회귀 모델을 만들어 줘.<br>
+어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,<br>
+학습에 쓰지 않은 영화들로 잰 예측 점수와<br>
+예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.</div>
+  <p class="small" style="margin-top:1.4vh">교재 ①과 같은 문장 · 파일 하나로 · 변수 선택은 체크박스</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-13 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 ① — 분할·기간·그래프</h2>
+  <div class="prompt">영화별 표를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 시험용으로 떼어 놓고 나머지로 학습해 줘.<br>
+수업의 기준 기간은 2025년 9월 1일부터 2026년 8월 31일까지이고, 영화별 표에 정리된 216편을 그대로 사용해 줘.<br>
+학습에 쓴 영화 편수와 점수를 잰 영화 편수, 기준 기간을 화면에 적어 줘.<br>
+시험용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 그리고,<br>
+예측이 실제와 같을 때를 나타내는 기준선도 함께 표시해 줘.<br>
+관객 수는 편차가 크니 두 축을 로그로 그려 줘.<br>
+예측이 1,000명보다 작게 나온 영화는 그래프 바닥에 붙여 표시하고 몇 편인지 적어 줘.<br>
+그래프는 plotly로 그려 줘.</div>
+  <p class="small" style="margin-top:1.4vh">교재 ①과 같은 문장 · 216편 · 10편마다 앞의 3편을 시험용으로 분리</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-14 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 ① — 데이터 주소와 열 이름</h2>
+  <div class="prompt" style="font-size:clamp(10px,1.08vw,15px);line-height:1.7;max-width:100%">두 표는 이 주소에서 불러와. 영화코드(movieCd) 열이 같은 영화를 가리켜. 두 파일 모두 인코딩은 UTF-8이야.<br>
+- https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_daily.csv<br>
+&nbsp;&nbsp;(열: 날짜(여덟 자리 숫자)·순위·영화코드·영화명·일관객·누적관객·스크린수·상영횟수)<br>
+- https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv<br>
+&nbsp;&nbsp;(열: movieCd(영화코드)·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·<br>
+&nbsp;&nbsp;&nbsp;first_scrn(첫 관측일 스크린수)·first_show(첫 관측일 상영횟수)·first_date(10위권 첫 등장일)·<br>
+&nbsp;&nbsp;&nbsp;peak(성수기 개봉이면 1, 아니면 0 — 1월·7월·12월이 성수기)·<br>
+&nbsp;&nbsp;&nbsp;first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)<br>
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
+  <p class="small" style="margin-top:1.4vh">교재 ①과 같은 문장 · 영화코드로 두 표 결합 · 인코딩 UTF-8 · requirements.txt 함께 요청</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-15 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">개선 프롬프트 — 변수 출처의 구분</h2>
+  <p class="small" style="margin-top:0">받은 코드를 main.py 한 파일로 저장해 실행 · 화면의 R²는 지금은 &lsquo;1에 가까울수록 예측이 잘 맞는다&rsquo; 수준으로만 읽기(계산법은 8차시) · 스크린 수 하나만 켠 뒤 변수를 하나씩 추가하며 점수 기록</p>
+  <div class="prompt" style="font-size:clamp(13px,1.45vw,20px);line-height:1.7;max-width:44em;margin-top:2vh">기본 변수 세 가지를 쓴 경우와 첫 주 관객 수까지 추가한 경우의 예측 점수를 나란히 보여 줘.<br>
+이 데이터는 사후 집계값이므로 실제 개봉 전 예측 성능이 아니라는 안내도 표시해 줘.</div>
+  <p class="small" style="margin-top:1.6vh">교재 ③과 같은 문장</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-16 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">변수 조합별 테스트 점수</h2>
+  <div class="diagram short" style="--dh:44vh"><svg viewBox="0 0 680 264" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="변수 조합별 테스트 점수 막대 그림 — 첫 관측일 스크린 수만 0.31, 기본 변수 3종 0.24로 하락, 첫 주 관객 수를 더하면 0.90으로 급등하며 데이터 누수 경계선을 넘는다">
+      <defs>
+        <pattern id="hatch8" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+          <rect width="8" height="8" fill="#e45756"/>
+          <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="2" stroke-opacity="0.45"/>
+        </pattern>
+      </defs>
+      <text x="440" y="22" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">테스트 점수(R²) — 떼어 둔 66편으로 잰 값</text>
+      <line x1="240" y1="34" x2="240" y2="210" stroke="#f0e2bc"/>
+      <line x1="440" y1="34" x2="440" y2="210" stroke="#f0e2bc"/>
+      <line x1="640" y1="34" x2="640" y2="210" stroke="#f0e2bc"/>
+      <line x1="240" y1="210" x2="640" y2="210" stroke="#f0e2bc"/>
+      <text x="240" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0</text>
+      <text x="440" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0.5</text>
+      <text x="640" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">1.0</text>
+      <text x="228" y="61" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">첫 관측일 스크린 수만</text>
+      <rect x="240" y="44" width="124" height="26" fill="#f4b400"/>
+      <text x="372" y="61" font-size="12.5" font-weight="800" fill="#2b2d3a">0.31</text>
+      <text x="228" y="97" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">기본 변수 3종</text>
+      <text x="228" y="112" text-anchor="end" font-size="10.5" fill="#7a7f95">(스크린+상영횟수+성수기)</text>
+      <rect x="240" y="86" width="96" height="26" fill="#f4b400"/>
+      <text x="344" y="103" font-size="12.5" font-weight="800" fill="#2b2d3a">0.24</text>
+      <text x="384" y="103" font-size="12.5" font-weight="800" fill="#e8930c">↓ 더 넣었는데 하락</text>
+      <line x1="16" y1="128" x2="664" y2="128" stroke="#e45756" stroke-width="1.5" stroke-dasharray="7 5"/>
+      <text x="340" y="144" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">첫 주 관객 수 추가 — 개봉 전에 알 수 있는가?</text>
+      <text x="228" y="171" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">3종 + 첫 주 관객 수</text>
+      <rect x="240" y="154" width="360" height="26" fill="url(#hatch8)" stroke="#e45756"/>
+      <text x="608" y="171" font-size="12.5" font-weight="800" fill="#e45756">0.90</text>
+      <text x="240" y="197" font-size="12" font-weight="800" fill="#e45756">⚠ 개봉 후에야 아는 값 — 데이터 누수</text>
+      <text x="340" y="252" text-anchor="middle" font-size="12.5" fill="#7a7f95">216편 중 150편으로 학습, 처음 보는 66편으로 채점한 실측값</text>
+    </svg></div>
+  <p class="small">교재 3절 그림과 같은 실측값 · 0.90은 개봉 후 집계 정보를 넣어 얻은 값</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-17 · 발견</div>
+  <h2 style="font-size:clamp(22px,2.8vw,38px)">두 장면의 구분 — 점수 하락과 점수 급등</h2>
+  <ul class="facts" style="font-size:clamp(15px,1.75vw,24px)"><li style="font-size:inherit;margin:1.4vh 0">비교 1 — 변수를 추가해도 테스트 점수는 하락 가능 · 기본 변수 조합에서 0.31 → 0.24</li><li style="font-size:inherit;margin:1.4vh 0">이 결과만으로 흥행 예측 가능성이나 과대적합을 단정 불가 — 학습 점수와 테스트 점수를 함께 확인, 분할을 바꿔도 같은 결과인지 확인</li><li style="font-size:inherit;margin:1.4vh 0">비교 2 — 사용할 수 없는 정보가 점수를 상승시킴 · 첫 주 관객 수 추가 시 0.90</li><li style="font-size:inherit;margin:1.4vh 0"><b>데이터 누수</b> — 예측 시점에 알 수 없는 정보로 평가가 부풀려지는 문제</li></ul>
+  <p class="point" style="font-size:clamp(17px,2vw,28px)">예측 시점이 달라지면 사용할 수 있는 정보도 변화 — 첫 주 집계 후의 전망이라면 확정된 첫 주 관객 수 사용 가능</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-18 · 발견</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">실제값과 예측값의 대각선 비교</h2>
+  <div class="diagram" style="--wh:40vh;margin-top:1.8vh;padding:1.4vh 1vw"><div class="sit" data-sit="s01-parity-read" data-h="0.37"><div class="plot"><img src="../../img/lesson07_sit_s01-parity-read.png" alt="가로축 실제 총 관객 수, 세로축 예측 총 관객 수 산점도. 두 값이 같은 자리를 나타내는 대각선 위에 점이 몰려 있는 그림" style="max-height:40vh;width:auto;max-width:100%;display:block;margin:0 auto"></div></div></div>
+  <ul class="facts" style="font-size:clamp(15px,1.75vw,24px)"><li style="font-size:inherit;margin:1.4vh 0">대각선 위 — 실제보다 많다고 예측한 영화, 아래 — 적다고 예측한 영화</li><li style="font-size:inherit;margin:1.4vh 0">66편 중 56편이 위쪽 — 오차가 한 방향으로 치우침</li><li style="font-size:inherit;margin:1.4vh 0">상위 5편이 전체 절대오차의 30.2% — 평균 오차 548,830명은 소수의 영화가 만든 값</li></ul>
+  <p class="small" style="margin-top:1.4vh">두 축을 실제값과 예측값으로 두면 예측의 치우침이 한 장에 드러남 · 교재 2절 상황 1</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-19 · 발견</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">예측 시점에 따른 점수의 변화</h2>
+  <div class="diagram" style="--wh:40vh;margin-top:1.8vh;padding:1.4vh 1vw"><div class="sit" data-sit="s06-timing-curve" data-h="0.37"><div class="plot"><img src="../../img/lesson07_sit_s06-timing-curve.png" alt="가로축 예측 시점, 세로축 평가 점수인 꺾은선 그래프. 개봉 전에서 시작해 하루치, 사흘, 이레, 열나흘 지점으로 이어지는 그림" style="max-height:40vh;width:auto;max-width:100%;display:block;margin:0 auto"></div></div></div>
+  <ul class="facts" style="font-size:clamp(15px,1.75vw,24px)"><li style="font-size:inherit;margin:1.4vh 0">개봉 전 0.240 → 첫 관측일 하루치 추가 시 0.652</li><li style="font-size:inherit;margin:1.4vh 0">3일 지점 0.603으로 하락 후 7일 0.772, 14일 0.847로 재상승</li><li style="font-size:inherit;margin:1.4vh 0">같은 216편, 같은 분할 — 차이의 원인은 예측 시점 하나</li></ul>
+  <p class="small" style="margin-top:1.4vh">시점을 미룰수록 점수 상승 · 다만 계속 오르지는 않음 · 실험실 상황 6</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-20 · 발견</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">뜻 없는 변수와 두 점수의 분기</h2>
+  <div class="diagram" style="--wh:40vh;margin-top:1.8vh;padding:1.4vh 1vw"><div class="sit" data-sit="s10-noise-columns" data-h="0.37"><div class="plot"><img src="../../img/lesson07_sit_s10-noise-columns.png" alt="가로축 무작위 열의 개수, 세로축 점수인 두 꺾은선. 훈련 점수는 올라가고 평가 점수는 내려가며 갈라지는 그림" style="max-height:40vh;width:auto;max-width:100%;display:block;margin:0 auto"></div></div></div>
+  <ul class="facts" style="font-size:clamp(15px,1.75vw,24px)"><li style="font-size:inherit;margin:1.4vh 0">무작위 숫자로 만든 열 60개 추가 — 훈련 0.123 → 0.529, 평가 0.240 → −2.324</li><li style="font-size:inherit;margin:1.4vh 0">평가선은 22개 부근에서 0 통과 · 0 아래는 평균만 답한 것보다 못한 예측</li><li style="font-size:inherit;margin:1.4vh 0">훈련 점수의 상승은 학습이 아니라 학습 자료를 외운 결과</li></ul>
+  <p class="small" style="margin-top:1.4vh">난수 146개 — 훈련 1.0000, 평가 −4,534.3 · 실험실 상황 10</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-21 · 도전</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">특성 만들기와 예측 시점의 이동</h2>
+  <p class="small" style="margin-top:0">예측 시점을 첫 관측일 집계 이후로 변경 · 첫 관측일 = 영화가 10위권에 처음 등장한 날 · 상영당 관객 수 = 그날의 관객 수 ÷ 상영 횟수(좌석 점유율과 다름) · 개봉 전 예측에 사용 불가</p>
+  <div class="prompt" style="font-size:clamp(12px,1.35vw,19px);line-height:1.65;max-width:46em;margin-top:2vh">이번에는 첫 관측일의 집계가 끝난 시점에서 예측한다고 가정해 줘.<br>
+그 시점에 알 수 있는 정보로 새 특성을 만들어 보자.<br>
+- 박스오피스 표에서 영화마다 10위권에 처음 든 날의 일관객을 상영횟수로 나눠<br>
+&nbsp;&nbsp;'상영당 관객 수'라는 새 열을 만들어 줘. 한 번 상영에 몇 명이 들었는지야.<br>
+- 기본 변수 세 개만 쓴 경우와 거기에 상영당 관객 수를 더한 경우의 R²를 나란히 보여 줘.<br>
+- 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-22 · 도전</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">상영당 관객 수를 더한 결과</h2>
+  <table class="mini">
+    <thead><tr><th>쓴 변수</th><th>테스트 R²</th></tr></thead>
+    <tbody>
+      <tr><td>기본 변수 세 가지</td><td>0.240</td></tr>
+      <tr><td>+ 첫 관측일 상영당 관객 수</td><td><em>0.529</em></td></tr>
+    </tbody>
+  </table>
+  <p class="point">기존 열을 조합해 새 변수를 만드는 일 — <b>특성 만들기</b></p>
+  <p class="small">0.240 → 0.529를 예측 성능 두 배로 해석하지 않음 · 첫 관측일 집계 이후라는 시점에서 읽기</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">7-23 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">구글의 영화 흥행 예측(2013)</h2>
+  <div class="shot wide" style="margin-top:1.6vh"><img src="img/lesson07_case1.png" alt="개봉 7일 전 검색 질의량을 가로축, 개봉 주말 흥행 수입을 세로축에 둔 산점도. 회색 점들 위로 붉은 회귀 직선이 지나가고 오른쪽 위에 R 제곱 70퍼센트가 적혀 있는 그림" style="max-height:38vh"></div>
+  <ul class="facts" style="font-size:clamp(15px,1.75vw,24px)"><li style="font-size:inherit;margin:1.4vh 0">개봉 7일 전 검색 질의량 하나만 사용한 단순 회귀 — 개봉 주말 흥행 수입 변동의 70% 설명</li><li style="font-size:inherit;margin:1.4vh 0">검색 광고 클릭 수·상영관 수·시리즈 여부 추가한 다중 회귀 — 92%</li><li style="font-size:inherit;margin:1.4vh 0">개봉 7일 전 모델과 개봉 4주 전 모델을 따로 구성 — 예측 시점에 확보한 정보만 변수로 사용</li></ul>
+  <p class="src">출처: Google, 「Quantifying Movie Magic with Google Search」(2013) 그림 3 · 2012년 개봉작 99편 · R²=70%</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">정리</div>
+  <h2>제7강 요약</h2>
+  <div class="split" style="margin-top:2.4vh;display:grid;grid-template-columns:1fr 1fr;gap:2.2vh 3vw"><div class="card"><div class="t">다중 선형회귀</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">여러 독립 변수에 가중치를 곱해 더한 예측 · 변수 둘이면 평면</div></div><div class="card"><div class="t">가중치 읽기 · +932와 −4,385</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">다른 변수의 값이 같을 때의 변화량 · 단위가 다르면 크기 비교 불가</div></div><div class="card"><div class="t">평가 자료 분리</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">학습 150편 · 테스트 66편 · 모든 조합에 같은 분할</div></div><div class="card"><div class="t">예측 시점 · 데이터 누수</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">기본 변수 0.24, 첫 주 관객 추가 0.90 · 개봉 전 성능과 별개</div></div></div>
+  <p class="small" style="margin-top:1vh">오늘 기록한 변수 조합·점수·평가 조건은 8차시에 그대로 사용</p>
+</section>
+
+<div class="hint">← → 이동 · Home 처음으로</div>
+<div class="foot">
+  <span>당곡고 데이터 과학 · 7차시</span>
+  <div class="dots" id="dots"></div>
+  <span id="pageno"></span>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="../../assets/lesson07_situations.js?v=3"></script>
+<script src="../../assets/widgets07.js?v=2"></script>
+<script>
+  // 상황 그래프(plotly)는 그 장이 보일 때 그린다 — 숨은 장에서 그리면 폭 0으로 그려진다.
+  // 오프라인이거나 plotly가 없으면 실측 PNG가 그대로 남는다.
+  function drawHere(slide) {
+    if (!window.Plotly || !window.drawSituations) return;
+    var box = slide.querySelector('.sit[data-sit]');
+    if (!box || box.dataset.plotted) return;
+    box.classList.add('situation');
+    window.drawSituations(slide);
+    fitSituations();
+  }
+  function fitSituations() {
+    if (!window.Plotly) return;
+    document.querySelectorAll('.sit .plot.js-plotly-plot').forEach(function (el) {
+      if (!el.clientWidth) return;
+      var r = parseFloat(el.parentNode.dataset.h) || 0.34;      // 상황마다 필요한 높이가 다르다
+      Plotly.relayout(el, { height: Math.round(innerHeight * r), width: el.clientWidth });
+    });
+  }
+  addEventListener('resize', fitSituations);
+</script>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+    drawHere(slides[cur]);
+    [...dots.children].forEach((d, k) => d.classList.toggle('here', k === cur));
+    document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => { if (e.target.closest('a, .widget, .situation, .sit')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  show(0);
+</script>
+</body>
+</html>

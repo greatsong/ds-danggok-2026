@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11차시 슬라이드 · 군집, 스포츠 선수 유형 — 데이터 과학</title>
+<script src="../../assets/release.js"></script>
+<script src="../../assets/gate.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1219; --bg-accent: #161b26;
+    --ink: #f2f4f8; --ink-dim: #8b93a7;
+    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
+  .slide.on { display: flex; }
+  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
+    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
+  .kicker.blue { color: var(--accent2); }
+  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
+  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
+  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
+  blockquote { margin-top: 2.6vh; font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
+    line-height: 1.5; max-width: 28em; }
+  blockquote::before { content: "\201C"; color: var(--accent); }
+  blockquote::after { content: "\201D"; color: var(--accent); }
+  .facts { margin-top: 1vh; }
+  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
+    padding-left: 1.2em; text-indent: -1.2em; }
+  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
+  .facts b { color: var(--accent2); font-weight: 800; }
+  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
+  .point b { color: var(--accent); }
+  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
+  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
+    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
+    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
+  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
+  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
+  table.mini th { color: var(--accent); font-weight: 800; }
+  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
+  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
+  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
+  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
+  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
+  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
+  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
+  .withimg .txt { flex: 1 1 0; min-width: 0; }
+  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
+  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
+  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
+  .diagram.short svg { max-height: var(--dh, 40vh); }
+  /* 인터랙티브 위젯 — 밝은 상자 안 */
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
+          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
+  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
+          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
+  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
+  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
+  .foot span { white-space: nowrap; }
+  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
+  .dots i.here { background: var(--accent); }
+  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
+    font-size: clamp(11px, 1.1vw, 14px); }
+@media (max-width: 760px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- 1 표지 -->
+<section class="slide chapter on">
+  <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 제11강</div>
+  <h1>군집 — 스포츠 선수 유형</h1>
+  <p class="sub">정답표 없이 묶는 학습 · 2025 KBO 타자 43명</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-1 · 교과서 146쪽</div>
+  <h2>k-평균 알고리즘의 정의</h2>
+  <blockquote>k-평균 알고리즘은 k개의 군집을 구성하는 기계학습 알고리즘이다. 군집의 개수, 즉 k값에 따라 군집화 결과와 그에 따른 의미 해석이 달라지기 때문에 k값을 적절히 설정하는 것이 중요하다.</blockquote>
+  <p class="small">『데이터 과학』 146쪽</p>
+  <p class="point">군집의 개수 k는 사람이 정하는 값</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-2 · 교과서 154쪽</div>
+  <h2>군집화의 정의</h2>
+  <blockquote>데이터 속성 간의 유사성을 측정하여 유사한 데이터끼리 군집을 형성하는 것을 군집화라고 한다.</blockquote>
+  <p class="small">『데이터 과학』 154쪽</p>
+  <ul class="facts">
+    <li>정답 범주 없이, 선택한 특성이 비슷한 데이터끼리 묶는 비지도학습</li>
+    <li>이 실습의 거리 기준은 유클리드 거리(교과서 148쪽)</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-3 · 원리</div>
+  <h2>지도학습과 비지도학습의 구분</h2>
+  <table class="mini">
+    <thead><tr><th>구분</th><th>정답(라벨)</th><th>모델이 하는 일</th><th>우리 수업의 예</th></tr></thead>
+    <tbody>
+      <tr><td>지도학습</td><td>있음</td><td>정답을 맞히도록 학습</td><td>기온 회귀(6차시) · 흥행 분류(9차시)</td></tr>
+      <tr><td>비지도학습</td><td>없음</td><td>데이터 안의 구조를 스스로 찾음</td><td>선수 유형 군집(오늘)</td></tr>
+    </tbody>
+  </table>
+  <p class="point">오늘의 차이 — 맞힐 정답표 없음</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-4 · 원리</div>
+  <h2>k-평균의 반복 절차</h2>
+  <ul class="facts">
+    <li>① 군집 수 k와 초기 중심 정하기</li>
+    <li>② 각 데이터를 가장 가까운 중심에 배정</li>
+    <li>③ 군집에 속한 데이터의 평균으로 중심 이동</li>
+    <li>④ ②③ 반복 — 변화가 충분히 작아지거나 정해 둔 반복 횟수에 도달하면 정지</li>
+  </ul>
+  <p class="point">초기 중심에 따라 결과가 달라짐</p>
+  <p class="small">예시 코드는 여러 번 시작한 결과 가운데 군집 내부 제곱거리 합이 가장 작은 것을 선택</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-4 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">k-평균의 진행 — 클릭 네 단계</h2>
+  <div class="diagram"><svg id="km12" viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="2025 KBO 타자 12명의 삼진과 홈런 산점도. 가로 세로 눈금 폭이 같고, 클릭할 때마다 k-평균이 한 단계씩 진행되어 두 묶음으로 나뉘는 그림" style="cursor:pointer">
+  <rect x="0" y="0" width="700" height="320" fill="transparent" pointer-events="all"/>
+  <g stroke="#e3ddcf" stroke-width="1" pointer-events="none">
+    <line x1="116" y1="35" x2="116" y2="282"/>
+    <line x1="211" y1="35" x2="211" y2="282"/>
+    <line x1="306" y1="35" x2="306" y2="282"/>
+    <line x1="401" y1="35" x2="401" y2="282"/>
+    <line x1="78" y1="234.5" x2="439" y2="234.5"/>
+    <line x1="78" y1="187" x2="439" y2="187"/>
+    <line x1="78" y1="139.5" x2="439" y2="139.5"/>
+    <line x1="78" y1="92" x2="439" y2="92"/>
+    <line x1="78" y1="44.5" x2="439" y2="44.5"/>
+  </g>
+  <path d="M78,35 V282 H439" fill="none" stroke="#6b7385" stroke-width="1.2" pointer-events="none"/>
+  <g font-size="12" fill="#6b7385" pointer-events="none">
+    <text x="116" y="300" text-anchor="middle">60</text>
+    <text x="211" y="300" text-anchor="middle">80</text>
+    <text x="306" y="300" text-anchor="middle">100</text>
+    <text x="401" y="300" text-anchor="middle">120</text>
+    <text x="70" y="286" text-anchor="end">0</text>
+    <text x="70" y="238.5" text-anchor="end">10</text>
+    <text x="70" y="191" text-anchor="end">20</text>
+    <text x="70" y="143.5" text-anchor="end">30</text>
+    <text x="70" y="96" text-anchor="end">40</text>
+    <text x="70" y="48.5" text-anchor="end">50</text>
+    <text x="258.5" y="316" text-anchor="middle">삼진(개)</text>
+    <text x="40" y="158" text-anchor="middle" transform="rotate(-90 40 158)">홈런(개)</text>
+  </g>
+  <text class="km12-hint" x="570" y="140" text-anchor="middle" font-size="16" font-weight="800" fill="#e8930c" pointer-events="none">👆 클릭 ①</text>
+  <text class="km12-sub" x="570" y="168" text-anchor="middle" font-size="14" fill="#6b5836" pointer-events="none">중심점 k=2개 배치</text>
+  <g class="km12-stage" pointer-events="none">
+    <circle class="km12-dot" cx="306" cy="44.5" r="8" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="130.25" cy="187" r="8" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="263.25" cy="191.75" r="8" fill="#b6b0a2" data-a1="g" data-a2="t"/>
+    <circle class="km12-dot" cx="125.5" cy="134.75" r="8" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="296.5" cy="168" r="8" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="420" cy="177.5" r="8" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="377.25" cy="206" r="8" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="401" cy="210.75" r="8" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="277.5" cy="267.75" r="8" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="101.75" cy="253.5" r="8" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="101.75" cy="277.25" r="8" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="358.25" cy="210.75" r="8" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <text x="318" y="48.5" text-anchor="start" font-size="12" fill="#6b5836">디아즈</text>
+    <text x="130.25" y="172" text-anchor="middle" font-size="12" fill="#6b5836">양의지</text>
+    <text x="263.25" y="210" text-anchor="middle" font-size="12" fill="#6b5836">구자욱</text>
+    <text x="125.5" y="120" text-anchor="middle" font-size="12" fill="#6b5836">오스틴</text>
+    <text x="296.5" y="153" text-anchor="middle" font-size="12" fill="#6b5836">최형우</text>
+    <text x="420" y="162" text-anchor="middle" font-size="12" fill="#6b5836">박동원</text>
+    <text x="381" y="191" text-anchor="middle" font-size="12" fill="#6b5836">오지환</text>
+    <text x="401" y="235" text-anchor="middle" font-size="12" fill="#6b5836">한유섬</text>
+    <text x="277.5" y="253" text-anchor="middle" font-size="12" fill="#6b5836">박해민</text>
+    <text x="113" y="257.5" text-anchor="start" font-size="12" fill="#6b5836">정수빈</text>
+    <text x="113" y="281" text-anchor="start" font-size="12" fill="#6b5836">신민재</text>
+    <text x="349" y="228" text-anchor="end" font-size="12" fill="#6b5836">김주원</text>
+    <g class="km12-cg" data-k="g" data-x0="116" data-y0="63.5" data-x1="144.5" data-y1="208.85" data-x2="114.8125" data-y2="213.125" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#f4b400" stroke="#c28f00" stroke-width="0.8">★</text></g>
+    <g class="km12-cg" data-k="t" data-x0="420" data-y0="63.5" data-x1="348.0714" data-y1="183.6071" data-x2="337.4688" data-y2="184.625" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#3ba6a0" stroke="#2b7a75" stroke-width="0.8">★</text></g>
+  </g>
+</svg></div>
+  <p class="src">그림을 클릭할 때마다 한 단계씩 진행 · 2025 KBO 타자 43명 가운데 12명의 실제 삼진·홈런 기록 · 진행 과정을 보이기 위해 두 항목만 원래 단위로 사용 · 가까움의 기준은 두 점 사이의 유클리드 거리(교과서 148쪽) · 가로·세로 눈금 폭이 같아 그림에서 잰 거리가 원래 단위의 거리와 일치</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-5 · 실습</div>
+  <h2>데이터 — 2025 KBO 타자 43명</h2>
+  <ul class="facts">
+    <li>kbo_hitters_2025.csv · 2025 정규시즌 규정타석을 채운 타자 43명의 공식 기록</li>
+    <li>행 하나가 선수 한 명 · 열은 홈런·도루·볼넷·삼진·출루율·장타율·타율 등 20개 항목</li>
+    <li>홈런 1위 디아즈 <b>50개</b> · 도루 1위 박해민 <b>49개</b> · 타율 1위 양의지 <b>0.337</b></li>
+    <li>군집에 사용할 여섯 항목 — 홈런 · 도루 · 볼넷 · 삼진 · 출루율 · 장타율</li>
+  </ul>
+  <p class="src">원출처 KBO 공식 기록실 · modudata 고정 커밋 bb86093</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-6 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">"타자 유형 군집" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로.<br>
+데이터: https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025.csv<br>
+이 파일의 열 이름은 선수명, 팀, 경기, 타석, 타수, 득점, 안타, 2루타, 3루타, 홈런, 타점, 도루, 볼넷, 사구, 삼진, 병살, 타율, 출루율, 장타율, OPS이고, 인코딩은 UTF-8이야.<br>
+2025 정규시즌 규정타석을 채운 타자 43명의 기록이야.<br>
+홈런, 도루, 볼넷, 삼진, 출루율, 장타율 여섯 항목으로 비슷한 선수끼리 묶어 줘.<br>
+항목마다 단위와 변화 폭이 다르니 표준화를 적용해 줘.<br>
+묶음의 개수는 2에서 6까지 슬라이더로 고르게 하고, 같은 설정에서 결과가 같도록 초기화 조건을 고정해 줘.<br>
+묶음마다 평균 기록과 소속 선수 명단을 보여 주고, 묶음별 인원과 묶은 선수 수 43명을 화면에 적어 줘.<br>
+가로축과 세로축에 쓸 기록 항목을 고르면 선수 43명을 점으로 찍고 묶음마다 색을 다르게 해 줘. 그래프는 plotly로 그려 줘.<br>
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
+  <p class="small">교재 ①과 같은 문장 · 저장은 main.py와 requirements.txt 두 파일</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-6 · 실습</div>
+  <h2>프롬프트에 넣은 조건</h2>
+  <ul class="facts">
+    <li>데이터 주소 — modudata 고정 커밋의 raw 주소</li>
+    <li>열 이름 <b>20개</b>와 인코딩 <b>UTF-8</b> 명시</li>
+    <li>표준화 적용 — 항목마다 단위와 변화 폭이 다름</li>
+    <li>묶음 개수 슬라이더 <b>2~6</b> · 초기화 조건 고정</li>
+    <li>묶은 선수 수 <b>43명</b> 표기 · plotly · requirements.txt 요청</li>
+  </ul>
+  <p class="point">조건을 적어 두면 열 이름 추측과 인코딩 오류가 줄어듦</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-7 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">개선 프롬프트 — 표준화 실험</h2>
+  <div class="prompt" style="font-size:clamp(13px,1.45vw,20px);line-height:1.7;max-width:46em;margin-top:2vh">같은 여섯 항목을 표준화하지 않고 원래 기록 그대로 묶은 결과도 만들어서,<br>
+표준화 전과 후의 묶음이 어떻게 달라졌는지 나란히 비교해 줘.<br>
+묶음이 달라진 선수의 이름을 목록으로 보여 주고, 몇 명인지도 적어 줘.<br>
+잘 나뉜 정도를 나타내는 점수도 묶음 개수 2부터 6까지 표로 보여 주고, 점수 변화는 plotly 선 그래프로 그려 줘.</div>
+  <p class="small">앞 코드 끝에 이어 붙이는 부분 · 화면에서 확인할 것은 표준화 전후 대조표, 묶음이 바뀐 선수 명단과 인원, k별 점수 표와 선 그래프</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-8 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">거리의 기준 — 자 바꾸기</h2>
+  <div class="diagram" style="--wh:40vh"><div class="widget" data-w="ruler" style="overflow-x:auto">
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KBO 타자 43명의 삼진과 출루율 산점도. 원래 단위와 표준화 두 눈금, 선택 선수와 최근접 선수를 잇는 선" style="min-width:640px">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">자 바꾸기 · 삼진과 출루율</text>
+  <!-- 격자·눈금 숫자(모드별 두 겹, 전환 시 opacity 교차) -->
+  <g class="gr gr-raw"></g>
+  <g class="gr gr-std" opacity="0"></g>
+  <path d="M76 48 V300 H452" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+  <text class="axx" x="264" y="326" font-size="13" fill="#6b7385" text-anchor="middle">삼진(개)</text>
+  <text class="axy" x="26" y="174" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 26 174)">출루율</text>
+  <!-- 연결선 → 점 43개 → 선택·최근접 덧점 → 이름 라벨 -->
+  <line class="link" x1="76" y1="300" x2="76" y2="300" stroke="#2f9e5f" stroke-width="1.6" stroke-dasharray="4 3" opacity="0"/>
+  <g class="pts"></g>
+  <circle class="dot-near" cx="-30" cy="-30" r="7" fill="#2f9e5f"/>
+  <circle class="dot-sel" cx="-30" cy="-30" r="7" fill="#b07a00"/>
+  <g class="labs"></g>
+  <!-- 오른쪽 패널 -->
+  <rect x="468" y="48" width="236" height="252" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1"/>
+  <text class="p-sel" x="480" y="76" font-size="14" font-weight="700" fill="#1c2230">선택 디아즈</text>
+  <text class="p-near" x="480" y="100" font-size="14" font-weight="700" fill="#2f9e5f">최근접 고명준</text>
+  <text x="480" y="132" font-size="13" fill="#6b7385">삼진 차</text>
+  <text class="v-k" x="692" y="132" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">1</text>
+  <text x="480" y="160" font-size="13" fill="#6b7385">출루율 차</text>
+  <text class="v-o" x="692" y="160" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">0.075</text>
+  <text x="480" y="188" font-size="13" fill="#6b7385">거리</text>
+  <text class="v-d" x="692" y="188" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">1.003</text>
+  <text x="480" y="216" font-size="13" fill="#6b7385">거리 제곱에서 삼진의 몫</text>
+  <rect x="480" y="232" width="156" height="18" fill="#e3ddcf"/>
+  <rect class="bar" x="480" y="232" width="155.1" height="18" fill="#b07a00"/>
+  <text class="v-s" x="692" y="246" font-size="14" font-weight="700" fill="#b07a00" text-anchor="end">99.4%</text>
+  <text x="480" y="272" font-size="13" fill="#6b7385">폭 맞추기</text>
+  <text x="480" y="292" font-size="13" fill="#6b7385">항목 중요도 결정 아님</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-mode="raw" aria-pressed="true">원래 단위</button>
+  <button class="wbtn" type="button" data-mode="std" aria-pressed="false">표준화</button>
+  <button class="wbtn on" type="button" data-link="1" aria-pressed="true">가장 가까운 선수 잇기</button>
+  <span class="wout">최근접 바뀜 35 / 43</span>
+</div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh">눈금을 바꾸면 가장 가까운 선수가 달라짐 · 같은 43명, 같은 기록</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-9 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">표준화 스위치 — 여섯 항목</h2>
+  <div class="diagram" style="--wh:42vh"><div class="widget" data-w="stdswitch" style="overflow-x:auto">
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="표준화 스위치: 같은 여섯 항목 k=3 군집을 원래 단위와 표준화 두 가지 자로 나눈 결과 비교" style="min-width:640px">
+<text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">표준화 스위치 · 여섯 항목</text>
+<g stroke="#e3ddcf" stroke-width="1">
+<line x1="68" y1="56.6" x2="438" y2="56.6"/>
+<line x1="68" y1="99.7" x2="438" y2="99.7"/>
+<line x1="68" y1="142.8" x2="438" y2="142.8"/>
+<line x1="68" y1="185.8" x2="438" y2="185.8"/>
+<line x1="68" y1="228.9" x2="438" y2="228.9"/>
+<line x1="150.2" y1="48" x2="150.2" y2="272"/>
+<line x1="232.4" y1="48" x2="232.4" y2="272"/>
+<line x1="314.7" y1="48" x2="314.7" y2="272"/>
+<line x1="396.9" y1="48" x2="396.9" y2="272"/>
+</g>
+<path d="M68,48 V272 H438" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+<g font-size="12" fill="#6b7385">
+<text x="60" y="61.1" text-anchor="end">50</text>
+<text x="60" y="104.2" text-anchor="end">40</text>
+<text x="60" y="147.3" text-anchor="end">30</text>
+<text x="60" y="190.3" text-anchor="end">20</text>
+<text x="60" y="233.4" text-anchor="end">10</text>
+<text x="60" y="276.5" text-anchor="end">0</text>
+<text x="68" y="290" text-anchor="middle">30</text>
+<text x="150.2" y="290" text-anchor="middle">60</text>
+<text x="232.4" y="290" text-anchor="middle">90</text>
+<text x="314.7" y="290" text-anchor="middle">120</text>
+<text x="396.9" y="290" text-anchor="middle">150</text>
+</g>
+<text x="30" y="160" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 30 160)">홈런(개)</text>
+<text x="434" y="264" font-size="13" fill="#6b7385" text-anchor="end">삼진(개)</text>
+<g class="pts"></g>
+<g class="rings" fill="none" stroke="#1c2230" stroke-width="2.5" opacity="0"></g>
+<circle class="selring" cx="-20" cy="-20" r="9" fill="none" stroke="#1c2230" stroke-width="1.5"/>
+<text class="lgRaw" x="68" y="306" font-size="13" fill="#1c2230"></text>
+<text class="lgStd" x="68" y="306" font-size="13" fill="#1c2230" opacity="0"></text>
+<rect x="454" y="48" width="250" height="258" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1"/>
+<text class="pname" x="470" y="74" font-size="15" font-weight="700" fill="#1c2230">양의지</text>
+<g font-size="12" fill="#6b7385">
+<text x="624" y="96" text-anchor="end">원래값</text>
+<text x="692" y="96" text-anchor="end">표준화값</text>
+</g>
+<g class="prow"><text x="470" y="120" font-size="13" fill="#6b7385">홈런</text><text class="pv" x="624" y="120" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">20</text><text class="pz" x="692" y="120" font-size="14" fill="#2b7fd6" text-anchor="end">0.52</text></g>
+<g class="prow"><text x="470" y="144" font-size="13" fill="#6b7385">도루</text><text class="pv" x="624" y="144" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">4</text><text class="pz" x="692" y="144" font-size="14" fill="#2b7fd6" text-anchor="end">−0.55</text></g>
+<g class="prow"><text x="470" y="168" font-size="13" fill="#6b7385">볼넷</text><text class="pv" x="624" y="168" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">50</text><text class="pz" x="692" y="168" font-size="14" fill="#2b7fd6" text-anchor="end">−0.20</text></g>
+<g class="prow"><text x="470" y="192" font-size="13" fill="#6b7385">삼진</text><text class="pv" x="624" y="192" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">63</text><text class="pz" x="692" y="192" font-size="14" fill="#2b7fd6" text-anchor="end">−1.00</text></g>
+<g class="prow"><text x="470" y="216" font-size="13" fill="#6b7385">출루율</text><text class="pv" x="624" y="216" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">0.406</text><text class="pz" x="692" y="216" font-size="14" fill="#2b7fd6" text-anchor="end">1.37</text></g>
+<g class="prow"><text x="470" y="240" font-size="13" fill="#6b7385">장타율</text><text class="pv" x="624" y="240" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">0.533</text><text class="pz" x="692" y="240" font-size="14" fill="#2b7fd6" text-anchor="end">1.31</text></g>
+<text class="passign" x="470" y="272" font-size="13" font-weight="700" fill="#b07a00">원래 단위 ③ → 표준화 ㉮ · 바뀜</text>
+<text x="470" y="294" font-size="12" fill="#6b7385">같은 값 · 눈금만 다름</text>
+<text x="68" y="330" font-size="13" font-weight="700" fill="#1c2230">거리에 실린 몫 · 전체 쌍의 거리 제곱 합계 기준</text>
+<g class="barA"></g>
+<text class="ovA" x="68" y="378" font-size="12" fill="#6b7385"></text>
+<text x="68" y="392" font-size="13" font-weight="700" fill="#1c2230">묶음을 가른 몫 · 묶음 평균이 전체 평균에서 떨어진 정도</text>
+<text class="ovB" x="704" y="392" font-size="12" fill="#6b7385" text-anchor="end"></text>
+<g class="barB"></g>
+<text x="68" y="434" font-size="12" fill="#6b7385">위 막대는 자의 폭을 맞춘 결과 · 아래 막대는 표준화 뒤에도 고르지 않음</text>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-m="raw">원래 단위</button>
+<button class="wbtn" type="button" data-m="std">표준화</button>
+<button class="wbtn" type="button" data-t="moved">바뀐 13명만 보기</button>
+<span class="wout">묶음 바뀐 선수 13 / 43</span>
+</div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh">자를 바꾸면 13명이 다른 묶음으로 이동 · 두 결과 가운데 하나가 틀린 것은 아님</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-9 · 발견</div>
+  <h2>기준에 따라 달라지는 결과</h2>
+  <ul class="facts">
+    <li>원래 단위로 거리를 계산하면 값의 변화 폭이 큰 삼진 등의 영향이 커짐</li>
+    <li>이 실습의 표준화 — 각 항목에서 평균을 빼고 표준편차로 나누어 평균 0, 표준편차 1로 맞춤</li>
+    <li>표준화 전후로 묶음이 바뀐 선수 <b>13명 / 43명</b></li>
+    <li>눈금을 바꾸면 가장 가까운 선수가 바뀌는 경우 <b>35명 / 43명</b></li>
+  </ul>
+  <p class="point">표준화가 모든 항목의 동등한 기여나 좋은 군집을 보장하지는 않음</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-10 · 활동</div>
+  <h2>세 묶음의 평균 기록</h2>
+  <table class="mini" style="font-size:clamp(14px,1.6vw,23px)">
+    <thead><tr><th>묶음</th><th>인원</th><th>홈런</th><th>도루</th><th>삼진</th><th>장타율</th><th>대표 선수</th><th>유형 이름</th></tr></thead>
+    <tbody>
+      <tr><td>㉮</td><td>9</td><td><em>27.6</em></td><td>6.9</td><td>90.6</td><td><em>0.542</em></td><td>양의지 · 구자욱 · 디아즈</td><td>______</td></tr>
+      <tr><td>㉯</td><td>18</td><td>6.4</td><td><em>17.1</em></td><td>72.7</td><td>0.393</td><td>박해민 · 정수빈 · 신민재</td><td>______</td></tr>
+      <tr><td>㉰</td><td>16</td><td>16.8</td><td>5.4</td><td><em>108.6</em></td><td>0.429</td><td>오지환 · 박동원</td><td>______</td></tr>
+    </tbody>
+  </table>
+  <p class="small">코드의 묶음 번호 1·2·0을 표에서는 ㉮·㉯·㉰로 표시 · 번호에 순위의 뜻 없음</p>
+  <p class="point">이름의 근거는 평균 기록과 선수 명단</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-11 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">군집 수의 선택 — 실루엣</h2>
+  <div class="diagram" style="--wh:42vh"><div class="widget" data-w="kpick">
+  <svg viewBox="0 0 720 450" style="min-width:640px">
+    <text x="150" y="26" font-size="14" fill="#6b7385">43명 실루엣</text>
+    <text x="450" y="36" font-size="13" fill="#6b7385">k 선택은 사람 몫 · 자동 추천 없음</text>
+    <text x="210" y="42" font-size="12" text-anchor="middle" fill="#6b7385">0</text>
+    <text class="meantext" x="317.2" y="42" font-size="13" text-anchor="middle" fill="#b07a00">평균 0.268</text>
+    <text x="170" y="414" font-size="12" text-anchor="middle" fill="#6b7385">−0.1</text>
+    <text x="410" y="414" font-size="12" text-anchor="middle" fill="#6b7385">0.5</text>
+    <g class="cards"></g>
+    <g class="bars"></g>
+    <g class="glab"></g>
+    <line x1="210" y1="46" x2="210" y2="402" stroke="#6b7385"/>
+    <line class="meanline" x1="317.2" y1="46" x2="317.2" y2="402" stroke="#b07a00" stroke-width="1" stroke-dasharray="3 3"/>
+    <text class="pinname" x="0" y="0" font-size="13" fill="#1c2230" display="none"></text>
+    <text class="readout" x="150" y="430" font-size="13" fill="#1c2230">막대 클릭 → 선수 한 명 고정 · k 변경 시 소속 이동 확인</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-k="2">★ k=2 · 0.268</button>
+    <button class="wbtn" type="button" data-k="3">k=3 · 0.262</button>
+    <button class="wbtn" type="button" data-k="4">k=4 · 0.222</button>
+    <button class="wbtn" type="button" data-k="5">k=5 · 0.230</button>
+    <button class="wbtn" type="button" data-k="6">k=6 · 0.188</button>
+    <span class="wout">평균 0.268 · 음수 1명 · 가장 작은 묶음 10명</span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh">점수는 k=2가 가장 높음 · 묶음 셋의 명단이 더 잘 읽히는지는 사람이 판단</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-11 · 판단</div>
+  <h2>점수와 해석의 불일치</h2>
+  <ul class="facts">
+    <li>잘 나뉜 정도 점수(실루엣) — k=2 <b>0.268</b>, k=3 <b>0.262</b>로 근소한 차이</li>
+    <li>두 묶음과 세 묶음의 평균 기록·명단을 비교해 분석 목적에 도움이 되는 구분을 선택</li>
+    <li>실루엣 점수는 같은 특성과 거리 기준에서만 비교 가능</li>
+  </ul>
+  <p class="point">가장 높은 점수가 유일한 정답은 아님</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-12 · 교과서 154쪽</div>
+  <h2>해석의 조건</h2>
+  <blockquote>군집 분석 결과를 해석하기 위해서는 데이터에 대한 깊은 이해가 필요하다.</blockquote>
+  <p class="small">『데이터 과학』 154쪽</p>
+  <p class="point">알고리즘이 만드는 것은 묶음의 번호까지 · 이름과 의미는 야구를 아는 사람의 몫</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-13 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">NBA 포지션 재정의 — 다섯에서 열셋으로</h2>
+  <div class="withimg"><div class="txt"><ul class="facts">
+    <li>포지션 정보를 사용하지 않고 분당 기록 7가지(득점·리바운드·어시스트·스틸·블록·턴오버·파울)로 한 시즌 NBA 선수들을 묶음</li>
+    <li>묶는 방법은 k-평균이 아니라 위상 데이터 분석</li>
+    <li>묶음의 개수 13과 이름은 사람이 결정 — 득점형 리바운더(노비츠키) · 페인트존 수비수(챈들러) · 유일무이형(로즈·하워드)</li>
+  </ul></div><img src="../../img/lesson11_case1.png" alt="어두운 배경 위에 점과 선이 이어진 그물 모양 지도. 분당 득점이 낮은 쪽은 초록, 높은 쪽은 주황과 빨강으로 표시되고 갈라진 가지마다 Role Player, Scoring Rebounder, Paint Protector, One-of-a-kind 같은 유형 이름 13개가 붙어 있음"></div>
+  <p class="src">그림: 무투 알라가판, 「From 5 to 13: Redefining the Positions in Basketball」, MIT 슬론 스포츠 애널리틱스 콘퍼런스 2012</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-13 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">음악 장르 지도 — Every Noise at Once</h2>
+  <p class="small" style="margin-top:.6vh">음향 특성(템포·음량·에너지·분위기)과 청취 기록이 비슷한 아티스트를 묶어 장르를 구성</p>
+  <div class="shot wide"><img src="../../img/lesson11_case2.png" alt="흰 바탕에 장르 이름 수천 개가 흩어진 화면. 왼쪽에는 metalcore와 thrash metal이 붉은색으로, 가운데와 오른쪽 아래에는 k-pop과 j-pop, trap이 노란색과 주황색으로 모여 있음"></div>
+  <p class="src">화면: everynoise.com — 스포티파이 장르 6,291개(2023년 12월 기준, 아티스트 약 100만 명)를 소리의 비슷함으로 배치한 지도, 글렌 맥도널드 제작 · 장르 이름과 개수도 제작자가 직접 결정</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-14 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">실루엣의 구성 — a와 b</h2>
+  <div class="diagram" style="--wh:36vh"><div class="widget" data-w="sildist">
+  <svg viewBox="0 0 720 350" style="min-width:640px" role="img" aria-label="선수 한 명의 실루엣을 내 묶음 평균 거리 a와 가장 가까운 다른 묶음 평균 거리 b로 뜯어본 그림. 시작 자리 세 벌을 바꾸면 묶음 소속과 점수가 바뀜">
+    <text x="20" y="32" font-size="15" font-weight="700" fill="#1c2230">실루엣 = (b − a) ÷ 둘 중 큰 값</text>
+    <text class="hd-name" x="700" y="32" text-anchor="end" font-size="15" font-weight="700" fill="#1c2230">문현빈</text>
+    <g class="lanes"></g>
+    <g class="ticks"></g>
+    <g class="means"></g>
+    <g class="self"></g>
+    <line x1="150" y1="210" x2="660" y2="210" stroke="#6b7385" stroke-width="1.2"/>
+    <g stroke="#6b7385" stroke-width="1">
+      <line x1="150" y1="210" x2="150" y2="216"/>
+      <line x1="284.2" y1="210" x2="284.2" y2="216"/>
+      <line x1="418.4" y1="210" x2="418.4" y2="216"/>
+      <line x1="552.6" y1="210" x2="552.6" y2="216"/>
+    </g>
+    <g font-size="12" fill="#6b7385" text-anchor="middle">
+      <text x="150" y="228">0</text>
+      <text x="284.2" y="228">2</text>
+      <text x="418.4" y="228">4</text>
+      <text x="552.6" y="228">6</text>
+    </g>
+    <text x="700" y="228" text-anchor="end" font-size="13" fill="#6b7385">표준화 6항목 거리</text>
+    <text class="calc" x="150" y="246" font-size="15" fill="#1c2230"></text>
+    <text x="20" y="262" font-size="13" fill="#6b7385">같은 데이터 · 같은 k=3 · 시작 자리만 다름</text>
+    <g class="runtable"></g>
+    <text x="20" y="344" font-size="12" fill="#6b7385">빈도는 무작위 시작 400회 기준 제작 시점 실측 · 예시 코드는 여러 번 시작해 가장 나은 결과 선택</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn" type="button" data-nav="-1" aria-label="앞 선수">◀</button>
+    <button class="wbtn" type="button" data-nav="1" aria-label="뒤 선수">▶</button>
+    <button class="wbtn" type="button" data-jump="min">가장 애매</button>
+    <button class="wbtn" type="button" data-jump="max">가장 뚜렷</button>
+    <button class="wbtn on" type="button" data-run="0" aria-label="시작 자리 1">①</button>
+    <button class="wbtn" type="button" data-run="1" aria-label="시작 자리 2">②</button>
+    <button class="wbtn" type="button" data-run="2" aria-label="시작 자리 3">③</button>
+    <span class="wout">a 2.437 · b 2.502 · s +0.026</span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh">실루엣은 같은 군집 안에서의 거리(a)와 가장 가까운 다른 군집까지의 거리(b)를 비교 · 범위 −1에서 1 · 같은 k=3에서도 시작 자리에 따라 점수와 명단이 달라짐</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-15 · 원리</div>
+  <h2>군집과 분류의 구분</h2>
+  <p class="small" style="margin-top:0">선생님 화면 시연 — 축구 게임(EA FC) 필드플레이어 800명, 능력치 6종</p>
+  <ul class="facts">
+    <li>k=2에서 공격형(메시·음바페)과 수비형(판다이크·캉테)으로 분리</li>
+    <li>실제 포지션(공격수·미드필더·수비수)과 대조하면 겹치되 일치하지 않음 — 공격수처럼 움직이는 미드필더, 수비형 공격수가 섞여 있음</li>
+    <li>군집은 데이터의 유사도로, 분류는 정해진 체계로 구분(교과서 155쪽 참고)</li>
+    <li>이 능력치는 게임 회사가 매긴 주관적 평가 — 데이터의 출처를 확인하는 습관(14차시)이 여기에도 적용</li>
+  </ul>
+  <p class="point">두 방법의 결과는 다를 수 있음</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">11-16 · 확인</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">확인 문제 — 비지도학습의 판별</h2>
+  <p class="small" style="margin-top:.6vh">기온 예측(6차시), 흥행 분류(9차시), 선수 유형 묶기(오늘) 가운데 비지도학습은 무엇일까요?</p>
+  <div class="split" style="margin-top:2vh">
+    <div class="card"><div class="t">①</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">기온 예측(6차시)</div></div>
+    <div class="card"><div class="t">②</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">흥행 분류(9차시)</div></div>
+    <div class="card"><div class="t">③</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">선수 유형 묶기(오늘)</div></div>
+  </div>
+  <p class="point">답 — ③ 선수 유형 묶기(오늘)</p>
+  <p class="small">선수 묶기에는 정답표가 없고 데이터 속 유사성만으로 구조를 찾으므로 비지도학습 · 기온 예측에는 실제 기온이라는 정답이 있고, 흥행 분류의 성공·기준 미달은 사람이 붙인 라벨이지만 붙인 뒤에는 정답이 있는 지도학습</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">정리</div>
+  <h2>제11강 요약</h2>
+  <div class="split" style="margin-top:2.6vh">
+    <div class="card"><div class="t">구분</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">정답 라벨의 유무 — 지도학습과 비지도학습</div></div>
+    <div class="card"><div class="t">절차</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">중심 놓기 → 배정 → 중심 이동 → 반복 · k는 사람이 결정</div></div>
+    <div class="card"><div class="t">기준</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">표준화 여부에 따라 13명의 소속이 이동</div></div>
+    <div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">점수는 k=2, 해석은 k=3 · 이름과 의미는 사람의 몫</div></div>
+  </div>
+  <p class="point">알고리즘이 만드는 것은 묶음의 번호까지</p>
+</section>
+
+<script>
+(function () {
+  var root = document.getElementById("km12");
+  if (!root) return;
+  var STEPS = [
+    ["\uD83D\uDC46 \uD074\uB9AD \u2460", "\uC911\uC2EC\uC810 k=2\uAC1C \uBC30\uCE58"],
+    ["\uD83D\uDC46 \uD074\uB9AD \u2461", "\uAC00\uAE4C\uC6B4 \uC911\uC2EC\uC810\uC5D0 \uBC30\uC815"],
+    ["\uD83D\uDC46 \uD074\uB9AD \u2462", "\uBB36\uC74C\uC758 \uD3C9\uADE0\uC73C\uB85C \uC911\uC2EC\uC810 \uC774\uB3D9"],
+    ["\uD83D\uDC46 \uD074\uB9AD \u2463", "\u2461\u2462 \uBC18\uBCF5 \u2192 \uC218\uB834"],
+    ["\u2705 \uC644\uC131", "\uD074\uB9AD\uD558\uBA74 \uCC98\uC74C\uBD80\uD130"]
+  ];
+  var COLORS = { g: "#f4b400", t: "#3ba6a0" };
+  var GRAY = "#b6b0a2";
+  var hint = root.querySelector(".km12-hint");
+  var sub = root.querySelector(".km12-sub");
+  var stage = root.querySelector(".km12-stage");
+  var dots = [].slice.call(root.querySelectorAll(".km12-dot"));
+  var stars = {};
+  [].slice.call(root.querySelectorAll(".km12-cg")).forEach(function (g) {
+    stars[g.getAttribute("data-k")] = g;
+    g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
+  });
+  var links = dots.map(function (d) {
+    var k = d.getAttribute("data-a1");
+    var ln = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    ln.setAttribute("x1", d.getAttribute("cx"));
+    ln.setAttribute("y1", d.getAttribute("cy"));
+    ln.setAttribute("x2", stars[k].getAttribute("data-x0"));
+    ln.setAttribute("y2", stars[k].getAttribute("data-y0"));
+    ln.setAttribute("stroke", COLORS[k]);
+    ln.setAttribute("stroke-width", "1.3");
+    ln.setAttribute("opacity", "0");
+    ln.style.transition = "opacity 0.6s ease";
+    stage.insertBefore(ln, stage.firstChild);
+    return ln;
+  });
+  dots.forEach(function (d) { d.style.transition = "fill 0.6s ease"; });
+  function place(g, x, y) { g.style.transform = "translate(" + x + "px," + y + "px)"; }
+  function say(i) { hint.textContent = STEPS[i][0]; sub.textContent = STEPS[i][1]; }
+  function reset() {
+    Object.keys(stars).forEach(function (k) {
+      var g = stars[k];
+      g.style.transition = "none";
+      place(g, g.getAttribute("data-x0"), g.getAttribute("data-y0"));
+      g.style.opacity = 0;
+      g.getBoundingClientRect();
+      g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
+    });
+    dots.forEach(function (d) { d.style.fill = GRAY; });
+    links.forEach(function (ln) { ln.style.opacity = 0; });
+    say(0);
+  }
+  var s = 0;
+  reset();
+  root.addEventListener("click", function (e) {
+    e.stopPropagation();
+    s = (s + 1) % 5;
+    if (s === 1) {
+      stars.g.style.opacity = 1; stars.t.style.opacity = 1;
+    } else if (s === 2) {
+      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a1")]; });
+      links.forEach(function (ln) { ln.style.opacity = 1; });
+    } else if (s === 3) {
+      links.forEach(function (ln) { ln.style.opacity = 0; });
+      Object.keys(stars).forEach(function (k) {
+        var g = stars[k];
+        place(g, g.getAttribute("data-x1"), g.getAttribute("data-y1"));
+      });
+    } else if (s === 4) {
+      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a2")]; });
+      Object.keys(stars).forEach(function (k) {
+        var g = stars[k];
+        place(g, g.getAttribute("data-x2"), g.getAttribute("data-y2"));
+      });
+    } else {
+      s = 0; reset(); return;
+    }
+    say(s);
+  });
+})();
+</script>
+
+<div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
+<div class="foot">
+  <span>당곡고 데이터 과학 · 11차시</span>
+  <div class="dots" id="dots"></div>
+  <span id="pageno"></span>
+</div>
+
+<script src="../../assets/widgets11.js"></script>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+    [...dots.children].forEach((d, k) => d.classList.toggle('here', k === cur));
+    document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => { if (e.target.closest('a, .widget')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  show(0);
+</script>
+</body>
+</html>

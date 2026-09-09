@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>14차시 슬라이드 · 데이터 윤리 — 데이터 과학</title>
+<script src="../../assets/release.js"></script>
+<script src="../../assets/gate.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1219; --bg-accent: #161b26;
+    --ink: #f2f4f8; --ink-dim: #8b93a7;
+    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
+  .slide.on { display: flex; }
+  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
+    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
+  .kicker.blue { color: var(--accent2); }
+  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
+  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
+  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
+  blockquote { font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
+    line-height: 1.5; max-width: 28em; }
+  blockquote::before { content: "\201C"; color: var(--accent); }
+  blockquote::after { content: "\201D"; color: var(--accent); }
+  .facts { margin-top: 1vh; }
+  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
+    padding-left: 1.2em; text-indent: -1.2em; }
+  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
+  .facts b { color: var(--accent2); font-weight: 800; }
+  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
+  .point b { color: var(--accent); }
+  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
+  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
+    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
+    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
+  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
+  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
+  table.mini th { color: var(--accent); font-weight: 800; }
+  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
+  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
+  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
+  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
+  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
+  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
+  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
+  .withimg .txt { flex: 1 1 0; min-width: 0; }
+  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
+  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
+  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
+  .diagram.short svg { max-height: var(--dh, 40vh); }
+  /* 인터랙티브 위젯 — 밝은 상자 안 */
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
+          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
+  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
+          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
+  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
+  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
+  .foot span { white-space: nowrap; }
+  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
+  .dots i.here { background: var(--accent); }
+  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
+    font-size: clamp(11px, 1.1vw, 14px); }
+@media (max-width: 760px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- 1 표지 -->
+<section class="slide chapter on">
+  <div class="kicker">데이터 과학 · Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 제14강</div>
+  <h1>데이터 윤리</h1>
+  <p class="sub">내 실습에서 쟁점 찾기</p>
+  <p class="small">할 수 있는 분석과 해도 되는 분석의 구분</p>
+</section>
+
+<!-- 2 오늘의 범위 -->
+<section class="slide">
+  <div class="kicker">14-0 · 개요</div>
+  <h2>오늘의 범위</h2>
+  <ul class="facts">
+    <li><b>교과서의 세 문제</b> — 편향성 · 혐오 표현 · 소유권</li>
+    <li><b>내 실습 돌아보기</b> — 인증키 · 데이터 민감도 · 모델이 배우는 편향 · AI 코드의 책임</li>
+    <li><b>모둠 토론</b> — 내가 겪은 윤리 사례 · SDGs와 데이터</li>
+  </ul>
+  <p class="point">오늘은 앱 제작 없음 · <b>이번 학기 실습</b>의 네 장면을 기준으로 점검</p>
+  <p class="small">팀 프로젝트의 데이터를 고르기 전 판단 기준 정리</p>
+</section>
+
+<!-- 3 편향성의 정의 -->
+<section class="slide">
+  <div class="kicker">14-1 · 교과서 38쪽</div>
+  <h2>데이터 편향성의 정의</h2>
+  <blockquote style="margin-top:3vh">수집된 데이터의 분포가 고르지 못하고, 특정한 지역, 연령, 성별 등에 치우쳐 있을 경우 데이터에 편향성이 있다고 한다</blockquote>
+  <p class="small">『데이터 과학』 38쪽</p>
+</section>
+
+<!-- 4 편향된 데이터와 모델 -->
+<section class="slide">
+  <div class="kicker">14-2 · 교과서 38쪽</div>
+  <h2>편향된 데이터와 모델의 결과</h2>
+  <blockquote style="margin-top:3vh">실제 현실을 대표하지 못하고 특정한 방향으로 치우쳐 있는 데이터를 가지고 모델을 만들면, 특정 대상에게 유리하거나 불리한 모델이 만들어질 수 있다</blockquote>
+  <p class="point">데이터의 치우침이 <b>모델의 결과</b>에 미치는 영향</p>
+  <p class="small">『데이터 과학』 38쪽</p>
+</section>
+
+<!-- 5 소유권의 물음 -->
+<section class="slide">
+  <div class="kicker">14-3 · 교과서 39쪽</div>
+  <h2>데이터 소유권의 물음</h2>
+  <blockquote style="margin-top:3vh">학교 수업 중에 생성된 데이터는 학생의 것일까? 학교의 것일까? 서비스를 만든 기업의 것일까?</blockquote>
+  <p class="point">누가 어떤 목적으로 <b>수집·이용·공개</b>할 수 있는지 확인</p>
+  <p class="small">『데이터 과학』 39쪽</p>
+</section>
+
+<!-- 6 세 가지 윤리 문제 -->
+<section class="slide">
+  <div class="kicker">14-4 · 원리</div>
+  <h2>세 가지 윤리 문제</h2>
+  <table class="mini" style="font-size:clamp(14px,1.6vw,22px)">
+    <tr><th>문제</th><th>무엇이 잘못되나</th><th>우리 실습과의 접점</th></tr>
+    <tr><td>데이터 편향성</td><td>치우친 데이터로 만든 모델이 특정 대상에게 불리하게 작동</td><td>7차시 영화 모델의 스크린 수 변수</td></tr>
+    <tr><td>혐오 표현</td><td>사람들이 쓴 잘못된 언어를 인공지능이 그대로 학습</td><td>매일 사용하는 AI 챗봇의 학습 데이터</td></tr>
+    <tr><td>데이터 소유권</td><td>내가 만든 데이터의 소유와 판매 권한이 불분명</td><td>수업 중 폼으로 제출한 응답의 귀속</td></tr>
+  </table>
+  <p class="point">공통 구조 — 데이터를 잘못 다루면 <b>사람이 피해</b>를 봄</p>
+  <p class="small">자세한 사례는 교과서 38~39쪽</p>
+</section>
+
+<!-- 7 인증키의 관리 -->
+<section class="slide">
+  <div class="kicker">14-5 · 원리</div>
+  <h2>인증키의 관리 — 장면 1</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,26px)">
+    <li style="font-size:inherit;margin:1.6vh 0">2·5차시 — 인증키를 코드와 분리해 비밀 금고에 보관</li>
+    <li style="font-size:inherit;margin:1.6vh 0">비공개용 키의 공개 — 다른 사람이 그 키로 요청, 호출 한도 소진·허용 기능 사용</li>
+    <li style="font-size:inherit;margin:1.6vh 0">13차시 수파베이스 — publishable·anon 키는 공개 사용 전제, secret·service_role 키는 비공개</li>
+    <li style="font-size:inherit;margin:1.6vh 0">공개 가능한 키도 데이터 접근 권한 설정을 대신하지 못함</li>
+    <li style="font-size:inherit;margin:1.6vh 0">유출 시 — 코드에서 삭제에 그치지 않고 해당 서비스에서 폐기·재발급</li>
+  </ul>
+  <p class="point" style="margin-top:2.2vh;font-size:clamp(17px,2vw,28px)">키의 역할과 권한은 <b>서비스마다 다름</b> · 제공 기관의 안내 확인</p>
+</section>
+
+<!-- 8 공개 여부와 민감도 -->
+<section class="slide">
+  <div class="kicker">14-6 · 원리</div>
+  <h2>공개 여부와 민감도 — 장면 2</h2>
+  <ul class="facts">
+    <li>급식 식단 — 학교 단위의 공개 정보, 이번 자료에 개별 학생의 섭취 기록 없음</li>
+    <li>확인 사항 — 제공 조건과 출처, 다른 자료와 결합했을 때의 개인 식별 가능성</li>
+    <li>위치·이동 기록 — 이름이 없어도 시간 순으로 연결하면 생활 패턴·동선이 드러남</li>
+  </ul>
+  <p class="point">공개 여부만으로 <b>재사용의 적절성</b> 판단 불가</p>
+  <p class="small">개인을 알아볼 가능성 · 정보의 내용 · 결합 가능성 · 공개 시 영향을 함께 확인</p>
+</section>
+
+<!-- 9 재식별 위젯 -->
+<section class="slide">
+  <div class="kicker">14-6 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">재식별 — 특징을 켤수록 좁혀지는 범위</h2>
+  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="reidNarrow">
+  <svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화명 열을 지운 표 216편을 점 216개로 나타낸 격자. 버튼으로 켠 특징 조합이 한 편뿐인 영화는 빨간 점, 두 편 이상인 영화는 회색 점">
+    <text x="360" y="34" text-anchor="middle" font-size="16" fill="#1c2230">영화명 열을 지운 표 216편</text>
+    <text class="sub" x="360" y="62" text-anchor="middle" font-size="14" fill="#6b7385">켠 특징 · 국가</text>
+    <text class="bins" x="360" y="84" text-anchor="middle" font-size="14" fill="#6b7385"></text>
+    <g class="dots">
+      <circle cx="68" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="100" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="100" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="100" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="68" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="126" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="68" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="152" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="152" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="152" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="68" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="178" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="68" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="204" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="204" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="204" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="204" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="68" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="230" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="68" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="256" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="256" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="256" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="256" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="68" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="282" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="282" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="68" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="94" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="120" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="146" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="172" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="198" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="224" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="250" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="276" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="302" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="328" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="354" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="380" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="406" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="432" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="458" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="484" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="510" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="536" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="562" cy="308" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="588" cy="308" r="6.5" fill="#d64545" opacity="1" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="614" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="640" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+      <circle cx="666" cy="308" r="6.5" fill="#b9b3a5" opacity=".5" style="transition:fill .3s,opacity .3s"/>
+    </g>
+    <circle cx="68" cy="337" r="6.5" fill="#d64545"/>
+    <text x="82" y="342" text-anchor="start" font-size="14" fill="#1c2230">한 편으로 좁혀짐</text>
+    <circle cx="68" cy="361" r="6.5" fill="#b9b3a5" opacity=".5"/>
+    <text x="82" y="366" text-anchor="start" font-size="14" fill="#1c2230">같은 값이 두 편 이상</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-k="0" aria-pressed="true">국가</button>
+    <button class="wbtn" type="button" data-k="1" aria-pressed="false">장르</button>
+    <button class="wbtn" type="button" data-k="2" aria-pressed="false">개봉월</button>
+    <button class="wbtn" type="button" data-k="3" aria-pressed="false">관객 규모</button>
+    <span class="wout">국가 → 13편(6.0%) 한 편으로 좁혀짐 · 가장 큰 묶음 84편</span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh;font-size:clamp(13px,1.4vw,19px)">영화명 열을 지운 216편 · 국가만 켜면 13편이 한 편으로 좁혀지고, 국가·장르·개봉월을 모두 켜면 160편 · 장르는 원문 그대로 72종 · 사람에 관한 데이터였다면 같은 방식이 재식별에 해당</p>
+</section>
+
+<!-- 10 스트라바 사례 -->
+<section class="slide">
+  <div class="kicker">14-7 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">달리기 앱 히트맵과 군사기지(2018)</h2>
+  <ul class="facts" style="font-size:clamp(15px,1.8vw,24px)">
+    <li style="font-size:inherit;margin:1.5vh 0">2017년 11월 — 스트라바가 이용자 활동을 합친 세계 히트맵 공개</li>
+    <li style="font-size:inherit;margin:1.5vh 0">규모 — 활동 약 <b>10억 건</b>, 위치 지점 약 <b>3조 개</b></li>
+    <li style="font-size:inherit;margin:1.5vh 0">2018년 1월 — 호주국립대 학생 네이선 루저가 군사기지의 내부 도로와 순찰·조깅 경로 확인</li>
+    <li style="font-size:inherit;margin:1.5vh 0">확인 범위 — 이라크 알아사드 공군기지를 비롯한 해외 군사기지</li>
+    <li style="font-size:inherit;margin:1.5vh 0">미국 국방부 — 관련 지침 검토 발표</li>
+  </ul>
+  <p class="point" style="margin-top:2.2vh;font-size:clamp(17px,2vw,28px)">이름을 지우고 합친 <b>집계 데이터의 한계</b></p>
+  <p class="src">ABC News(2018년 1월 29일)</p>
+</section>
+
+<!-- 11 알아사드 공군기지 이미지 -->
+<section class="slide">
+  <div class="kicker">14-7 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">사례 — 알아사드 공군기지의 윤곽</h2>
+  <div class="shot wide" style="margin-top:1.4vh"><img src="img/lesson14_case1.jpg" alt="어두운 지도 위에 주황색과 흰색 선으로 알아사드 공군기지의 외곽 도로와 내부 경로가 드러난 화면. 왼쪽 아래에 Al Asad Airbase 표기가 있습니다."></div>
+  <p class="src">이미지 — ABC News(2018년 1월 29일) 보도 수록 · 지도 원본은 스트라바 글로벌 히트맵</p>
+</section>
+
+<!-- 12 모델이 학습하는 편향 -->
+<section class="slide">
+  <div class="kicker">14-8 · 원리</div>
+  <h2 style="font-size:clamp(22px,2.8vw,38px)">모델이 학습하는 편향 — 장면 3</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,26px)">
+    <li style="font-size:inherit;margin:1.6vh 0">7차시 입력에 첫 관측일 스크린 수 포함</li>
+    <li style="font-size:inherit;margin:1.6vh 0">이 자료로 스크린 배정의 공정성이나 특정 배급사에 대한 차별을 입증한 것은 아님</li>
+    <li style="font-size:inherit;margin:1.6vh 0">가정 — 배정 기회가 일부 영화에 치우쳐 있는 경우</li>
+    <li style="font-size:inherit;margin:1.6vh 0">예측 결과가 다시 배정에 사용될 때 기존 차이가 커질 가능성</li>
+    <li style="font-size:inherit;margin:1.6vh 0">관객 수 예측을 영화의 예술적 가치나 완성도 평가로 소개하지 않음</li>
+  </ul>
+  <p class="point" style="margin-top:2.2vh;font-size:clamp(17px,2vw,28px)">모델 활용 시 <b>검토할 가능성</b> · 실제 배정의 원인 판정은 아님</p>
+</section>
+
+<!-- 13 스크린 배정 분포 위젯 -->
+<section class="slide">
+  <div class="kicker">14-8 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">스크린 배정의 분포 — 상위 비율과 점유</h2>
+  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="screenSkew">
+  <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화 216편의 첫 관측일 스크린 수를 내림차순으로 세운 막대그래프: 상위 비율 슬라이더를 옮기면 파란 막대 구간과 그 구간이 차지하는 스크린 수 비율이 함께 바뀜">
+    <text x="56" y="14" text-anchor="start" font-size="14" fill="#6b7385">스크린 수</text>
+    <line x1="56" y1="249.38" x2="696" y2="249.38" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="194.77" x2="696" y2="194.77" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="140.15" x2="696" y2="140.15" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="85.54" x2="696" y2="85.54" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="30.92" x2="696" y2="30.92" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="304" x2="696" y2="304" stroke="#b9b3a5" stroke-width="1"/>
+    <text x="50" y="309" text-anchor="end" font-size="14" fill="#6b7385">0</text>
+    <text x="50" y="254.38" text-anchor="end" font-size="14" fill="#6b7385">500</text>
+    <text x="50" y="199.77" text-anchor="end" font-size="14" fill="#6b7385">1,000</text>
+    <text x="50" y="145.15" text-anchor="end" font-size="14" fill="#6b7385">1,500</text>
+    <text x="50" y="90.54" text-anchor="end" font-size="14" fill="#6b7385">2,000</text>
+    <text x="50" y="35.92" text-anchor="end" font-size="14" fill="#6b7385">2,500</text>
+    <g class="bars">
+      <rect x="56" y="22" width="2.36" height="282" fill="#2b7fd6"/>
+      <rect x="59" y="76.4" width="2.36" height="227.6" fill="#2b7fd6"/>
+      <rect x="61.9" y="118.4" width="2.36" height="185.6" fill="#2b7fd6"/>
+      <rect x="64.9" y="153.9" width="2.36" height="150.1" fill="#2b7fd6"/>
+      <rect x="67.9" y="158.6" width="2.36" height="145.4" fill="#2b7fd6"/>
+      <rect x="70.8" y="166.3" width="2.36" height="137.7" fill="#2b7fd6"/>
+      <rect x="73.8" y="176.6" width="2.36" height="127.4" fill="#2b7fd6"/>
+      <rect x="76.7" y="186.9" width="2.36" height="117.1" fill="#2b7fd6"/>
+      <rect x="79.7" y="200" width="2.36" height="104" fill="#2b7fd6"/>
+      <rect x="82.7" y="201.3" width="2.36" height="102.7" fill="#2b7fd6"/>
+      <rect x="85.6" y="207.5" width="2.36" height="96.5" fill="#2b7fd6"/>
+      <rect x="88.6" y="211" width="2.36" height="93" fill="#2b7fd6"/>
+      <rect x="91.6" y="211.9" width="2.36" height="92.1" fill="#2b7fd6"/>
+      <rect x="94.5" y="212" width="2.36" height="92" fill="#2b7fd6"/>
+      <rect x="97.5" y="213.4" width="2.36" height="90.6" fill="#2b7fd6"/>
+      <rect x="100.4" y="215.6" width="2.36" height="88.4" fill="#2b7fd6"/>
+      <rect x="103.4" y="218.9" width="2.36" height="85.1" fill="#2b7fd6"/>
+      <rect x="106.4" y="222.2" width="2.36" height="81.8" fill="#2b7fd6"/>
+      <rect x="109.3" y="223.4" width="2.36" height="80.6" fill="#2b7fd6"/>
+      <rect x="112.3" y="228.2" width="2.36" height="75.8" fill="#2b7fd6"/>
+      <rect x="115.3" y="228.8" width="2.36" height="75.2" fill="#2b7fd6"/>
+      <rect x="118.2" y="232.6" width="2.36" height="71.4" fill="#2b7fd6"/>
+      <rect x="121.2" y="233.2" width="2.36" height="70.8" fill="#b9b3a5"/>
+      <rect x="124.1" y="238.4" width="2.36" height="65.6" fill="#b9b3a5"/>
+      <rect x="127.1" y="238.8" width="2.36" height="65.2" fill="#b9b3a5"/>
+      <rect x="130.1" y="241.6" width="2.36" height="62.4" fill="#b9b3a5"/>
+      <rect x="133" y="242" width="2.36" height="62" fill="#b9b3a5"/>
+      <rect x="136" y="242.8" width="2.36" height="61.2" fill="#b9b3a5"/>
+      <rect x="139" y="243.2" width="2.36" height="60.8" fill="#b9b3a5"/>
+      <rect x="141.9" y="245.2" width="2.36" height="58.8" fill="#b9b3a5"/>
+      <rect x="144.9" y="245.5" width="2.36" height="58.5" fill="#b9b3a5"/>
+      <rect x="147.9" y="245.6" width="2.36" height="58.4" fill="#b9b3a5"/>
+      <rect x="150.8" y="245.8" width="2.36" height="58.2" fill="#b9b3a5"/>
+      <rect x="153.8" y="246.8" width="2.36" height="57.2" fill="#b9b3a5"/>
+      <rect x="156.7" y="247.4" width="2.36" height="56.6" fill="#b9b3a5"/>
+      <rect x="159.7" y="248.8" width="2.36" height="55.2" fill="#b9b3a5"/>
+      <rect x="162.7" y="249.2" width="2.36" height="54.8" fill="#b9b3a5"/>
+      <rect x="165.6" y="249.6" width="2.36" height="54.4" fill="#b9b3a5"/>
+      <rect x="168.6" y="250.8" width="2.36" height="53.2" fill="#b9b3a5"/>
+      <rect x="171.6" y="251" width="2.36" height="53" fill="#b9b3a5"/>
+      <rect x="174.5" y="251.1" width="2.36" height="52.9" fill="#b9b3a5"/>
+      <rect x="177.5" y="253" width="2.36" height="51" fill="#b9b3a5"/>
+      <rect x="180.4" y="255.9" width="2.36" height="48.1" fill="#b9b3a5"/>
+      <rect x="183.4" y="256" width="2.36" height="48" fill="#b9b3a5"/>
+      <rect x="186.4" y="257.2" width="2.36" height="46.8" fill="#b9b3a5"/>
+      <rect x="189.3" y="258.9" width="2.36" height="45.1" fill="#b9b3a5"/>
+      <rect x="192.3" y="259.3" width="2.36" height="44.7" fill="#b9b3a5"/>
+      <rect x="195.3" y="259.7" width="2.36" height="44.3" fill="#b9b3a5"/>
+      <rect x="198.2" y="260.4" width="2.36" height="43.6" fill="#b9b3a5"/>
+      <rect x="201.2" y="261.9" width="2.36" height="42.1" fill="#b9b3a5"/>
+      <rect x="204.1" y="262.4" width="2.36" height="41.6" fill="#b9b3a5"/>
+      <rect x="207.1" y="262.6" width="2.36" height="41.4" fill="#b9b3a5"/>
+      <rect x="210.1" y="262.7" width="2.36" height="41.3" fill="#b9b3a5"/>
+      <rect x="213" y="263.8" width="2.36" height="40.2" fill="#b9b3a5"/>
+      <rect x="216" y="263.8" width="2.36" height="40.2" fill="#b9b3a5"/>
+      <rect x="219" y="264.1" width="2.36" height="39.9" fill="#b9b3a5"/>
+      <rect x="221.9" y="264.9" width="2.36" height="39.1" fill="#b9b3a5"/>
+      <rect x="224.9" y="265.2" width="2.36" height="38.8" fill="#b9b3a5"/>
+      <rect x="227.9" y="265.4" width="2.36" height="38.6" fill="#b9b3a5"/>
+      <rect x="230.8" y="265.9" width="2.36" height="38.1" fill="#b9b3a5"/>
+      <rect x="233.8" y="267" width="2.36" height="37" fill="#b9b3a5"/>
+      <rect x="236.7" y="269.7" width="2.36" height="34.3" fill="#b9b3a5"/>
+      <rect x="239.7" y="270.2" width="2.36" height="33.8" fill="#b9b3a5"/>
+      <rect x="242.7" y="270.6" width="2.36" height="33.4" fill="#b9b3a5"/>
+      <rect x="245.6" y="270.7" width="2.36" height="33.3" fill="#b9b3a5"/>
+      <rect x="248.6" y="271.8" width="2.36" height="32.2" fill="#b9b3a5"/>
+      <rect x="251.6" y="274.3" width="2.36" height="29.7" fill="#b9b3a5"/>
+      <rect x="254.5" y="274.6" width="2.36" height="29.4" fill="#b9b3a5"/>
+      <rect x="257.5" y="274.8" width="2.36" height="29.2" fill="#b9b3a5"/>
+      <rect x="260.4" y="275.4" width="2.36" height="28.6" fill="#b9b3a5"/>
+      <rect x="263.4" y="275.6" width="2.36" height="28.4" fill="#b9b3a5"/>
+      <rect x="266.4" y="276.4" width="2.36" height="27.6" fill="#b9b3a5"/>
+      <rect x="269.3" y="276.6" width="2.36" height="27.4" fill="#b9b3a5"/>
+      <rect x="272.3" y="277" width="2.36" height="27" fill="#b9b3a5"/>
+      <rect x="275.3" y="277.2" width="2.36" height="26.8" fill="#b9b3a5"/>
+      <rect x="278.2" y="277.3" width="2.36" height="26.7" fill="#b9b3a5"/>
+      <rect x="281.2" y="277.8" width="2.36" height="26.2" fill="#b9b3a5"/>
+      <rect x="284.1" y="279.4" width="2.36" height="24.6" fill="#b9b3a5"/>
+      <rect x="287.1" y="279.8" width="2.36" height="24.2" fill="#b9b3a5"/>
+      <rect x="290.1" y="279.8" width="2.36" height="24.2" fill="#b9b3a5"/>
+      <rect x="293" y="279.9" width="2.36" height="24.1" fill="#b9b3a5"/>
+      <rect x="296" y="280" width="2.36" height="24" fill="#b9b3a5"/>
+      <rect x="299" y="280.6" width="2.36" height="23.4" fill="#b9b3a5"/>
+      <rect x="301.9" y="281.3" width="2.36" height="22.7" fill="#b9b3a5"/>
+      <rect x="304.9" y="282.4" width="2.36" height="21.6" fill="#b9b3a5"/>
+      <rect x="307.9" y="282.6" width="2.36" height="21.4" fill="#b9b3a5"/>
+      <rect x="310.8" y="283.1" width="2.36" height="20.9" fill="#b9b3a5"/>
+      <rect x="313.8" y="283.5" width="2.36" height="20.5" fill="#b9b3a5"/>
+      <rect x="316.7" y="284.1" width="2.36" height="19.9" fill="#b9b3a5"/>
+      <rect x="319.7" y="284.3" width="2.36" height="19.7" fill="#b9b3a5"/>
+      <rect x="322.7" y="284.3" width="2.36" height="19.7" fill="#b9b3a5"/>
+      <rect x="325.6" y="284.8" width="2.36" height="19.2" fill="#b9b3a5"/>
+      <rect x="328.6" y="284.9" width="2.36" height="19.1" fill="#b9b3a5"/>
+      <rect x="331.6" y="285" width="2.36" height="19" fill="#b9b3a5"/>
+      <rect x="334.5" y="285" width="2.36" height="19" fill="#b9b3a5"/>
+      <rect x="337.5" y="285.1" width="2.36" height="18.9" fill="#b9b3a5"/>
+      <rect x="340.4" y="285.4" width="2.36" height="18.6" fill="#b9b3a5"/>
+      <rect x="343.4" y="285.8" width="2.36" height="18.2" fill="#b9b3a5"/>
+      <rect x="346.4" y="286" width="2.36" height="18" fill="#b9b3a5"/>
+      <rect x="349.3" y="286.1" width="2.36" height="17.9" fill="#b9b3a5"/>
+      <rect x="352.3" y="286.3" width="2.36" height="17.7" fill="#b9b3a5"/>
+      <rect x="355.3" y="286.7" width="2.36" height="17.3" fill="#b9b3a5"/>
+      <rect x="358.2" y="286.9" width="2.36" height="17.1" fill="#b9b3a5"/>
+      <rect x="361.2" y="287.1" width="2.36" height="16.9" fill="#b9b3a5"/>
+      <rect x="364.1" y="287.1" width="2.36" height="16.9" fill="#b9b3a5"/>
+      <rect x="367.1" y="287.1" width="2.36" height="16.9" fill="#b9b3a5"/>
+      <rect x="370.1" y="287.3" width="2.36" height="16.7" fill="#b9b3a5"/>
+      <rect x="373" y="287.6" width="2.36" height="16.4" fill="#b9b3a5"/>
+      <rect x="376" y="288.2" width="2.36" height="15.8" fill="#b9b3a5"/>
+      <rect x="379" y="288.2" width="2.36" height="15.8" fill="#b9b3a5"/>
+      <rect x="381.9" y="288.4" width="2.36" height="15.6" fill="#b9b3a5"/>
+      <rect x="384.9" y="288.5" width="2.36" height="15.5" fill="#b9b3a5"/>
+      <rect x="387.9" y="288.6" width="2.36" height="15.4" fill="#b9b3a5"/>
+      <rect x="390.8" y="288.6" width="2.36" height="15.4" fill="#b9b3a5"/>
+      <rect x="393.8" y="288.6" width="2.36" height="15.4" fill="#b9b3a5"/>
+      <rect x="396.7" y="289.1" width="2.36" height="14.9" fill="#b9b3a5"/>
+      <rect x="399.7" y="289.4" width="2.36" height="14.6" fill="#b9b3a5"/>
+      <rect x="402.7" y="289.5" width="2.36" height="14.5" fill="#b9b3a5"/>
+      <rect x="405.6" y="289.8" width="2.36" height="14.2" fill="#b9b3a5"/>
+      <rect x="408.6" y="289.8" width="2.36" height="14.2" fill="#b9b3a5"/>
+      <rect x="411.6" y="289.9" width="2.36" height="14.1" fill="#b9b3a5"/>
+      <rect x="414.5" y="290.1" width="2.36" height="13.9" fill="#b9b3a5"/>
+      <rect x="417.5" y="290.6" width="2.36" height="13.4" fill="#b9b3a5"/>
+      <rect x="420.4" y="291" width="2.36" height="13" fill="#b9b3a5"/>
+      <rect x="423.4" y="291.1" width="2.36" height="12.9" fill="#b9b3a5"/>
+      <rect x="426.4" y="291.2" width="2.36" height="12.8" fill="#b9b3a5"/>
+      <rect x="429.3" y="291.3" width="2.36" height="12.7" fill="#b9b3a5"/>
+      <rect x="432.3" y="291.4" width="2.36" height="12.6" fill="#b9b3a5"/>
+      <rect x="435.3" y="291.4" width="2.36" height="12.6" fill="#b9b3a5"/>
+      <rect x="438.2" y="292.7" width="2.36" height="11.3" fill="#b9b3a5"/>
+      <rect x="441.2" y="292.9" width="2.36" height="11.1" fill="#b9b3a5"/>
+      <rect x="444.1" y="292.9" width="2.36" height="11.1" fill="#b9b3a5"/>
+      <rect x="447.1" y="293.1" width="2.36" height="10.9" fill="#b9b3a5"/>
+      <rect x="450.1" y="293.6" width="2.36" height="10.4" fill="#b9b3a5"/>
+      <rect x="453" y="294.2" width="2.36" height="9.8" fill="#b9b3a5"/>
+      <rect x="456" y="294.4" width="2.36" height="9.6" fill="#b9b3a5"/>
+      <rect x="459" y="294.5" width="2.36" height="9.5" fill="#b9b3a5"/>
+      <rect x="461.9" y="294.6" width="2.36" height="9.4" fill="#b9b3a5"/>
+      <rect x="464.9" y="294.8" width="2.36" height="9.2" fill="#b9b3a5"/>
+      <rect x="467.9" y="294.8" width="2.36" height="9.2" fill="#b9b3a5"/>
+      <rect x="470.8" y="294.9" width="2.36" height="9.1" fill="#b9b3a5"/>
+      <rect x="473.8" y="295.3" width="2.36" height="8.7" fill="#b9b3a5"/>
+      <rect x="476.7" y="295.5" width="2.36" height="8.5" fill="#b9b3a5"/>
+      <rect x="479.7" y="295.5" width="2.36" height="8.5" fill="#b9b3a5"/>
+      <rect x="482.7" y="295.7" width="2.36" height="8.3" fill="#b9b3a5"/>
+      <rect x="485.6" y="295.9" width="2.36" height="8.1" fill="#b9b3a5"/>
+      <rect x="488.6" y="297.1" width="2.36" height="6.9" fill="#b9b3a5"/>
+      <rect x="491.6" y="297.2" width="2.36" height="6.8" fill="#b9b3a5"/>
+      <rect x="494.5" y="297.2" width="2.36" height="6.8" fill="#b9b3a5"/>
+      <rect x="497.5" y="297.3" width="2.36" height="6.7" fill="#b9b3a5"/>
+      <rect x="500.4" y="297.7" width="2.36" height="6.3" fill="#b9b3a5"/>
+      <rect x="503.4" y="298" width="2.36" height="6" fill="#b9b3a5"/>
+      <rect x="506.4" y="298.1" width="2.36" height="5.9" fill="#b9b3a5"/>
+      <rect x="509.3" y="298.5" width="2.36" height="5.5" fill="#b9b3a5"/>
+      <rect x="512.3" y="298.9" width="2.36" height="5.1" fill="#b9b3a5"/>
+      <rect x="515.3" y="299" width="2.36" height="5" fill="#b9b3a5"/>
+      <rect x="518.2" y="299.1" width="2.36" height="4.9" fill="#b9b3a5"/>
+      <rect x="521.2" y="299.3" width="2.36" height="4.7" fill="#b9b3a5"/>
+      <rect x="524.1" y="299.6" width="2.36" height="4.4" fill="#b9b3a5"/>
+      <rect x="527.1" y="299.7" width="2.36" height="4.3" fill="#b9b3a5"/>
+      <rect x="530.1" y="299.8" width="2.36" height="4.2" fill="#b9b3a5"/>
+      <rect x="533" y="300.2" width="2.36" height="3.8" fill="#b9b3a5"/>
+      <rect x="536" y="300.3" width="2.36" height="3.7" fill="#b9b3a5"/>
+      <rect x="539" y="300.3" width="2.36" height="3.7" fill="#b9b3a5"/>
+      <rect x="541.9" y="300.5" width="2.36" height="3.5" fill="#b9b3a5"/>
+      <rect x="544.9" y="300.7" width="2.36" height="3.3" fill="#b9b3a5"/>
+      <rect x="547.9" y="300.7" width="2.36" height="3.3" fill="#b9b3a5"/>
+      <rect x="550.8" y="300.8" width="2.36" height="3.2" fill="#b9b3a5"/>
+      <rect x="553.8" y="301.1" width="2.36" height="2.9" fill="#b9b3a5"/>
+      <rect x="556.7" y="301.2" width="2.36" height="2.8" fill="#b9b3a5"/>
+      <rect x="559.7" y="301.2" width="2.36" height="2.8" fill="#b9b3a5"/>
+      <rect x="562.7" y="301.5" width="2.36" height="2.5" fill="#b9b3a5"/>
+      <rect x="565.6" y="301.7" width="2.36" height="2.3" fill="#b9b3a5"/>
+      <rect x="568.6" y="301.8" width="2.36" height="2.2" fill="#b9b3a5"/>
+      <rect x="571.6" y="301.9" width="2.36" height="2.1" fill="#b9b3a5"/>
+      <rect x="574.5" y="301.9" width="2.36" height="2.1" fill="#b9b3a5"/>
+      <rect x="577.5" y="301.9" width="2.36" height="2.1" fill="#b9b3a5"/>
+      <rect x="580.4" y="302.1" width="2.36" height="1.9" fill="#b9b3a5"/>
+      <rect x="583.4" y="302.1" width="2.36" height="1.9" fill="#b9b3a5"/>
+      <rect x="586.4" y="302.3" width="2.36" height="1.7" fill="#b9b3a5"/>
+      <rect x="589.3" y="302.3" width="2.36" height="1.7" fill="#b9b3a5"/>
+      <rect x="592.3" y="302.3" width="2.36" height="1.7" fill="#b9b3a5"/>
+      <rect x="595.3" y="302.6" width="2.36" height="1.4" fill="#b9b3a5"/>
+      <rect x="598.2" y="302.6" width="2.36" height="1.4" fill="#b9b3a5"/>
+      <rect x="601.2" y="302.6" width="2.36" height="1.4" fill="#b9b3a5"/>
+      <rect x="604.1" y="302.6" width="2.36" height="1.4" fill="#b9b3a5"/>
+      <rect x="607.1" y="302.7" width="2.36" height="1.3" fill="#b9b3a5"/>
+      <rect x="610.1" y="302.7" width="2.36" height="1.3" fill="#b9b3a5"/>
+      <rect x="613" y="302.8" width="2.36" height="1.2" fill="#b9b3a5"/>
+      <rect x="616" y="302.9" width="2.36" height="1.1" fill="#b9b3a5"/>
+      <rect x="619" y="302.9" width="2.36" height="1.1" fill="#b9b3a5"/>
+      <rect x="621.9" y="302.9" width="2.36" height="1.1" fill="#b9b3a5"/>
+      <rect x="624.9" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="627.9" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="630.8" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="633.8" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="636.7" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="639.7" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="642.7" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="645.6" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="648.6" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="651.6" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="654.5" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="657.5" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="660.4" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="663.4" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="666.4" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="669.3" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="672.3" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="675.3" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="678.2" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="681.2" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="684.1" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="687.1" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="690.1" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+      <rect x="693" y="303" width="2.36" height="1" fill="#b9b3a5"/>
+    </g>
+    <line class="cut" x1="120.89" y1="20" x2="120.89" y2="304" stroke="#b07a00" stroke-width="1.5" stroke-dasharray="4 4"/>
+    <text class="cutlab" x="128" y="16" text-anchor="start" font-size="14" fill="#b07a00">상위 10%</text>
+    <text x="70" y="40" text-anchor="start" font-size="14" fill="#6b7385">216편 · 첫 관측일 스크린 수 합계 57,566</text>
+    <text x="70" y="60" text-anchor="start" font-size="14" fill="#6b7385">최댓값 2,582 · 중앙값 147.5 · 최솟값 1</text>
+    <text x="57.18" y="320" text-anchor="middle" font-size="14" fill="#6b7385">1</text>
+    <text x="202.37" y="320" text-anchor="middle" font-size="14" fill="#6b7385">50</text>
+    <text x="350.51" y="320" text-anchor="middle" font-size="14" fill="#6b7385">100</text>
+    <text x="498.66" y="320" text-anchor="middle" font-size="14" fill="#6b7385">150</text>
+    <text x="696" y="320" text-anchor="end" font-size="14" fill="#6b7385">216</text>
+    <text x="650" y="320" text-anchor="end" font-size="14" fill="#6b7385">스크린 수 순위</text>
+  </svg>
+  <div class="wctl">
+    <label>상위 비율 <input class="pin" type="range" min="5" max="100" step="5" value="10"></label>
+    <span class="wout">상위 10% · 22편 → 전체 스크린 수의 41.4%</span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh;font-size:clamp(13px,1.4vw,19px)">영화 216편의 첫 관측일 스크린 수를 내림차순으로 세운 막대 · 이 분포만으로 배정의 원인이나 공정성 판정 불가</p>
+</section>
+
+<!-- 14 집단별 정확도 표 -->
+<section class="slide">
+  <div class="kicker">14-9 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">얼굴 성별 분류의 집단별 정확도(2018)</h2>
+  <table class="mini" style="font-size:clamp(13px,1.5vw,20px)">
+    <tr><th>분류기</th><th>어두운 피부 남성</th><th>어두운 피부 여성</th><th>밝은 피부 남성</th><th>밝은 피부 여성</th><th>최대 격차</th></tr>
+    <tr><td>마이크로소프트</td><td>94.0%</td><td>79.2%</td><td>100%</td><td>98.3%</td><td><em>20.8%p</em></td></tr>
+    <tr><td>페이스++</td><td>99.3%</td><td>65.5%</td><td>99.2%</td><td>94.0%</td><td><em>33.8%p</em></td></tr>
+    <tr><td>아이비엠</td><td>88.0%</td><td>65.3%</td><td>99.7%</td><td>92.9%</td><td><em>34.4%p</em></td></tr>
+  </table>
+  <p class="point" style="font-size:clamp(17px,2vw,28px)">전체 정확도 하나로는 확인되지 않는 <b>집단별 격차</b></p>
+  <p class="src">같은 사진 1,270장 · MIT 미디어랩 조이 부올람위니, 팀닛 게브루(2018)</p>
+</section>
+
+<!-- 15 젠더 셰이드 이미지 -->
+<section class="slide">
+  <div class="kicker">14-9 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">사례 — 젠더 셰이드의 평가 결과</h2>
+  <div class="shot wide" style="margin-top:1.2vh"><img src="img/lesson14_case2.png" alt="위쪽에 평가 대상 네 집단을 나타내는 흐릿한 합성 얼굴 네 장, 아래쪽에 마이크로소프트·페이스++·아이비엠의 집단별 정확도와 최대 격차를 막대와 함께 정리한 표."></div>
+  <p class="src">이미지 — 젠더 셰이드 프로젝트(gendershades.org, MIT 미디어랩 2018) 공개 자료 · 수치 출처 Buolamwini &amp; Gebru(2018), PMLR 81</p>
+  <p class="small" style="margin-top:1vh;font-size:clamp(13px,1.4vw,19px)">9차시 분류 모델과 10차시 정확도 계산의 연장 · 집단을 나누는 기준은 사람이 결정</p>
+</section>
+
+<!-- 16 AI 코드의 책임 -->
+<section class="slide">
+  <div class="kicker">14-10 · 원리</div>
+  <h2 style="font-size:clamp(22px,2.8vw,38px)">AI가 작성한 코드의 책임 — 장면 4</h2>
+  <ul class="facts">
+    <li>앱으로 공개할 때 개발자의 검증 참여</li>
+    <li>결과가 잘못된 경우 — 데이터 재확인, 오류 수정, 이용자에게 고지</li>
+    <li>8·10·12차시의 손계산과 예시 자료 검산이 그 방법</li>
+    <li>역할 구분 — 데이터 제공자 · 도구 제공자 · 앱 운영자</li>
+  </ul>
+  <p class="point">자신이 확인한 <b>범위와 한계</b>까지 표기</p>
+</section>
+
+<!-- 17 점검 3항목 -->
+<section class="slide">
+  <div class="kicker">14-11 · 활동</div>
+  <h2>앱 공개 전 점검 3항목</h2>
+  <ul class="facts" style="font-size:clamp(15px,1.8vw,25px)">
+    <li style="font-size:inherit;margin:1.8vh 0"><b>키</b> — 비공개용 키를 비밀 금고에 두었는가? 공개 가능한 키는 접근 권한 설정과 함께 확인했는가?</li>
+    <li style="font-size:inherit;margin:1.8vh 0"><b>출처</b> — 데이터의 출처·수집 시점·이용 조건을 확인하고 화면에 표기했는가?</li>
+    <li style="font-size:inherit;margin:1.8vh 0"><b>사람</b> — 자료를 결합하면 개인이 드러날 수 있는가? 분석·공개가 특정 대상에게 불리하게 작용할 가능성을 점검했는가?</li>
+  </ul>
+  <p class="point" style="font-size:clamp(17px,2vw,28px)">확인하지 못한 항목은 그대로 표시하고 <b>필요한 조치 기록</b></p>
+  <p class="small" style="margin-top:1.4vh">출처 표기만으로 이용 조건 충족 아님 · 13차시 반찬 월드컵도 반복 참여·참여자 구성 확인</p>
+</section>
+
+<!-- 18 자료별 점검 위젯 -->
+<section class="slide">
+  <div class="kicker">14-11 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">자료별 점검 결과</h2>
+  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="openCheck">
+  <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="자료 네 가지와 점검 3항목 판정 그림">
+    <text x="135" y="26" text-anchor="middle" font-size="14" fill="#6b7385">자료</text>
+    <g class="ocCard" data-s="0">
+      <rect x="20" y="40" width="230" height="52" rx="10" fill="#fff" stroke="#2b7fd6" stroke-width="2"/>
+      <text x="135" y="71" text-anchor="middle" font-size="15" fill="#1c2230">급식 식단</text>
+    </g>
+    <g class="ocCard" data-s="1">
+      <rect x="20" y="100" width="230" height="52" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+      <text x="135" y="131" text-anchor="middle" font-size="15" fill="#1c2230">우리 반 설문 응답</text>
+    </g>
+    <g class="ocCard" data-s="2">
+      <rect x="20" y="160" width="230" height="52" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+      <text x="135" y="191" text-anchor="middle" font-size="15" fill="#1c2230">13차시 방명록 글</text>
+    </g>
+    <g class="ocCard" data-s="3">
+      <rect x="20" y="220" width="230" height="52" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+      <text x="135" y="251" text-anchor="middle" font-size="15" fill="#1c2230">스마트폰 위치 기록</text>
+    </g>
+    <text x="485" y="26" text-anchor="middle" font-size="14" fill="#6b7385">점검 3항목</text>
+    <g class="ocRow" data-r="0" role="button" tabindex="0" aria-label="키 항목 열기" style="cursor:pointer">
+      <rect class="rowBox" x="270" y="46" width="430" height="68" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+      <text x="292" y="73" font-size="16" font-weight="700" fill="#1c2230">키</text>
+      <text class="rowLine" x="292" y="98" font-size="14" fill="#6b7385">?</text>
+      <g class="rowBadge" opacity="0">
+        <rect x="600" y="60" width="90" height="26" rx="13" fill="#b07a00"/>
+        <text x="645" y="78" text-anchor="middle" font-size="13" fill="#fff">확인 필요</text>
+      </g>
+    </g>
+    <g class="ocRow" data-r="1" role="button" tabindex="0" aria-label="출처 항목 열기" style="cursor:pointer">
+      <rect class="rowBox" x="270" y="128" width="430" height="68" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+      <text x="292" y="155" font-size="16" font-weight="700" fill="#1c2230">출처</text>
+      <text class="rowLine" x="292" y="180" font-size="14" fill="#6b7385">?</text>
+      <g class="rowBadge" opacity="0">
+        <rect x="600" y="142" width="90" height="26" rx="13" fill="#b07a00"/>
+        <text x="645" y="160" text-anchor="middle" font-size="13" fill="#fff">확인 필요</text>
+      </g>
+    </g>
+    <g class="ocRow" data-r="2" role="button" tabindex="0" aria-label="사람 항목 열기" style="cursor:pointer">
+      <rect class="rowBox" x="270" y="210" width="430" height="68" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+      <text x="292" y="237" font-size="16" font-weight="700" fill="#1c2230">사람</text>
+      <text class="rowLine" x="292" y="262" font-size="14" fill="#6b7385">?</text>
+      <g class="rowBadge" opacity="0">
+        <rect x="600" y="224" width="90" height="26" rx="13" fill="#b07a00"/>
+        <text x="645" y="242" text-anchor="middle" font-size="13" fill="#fff">확인 필요</text>
+      </g>
+    </g>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-s="0">급식 식단</button>
+    <button class="wbtn" type="button" data-s="1">우리 반 설문 응답</button>
+    <button class="wbtn" type="button" data-s="2">13차시 방명록 글</button>
+    <button class="wbtn" type="button" data-s="3">스마트폰 위치 기록</button>
+    <span class="wout">열어 본 항목 0/3</span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh;font-size:clamp(13px,1.4vw,19px)">자료를 바꾸고 세 줄을 열면 같은 항목이라도 자료마다 걸리는 곳이 달라짐 · 판정은 자료의 제공 조건에서 확인</p>
+</section>
+
+<!-- 19 SDGs -->
+<section class="slide">
+  <div class="kicker">14-12 · 교과서 36쪽</div>
+  <h2>지속 가능 발전 목표</h2>
+  <blockquote style="margin-top:2.4vh;font-size:clamp(17px,2.1vw,30px)">세계 연합(UN)은 전 세계 빈곤을 종식시키고, 지구를 보호하며, 2030년까지 모든 사람들이 평화와 번영을 누릴 수 있는 지속 가능한 미래를 만들기 위한 17개의 지속 가능 발전 목표(SDGs: Sustainable Development Goals)를 제시하였다</blockquote>
+  <p class="point" style="font-size:clamp(17px,2vw,28px)">기후·건강·교통 같은 세계의 문제를 <b>진단하고 해결하는 도구</b>로서의 데이터</p>
+  <p class="small">『데이터 과학』 36쪽</p>
+</section>
+
+<!-- 20 사례 토론 -->
+<section class="slide">
+  <div class="kicker">14-13 · 활동</div>
+  <h2>사례 토론의 정리 기준</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,26px)">
+    <li style="font-size:inherit;margin:1.7vh 0">교과서 39쪽 조사하기 ① — 직접 겪었거나 자료로 확인한 데이터 윤리 사례</li>
+    <li style="font-size:inherit;margin:1.7vh 0">설명 항목 — 어떤 데이터를 누가 사용했는지, 누구에게 어떤 영향이 있었는지, 확인된 사실과 추측의 구분</li>
+    <li style="font-size:inherit;margin:1.7vh 0">교과서 37쪽 조사하기 ① — 지속 가능한 미래를 위한 데이터 과학 활용 사례</li>
+    <li style="font-size:inherit;margin:1.7vh 0">정리 항목 — 해결하려는 문제 · 사용한 데이터 · 얻은 성과 · 남은 한계</li>
+  </ul>
+  <p class="point" style="font-size:clamp(17px,2vw,28px)">데이터의 사용 자체가 <b>좋은 결과의 보장은 아님</b></p>
+</section>
+
+<!-- 21 팀 데이터 후보 점검 -->
+<section class="slide">
+  <div class="kicker">14-14 · 원리</div>
+  <h2>팀 데이터 후보의 점검 기준</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,26px)">
+    <li style="font-size:inherit;margin:1.7vh 0">윤리의 위치 — 수집·분석·공개의 각 단계</li>
+    <li style="font-size:inherit;margin:1.7vh 0">점검 대상 — 데이터가 누구를 대표하는지, 이용 조건, 개인 식별 가능성, 결과의 영향</li>
+    <li style="font-size:inherit;margin:1.7vh 0">지난 시간에 고른 팀 데이터 후보를 네 기준으로 점검 — <b>개인정보 · 출처 · 이용 약관 · 편향</b></li>
+    <li style="font-size:inherit;margin:1.7vh 0">점검 결과로 팀 주제 카드 확정</li>
+  </ul>
+  <p class="point" style="font-size:clamp(17px,2vw,28px)">1차시의 질문 던지기로 시작한 <b>공통 수업의 마무리</b></p>
+</section>
+
+<!-- 22 확인 문제 1 -->
+<section class="slide">
+  <div class="kicker">14-15 · 확인 문제</div>
+  <h2 style="font-size:clamp(18px,2.1vw,28px)">민감도를 가르는 기준</h2>
+  <p class="point" style="margin-top:1.4vh;font-size:clamp(16px,1.9vw,26px);font-weight:400">급식 식단 데이터는 전량 내려받아 공개 앱으로 제작 · 개인 위치 데이터라면 같은 방식이 위험<br>두 데이터의 민감도를 가르는 기준은 무엇일까요?</p>
+  <ul class="facts" style="font-size:clamp(15px,1.8vw,24px);margin-top:1.6vh">
+    <li style="font-size:inherit;margin:1.4vh 0">공개된 데이터인가 아닌가</li>
+    <li style="font-size:inherit;margin:1.4vh 0">데이터의 양이 많은가 적은가</li>
+    <li style="font-size:inherit;margin:1.4vh 0"><b>기록을 이어 붙였을 때 특정 개인을 추적할 수 있는가</b></li>
+  </ul>
+  <p class="small" style="margin-top:1.6vh">이번 급식 자료에는 개인별 섭취 기록 없음 · 위치 기록은 이름이 없어도 시간·장소를 결합하면 동선이 드러남 · 공개 여부만으로 민감도 판단 불가</p>
+</section>
+
+<!-- 23 확인 문제 2 -->
+<section class="slide">
+  <div class="kicker">14-15 · 확인 문제</div>
+  <h2 style="font-size:clamp(18px,2.1vw,28px)">예측 모델의 소개 방식</h2>
+  <p class="point" style="margin-top:1.4vh;font-size:clamp(16px,1.9vw,26px);font-weight:400">영화 관객 수를 예측하는 모델을 "좋은 영화를 가려내는 모델"이라고 소개하면 왜 문제가 될까요?</p>
+  <ul class="facts" style="font-size:clamp(15px,1.8vw,24px);margin-top:1.6vh">
+    <li style="font-size:inherit;margin:1.4vh 0">스크린 수는 흥행 예측에 도움이 되지 않는 변수이기 때문</li>
+    <li style="font-size:inherit;margin:1.4vh 0">변수가 하나 늘면 모델의 정확도가 낮아지기 때문</li>
+    <li style="font-size:inherit;margin:1.4vh 0"><b>관객 수와 영화의 가치는 다른 평가 대상이며, 기존 배정의 치우침이 예측과 활용 과정에서 반복될 수도 있기 때문</b></li>
+  </ul>
+  <p class="small" style="margin-top:1.6vh">흥행 예측과 좋은 영화의 판별은 다름 · 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동할 수 있음(교과서 38쪽)</p>
+</section>
+
+<!-- 24 정리 -->
+<section class="slide">
+  <div class="kicker">정리</div>
+  <h2>제14강 요약</h2>
+  <div class="split" style="margin-top:2.2vh;gap:2vw"><div class="card"><div class="t">세 문제</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">편향성 · 혐오 표현 · 소유권</div></div><div class="card"><div class="t">민감도</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">공개 여부가 아니라 결합했을 때의 개인 식별 가능성</div></div><div class="card"><div class="t">점검</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">앱 공개 전 키 · 출처 · 사람 3항목</div></div><div class="card"><div class="t">다음</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">팀 데이터 후보를 개인정보 · 출처 · 이용 약관 · 편향으로 점검</div></div></div>
+  <p class="point">할 수 있는 분석과 <b>해도 되는 분석</b>의 구분</p>
+</section>
+
+<div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
+<div class="foot">
+  <span>당곡고 데이터 과학 · 14차시</span>
+  <div class="dots" id="dots"></div>
+  <span id="pageno"></span>
+</div>
+
+<script src="../../assets/widgets14.js"></script>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+    [...dots.children].forEach((d, k) => d.classList.toggle('here', k === cur));
+    document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => { if (e.target.closest('a, .widget')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  show(0);
+</script>
+</body>
+</html>

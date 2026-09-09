@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12차시 슬라이드 · 연관 분석 — 데이터 과학</title>
+<script src="../../assets/release.js"></script>
+<script src="../../assets/gate.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1219; --bg-accent: #161b26;
+    --ink: #f2f4f8; --ink-dim: #8b93a7;
+    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
+  }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--ink);
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
+  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
+    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
+  .slide.on { display: flex; }
+  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
+    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
+  .kicker.blue { color: var(--accent2); }
+  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
+  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
+  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
+  blockquote { font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
+    line-height: 1.5; max-width: 28em; }
+  blockquote::before { content: "\201C"; color: var(--accent); }
+  blockquote::after { content: "\201D"; color: var(--accent); }
+  .facts { margin-top: 1vh; }
+  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
+    padding-left: 1.2em; text-indent: -1.2em; }
+  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
+  .facts b { color: var(--accent2); font-weight: 800; }
+  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
+  .point b { color: var(--accent); }
+  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
+  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
+    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
+    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
+  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
+  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
+  table.mini th { color: var(--accent); font-weight: 800; }
+  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
+  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
+  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
+  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
+  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
+  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
+  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
+  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
+  .withimg .txt { flex: 1 1 0; min-width: 0; }
+  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
+  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
+  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
+  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
+  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
+  .diagram.short svg { max-height: var(--dh, 40vh); }
+  /* 인터랙티브 위젯 — 밝은 상자 안 */
+  .widget { color: #1c2230; }
+  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
+  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
+          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
+  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
+  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
+  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
+          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
+  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
+  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
+  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
+  .foot span { white-space: nowrap; }
+  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
+  .dots i.here { background: var(--accent); }
+  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
+    font-size: clamp(11px, 1.1vw, 14px); }
+@media (max-width: 760px) { .dots { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- 1 표지 -->
+<section class="slide chapter on">
+  <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 제12강</div>
+  <h1>연관 분석</h1>
+  <p class="sub">함께 등장하는 메뉴 규칙의 계산과 판정</p>
+</section>
+
+<!-- 2 지지도·신뢰도 -->
+<section class="slide">
+  <div class="kicker">12-1 · 교과서 159쪽</div>
+  <h2>지지도와 신뢰도의 정의</h2>
+  <blockquote style="margin-top:2.6vh">지지도는 두 개의 사건이 동시에 발생하는 비율이며 …</blockquote>
+  <blockquote style="margin-top:2.2vh">신뢰도는 규칙의 결과 부분이 발생할 가능성을 측정한다.</blockquote>
+  <p class="small">『데이터 과학』 159쪽 · 지지도의 분모는 전체 일수, 신뢰도의 분모는 A가 등장한 일수</p>
+</section>
+
+<!-- 3 향상도 -->
+<section class="slide">
+  <div class="kicker">12-2 · 교과서 160쪽</div>
+  <h2>향상도의 정의</h2>
+  <blockquote style="margin-top:3vh">두 사건 A와 B가 서로 영향을 주지 않고 독립적으로 발생한다면, 향상도는 1에 가까워진다.</blockquote>
+  <p class="point">향상도 1 = 표본에서 두 비율이 같음</p>
+  <p class="small">향상도 1은 독립이나 우연의 증명이 아님. 표본에서 관찰된 비의 값임</p>
+</section>
+
+<!-- 4 세 지표의 분모 -->
+<section class="slide">
+  <div class="kicker">12-3 · 원리</div>
+  <h2>세 지표의 분모</h2>
+  <table class="mini">
+    <tr><th>숫자</th><th>계산식 (N: 전체 일수)</th><th>묻는 말</th></tr>
+    <tr><td>지지도</td><td>A·B 동시 일수 ÷ N</td><td>이 조합, 다룰 만큼 자주 나오는가</td></tr>
+    <tr><td>신뢰도</td><td>A·B 동시 일수 ÷ A 등장 일수</td><td>A가 나오면 B도 나오는가</td></tr>
+    <tr><td>향상도</td><td>신뢰도 ÷ (B 등장 일수 ÷ N)</td><td>A가 있을 때 B의 등장률은 전체 등장률의 몇 배인가</td></tr>
+  </table>
+  <p class="point">세 지표의 차이는 분모의 차이</p>
+</section>
+
+<!-- 5 교과서 예시 -->
+<section class="slide">
+  <div class="kicker">12-4 · 교과서 160쪽</div>
+  <h2>교과서 예시 — {삼겹살} → {쌈채소}</h2>
+  <ul class="facts">
+    <li>향상도 <b>1.67</b></li>
+    <li>삼겹살을 산 거래의 쌈채소 구매 비율 ÷ 전체 거래의 쌈채소 구매 비율 = 약 1.67배</li>
+    <li>구매의 원인이나 미래의 구매를 보장하는 값이 아님</li>
+    <li>자주 팔리는 상품은 다른 여러 상품과도 자주 겹침</li>
+  </ul>
+  <p class="point">동시 등장 횟수와 함께 <b>각 항목의 기본 등장률</b>도 확인</p>
+</section>
+
+<!-- 6 사례: 팝타르트 -->
+<section class="slide">
+  <div class="kicker">12-5 · 사례</div>
+  <h2>허리케인 직전의 딸기 팝타르트</h2>
+  <div class="withimg"><div class="txt"><ul class="facts">
+    <li>2004년 미국 월마트, 허리케인 찰리 때의 판매 기록 재계산</li>
+    <li>허리케인 직전 딸기 팝타르트, 평소의 약 <b>7배</b> 판매. 최다 판매 품목은 맥주</li>
+    <li>다음 허리케인의 진로에 있는 매장으로 두 품목 사전 배송</li>
+    <li>팝타르트, 전체 판매 비중이 작아 지지도 낮음. 지지도로 걸렀다면 놓쳤을 규칙</li>
+  </ul></div><img src="img/lesson12_case1.jpg" alt="하늘색 바탕 위에 겹쳐 놓인 딸기 맛 팝타르트 두 장. 흰 아이싱 위에 빨강·초록·노랑 알갱이가 뿌려져 있습니다."></div>
+  <p class="src">뉴욕타임스 2004년 11월 14일 보도 · 사진: 위키미디어 공용(퍼블릭 도메인)</p>
+</section>
+
+<!-- 7 사례: 아마존 -->
+<section class="slide">
+  <div class="kicker">12-6 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">아마존의 자주 함께 구매하는 품목</h2>
+  <ul class="facts" style="font-size:clamp(14px,1.5vw,20px);margin-top:0">
+    <li style="margin:1.1vh 0">2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록 비교</li>
+    <li style="margin:1.1vh 0">상품 페이지의 '자주 함께 구매하는 품목' 칸으로 현재도 작동함</li>
+    <li style="margin:1.1vh 0">파는 상품이 많으면 어떤 두 상품의 지지도든 낮음. 신뢰도와 향상도가 높으면 추천 대상</li>
+    <li style="margin:1.1vh 0">어느 규칙에 재고와 화면 자리를 걸지는 사람이 결정</li>
+  </ul>
+  <div class="shot wide" style="margin-top:1.4vh"><img src="img/lesson12_case2.jpg" style="max-height:35vh" alt="아마존 상품 페이지의 자주 함께 구매하는 품목 영역 화면. 세 권의 책이 더하기 기호로 이어져 있고 오른쪽에 총액과 장바구니 추가 단추가 있습니다."></div>
+  <p class="src">화면 — 아마존 『사피엔스』 상품 페이지(2026년 9월 갈무리) · 방식 출처: Linden 외, IEEE Internet Computing(2003)</p>
+</section>
+
+<!-- 8 장바구니 변환 -->
+<section class="slide">
+  <div class="kicker">12-7 · 실습</div>
+  <h2>장바구니로의 변환</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,26px)">
+    <li style="margin:1.6vh 0"><b>하루 중식 식단 한 줄이 장바구니 1건, 메뉴 하나가 상품 하나</b></li>
+    <li style="margin:1.6vh 0">중식 184일 = 장바구니 184건</li>
+    <li style="margin:1.6vh 0">원본 열은 MLSV_YMD와 DDISH_NM, 메뉴 사이 구분은 &lt;br/&gt;</li>
+    <li style="margin:1.6vh 0">괄호 두 가지 — 알레르기 번호, (자율)·(대)·(소스) 같은 표기</li>
+    <li style="margin:1.6vh 0">이 실습의 기준, 괄호와 그 안의 내용을 제거한 이름으로 집계. 저장본에서 506종</li>
+    </ul>
+  <p class="small">괄호를 그대로 두면 이름 510개. 괄호를 제거하면 용량·소스 구분은 사라짐 · 알레르기 안내에는 원래 식단을 사용 · 손계산 기준은 modudata의 184일 급식 저장본(danggok_meals_live.csv)</p>
+</section>
+
+<!-- 9 위젯: 장바구니 -->
+<section class="slide">
+  <div class="kicker">12-8 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">장바구니 한 건과 누적 메뉴 종류</h2>
+  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="basket">
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="고른 날의 급식 메뉴를 칩으로 늘어놓은 그림과, 1일차부터 184일차까지 누적 메뉴 종류 수를 나타낸 꺾은선. 정리 기준에 따라 마지막 값이 506종과 510개로 갈립니다.">
+  <!-- 요약 줄 -->
+  <text class="sum" x="24" y="22" font-size="17" font-weight="800" fill="#1c2230">2025-09-02 · 메뉴 7개 · 만들어지는 쌍 21개</text>
+  <!-- 왼쪽: 하루 메뉴 칩 -->
+  <text x="24" y="44" font-size="14" fill="#6b7385">하루 식단 → 장바구니 1건</text>
+  <g class="chips"></g>
+  <!-- 오른쪽: 누적 메뉴 종류 곡선 -->
+  <text x="396" y="50" font-size="14" fill="#6b7385">누적 메뉴 종류 수</text>
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="396" y1="250" x2="700" y2="250"/>
+    <line x1="396" y1="204" x2="700" y2="204"/>
+    <line x1="396" y1="158" x2="700" y2="158"/>
+    <line x1="396" y1="112" x2="700" y2="112"/>
+    <line x1="396" y1="66" x2="700" y2="66"/>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="end">
+    <text x="390" y="255">0</text>
+    <text x="390" y="209">130</text>
+    <text x="390" y="163">260</text>
+    <text x="390" y="117">390</text>
+    <text x="390" y="71">520</text>
+  </g>
+  <g font-size="14" fill="#6b7385">
+    <text x="396" y="270">1</text>
+    <text x="470.8" y="270" text-anchor="middle">46</text>
+    <text x="547.2" y="270" text-anchor="middle">92</text>
+    <text x="623.6" y="270" text-anchor="middle">138</text>
+    <text x="700" y="270" text-anchor="end">184일</text>
+  </g>
+  <g class="curves" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <polyline class="craw" points="396,250 700,69.5" stroke="#b9b3a5" stroke-width="1.5" opacity=".6"/>
+    <polyline class="cclean" points="396,250 700,71" stroke="#2b7fd6" stroke-width="2"/>
+  </g>
+  <line class="vline" x1="397.7" y1="66" x2="397.7" y2="250" stroke="#b07a00" stroke-width="1" stroke-dasharray="3 3"/>
+  <circle class="cdot" cx="397.7" cy="245.0" r="4" fill="#b07a00"/>
+  <text class="cval" x="407.7" y="244.0" font-size="16" font-weight="800" fill="#b07a00" stroke="#f7f3e8" stroke-width="4" stroke-linejoin="round" paint-order="stroke">14종</text>
+  <!-- 마지막 값 두 줄 -->
+  <text class="foot1" x="700" y="292" text-anchor="end" font-size="15" fill="#2b7fd6">184일 · 506종</text>
+  <text class="foot2" x="700" y="312" text-anchor="end" font-size="14" fill="#b9b3a5">괄호 그대로면 510개</text>
+  <!-- 고정 안내 -->
+  <text x="24" y="320" font-size="14" fill="#6b7385">중식 184일 = 장바구니 184건 · 하루 6~8개 · 서로 다른 쌍 3,146개</text>
+</svg>
+<div class="wctl">
+  <label>날짜 <input type="range" min="0" max="183" step="1" value="1"></label>
+  <span class="wout">2025-09-02 (2일차)</span>
+</div>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-m="clean">괄호 제거</button>
+  <button class="wbtn" type="button" data-m="raw">괄호 그대로</button>
+</div>
+</div></div>
+  <p class="small">하루 메뉴 6~8개 → 그날의 쌍 15~28개 · 괄호 그대로 510개, 괄호 제거 506종 · 누적 곡선, 184일째까지 꺾이지 않음. 마지막 46일에도 새 메뉴 82종 · 서로 다른 쌍 3,146개</p>
+</section>
+
+<!-- 10 손 활동지 ① -->
+<section class="slide">
+  <div class="kicker">12-9 · 교과서 158·160쪽</div>
+  <h2>손 활동지 ① — 개나리 마트</h2>
+  <ul class="facts">
+    <li>교과서 158쪽의 거래 목록 10건 사용</li>
+    <li>활동지 문제 1 — <b>{쌀} → {김치}</b>, <b>{삼겹살, 쌈채소} → {고추장}</b>의 세 지표 계산</li>
+    <li>교과서 ③번 토의 — 영향이 가장 큰 규칙을 짝과 비교</li>
+    <li>두 규칙 모두 그럴듯해 보이나, 향상도를 구하면 판단이 달라짐</li>
+  </ul>
+  <p class="point">이 판정 기준을 가지고 급식 자료로 이동</p>
+</section>
+
+<!-- 11 프롬프트 1/2 -->
+<section class="slide">
+  <div class="kicker">12-10 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (1/2)</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">"급식 규칙 찾기" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py.<br>
+당곡고 급식을 나이스 급식 API로 받아서 하루 중식 식단을 장바구니 하나로 보고,<br>
+함께 자주 나오는 메뉴 쌍을 찾아 줘.<br>
+- 인증키는 비밀 금고에 NEIS_API_KEY라는 이름으로 넣어 뒀어. 코드에 직접 적지 말고 거기서 꺼내 써.<br>
+- 기간은 2025년 9월 1일부터 2026년 9월 30일까지, 중식만. 조회된 모든 페이지를 받아 날짜별로 한 건씩 세어 줘.<br>
+- 조회 자료 없음과 인증·통신 오류를 구분하고, 일부만 받은 자료로 계산하지 않게 해 줘.<br>
+- 하루 식단을 메뉴별로 나누고, 메뉴 이름의 괄호와 그 안의 내용은 전부 제외해 세 줘.<br>
+- 화면 맨 위에 조회 기간과 분석한 날 수, 메뉴 종류 수를 적어 줘.<br>
+- 결과 표의 열은 조건, 결과, 동시, 지지도, 신뢰도, 향상도 여섯 개로 하고, 향상도가 높은 순으로 정렬해 줘.<br>
+- 동시에 나온 횟수가 5회 이상인 규칙만 보이게 해 줘.<br>
+- 향상도 상위 10개 규칙은 가로 막대그래프로도 보여 줘. 그래프는 plotly로 그려 줘.<br>
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
+  <p class="small">교재 ①과 같은 문장 · 파일명 main.py, 인증키는 비밀 금고, 기간 2025-09-01~2026-09-30 중식, 괄호 제거, 동시 5회 이상, plotly 지정까지 프롬프트에 포함</p>
+</section>
+
+<!-- 12 프롬프트 2/2 -->
+<section class="slide">
+  <div class="kicker">12-11 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (2/2) — 포털 문서 붙여넣기</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">──── 아래는 나이스 교육정보 개방 포털 문서에서 복사한 부분 ────<br>
+[급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo<br>
+요청변수: Type=json(응답은 JSON, 글자는 UTF-8) · KEY(인증키) ·<br>
+&nbsp;&nbsp;ATPT_OFCDC_SC_CODE=B10(서울특별시교육청) · SD_SCHUL_CODE=7010073(당곡고등학교) ·<br>
+&nbsp;&nbsp;MMEAL_SC_CODE=2(중식) · MLSV_FROM_YMD=20250901, MLSV_TO_YMD=20260930 ·<br>
+&nbsp;&nbsp;pSize(한 번에 받을 행 수, 상한 1000) · pIndex(쪽 번호, 1부터)<br>
+응답 구조: mealServiceDietInfo의 첫 번째 상자 head 안에 list_total_count(전체 건수),<br>
+&nbsp;&nbsp;두 번째 상자 안 row 목록에 하루마다<br>
+&nbsp;&nbsp;MLSV_YMD(급식일자, 하이픈 없는 여덟 자리) ·<br>
+&nbsp;&nbsp;DDISH_NM(식단 이름, 메뉴 사이 구분은 &lt;br/&gt;, 괄호 안은 알레르기 번호이거나 (자율)·(대)·(소스) 같은 표기) ·<br>
+&nbsp;&nbsp;CAL_INFO(칼로리)<br>
+&nbsp;&nbsp;※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다.</div>
+  <p class="small">교재 ①과 같은 문장 · 열 이름·인코딩·응답 구조를 프롬프트에 적어 두면 AI의 열 이름 추측 방지</p>
+</section>
+
+<!-- 13 개선 프롬프트 -->
+<section class="slide">
+  <div class="kicker">12-12 · 실습</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">개선 프롬프트 — 판정 표시와 메뉴 좁히기</h2>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">향상도가 높은 순서로 정렬하고, 향상도가 1에 가까운 규칙(0.9~1.1)은<br>
+"기본 등장률과 비슷함"이라고 표시해 줘. 이 구간은 관찰용 기준이며 통계 검정 결과가 아니라고 안내해 줘.<br>
+그리고 메뉴 이름을 고르면 그 메뉴가 낀 규칙만 모아 볼 수 있게 해 줘.</div>
+  <p class="small">교재 ③과 같은 문장 · ② 단계에서 표를 신뢰도 순으로 한 번, 향상도 순으로 한 번 정렬. 두 순위의 차이가 오늘의 발견</p>
+</section>
+
+<!-- 14 결과 표 -->
+<section class="slide">
+  <div class="kicker">12-13 · 결과</div>
+  <h2>급식 184일의 세 규칙</h2>
+  <table class="mini" style="font-size:clamp(14px,1.6vw,22px)">
+    <tr><th>규칙</th><th>등장</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr>
+    <tr><td>제육볶음 → 배추김치</td><td>10일 · 102일</td><td>6일</td><td><em>0.60</em></td><td><em>1.08</em></td><td>기본 등장률과 비슷함 (배추김치는 전체의 약 55%)</td></tr>
+    <tr><td>순대국 → 석박지</td><td>5일 · 20일</td><td>5일</td><td><em>1.00</em></td><td><em>9.2</em></td><td>표본의 순대국 5일 모두 석박지와 함께 등장</td></tr>
+    <tr><td>배추김치 ↔ 깍두기</td><td>102일 · 32일</td><td>0일</td><td>0</td><td>0</td><td>독립을 가정한 기대 동시 일수는 약 17.7일</td></tr>
+  </table>
+  <p class="small">184일 급식 저장본으로 검산한 값 · 등장 열은 앞 메뉴와 뒤 메뉴가 각각 나온 일수 · 마지막 행, 동시 0회라 '동시 5회 이상' 결과 표에 나오지 않음</p>
+</section>
+
+<!-- 15 위젯: 기본 등장률 -->
+<section class="slide">
+  <div class="kicker">12-14 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">신뢰도와 기본 등장률의 비교</h2>
+  <div class="diagram" style="--wh:42vh">    <div class="widget" data-w="baseline">
+  <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="0에서 1까지의 같은 눈금 위에 신뢰도 막대와 기본 등장률 막대를 나란히 놓고, 두 길이의 비가 향상도임을 보이는 그림. 아래 격자는 전체 일수와 각 메뉴의 등장 일수를 칸 수로 나타냅니다.">
+    <text class="ttl" x="24" y="26" font-size="18" font-weight="800" fill="#1c2230"></text>
+    <g class="bdg" opacity="0">
+      <rect class="bdgbox" x="512" y="8" width="188" height="24" rx="999" fill="#ffffff" stroke="#b07a00"/>
+      <text class="bdgtxt" x="524" y="25" font-size="14" fill="#b07a00"></text>
+    </g>
+    <g stroke="#e3ddcf" stroke-width="1">
+      <line x1="214" y1="44" x2="214" y2="150"/>
+      <line x1="335.5" y1="44" x2="335.5" y2="150"/>
+      <line x1="457" y1="44" x2="457" y2="150"/>
+      <line x1="578.5" y1="44" x2="578.5" y2="150"/>
+      <line x1="700" y1="44" x2="700" y2="150"/>
+    </g>
+    <g font-size="14" fill="#6b7385" text-anchor="middle">
+      <text x="214" y="40">0</text>
+      <text x="335.5" y="40">0.25</text>
+      <text x="457" y="40">0.5</text>
+      <text x="578.5" y="40">0.75</text>
+      <text x="700" y="40">1</text>
+    </g>
+    <rect class="bar2" x="214" y="104" width="0" height="30" fill="#b9b3a5"/>
+    <rect class="bar1" x="214" y="56" width="0" height="30" fill="#2b7fd6"/>
+    <rect class="ov1" x="214" y="56" width="0" height="30" fill="#b07a00" fill-opacity="0.55"/>
+    <line class="cap1" x1="214" y1="56" x2="214" y2="86" stroke="#2b7fd6" stroke-width="2" stroke-opacity="0"/>
+    <line class="baseL" x1="214" y1="104" x2="214" y2="50" stroke="#b07a00" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text class="l1a" x="24" y="76" font-size="14" fill="#1c2230"></text>
+    <text class="l1b" x="24" y="88" font-size="14" fill="#1c2230"></text>
+    <text class="l2a" x="24" y="124" font-size="14" fill="#1c2230"></text>
+    <text class="l2b" x="24" y="136" font-size="14" fill="#1c2230"></text>
+    <line class="lead1" x1="214" y1="71" x2="214" y2="71" stroke="#b9b3a5" stroke-width="1" stroke-opacity="0"/>
+    <line class="lead2" x1="214" y1="119" x2="214" y2="119" stroke="#b9b3a5" stroke-width="1" stroke-opacity="0"/>
+    <text class="val1" x="222" y="76" font-size="16" font-weight="800" fill="#2b7fd6"></text>
+    <text class="val2" x="222" y="124" font-size="16" font-weight="800" fill="#6b7385"></text>
+    <text x="24" y="170" font-size="14" fill="#6b7385">막대 두 개의 길이 비 = 향상도</text>
+    <text class="gnote" x="24" y="192" font-size="14" fill="#6b7385" opacity="0">배열 순서 무관</text>
+    <g class="grid"></g>
+    <rect x="380" y="188" width="320" height="142" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
+    <text class="c1a" x="392" y="212" font-size="14" fill="#6b7385"></text>
+    <text class="c1b" x="392" y="222" font-size="14" fill="#6b7385"></text>
+    <text class="c2" x="392" y="240" font-size="15" fill="#1c2230"></text>
+    <text class="c3" x="392" y="264" font-size="15" fill="#1c2230"></text>
+    <text class="c4a" x="392" y="298" font-size="15" fill="#b07a00"></text>
+    <text class="c4b" x="560" y="298" font-size="24" font-weight="800" fill="#b07a00"></text>
+    <text class="c5" x="392" y="322" font-size="14" fill="#6b7385"></text>
+  </svg>
+  <div class="wctl">
+    <span><button class="wbtn on" type="button" data-set="meal">급식 184일</button>
+      <button class="wbtn" type="button" data-set="out">표 밖 조합</button>
+      <button class="wbtn" type="button" data-set="hand">손계산 20일</button></span>
+    <span><button class="wbtn on" type="button" data-sort="lift">향상도 순</button>
+      <button class="wbtn" type="button" data-sort="conf">신뢰도 순</button>
+      <button class="wbtn" type="button" data-sort="co">동시 순</button></span>
+    <label>규칙 <input class="rng" type="range" min="0" max="51" step="1" value="40"></label>
+    <span class="wout"></span>
+    <button class="wbtn dir" type="button">방향 바꾸기</button>
+  </div>
+</div></div>
+  <p class="small">같은 눈금 위의 두 막대 — 위는 신뢰도, 아래는 B의 기본 등장률. 두 길이의 비가 향상도</p>
+</section>
+
+<!-- 16 발견 -->
+<section class="slide">
+  <div class="kicker">12-15 · 발견</div>
+  <h2>결과 표에서 확인할 세 가지</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
+    <li style="margin:2vh 0"><b>신뢰도는 기본 등장률과 비교</b> — 0.60이 전체 등장률 약 0.55보다 얼마나 높은지 함께 확인</li>
+    <li style="margin:2vh 0"><b>신뢰도는 규칙의 방향에 따라 달라짐</b> — 순대국 → 석박지 1.00, 석박지 → 순대국 0.25(5÷20). 같은 두 메뉴의 지지도와 향상도는 방향을 바꾸어도 같음</li>
+    <li style="margin:2vh 0"><b>동시 0회도 관찰 결과</b> — 이 기간에 두 김치가 함께 나오지 않았다는 뜻. 실제 운영 원칙인지는 별도 확인</li>
+  </ul>
+  <p class="small">정렬을 바꾸면 신뢰도 1위와 향상도 1위가 서로 다름. 신뢰도 1.00인 규칙 여섯 개의 향상도는 1.80부터 9.20까지</p>
+</section>
+
+<!-- 17 위젯: 최소 동시 등장 -->
+<section class="slide">
+  <div class="kicker">12-16 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">최소 동시 등장 기준과 규칙 수</h2>
+  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="minco">
+  <div class="wctl"><label>최소 동시 등장 <input class="thr" type="range" min="1" max="10" step="1" value="5"></label> <span class="wout">5일</span></div>
+  <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="메뉴 쌍 3,146개를 동시 등장 일수별로 나눈 가로 띠와, 최소 동시 등장 기준에 따라 달라지는 규칙 수·상위 규칙 표.">
+    <text class="sum" x="24" y="20" font-size="17" font-weight="800" fill="#1c2230"></text>
+    <text class="sum2" x="480" y="20" font-size="14" fill="#6b7385"></text>
+
+    <text x="24" y="46" font-size="14" fill="#6b7385">쌍 3,146개 전부</text>
+    <g class="b1">
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+      <rect class="b1r" rx="2"/>
+    </g>
+    <text class="b1in" x="34" y="70" font-size="14" fill="#ffffff">동시 1일 2,845쌍 · 전체의 90%</text>
+
+    <line class="lk1" y1="94" y2="112" x2="24" stroke="#e3ddcf" stroke-width="1"/>
+    <line class="lk2" x1="700" y1="94" x2="700" y2="112" stroke="#e3ddcf" stroke-width="1"/>
+
+    <text x="24" y="104" font-size="14" fill="#6b7385">동시 2일 이상 301쌍 확대</text>
+    <g class="b2">
+      <rect class="b2r" rx="2"/>
+      <rect class="b2r" rx="2"/>
+      <rect class="b2r" rx="2"/>
+      <rect class="b2r" rx="2"/>
+      <rect class="b2r" rx="2"/>
+      <rect class="b2r" rx="2"/>
+      <rect class="b2r" rx="2"/>
+      <rect class="b2r" rx="2"/>
+      <rect class="b2r" rx="2"/>
+    </g>
+    <g class="tks" font-size="14" fill="#6b7385" text-anchor="middle">
+      <text class="tkl" y="150"></text>
+      <text class="tkl" y="150"></text>
+      <text class="tkl" y="150"></text>
+      <text class="tkl" y="150"></text>
+      <text class="tkl" y="150"></text>
+      <text class="tkl" y="150"></text>
+    </g>
+    <text x="24" y="150" font-size="14" fill="#6b7385">오른쪽 끝 9·16·17일 각 1쌍</text>
+
+    <g class="cg1"><line class="cut1" x1="0" x2="0" y1="48" y2="86" stroke="#b07a00" stroke-width="2"/></g>
+    <g class="cg2"><line class="cut2" x1="0" x2="0" y1="108" y2="140" stroke="#b07a00" stroke-width="2"/></g>
+    <text class="cutlab" y="90" font-size="14" fill="#b07a00"></text>
+
+    <rect x="24" y="164" width="676" height="108" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
+    <text x="34" y="186" font-size="14" fill="#6b7385">조건 → 결과</text>
+    <text x="430" y="186" font-size="14" fill="#6b7385">동시</text>
+    <text x="510" y="186" font-size="14" fill="#6b7385">신뢰도</text>
+    <text x="610" y="186" font-size="14" fill="#6b7385">향상도</text>
+    <g class="r1">
+      <text class="c0" x="34" y="210" font-size="15" fill="#1c2230"></text>
+      <text class="c1" x="430" y="210" font-size="15" fill="#1c2230"></text>
+      <text class="c2" x="510" y="210" font-size="15" fill="#1c2230"></text>
+      <text class="c3" x="610" y="210" font-size="15" font-weight="800" fill="#1c2230"></text>
+    </g>
+    <g class="r2">
+      <text class="c0" x="34" y="234" font-size="15" fill="#1c2230"></text>
+      <text class="c1" x="430" y="234" font-size="15" fill="#1c2230"></text>
+      <text class="c2" x="510" y="234" font-size="15" fill="#1c2230"></text>
+      <text class="c3" x="610" y="234" font-size="15" font-weight="800" fill="#1c2230"></text>
+    </g>
+    <g class="r3">
+      <text class="c0" x="34" y="258" font-size="15" fill="#1c2230"></text>
+      <text class="c1" x="430" y="258" font-size="15" fill="#1c2230"></text>
+      <text class="c2" x="510" y="258" font-size="15" fill="#1c2230"></text>
+      <text class="c3" x="610" y="258" font-size="15" font-weight="800" fill="#1c2230"></text>
+    </g>
+    <g class="bdg" display="none">
+      <rect class="bdgbox" x="196" y="244" width="146" height="21" rx="999" fill="#ffffff" stroke="#e3ddcf"/>
+      <text class="bdgtxt" x="208" y="259" font-size="14" fill="#6b7385">기준에 걸려 표 밖</text>
+    </g>
+  </svg>
+</div></div>
+  <p class="small">쌍 3,146개 중 동시 1일 2,845쌍으로 전체의 90% · 동시 2일 이상 301쌍 · 오른쪽 끝 9·16·17일 각 1쌍</p>
+</section>
+
+<!-- 18 기준의 효과 -->
+<section class="slide">
+  <div class="kicker">12-17 · 발견</div>
+  <h2>기준을 바꾸면 달라지는 것</h2>
+  <ul class="facts">
+    <li>기준 1일 — 규칙 <b>6,292개</b>, 그중 328개가 동시 등장 한 번에 향상도 184.0으로 표 위쪽 차지</li>
+    <li>기준 5일 — 이 실습의 설정. 동시 5회 이상 26쌍 × 양방향 = 규칙 <b>52개</b></li>
+    <li>기준 8일 — 규칙 <b>6개</b>만 남음</li>
+    <li>흐려진 구간은 표에서 빠진 조합. 관련이 없다고 확인된 조합 아님</li>
+  </ul>
+  <p class="point">결과 표에 없다는 것과 관련이 없다는 것은 다름</p>
+</section>
+
+<!-- 19 손 활동지 ② -->
+<section class="slide">
+  <div class="kicker">12-18 · 실습</div>
+  <h2>손 활동지 ② — 실측 수치 검산 (활동지 문제 4~6)</h2>
+  <ul class="facts">
+    <li>급식 184일 · 제육볶음 10일 · 배추김치 102일 · 동시 6일</li>
+    <li>신뢰도 = 6 ÷ 10 = <b>0.60</b></li>
+    <li>기본 등장률 = 102 ÷ 184 ≈ <b>0.554</b></li>
+    <li>향상도 = 0.60 ÷ (102 ÷ 184) ≈ <b>1.08</b></li>
+    <li>중간 값은 반올림하지 않고 마지막에 반올림</li>
+  </ul>
+  <p class="point">나눗셈 세 번으로 화면의 1.08을 <b>직접 검산</b></p>
+</section>
+
+<!-- 20 판단 -->
+<section class="slide">
+  <div class="kicker">12-19 · 판단</div>
+  <h2>향상도와 인과관계</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
+    <li style="margin:1.8vh 0">향상도 9.2는 순대국이 석박지의 등장을 일으킨다는 증명 아님</li>
+    <li style="margin:1.8vh 0">식단 구성 방침 등 다른 요인이 두 메뉴에 함께 작용했을 수 있음</li>
+    <li style="margin:1.8vh 0">신뢰도 1.00도 이 표본의 5일에서 관찰된 값. 다음 식단을 보장하지 않음</li>
+    <li style="margin:1.8vh 0">동시 5회 이상은 드문 조합을 제외하는 실습 기준. 184일에서 최소 지지도 5÷184 ≈ 0.027</li>
+    <li style="margin:1.8vh 0">이 기준도 우연을 완전히 배제하지 못함</li>
+  </ul>
+  <p class="small">세 지표와 함께 관측 기간과 등장 횟수를 기록</p>
+</section>
+
+<!-- 21 정리 -->
+<section class="slide">
+  <div class="kicker">정리</div>
+  <h2>제12강 요약</h2>
+  <div class="split" style="margin-top:2.2vh;gap:2vw"><div class="card"><div class="t">세 숫자</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">지지도는 전체 대비 동시 비율, 신뢰도는 A 등장일 중 B 비율, 향상도는 신뢰도 ÷ B의 기본 등장률</div></div><div class="card"><div class="t">방향</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">신뢰도는 방향에 따라 달라짐. 지지도와 향상도는 방향을 바꾸어도 같음</div></div><div class="card"><div class="t">기준</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">동시 5회 이상은 실습 기준. 184일에서 최소 지지도 약 0.027</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">향상도 9.2도 인과의 증명 아님. 표본과 관측 기간 함께 기록</div></div></div>
+  <p class="point">세 지표 함께 확인. <b>관측 기간과 등장 횟수</b>까지 기록</p>
+</section>
+
+<div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
+<div class="foot">
+  <span>당곡고 데이터 과학 · 12차시</span>
+  <div class="dots" id="dots"></div>
+  <span id="pageno"></span>
+</div>
+
+<script src="../../assets/widgets12.js"></script>
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dots = document.getElementById('dots');
+  slides.forEach(() => dots.appendChild(document.createElement('i')));
+  let cur = 0;
+  function show(i) {
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('on', k === cur));
+    [...dots.children].forEach((d, k) => d.classList.toggle('here', k === cur));
+    document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
+  }
+  addEventListener('keydown', e => {
+    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
+    if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
+    if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
+    if (e.key === 'Home') show(0);
+  });
+  addEventListener('click', e => { if (e.target.closest('a, .widget')) return; show(cur + (e.clientX > innerWidth / 2 ? 1 : -1)); });
+  show(0);
+</script>
+</body>
+</html>
