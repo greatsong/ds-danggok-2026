@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>13차시 · 데이터베이스와 수파베이스 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb4">
+<link rel="stylesheet" href="assets/style.css?v=tb5">
 <style>/* 긴 열 이름과 설계표를 좁은 화면에서도 읽을 수 있도록 */
 main{overflow-wrap:anywhere}
 main code:not(pre code){white-space:normal;word-break:break-all}
@@ -425,6 +425,22 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <p>Supabase는 PostgreSQL 데이터베이스와 API·인증 등의 기능을 제공합니다. 이번에는 <b>교사 또는 모둠 대표 한 명</b>이 연습용 프로젝트와 대결 기록 표를 준비합니다. 다른 학생은 같은 프로젝트에 연결합니다. 아래 준비 절차부터 따라가면 실제로 여러 기기의 대결 기록을 한곳에 저장하고 집계할 수 있습니다.</p>
   </div>
 
+  <details class="glossary"><summary>더 알아보기 — 실제 사례: 엑셀 파일 한 장의 한계로 빠진 확진자 15,841명</summary><div class="gin">
+    <h3>엑셀 파일 한 장의 한계로 확진자 15,841명이 집계에서 빠진 사건 (영국, 2020)</h3>
+    <p>2020년 10월 5일 잉글랜드 공중보건국은 9월 25일부터 10월 2일까지 확진자 15,841명이 일일 집계에서 빠졌다고 발표했습니다. 검사 기관이 CSV로 보낸 결과를 옛 XLS 엑셀 서식에 모았습니다. 이 형식은 한 시트에 약 65,000행까지만 담을 수 있고 검사 한 건이 여러 행을 차지해 서식 하나가 약 1,400명분에서 가득 찼습니다. 한도를 넘긴 결과는 저장되지 않았습니다.</p>
+    <table class="daymap">
+      <thead><tr><th>구분</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><b>무슨 일</b></td><td>2020년 9월 25일부터 10월 2일까지 확진자 15,841명이 일일 집계에서 빠졌습니다.</td></tr>
+        <tr><td><b>원인</b></td><td>검사 기관이 CSV로 보낸 결과를 옛 XLS 엑셀 서식에 모았습니다. 이 형식은 한 시트에 약 65,000행까지만 담을 수 있고 검사 한 건이 여러 행을 차지해 서식 하나가 약 1,400명분에서 가득 찼습니다.</td></tr>
+        <tr><td><b>결과</b></td><td>한도를 넘긴 결과가 저장되지 않았습니다. 누락된 확진자의 접촉자 추적이 늦어졌습니다.</td></tr>
+      </tbody>
+    </table>
+    <p class="mini">출처: <a href="https://www.bbc.com/news/technology-54423988" target="_blank" rel="noopener">BBC News 2020년 10월 5일 보도</a></p>
+    <figure class="case" style="margin:12px 0"><img src="img/lesson13_case1.jpg" alt="9월 25일부터 10월 2일까지 날짜별 신규 확진자 수 막대그래프. 옅은 색은 처음 발표된 수, 진한 색은 나중에 추가된 누락분이다." width="1600" height="1125" loading="lazy" style="width:100%;height:auto;border-radius:10px"><figcaption class="mini">그래프: 보고 문제 이후 추가된 날짜별 확진자 수 · 출처 Gov.uk 대시보드·잉글랜드 공중보건국 · BBC News 2020년 10월 5일</figcaption></figure>
+    <p>파일은 형식이 정한 크기 한도를 넘으면 기록이 조용히 사라집니다. 데이터베이스는 행을 계속 추가하고 제약을 어기면 오류로 알립니다. 반찬 월드컵 앱에서 저장 결과를 확인하지 못했을 때 재선택을 잠그도록 만든 처리도 같은 이유에서 필요합니다.</p>
+  </div></details>
+
   <h2>2. 실습 — 반찬 월드컵과 대결 기록 분석 (바이브 코딩)</h2>
   <p class="mini">대결 한 번이 한 행입니다. <code>id</code>(기록 번호) · <code>game_id</code>(한 판을 묶는 번호) · <code>round</code>(라운드) · <code>left_menu</code> · <code>right_menu</code> · <code>winner</code> · <code>created_at</code>만 저장하며 이름·학번·비밀번호는 받지 않습니다.</p>
   <p>오늘 실습에서는 좋아하는 반찬을 1대1로 겨루는 8강 토너먼트를 만듭니다. 한 판은 8강 네 번, 4강 두 번, 결승 한 번으로 모두 일곱 번 선택합니다. 각 대결의 결과는 표의 한 행으로 저장되며, 이 행들은 학급이 함께 쓰는 데이터베이스에 쌓입니다. 판이 쌓이면 학급 전체의 대결 기록이 되고, 이 기록을 뒤에서 분석합니다.</p>
@@ -439,6 +455,36 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     </tbody>
   </table>
   <p class="mini">8위와 9위(치즈불닭)가 5일로 같아 가나다순으로 갈렸습니다. 동점을 어떻게 처리할지 미리 정해 두어야 결과가 사람마다 달라지지 않습니다.</p>
+  <figure class="interactive" data-fig="menu8pick">
+    <div class="widget" data-w="menu8pick">
+<svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="중식 184일 등장 일수 상위 목록: 제외 기준 다섯 종을 켜고 끄면 회색 처리와 순위가 바뀌고, 수업 후보 여덟에는 파란 점이 붙음">
+<text x="8" y="18" font-size="14" font-weight="800" fill="#1c2230">중식 184일 · 등장 일수 상위</text>
+<text class="hright" x="712" y="18" text-anchor="end" font-size="12" fill="#6b7385"></text>
+<g class="legend" display="none">
+<circle cx="630" cy="34.6" r="3" fill="#2b7fd6"/>
+<text x="712" y="38" text-anchor="end" font-size="10" fill="#2b7fd6">수업 후보 여덟</text>
+</g>
+<!-- 목록 · 최대 14행 · y = 46 + i*19 -->
+<g class="rows"></g>
+<!-- 회색이 아닌 항목의 여덟 번째 아래 -->
+<g class="cut" display="none">
+<line x1="8" y1="185" x2="712" y2="185" stroke="#b07a00" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="712" y="181" text-anchor="end" font-size="10" fill="#b07a00">등장 일수만으로 자른 여덟</text>
+</g>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-cat="밥" aria-pressed="true">밥류</button>
+<button class="wbtn on" type="button" data-cat="김치" aria-pressed="true">김치류</button>
+<button class="wbtn on" type="button" data-cat="국" aria-pressed="true">국·찌개류</button>
+<button class="wbtn on" type="button" data-cat="곁" aria-pressed="true">곁반찬(나물·무침·샐러드·김)</button>
+<button class="wbtn on" type="button" data-cat="후식" aria-pressed="true">후식·음료</button>
+<button class="wbtn" type="button" data-pick="1" aria-pressed="false">수업 후보 여덟 표시</button>
+<span class="wout"></span>
+</div>
+</div>
+    <figcaption>급식 중식 184일 기록에서 5일 이상 등장한 마흔아홉 종을 등장 일수 순으로 보여 줍니다. 밥류·김치류·국과 찌개류·곁반찬·후식과 음료의 제외 기준 다섯 가지를 켜고 끄면 해당 분류의 항목이 회색으로 표시되고 남은 항목의 순위가 다시 매겨집니다. 다섯 분류를 모두 걸러 내면 열세 종이 남으며, 남은 열세 종 가운데 일곱 번째부터 열세 번째까지 일곱 항목이 5일로 같아 등장 일수만으로는 여덟 번째를 정할 수 없습니다. 수업 후보 여덟 가지는 여기에서 재료나 조리법이 겹치는 항목, 소스 이름만 적힌 항목, 분식이나 곁반찬에 가까운 항목을 더 빼고 고정한 목록이며, [수업 후보 여덟 표시] 단추를 켜면 수업 후보 여덟 가지에 파란 점이 붙습니다. 등장 일수는 후보를 정한 기준일 뿐 학생의 선호도가 아닙니다.</figcaption>
+  </figure>
+
 
 
   <ol class="steps">
@@ -496,26 +542,28 @@ SUPABASE_KEY = "…"</div>
           <thead><tr><th>어디</th><th>어떤 모습</th></tr></thead>
           <tbody>
             <tr><td><b>① 비밀 금고(Secrets)</b></td><td><code>SUPABASE_URL = "…"</code> · <code>SUPABASE_KEY = "…"</code> — 앞에서 만든 두 줄</td></tr>
-            <tr><td><b>② 프롬프트</b></td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와"</td></tr>
+            <tr><td><b>② 프롬프트</b></td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘"</td></tr>
             <tr><td><b>③ AI가 준 코드</b></td><td><code>st.secrets["SUPABASE_URL"]</code> · <code>st.secrets["SUPABASE_KEY"]</code></td></tr>
           </tbody>
         </table>
       </div>
     </li>
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>반찬 월드컵 스트림릿 앱을 파일 하나로 만들어 줘.
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>반찬 월드컵 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로.
 후보는 제육볶음·간장찜닭·가자미순살튀김·돈육불백·미트볼데리야끼볶음·수육·진미채고추장볶음·치즈떡닭갈비 여덟 가지야.
 8강 토너먼트로 진행해 줘. 판을 시작할 때 후보 순서를 섞고, 두 반찬을 나란히 보여 준 뒤 하나를 고르게 해.
 이긴 반찬만 다음 라운드로 올려서 8강 네 번, 4강 두 번, 결승 한 번으로 모두 일곱 번 고르게 해 줘.
 이름·학번·비밀번호는 받지 마.
-서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 menu_duels 표에 대결을 한 행씩 저장해 줘.
-열은 game_id(한 판을 묶는 번호), round(8강·4강·결승), left_menu, right_menu, winner야.
-id와 created_at은 데이터베이스가 자동으로 채워.
-새 표를 만들지 말고 이 표에 연결해 줘. 수정·삭제 기능은 넣지 마.
-접속 정보는 비밀 금고의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘.
+서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘.
+표 이름은 menu_duels이고 public 스키마에 있어. 표 이름에 스키마 이름을 붙여 쓰지는 마.
+이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야.
+id는 자동으로 늘어나는 정수이고 created_at은 저장 시각이 기본값이라 앱이 넣지 않아.
+앱이 채우는 열은 game_id(한 판을 묶는 문자열), round('8강'·'4강'·'결승' 가운데 하나), left_menu, right_menu, winner 다섯이고 모두 문자열이야.
+새 표를 만들지 말고 이 표에 그대로 연결해 줘. 수정·삭제 기능은 넣지 마.
+접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘.
 판이 끝나면 우승 반찬을 보여 주고, 다시 시작하는 단추를 넣어 줘.
 저장 결과를 확인하지 못하면 대결을 진행하지 말고 재선택을 잠근 뒤 확인이 필요하다고 안내해 줘.
-필요한 라이브러리 목록도 함께 알려 줘.</pre></div>
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       <details class="sample"><summary>준비 확인 — 만든 표의 열과 행 수 읽기</summary><p class="mini">표 생성은 <a href="#vote-db-setup">3절의 SQL</a>로 한 번만 합니다. 아래는 생성 뒤 확인하는 조회 코드입니다.</p><div class="codewrap code"><span class="label">SQL · 준비 확인</span><pre>SELECT column_name, data_type, is_nullable
 FROM information_schema.columns
 WHERE table_schema = 'public' AND table_name = 'menu_duels'
@@ -524,7 +572,7 @@ SELECT COUNT(*) AS 대결기록수 FROM public.menu_duels;</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 한 판을 끝까지 해 본다</span><br>
       배포한 뒤 한 판을 끝까지 진행합니다. 8강 네 번, 4강 두 번, 결승 한 번으로 <b>일곱 번</b>을 고르면 우승 반찬이 나옵니다. 표에는 일곱 행이 쌓입니다. 두 번째 판을 시작하면 대진표가 다시 섞여 다른 상대를 만납니다.
-      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">파일 하나로 저장합니다. 실제 공유 저장은 아래 두 기기 확인 절차로 점검합니다.</p><div class="codewrap code"><span class="label">main.py</span><button class="copy-btn">복사</button><pre># main.py — 반찬 월드컵 8강. 대결 한 번이 표의 한 행이 된다.
+      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 실제 공유 저장은 아래 두 기기 확인 절차로 점검합니다.</p><div class="codewrap code"><span class="label">main.py</span><button class="copy-btn">복사</button><pre># main.py — 반찬 월드컵 8강. 대결 한 번이 표의 한 행이 된다.
 import random
 import uuid
 
@@ -607,17 +655,24 @@ else:
         choose(right, left, right, round_name)
 
 st.caption("판 번호: " + st.session_state.game_id)
-st.caption("반복 참여를 막지는 않습니다. 저장 결과 확인이 필요하면 이 판 번호를 준비 담당자에게 알려 주세요.")</pre></div></details>
+st.caption("반복 참여를 막지는 않습니다. 저장 결과 확인이 필요하면 이 판 번호를 준비 담당자에게 알려 주세요.")</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+supabase
+pandas
+plotly</pre></div></details>
     </li>
     <li><span class="st">③ 개선 프롬프트 — 학급의 대결 기록을 분석한다</span>
       <p>한 판이 끝나면 우승 반찬 하나가 남습니다. 우승만으로는 그 반찬이 정말 인기 있는지 알 수 없습니다. 토너먼트에서는 이긴 반찬만 다음 라운드로 올라갑니다. 그 결과 다음 라운드에 진출한 반찬은 겨룬 횟수가 많아집니다. 승리 수와 함께 이긴 횟수를 겨룬 횟수로 나눈 비율인 승률을 살펴봅니다. 승률도 상대와 대진표의 영향을 받으므로 학급 전체의 선호 비율로 해석하지 않습니다.</p>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>이 앱에 학급 전체의 대결 기록을 분석하는 화면을 추가해 줘.
-menu_duels에 저장된 전체 기록을 대상으로, 반찬별 대결 수·승리 수·승률·우승 횟수를 비교하게 해 줘.
+menu_duels에 저장된 전체 기록을 대상으로 해. id, game_id, round, left_menu, right_menu, winner 여섯 열을 읽어서 반찬별 대결 수·승리 수·승률·우승 횟수를 비교하게 해 줘.
+대결 수는 left_menu와 right_menu 양쪽을 모두 세고, 우승 횟수는 round가 '결승'인 행의 winner를 세어 줘.
 모든 후보를 표시하고 대결 기록이 없는 후보의 승률은 아직 알 수 없다고 안내해 줘.
-승률은 백분율로 보여 주고 높은 순서의 표와 막대그래프로 비교해 줘.
-기록 수와 참여 인원은 다르며, 진행 중에 남긴 대결도 집계에 포함된다고 표시해 줘.
+승률은 백분율로 보여 주고 높은 순서의 표와 가로 막대그래프로 비교해 줘.
+그래프는 plotly로 그려 줘.
+집계에 사용한 대결 기록 수와 판 수를 화면에 적어 줘. 기록 수와 참여 인원은 다르며, 진행 중에 남긴 대결도 집계에 들어간다고 표시해 줘.
 한 판이 끝난 화면에서도 분석을 볼 수 있게 하고 결과를 다시 불러오는 단추를 넣어 줘.
-기록이 아직 없을 때와 조회에 실패했을 때를 구분해 안내해 줘.</pre></div>
+기록이 아직 없을 때와 조회에 실패했을 때를 구분해 안내해 줘.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다. 실제 데이터베이스의 저장·조회 결과는 배포 후 확인합니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># main.py에 이어 붙일 부분 — 학급의 대결 기록을 분석한다
 import pandas as pd
 import plotly.express as px
@@ -689,15 +744,204 @@ st.caption("조회 도중 들어온 새 기록은 다시 불러오면 반영됩�
   </ol>
   <p>이 절차로 배포·공유 저장·조회 연결을 점검합니다. 같은 사람이 여러 판을 할 수 있으므로 참여 인원을 검증한 것은 아닙니다. 결과는 자동 갱신되지 않으며 다시 불러와 확인합니다.</p>
   <div class="callout tip"><div class="h">막혔을 때 확인합니다</div><p>연결 오류는 같은 프로젝트의 주소·publishable 키와 Secrets 이름을 확인합니다. 표·권한 오류는 준비 SQL의 실행 결과를 확인하며, RLS를 끄거나 관리자 키를 넣어 해결하지 않습니다. 저장 결과가 불확실하면 반복 제출하지 말고 판 번호로 최근 기록을 확인합니다. 조회만 실패했다면 결과를 다시 불러옵니다. 라이브러리 오류는 requirements.txt의 네 줄을 확인합니다.</p></div>
+  <figure class="interactive" data-fig="duel28">
+    <div class="widget" data-w="duel28">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="반찬 여덟 가지의 쌍 28칸 격자와 반찬별 승률 표. 한 판에서 채워지는 칸이 일곱 칸이라는 점과 대진표에 따라 우승 반찬이 달라지는 모습을 나타낸 그림">
+  <rect class="champbg" x="508" y="3" width="204" height="22" rx="5" fill="#fff3cf" opacity="0" style="transition:opacity 150ms ease"/>
+  <text class="obs" x="8" y="21" font-size="15" font-weight="800" fill="#b07a00">관측 0 / 28</text>
+  <text class="champ" x="712" y="20" text-anchor="end" font-size="12" font-weight="700" fill="#1c2230">이번 판 우승 · —</text>
+  <line x1="360" y1="36" x2="360" y2="322" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="368" y1="58" x2="712" y2="58" stroke="#e3ddcf" stroke-width="1"/>
+  <text x="368" y="52" font-size="10" font-weight="700" fill="#6b7385">반찬</text>
+  <text x="566" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">대결 수</text>
+  <text x="618" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승리 수</text>
+  <text x="676" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승률</text>
+  <text x="712" y="40" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">리그</text>
+  <text x="712" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승률</text>
+  <g class="collab"></g>
+  <g class="rowlab"></g>
+  <g class="cells"></g>
+  <rect class="foc" x="0" y="0" width="30" height="30" rx="3" fill="none" stroke="#b07a00" stroke-width="2" opacity="0" pointer-events="none"/>
+  <g class="tbl"></g>
+  <text x="8" y="300" font-size="10" fill="#6b7385">칸 = 두 반찬의 대결 · 가운데 숫자 = 승자 번호</text>
+  <text x="8" y="316" font-size="10" fill="#6b7385">진하기 · 오른쪽 아래 숫자 = 같은 쌍의 대결 횟수</text>
+  <text x="368" y="300" font-size="10" fill="#6b7385">리그 승률 = 이긴 쌍 수 / 답한 쌍 수</text>
+  <text x="368" y="316" font-size="10" fill="#6b7385">28칸 완성 → 분모 7 고정</text>
+</svg>
+<div class="wctl pick"><span class="pmsg">한 판 진행 · 일곱 번 선택</span></div>
+<div class="wctl">
+<button class="wbtn" type="button" data-act="play">한 판 진행</button>
+<button class="wbtn" type="button" data-act="redraw">대진표 다시 뽑기</button>
+<button class="wbtn" type="button" data-act="fill">남은 칸 채우기</button>
+<button class="wbtn" type="button" data-act="reset">처음으로</button>
+<span class="wout">관측 0 / 28 · 미관측 28칸</span>
+</div>
+</div>
+    <figcaption>격자 28칸 가운데 한 판에서 채워지는 칸은 일곱 칸입니다. 대진표를 다시 뽑으면 같은 답에서도 우승 반찬이 바뀝니다. 답은 학생이 직접 고른 값이며, 급식 등장 일수는 후보를 정한 기준일 뿐 선호도가 아닙니다.</figcaption>
+  </figure>
+
 
   <div class="callout warn">
     <div class="h">⚠️ 발견 — 승리 수와 승률을 함께 읽는다</div>
     <p>다음 라운드로 진출한 반찬은 다시 겨루므로 반찬마다 대결 수가 다릅니다. 승리 수와 승률을 함께 비교하면서 분모가 무엇인지 확인합니다. 8차시 R²는 평균값으로 예측한 기준과 비교한 값이며, 12차시 향상도는 결론 메뉴의 전체 등장률을 기준으로 비교한 값입니다. 승률도 대진 상대·라운드·반복 참여의 영향을 받습니다. 대결 수로 나누었다고 공정한 순위나 학급 전체의 선호 비율이 보장되지는 않습니다.</p>
   </div>
+  <figure class="interactive" data-fig="rankcross13">
+    <div class="widget" data-w="rankcross13">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="리그 승률 순위와 한 판 지표 순위를 교차선으로 이은 비교 표">
+  <text class="ttlL" x="8" y="24" font-size="12" font-weight="800" fill="#1c2230">리그 승률 · 분모 7</text>
+  <text class="ttlR" x="470" y="24" font-size="12" font-weight="800" fill="#1c2230">한 판 승리 수</text>
+  <line x1="8" y1="32" x2="250" y2="32" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="470" y1="32" x2="712" y2="32" stroke="#e3ddcf" stroke-width="1"/>
+  <g fill="none">
+    <path class="lnk" d="M254,44 C330,44 390,74 466,74" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,134 C330,134 390,164 466,164" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,164 C330,164 390,194 466,194" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,194 C330,194 390,104 466,104" stroke="#d64545" stroke-width="2.2"/>
+    <path class="lnk" d="M254,74 C330,74 390,44 466,44" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,224 C330,224 390,224 466,224" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,254 C330,254 390,254 466,254" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,104 C330,104 390,134 466,134" stroke="#b9b3a5" stroke-width="1.2"/>
+  </g>
+  <g class="rowL" transform="translate(0,48)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">1</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">제육볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.71</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">10</text>
+  </g>
+  <g class="rowL" transform="translate(0,138)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">4</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">간장찜닭</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">7</text>
+  </g>
+  <g class="rowL" transform="translate(0,168)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">5</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">가자미순살튀김</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+  </g>
+  <g class="rowL" transform="translate(0,198)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">6</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">돈육불백</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+  </g>
+  <g class="rowL" transform="translate(0,78)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">2</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">미트볼데리야끼볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.57</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,228)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">7</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">수육</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,258)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">8</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">진미채고추장볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,108)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">3</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">치즈떡닭갈비</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.57</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowR" transform="translate(0,78)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">10</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">제육볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">2 / 3</text>
+  </g>
+  <g class="rowR" transform="translate(0,168)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">7</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">간장찜닭</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,198)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">가자미순살튀김</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,108)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">돈육불백</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">1 / 2</text>
+  </g>
+  <g class="rowR" transform="translate(0,48)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">미트볼데리야끼볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">3 / 3</text>
+  </g>
+  <g class="rowR" transform="translate(0,228)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">수육</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,258)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">진미채고추장볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,138)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">치즈떡닭갈비</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">1 / 2</text>
+  </g>
+  <text x="360" y="286" font-size="10" text-anchor="middle" fill="#6b7385">굵은 붉은 선 = 순위차 2 이상 · 원 안 숫자 = 중식 등장 일수</text>
+</svg>
+<div class="wctl">
+  <label>대진 번호 <input class="wslider" type="range" min="1" max="315" step="1" value="1"></label>
+  <button class="wbtn wmetric on" type="button" data-m="wins">한 판 승리 수</button>
+  <button class="wbtn wmetric" type="button" data-m="rate">한 판 승률</button>
+  <button class="wbtn wmetric" type="button" data-m="champ">우승 횟수 · 315판 합계</button>
+  <button class="wbtn wans on" type="button" data-a="A">예시 답 A · 엇갈린 반</button>
+  <button class="wbtn wans" type="button" data-a="B">예시 답 B · 일관된 반</button>
+  <button class="wbtn wans wmine" type="button" data-a="M" disabled>내 격자 답 (28칸 완성 후)</button>
+  <span class="wout">대진 1 · 순위가 바뀐 반찬 6종 · 최대 순위차 3 · 이번 판 우승 미트볼데리야끼볶음</span>
+</div>
+</div>
+    <figcaption>예시 학급 답 한 묶음으로 315가지 대진을 모두 계산한 결과입니다. 대진 번호를 바꾸면 한 판 승리 수와 승률 순위가 달라지지만, 분모가 7로 같은 리그 승률 순위는 그대로입니다. 수업 뒤에는 menu_duels에 쌓인 실제 기록으로 같은 표를 만들어 비교합니다.</figcaption>
+  </figure>
+
   <div class="callout tip">
     <div class="h">💡 판단 — 대결 기록 수는 참여 인원이 아니다</div>
     <p>이 앱은 사람을 구별하지 않으며, 이름과 학번을 받지 않습니다. 한 사람이 여러 판을 할 수도 있습니다. 저장 결과가 불확실할 때의 잠금도 현재 접속에서만 유지되므로 새로 접속하거나 다른 기기를 사용한 재제출까지 막지는 못합니다. 그래서 대결 기록의 수는 참여 인원이 아닙니다. 여러 판을 한 사람의 취향이 결과를 더 크게 움직입니다. 이 한계를 알고 결과를 읽는 것이 오늘의 태도입니다.</p>
   </div>
+
+  <details class="glossary"><summary>더 알아보기 — 실제 사례: 챗봇 아레나의 대결 기록과 승률표</summary><div class="gin">
+    <h3>AI 모델 월드컵 — 챗봇 아레나의 대결 기록과 승률표</h3>
+    <p>챗봇 아레나는 2023년 4월에 시작되었습니다. 같은 질문에 두 AI가 답한 내용을 나란히 보여 주고 사람이 더 나은 쪽을 고르는 방식입니다. 캘리포니아대 버클리 연구진이 2024년 3월 공개한 논문 기준으로 9만여 명이 약 24만 건을 투표했고 대상 모델은 50개가 넘습니다.</p>
+    <table class="daymap">
+      <thead><tr><th>구분</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><b>무엇</b></td><td>같은 질문에 두 AI가 답한 내용을 나란히 보여 주고 사람이 더 나은 쪽을 고르는 방식입니다.</td></tr>
+        <tr><td><b>규모</b></td><td>9만여 명이 약 24만 건을 투표했고 대상 모델은 50개가 넘습니다.</td></tr>
+        <tr><td><b>구조</b></td><td>대결 한 건이 한 행으로 저장되고 그 행들을 모델 쌍별로 묶어 세면 승률표가 됩니다.</td></tr>
+      </tbody>
+    </table>
+    <p class="mini">출처: Chiang 외, <a href="https://arxiv.org/abs/2403.04132" target="_blank" rel="noopener">「Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference」, arXiv:2403.04132</a> (2024)</p>
+    <figure class="case" style="margin:12px 0"><img src="img/lesson13_case2.png" alt="가로축과 세로축에 모델 이름을 놓은 승률 행렬. 각 칸은 비기지 않은 대결에서 세로축 모델이 가로축 모델을 이긴 비율이며, 파란색일수록 높고 붉은색일수록 낮다." width="750" height="750" loading="lazy" style="width:100%;height:auto;border-radius:10px"><figcaption class="mini">그림: 비긴 경기를 제외한 모델 간 승률 행렬 · Chiang 외, 챗봇 아레나 논문(arXiv:2403.04132) 2024, 그림 2</figcaption></figure>
+    <p>오늘 만드는 반찬 월드컵과 구조가 같습니다. 대결 한 번이 표의 한 행으로 저장됩니다(INSERT). 그 행들을 이긴 쪽 기준으로 묶어 세면(GROUP BY·COUNT) 승률이 나옵니다. 여러 사람이 서로 다른 기기에서 남긴 기록을 한곳에 모아야 하므로 개인 파일이 아니라 공유 데이터베이스가 필요합니다.</p>
+  </div></details>
 
   <h2>3. SQL — 테이블을 다루는 언어</h2>
   <p>예시 코드의 <code>db.table("menu_duels").select(...)</code>는 파이썬에서 API를 통해 데이터 조회를 요청하는 표현입니다. 같은 조회 목적을 데이터베이스에서 표현하는 언어가 <b>SQL</b>입니다. 오늘은 명령어를 모두 외우기보다 어떤 표의 어떤 행을 읽거나 바꾸는 문장인지 이해합니다. 수정·삭제 예시는 별도의 연습 자료에서만 다룹니다.</p>
@@ -1370,10 +1614,10 @@ LIMIT 5;</pre></div>
   <table class="daymap">
     <thead><tr><th>알려 줄 것</th><th>왜</th><th>①의 문장</th></tr></thead>
     <tbody>
-      <tr><td><b>표 이름과 열 이름</b>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다</td><td>"표 이름은 menu_duels이고 열은 id · game_id · round · left_menu · right_menu · winner · created_at이야"</td></tr>
+      <tr><td><b>표 이름과 열 이름</b>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다</td><td>"표 이름은 menu_duels이고 public 스키마에 있어. 이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야"</td></tr>
       <tr><td><b>새 표를 만들지 말 것</b></td><td>학급 공용 프로젝트에서는 학생이 표를 만들 권한이 없다</td><td>"새 표를 만들지 말고 이 표에 그대로 연결해 줘"</td></tr>
-      <tr><td><b>접속 정보는 비밀 금고에</b></td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 불러와"</td></tr>
-      <tr><td><b>무결성 조건</b></td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"서로 다른 두 후보 중 하나를 골랐을 때만 대결을 저장해 줘"</td></tr>
+      <tr><td><b>접속 정보는 비밀 금고에</b></td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘"</td></tr>
+      <tr><td><b>무결성 조건</b></td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘"</td></tr>
     </tbody>
   </table>
   <p>팀 프로젝트에서도 앱의 목적, 실제 표의 구조, 접속 정보의 이름, 허용된 입력과 동작을 알려 줍니다. 코드를 받은 뒤에는 저장한 값과 조회·집계 결과가 맞는지 작은 예로 확인합니다.</p>
@@ -1391,7 +1635,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   </details>
 
   <h2>4. 팀 프로젝트 예고 — 데이터로 답할 수 있는 문제인가</h2>
-  <p>공통 수업은 다음 시간 데이터 윤리 한 차시만 남았습니다. 중간 지필평가 이후에는 2~3인 팀으로 공통 수업에서 익힌 도구를 활용해 <b>팀만의 질문</b>에 도전합니다. 오늘은 그 준비로 팀을 구성하고 주제 후보를 고릅니다.</p>
+  <p>공통 수업은 다음 시간 데이터 윤리 한 차시만 남았습니다. 그 뒤에는 2~3인 팀으로 공통 수업에서 익힌 도구를 활용해 <b>팀만의 질문</b>에 도전합니다. 오늘은 그 준비로 팀을 구성하고 주제 후보를 고릅니다.</p>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 174쪽</span></div>
     <p class="q">"데이터 과학은 다양한 분야의 문제를 해결하고 의사 결정을 지원하는 데 큰 도움이 되지만, 모든 문제를 해결할 수 있는 것은 아니다." <span class="src">(174쪽)</span></p>
@@ -1477,5 +1721,6 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
+<script src="assets/widgets13.js"></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>8차시 · 회귀 평가 손계산 — 오차·MSE·결정계수 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb4">
+<link rel="stylesheet" href="assets/style.css?v=tb5">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -187,6 +187,79 @@
       <text x="350" y="296" text-anchor="middle" font-size="11.5" fill="#7a7f95">점 배치는 이해를 위한 가상의 예(본문의 수치와 동일).</text>
     </svg>
   </div>
+  <figure class="interactive" data-fig="r2denom">
+    <div class="widget" data-w="r2denom">
+  <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="실젯값 세 개의 퍼짐과 예측값을 따로 움직여 기준 제곱오차 합과 내 제곱오차 합의 비율이 어떻게 바뀌는지 보이는 그림">
+    <!-- 좌 · 좌표평면 격자와 축 -->
+    <line x1="56" y1="194.5" x2="430" y2="194.5" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="144.9" x2="430" y2="144.9" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="95.4" x2="430" y2="95.4" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="45.8" x2="430" y2="45.8" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="56" y1="244" x2="430" y2="244" stroke="#b9b3a5" stroke-width="1.5"/>
+    <line x1="56" y1="26" x2="56" y2="244" stroke="#b9b3a5" stroke-width="1.5"/>
+    <text x="48" y="20" text-anchor="end" font-size="13" fill="#6b7385">만 명</text>
+    <text x="48" y="50.3" text-anchor="end" font-size="13" fill="#6b7385">100</text>
+    <text x="48" y="99.9" text-anchor="end" font-size="13" fill="#6b7385">75</text>
+    <text x="48" y="149.4" text-anchor="end" font-size="13" fill="#6b7385">50</text>
+    <text x="48" y="199" text-anchor="end" font-size="13" fill="#6b7385">25</text>
+    <text x="48" y="248.5" text-anchor="end" font-size="13" fill="#6b7385">0</text>
+    <text x="120" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 가</text>
+    <text x="243" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 나</text>
+    <text x="366" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 다</text>
+    <!-- 넓이 · 오차 · 점 -->
+    <g data-dyn="base"></g>
+    <g data-dyn="mine"></g>
+    <!-- 평균 수평선 -->
+    <line data-dyn="mean" x1="56" y1="125.1" x2="430" y2="125.1" stroke="#9a9a9a" stroke-width="2.5"/>
+    <g data-dyn="errs"></g>
+    <g data-dyn="dots"></g>
+    <text data-t="mean" x="62" y="118.1" font-size="12" fill="#7a7f95" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" paint-order="stroke">평균 60만 명</text>
+    <!-- 예측 점 조작 영역 -->
+    <rect class="hit" x="105" y="154.7" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 가의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="40" style="touch-action:none;cursor:ns-resize"/>
+    <rect class="hit" x="228" y="115.1" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 나의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="60" style="touch-action:none;cursor:ns-resize"/>
+    <rect class="hit" x="351" y="75.5" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 다의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="80" style="touch-action:none;cursor:ns-resize"/>
+    <text x="243" y="288" text-anchor="middle" font-size="11.5" fill="#7a7f95">빨간 선분 = 오차 · 노란 넓이 = 오차² · 회색 넓이 = 기준 오차²</text>
+    <!-- 우 · 계산표 -->
+    <text x="474" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">실젯값</text>
+    <text x="534" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">예측값</text>
+    <text x="584" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">오차</text>
+    <text x="634" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">오차²</text>
+    <text x="688" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">기준²</text>
+    <g data-dyn="rows"></g>
+    <line x1="452" y1="122" x2="706" y2="122" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="474" y="140" text-anchor="middle" font-size="11.5" fill="#7a7f95">합계</text>
+    <text data-t="sse" x="634" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#e45756">200</text>
+    <text data-t="sst" x="688" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#9a9a9a">1800</text>
+    <text x="634" y="157" text-anchor="middle" font-size="10" fill="#7a7f95">SSE</text>
+    <text x="688" y="157" text-anchor="middle" font-size="10" fill="#7a7f95">SST</text>
+    <text x="452" y="176" font-size="10.5" fill="#7a7f95">기준² = (실젯값 − 평균)²</text>
+    <text x="452" y="190" font-size="10.5" fill="#7a7f95">SSE = 내 제곱오차 합 · SST = 기준 제곱오차 합</text>
+    <text x="452" y="208" font-size="13" fill="#7a7f95">R² = 1 − (SSE ÷ SST)</text>
+    <text data-t="r2" x="452" y="238" font-size="30" font-weight="800" fill="#a97a00">0.89</text>
+    <!-- R² 게이지 -->
+    <rect x="452" y="250" width="169.3" height="14" fill="#e45756" opacity="0.12"/>
+    <rect x="621.3" y="250" width="84.7" height="14" fill="#2f9e5f" opacity="0.12"/>
+    <line x1="452" y1="264" x2="706" y2="264" stroke="#b9b3a5" stroke-width="1"/>
+    <text x="452" y="280" text-anchor="middle" font-size="11" fill="#7a7f95">−2</text>
+    <text x="536.7" y="280" text-anchor="middle" font-size="11" fill="#7a7f95">−1</text>
+    <text x="621.3" y="280" text-anchor="middle" font-size="11" fill="#7a7f95">0</text>
+    <text x="706" y="280" text-anchor="middle" font-size="11" fill="#7a7f95">1</text>
+    <line class="ndl" x1="696.6" y1="246" x2="696.6" y2="268" stroke="#1c2230" stroke-width="2.5"/>
+    <text x="452" y="296" font-size="11" fill="#7a7f95">제곱오차 합 감소 비율 · 0 = 평균만 찍는 모델</text>
+  </svg>
+  <div class="wctl">
+    <label>퍼짐 d <input type="range" min="6" max="40" step="1" value="30" data-k="d" aria-label="실젯값의 퍼짐"> <span data-v="d">30만 명</span></label>
+    <button class="wbtn" type="button" data-act="mean">평균만 찍기</button>
+    <button class="wbtn" type="button" data-act="reset">원래 예측</button>
+    <button class="wbtn on" type="button" data-act="area-both">둘 다</button>
+    <button class="wbtn" type="button" data-act="area-base">기준 넓이</button>
+    <button class="wbtn" type="button" data-act="area-mine">내 넓이</button>
+    <span class="wout" data-t="out">기준 제곱오차 합 1800 · 내 제곱오차 합 200 · R² 0.89</span>
+  </div>
+</div>
+    <figcaption>퍼짐 슬라이더는 실젯값만 평균 둘레로 벌리고 좁힙니다. 오차가 그대로여서 노란 넓이의 합은 변하지 않고 회색 넓이의 합만 달라지므로 R²가 바뀝니다. 예측 점을 세로로 끌면 그 점의 오차가 달라져 노란 넓이가 함께 변합니다.</figcaption>
+  </figure>
+
   <div class="callout tip">
     <div class="h">💡 R² 눈금 읽기</div>
     <ul>
@@ -200,12 +273,16 @@
   <h2>4. 기온 모델 다시 보기 — 자료 선택에 따른 R² 비교</h2>
   <p>기온 예측기를 새로 만들어 자료 선택에 따른 R²의 변화를 확인합니다. 여기서는 직선을 학습한 자료에 다시 예측한 <b>학습 자료의 R²</b>를 계산합니다. 별도로 떼어 둔 자료에서 평가한 7차시의 테스트 R²와는 평가 조건이 다릅니다.</p>
   <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.
-서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로
-수업 기준 기간인 2025년까지의 자료로 연도별 평균기온을 구해 줘.
+서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.
+이 파일의 열 이름은 날짜, 지점, 평균기온, 최저기온, 최고기온이고, 인코딩은 UTF-8이야.
+수업의 기준 기간은 2025년까지야. 그 이후 자료는 빼 줘.
 관측일이 300일이 안 되는 해를 뺄지 말지 고르는 스위치를 달아 줘.
 각 경우를 따로 학습한 R²를 나란히 보여 주고, 학습 자료에서 계산한 점수라고 표시해 줘.
-스위치에 따라 산점도와 회귀선이 바뀌게 하고, 제외 후보인 연도와 관측일 수도 보여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 관측일 필터를 켜고 끄며 R²가 어떻게 달라지는지 본다
+스위치에 따라 산점도와 회귀선이 바뀌게 하고, 제외 후보인 연도와 관측일 수도 보여 줘.
+그래프는 plotly로 그려 줘.
+직선을 만든 해의 개수와 시작 연도, 끝 연도를 화면에 적어 줘.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 관측일 필터를 켜고 끄며 R²가 어떻게 달라지는지 본다
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -238,17 +315,100 @@ used = all_years[all_years["count"] &gt;= 300] if on else all_years
 c1, c2 = st.columns(2)
 c1.metric("필터 적용 · 학습 R²", f"{score(all_years[all_years['count'] &gt;= 300]):.2f}")
 c2.metric("필터 해제 · 학습 R²", f"{score(all_years):.2f}")
-st.caption(f"지금 쓰는 해: {len(used)}개 · 뺀 해: {len(all_years) - len(used)}개")
+st.caption(f"지금 쓰는 해: {len(used)}개 · {int(used['연도'].min())}~{int(used['연도'].max())}년 · 뺀 해: {len(all_years) - len(used)}개")
 a, b = np.polyfit(used["연도"], used["mean"], 1)
 fig = px.scatter(used, x="연도", y="mean", labels={"mean": "연평균기온(℃)"})
 fig.add_scatter(x=used["연도"], y=a * used["연도"] + b, mode="lines", name="회귀선")
 st.plotly_chart(fig, width="stretch")
 st.write("관측일이 300일 미만인 해")
-st.dataframe(all_years[all_years["count"] &lt; 300].rename(columns={"mean": "평균기온", "count": "관측일 수"}), hide_index=True)</pre></div></details>
+st.dataframe(all_years[all_years["count"] &lt; 300].rename(columns={"mean": "평균기온", "count": "관측일 수"}), hide_index=True)</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+numpy
+plotly</pre></div></details>
   <div class="callout warn">
     <div class="h">⚠️ 필터를 바꾸면 학습·평가 자료도 바뀝니다</div>
     <p>관측일 필터를 적용한 114개 연도의 학습 R²는 <b>0.70</b>, 적용하지 않은 117개 연도에서는 <b>0.39</b>입니다. 필터를 해제하면 1907년(92일), 1950년(243일), 1953년(31일)이 포함됩니다. 특히 1953년의 겨울 한 달 평균은 다른 해의 연평균과 비교하기 어렵고, 큰 잔차가 제곱오차 합에 영향을 줍니다. 자료가 달라지면 회귀선과 R²의 분모도 함께 바뀝니다. 따라서 이 비교만으로 새로운 자료에 대한 예측 성능이 향상되었다고 결론지을 수는 없습니다.</p>
   </div>
+  <figure class="interactive" data-fig="r2swap">
+    <div class="widget" data-w="r2swap">
+<svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 자료와 평가 자료를 따로 바꿔 가며 결정계수가 0.39·0.68·0.70으로 달라지는 것을 보이는 산점도와 사다리">
+<!-- 좌 · 산점도(연도 × 연평균기온) -->
+<g stroke="#e3ddcf" stroke-width="1">
+<line x1="56" y1="227.4" x2="470" y2="227.4"/>
+<line x1="56" y1="164.5" x2="470" y2="164.5"/>
+<line x1="56" y1="101.5" x2="470" y2="101.5"/>
+<line x1="56" y1="38.6" x2="470" y2="38.6"/>
+</g>
+<path d="M56,26 V240 H470" fill="none" stroke="#b9b3a5" stroke-width="1.2"/>
+<g font-size="12" fill="#6b7385" text-anchor="end">
+<text x="48" y="20">℃</text>
+<text x="48" y="231.4">0</text>
+<text x="48" y="168.5">5</text>
+<text x="48" y="105.5">10</text>
+<text x="48" y="42.6">15</text>
+</g>
+<g font-size="12" fill="#6b7385" text-anchor="middle">
+<text x="87.8" y="254">1910</text>
+<text x="151.5" y="254">1930</text>
+<text x="278.9" y="254">1970</text>
+<text x="374.5" y="254">2000</text>
+<text x="454.1" y="254">2025</text>
+</g>
+<text x="478" y="254" font-size="12" fill="#6b7385">연도</text>
+<g class="pts" fill="#2b7fd6" opacity="0.55"></g>
+<line class="ghost" x1="56" y1="100.1" x2="470" y2="57.6" stroke="#9a9a9a" stroke-width="2" stroke-dasharray="5 4" opacity="0"/>
+<line class="fit" x1="56" y1="100.1" x2="470" y2="57.6" stroke="#f4b400" stroke-width="2.5"/>
+<g class="exg"></g>
+<polyline class="exlead" points="224.8,219.3 236.0,209.9" fill="none" stroke="#e45756" stroke-width="1"/>
+<text class="extx" x="240.0" y="205.9" font-size="11" fill="#e45756">1953년 · 0.64℃ · 31일</text>
+<!-- 우 · 상태 패널 -->
+<g font-size="12" fill="#7a7f95">
+<text x="486" y="44">학습 자료</text>
+<text x="486" y="70">평가 자료</text>
+<text x="486" y="104">내 제곱오차 합(SSE)</text>
+<text x="486" y="128">기준 제곱오차 합(SST)</text>
+</g>
+<text class="v-train" x="712" y="44" text-anchor="end" font-size="13" font-weight="700" fill="#1c2230">114개 연도</text>
+<text class="v-eval" x="712" y="70" text-anchor="end" font-size="13" font-weight="700" fill="#1c2230">114개 연도</text>
+<text class="v-sse" x="712" y="104" text-anchor="end" font-size="14" font-weight="700" fill="#e45756">39.12</text>
+<text class="v-sst" x="712" y="128" text-anchor="end" font-size="14" font-weight="700" fill="#9a9a9a">130.99</text>
+<line x1="492" y1="146" x2="706" y2="146" stroke="#e3ddcf" stroke-width="1"/>
+<text x="486" y="186" font-size="13" fill="#7a7f95">R²</text>
+<text class="v-r2" data-t="r2" x="712" y="186" text-anchor="end" font-size="30" font-weight="800" fill="#a97a00">0.70</text>
+<!-- 하단 · 몫 사다리 -->
+<g fill="none" stroke="#1c2230" stroke-width="1.2">
+<polyline points="212.8,238 212.8,234 589.2,234 589.2,238"/>
+<polyline points="589.2,240 589.2,236 615.1,236 615.1,240"/>
+<polyline points="602,236 646,224"/>
+</g>
+<g font-size="12" font-weight="700" fill="#1c2230">
+<text x="401" y="224" text-anchor="middle">평가 자료가 바뀐 몫 +0.29</text>
+<text x="680" y="220" text-anchor="end">직선이 바뀐 몫 +0.02</text>
+<text x="212.8" y="250" text-anchor="middle">0.39</text>
+<text x="585" y="250" text-anchor="end">0.68</text>
+<text x="619" y="250">0.70</text>
+</g>
+<line x1="96" y1="262" x2="680" y2="262" stroke="#b9b3a5" stroke-width="1"/>
+<circle class="d0" cx="212.8" cy="262" r="5" fill="#9a9a9a" stroke="none" stroke-width="0"/>
+<circle class="d1" cx="589.2" cy="262" r="5" fill="#f4b400" stroke="none" stroke-width="0"/>
+<circle class="d2" cx="615.1" cy="262" r="7" fill="#2f9e5f" stroke="#1c2230" stroke-width="2"/>
+<g font-size="10.5" fill="#7a7f95">
+<text x="212.8" y="283" text-anchor="middle">117개 학습 · 117개 평가</text>
+<text x="585" y="283" text-anchor="end">117개 학습 · 114개 평가</text>
+<text x="712" y="297" text-anchor="end">114개 학습 · 114개 평가</text>
+</g>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-act="s-a">114개 연도 · 학습·평가 동일</button>
+<button class="wbtn" type="button" data-act="s-b">117개 연도 · 학습·평가 동일</button>
+<button class="wbtn" type="button" data-act="s-c">117개 학습 · 114개 평가</button>
+<span class="wout" data-t="out">SSE 39.12 · SST 130.99 · R² 0.70</span>
+</div>
+</div>
+    <figcaption>버튼으로 학습 자료와 평가 자료를 따로 바꿉니다. 세 번째 버튼은 학습 자료 117개 연도를 그대로 두고 평가 대상만 114개 연도로 바꾸어 R²가 0.68이 되며, 0.39에서 0.70으로 오른 몫의 대부분이 평가 자료 교체에서 나왔음을 보여 줍니다.</figcaption>
+  </figure>
+
   <div class="callout tip"><div class="h">자료를 제외하는 기준</div><p>연간 기온을 충분히 대표하는지 확인한 뒤 제외 기준을 정합니다. 점수가 높아졌다는 이유만으로 자료 제외를 정당화해서는 안 됩니다. 전처리 방법의 예측 성능을 비교하려면 같은 평가 자료를 사용해야 합니다.</p></div>
   <p>남은 시간에는 교과서 134쪽 해 보기 ③(폼 Ⅲ-02c)으로 단순 회귀와 다중 회귀의 성능을 MSE와 결정계수, 두 지표로 나란히 비교합니다. 데이터 몇 행만으로 학습한 모델이 훈련 데이터에서만 높은 점수를 받는 현상 — 교과서가 <b>과대적합</b>이라 부르는 것 — 도 여기서 관찰합니다.</p>
   <div class="callout check">
@@ -261,6 +421,7 @@ st.dataframe(all_years[all_years["count"] &lt; 300].rename(columns={"mean": "평
 - 연평균기온을 2005년 이전은 공부용, 2005년부터는 시험용으로 나눠 줘.
 - 1차(직선), 3차, 9차 곡선을 각각 공부용으로만 맞추고,
   시험용에서 평균 몇 도나 빗나가는지와 2050년 예측값을 한 표로 보여 줘.
+- 공부용과 시험용에 각각 몇 개 연도가 들어갔는지도 화면에 적어 줘.
 - 반드시 학습에 안 쓴 시험용으로 채점해 줘.
   연도 숫자가 커서 고차 곡선이 불안하면 연도를 작은 수로 바꿔서 계산해 줘.</pre></div>
   <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 직선 대신 곡선을 쓰면 (main.py 끝에 이어 붙일 부분)
@@ -288,7 +449,173 @@ st.caption(f"학습 {len(공부)}개 연도 · 평가 {len(시험)}개 연도 ·
       <tr><td>9차</td><td>12.44℃</td><td>2,445℃</td></tr>
     </tbody>
   </table>
+  <figure class="interactive" data-fig="degsplit">
+    <div class="widget" data-w="degsplit">
+  <svg viewBox="0 0 720 430" role="img" aria-label="곡선의 차수를 1에서 9까지 바꾸면 학습 오차 막대는 줄고 평가 오차 막대는 커지는 것을 보이는 산점도와 막대 그림">
+    <rect x="56" y="20" width="640" height="230" fill="#fff" stroke="#e3ddcf"/>
+    <rect x="493.2" y="20" width="202.8" height="230" fill="#d64545" opacity="0.05"/>
+    <g stroke="#e3ddcf">
+      <line x1="56" y1="192.5" x2="696" y2="192.5"/>
+      <line x1="56" y1="135" x2="696" y2="135"/>
+      <line x1="56" y1="77.5" x2="696" y2="77.5"/>
+    </g>
+    <g font-size="14" fill="#6b7385" text-anchor="end">
+      <text x="50" y="197">10</text>
+      <text x="50" y="139.5">12</text>
+      <text x="50" y="82">14</text>
+      <text x="50" y="26">16℃</text>
+    </g>
+    <g stroke="#b9b3a5">
+      <line x1="56" y1="250" x2="696" y2="250"/>
+      <line x1="110.1" y1="250" x2="110.1" y2="253"/>
+      <line x1="245.3" y1="250" x2="245.3" y2="253"/>
+      <line x1="380.5" y1="250" x2="380.5" y2="253"/>
+      <line x1="515.7" y1="250" x2="515.7" y2="253"/>
+      <line x1="650.9" y1="250" x2="650.9" y2="253"/>
+    </g>
+    <g font-size="14" fill="#6b7385" text-anchor="middle">
+      <text x="110.1" y="264">1920</text>
+      <text x="245.3" y="264">1950</text>
+      <text x="380.5" y="264">1980</text>
+      <text x="515.7" y="264">2010</text>
+      <text x="650.9" y="264">2040</text>
+    </g>
+    <line x1="493.2" y1="20" x2="493.2" y2="250" stroke="#6b7385" stroke-width="1.2" stroke-dasharray="5 4"/>
+    <g class="train" fill="#2b7fd6" opacity="0.55"></g>
+    <g class="test" fill="#fff" stroke="#d64545" stroke-width="1.4"></g>
+    <g class="cvA" opacity="0">
+      <path class="cs" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linejoin="round"/>
+      <path class="cd" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="6 4"/>
+    </g>
+    <g class="cvB" opacity="0">
+      <path class="cs" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linejoin="round"/>
+      <path class="cd" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="6 4"/>
+    </g>
+    <g class="marks"></g>
+    <g font-size="14" stroke="#fff" stroke-width="3" paint-order="stroke">
+      <text class="nTr" x="68" y="38" fill="#2b7fd6">학습</text>
+      <text x="493.2" y="38" fill="#6b7385" text-anchor="middle">2005년</text>
+      <text class="nEv" x="656" y="38" fill="#d64545" text-anchor="end">평가</text>
+    </g>
+
+    <g stroke="#e3ddcf">
+      <line x1="156" y1="300" x2="156" y2="376"/>
+      <line x1="256" y1="300" x2="256" y2="376"/>
+    </g>
+    <line x1="56" y1="300" x2="56" y2="376" stroke="#b9b3a5"/>
+    <text x="56" y="296" font-size="14" font-weight="700" fill="#2b7fd6">학습 오차</text>
+    <rect class="bar1" x="56" y="302" width="0" height="20" rx="2" fill="#2b7fd6"/>
+    <text class="v1" x="64" y="317" font-size="14" fill="#2b7fd6"></text>
+    <text x="56" y="342" font-size="14" font-weight="700" fill="#d64545">평가 오차</text>
+    <rect class="bar2" x="56" y="350" width="0" height="20" rx="2" fill="#d64545"/>
+    <text class="v2" x="64" y="365" font-size="14" fill="#d64545"></text>
+    <g font-size="14" fill="#6b7385" text-anchor="middle">
+      <text x="56" y="392">0</text>
+      <text x="156" y="392">1</text>
+      <text x="256" y="392">2℃</text>
+    </g>
+
+    <text x="400" y="296" font-size="14" fill="#1c2230">차수별 평가 오차</text>
+    <text x="690" y="316" font-size="13" fill="#6b7385" text-anchor="end">1.2℃ 위는 잘림</text>
+    <line x1="410" y1="300" x2="690" y2="300" stroke="#e3ddcf" stroke-dasharray="4 4"/>
+    <line x1="410" y1="410" x2="690" y2="410" stroke="#b9b3a5"/>
+    <g font-size="13" fill="#6b7385" text-anchor="middle">
+      <text x="420" y="406">1</text>
+      <text x="484" y="406">3</text>
+      <text x="548" y="406">5</text>
+      <text x="612" y="406">7</text>
+      <text x="676" y="406">9</text>
+    </g>
+    <polyline class="trace" points="" fill="none" stroke="#d64545" stroke-width="1.4" opacity="0.5"/>
+    <g class="tdots"></g>
+  </svg>
+  <div class="wctl">
+    <label>곡선의 차수 <input type="range" min="1" max="9" step="1" value="1" data-k="deg" aria-label="곡선의 차수"></label>
+    <span class="wticks">1 · 3 · 5 · 7 · 9</span>
+    <span class="wout" data-t="out"></span>
+  </div>
+</div>
+    <figcaption>차수를 올리면 파란 학습 오차 막대는 조금씩 줄지만, 붉은 평가 오차 막대는 높은 차수에서 눈금을 벗어납니다. 오른쪽 궤적에서 2차의 평가 오차가 직선보다 작으므로, 차수와 평가 오차가 나란히 커지지는 않습니다.</figcaption>
+  </figure>
+
   <p>이 평가 자료에서 MAE는 1차 0.54℃, 3차 1.01℃, 9차 12.44℃입니다. 2050년 예측값은 각각 13.8℃, 19.1℃, 2,445℃였습니다. 이번 비교에서는 1차 모델의 평가 오차가 가장 작았지만, 모든 자료에서 직선이 가장 좋다는 뜻은 아닙니다. 학습 자료에 지나치게 맞추어 새로운 자료의 예측 성능이 떨어지는 현상을 <b>과대적합</b>이라고 합니다. 고차 다항식은 외삽에서 특히 불안정한 값을 낼 수 있습니다.</p>
+  <figure class="interactive" data-fig="nearfar">
+    <div class="widget" data-w="nearfar">
+  <svg viewBox="0 0 720 250" role="img" aria-label="예측 연도를 2006년에서 2050년까지 옮기며 1차와 9차 예측값이 실제 기온에서 얼마나 멀어지는지 보이는 그림">
+    <g stroke="#e3ddcf" stroke-width="1">
+      <line x1="52" y1="18" x2="420" y2="18"/>
+      <line x1="52" y1="67.3" x2="420" y2="67.3"/>
+      <line x1="52" y1="116.5" x2="420" y2="116.5"/>
+      <line x1="52" y1="165.8" x2="420" y2="165.8"/>
+    </g>
+    <line x1="52" y1="215" x2="420" y2="215" stroke="#b9b3a5" stroke-width="1.2"/>
+    <line x1="52" y1="18" x2="52" y2="215" stroke="#b9b3a5" stroke-width="1.2"/>
+    <g font-size="14" fill="#6b7385" text-anchor="end">
+      <text x="46" y="22">20℃</text>
+      <text x="46" y="71.3">17</text>
+      <text x="46" y="120.5">14</text>
+      <text x="46" y="169.8">11</text>
+      <text x="46" y="219">8</text>
+    </g>
+    <g font-size="14" fill="#6b7385" text-anchor="middle">
+      <text x="52" y="230" text-anchor="start">1995</text>
+      <text x="118.9" y="230">2005</text>
+      <text x="185.8" y="230">2015</text>
+      <text x="252.7" y="230">2025</text>
+      <text x="319.6" y="230">2035</text>
+      <text x="420" y="230" text-anchor="end">2050</text>
+    </g>
+    <line x1="118.9" y1="18" x2="118.9" y2="215" stroke="#6b7385" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="113" y="78" font-size="14" fill="#6b7385" text-anchor="end">2005년</text>
+    <path class="c1s" fill="none" stroke="#2b7fd6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="c1d" fill="none" stroke="#2b7fd6" stroke-width="2" stroke-dasharray="6 5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="c9s" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="c9d" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-dasharray="6 5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g class="ptr1" fill="#2b7fd6" opacity=".55"></g>
+    <g class="ptr2" fill="#ffffff" stroke="#d64545" stroke-width="1.6"></g>
+    <line class="hl" x1="252.7" y1="18" x2="252.7" y2="215" stroke="#333333" stroke-width="1.2"/>
+    <text class="hlab" x="252.7" y="31" font-size="14" font-weight="700" fill="#333333" text-anchor="middle">2025년</text>
+    <g class="ptr" fill="#b07a00">
+      <path class="ptri" d="M204.3 40 L209.8 50 L198.8 50 Z"/>
+      <text class="ptxt" x="215.8" y="50" font-size="14" font-weight="700">축 밖</text>
+    </g>
+    <g>
+      <line x1="58" y1="178" x2="80" y2="178" stroke="#2b7fd6" stroke-width="2"/>
+      <text x="86" y="183" font-size="14" fill="#6b7385">1차</text>
+      <line x1="58" y1="199" x2="80" y2="199" stroke="#b07a00" stroke-width="2.2"/>
+      <text x="86" y="204" font-size="14" fill="#6b7385">9차</text>
+    </g>
+    <line x1="432" y1="18" x2="432" y2="232" stroke="#e3ddcf" stroke-width="1"/>
+    <g stroke="#e3ddcf" stroke-width="1">
+      <line x1="440" y1="62" x2="700" y2="62"/>
+      <line x1="440" y1="106" x2="700" y2="106"/>
+      <line x1="440" y1="150" x2="700" y2="150"/>
+    </g>
+    <line x1="440" y1="194" x2="700" y2="194" stroke="#b9b3a5" stroke-width="1.2"/>
+    <g font-size="14.5" fill="#6b7385">
+      <text x="440" y="48">선택 연도</text>
+      <text x="440" y="92">1차(직선) 예측</text>
+      <text x="440" y="136">9차 예측</text>
+      <text x="440" y="180">실제</text>
+      <text x="440" y="222">9차 − 실제</text>
+    </g>
+    <g text-anchor="end" font-weight="700" style="font-variant-numeric:tabular-nums">
+      <text class="v0" x="700" y="48" font-size="20" fill="#1c2230">2025</text>
+      <text class="v1" x="700" y="92" font-size="20" fill="#2b7fd6">13.19℃</text>
+      <text class="v9" x="700" y="136" font-size="20" fill="#b07a00">69.45℃</text>
+      <text class="va" x="700" y="180" font-size="20" fill="#1c2230">14.15℃</text>
+      <text class="vd" x="700" y="222" font-size="20" fill="#d64545" style="transition:fill .25s">+55.30℃</text>
+    </g>
+  </svg>
+  <div class="wctl">
+    <label>예측 연도 <input type="range" min="2006" max="2050" step="1" value="2025" data-k="yr" aria-label="예측 연도"></label>
+    <span data-t="ticks">2006 · 2025 · 2050</span>
+    <span class="wout" data-t="out">2025년 · 1차 13.19℃ · 9차 69.45℃ · 실제 14.15℃ · 9차 − 실제 +55.30℃</span>
+  </div>
+</div>
+    <figcaption>예측 연도를 2006년부터 2050년까지 옮기면 2004년까지 학습한 1차 예측값과 9차 예측값이 함께 바뀝니다. 2006년에는 9차 예측 13.12℃와 실제 13.06℃의 차이가 +0.06℃이지만 2025년에는 9차 예측 69.45℃와 실제 14.15℃의 차이가 +55.30℃로 커지므로 예측 시점이 가깝다는 이유만으로 외삽을 믿을 수는 없습니다.</figcaption>
+  </figure>
+
   <div class="callout warn">
     <div class="h">⚠️ 2050년도 2200년도 외삽입니다</div>
     <p>도전 활동의 모델은 2005년 이전 자료로 학습했습니다. 따라서 2050년과 2200년의 예측은 모두 학습 범위 밖의 <b>외삽</b>입니다. 미래 시점이 비교적 가깝다는 이유만으로 정확하다고 볼 수 없습니다. 여기서 계산한 값은 회귀 모델을 범위 밖에 적용한 예시이며, 기후 예보를 뜻하지 않습니다.</p>
@@ -306,6 +633,21 @@ st.caption(f"학습 {len(공부)}개 연도 · 평가 {len(시험)}개 연도 ·
     </tbody>
   </table>
   <p>점수를 볼 때는 사용한 자료, 평가 방법, 비교 기준을 확인합니다. 10차시 분류에서는 한 종류만 예측하는 기준과 비교하고, 12차시 연관 분석에서는 우연히 함께 나타날 가능성을 고려합니다.</p>
+
+  <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
+  <h3>실제로 쓰이는 평가 지표</h3>
+  <p>오늘 수업에서 손으로 계산한 MAE, MSE, 결정계수는 단순한 연습 문제가 아닙니다. 산업과 공공 기관이 실제로 쓰는 평가 기준으로, 두 사례를 통해 같은 계산이 어떤 판단에 활용되는지 확인하겠습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>무엇을 예측·분류했나</th><th>이 차시 개념과의 연결</th></tr></thead>
+    <tbody>
+      <tr><td><b>넷플릭스 프라이즈</b><br>2006~2009<br><a href="https://en.wikipedia.org/wiki/Netflix_Prize" target="_blank" rel="noopener">대회 개요</a></td><td>2006년 넷플릭스는 자사 추천 알고리즘 시네매치의 예측 오차를 10퍼센트 줄이는 팀에게 상금 100만 달러를 주겠다고 공개 대회를 열었다. 평가 지표는 실젯값과 예측값의 제곱오차를 평균한 뒤 제곱근을 씌운 RMSE였고, 시네매치의 기준 점수는 0.9525, 대상 기준선은 0.8563이었다. 2009년 6월 26일 벨코어스 프래그매틱 카오스 팀이 0.8558을 기록해 10.05퍼센트 개선에 도달했다. 같은 해 9월 21일 대상을 받았다.</td><td>RMSE는 MSE의 제곱근이므로 8차시 활동지에서 계산한 제곱오차의 평균과 같은 지표다. 이 대회는 개선율을 계산할 때 기존 모델인 시네매치를 기준선으로 삼았는데, 이는 결정계수가 항상 평균값만 예측하는 모델을 기준선으로 삼아 비율을 계산하는 구조와 같다. 0.9525와 0.8558은 소수점 아래 둘째 자리에서 갈리는 차이인데도 상금 100만 달러가 걸렸다. 넷플릭스가 우승 알고리즘을 그대로 쓰지 않았다는 사실은 6절의 평가 점수의 한계와 연결된다.</td></tr>
+      <tr><td><b>미국 국립허리케인센터</b><br>진로 예보 오차 1970~2025<br><a href="https://www.nhc.noaa.gov/verification/verify5.shtml" target="_blank" rel="noopener">기관 검증 자료</a></td><td>미국 국립허리케인센터(NHC)는 1970년부터 해마다 예보한 태풍 위치와 실제 위치 사이의 거리를 모두 평균해 진로 예보 오차를 공개한다. 부호 없는 거리를 평균하므로 이 값은 8차시에 계산하는 평균절대오차(MAE)와 계산 방식이 같다. 2024년 대서양 지역 48시간 예보의 평균 오차는 45.4해리(약 84킬로미터)로, 12시간부터 120시간까지 모든 구간에서 역대 최소 기록이었다. 1970년대에는 같은 48시간 오차가 200해리를 넘는 해가 대부분이었다.</td><td>그래프의 점 하나가 그해에 발표한 모든 예보의 오차를 평균한 값 하나다. 활동지에서 표 한 장의 절대오차를 평균해 MAE를 구하는 과정을, 한 해 수백 건의 예보에 대해 55년 동안 반복한 결과가 이 그림이다. 세로축 단위가 해리이므로 값을 원래 단위로 그대로 읽을 수 있다는 MAE의 성질도 확인된다. 계열마다 추세선이 따로 그려져 있어, 예보 시간이 길수록 오차가 커진다는 점과 각 계열이 해마다 크게 흔들린다는 점을 함께 볼 수 있다.</td></tr>
+    </tbody>
+  </table>
+  <figure class="case"><img src="img/lesson08_case1.jpg" alt="넷플릭스 프라이즈 공식 리더보드 화면. 1위 벨코어스 프래그매틱 카오스의 점수 0.8558과 개선율 10.05가 검은 테두리로 강조되어 있고, 그 아래 붉은 띠에 대상 기준선 0.8563이 표시되어 있습니다." loading="lazy" style="width:100%;height:auto"><figcaption class="src">출처: Netflix Prize 공식 리더보드(2009-06-26 갱신) · RMSE 0.8558, 시네매치 대비 10.05% 개선 · netflixprize.com(현재 서비스 종료) 갈무리</figcaption></figure>
+  <figure class="case"><img src="img/lesson08_case2.jpg" alt="미국 국립허리케인센터의 대서양 진로 예보 연평균 오차 그래프. 가로축은 1970년부터 2025년까지의 연도, 세로축은 해리 단위 오차이며 24·48·72·96·120시간 예보가 각각 다른 색 선으로 그려져 있고 계열마다 아래로 내려가는 추세선이 겹쳐져 있습니다." loading="lazy" style="width:100%;height:auto"><figcaption class="src">출처: 미국 국립허리케인센터(NHC/NOAA) 예보 검증 자료 · 대서양 진로 예보 연평균 오차 1970–2025 · 세로축 단위 해리 · nhc.noaa.gov</figcaption></figure>
+  <p>넷플릭스는 2012년 기술 블로그에서 우승 알고리즘 전체를 서비스에 적용하지 않았다고 밝혔습니다. 정확도 향상분이 실제 시스템에 적용하는 비용에 미치지 못했기 때문입니다. 지표의 소수점 아래 둘째 자리 차이에 상금 100만 달러가 걸렸지만, 그 차이가 곧 서비스의 개선을 뜻하지는 않았습니다. 두 사례 모두 지표의 값 하나만으로는 판단을 마칠 수 없으며, 그 값이 어떤 자료에서 어떤 기준과 비교해 나온 것인지를 함께 확인해야 합니다.</p>
+  </div></details>
 
   <h2>7. 확인 문제</h2>
   <div class="quiz">
@@ -395,5 +737,6 @@ st.caption(f"학습 {len(공부)}개 연도 · 평가 {len(시험)}개 연도 ·
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
+<script src="assets/widgets08.js"></script>
 </body>
 </html>

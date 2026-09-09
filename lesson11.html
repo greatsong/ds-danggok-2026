@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>11차시 · 군집 — 스포츠 선수 유형 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb4">
+<link rel="stylesheet" href="assets/style.css?v=tb5">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -87,7 +87,7 @@
     <g class="km12-cg" data-k="t" data-x0="445" data-y0="195" data-x1="530.833333" data-y1="131.666667" data-x2="538.333333" data-y2="115" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#3ba6a0" stroke="#2b7a75" stroke-width="0.8">★</text></g>
   </g>
   <text x="350" y="243" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">"가깝다"는 두 점 사이의 거리(유클리디안 거리, 교과서 148쪽)로 잰다.</text>
-  <text x="350" y="261" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">점의 위치는 과정을 보이기 위한 모식도이며 실제 선수 기록의 좌표가 아니다.</text>
+  <text x="350" y="261" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">이 그림의 점은 알고리즘 진행을 보이기 위해 임의로 배치한 것이며 실제 선수 기록이 아니다.</text>
 </svg>
 <script>
 (function () {
@@ -182,17 +182,20 @@
   <p>데이터는 <b>2025 정규시즌 규정타석을 채운 타자 43명</b>의 공식 기록(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025.csv" target="_blank" rel="noopener"><code>kbo_hitters_2025.csv</code></a> — 원출처: <a href="https://www.koreabaseball.com" target="_blank" rel="noopener">KBO 공식 기록실</a>)입니다. 행 하나가 선수 한 명, 열은 홈런·도루·볼넷·삼진·출루율·장타율·타율 등 20개 항목입니다. 홈런 1위 디아즈(50개), 도루 1위 박해민(49개), 타율 1위 양의지(0.337)가 모두 이 표 안에 있습니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"타자 유형 군집" 스트림릿 앱을 만들어 줘. 파일 하나로.
-타자 기록 데이터(kbo_hitters_2025.csv)를 읽어서
-홈런, 도루, 볼넷, 삼진, 출루율, 장타율로 비슷한 선수끼리 묶어 줘.
-묶음의 개수는 슬라이더로 고르게 하고,
-묶음마다 평균 기록과 소속 선수 명단을 보여 줘.
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"타자 유형 군집" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로.
 데이터: https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025.csv
-기록 항목의 단위 차이를 고려해 표준화를 적용해 줘.
-같은 설정에서 결과를 비교할 수 있도록 초기화 조건을 고정해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 비슷한 선수끼리 묶는다
+이 파일의 열 이름은 선수명, 팀, 경기, 타석, 타수, 득점, 안타, 2루타, 3루타, 홈런, 타점, 도루, 볼넷, 사구, 삼진, 병살, 타율, 출루율, 장타율, OPS이고, 인코딩은 UTF-8이야.
+2025 정규시즌 규정타석을 채운 타자 43명의 기록이야.
+홈런, 도루, 볼넷, 삼진, 출루율, 장타율 여섯 항목으로 비슷한 선수끼리 묶어 줘.
+항목마다 단위와 변화 폭이 다르니 표준화를 적용해 줘.
+묶음의 개수는 2에서 6까지 슬라이더로 고르게 하고, 같은 설정에서 결과가 같도록 초기화 조건을 고정해 줘.
+묶음마다 평균 기록과 소속 선수 명단을 보여 주고, 묶음별 인원과 묶은 선수 수 43명을 화면에 적어 줘.
+가로축과 세로축에 쓸 기록 항목을 고르면 선수 43명을 점으로 찍고 묶음마다 색을 다르게 해 줘. 그래프는 plotly로 그려 줘.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 비슷한 선수끼리 묶는다
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
@@ -207,7 +210,7 @@ def load_data():
 
 
 df = load_data()
-k = st.slider("몇 묶음으로 나눌까요", 2, 5, 3)
+k = st.slider("몇 묶음으로 나눌까요", 2, 6, 3)
 
 X = df[FEATS]
 Xs = StandardScaler().fit_transform(X)
@@ -219,21 +222,41 @@ st.dataframe(df.groupby("묶음(표준화 후)")[FEATS].mean().round(2))
 
 st.subheader("묶음별 선수 명단")
 for g, part in df.groupby("묶음(표준화 후)"):
-    st.write(f"{g}번 묶음 ({len(part)}명): " + ", ".join(part["선수명"]))</pre></div></details>
+    st.write(f"{g}번 묶음 ({len(part)}명): " + ", ".join(part["선수명"]))
+
+st.subheader("두 항목으로 보는 산점도")
+c1, c2 = st.columns(2)
+xcol = c1.selectbox("가로축", FEATS, index=3)
+ycol = c2.selectbox("세로축", FEATS, index=0)
+fig = px.scatter(df, x=xcol, y=ycol, color=df["묶음(표준화 후)"].astype(str),
+                 hover_name="선수명", labels={"color": "묶음"})
+st.plotly_chart(fig, width="stretch")
+st.caption("묶은 선수 43명 · 2025 정규시즌 규정타석")</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+scikit-learn
+plotly</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 명단을 읽는다</span><br>
-      받은 코드를 <b>main.py</b> 파일 하나로 저장해 실행합니다. 오늘 앱은 화면이 하나입니다. k를 2에서 5까지 바꿔 봅니다. 묶음이 갈라지고 합쳐질 때마다 명단을 읽습니다 — 43명이라 전체를 눈으로 읽을 수 있습니다. 내가 아는 선수가 어느 묶음에 들어갔는지가 첫 번째 관찰 거리입니다.</li>
+      받은 코드를 <b>main.py</b>와 <b>requirements.txt</b> 두 파일로 저장해 실행합니다. 오늘 앱은 화면이 하나입니다. k를 2에서 6까지 바꿔 봅니다. 묶음이 갈라지고 합쳐질 때마다 명단을 읽습니다 — 43명이라 전체를 눈으로 읽을 수 있습니다. 내가 아는 선수가 어느 묶음에 들어갔는지가 첫 번째 관찰 거리입니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 표준화 실험</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>기록 항목들을 표준화한 결과와 원래 기록으로 묶은 결과를 만들고,
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>같은 여섯 항목을 표준화하지 않고 원래 기록 그대로 묶은 결과도 만들어서,
 표준화 전과 후의 묶음이 어떻게 달라졌는지 나란히 비교해 줘.
-잘 나뉜 정도를 나타내는 점수도 k마다 보여 줘.</pre></div>
+묶음이 달라진 선수의 이름을 목록으로 보여 주고, 몇 명인지도 적어 줘.
+잘 나뉜 정도를 나타내는 점수도 묶음 개수 2부터 6까지 표로 보여 주고, 점수 변화는 plotly 선 그래프로 그려 줘.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 표준화 전후 비교와 k별 점수
 st.subheader("표준화 전과 후, 그리고 k별 점수")
 st.dataframe(pd.crosstab(df["묶음(표준화 전)"], df["묶음(표준화 후)"]))
-scores = [{"k": kk,
-           "점수(실루엣)": round(silhouette_score(Xs, KMeans(n_clusters=kk, n_init=10, random_state=42).fit_predict(Xs)), 3)}
-          for kk in range(2, 6)]
-st.dataframe(pd.DataFrame(scores), hide_index=True)
+
+pair = df.groupby("묶음(표준화 전)")["묶음(표준화 후)"].agg(lambda s: s.mode()[0])
+moved = df[df["묶음(표준화 후)"] != df["묶음(표준화 전)"].map(pair)]
+st.write(f"묶음이 달라진 선수 {len(moved)}명: " + ", ".join(moved["선수명"]))
+
+scores = pd.DataFrame([{"k": kk,
+                        "점수(실루엣)": round(silhouette_score(Xs, KMeans(n_clusters=kk, n_init=10, random_state=42).fit_predict(Xs)), 3)}
+                       for kk in range(2, 7)])
+st.dataframe(scores, hide_index=True)
+st.plotly_chart(px.line(scores, x="k", y="점수(실루엣)", markers=True), width="stretch")
 st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 같지는 않습니다.")</pre></div></details>
     </li>
   </ol>
@@ -246,54 +269,118 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
     </ul>
   </div>
 
-  <div style="overflow-x:auto;margin:18px 0">
-    <svg viewBox="0 0 700 352" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="삼진과 장타율의 원래 단위를 비교한 뒤 각 항목의 평균에서 몇 표준편차 떨어졌는지로 세 군집의 평균 위치를 나타낸 그림">
-      <!-- 상단 — 표준화 전 -->
-      <text x="24" y="30" font-size="15" font-weight="800" fill="#3a2e1a">표준화 전 — 원래 단위의 자</text>
-      <text x="100" y="67" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">삼진</text>
-      <line x1="110" y1="62" x2="630" y2="62" stroke="#c9b990" stroke-width="2"/>
-      <line x1="110" y1="56" x2="110" y2="68" stroke="#c9b990" stroke-width="2"/>
-      <line x1="630" y1="56" x2="630" y2="68" stroke="#c9b990" stroke-width="2"/>
-      <text x="110" y="84" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
-      <text x="630" y="84" text-anchor="middle" font-size="11" fill="#9a8b6a">120</text>
-      <circle cx="425" cy="62" r="7" fill="#54a24b"/>
-      <circle cx="503" cy="62" r="7" fill="#f4b400"/>
-      <circle cx="581" cy="62" r="7" fill="#3ba6a0"/>
-      <text x="425" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯ 72.7</text>
-      <text x="503" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮ 90.6</text>
-      <text x="581" y="47" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰ 108.6</text>
-      <text x="100" y="121" text-anchor="end" font-size="13" font-weight="700" fill="#6b5836">장타율</text>
-      <line x1="110" y1="116" x2="420" y2="116" stroke="#c9b990" stroke-width="2"/>
-      <line x1="110" y1="110" x2="110" y2="122" stroke="#c9b990" stroke-width="2"/>
-      <line x1="420" y1="110" x2="420" y2="122" stroke="#c9b990" stroke-width="2"/>
-      <text x="110" y="138" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
-      <text x="420" y="138" text-anchor="middle" font-size="11" fill="#9a8b6a">0.6</text>
-      <circle cx="313" cy="116" r="7" fill="#54a24b"/>
-      <circle cx="332" cy="116" r="7" fill="#3ba6a0"/>
-      <circle cx="390" cy="116" r="7" fill="#f4b400"/>
-      <text x="299" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#54a24b">㉯ 0.393</text>
-      <text x="341" y="138" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">㉰ 0.429</text>
-      <text x="397" y="101" text-anchor="middle" font-size="12" font-weight="700" fill="#c28f00">㉮ 0.542</text>
-      <text x="350" y="168" text-anchor="middle" font-size="12.5" fill="#6b5836">삼진의 차이는 수십 단위, 장타율의 차이는 0.1 안팎 — 거리 계산은 큰 숫자가 지배한다.</text>
-      <line x1="24" y1="186" x2="676" y2="186" stroke="#f0e2bc" stroke-width="1.5"/>
-      <text x="24" y="210" font-size="15" font-weight="800" fill="#3a2e1a">표준화 후 — 평균 0, 표준편차 1</text>
-<text x="100" y="250" text-anchor="end" font-size="12">삼진</text><line x1="110" y1="246" x2="630" y2="246" stroke="#c9b990"/>
-<text x="110" y="264" text-anchor="middle" font-size="11">-2</text>
-<text x="370" y="264" text-anchor="middle" font-size="11">0</text>
-<text x="630" y="264" text-anchor="middle" font-size="11">2</text>
-<circle cx="286.9" cy="246" r="6" fill="#54a24b"/><text x="286.9" y="234" text-anchor="middle" font-size="11" fill="#54a24b">㉯</text>
-<circle cx="373.7" cy="246" r="6" fill="#c28f00"/><text x="373.7" y="234" text-anchor="middle" font-size="11" fill="#c28f00">㉮</text>
-<circle cx="461.4" cy="246" r="6" fill="#3ba6a0"/><text x="461.4" y="234" text-anchor="middle" font-size="11" fill="#3ba6a0">㉰</text>
-<text x="100" y="304" text-anchor="end" font-size="12">장타율</text><line x1="110" y1="300" x2="630" y2="300" stroke="#c9b990"/>
-<text x="110" y="318" text-anchor="middle" font-size="11">-2</text>
-<text x="370" y="318" text-anchor="middle" font-size="11">0</text>
-<text x="630" y="318" text-anchor="middle" font-size="11">2</text>
-<circle cx="290.5" cy="300" r="6" fill="#54a24b"/><text x="290.5" y="288" text-anchor="middle" font-size="11" fill="#54a24b">㉯</text>
-<circle cx="556.0" cy="300" r="6" fill="#c28f00"/><text x="556.0" y="288" text-anchor="middle" font-size="11" fill="#c28f00">㉮</text>
-<circle cx="354.8" cy="300" r="6" fill="#3ba6a0"/><text x="354.8" y="288" text-anchor="middle" font-size="11" fill="#3ba6a0">㉰</text>
-<text x="350" y="345" text-anchor="middle" font-size="11">㉮·㉯·㉰는 아래 표의 군집 평균이다. 0~1 범위로 제한되지 않는다.</text>
-    </svg>
-  </div>
+  
+  <figure class="interactive" data-fig="ruler">
+    <div class="widget" data-w="ruler" style="overflow-x:auto">
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KBO 타자 43명의 삼진과 출루율 산점도. 원래 단위와 표준화 두 눈금, 선택 선수와 최근접 선수를 잇는 선" style="min-width:640px">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">자 바꾸기 · 삼진과 출루율</text>
+  <!-- 격자·눈금 숫자(모드별 두 겹, 전환 시 opacity 교차) -->
+  <g class="gr gr-raw"></g>
+  <g class="gr gr-std" opacity="0"></g>
+  <path d="M76 48 V300 H452" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+  <text class="axx" x="264" y="326" font-size="13" fill="#6b7385" text-anchor="middle">삼진(개)</text>
+  <text class="axy" x="26" y="174" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 26 174)">출루율</text>
+  <!-- 연결선 → 점 43개 → 선택·최근접 덧점 → 이름 라벨 -->
+  <line class="link" x1="76" y1="300" x2="76" y2="300" stroke="#2f9e5f" stroke-width="1.6" stroke-dasharray="4 3" opacity="0"/>
+  <g class="pts"></g>
+  <circle class="dot-near" cx="-30" cy="-30" r="7" fill="#2f9e5f"/>
+  <circle class="dot-sel" cx="-30" cy="-30" r="7" fill="#b07a00"/>
+  <g class="labs"></g>
+  <!-- 오른쪽 패널 -->
+  <rect x="468" y="48" width="236" height="252" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1"/>
+  <text class="p-sel" x="480" y="76" font-size="14" font-weight="700" fill="#1c2230">선택 디아즈</text>
+  <text class="p-near" x="480" y="100" font-size="14" font-weight="700" fill="#2f9e5f">최근접 고명준</text>
+  <text x="480" y="132" font-size="13" fill="#6b7385">삼진 차</text>
+  <text class="v-k" x="692" y="132" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">1</text>
+  <text x="480" y="160" font-size="13" fill="#6b7385">출루율 차</text>
+  <text class="v-o" x="692" y="160" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">0.075</text>
+  <text x="480" y="188" font-size="13" fill="#6b7385">거리</text>
+  <text class="v-d" x="692" y="188" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">1.003</text>
+  <text x="480" y="216" font-size="13" fill="#6b7385">거리 제곱에서 삼진의 몫</text>
+  <rect x="480" y="232" width="156" height="18" fill="#e3ddcf"/>
+  <rect class="bar" x="480" y="232" width="155.1" height="18" fill="#b07a00"/>
+  <text class="v-s" x="692" y="246" font-size="14" font-weight="700" fill="#b07a00" text-anchor="end">99.4%</text>
+  <text x="480" y="272" font-size="13" fill="#6b7385">폭 맞추기</text>
+  <text x="480" y="292" font-size="13" fill="#6b7385">항목 중요도 결정 아님</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-mode="raw" aria-pressed="true">원래 단위</button>
+  <button class="wbtn" type="button" data-mode="std" aria-pressed="false">표준화</button>
+  <button class="wbtn on" type="button" data-link="1" aria-pressed="true">가장 가까운 선수 잇기</button>
+  <span class="wout">최근접 바뀜 35 / 43</span>
+</div>
+</div>
+    <figcaption>눈금을 바꾸면 가장 가까운 선수가 달라집니다. 같은 43명, 같은 기록입니다.</figcaption>
+  </figure>
+
+  <figure class="interactive" data-fig="stdswitch">
+    <div class="widget" data-w="stdswitch" style="overflow-x:auto">
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="표준화 스위치: 같은 여섯 항목 k=3 군집을 원래 단위와 표준화 두 가지 자로 나눈 결과 비교" style="min-width:640px">
+<text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">표준화 스위치 · 여섯 항목</text>
+<g stroke="#e3ddcf" stroke-width="1">
+<line x1="68" y1="56.6" x2="438" y2="56.6"/>
+<line x1="68" y1="99.7" x2="438" y2="99.7"/>
+<line x1="68" y1="142.8" x2="438" y2="142.8"/>
+<line x1="68" y1="185.8" x2="438" y2="185.8"/>
+<line x1="68" y1="228.9" x2="438" y2="228.9"/>
+<line x1="150.2" y1="48" x2="150.2" y2="272"/>
+<line x1="232.4" y1="48" x2="232.4" y2="272"/>
+<line x1="314.7" y1="48" x2="314.7" y2="272"/>
+<line x1="396.9" y1="48" x2="396.9" y2="272"/>
+</g>
+<path d="M68,48 V272 H438" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+<g font-size="12" fill="#6b7385">
+<text x="60" y="61.1" text-anchor="end">50</text>
+<text x="60" y="104.2" text-anchor="end">40</text>
+<text x="60" y="147.3" text-anchor="end">30</text>
+<text x="60" y="190.3" text-anchor="end">20</text>
+<text x="60" y="233.4" text-anchor="end">10</text>
+<text x="60" y="276.5" text-anchor="end">0</text>
+<text x="68" y="290" text-anchor="middle">30</text>
+<text x="150.2" y="290" text-anchor="middle">60</text>
+<text x="232.4" y="290" text-anchor="middle">90</text>
+<text x="314.7" y="290" text-anchor="middle">120</text>
+<text x="396.9" y="290" text-anchor="middle">150</text>
+</g>
+<text x="30" y="160" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 30 160)">홈런(개)</text>
+<text x="434" y="264" font-size="13" fill="#6b7385" text-anchor="end">삼진(개)</text>
+<g class="pts"></g>
+<g class="rings" fill="none" stroke="#1c2230" stroke-width="2.5" opacity="0"></g>
+<circle class="selring" cx="-20" cy="-20" r="9" fill="none" stroke="#1c2230" stroke-width="1.5"/>
+<text class="lgRaw" x="68" y="306" font-size="13" fill="#1c2230"></text>
+<text class="lgStd" x="68" y="306" font-size="13" fill="#1c2230" opacity="0"></text>
+<rect x="454" y="48" width="250" height="258" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1"/>
+<text class="pname" x="470" y="74" font-size="15" font-weight="700" fill="#1c2230">양의지</text>
+<g font-size="12" fill="#6b7385">
+<text x="624" y="96" text-anchor="end">원래값</text>
+<text x="692" y="96" text-anchor="end">표준화값</text>
+</g>
+<g class="prow"><text x="470" y="120" font-size="13" fill="#6b7385">홈런</text><text class="pv" x="624" y="120" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">20</text><text class="pz" x="692" y="120" font-size="14" fill="#2b7fd6" text-anchor="end">0.52</text></g>
+<g class="prow"><text x="470" y="144" font-size="13" fill="#6b7385">도루</text><text class="pv" x="624" y="144" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">4</text><text class="pz" x="692" y="144" font-size="14" fill="#2b7fd6" text-anchor="end">−0.55</text></g>
+<g class="prow"><text x="470" y="168" font-size="13" fill="#6b7385">볼넷</text><text class="pv" x="624" y="168" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">50</text><text class="pz" x="692" y="168" font-size="14" fill="#2b7fd6" text-anchor="end">−0.20</text></g>
+<g class="prow"><text x="470" y="192" font-size="13" fill="#6b7385">삼진</text><text class="pv" x="624" y="192" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">63</text><text class="pz" x="692" y="192" font-size="14" fill="#2b7fd6" text-anchor="end">−1.00</text></g>
+<g class="prow"><text x="470" y="216" font-size="13" fill="#6b7385">출루율</text><text class="pv" x="624" y="216" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">0.406</text><text class="pz" x="692" y="216" font-size="14" fill="#2b7fd6" text-anchor="end">1.37</text></g>
+<g class="prow"><text x="470" y="240" font-size="13" fill="#6b7385">장타율</text><text class="pv" x="624" y="240" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">0.533</text><text class="pz" x="692" y="240" font-size="14" fill="#2b7fd6" text-anchor="end">1.31</text></g>
+<text class="passign" x="470" y="272" font-size="13" font-weight="700" fill="#b07a00">원래 단위 ③ → 표준화 ㉮ · 바뀜</text>
+<text x="470" y="294" font-size="12" fill="#6b7385">같은 값 · 눈금만 다름</text>
+<text x="68" y="330" font-size="13" font-weight="700" fill="#1c2230">거리에 실린 몫 · 전체 쌍의 거리 제곱 합계 기준</text>
+<g class="barA"></g>
+<text class="ovA" x="68" y="378" font-size="12" fill="#6b7385"></text>
+<text x="68" y="392" font-size="13" font-weight="700" fill="#1c2230">묶음을 가른 몫 · 묶음 평균이 전체 평균에서 떨어진 정도</text>
+<text class="ovB" x="704" y="392" font-size="12" fill="#6b7385" text-anchor="end"></text>
+<g class="barB"></g>
+<text x="68" y="434" font-size="12" fill="#6b7385">위 막대는 자의 폭을 맞춘 결과 · 아래 막대는 표준화 뒤에도 고르지 않음</text>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-m="raw">원래 단위</button>
+<button class="wbtn" type="button" data-m="std">표준화</button>
+<button class="wbtn" type="button" data-t="moved">바뀐 13명만 보기</button>
+<span class="wout">묶음 바뀐 선수 13 / 43</span>
+</div>
+</div>
+    <figcaption>자를 바꾸면 13명이 다른 묶음으로 갑니다. 두 결과 가운데 하나가 틀린 것이 아닙니다.</figcaption>
+  </figure>
+
 
   <h2>3. 활동 — 묶음에 이름 붙이기</h2>
   <p>예시 코드와 같은 조건으로 만든 k=3 군집의 평균 기록입니다. 코드의 묶음 번호 1·2·0을 이 표에서는 각각 ㉮·㉯·㉰로 표시했습니다. 번호에는 순위의 뜻이 없습니다. 각 묶음에 유형 이름을 붙이고 평균 기록과 선수 명단을 근거로 설명합니다.</p>
@@ -305,44 +392,56 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
       <tr><td>㉰</td><td>16</td><td>16.8</td><td>5.4</td><td><b>108.6</b></td><td>0.429</td><td>오지환 · 박동원</td><td>______</td></tr>
     </tbody>
   </table>
-  <div style="overflow-x:auto;margin:18px 0">
-    <svg viewBox="0 0 700 420" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="홈런 평균과 도루 평균 두 축 위에 세 묶음의 평균 위치를 나타낸 산점도. 세 묶음이 서로 다른 방향으로 갈라져 있다">
-      <!-- 축 -->
-      <line x1="90" y1="40" x2="90" y2="340" stroke="#c9b990" stroke-width="2"/>
-      <line x1="90" y1="340" x2="640" y2="340" stroke="#c9b990" stroke-width="2"/>
-      <line x1="273" y1="340" x2="273" y2="346" stroke="#c9b990" stroke-width="2"/>
-      <line x1="457" y1="340" x2="457" y2="346" stroke="#c9b990" stroke-width="2"/>
-      <line x1="640" y1="340" x2="640" y2="346" stroke="#c9b990" stroke-width="2"/>
-      <line x1="84" y1="190" x2="90" y2="190" stroke="#c9b990" stroke-width="2"/>
-      <line x1="84" y1="40" x2="90" y2="40" stroke="#c9b990" stroke-width="2"/>
-      <text x="90" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">0</text>
-      <text x="273" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">10</text>
-      <text x="457" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">20</text>
-      <text x="640" y="360" text-anchor="middle" font-size="11" fill="#9a8b6a">30</text>
-      <text x="78" y="344" text-anchor="end" font-size="11" fill="#9a8b6a">0</text>
-      <text x="78" y="194" text-anchor="end" font-size="11" fill="#9a8b6a">10</text>
-      <text x="78" y="44" text-anchor="end" font-size="11" fill="#9a8b6a">20</text>
-      <text x="365" y="386" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5836">홈런(평균)</text>
-      <text x="34" y="190" text-anchor="middle" font-size="13" font-weight="700" fill="#6b5836" transform="rotate(-90 34 190)">도루(평균)</text>
-      <!-- 묶음 평균 점 3개 (크기는 인원에 비례) -->
-      <circle cx="207" cy="84" r="25" fill="#54a24b" fill-opacity="0.8" stroke="#3e7d38" stroke-width="1.5"/>
-      <circle cx="398" cy="259" r="24" fill="#3ba6a0" fill-opacity="0.8" stroke="#2b7a75" stroke-width="1.5"/>
-      <circle cx="596" cy="237" r="18" fill="#f4b400" fill-opacity="0.85" stroke="#c28f00" stroke-width="1.5"/>
-      <!-- 라벨 -->
-      <text x="242" y="80" font-size="12.5" font-weight="700" fill="#3e7d38">㉯ 18명 — 박해민 · 정수빈 · 신민재</text>
-      <text x="242" y="98" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
-      <text x="432" y="255" font-size="12.5" font-weight="700" fill="#2b7a75">㉰ 16명 — 오지환 · 박동원</text>
-      <text x="432" y="273" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
-      <text x="570" y="209" text-anchor="end" font-size="12.5" font-weight="700" fill="#c28f00">㉮ 9명 — 양의지 · 구자욱 · 디아즈</text>
-      <text x="570" y="227" text-anchor="end" font-size="12.5" fill="#6b5836">유형 이름은? ______</text>
-      <text x="365" y="412" text-anchor="middle" font-size="12" fill="#9a8b6a">홈런과 도루 두 축만으로도 세 묶음의 방향이 갈린다 — 이름 칸은 여러분의 몫이다.</text>
-    </svg>
+  
+  <figure class="interactive" data-fig="kpick">
+    <div class="widget" data-w="kpick">
+  <svg viewBox="0 0 720 450" style="min-width:640px">
+    <text x="150" y="26" font-size="14" fill="#6b7385">43명 실루엣</text>
+    <text x="450" y="36" font-size="13" fill="#6b7385">k 선택은 사람 몫 · 자동 추천 없음</text>
+    <text x="210" y="42" font-size="12" text-anchor="middle" fill="#6b7385">0</text>
+    <text class="meantext" x="317.2" y="42" font-size="13" text-anchor="middle" fill="#b07a00">평균 0.268</text>
+    <text x="170" y="414" font-size="12" text-anchor="middle" fill="#6b7385">−0.1</text>
+    <text x="410" y="414" font-size="12" text-anchor="middle" fill="#6b7385">0.5</text>
+    <g class="cards"></g>
+    <g class="bars"></g>
+    <g class="glab"></g>
+    <line x1="210" y1="46" x2="210" y2="402" stroke="#6b7385"/>
+    <line class="meanline" x1="317.2" y1="46" x2="317.2" y2="402" stroke="#b07a00" stroke-width="1" stroke-dasharray="3 3"/>
+    <text class="pinname" x="0" y="0" font-size="13" fill="#1c2230" display="none"></text>
+    <text class="readout" x="150" y="430" font-size="13" fill="#1c2230">막대 클릭 → 선수 한 명 고정 · k 변경 시 소속 이동 확인</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-k="2">★ k=2 · 0.268</button>
+    <button class="wbtn" type="button" data-k="3">k=3 · 0.262</button>
+    <button class="wbtn" type="button" data-k="4">k=4 · 0.222</button>
+    <button class="wbtn" type="button" data-k="5">k=5 · 0.230</button>
+    <button class="wbtn" type="button" data-k="6">k=6 · 0.188</button>
+    <span class="wout">평균 0.268 · 음수 1명 · 가장 작은 묶음 10명</span>
   </div>
+</div>
+    <figcaption>점수는 k=2가 가장 높습니다. 묶음 셋의 명단이 더 읽히는지는 사람이 판단합니다.</figcaption>
+  </figure>
+
   <div class="tbquote">
     <div class="h">📖 교과서의 한 줄 <span class="src">『데이터 과학』 154쪽</span></div>
     <p class="q">"군집 분석 결과를 해석하기 위해서는 데이터에 대한 깊은 이해가 필요하다." <span class="src">(154쪽)</span></p>
     <p class="t">→ 알고리즘은 묶음의 번호까지만 만든다. 이름과 의미는 야구를 아는 사람이 붙인다.</p>
   </div>
+
+  <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
+  <h3>정답표 없이 묶고 이름을 사람이 붙인 두 사례</h3>
+  <p>두 사례 모두 정답 라벨 없이 기록만으로 대상을 묶고 묶음의 이름은 사람이 붙였다는 점에서 오늘 실습과 같은 순서를 밟았습니다. 하나는 농구 선수의 기록을, 다른 하나는 음악의 음향 특성을 기준으로 묶었다는 차이가 있습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>무엇을 묶었나</th><th>사람이 정한 것</th></tr></thead>
+    <tbody>
+      <tr><td><b>NBA 포지션 재정의</b><br>MIT 슬론 스포츠 애널리틱스 콘퍼런스 2012</td><td>포지션 정보를 쓰지 않고 분당 기록 7가지(득점·리바운드·어시스트·스틸·블록·턴오버·파울)로 한 시즌 NBA 선수들을 묶었다. 묶는 방법은 k-평균이 아니라 위상 데이터 분석이다</td><td>묶음의 개수 13과 묶음 이름은 사람이 정했다. 이름 예시로는 득점형 리바운더(노비츠키), 페인트존 수비수(챈들러), 유일무이형(로즈·하워드)이 있다</td></tr>
+      <tr><td><b>음악 장르 지도</b><br>Every Noise at Once, 2013~</td><td>템포와 음량, 에너지, 분위기 같은 음향 특성과 청취 기록이 비슷한 아티스트를 묶어 장르를 만들었다</td><td>장르 이름과 개수는 지도 제작자 글렌 맥도널드가 직접 정했다</td></tr>
+    </tbody>
+  </table>
+  <figure class="case" style="margin:16px 0"><img src="img/lesson11_case1.png" loading="lazy" alt="어두운 배경 위에 점과 선이 이어진 그물 모양 지도. 분당 득점이 낮은 쪽은 초록, 높은 쪽은 주황과 빨강으로 표시되고 갈라진 가지마다 Role Player, Scoring Rebounder, Paint Protector, One-of-a-kind 같은 유형 이름 13개가 붙어 있습니다." style="width:100%;max-width:560px;display:block;border:1px solid #e3ddcf;border-radius:6px"><figcaption style="font-size:.85rem;color:#6b5836;margin-top:6px">그림: 무투 알라가판, 「From 5 to 13: Redefining the Positions in Basketball」, MIT 슬론 스포츠 애널리틱스 콘퍼런스 2012 (<a href="https://www.sloansportsconference.com/research-papers/from-5-to-13-redefining-the-positions-in-basketball" target="_blank" rel="noopener">발표 자료</a>)</figcaption></figure>
+  <figure class="case" style="margin:16px 0"><img src="img/lesson11_case2.png" loading="lazy" alt="흰 바탕에 장르 이름 수천 개가 흩어진 화면. 왼쪽에는 metalcore와 thrash metal이 붉은색으로, 가운데와 오른쪽 아래에는 k-pop과 j-pop, trap이 노란색과 주황색으로 모여 있습니다." style="width:100%;max-width:560px;display:block;border:1px solid #e3ddcf;border-radius:6px"><figcaption style="font-size:.85rem;color:#6b5836;margin-top:6px">화면: <a href="https://everynoise.com/" target="_blank" rel="noopener">everynoise.com</a> — 스포티파이 장르 6,291개(2023년 12월 기준, 아티스트 약 100만 명)를 소리의 비슷함으로 배치한 지도, 글렌 맥도널드 제작</figcaption></figure>
+  <p>두 사례의 공통점은 정답 라벨을 쓰지 않고 기록 사이의 비슷한 정도로 묶으며 묶음의 개수와 이름을 사람이 정한다는 점입니다. 3절에서 세 묶음에 이름을 붙이는 일은 실제 분석에서도 사람의 몫입니다. 묶는 기준으로 어떤 기록을 쓰느냐에 따라 결과가 달라지며 이 점은 2절의 표준화 실험과 이어집니다.</p>
+  </div></details>
 
   <h3>시연 — 군집과 분류는 다르다 (축구 선수 800명)</h3>
   <p>선생님 화면으로 한 장면을 더 봅니다. 축구 게임(EA FC)의 필드플레이어 800명을 능력치 6종으로 묶으면, k=2에서 공격형(메시·음바페)과 수비형(판다이크·캉테)으로 나뉩니다. 그런데 이 묶음을 실제 포지션(공격수/미드필더/수비수)과 대조하면 겹치되 일치하지는 않습니다 — 공격수처럼 뛰는 미드필더, 수비형 공격수가 섞여 있기 때문입니다. 교과서 155쪽의 참고가 말하는 그대로입니다: 군집은 데이터의 유사도로, 분류는 정해진 체계로 나눕니다. 둘의 결과는 다를 수 있습니다. 덧붙여 이 능력치는 게임 회사가 매긴 주관적 평가라는 점도 기억해 둡니다 — 데이터의 출처를 따지는 습관(14차시)은 여기서도 유효합니다.</p>
@@ -361,6 +460,48 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
 
   <h2>4. 개념 정리 — 정답이 없다는 것의 뜻</h2>
   <p>회귀·분류는 예측과 정답을 비교하지만, 이 군집 실습에는 정답 범주가 없습니다. 실루엣 점수는 같은 군집 안에서의 거리와 가까운 다른 군집까지의 거리를 비교합니다. 값의 범위는 −1부터 1이며, 높을수록 해당 거리 기준에서 잘 구분된 편입니다. 점수만으로 선수 유형의 의미를 확정할 수는 없습니다. 특성 선택, 표준화, k, 초기화 조건을 함께 기록하고 해석의 근거를 설명합니다.</p>
+  <figure class="interactive" data-fig="sildist">
+    <div class="widget" data-w="sildist">
+  <svg viewBox="0 0 720 350" style="min-width:640px" role="img" aria-label="선수 한 명의 실루엣을 내 묶음 평균 거리 a와 가장 가까운 다른 묶음 평균 거리 b로 뜯어본 그림. 시작 자리 세 벌을 바꾸면 묶음 소속과 점수가 바뀜">
+    <text x="20" y="32" font-size="15" font-weight="700" fill="#1c2230">실루엣 = (b − a) ÷ 둘 중 큰 값</text>
+    <text class="hd-name" x="700" y="32" text-anchor="end" font-size="15" font-weight="700" fill="#1c2230">문현빈</text>
+    <g class="lanes"></g>
+    <g class="ticks"></g>
+    <g class="means"></g>
+    <g class="self"></g>
+    <line x1="150" y1="210" x2="660" y2="210" stroke="#6b7385" stroke-width="1.2"/>
+    <g stroke="#6b7385" stroke-width="1">
+      <line x1="150" y1="210" x2="150" y2="216"/>
+      <line x1="284.2" y1="210" x2="284.2" y2="216"/>
+      <line x1="418.4" y1="210" x2="418.4" y2="216"/>
+      <line x1="552.6" y1="210" x2="552.6" y2="216"/>
+    </g>
+    <g font-size="12" fill="#6b7385" text-anchor="middle">
+      <text x="150" y="228">0</text>
+      <text x="284.2" y="228">2</text>
+      <text x="418.4" y="228">4</text>
+      <text x="552.6" y="228">6</text>
+    </g>
+    <text x="700" y="228" text-anchor="end" font-size="13" fill="#6b7385">표준화 6항목 거리</text>
+    <text class="calc" x="150" y="246" font-size="15" fill="#1c2230"></text>
+    <text x="20" y="262" font-size="13" fill="#6b7385">같은 데이터 · 같은 k=3 · 시작 자리만 다름</text>
+    <g class="runtable"></g>
+    <text x="20" y="344" font-size="12" fill="#6b7385">빈도는 무작위 시작 400회 기준 제작 시점 실측 · 예시 코드는 여러 번 시작해 가장 나은 결과 선택</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn" type="button" data-nav="-1" aria-label="앞 선수">◀</button>
+    <button class="wbtn" type="button" data-nav="1" aria-label="뒤 선수">▶</button>
+    <button class="wbtn" type="button" data-jump="min">가장 애매</button>
+    <button class="wbtn" type="button" data-jump="max">가장 뚜렷</button>
+    <button class="wbtn on" type="button" data-run="0" aria-label="시작 자리 1">①</button>
+    <button class="wbtn" type="button" data-run="1" aria-label="시작 자리 2">②</button>
+    <button class="wbtn" type="button" data-run="2" aria-label="시작 자리 3">③</button>
+    <span class="wout">a 2.437 · b 2.502 · s +0.026</span>
+  </div>
+</div>
+    <figcaption>같은 데이터, 같은 k=3이라도 시작 자리에 따라 점수와 명단이 달라집니다. 가장 자주 나오는 결과가 가장 점수 높은 결과는 아닙니다.</figcaption>
+  </figure>
+
 
   <h2>5. 확인 문제</h2>
   <div class="quiz">
@@ -413,5 +554,6 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
+<script src="assets/widgets11.js"></script>
 </body>
 </html>

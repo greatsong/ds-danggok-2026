@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>7차시 · 다중 선형회귀 — 영화 흥행 예측 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb4">
+<link rel="stylesheet" href="assets/style.css?v=tb6">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -53,6 +53,107 @@
     <p class="t">→ 독립 변수가 여러 개면 다중 회귀. 그리고 모델의 점수는 학습에 쓰지 않은 문제(테스트 데이터)로 매겨야 믿을 수 있다.</p>
   </div>
   <p>단순 선형회귀는 독립 변수 하나로 예측합니다. 다중 선형회귀는 여러 독립 변수에 각각 가중치를 곱한 뒤 더하고, 절편을 더해 예측합니다. 독립 변수가 둘이면 관계를 평면으로 나타낼 수 있습니다. 가중치는 다른 변수의 값이 같을 때 해당 변수가 1 증가하면 예측값이 얼마나 달라지는지를 나타냅니다. <b>변수의 단위가 다르면 가중치 크기만으로 중요도를 비교할 수 없습니다.</b></p>
+  <div class="situation" data-sit="s08-collinear-coef">
+    <div class="sit-h"><span class="num">상황 8</span><span class="t">겹치는 두 변수 · 계수를 읽는 법</span></div>
+    <p class="intuition">스크린 수와 상영 횟수가 거의 비례해 216편이 바닥면의 좁은 띠 하나 위에만 놓이고, 그 결과 스크린 수 계수가 혼자 넣을 때의 +932에서 함께 넣을 때 −4,385로 뒤집힙니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s08-collinear-coef.png" alt="겹치는 두 변수 · 계수를 읽는 법"></div>
+    <ul class="reading"><li>216편이 좁은 띠 위에만 있습니다.</li><li>띠 바깥에서의 평면 높이는 관측으로 뒷받침되지 않습니다.</li><li>원래 단위에서는 성수기 계수 −37,977이 가장 커 보이지만 성수기는 0 또는 1이고 스크린 수는 수백 단위입니다.</li><li>표준화하면 순서가 뒤집혀 성수기의 영향이 가장 작습니다.</li><li>스크린 수 계수를 상영 횟수 계수와 띠의 기울기로 되돌리면 −4,385.22 + 1,650.08 × 3.2225 = 932.18이 되어 변수 하나만 썼을 때의 기울기와 같습니다.</li><li>두 계수는 따로 읽을 수 없습니다.</li><li>참고로 시험용 66편을 떼는 시작 위치를 0번째에서 9번째까지 옮기면 스크린 수 계수는 −2,325에서 −4,459, 평가 R²는 −0.080에서 +0.447까지 움직입니다.</li><li>부호는 열 번 모두 같습니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>두 변수가 얼마나 겹치는 정보인지, 그리고 계수를 어떻게 읽어야 하는지 보고 싶어. 먼저 첫 관측일 스크린 수를 가로축, 첫 관측일 상영 횟수를 세로축에 둔 산점도를 그리고 점들이 거의 직선을 이루는지 보이게 해 줘. 그 직선의 기울기와 두 변수의 상관계수를 숫자로 적어 줘. 다음으로 스크린 수만 쓴 모델, 상영 횟수만 쓴 모델, 둘을 함께 쓴 모델, 여기에 성수기 개봉까지 넣은 모델 네 가지의 계수와 절편과 시험용 점수를 표로 보여 주고, 계수는 0을 가운데 두고 좌우로 뻗는 막대그래프로 그려서 부호가 바뀌는 변수가 눈에 띄게 해 줘. 마지막으로 세 변수를 평균 0 표준편차 1로 맞춘 다음 다시 학습해 얻은 계수도 같은 방식의 막대로 그려서 옆에 나란히 붙여 줘. 표준화 기준은 학습용 영화에서만 구해 시험용에도 그대로 적용해 줘. 막대마다 그 변수의 표준편차를 함께 적어 줘. 그래프는 plotly로 그려 줘. 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+  <div class="situation" data-sit="s04-slice-hold">
+    <div class="sit-h"><span class="num">상황 4</span><span class="t">단면 · 다른 변수가 같을 때의 뜻</span></div>
+    <p class="intuition">상영 횟수를 한 값에 고정하고 평면을 세로로 자르면 직선 하나가 나오며, 그 직선의 기울기가 곧 '다른 변수의 값이 같을 때'의 계수입니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s04-slice-hold.png" alt="단면 · 다른 변수가 같을 때의 뜻"></div>
+    <ul class="reading"><li>슬라이더를 어디에 두어도 단면 직선의 기울기는 −4,385로 같습니다.</li><li>절편만 올라갑니다.</li><li>이 −4,385는 상영 횟수가 같은 영화끼리 비교할 때의 값입니다.</li><li>상영 횟수를 함께 늘리는 상황에는 적용되지 않습니다.</li><li>점선(변수 하나)은 올라가고 실선(변수 둘)은 내려갑니다.</li><li>같은 데이터에서 두 부호가 모두 나옵니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>평면을 한 방향으로 잘라서 보여 줘. 첫 관측일 상영 횟수를 슬라이더로 한 값에 고정하고, 그 상태에서 스크린 수만 0관에서 600관까지 움직였을 때의 예측 관객 수를 선 그래프로 그려 줘. 슬라이더 범위는 100회부터 3,000회까지야. 같은 그래프에 스크린 수 하나만 썼을 때의 예측 직선도 다른 색 점선으로 함께 그려서 두 선을 비교하게 해 줘. 두 선의 기울기를 각각 숫자로 적고 0명 자리에 가로 기준선을 그어 줘. 슬라이더를 움직였을 때 단면 직선의 기울기가 달라지는지 그대로인지도 화면에 적어 줘. 상영 횟수가 고정한 값의 앞뒤 20퍼센트 안에 드는 영화만 점으로 함께 찍어 주고 몇 편인지도 적어 줘. 그래프는 plotly로 그려 줘. 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+  <div class="situation" data-sit="s03-plane-two-var">
+    <div class="sit-h"><span class="num">상황 3</span><span class="t">변수 둘 · 3차원 산점도 위의 평면</span></div>
+    <p class="intuition">변수가 둘이면 예측은 직선이 아니라 평면이며, 한 영화의 예측값은 바닥면의 좌표 (스크린 수, 상영 횟수)에서 평면까지 올라간 높이입니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s03-plane-two-var.png" alt="변수 둘 · 3차원 산점도 위의 평면"></div>
+    <ul class="reading"><li>예측값은 바닥 좌표에서 평면까지의 높이입니다.</li><li>변수가 둘이면 두 좌표가 모두 있어야 높이가 정해집니다.</li><li>스크린 수 계수는 −4,385로 음수입니다.</li><li>변수 하나만 썼을 때의 +932와 부호가 반대입니다.</li><li>변수를 하나 더 넣었으나 평가 R²는 0.313에서 0.243으로 낮아졌고, 음수 예측이 5편 생겼습니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 변수를 두 개 쓴 모습을 3차원으로 보여 줘. 첫 관측일 스크린 수를 x축, 첫 관측일 상영 횟수를 y축, 총 관객 수를 z축에 둔 3차원 산점도를 그려 줘. 그 위에 학습용 영화로 맞춘 회귀 평면을 반투명한 면으로 겹쳐 그려서 점이 면의 위에 있는지 아래에 있는지 보이게 해 줘. 평면의 두 계수와 절편을 화면에 숫자로 적어 줘. 예측이 0명보다 작게 나오는 구역이 면의 어디쯤인지 알아볼 수 있게 색을 나누고, 시험용 영화 가운데 음수 예측을 받은 영화가 몇 편이고 가장 낮은 예측값이 몇 명인지도 적어 줘. 변수 하나만 썼을 때의 시험 점수와 두 개를 썼을 때의 시험 점수를 나란히 보여 줘. 그래프는 plotly로 그려 줘. 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+  <div class="situation" data-sit="s02-line-one-var">
+    <div class="sit-h"><span class="num">상황 2</span><span class="t">변수 하나 · 산점도 위의 직선</span></div>
+    <p class="intuition">변수가 하나이면 예측은 평면 위의 직선 하나이며, 한 영화의 예측값은 그 영화의 스크린 수에서 직선까지 올라간 높이 하나로 정해집니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s02-line-one-var.png" alt="변수 하나 · 산점도 위의 직선"></div>
+    <ul class="reading"><li>기울기 932는 스크린 수가 1관 늘 때 예측 관객이 932명 늘어난다는 뜻입니다.</li><li>점이 왼쪽 아래에 몰려 있으므로, 오른쪽 끝 구간의 직선은 여섯 편만 보고 그은 부분입니다.</li><li>시험용 66편 중 62편에서 예측이 실제보다 큽니다.</li><li>직선이 점들의 위를 지나고 있습니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>변수 하나만 쓴 모습을 그림으로 보고 싶어. 첫 관측일 스크린 수를 가로축, 총 관객 수를 세로축에 둔 산점도를 그리고 학습에 쓴 영화와 시험용 영화를 다른 색으로 구분해 줘. 학습용 영화만으로 맞춘 회귀 직선을 그 위에 함께 그려 줘. 직선의 기울기와 절편을 그래프 옆에 숫자로 적고, 학습 자료에서 잰 점수와 시험 자료에서 잰 점수를 둘 다 적어 줘. 시험용 영화 가운데 예측이 실제보다 크게 나온 편수도 함께 세어 줘. 학습용 영화 중 스크린 수가 400관보다 적은 영화와 1,000관을 넘는 영화가 각각 몇 편인지도 적어 줘. 그래프는 plotly로 그려 줘. 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+  <figure class="interactive" data-fig="wplane">
+    <div class="widget" data-w="wplane">
+<svg viewBox="0 0 720 400" role="img" aria-label="가중치 세 개를 슬라이더로 바꾸면 다섯 편의 예측값과 오차 제곱합, 그리고 성수기 0과 1의 두 단면 직선이 함께 달라지는 계산판">
+  <text class="eq" x="20" y="28" font-size="15" font-weight="800" fill="#1c2230">예측 = 1.00×스크린 + 0.00×성수기 + 0.00</text>
+
+  <g font-size="14" fill="#6b7385">
+    <text x="20" y="80">영화</text>
+    <text x="200" y="64" text-anchor="end">스크린</text>
+    <text x="200" y="80" text-anchor="end">(100관)</text>
+    <text x="258" y="80" text-anchor="end">성수기</text>
+    <text x="322" y="64" text-anchor="end">실제</text>
+    <text x="322" y="80" text-anchor="end">(만명)</text>
+    <text x="380" y="80" text-anchor="end">예측</text>
+    <text x="428" y="80" text-anchor="end">오차²</text>
+  </g>
+  <line x1="20" y1="90" x2="428" y2="90" stroke="#e3ddcf" stroke-width="1.2"/>
+
+  <g class="rows" font-size="15" fill="#1c2230"></g>
+
+  <line x1="20" y1="262" x2="428" y2="262" stroke="#e3ddcf" stroke-width="1.2"/>
+  <text x="20" y="286" font-size="15" font-weight="800" fill="#1c2230">오차 제곱합</text>
+  <rect x="20" y="300" width="300" height="14" rx="7" fill="#e3ddcf"/>
+  <rect class="bar" x="20" y="300" width="0" height="14" rx="7" fill="#b07a00"/>
+  <polyline class="saw" points="318,302 310,304.5 318,307 310,309.5 318,312" fill="none" stroke="#e3ddcf" stroke-width="2.4" visibility="hidden"/>
+  <text class="sse" x="330" y="316" font-size="22" font-weight="800" fill="#b07a00">245.8</text>
+  <text class="refsse" x="20" y="338" font-size="14" fill="#6b7385">최소제곱 정답 114.63</text>
+  <text x="20" y="360" font-size="14" fill="#6b7385">단위가 다른 가중치 · 크기 비교 불가</text>
+  <text x="20" y="380" font-size="14" fill="#6b7385">스크린 1단위 = 100관 · 성수기 1단위 = 있음/없음</text>
+
+  <text x="452" y="28" font-size="15" font-weight="800" fill="#1c2230">평면의 두 단면</text>
+  <text x="452" y="48" font-size="14" fill="#6b7385">성수기 0 / 성수기 1</text>
+  <text x="452" y="64" font-size="14" fill="#6b7385">총 관객(만명)</text>
+  <line x1="470" y1="70" x2="470" y2="290" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="466" y1="290" x2="706" y2="290" stroke="#6b7385" stroke-width="1.2"/>
+  <g font-size="14" fill="#6b7385">
+    <text x="470" y="308" text-anchor="middle">3</text>
+    <text x="562" y="308" text-anchor="middle">5</text>
+    <text x="700" y="308" text-anchor="middle">8</text>
+    <text x="464" y="295" text-anchor="end">0</text>
+    <text x="464" y="195" text-anchor="end">10</text>
+    <text x="464" y="95" text-anchor="end">20</text>
+    <text x="585" y="330" text-anchor="middle">스크린(100관)</text>
+    <text x="452" y="352">실선 · 성수기 0 / 점선 · 성수기 1</text>
+    <text x="452" y="374">같은 기울기, 다른 절편</text>
+  </g>
+  <g class="dots"></g>
+  <line class="ref" x1="0" y1="0" x2="0" y2="0" stroke="#b9b3a5" stroke-width="2" visibility="hidden"/>
+  <line class="l0" x1="0" y1="0" x2="0" y2="0" stroke="#2b7fd6" stroke-width="2.4"/>
+  <line class="l1" x1="0" y1="0" x2="0" y2="0" stroke="#b07a00" stroke-width="2.4" stroke-dasharray="6 4"/>
+  <g class="marks" fill="#6b7385"></g>
+  <text class="reflab" x="474" y="86" font-size="14" fill="#6b7385" visibility="hidden">성수기 빼고 구한 직선 1.83</text>
+</svg>
+<div class="wctl">
+  <label>w₁ 스크린(만명/100관) <input type="range" class="s1" min="-1" max="4" step="0.01" value="1"> <span class="v1">1.00</span></label>
+  <label>w₂ 성수기(만명) <input type="range" class="s2" min="-8" max="4" step="0.01" value="0"> <span class="v2">0.00</span></label>
+  <label>b 절편(만명) <input type="range" class="s3" min="0" max="6" step="0.01" value="0"> <span class="v3">0.00</span></label>
+  <button class="wbtn bfix" type="button" aria-pressed="false">성수기 가중치 0 고정</button>
+  <button class="wbtn bbest" type="button">최소제곱 정답</button>
+  <button class="wbtn bref" type="button" aria-pressed="false">따로 구한 직선 겹치기</button>
+  <span class="wout fixnote"></span>
+</div>
+</div>
+    <figcaption>스크린 가중치, 성수기 가중치, 절편 슬라이더를 조정하면 다섯 편의 예측값, 오차 제곱합, 두 단면 직선이 함께 달라집니다. 이 모형은 학습 150편 중 다섯 편으로 구성한 축소판입니다. 학습 150편 전체에서는 스크린 수만 사용한 가중치가 +932명/스크린이고, 상영 횟수를 함께 넣으면 −4,385명/스크린으로 부호가 바뀝니다. 두 값은 표본과 조건이 다르므로 같은 수로 읽지 않습니다.</figcaption>
+  </figure>
+
   <h3>점수는 처음 보는 문제로 매긴다</h3>
   <p>학습 자료에서 높은 점수를 얻었다고 새로운 영화도 잘 예측하는 것은 아닙니다. 일부 영화를 <b>테스트 데이터</b>로 먼저 떼어 두고, 나머지 영화로 학습한 뒤 테스트 자료에서 점수를 계산합니다. 변수 조합을 비교할 때는 같은 분할을 사용합니다.</p>
   <div style="overflow-x:auto;margin:18px 0">
@@ -94,6 +195,75 @@
     </tbody>
   </table>
   <p><b>수업 자료의 한계:</b> 파일의 first_scrn과 first_show는 개봉 전 계획값이 아니라, 일별 자료에서 각 영화가 10위권에 처음 등장한 날의 집계값과 일치합니다. 216편 중 75편은 그날이 개봉일과 다릅니다. 따라서 아래에서는 이를 <b>기본 변수</b>라고 부르며 교육용 비교에 사용합니다. 이 자료로 얻은 점수를 실제 개봉 전 예측 성능으로 해석해서는 안 됩니다. 실제 서비스를 만들려면 예측 시점에 확보한 자료로 다시 검증해야 합니다.</p>
+  <figure class="interactive" data-fig="leakname">
+    <div class="widget" data-w="leakname">
+  <svg viewBox="0 0 720 280" role="img" aria-label="네 개의 열 이름과 상관계수, 그리고 그 값을 언제부터 쓸 수 있는지를 두 모드로 비교하는 표">
+    <text x="20" y="26" font-size="15" font-weight="800" fill="#1c2230">파일에 적힌 열 이름</text>
+
+    <rect x="20" y="40" width="240" height="46" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
+    <text x="32" y="60" font-size="15" font-family="monospace" fill="#1c2230">first_scrn</text>
+    <text class="rv" data-i="0" x="248" y="60" font-size="14" fill="#6b7385" text-anchor="end"></text>
+    <rect x="138" y="68" width="110" height="12" rx="6" fill="#e3ddcf"/>
+    <rect class="rb" data-i="0" x="138" y="68" width="0" height="12" rx="6" fill="#b07a00"/>
+
+    <rect x="20" y="94" width="240" height="46" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
+    <text x="32" y="114" font-size="15" font-family="monospace" fill="#1c2230">first_week_audi</text>
+    <text class="rv" data-i="1" x="248" y="114" font-size="14" fill="#6b7385" text-anchor="end"></text>
+    <rect x="138" y="122" width="110" height="12" rx="6" fill="#e3ddcf"/>
+    <rect class="rb" data-i="1" x="138" y="122" width="0" height="12" rx="6" fill="#b07a00"/>
+
+    <rect x="20" y="148" width="240" height="46" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
+    <text x="32" y="168" font-size="15" font-family="monospace" fill="#1c2230">days_in_top10</text>
+    <text class="rv" data-i="2" x="248" y="168" font-size="14" fill="#6b7385" text-anchor="end"></text>
+    <rect x="138" y="176" width="110" height="12" rx="6" fill="#e3ddcf"/>
+    <rect class="rb" data-i="2" x="138" y="176" width="0" height="12" rx="6" fill="#b07a00"/>
+
+    <rect x="20" y="202" width="240" height="46" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
+    <text x="32" y="222" font-size="15" fill="#1c2230">누적관객(마지막 행)</text>
+    <text class="rv" data-i="3" x="248" y="222" font-size="14" fill="#6b7385" text-anchor="end"></text>
+    <rect x="138" y="230" width="110" height="12" rx="6" fill="#e3ddcf"/>
+    <rect class="rb" data-i="3" x="138" y="230" width="0" height="12" rx="6" fill="#b07a00"/>
+
+    <g class="jg" opacity="1">
+      <rect x="272" y="40" width="168" height="46" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-dasharray="4 3"/>
+      <text x="356" y="72" font-size="24" font-weight="800" fill="#6b7385" text-anchor="middle">?</text>
+      <rect x="272" y="94" width="168" height="46" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-dasharray="4 3"/>
+      <text x="356" y="126" font-size="24" font-weight="800" fill="#6b7385" text-anchor="middle">?</text>
+      <rect x="272" y="148" width="168" height="46" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-dasharray="4 3"/>
+      <text x="356" y="180" font-size="24" font-weight="800" fill="#6b7385" text-anchor="middle">?</text>
+      <rect x="272" y="202" width="168" height="46" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-dasharray="4 3"/>
+      <text x="356" y="234" font-size="24" font-weight="800" fill="#6b7385" text-anchor="middle">?</text>
+    </g>
+
+    <rect x="452" y="40" width="250" height="208" rx="10" fill="#ffffff" stroke="#e3ddcf"/>
+    <text x="464" y="62" font-size="15" font-weight="800" fill="#1c2230">10위권 첫 등장일 − 개봉일</text>
+
+    <text x="464" y="84" font-size="14" fill="#6b7385">같은 날</text>
+    <rect class="pb" data-i="0" x="464" y="90" width="0" height="20" rx="4" fill="#e3ddcf"/>
+    <text class="pn" data-i="0" x="470" y="105" font-size="14" fill="#1c2230"></text>
+
+    <text x="464" y="130" font-size="14" fill="#6b7385">개봉일보다 이른</text>
+    <rect class="pb" data-i="1" x="464" y="136" width="0" height="20" rx="4" fill="#d64545"/>
+    <text class="pn" data-i="1" x="470" y="151" font-size="14" fill="#1c2230"></text>
+
+    <text x="464" y="176" font-size="14" fill="#6b7385">개봉일보다 늦은</text>
+    <rect class="pb" data-i="2" x="464" y="182" width="0" height="20" rx="4" fill="#b07a00"/>
+    <text class="pn" data-i="2" x="470" y="197" font-size="14" fill="#1c2230"></text>
+
+    <text class="fn1" x="464" y="222" font-size="14" fill="#6b7385"></text>
+    <text x="464" y="242" font-size="14" fill="#b07a00">이름의 '첫'은 개봉 전 계획값 아님</text>
+
+    <text class="cap" x="20" y="268" font-size="14" fill="#6b7385"></text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-m="0" aria-pressed="true">열 이름만</button>
+    <button class="wbtn" type="button" data-m="1" aria-pressed="false">자료 설명서 확인 후</button>
+    <span class="wout"></span>
+  </div>
+</div>
+    <figcaption>두 버튼으로 전환하면 같은 네 열이 물음표에서 시점 배지로 바뀝니다. 상관계수는 열 이름 옆에 적힌 숫자이고, 사용할 수 있는 시점은 파일 어디에도 적혀 있지 않습니다. 10위권 첫 등장일이 개봉일과 다른 영화가 216편 중 75편입니다. 마지막 행의 누적관객은 216편 중 214편에서 총 관객과 값이 같으므로, 예측을 돕는 변수가 아니라 정답을 그대로 넣은 것입니다.</figcaption>
+  </figure>
+
   <div class="callout mini">
     <div class="h">📝 변수 발상부터 — 폼 Ⅲ-01a</div>
     <p>교과서 106쪽 해 보기 ①은 태풍의 진로를 예측하려면 어떤 데이터가 필요한지 묻습니다. 같은 발상을 영화로 옮겨 봅니다. "총 관객 수를 미리 맞히려면 무엇을 알아야 하는가" — 개봉 시기, 장르, 상영관 수, 전작의 성적, 출연 배우… 떠오르는 후보를 폼 Ⅲ-01a에 적고 시작합니다.</p>
@@ -118,7 +288,14 @@
 어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,
 학습에 쓰지 않은 영화들로 잰 예측 점수와
 예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.
-학습에 쓴 영화 편수와 점수를 잰 영화 편수를 화면에 적어 줘.
+영화별 표를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 시험용으로 떼어 놓고 나머지로 학습해 줘.
+수업의 기준 기간은 2025년 9월 1일부터 2026년 8월 31일까지이고, 영화별 표에 정리된 216편을 그대로 사용해 줘.
+학습에 쓴 영화 편수와 점수를 잰 영화 편수, 기준 기간을 화면에 적어 줘.
+시험용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 그리고,
+예측이 실제와 같을 때를 나타내는 기준선도 함께 표시해 줘.
+관객 수는 편차가 크니 두 축을 로그로 그려 줘.
+예측이 1,000명보다 작게 나온 영화는 그래프 바닥에 붙여 표시하고 몇 편인지 적어 줘.
+그래프는 plotly로 그려 줘.
 두 표는 이 주소에서 불러와. 영화코드(movieCd) 열이 같은 영화를 가리켜. 두 파일 모두 인코딩은 UTF-8이야.
 - https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_daily.csv
   (열: 날짜(여덟 자리 숫자)·순위·영화코드·영화명·일관객·누적관객·스크린수·상영횟수)
@@ -126,8 +303,9 @@
   (열: movieCd(영화코드)·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·
    first_scrn(첫 관측일 스크린수)·first_show(첫 관측일 상영횟수)·first_date(10위권 첫 등장일)·
    peak(성수기 개봉이면 1, 아니면 0 — 1월·7월·12월이 성수기)·
-   first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">파일 하나로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 여러 변수로 총 관객을 예측한다
+   first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 여러 변수로 총 관객을 예측한다
 import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -153,7 +331,8 @@ df = load_data().sort_values("movieCd").reset_index(drop=True)
 # 열 편 중 앞 세 편을 시험용으로 떼어 둔다 (누가 해도 같은 결과가 나오도록)
 is_test = df.index % 10 &lt; 3
 train, test = df[~is_test], df[is_test]
-st.caption(f"학습 {len(train)}편 · 시험 {len(test)}편")
+st.caption(f"학습 {len(train)}편 · 시험 {len(test)}편 · 전체 {len(df)}편")
+st.caption("기준 기간 2025년 9월 1일 ~ 2026년 8월 31일 · 박스오피스 상위 10위 기록")
 
 기본 = {"첫 관측일 스크린수": "first_scrn", "첫 관측일 상영횟수": "first_show", "성수기 개봉": "peak"}
 추가 = {"첫 주 관객": "first_week_audi"}
@@ -168,14 +347,41 @@ model = LinearRegression().fit(train[picked], train["total_audi"])
 pred = model.predict(test[picked])
 c1, c2 = st.columns(2)
 c1.metric("시험용 영화로 잰 점수 (R²)", f"{r2_score(test['total_audi'], pred):.3f}")
-c2.metric("평균 오차", f"{mean_absolute_error(test['total_audi'], pred):,.0f}명")</pre></div></details>
+c2.metric("평균 오차", f"{mean_absolute_error(test['total_audi'], pred):,.0f}명")
+
+import plotly.express as px
+
+바닥 = 1000
+표시 = pd.DataFrame({"실제": test["total_audi"].values, "예측": pred})
+표시["예측(표시용)"] = 표시["예측"].clip(lower=바닥)   # 음수 예측도 그래프 바닥에 남긴다
+fig = px.scatter(표시, x="실제", y="예측(표시용)", log_x=True, log_y=True,
+                 labels={"실제": "실제 총 관객 수", "예측(표시용)": "예측 총 관객 수"})
+끝 = [표시["실제"].min(), 표시["실제"].max()]
+fig.add_shape(type="line", x0=끝[0], y0=끝[0], x1=끝[1], y1=끝[1], line=dict(dash="dash"))
+st.plotly_chart(fig, use_container_width=True)
+
+낮음 = int((표시["예측"] &lt; 바닥).sum())
+if 낮음:
+    st.caption(f"예측이 1,000명보다 작게 나온 영화 {낮음}편은 그래프 바닥에 표시했습니다. 회귀는 음수도 예측합니다.")</pre></div><div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+scikit-learn
+plotly</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
       받은 코드를 <b>main.py</b> 파일 하나로 저장해 실행합니다. 화면에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(계산법은 8차시에 살펴봅니다). 첫 관측일 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 변수의 출처를 나눠서 비교한다</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>기본 변수 세 가지를 쓴 경우와 첫 주 관객 수까지 추가한 경우의 예측 점수를 나란히 보여 줘.
 이 데이터는 사후 집계값이므로 실제 개봉 전 예측 성능이 아니라는 안내도 표시해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 기본 변수와 첫 주 관객 수 추가 비교
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p>
+  <div class="situation" data-sit="s01-parity-read">
+    <div class="sit-h"><span class="num">상황 1</span><span class="t">실제값과 예측값의 대각선 비교</span></div>
+    <p class="intuition">시험용 66편 가운데 56편의 점이 대각선 위에 놓여, 모델이 대부분의 영화를 실제보다 많다고 예측한다는 사실이 한 장에 드러납니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s01-parity-read.png" alt="실제값과 예측값의 대각선 비교"></div>
+    <ul class="reading"><li>대각선 위의 점은 실제보다 많다고 예측한 영화, 아래의 점은 적다고 예측한 영화입니다.</li><li>66편 가운데 56편이 위쪽에 있습니다.</li><li>오차가 양쪽으로 고르게 나지 않고 한 방향으로 치우쳐 있습니다.</li><li>상위 5편이 전체 절대오차의 30.2%를 차지합니다.</li><li>평균 오차 548,830명은 소수의 영화가 만든 값입니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>지금 화면에 있는 산점도를 조금 더 자세히 읽고 싶어. 시험용 66편 가운데 점이 대각선보다 아래에 있는 영화와 위에 있는 영화가 각각 몇 편인지 세어서 그래프 옆에 적어 줘. 예측이 음수로 나온 영화가 몇 편이고 가장 작은 예측값이 몇 명인지도 적어 줘. 그리고 실제 총 관객 수에서 예측값을 뺀 오차를 구해서 절댓값이 큰 여덟 편을 가로 막대그래프로 따로 그려 줘. 0을 가운데 두고 실제가 더 많았던 영화는 오른쪽, 예측이 더 많았던 영화는 왼쪽으로 뻗게 하고 두 방향의 색을 다르게 해 줘. 막대마다 영화 이름과 그 영화의 첫 관측일 스크린 수를 함께 적어 줘. 여덟 편의 절대오차 합이 66편 전체 절대오차 합의 몇 퍼센트인지도 계산해서 적어 줘. 그래프는 plotly로 그려 줘. 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 기본 변수와 첫 주 관객 수 추가 비교
 st.subheader("기본 변수만 vs 첫 주 관객 추가")
 결과 = []
 for 이름, 변수 in [("기본 변수만", list(기본.values())),
@@ -204,39 +410,139 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
 
   <h2>3. 결과 비교 — 변수 조합과 예측 시점</h2>
   <p>각 변수 조합을 실행하면 아래 결과를 비교할 수 있습니다. 영화 코드 순으로 정렬한 216편에서 10편마다 앞의 3편을 테스트 자료로 지정했습니다. 학습 150편, 테스트 66편이며 모든 조합에 같은 분할을 사용합니다. 이는 수업 결과를 재현하기 위한 분할로, 미래 개봉작의 예측 성능을 보장하는 검증은 아닙니다.</p>
-  <div style="overflow-x:auto;margin:18px 0">
-    <svg viewBox="0 0 680 264" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="변수 조합별 테스트 점수 막대 그림 — 첫 관측일 스크린 수만 0.31, 기본 변수 3종 0.24로 하락, 첫 주 관객 수를 더하면 0.90으로 급등하며 데이터 누수 경계선을 넘는다">
-      <defs>
-        <pattern id="hatch8" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
-          <rect width="8" height="8" fill="#e45756"/>
-          <line x1="0" y1="0" x2="0" y2="8" stroke="#ffffff" stroke-width="2" stroke-opacity="0.45"/>
-        </pattern>
-      </defs>
-      <text x="440" y="22" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">테스트 점수(R²) — 떼어 둔 66편으로 잰 값</text>
-      <line x1="240" y1="34" x2="240" y2="210" stroke="#f0e2bc"/>
-      <line x1="440" y1="34" x2="440" y2="210" stroke="#f0e2bc"/>
-      <line x1="640" y1="34" x2="640" y2="210" stroke="#f0e2bc"/>
-      <line x1="240" y1="210" x2="640" y2="210" stroke="#f0e2bc"/>
-      <text x="240" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0</text>
-      <text x="440" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">0.5</text>
-      <text x="640" y="228" text-anchor="middle" font-size="12" fill="#7a7f95">1.0</text>
-      <text x="228" y="61" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">첫 관측일 스크린 수만</text>
-      <rect x="240" y="44" width="124" height="26" fill="#f4b400"/>
-      <text x="372" y="61" font-size="12.5" font-weight="800" fill="#2b2d3a">0.31</text>
-      <text x="228" y="97" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">기본 변수 3종</text>
-      <text x="228" y="112" text-anchor="end" font-size="10.5" fill="#7a7f95">(스크린+상영횟수+성수기)</text>
-      <rect x="240" y="86" width="96" height="26" fill="#f4b400"/>
-      <text x="344" y="103" font-size="12.5" font-weight="800" fill="#2b2d3a">0.24</text>
-      <text x="384" y="103" font-size="12.5" font-weight="800" fill="#e8930c">↓ 더 넣었는데 하락</text>
-      <line x1="16" y1="128" x2="664" y2="128" stroke="#e45756" stroke-width="1.5" stroke-dasharray="7 5"/>
-      <text x="340" y="144" text-anchor="middle" font-size="12" font-weight="800" fill="#e45756">첫 주 관객 수 추가 — 개봉 전에 알 수 있는가?</text>
-      <text x="228" y="171" text-anchor="end" font-size="12.5" font-weight="800" fill="#2b2d3a">3종 + 첫 주 관객 수</text>
-      <rect x="240" y="154" width="360" height="26" fill="url(#hatch8)" stroke="#e45756"/>
-      <text x="608" y="171" font-size="12.5" font-weight="800" fill="#e45756">0.90</text>
-      <text x="240" y="197" font-size="12" font-weight="800" fill="#e45756">⚠ 개봉 후에야 아는 값 — 데이터 누수</text>
-      <text x="340" y="252" text-anchor="middle" font-size="12.5" fill="#7a7f95">216편 중 150편으로 학습, 처음 보는 66편으로 채점한 실측값</text>
-    </svg>
+  
+  <figure class="interactive" data-fig="leaktime">
+    <div class="widget" data-w="leaktime">
+  <svg viewBox="0 0 720 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="예측 시점 손잡이와 변수 카드 일곱 장. 시점을 옮기면 사용 가능 경계가 움직이고, 카드를 켜고 끄면 테스트 R²와 산점도가 함께 달라진다">
+    <g>
+      <line x1="40" y1="56" x2="700" y2="56" stroke="#e3ddcf" stroke-width="2"/>
+      <line x1="195" y1="30" x2="195" y2="74" stroke="#6b7385" stroke-dasharray="3 3"/>
+      <text x="199" y="22" font-size="14" fill="#6b7385">개봉일</text>
+      <text x="470" y="22" text-anchor="middle" font-size="14" fill="#b07a00">216편 중 75편은 개봉일과 다름</text>
+      <line x1="105" y1="48" x2="105" y2="64" stroke="#6b7385"/>
+      <line x1="285" y1="48" x2="285" y2="64" stroke="#6b7385"/>
+      <line x1="455" y1="48" x2="455" y2="64" stroke="#6b7385"/>
+      <line x1="625" y1="48" x2="625" y2="64" stroke="#6b7385"/>
+      <text x="105" y="82" text-anchor="middle" font-size="16" fill="#1c2230">개봉 전</text>
+      <text x="285" y="82" text-anchor="middle" font-size="16" fill="#1c2230">첫 관측일 집계 후</text>
+      <text x="455" y="82" text-anchor="middle" font-size="16" fill="#1c2230">첫 주 집계 후</text>
+      <text x="625" y="82" text-anchor="middle" font-size="16" fill="#1c2230">종영 후</text>
+    </g>
+    <g>
+      <line class="bline" x1="187" y1="52" x2="187" y2="280" stroke="#b07a00" stroke-width="2" stroke-dasharray="6 4"/>
+      <text class="blab" x="181" y="44" text-anchor="end" font-size="14" fill="#b07a00">사용 가능 경계</text>
+    </g>
+    <g class="cards">
+      <g class="card" data-v="0" data-t="0" role="button" tabindex="0" aria-pressed="false">
+        <rect class="cbox" x="27" y="102" width="156" height="52" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1.5" style="transition:fill .3s ease,stroke .3s ease"/>
+        <g class="chatch" display="none" stroke="#d64545" stroke-width="1.5" opacity=".5"><line x1="30" y1="148" x2="38" y2="108"/><line x1="37" y1="148" x2="45" y2="108"/><line x1="44" y1="148" x2="52" y2="108"/></g>
+        <text class="cn1" x="57" y="126" font-size="16" font-weight="700" fill="#1c2230">성수기 개봉</text>
+        <text class="cbadge" x="175" y="146" font-size="14" text-anchor="end" fill="#6b7385"></text>
+        <g class="clock" display="none" fill="none" stroke="#6b7385" stroke-width="1.5" transform="translate(157,110)"><rect x="0" y="5" width="14" height="9" rx="2"/><path d="M3.5 5 V3 a3.5 3.5 0 0 1 7 0 V5"/></g>
+      </g>
+      <g class="card" data-v="1" data-t="1" role="button" tabindex="0" aria-pressed="false">
+        <rect class="cbox" x="207" y="102" width="156" height="52" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1.5" style="transition:fill .3s ease,stroke .3s ease"/>
+        <g class="chatch" display="none" stroke="#d64545" stroke-width="1.5" opacity=".5"><line x1="210" y1="148" x2="218" y2="108"/><line x1="217" y1="148" x2="225" y2="108"/><line x1="224" y1="148" x2="232" y2="108"/></g>
+        <text class="cn1" x="237" y="126" font-size="16" font-weight="700" fill="#1c2230">첫 관측일</text>
+        <text class="cn2" x="237" y="146" font-size="16" font-weight="700" fill="#1c2230">스크린 수</text>
+        <text class="cbadge" x="355" y="146" font-size="14" text-anchor="end" fill="#6b7385"></text>
+        <g class="clock" display="none" fill="none" stroke="#6b7385" stroke-width="1.5" transform="translate(337,110)"><rect x="0" y="5" width="14" height="9" rx="2"/><path d="M3.5 5 V3 a3.5 3.5 0 0 1 7 0 V5"/></g>
+      </g>
+      <g class="card" data-v="2" data-t="1" role="button" tabindex="0" aria-pressed="false">
+        <rect class="cbox" x="207" y="162" width="156" height="52" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1.5" style="transition:fill .3s ease,stroke .3s ease"/>
+        <g class="chatch" display="none" stroke="#d64545" stroke-width="1.5" opacity=".5"><line x1="210" y1="208" x2="218" y2="168"/><line x1="217" y1="208" x2="225" y2="168"/><line x1="224" y1="208" x2="232" y2="168"/></g>
+        <text class="cn1" x="237" y="186" font-size="16" font-weight="700" fill="#1c2230">첫 관측일</text>
+        <text class="cn2" x="237" y="206" font-size="16" font-weight="700" fill="#1c2230">상영 횟수</text>
+        <text class="cbadge" x="355" y="206" font-size="14" text-anchor="end" fill="#6b7385"></text>
+        <g class="clock" display="none" fill="none" stroke="#6b7385" stroke-width="1.5" transform="translate(337,170)"><rect x="0" y="5" width="14" height="9" rx="2"/><path d="M3.5 5 V3 a3.5 3.5 0 0 1 7 0 V5"/></g>
+      </g>
+      <g class="card" data-v="3" data-t="1" role="button" tabindex="0" aria-pressed="false">
+        <rect class="cbox" x="207" y="222" width="156" height="52" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1.5" style="transition:fill .3s ease,stroke .3s ease"/>
+        <g class="chatch" display="none" stroke="#d64545" stroke-width="1.5" opacity=".5"><line x1="210" y1="268" x2="218" y2="228"/><line x1="217" y1="268" x2="225" y2="228"/><line x1="224" y1="268" x2="232" y2="228"/></g>
+        <text class="cn1" x="237" y="246" font-size="16" font-weight="700" fill="#1c2230">상영당</text>
+        <text class="cn2" x="237" y="266" font-size="16" font-weight="700" fill="#1c2230">관객 수</text>
+        <text class="cbadge" x="355" y="266" font-size="14" text-anchor="end" fill="#6b7385"></text>
+        <g class="clock" display="none" fill="none" stroke="#6b7385" stroke-width="1.5" transform="translate(337,230)"><rect x="0" y="5" width="14" height="9" rx="2"/><path d="M3.5 5 V3 a3.5 3.5 0 0 1 7 0 V5"/></g>
+      </g>
+      <g class="card" data-v="4" data-t="2" role="button" tabindex="0" aria-pressed="false">
+        <rect class="cbox" x="377" y="102" width="156" height="52" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1.5" style="transition:fill .3s ease,stroke .3s ease"/>
+        <g class="chatch" display="none" stroke="#d64545" stroke-width="1.5" opacity=".5"><line x1="380" y1="148" x2="388" y2="108"/><line x1="387" y1="148" x2="395" y2="108"/><line x1="394" y1="148" x2="402" y2="108"/></g>
+        <text class="cn1" x="407" y="126" font-size="16" font-weight="700" fill="#1c2230">첫 주</text>
+        <text class="cn2" x="407" y="146" font-size="16" font-weight="700" fill="#1c2230">관객 수</text>
+        <text class="cbadge" x="525" y="146" font-size="14" text-anchor="end" fill="#6b7385"></text>
+        <g class="clock" display="none" fill="none" stroke="#6b7385" stroke-width="1.5" transform="translate(507,110)"><rect x="0" y="5" width="14" height="9" rx="2"/><path d="M3.5 5 V3 a3.5 3.5 0 0 1 7 0 V5"/></g>
+      </g>
+      <g class="card" data-v="5" data-t="3" role="button" tabindex="0" aria-pressed="false">
+        <rect class="cbox" x="547" y="102" width="156" height="52" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1.5" style="transition:fill .3s ease,stroke .3s ease"/>
+        <g class="chatch" display="none" stroke="#d64545" stroke-width="1.5" opacity=".5"><line x1="550" y1="148" x2="558" y2="108"/><line x1="557" y1="148" x2="565" y2="108"/><line x1="564" y1="148" x2="572" y2="108"/></g>
+        <text class="cn1" x="577" y="126" font-size="16" font-weight="700" fill="#1c2230">10위권</text>
+        <text class="cn2" x="577" y="146" font-size="16" font-weight="700" fill="#1c2230">등장 일수</text>
+        <text class="cbadge" x="695" y="146" font-size="14" text-anchor="end" fill="#6b7385"></text>
+        <g class="clock" display="none" fill="none" stroke="#6b7385" stroke-width="1.5" transform="translate(677,110)"><rect x="0" y="5" width="14" height="9" rx="2"/><path d="M3.5 5 V3 a3.5 3.5 0 0 1 7 0 V5"/></g>
+      </g>
+      <g class="card" data-v="6" data-t="3" role="button" tabindex="0" aria-pressed="false">
+        <rect class="cbox" x="547" y="162" width="156" height="52" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1.5" style="transition:fill .3s ease,stroke .3s ease"/>
+        <g class="chatch" display="none" stroke="#d64545" stroke-width="1.5" opacity=".5"><line x1="550" y1="208" x2="558" y2="168"/><line x1="557" y1="208" x2="565" y2="168"/><line x1="564" y1="208" x2="572" y2="168"/></g>
+        <text class="cn1" x="577" y="186" font-size="16" font-weight="700" fill="#1c2230">마지막</text>
+        <text class="cn2" x="577" y="206" font-size="16" font-weight="700" fill="#1c2230">누적 관객</text>
+        <text class="cbadge" x="695" y="206" font-size="14" text-anchor="end" fill="#6b7385"></text>
+        <g class="clock" display="none" fill="none" stroke="#6b7385" stroke-width="1.5" transform="translate(677,170)"><rect x="0" y="5" width="14" height="9" rx="2"/><path d="M3.5 5 V3 a3.5 3.5 0 0 1 7 0 V5"/></g>
+      </g>
+    </g>
+    <g>
+      <rect x="20" y="280" width="400" height="130" rx="10" fill="#ffffff" stroke="#e3ddcf"/>
+      <text x="36" y="297" font-size="14" fill="#6b7385">테스트 R²</text>
+      <text x="404" y="297" text-anchor="end" font-size="14" fill="#6b7385">학습 150편 · 테스트 66편</text>
+      <text class="big" x="36" y="340" font-size="28" font-weight="800" fill="#d64545">0.240</text>
+      <text class="neg" x="336" y="381" font-size="14" fill="#d64545" display="none">0 미만</text>
+      <text class="mae" x="36" y="364" font-size="15" fill="#1c2230">평균 오차 548,830명</text>
+      <g class="warn">
+        <rect x="190" y="304" width="216" height="64" rx="15" fill="#fdeeee" stroke="#d64545"/>
+        <text x="298" y="322" text-anchor="middle" font-size="14" fill="#d64545">이 시점 사용 불가</text>
+        <text x="298" y="340" text-anchor="middle" font-size="14" fill="#d64545">잠긴 변수 포함</text>
+        <text x="298" y="358" text-anchor="middle" font-size="14" fill="#d64545">점수는 실측 · 시점만 불일치</text>
+      </g>
+      <rect x="36" y="372" width="290" height="10" rx="5" fill="#e3ddcf"/>
+      <rect class="gfill" x="36" y="372" width="70" height="10" rx="5" fill="#d64545"/>
+      <line x1="181" y1="370" x2="181" y2="386" stroke="#6b7385"/>
+      <text x="36" y="400" font-size="14" fill="#6b7385">0</text>
+      <text x="181" y="400" text-anchor="middle" font-size="14" fill="#6b7385">0.5</text>
+      <text x="326" y="400" text-anchor="end" font-size="14" fill="#6b7385">1.0</text>
+    </g>
+    <g>
+      <text x="572" y="296" text-anchor="middle" font-size="15" font-weight="800" fill="#1c2230">테스트 66편 · 실제 대 예측</text>
+      <line x1="448" y1="302" x2="448" y2="374" stroke="#e3ddcf"/>
+      <line x1="505.7" y1="302" x2="505.7" y2="374" stroke="#e3ddcf"/>
+      <line x1="563.3" y1="302" x2="563.3" y2="374" stroke="#e3ddcf"/>
+      <line x1="621" y1="302" x2="621" y2="374" stroke="#e3ddcf"/>
+      <line x1="678.7" y1="302" x2="678.7" y2="374" stroke="#e3ddcf"/>
+      <line x1="448" y1="374" x2="696" y2="374" stroke="#e3ddcf"/>
+      <line x1="448" y1="374" x2="696" y2="302" stroke="#6b7385" stroke-width="1.2" stroke-dasharray="5 4"/>
+      <text x="692" y="366" text-anchor="end" font-size="14" fill="#6b7385">예측=실제</text>
+      <g class="dots" fill="#d64545" opacity=".55"></g>
+      <g class="tris" fill="none" stroke="#d64545" stroke-width="1.2"></g>
+      <text x="448" y="390" text-anchor="middle" font-size="14" fill="#6b7385">1천</text>
+      <text x="505.7" y="390" text-anchor="middle" font-size="14" fill="#6b7385">1만</text>
+      <text x="563.3" y="390" text-anchor="middle" font-size="14" fill="#6b7385">10만</text>
+      <text x="621" y="390" text-anchor="middle" font-size="14" fill="#6b7385">100만</text>
+      <text x="678.7" y="390" text-anchor="middle" font-size="14" fill="#6b7385">1000만</text>
+      <text x="430" y="338" text-anchor="middle" font-size="14" fill="#6b7385" transform="rotate(-90 430 338)">예측</text>
+      <text x="490" y="408" text-anchor="middle" font-size="14" fill="#6b7385">실제 총 관객</text>
+      <text class="lowcap" x="700" y="408" text-anchor="end" font-size="14" fill="#6b7385">1천 미만 예측 5편</text>
+    </g>
+  </svg>
+  <div class="wctl">
+    <label>예측 시점 <input type="range" min="0" max="2" step="1" value="0"></label>
+    <button class="wbtn on" type="button" data-t="0" aria-pressed="true">개봉 전</button>
+    <button class="wbtn" type="button" data-t="1" aria-pressed="false">첫 관측일 집계 후</button>
+    <button class="wbtn" type="button" data-t="2" aria-pressed="false">첫 주 집계 후</button>
+    <button class="wbtn" type="button" data-reset="1">기본 3종으로</button>
+    <span class="wout"></span>
   </div>
+</div>
+    <figcaption>시점 손잡이를 옮기면 사용 가능한 변수의 경계가 이동하고, 카드를 눌러 켜고 끄면 테스트 점수와 산점도가 함께 달라집니다. 영화 216편 가운데 150편으로 학습하고 나머지 66편으로 점수를 잰 실측값입니다. 잠긴 카드를 켜면 점수는 올라가지만, 그 시점에는 아직 확보할 수 없는 값입니다.</figcaption>
+  </figure>
+
   <div class="callout warn">
     <div class="h">⚠️ 두 장면을 나눠서 읽어야 한다</div>
     <ul>
@@ -247,8 +553,62 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
   <div class="callout tip">
     <div class="h">💡 그렇다면 0.90은 쓸모없는 숫자인가</div>
     <p>예측 시점이 달라지면 사용할 수 있는 정보도 달라집니다. 개봉 첫 주의 집계가 끝난 뒤 전체 관객 수를 전망한다면, 그때 확정된 첫 주 관객 수는 사용할 수 있습니다. 다만 예측 시점에 확보한 자료만 사용하고, 새로운 영화에서도 같은 방식으로 평가해야 합니다.</p>
+  <div class="situation" data-sit="s10-noise-columns">
+    <div class="sit-h"><span class="num">상황 10</span><span class="t">뜻 없는 변수를 더할 때의 두 점수</span></div>
+    <p class="intuition">무작위 숫자로 만든 열을 60개까지 더하면 훈련 점수는 0.123에서 0.529로 올라가는 동안 평가 점수는 0.240에서 −2.324로 내려가, 두 선이 갈라지는 모양이 나타납니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s10-noise-columns.png" alt="뜻 없는 변수를 더할 때의 두 점수"></div>
+    <ul class="reading"><li>회색 훈련선은 뜻 없는 숫자만 넣어도 0.123에서 0.529로 올라갑니다.</li><li>금색 평가선은 0.240에서 −2.324로 내려가며, 22개 부근에서 0을 지납니다.</li><li>0 아래는 평균만 답한 것보다 못한 예측입니다.</li><li>훈련 점수의 상승은 학습이 아니라 학습 자료를 외운 결과입니다.</li><li>난수 146개에서는 훈련 1.0000, 평가 −4,534.3이 됩니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>아무 뜻 없는 숫자를 변수로 넣으면 점수가 어떻게 되는지 실험해 보고 싶어. 영화마다 무작위 숫자로 채운 새 열을 만들고 그 개수를 0개부터 60개까지 늘려 가며 기본 변수 세 개와 함께 학습시켜 줘. 누가 실행해도 같은 결과가 나오도록 무작위 숫자의 씨앗 값은 0으로 고정하고, 무작위 열은 학습용과 시험용을 나누기 전에 만들어 줘. 개수마다 학습에 쓴 영화로 잰 점수와 시험용 영화로 잰 점수를 둘 다 구해서 가로축을 무작위 열 개수로 둔 꺾은선 두 개로 그려 줘. 점수 0에 가로 기준선을 긋고 0보다 아래인 구간은 배경을 다르게 칠해 줘. 두 선이 처음 교차하는 지점과 평가 점수가 0 아래로 내려가는 지점을 화면에 적어 줘. 학습에 쓴 영화 편수보다 변수가 많아지면 어떻게 되는지도 확인할 수 있게 개수를 더 크게 넣어 보는 칸을 하나 만들어 줘. 그래프는 plotly로 그려 줘. 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
   </div>
-    <h2>4. 도전 — 단서를 하나 만들어 넣으면</h2>
+  <div class="situation" data-sit="s09-facet-models">
+    <div class="sit-h"><span class="num">상황 9</span><span class="t">그릴 수 없는 공간을 대신 보는 네 칸</span></div>
+    <p class="intuition">변수가 셋을 넘으면 산점도와 평면을 그릴 수 없으므로, 가로축을 실제값·세로축을 예측값으로 바꾼 네 칸에 모든 모델을 같은 기준으로 세웁니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s09-facet-models.png" alt="그릴 수 없는 공간을 대신 보는 네 칸"></div>
+    <ul class="reading"><li>변수가 셋을 넘으면 산점도와 평면을 그릴 수 없습니다.</li><li>대신 실제값과 예측값 두 축으로 모든 모델을 한 기준에 세웁니다.</li><li>대각선에 가까울수록 예측이 맞은 것입니다.</li><li>넷째 칸에서만 점이 대각선 주위로 모입니다.</li><li>넷째 칸의 0.901은 첫 주 관객 수를 넣어 얻은 값이며 개봉 전 예측 성능이 아닙니다.</li><li>같은 칸에서 12편은 1,000명 미만 예측을 받았습니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>변수를 하나씩 늘려 가며 만든 모델 네 개를 한 화면에서 비교해 줘. 첫째는 스크린 수만, 둘째는 스크린 수와 상영 횟수, 셋째는 거기에 성수기 여부, 넷째는 거기에 첫 주 관객 수까지야. 네 모델 모두 같은 시험용 영화로 예측하고, 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 네 칸으로 나란히 그려 줘. 각 칸에 예측이 실제와 같을 때를 나타내는 대각선을 함께 그려 줘. 관객 수는 편차가 크니 두 축을 로그로 그리고, 예측이 1,000명보다 작게 나온 영화는 바닥에 붙여 표시한 다음 칸마다 몇 편인지 적어 줘. 학습 자료에서 잰 점수와 시험 자료에서 잰 점수를 칸마다 함께 적어 줘. 넷째 칸에는 첫 주 관객 수가 개봉 이후에 알 수 있는 값이라는 안내를 표시해 줘. 그래프는 plotly로 그려 줘. 네 모델 모두 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+  <div class="situation" data-sit="s07-leak-one">
+    <div class="sit-h"><span class="num">상황 7</span><span class="t">정답과 같은 열을 변수로 넣었을 때의 점수</span></div>
+    <p class="intuition">총 관객 수와 사실상 같은 열을 변수로 넣으면 평가 R²가 1.0000이 되고, 시험용 66개의 점이 모두 대각선 위에 겹쳐 한 줄처럼 보입니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s07-leak-one.png" alt="정답과 같은 열을 변수로 넣었을 때의 점수"></div>
+    <ul class="reading"><li>적색 막대 1.0000, 산점도 66개 점이 모두 대각선 위에 있습니다.</li><li>정답과 같은 값을 변수로 넣은 결과입니다.</li><li>계수 0.99964, 가장 큰 오차 1,701명, 평균 오차 422명입니다.</li><li>모델이 총 관객 수를 그대로 옮겨 적었습니다.</li><li>등장일수는 훈련 0.672인데 평가는 0.117입니다.</li><li>개봉 후 정보라고 점수가 항상 오르지는 않습니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>개봉한 뒤에야 알 수 있는 값을 변수로 넣으면 점수가 어떻게 되는지 확인하고 싶어. 박스오피스 표에서 영화마다 세 가지를 새로 만들어 줘. 영화가 표에 등장한 날 수, 순위 중 가장 높았던 순위, 누적관객 중 가장 큰 값이야. 기본 변수 세 개만 쓴 경우와 여기에 등장한 날 수, 가장 높았던 순위, 첫 주 관객, 누적관객의 최댓값을 각각 하나씩 더한 경우까지 다섯 가지의 시험용 점수와 학습용 점수를 표와 가로 막대그래프로 나란히 보여 줘. 그리고 기본 변수만 쓴 모델과 누적관객 최댓값을 넣은 모델 두 가지에 대해 시험용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 나란히 그려 줘. 두 축 모두 로그로 하고 실제와 예측이 같을 때를 나타내는 기준선도 그려 줘. 누적관객 최댓값과 총 관객 수가 완전히 같은 영화가 몇 편인지, 그리고 누적관객 최댓값을 넣은 모델의 가장 큰 오차가 몇 명인지도 화면에 적어 줘. 그래프는 plotly로 그려 줘. 다섯 가지 모두 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+  </div>
+  <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
+  <h3>변수를 더한 예측, 그리고 그 예측으로 내린 결정</h3>
+  <p>여러 변수를 조합해 수치를 예측하는 모델은 실제 의사 결정 과정에서 널리 활용됩니다. 그러나 예측 시점에 확보할 수 있는 정보만 변수로 사용해야 한다는 원칙을 지키지 않으면 점수가 부풀려집니다. 다음 두 사례는 이러한 원칙이 실제 현장에서 어떻게 적용되거나 무시되었는지를 보여 줍니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>무엇을 예측·분류했나</th><th>이 차시 개념과의 연결</th></tr></thead>
+    <tbody>
+      <tr><td><b>구글의 영화 흥행 예측</b><br>2013<br><a href="https://ssl.gstatic.com/think/docs/quantifying-movie-magic_research-studies.pdf" target="_blank" rel="noopener">백서 원문</a></td><td>구글은 2013년 6월 백서 「Quantifying Movie Magic with Google Search」에서 2012년 개봉작 99편을 분석했다. 개봉 7일 전 검색 질의량 하나만 사용한 단순 회귀가 개봉 주말 흥행 수입 변동의 70%를 설명했다. 검색 광고 클릭 수·상영관 수·시리즈 여부를 더한 다중 회귀는 92%까지 올라갔다. 개봉 4주 전 시점에서도 예고편 검색량·시리즈 여부·계절성 세 변수로 94%를 보고했다.</td><td>변수 하나에서 넷으로 늘렸을 때의 점수 변화는 이 차시 실습에서 변수를 켜고 끄며 점수를 비교하는 활동과 같은 구조다. 구글이 개봉 7일 전 모델과 개봉 4주 전 모델을 따로 만든 것은 예측 시점에 확보한 정보만 변수로 사용할 수 있다는 이 차시의 기준과 이어진다.</td></tr>
+      <tr><td><b>질로우의 집값 예측 모델</b><br>미국 2021<br><a href="https://www.sec.gov/Archives/edgar/data/1617640/000161764021000085/exhibit993.htm" target="_blank" rel="noopener">실적 발표 공시</a></td><td>미국 부동산 기업 질로우는 여러 변수로 집값을 예측하는 제스티메이트로 값을 매겨 주택을 직접 사고파는 사업을 운영했다. 2021년 3분기에만 9,680채를 사들였다. 예측한 매각가보다 비싸게 매입한 것으로 확인되어 3억 400만 달러의 재고 평가손실을 기록했다. 2021년 11월 2일 사업 중단과 전체 인력 약 25% 감축을 발표했다.</td><td>과거 자료에서 높은 점수를 얻은 모델도 조건이 달라진 새 자료에서는 같은 성능을 내지 못한다. 이 내용은 5절 '좋은 점수가 좋은 모델인가'와 직접 연결된다.</td></tr>
+    </tbody>
+  </table>
+  <figure class="case"><img src="img/lesson07_case1.png" alt="개봉 7일 전 검색 질의량을 가로축, 개봉 주말 흥행 수입을 세로축에 둔 산점도. 회색 점들 위로 붉은 회귀 직선이 지나가고 오른쪽 위에 R 제곱 70퍼센트가 적혀 있습니다." loading="lazy" style="width:100%;height:auto"><figcaption class="src">출처: Google, 「Quantifying Movie Magic with Google Search」(2013) 그림 3 · 2012년 개봉작 99편 · 개봉 7일 전 검색량과 개봉 주말 흥행 수입 · R²=70%</figcaption></figure>
+  <figure class="case"><img src="img/lesson07_case2.png" alt="질로우의 분기별 주택 매입 건수 막대그래프. 2019년 1분기부터 2021년 1분기까지는 대체로 900~2,300채 사이이고 2020년 2분기에는 거의 0으로 떨어졌다가, 2021년 2분기 약 3,800채, 3분기 9,680채로 늘어납니다." loading="lazy" style="width:100%;height:auto"><figcaption class="src">출처: 마이크 델프리트(mikedp.com, 2021) · 질로우의 분기별 주택 매입 건수 · 2021년 3분기 9,680채</figcaption></figure>
+  <p>모델의 성능을 판단할 때는 점수의 크기보다 그 점수가 어느 시점의 정보로 나온 값인지를 먼저 확인합니다. 예측 시점에 실제로 확보할 수 있는 정보만으로 구성된 변수인지 검토해야 합니다.</p>
+  </div></details>
+
+    
+  <h2>상황으로 보는 다중 회귀 — 사이킷런과 plotly로 직접 확인하기</h2>
+  <p>같은 데이터, 같은 전처리, 같은 학습용·시험용 나누기로 변수와 조건만 바꾸어 계산한 결과입니다. 그래프는 사이킷런으로 계산해 plotly로 그렸고, 각 상황 아래의 프롬프트를 내 앱의 대화창에 붙여 넣으면 같은 그림을 직접 만들 수 있습니다.</p>
+  <div class="situation" data-sit="s05-combo-31">
+    <div class="sit-h"><span class="num">상황 5</span><span class="t">변수 조합 31가지의 전수 비교</span></div>
+    <p class="intuition">다섯 변수로 만들 수 있는 조합 31가지를 모두 계산해 점으로 흩뿌리면, 변수 개수가 같아도 평가 점수가 −0.180에서 0.395까지 벌어진다는 사실이 드러납니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s05-combo-31.png" alt="변수 조합 31가지의 전수 비교"></div>
+    <ul class="reading"><li>같은 개수 안에서도 점의 세로 폭이 큽니다.</li><li>세 개짜리는 −0.180에서 0.395까지 벌어집니다.</li><li>파랑(첫 관측일 상영 횟수 포함)이 위쪽, 회색이 아래쪽으로 갈라집니다.</li><li>개수보다 어떤 변수가 들어 있느냐가 크게 작용합니다.</li><li>한 개짜리 최고 0.395가 다섯 개를 모두 넣은 조합 0.266보다 높습니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>다섯 변수로 만들 수 있는 조합을 전부 비교해 보고 싶어. 영화 정보 표의 국가에서 한국이 아니면 1인 해외영화 열과 개봉일에서 월만 뽑은 개봉월 열을 새로 만들어 줘. 그다음 첫 관측일 스크린 수, 첫 관측일 상영 횟수, 성수기 개봉, 해외영화 여부, 개봉월 다섯 개 중 하나 이상을 고르는 모든 조합 서른한 가지를 자동으로 만들어서 각각 학습에 쓴 영화로 잰 점수와 시험용 영화로 잰 점수를 구해 줘. 가로축을 변수 개수로 두고 조합 하나를 점 하나로 찍은 그래프를 그려 줘. 점이 겹치지 않게 좌우로 조금씩 흩어 주고, 첫 관측일 상영 횟수가 들어간 조합과 아닌 조합을 다른 색으로 칠해 줘. 개수마다 평가 점수의 중앙값도 가로 막대로 표시해 줘. 평가 점수가 가장 높은 조합 세 개와 가장 낮은 조합 세 개를 변수 이름까지 적어서 표로 보여 줘. 그래프는 plotly로 그려 줘. 서른한 가지 모두 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+<h2>4. 도전 — 단서를 하나 만들어 넣으면</h2>
   <p>이번 도전에서는 <b>예측 시점을 해당 영화의 첫 관측일 집계가 끝난 뒤로 바꿉니다.</b> 첫 관측일은 수업 자료에서 영화가 10위권에 처음 등장한 날입니다. 그날의 관객 수를 상영 횟수로 나누어 <b>상영당 관객 수</b>라는 특성을 만듭니다. 한 번 상영에 평균 몇 명이 관람했는지를 뜻하며, 좌석 수를 고려한 좌석 점유율과는 다릅니다. 이 값은 개봉 전 예측에 사용할 수 없습니다.</p>
   <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 첫 관측일의 집계가 끝난 시점에서 예측한다고 가정해 줘.
 그 시점에 알 수 있는 정보로 새 특성을 만들어 보자.
@@ -280,6 +640,76 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
     </tbody>
   </table>
   <p>같은 테스트 자료에서 기본 변수만 사용한 R²는 0.240이고, 첫 관측일의 상영당 관객 수를 추가하면 0.529입니다. 기존 열을 조합해 새 변수를 만드는 것을 <b>특성 만들기</b>라고 합니다. R²가 높아졌다는 결과를 예측 성능이 두 배가 되었다고 해석해서는 안 됩니다. 이번 비교는 첫 관측일 집계 이후라는 시점에서 읽어야 합니다.</p>
+  <div class="situation" data-sit="s06-timing-curve">
+    <div class="sit-h"><span class="num">상황 6</span><span class="t">예측 시점에 따른 점수의 변화</span></div>
+    <p class="intuition">예측을 미룰수록 점수가 올라가는 정도를 시점 축 위에서 봅니다. 개봉 전 0.240에서 첫 관측일 하루치만 알아도 0.652, 14일치를 알면 0.847이 됩니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s06-timing-curve.png" alt="예측 시점에 따른 점수의 변화"></div>
+    <ul class="reading"><li>개봉 전 0.240에서 첫날 하루치만 더해도 0.652로 올라갑니다.</li><li>3일 지점에서 0.603으로 내려갔다가 7일 0.772, 14일 0.847로 다시 올라갑니다.</li><li>시점을 미룬다고 점수가 계속 오르지는 않습니다.</li><li>같은 216편, 같은 분할이므로 차이의 원인은 예측 시점 하나뿐입니다.</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>예측하는 시점을 바꿔 가며 점수를 비교하고 싶어. 박스오피스 표에서 영화마다 10위권에 처음 등장한 날을 찾고, 그날부터 1일·3일·7일·14일 동안의 일관객을 각각 더해서 네 개의 새 열을 만들어 줘. 자료에 없는 날은 0으로 처리해 줘. 그다음 기본 변수 세 개만 쓴 개봉 전 모델과, 기본 변수에 각 시점의 누적 관객을 하나씩 더한 네 모델까지 다섯 가지의 시험용 점수와 평균 오차를 구해 줘. 가로축을 예측 시점으로 두고 점수를 꺾은선으로 이은 그래프를 그리고 점마다 값을 숫자로 적어 줘. 시점 변수 하나만 쓴 경우의 점수도 옅은 색 선으로 함께 그려 줘. 점수가 앞 시점보다 낮아진 지점이 있으면 그 점만 색을 다르게 표시해 줘. 각 시점에 사용한 정보가 그 시점에 실제로 확보되는 값인지 한 줄로 적어 줘. 그래프는 plotly로 그려 줘. 다섯 가지 모두 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+  <figure class="interactive" data-fig="wmix">
+    <div class="widget" data-w="wmix">
+<svg viewBox="0 0 720 360" role="img" aria-label="변수 다섯 개를 켜고 끄면 학습과 테스트 두 막대, 직전 조합 고스트, 가중치 표, 하락 횟수 카운터가 함께 달라지는 비교판">
+  <text x="20" y="26" font-size="15" font-weight="800" fill="#1c2230">테스트 점수(R²) · 떼어 둔 66편</text>
+
+  <g stroke="#e3ddcf" stroke-width="1.2">
+    <line x1="250" y1="38" x2="250" y2="106"/>
+    <line x1="450" y1="38" x2="450" y2="106"/>
+    <line x1="650" y1="38" x2="650" y2="106"/>
+    <line x1="250" y1="106" x2="650" y2="106"/>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="middle">
+    <text x="250" y="124">0</text>
+    <text x="450" y="124">0.5</text>
+    <text x="650" y="124">1.0</text>
+  </g>
+
+  <text x="240" y="62" font-size="14" font-weight="800" fill="#1c2230" text-anchor="end">테스트</text>
+  <rect class="btest" x="250" y="44" width="0" height="24" fill="#2b7fd6"/>
+  <rect class="ghost" x="250" y="44" width="0" height="24" fill="none" stroke="#2b7fd6" stroke-opacity="0.4" stroke-width="1.5" stroke-dasharray="4 3" visibility="hidden"/>
+  <polyline class="sawtest" points="650,44 657,50 650,56 657,62 650,68" fill="none" stroke="#2b7fd6" stroke-width="2" visibility="hidden"/>
+  <text class="vtest" x="258" y="62" font-size="15" font-weight="800" fill="#1c2230"></text>
+
+  <text x="240" y="96" font-size="14" font-weight="800" fill="#1c2230" text-anchor="end">학습</text>
+  <rect class="btrain" x="250" y="78" width="0" height="24" fill="#b9b3a5"/>
+  <polyline class="sawtrain" points="650,78 657,84 650,90 657,96 650,102" fill="none" stroke="#b9b3a5" stroke-width="2" visibility="hidden"/>
+  <text class="vtrain" x="258" y="96" font-size="15" font-weight="800" fill="#1c2230"></text>
+
+  <text class="delta" x="250" y="146" font-size="15" font-weight="800" fill="#6b7385"></text>
+
+  <text class="unitlab" x="430" y="170" font-size="14" fill="#6b7385" text-anchor="end">(명 / 1단위)</text>
+  <g font-size="14" fill="#6b7385">
+    <text x="20" y="192">변수</text>
+    <text x="315" y="192" text-anchor="end">가중치</text>
+    <text x="430" y="192" text-anchor="end">따로 구한 값</text>
+  </g>
+  <line x1="20" y1="200" x2="430" y2="200" stroke="#e3ddcf" stroke-width="1.2"/>
+  <g class="rows" font-size="15" fill="#1c2230"></g>
+
+  <rect x="452" y="160" width="248" height="160" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1.2"/>
+  <g class="boxfull">
+    <text x="468" y="192" font-size="15" font-weight="800" fill="#1c2230">변수를 더했는데 내려간 경우</text>
+    <text class="kcnt" x="468" y="236" font-size="26" font-weight="800" fill="#b07a00">지금까지 0회</text>
+    <text x="468" y="264" font-size="14" fill="#6b7385">전체 75경로 중 41회</text>
+    <text class="leakwarn" x="468" y="300" font-size="15" font-weight="800" fill="#d64545" visibility="hidden">개봉 전 사용 불가 변수 포함</text>
+  </g>
+  <text class="boxempty" x="468" y="236" font-size="15" fill="#6b7385" visibility="hidden">변수 1개 이상 선택</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-v="0" aria-pressed="true">스크린 수</button>
+  <button class="wbtn" type="button" data-v="1" aria-pressed="false">상영 횟수</button>
+  <button class="wbtn" type="button" data-v="2" aria-pressed="false">성수기</button>
+  <button class="wbtn leak" type="button" data-v="3" aria-pressed="false">⚠ 첫 주 관객 · 개봉 후</button>
+  <button class="wbtn leak" type="button" data-v="4" aria-pressed="false">⚠ 상영당 관객 · 개봉 후</button>
+  <button class="wbtn" type="button" data-u="1" aria-pressed="false">1 표준편차당</button>
+  <button class="wbtn" type="button" data-r="1">처음으로</button>
+</div>
+</div>
+    <figcaption>변수 버튼을 켜고 끄면 학습과 테스트 두 막대, 가중치 표, 하락 횟수가 함께 달라집니다. 학습 150편으로 가중치를 구하고 테스트 66편으로 점수를 잰 실측값입니다. 스크린 수만 사용한 조합은 학습 0.032보다 테스트 0.313이 높습니다. 떼어 둔 66편이 상대적으로 예측하기 쉬운 쪽이었기 때문이며, 테스트 점수가 항상 더 낮은 것은 아닙니다. 스크린 수와 상영 횟수의 상관은 학습 150편에서 0.959입니다.</figcaption>
+  </figure>
+
 
 
 <h2>5. 개념 정리 — 좋은 점수가 좋은 모델인가</h2>
@@ -354,5 +784,8 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
+<script src="assets/widgets07.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="assets/lesson07_situations.js"></script>
 </body>
 </html>
