@@ -959,10 +959,10 @@ SELECT * FROM menu_duels WHERE winner = '제육볶음';</pre></div>
   <table class="daymap">
     <thead><tr><th>낱말</th><th>뜻</th><th>우리말로 읽으면</th></tr></thead>
     <tbody>
-      <tr><td><b>SELECT</b></td><td>가져올 열을 고른다. *는 모든 열</td><td>"메뉴와 저장 시각을 보여 줘"</td></tr>
+      <tr><td><b>SELECT</b></td><td>가져올 열을 고른다. *는 모든 열</td><td>메뉴와 저장 시각을 보여 주십시오.</td></tr>
       <tr><td><b>FROM</b></td><td>어느 테이블에서 가져올지</td><td>"대결 기록 표에서"</td></tr>
       <tr><td><b>WHERE</b></td><td>조건에 맞는 행만 남긴다</td><td>"제육볶음을 선택한 표만"</td></tr>
-      <tr><td><b>ORDER BY</b></td><td>정렬 기준. DESC는 내림차순, ASC는 오름차순</td><td>"최근 대결부터"</td></tr>
+      <tr><td><b>ORDER BY</b></td><td>정렬 기준입니다. DESC는 내림차순, ASC는 오름차순입니다.</td><td>"최근 대결부터"</td></tr>
     </tbody>
   </table>
   <p>WHERE는 조건에 맞는 행을 고르는 절입니다. 파일도 프로그램으로 필터링할 수 있습니다. 데이터베이스에서는 검색 조건을 서버에 보내 필요한 결과를 가져옵니다.</p>
@@ -991,9 +991,9 @@ DELETE FROM votes_practice WHERE id = 7;</pre></div>
       <tr><td><b>id</b></td><td>기록 번호</td><td>정수</td><td>자동 증가 · 기본 키</td></tr>
       <tr><td><b>game_id</b></td><td>한 판을 묶는 번호</td><td>문자열</td><td>NULL·빈 값 불가</td></tr>
       <tr><td><b>round</b></td><td>대결 라운드</td><td>문자열</td><td>8강·4강·결승 중 하나</td></tr>
-      <tr><td><b>left_menu · right_menu</b></td><td>겨룬 두 반찬</td><td>문자열</td><td>여덟 후보 중 서로 다른 반찬 · NULL 불가</td></tr>
-      <tr><td><b>winner</b></td><td>이긴 반찬</td><td>문자열</td><td>겨룬 두 반찬 중 하나 · NULL 불가</td></tr>
-      <tr><td><b>created_at</b></td><td>저장 시각</td><td>날짜·시각</td><td>현재 시각을 기본값으로 사용</td></tr>
+      <tr><td><b>left_menu · right_menu</b></td><td>겨룬 두 반찬</td><td>문자열</td><td>여덟 후보 중 서로 다른 반찬. NULL 불가</td></tr>
+      <tr><td><b>winner</b></td><td>이긴 반찬</td><td>문자열</td><td>겨룬 두 반찬 중 하나. NULL 불가</td></tr>
+      <tr><td><b>created_at</b></td><td>저장 시각</td><td>날짜·시각</td><td>현재 시각을 기본값으로 사용합니다.</td></tr>
     </tbody>
   </table>
   <div class="codewrap code"><span class="label">SQL · 표 만들기</span><pre>-- 준비 담당자가 별도 연습용 프로젝트의 SQL Editor에서 한 번 실행합니다.
@@ -1024,15 +1024,15 @@ CREATE POLICY "insert_practice_votes" ON public.menu_duels
     <thead><tr><th>설계표의 항목</th><th>SQL에서</th><th>예</th></tr></thead>
     <tbody>
       <tr><td><b>속성명</b></td><td>열 이름</td><td>id, game_id, round, left_menu, right_menu, winner, created_at</td></tr>
-      <tr><td><b>데이터형</b></td><td>text(문자열) · integer/bigint(정수) · numeric(소수) · boolean(참/거짓) · timestamptz(날짜·시각)</td><td>관객 수는 bigint, 타율은 numeric</td></tr>
-      <tr><td><b>조건</b></td><td>NOT NULL(NULL 불가) · PRIMARY KEY(기본 키) · UNIQUE(중복 불가) · DEFAULT(기본값)</td><td>이메일은 UNIQUE</td></tr>
+      <tr><td><b>데이터형</b></td><td>text(문자열), integer/bigint(정수), numeric(소수), boolean(참/거짓), timestamptz(날짜·시각)</td><td>관객 수는 bigint, 타율은 numeric입니다.</td></tr>
+      <tr><td><b>조건</b></td><td>NOT NULL(NULL 불가), PRIMARY KEY(기본 키), UNIQUE(중복 불가), DEFAULT(기본값)</td><td>이메일은 UNIQUE</td></tr>
     </tbody>
   </table>
   <p><b>기본 키</b>는 행을 유일하게 구분하는 열 또는 열의 조합입니다. 이 표에서는 자동으로 부여되는 id가 기본 키입니다. 같은 반찬이 여러 번 이겨도 각 행의 id는 다릅니다. NOT NULL은 NULL을 막지만 빈 문자열까지 막지는 않습니다. 그래서 판 번호는 빈 값을 막고, 두 반찬은 서로 다른 후보이며 승자는 그 둘 중 하나인지 CHECK 제약으로 검사합니다. 이 제약만으로 대진표 전체의 올바름이나 실제 참여자를 확인할 수는 없습니다.</p>
   <details class="glossary" open>
     <summary>🔬 움직여 보기 — 설계표를 채우면 CREATE TABLE 문장이 만들어진다 (교과서 31쪽 탐구활동)</summary>
     <div class="gin">
-      <p style="margin:10px 0 8px">교과서 31쪽의 쇼핑몰 테이블(사용자·제품·장바구니)을 예시로 불러오거나, 표 이름부터 직접 정해 나만의 표를 설계해 보세요. 속성명을 적고 데이터형과 조건을 고르면 오른쪽 아래에 SQL 문장이 바로 만들어지고, 그 문장을 우리말로 읽은 해석이 함께 나타납니다. 데이터베이스를 실제로 만드는 것이 아니라, 설계표의 한 칸이 SQL의 어느 낱말이 되는지 읽는 연습입니다.</p>
+      <p style="margin:10px 0 8px">교과서 31쪽의 쇼핑몰 테이블(사용자·제품·장바구니)을 예시로 불러오거나, 표 이름부터 직접 정해 나만의 표를 설계해 보십시오. 속성명을 적고 데이터형과 조건을 고르면 오른쪽 아래에 SQL 문장이 바로 만들어지고, 그 문장을 우리말로 읽은 해석이 함께 나타납니다. 데이터베이스를 실제로 만드는 것이 아니라, 설계표의 한 칸이 SQL의 어느 낱말이 되는지 읽는 연습입니다.</p>
       <div class="sch">
         <div class="sch-bar">
           <label>예시 불러오기 <select class="sch-preset"><option value="">직접 설계</option><option value="user">사용자 표</option><option value="product">제품 표</option><option value="cart">장바구니 표</option><option value="menu_duels">대결 기록 표</option></select></label>
@@ -1189,8 +1189,8 @@ LIMIT 5;</pre></div>
     <thead><tr><th>낱말</th><th>뜻</th></tr></thead>
     <tbody>
       <tr><td><b>COUNT(*)</b></td><td>조건에 맞는 행의 개수를 센다</td></tr>
-      <tr><td><b>LIKE '%배추김치%'</b></td><td>문자열 안에 "배추김치"가 들어 있는 행을 찾는다. %는 "무엇이든"</td></tr>
-      <tr><td><b>GROUP BY</b></td><td>같은 값끼리 묶는다. "요일별로"</td></tr>
+      <tr><td><b>LIKE '%배추김치%'</b></td><td>문자열 안에 '배추김치'가 들어 있는 행을 찾는다. %는 '무엇이든'을 뜻한다.</td></tr>
+      <tr><td><b>GROUP BY</b></td><td>같은 값끼리 묶는다. '요일별로' 묶는다.</td></tr>
       <tr><td><b>COUNT · SUM · AVG · MAX · MIN</b></td><td>묶음마다 개수 · 합계 · 평균 · 최댓값 · 최솟값</td></tr>
       <tr><td><b>AS</b></td><td>결과 열에 붙일 이름</td></tr>
       <tr><td><b>LIMIT</b></td><td>앞에서 몇 행만 가져온다. "상위 5개"</td></tr>
@@ -1199,7 +1199,7 @@ LIMIT 5;</pre></div>
   <details class="glossary" open>
     <summary>🔬 움직여 보기 — SQL 문장 조립기 (급식 20끼 연습 데이터)</summary>
     <div class="gin">
-      <p style="margin:10px 0 8px">아래에서 낱말을 고르면 SQL 문장이 만들어지고, 그 문장을 연습용 급식 20끼(15일의 중식 15끼와 석식 5끼) 표에 실행한 결과가 바로 아래에 나타납니다. 칼로리는 연습용 예시 값입니다. 조건 없이 요일로 묶으면 같은 날의 중식과 석식이 따로 세어지므로, "일수"를 보려면 조건에서 식사를 고릅니다.</p>
+      <p style="margin:10px 0 8px">아래에서 낱말을 고르면 SQL 문장이 만들어지고, 그 문장을 연습용 급식 20끼(15일의 중식 15끼와 석식 5끼) 표에 실행한 결과가 바로 아래에 나타납니다. 칼로리는 연습용 예시 값입니다. 조건 없이 요일로 묶으면 같은 날의 중식과 석식이 따로 세어지므로, '일수'를 보려면 조건에서 식사를 고릅니다.</p>
       <div class="sqlb" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:0.92rem">
         <label>묶는 열(GROUP BY) <select class="sqlb-g"><option value="요일">요일</option><option value="식사">식사</option><option value="월">월</option></select></label>
         <label>집계 <select class="sqlb-f"><option value="COUNT(*)">COUNT(*) 끼니수</option><option value="AVG(칼로리)">AVG(칼로리) 평균 열량</option><option value="MAX(칼로리)">MAX(칼로리) 최고 열량</option><option value="SUM(칼로리)">SUM(칼로리) 열량 합</option></select></label>
@@ -1285,13 +1285,13 @@ LIMIT 5;</pre></div>
   <div class="app-sql-wrap"><table class="daymap app-sql">
     <thead><tr><th>앱에서 하는 일</th><th>뒤에서 실행되는 SQL</th><th>읽는 법</th></tr></thead>
     <tbody>
-      <tr><td><b>피드를 연다</b></td><td><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</code></td><td>게시물 표에서, 올린 시각이 늦은 것부터, 20개만</td></tr>
-      <tr><td><b>해시태그 #고양이를 검색한다</b></td><td><code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></td><td>해시태그 열에 "#고양이"가 들어 있는 행만</td></tr>
-      <tr><td><b>cat_mong 프로필의 "게시물 4"</b></td><td><code>SELECT COUNT(*) FROM posts WHERE 작성자 = 'cat_mong';</code></td><td>cat_mong이 쓴 행의 개수를 센다</td></tr>
-      <tr><td><b>인기 해시태그 순위</b></td><td><code>SELECT 해시태그, COUNT(*) AS 개수 FROM posts GROUP BY 해시태그 ORDER BY 개수 DESC LIMIT 10;</code></td><td>해시태그별로 묶어 개수를 세고, 많은 순으로 10개</td></tr>
-      <tr><td><b>❤ 좋아요를 누른다</b></td><td><code>UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = 4;</code></td><td>4번 게시물 한 행의 좋아요 값을 1 늘린다</td></tr>
-      <tr><td><b>댓글을 단다</b></td><td><code>INSERT INTO comments (게시물id, 작성자, 댓글) VALUES (4, 'dog_bori', '박스 안이 그렇게 좋아?');</code></td><td>댓글 표에 새 행 하나를 넣는다</td></tr>
-      <tr><td><b>내 게시물을 지운다</b></td><td><code>DELETE FROM posts WHERE id = 4 AND 작성자 = 'cat_mong';</code></td><td>4번이면서 cat_mong이 쓴 행만 지운다. 삭제 대상의 조건이다. 작성자 확인과 접근 권한 검사는 별도로 필요하다</td></tr>
+      <tr><td><b>피드를 연다</b></td><td><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</code></td><td>게시물 표에서, 올린 시각이 늦은 것부터 20개만 가져온다.</td></tr>
+      <tr><td><b>해시태그 #고양이를 검색한다</b></td><td><code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></td><td>해시태그 열에 '#고양이'가 들어 있는 행만 찾는다.</td></tr>
+      <tr><td><b>cat_mong 프로필의 "게시물 4"</b></td><td><code>SELECT COUNT(*) FROM posts WHERE 작성자 = 'cat_mong';</code></td><td>cat_mong이 쓴 행의 개수를 센다.</td></tr>
+      <tr><td><b>인기 해시태그 순위</b></td><td><code>SELECT 해시태그, COUNT(*) AS 개수 FROM posts GROUP BY 해시태그 ORDER BY 개수 DESC LIMIT 10;</code></td><td>해시태그별로 묶어 개수를 세고, 많은 순으로 10개를 가져온다.</td></tr>
+      <tr><td><b>❤ 좋아요를 누른다</b></td><td><code>UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = 4;</code></td><td>4번 게시물 한 행의 좋아요 값을 1 늘린다.</td></tr>
+      <tr><td><b>댓글을 단다</b></td><td><code>INSERT INTO comments (게시물id, 작성자, 댓글) VALUES (4, 'dog_bori', '박스 안이 그렇게 좋아?');</code></td><td>댓글 표에 새 행 하나를 넣는다.</td></tr>
+      <tr><td><b>내 게시물을 지운다</b></td><td><code>DELETE FROM posts WHERE id = 4 AND 작성자 = 'cat_mong';</code></td><td>4번이면서 cat_mong이 쓴 행만 지운다. 삭제 대상의 조건이다. 작성자 확인과 접근 권한 검사는 별도로 필요하다.</td></tr>
     </tbody>
   </table></div>
   <p>실제 서비스는 여러 테이블·캐시·접근 권한 등을 함께 사용합니다. 여기서는 조회·추가·갱신·삭제라는 기본 동작을 구분하는 데 집중합니다. 아래 시뮬레이터는 페이지 안의 연습 데이터만 바꿉니다.</p>
@@ -1306,7 +1306,7 @@ LIMIT 5;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="read">
-          <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 단추를 누르거나 직접 고쳐 써 보세요. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, "GROUP BY에 없는 열"을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
+          <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 단추를 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
           <div class="sim-row">
             <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 표 posts</option><option value="meals">급식 표 meals</option></select></label>
             <span class="sim-cols"></span>
@@ -1321,7 +1321,7 @@ LIMIT 5;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="write" hidden>
-          <p class="sim-intro">cat_mong의 4번 게시물 "박스 새로 샀는데 포장지에 들어감 🐱"에 달린 댓글 표(comments)입니다. 월드컵 앱과 다른 댓글 연습 자료입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
+          <p class="sim-intro">cat_mong의 4번 게시물 '박스 새로 샀는데 포장지에 들어감 🐱'에 달린 댓글 표(comments)입니다. 월드컵 앱과 다른 댓글 연습 자료입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
           <div class="w-grid">
             <div class="w-card ins">
               <div class="w-h"><span class="w-ico">💬</span> 댓글 달기 — INSERT</div>
@@ -1583,7 +1583,7 @@ LIMIT 5;</pre></div>
   <div class="quiz">
     <div class="qq"><span class="qn">장면 1</span> 지우가 먼저 나섭니다. "요일별로(GROUP BY) 평균 열량을 내서(AVG), 높은 요일부터(ORDER BY) 보면 되겠다." 지우가 써야 할 SQL 문장을 종이에 완성해 본 뒤 펼쳐 보세요. 중식만 대상으로 하고, 결과 열의 이름은 요일과 평균칼로리로 합니다.</div>
     <details class="reveal"><summary>정답 펼쳐 보기</summary>
-      <p><code>SELECT 요일, AVG(칼로리) AS 평균칼로리 FROM meals WHERE 식사 = '중식' GROUP BY 요일 ORDER BY 평균칼로리 DESC;</code> — 위 조립기에서 묶는 열 "요일", 집계 "AVG(칼로리)", 조건 "식사 = '중식'"을 고르면 같은 문장이 만들어집니다.</p>
+      <p><code>SELECT 요일, AVG(칼로리) AS 평균칼로리 FROM meals WHERE 식사 = '중식' GROUP BY 요일 ORDER BY 평균칼로리 DESC;</code>위 조립기에서 묶는 열 '요일', 집계 'AVG(칼로리)', 조건 '식사 = '중식''을 고르면 같은 문장이 만들어집니다.</p>
     </details>
   </div>
   <div class="quiz">
@@ -1614,7 +1614,7 @@ LIMIT 5;</pre></div>
   <table class="daymap">
     <thead><tr><th>알려 줄 것</th><th>왜</th><th>①의 문장</th></tr></thead>
     <tbody>
-      <tr><td><b>표 이름과 열 이름</b>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다</td><td>"표 이름은 menu_duels이고 public 스키마에 있어. 이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야"</td></tr>
+      <tr><td><b>표 이름과 열 이름</b>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다.</td><td>"표 이름은 menu_duels이고 public 스키마에 있어. 이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야"</td></tr>
       <tr><td><b>새 표를 만들지 말 것</b></td><td>학급 공용 프로젝트에서는 학생이 표를 만들 권한이 없다</td><td>"새 표를 만들지 말고 이 표에 그대로 연결해 줘"</td></tr>
       <tr><td><b>접속 정보는 비밀 금고에</b></td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘"</td></tr>
       <tr><td><b>무결성 조건</b></td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘"</td></tr>
@@ -1655,7 +1655,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 모둠 과제 자료를 CSV 파일로 만들어 메신저로 주고받는 방식과 비교해, 데이터베이스를 쓸 때의 이점을 두 가지 서술해 본 뒤 펼쳐 보세요.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>① 동시 입력을 처리하는 기능으로 여러 대결 기록을 각각 저장할 수 있습니다. ② 한곳에 모인 데이터를 조건에 따라 조회·집계할 수 있습니다. 제약과 접근 권한도 관리할 수 있지만 올바른 설정이 필요합니다. 파일에서도 프로그램을 만들면 이런 작업이 가능하며, 데이터베이스는 이를 관리하는 기능을 제공합니다.</p>
+      <p>동시 입력을 처리하는 기능으로 여러 대결 기록을 각각 저장할 수 있습니다. 한곳에 모인 데이터를 조건에 따라 조회·집계할 수 있습니다. 제약과 접근 권한도 관리할 수 있지만 올바른 설정이 필요합니다. 파일에서도 프로그램을 만들면 이런 작업이 가능하며, 데이터베이스는 이를 관리하는 기능을 제공합니다.</p>
     </details>
   </div>
   <div class="quiz">
@@ -1689,7 +1689,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   <ul class="checklist">
     <li>CSV 파일로 부족해지는 세 순간(동시에 쓰기·계속 쌓기·골라 읽기)을 말할 수 있다.</li>
     <li>반찬 월드컵 앱에서 저장 성공과 반찬별 승률 집계를 확인했다.</li>
-    <li>친구와 같은 대결 기록 표에 연결해 서로의 대결 기록이 집계에 반영되는지 확인했다.</li>
+    <li>친구와 같은 대결 기록 표에 연결하여 서로의 대결 기록이 집계에 반영되는지 확인했다.</li>
     <li>(읽기 자료) SQL 문장 하나를 읽고 네 동작(생성·읽기·갱신·삭제) 중 어느 것인지 말할 수 있다.</li>
     <li>팀을 구성하고, 데이터 후보를 앞의 두 물음으로 먼저 판단해 주제 카드 초안을 냈다.</li>
   </ul>
@@ -1703,9 +1703,9 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     <tr><td class="term">수파베이스</td><td>PostgreSQL 데이터베이스와 API·인증 등을 제공하는 서비스</td></tr>
     <tr><td class="term">데이터 무결성</td><td>잘못된 값이 들어오지 않도록 제약을 걸어 데이터의 올바름을 지키는 것</td></tr>
     <tr><td class="term">데이터 적합성</td><td>어떤 문제가 데이터로 답할 수 있는 문제인지 — 존재·적합·윤리로 판단</td></tr>
-    <tr><td class="term">SQL</td><td>테이블에 데이터를 넣고(INSERT) 꺼내고(SELECT) 고치고(UPDATE) 지우라고(DELETE) 지시하는 언어. WHERE는 조건, ORDER BY는 정렬</td></tr>
+    <tr><td class="term">SQL</td><td>테이블에 데이터를 넣고(INSERT) 꺼내고(SELECT) 고치고(UPDATE) 지우는(DELETE) 언어이다. WHERE는 조건, ORDER BY는 정렬이다.</td></tr>
     <tr><td class="term">기본 키</td><td>행을 유일하게 구분하는 열 또는 열의 조합. 이 대결 기록 표에서는 id를 사용</td></tr>
-    <tr><td class="term">GROUP BY</td><td>같은 값끼리 묶어 묶음마다 COUNT·AVG 같은 집계를 구하는 SQL 낱말. 묶은 열이 아닌 열은 집계 함수로 감싼다</td></tr>
+    <tr><td class="term">GROUP BY</td><td>같은 값끼리 묶어 묶음마다 COUNT·AVG 같은 집계를 구하는 SQL 낱말이다. 묶은 열이 아닌 열은 집계 함수로 감싼다.</td></tr>
     <tr><td class="term">권한 정책(RLS)</td><td>활성화된 테이블에서 앱 역할이 접근할 수 있는 행을 정하는 정책. 테이블 권한과 함께 적용</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>

@@ -40,7 +40,7 @@
   </div>
 
   <h2>0. 왜 배우나</h2>
-  <p>연관 분석은 함께 나타나는 항목의 패턴을 찾습니다. 자주 나오는 메뉴는 다른 여러 메뉴와도 자주 겹칩니다. 따라서 동시 등장 횟수뿐 아니라 각 메뉴의 기본 등장률도 함께 살펴야 합니다. 오늘은 하루 중식 식단을 한 건으로 보고, 두 메뉴의 관계를 비교합니다.</p>
+  <p>연관 분석은 함께 나타나는 항목의 패턴을 찾습니다. 자주 나오는 메뉴는 다른 여러 메뉴와도 자주 겹칩니다. 따라서 동시 등장 횟수뿐 아니라 각 메뉴의 기본 등장률도 함께 살펴야 합니다. 하루 중식 식단을 한 건으로 보고, 두 메뉴의 관계를 비교합니다.</p>
 
   <h2>1. 개념 이해 — 교과서의 세 숫자</h2>
   <div class="tbquote">
@@ -291,7 +291,7 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
   </div>
 
   <h2>4. 결과 해석 — 기본 등장률과 비교하기</h2>
-  <p>아래 값은 위에서 연결한 184일 저장본으로 검산했습니다. 등장 열은 앞 메뉴와 뒤 메뉴가 각각 나온 일수입니다. 마지막 행은 동시 0회이므로 “동시 5회 이상” 결과 표에 나오지 않습니다. 별도로 두 메뉴를 세어 비교한 사례입니다.</p>
+  <p>아래 값은 위에서 연결한 184일 저장본으로 검산했습니다. 등장 열은 앞 메뉴와 뒤 메뉴가 각각 나온 일수입니다. 마지막 행은 동시 0회이므로 '동시 5회 이상' 결과 표에 나오지 않습니다. 별도로 두 메뉴를 세어 비교한 사례입니다.</p>
   <table class="daymap">
     <thead><tr><th>규칙</th><th>등장</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr></thead>
     <tbody>
@@ -471,8 +471,8 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
   <table class="daymap">
     <thead><tr><th>사례</th><th>무엇을 계산했나</th><th>세 지표로 보면</th></tr></thead>
     <tbody>
-      <tr><td><b>허리케인 직전의<br>딸기 팝타르트</b></td><td>2004년 미국 월마트는 허리케인 찰리 때의 판매 기록을 다시 계산했다. 허리케인 직전에 딸기 팝타르트가 평소의 약 7배 팔렸고 가장 많이 팔린 품목은 맥주였다. 월마트는 다음 허리케인의 진로에 있는 매장으로 두 품목을 미리 실어 보냈다 (<a href="https://www.nytimes.com/2004/11/14/business/yourmoney/what-walmart-knows-about-customers-habits.html" target="_blank" rel="noopener">보도 원문 보기</a>)</td><td>향상도가 쓰인 자리다. 팝타르트는 전체 판매에서 차지하는 비중이 작아 지지도가 낮다. 조건을 허리케인 경보가 내려진 날로 좁히면 판매 비율이 평소의 약 7배가 된다. 지지도가 낮다는 이유로 걸렀다면 찾지 못했을 규칙이다</td></tr>
-      <tr><td><b>아마존의<br>자주 함께 구매하는 품목</b></td><td>아마존은 2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록을 비교한다. 이 방식은 지금도 상품 페이지의 자주 함께 구매하는 품목 칸으로 작동한다 (<a href="https://www.amazon.com/Sapiens-Humankind-Yuval-Noah-Harari/dp/0062316095" target="_blank" rel="noopener">상품 페이지 보기</a>)</td><td>지지도와 신뢰도의 차이를 보여 준다. 전체 주문 가운데 두 책이 함께 담긴 비율이 지지도이고 한 책을 산 사람 가운데 다른 책도 산 비율이 신뢰도이다. 파는 상품이 많으면 어떤 두 권의 지지도든 낮지만 신뢰도와 향상도가 높으면 추천 대상이 된다</td></tr>
+      <tr><td><b>허리케인 직전의<br>딸기 팝타르트</b></td><td>2004년 미국 월마트는 허리케인 찰리 때의 판매 기록을 다시 계산했다. 허리케인 직전에 딸기 팝타르트가 평소의 약 7배 팔렸고 가장 많이 팔린 품목은 맥주였다. 월마트는 다음 허리케인의 진로에 있는 매장으로 두 품목을 미리 실어 보냈다 (<a href="https://www.nytimes.com/2004/11/14/business/yourmoney/what-walmart-knows-about-customers-habits.html" target="_blank" rel="noopener">보도 원문 보기</a>)</td><td>향상도가 쓰인 자리다. 팝타르트는 전체 판매에서 차지하는 비중이 작아 지지도가 낮다. 조건을 허리케인 경보가 내려진 날로 좁히면 판매 비율이 평소의 약 7배가 된다. 지지도가 낮다는 이유로 걸렀다면 찾지 못했을 규칙이다.</td></tr>
+      <tr><td><b>아마존의<br>자주 함께 구매하는 품목</b></td><td>아마존은 2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록을 비교한다. 이 방식은 지금도 상품 페이지의 자주 함께 구매하는 품목 칸으로 작동한다 (<a href="https://www.amazon.com/Sapiens-Humankind-Yuval-Noah-Harari/dp/0062316095" target="_blank" rel="noopener">상품 페이지 보기</a>)</td><td>지지도와 신뢰도의 차이를 보여 준다. 전체 주문 가운데 두 책이 함께 담긴 비율이 지지도이고 한 책을 산 사람 가운데 다른 책도 산 비율이 신뢰도이다. 파는 상품이 많으면 어떤 두 권의 지지도든 낮지만 신뢰도와 향상도가 높으면 추천 대상이 된다.</td></tr>
     </tbody>
   </table>
   <figure class="case" style="margin:16px 0 4px"><img src="img/lesson12_case1.jpg" alt="하늘색 바탕 위에 겹쳐 놓인 딸기 맛 팝타르트 두 장. 흰 아이싱 위에 빨강·초록·노랑 알갱이가 뿌려져 있습니다." loading="lazy" width="849" height="624" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>월마트의 허리케인 판매 분석: 뉴욕타임스 2004년 11월 14일 보도 · 사진: 딸기 팝타르트, 위키미디어 공용(퍼블릭 도메인)</figcaption></figure>
