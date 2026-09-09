@@ -362,3 +362,24 @@ details.sample[open] summary::before { content: "▾ "; }
 @media print {
   .interactive { box-shadow: none; break-inside: avoid; }
 }
+
+/* ── 상황 갤러리(7차시 실험실) — 사이킷런 계산 + plotly 그래프 + 실험 프롬프트 ── */
+.situation { margin: 22px 0; padding: 12px 12px 14px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.situation .sit-h { display: flex; align-items: baseline; gap: 10px; margin: 0 4px 6px; }
+.situation .sit-h .num { font-size: 0.8rem; font-weight: 800; color: #2b7fd6; letter-spacing: .06em; }
+.situation .sit-h .t { font-size: 1.02rem; font-weight: 800; color: var(--text); }
+.situation .intuition { margin: 0 4px 8px; font-size: 0.95rem; color: var(--text); }
+.situation .plot { width: 100%; min-height: 300px; }
+.situation .plot img { width: 100%; height: auto; display: block; }
+.situation .reading { margin: 8px 4px 0; padding-left: 0; list-style: none; font-size: 0.9rem; color: var(--text-soft); }
+.situation .reading li::before { content: "·  "; color: #2b7fd6; font-weight: 800; }
+.situation details.try { margin: 10px 4px 0; }
+.situation details.try summary { cursor: pointer; font-size: 0.88rem; font-weight: 700; color: var(--accent); list-style: none; }
+.situation details.try summary::-webkit-details-marker { display: none; }
+.situation details.try summary::before { content: "▸ "; }
+.situation details.try[open] summary::before { content: "▾ "; }
+.situation details.try .codewrap { margin-top: 6px; }
+figure.case { margin: 12px 0 0; }
+figure.case img { width: 100%; height: auto; display: block; border-radius: var(--radius-sm); }
+figure.case figcaption { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+@media (max-width: 600px) { .situation { padding: 8px 8px 10px; } .situation .plot { min-height: 260px; } }

@@ -46,12 +46,12 @@
   // 2) 이 페이지를 잠글지 판정
   var path = location.pathname;
   var released = (typeof window.RELEASED_LESSON === 'number') ? window.RELEASED_LESSON : 1;
-  var m = path.match(/lesson(\d{2})(?:-deep)?\.html$/);
+  var m = path.match(/lesson(\d{2})(?:-deep|-lab)?\.html$/);
   var locked = false;
   if (!teacher) {
     if (path.indexOf('/teacher/') !== -1) locked = true;
     else if (/(glossary|concepts|study-guide|eval-workbook)\.html$/.test(path)) locked = released < 15; // 시험 대비 시점(15차시)에 공개
-    else if (/extra-movie(?:-deep)?\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
+    else if (/extra-movie(?:-deep|-lab)?\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
     else if (/extra-models\.html$/.test(path)) locked = released < 11;        // 모델 도감 — 군집(11차시)까지 마치면 (2026-09-03)
     else if (/data\.html$/.test(path)) locked = released < 4;              // 데이터 목록 — 영화 트랙을 마친 뒤
     else if (/extra-api\.html$/.test(path)) locked = released < 4;         // 영화 API 프로젝트 — 4차시 이후
@@ -87,11 +87,11 @@
       var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="concepts"], a[href*="teacher/"], a[href*="extra-movie"], a[href*="extra-api"], a[href*="extra-models"], a[href*="project"]');
       Array.prototype.forEach.call(links, function (a) {
         var href = a.getAttribute('href') || '';
-        var lm = href.match(/lesson(\d{2})(?:-deep)?\.html/);
+        var lm = href.match(/lesson(\d{2})(?:-deep|-lab)?\.html/);
         var blocked =
           (lm && parseInt(lm[1], 10) > released) ||
           (/(glossary|concepts|study-guide|eval-workbook)\.html/.test(href) && released < 15) ||
-          (/extra-movie(?:-deep)?\.html/.test(href) && released < 4) ||
+          (/extra-movie(?:-deep|-lab)?\.html/.test(href) && released < 4) ||
           (/extra-models\.html/.test(href) && released < 11) ||
           (/(^|\/)data\.html/.test(href) && released < 4) ||
           (/extra-api\.html/.test(href) && released < 4) ||
