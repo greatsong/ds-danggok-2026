@@ -106,71 +106,9 @@
   </table>
   <p><b>수업 자료의 한계:</b> 파일의 first_scrn과 first_show는 개봉 전 계획값이 아니라, 일별 자료에서 각 영화가 10위권에 처음 등장한 날의 집계값과 일치합니다. 개봉일과 첫 관측일이 다른 영화도 적지 않습니다. 따라서 아래에서는 이를 <b>기본 변수</b>라고 부르며 교육용 비교에 사용합니다. 이 자료로 얻은 점수를 실제 개봉 전 예측 성능으로 해석해서는 안 됩니다. 실제 서비스를 만들려면 예측 시점에 확보한 자료로 다시 검증해야 합니다.</p>
   <div class="callout mini">
-    <div class="h">📝 변수 발상부터 — 폼 Ⅲ-01a</div>
-    <p>교과서 106쪽 해 보기 ①은 태풍의 진로를 예측하려면 어떤 데이터가 필요한지 묻습니다. 같은 발상을 영화로 옮겨 봅니다. 총 관객 수를 미리 맞히려면 무엇을 알아야 하는지 묻습니다. 개봉 시기, 장르, 상영관 수, 전작의 성적, 출연 배우 등 떠오르는 후보를 폼 Ⅲ-01a에 적고 시작합니다.</p>
+    <div class="h">📝 먼저 감으로 맞혀 보기 — 폼 Ⅲ-01a</div>
+    <p>본문에 들어가기 전에 폼 Ⅲ-01a를 먼저 엽니다. 상영관 수만 알려 주고 두 영화 중 어느 쪽이 더 흥행했을지 고르는 물음으로 시작합니다. 그다음 위 두 표에 실제로 들어 있는 항목을 보고, 개봉 전에 알 수 있는 항목과 예측에 쓰면 안 되는 항목을 고릅니다. 교과서 106쪽이 태풍의 진로를 예측하는 데 필요한 데이터를 묻는 것과 같은 물음을 영화로 옮긴 것입니다.</p>
   </div>
-<figure class="interactive" data-fig="wplane">
-    <div class="widget" data-w="wplane">
-<svg viewBox="0 0 720 400" role="img" aria-label="가중치 세 개를 슬라이더로 바꾸면 다섯 편의 예측값과 오차 제곱합, 그리고 성수기 0과 1의 두 단면 직선이 함께 달라지는 계산판">
-  <text class="eq" x="20" y="28" font-size="15" font-weight="800" fill="#1c2230">예측 = 1.00×스크린 + 0.00×성수기 + 0.00</text>
-
-  <g font-size="14" fill="#6b7385">
-    <text x="20" y="80">영화</text>
-    <text x="200" y="64" text-anchor="end">스크린</text>
-    <text x="200" y="80" text-anchor="end">(100관)</text>
-    <text x="258" y="80" text-anchor="end">성수기</text>
-    <text x="322" y="64" text-anchor="end">실제</text>
-    <text x="322" y="80" text-anchor="end">(만명)</text>
-    <text x="380" y="80" text-anchor="end">예측</text>
-    <text x="428" y="80" text-anchor="end">오차²</text>
-  </g>
-  <line x1="20" y1="90" x2="428" y2="90" stroke="#e3ddcf" stroke-width="1.2"/>
-
-  <g class="rows" font-size="15" fill="#1c2230"></g>
-
-  <line x1="20" y1="262" x2="428" y2="262" stroke="#e3ddcf" stroke-width="1.2"/>
-  <text x="20" y="286" font-size="15" font-weight="800" fill="#1c2230">오차 제곱합</text>
-  <rect x="20" y="300" width="300" height="14" rx="7" fill="#e3ddcf"/>
-  <rect class="bar" x="20" y="300" width="0" height="14" rx="7" fill="#b07a00"/>
-  <polyline class="saw" points="318,302 310,304.5 318,307 310,309.5 318,312" fill="none" stroke="#e3ddcf" stroke-width="2.4" visibility="hidden"/>
-  <text class="sse" x="330" y="316" font-size="22" font-weight="800" fill="#b07a00">245.8</text>
-  <text class="refsse" x="20" y="338" font-size="14" fill="#6b7385">최소제곱 정답 114.63</text>
-  <text x="20" y="360" font-size="14" fill="#6b7385">단위가 다른 가중치 · 크기 비교 불가</text>
-  <text x="20" y="380" font-size="14" fill="#6b7385">스크린 1단위 = 100관 · 성수기 1단위 = 있음/없음</text>
-
-  <text x="452" y="28" font-size="15" font-weight="800" fill="#1c2230">평면의 두 단면</text>
-  <text x="452" y="48" font-size="14" fill="#6b7385">성수기 0 / 성수기 1</text>
-  <text x="452" y="64" font-size="14" fill="#6b7385">총 관객(만명)</text>
-  <line x1="470" y1="70" x2="470" y2="290" stroke="#6b7385" stroke-width="1.2"/>
-  <line x1="466" y1="290" x2="706" y2="290" stroke="#6b7385" stroke-width="1.2"/>
-  <g font-size="14" fill="#6b7385">
-    <text x="470" y="308" text-anchor="middle">3</text>
-    <text x="562" y="308" text-anchor="middle">5</text>
-    <text x="700" y="308" text-anchor="middle">8</text>
-    <text x="464" y="295" text-anchor="end">0</text>
-    <text x="464" y="195" text-anchor="end">10</text>
-    <text x="464" y="95" text-anchor="end">20</text>
-    <text x="585" y="330" text-anchor="middle">스크린(100관)</text>
-    <text x="452" y="352">실선 · 성수기 0 / 점선 · 성수기 1</text>
-    <text x="452" y="374">같은 기울기, 다른 절편</text>
-  </g>
-  <g class="dots"></g>
-  <line class="ref" x1="0" y1="0" x2="0" y2="0" stroke="#b9b3a5" stroke-width="2" visibility="hidden"/>
-  <line class="l0" x1="0" y1="0" x2="0" y2="0" stroke="#2b7fd6" stroke-width="2.4"/>
-  <line class="l1" x1="0" y1="0" x2="0" y2="0" stroke="#b07a00" stroke-width="2.4" stroke-dasharray="6 4"/>
-  <g class="marks" fill="#6b7385"></g>
-  <text class="reflab" x="474" y="86" font-size="14" fill="#6b7385" visibility="hidden">성수기 빼고 구한 직선 1.83</text>
-</svg>
-<div class="wctl">
-  <label>w₁ 스크린(만명/100관) <input type="range" class="s1" min="-1" max="4" step="0.01" value="1"> <span class="v1">1.00</span></label>
-  <label>w₂ 성수기(만명) <input type="range" class="s2" min="-8" max="4" step="0.01" value="0"> <span class="v2">0.00</span></label>
-  <label>b 절편(만명) <input type="range" class="s3" min="0" max="6" step="0.01" value="0"> <span class="v3">0.00</span></label>
-  <button class="wbtn bfix" type="button" aria-pressed="false">성수기 가중치 0 고정</button>
-  <button class="wbtn bbest" type="button">최소제곱 정답</button>
-  <button class="wbtn bref" type="button" aria-pressed="false">따로 구한 직선 겹치기</button>
-  <span class="wout fixnote"></span>
-</div>
-</div>
     <figcaption>스크린 가중치, 성수기 가중치, 절편 슬라이더를 조정하면 다섯 편의 예측값, 오차 제곱합, 두 단면 직선이 함께 달라집니다. 다섯 편만 놓고 손으로 맞춘 축소판이며, 앱에서 전체 영화로 학습한 결과와는 다릅니다.</figcaption>
   </figure>
 
@@ -317,7 +255,7 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
   <h2>3. 결과 읽기 — 모델을 평가하는 지표</h2>
   <p>앱은 변수 조합마다 두 숫자를 보여 줍니다. 하나는 <b>R²</b>, 다른 하나는 <b>평균 오차</b>입니다. 두 숫자가 무엇을 재는지 알아야 조합을 비교할 수 있습니다. 각 변수 조합을 실행하면 아래 결과를 비교할 수 있습니다. 영화 코드 순으로 정렬한 뒤 10편마다 앞의 3편을 테스트 자료로 지정합니다. 모든 조합에 같은 분할을 사용하므로, 조합끼리는 공정하게 비교됩니다. 이는 수업 결과를 재현하기 위한 분할로, 미래 개봉작의 예측 성능을 보장하는 검증은 아닙니다.</p>
   <div class="callout theory">
-    <div class="h">📏 결정계수 R² — 무엇과 견주어 잘한 것인가</div>
+    <div class="h">📏 결정계수 R² — 무엇과 비교해서 잘한 것인가</div>
     <p>예측이 얼마나 맞았는지 재려면 비교 대상이 있어야 합니다. R²가 잡는 비교 대상은 <b>아무 정보도 쓰지 않고 언제나 평균만 답하는 모델</b>입니다. 모든 영화에 "평균 관객 수만큼 들 것"이라고 답하는 모델보다 내 모델이 얼마나 덜 틀렸는지를 비율로 나타낸 값이 R²입니다.</p>
     <p class="t">R² = 1 − (내 모델의 오차 제곱합 ÷ 평균만 답했을 때의 오차 제곱합)</p>
     <ul>
@@ -474,7 +412,7 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
     </ul>
   </div>
   <h3>있는 열을 나누어 만들기</h3>
-  <p>이번 도전에서는 <b>예측 시점을 해당 영화의 첫 관측일 집계가 끝난 뒤로 바꿉니다.</b> 첫 관측일은 수업 자료에서 영화가 10위권에 처음 등장한 날입니다. 그날의 관객 수를 상영 횟수로 나누어 <b>상영당 관객 수</b>라는 특성을 만듭니다. 한 번 상영에 평균 몇 명이 관람했는지를 뜻하며, 좌석 수를 고려한 좌석 점유율과는 다릅니다. 이 값은 개봉 전 예측에 사용할 수 없습니다.</p>
+  <p>이번 도전에서는 <b>예측 시점을 해당 영화의 첫 관측일 집계가 끝난 뒤로 바꿉니다.</b> 첫 관측일은 수업 자료에서 영화가 10위권에 처음 등장한 날입니다. 그날의 관객 수를 상영 횟수로 나누어 <b>상영당 관객 수</b>라는 속성을 만듭니다. 한 번 상영에 평균 몇 명이 관람했는지를 뜻하며, 좌석 수를 고려한 좌석 점유율과는 다릅니다. 이 값은 개봉 전 예측에 사용할 수 없습니다.</p>
   <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 첫 관측일의 집계가 끝난 시점에서 예측한다고 가정해 줘.
 그 시점에 알 수 있는 정보로 새 속성을 만들어 보자.
 - 박스오피스 표에서 영화마다 10위권에 처음 든 날의 일관객을 상영횟수로 나눠
@@ -543,8 +481,8 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 4</span> 상영당 관객 수를 더했을 때 R²가 눈에 띄게 올랐습니다. 이때 바뀐 것은 무엇입니까?</div>
     <div class="qitem">
-      <div class="qopts qopts-col"><button class="opt">모델을 더 센 것으로 바꿨다</button><button class="opt" data-ok="1">모델은 그대로 두고 단서(특성) 하나를 만들어 더했다</button><button class="opt">시험용 영화를 학습에 함께 넣었다</button></div>
-      <div class="fb">모델의 종류와 자료 분할은 유지하고 새 특성을 추가했습니다. 첫 관측일의 관객 수와 상영 횟수를 조합한 특성입니다. 이 비교에서는 예측 시점도 첫 관측일 집계 이후로 정했습니다.</div>
+      <div class="qopts qopts-col"><button class="opt">모델을 더 센 것으로 바꿨다</button><button class="opt" data-ok="1">모델은 그대로 두고 단서(속성) 하나를 만들어 더했다</button><button class="opt">시험용 영화를 학습에 함께 넣었다</button></div>
+      <div class="fb">모델의 종류와 자료 분할은 유지하고 새 속성을 추가했습니다. 첫 관측일의 관객 수와 상영 횟수를 조합한 속성입니다. 이 비교에서는 예측 시점도 첫 관측일 집계 이후로 정했습니다.</div>
     </div>
   </div>
 
@@ -564,7 +502,7 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
     <tr><td class="term">가중치</td><td>다른 변수의 값이 같을 때 해당 변수가 1 증가하면 예측값이 변하는 양입니다.</td></tr>
     <tr><td class="term">훈련 데이터 / 테스트 데이터</td><td>모델을 학습시키는 데이터 / 점수를 매기기 위해 따로 떼어 둔 데이터</td></tr>
     <tr><td class="term">데이터 누수</td><td>예측 시점에 알 수 없는 정보가 변수로 새어 들어와 점수를 부풀리는 것</td></tr>
-      <tr><td class="term">특성 만들기</td><td>이미 있는 열을 조합해 모델에게 줄 새 단서를 만드는 일. 첫날 관객÷상영횟수로 만든 '상영당 관객 수'가 그 예입니다.</td></tr>
+      <tr><td class="term">속성 만들기</td><td>자료를 살펴 새 열을 만들어 모델에 주는 일. 영어로 feature engineering. 첫날 관객÷상영횟수로 만든 '상영당 관객 수'가 그 예입니다.</td></tr>
 </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
