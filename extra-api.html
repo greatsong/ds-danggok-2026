@@ -249,7 +249,7 @@ def load_trend():
 
 
 t = load_trend()
-고른장르 = st.multiselect("견줘 볼 장르", sorted(t["장르"].unique()),
+고른장르 = st.multiselect("비교할 장르", sorted(t["장르"].unique()),
                      default=["액션", "코미디", "드라마"])
 if 고른장르:
     관객 = t.groupby(["연도", "장르"])["주간관객"].sum().unstack(fill_value=0)
