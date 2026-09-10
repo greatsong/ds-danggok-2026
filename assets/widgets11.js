@@ -445,7 +445,7 @@ function initW_ruler(root, D) {
   function near() { return mode === 'raw' ? nRaw[sel] : nStd[sel]; }
 
   // ── 그리기
-  var BAR_W = 156;                                  // 패널 가용폭(480~692)에서 값 자리를 뺀 폭
+  var BAR_W = 156;                                  // 패널 가용폭(480~692)에서 값 표시 폭을 뺀 나머지
   function nameW(t) { return t.length * 13 + 4; }   // 한글은 글자 폭 ≈ font-size
   function box(k, ty) {
     var x = cur[k][0], w = nameW(NM[k]);
@@ -990,7 +990,7 @@ function initW_sildist(root, D) {
     rowText.push(mk('text', { x: 30, y: rowMid[r] + 5, 'font-size': 13, fill: '#1c2230' }, gTable));
   }
 
-  // 시작 자리를 바꿀 때만 전환한다. 선수 전환은 즉시.
+  // 시작 중심점을 바꿀 때만 전환한다. 선수 전환은 즉시.
   function setAnim(on) {
     var move = (on && !reduce) ? 'transform 250ms ease' : 'none';
     var col = (on && !reduce) ? 'stroke 250ms ease' : 'none';
