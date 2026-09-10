@@ -288,7 +288,7 @@
   <h2>4. 기온 모델 C시 보기 — 데이터 선택에 따른 R² 비교</h2>
   <p>기온 예측기를 새로 만들어 데이터 선택에 따라 R²가 어떻게 달라지는지 확인합니다. 여기서는 <b>연도</b>가 독립 변수이고 <b>연평균기온</b>이 종속 변수입니다. 이번 절에서 계산하는 것은 직선을 학습한 데이터에 그대로 예측한 <b>학습 데이터의 R²</b>입니다. 따로 떼어 둔 데이터에서 평가한 7차시의 테스트 R²와는 평가 조건이 다릅니다.</p>
   <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.
-서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv)로 연도별 평균기온을 구해 줘.
+서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.
 이 파일의 열 이름은 날짜, 지점, 평균기온, 최저기온, 최고기온이고, 인코딩은 UTF-8이야.
 아직 한 해가 다 차지 않은 연도가 섞여 있어. 관측일 수로 걸러 줘.
 관측일이 300일이 안 되는 해를 뺄지 말지 고르는 스위치를 달아 줘.
@@ -303,7 +303,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 
-DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv"
 
 
 @st.cache_data
