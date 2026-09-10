@@ -541,7 +541,12 @@ function initW_monthlong(root, D) {
   });
   line.setAttribute('x1', X0); line.setAttribute('x2', X1);
   line.setAttribute('y1', py(M.med)); line.setAttribute('y2', py(M.med));
-  tBase.setAttribute('y', py(M.med) - 6);
+  // 라벨은 가장 낮은 달 위에 둔다. 그 자리는 기준선 위가 늘 비어 있다
+  let low = 0;
+  M.months.forEach(function (r, i) { if (r[2] < M.months[low][2]) low = i; });
+  tBase.setAttribute('x', cx(low));
+  tBase.setAttribute('y', py(M.med) - 7);
+  tBase.setAttribute('text-anchor', 'middle');
   tBase.textContent = '전체 중앙값 ' + M.med.toLocaleString() + '명';
   tOut.textContent = '성수기 네 달 12·1·7·8월이 전체 중앙값 위에 있습니다';
 }

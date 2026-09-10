@@ -52,10 +52,9 @@
 
   <h2>1. 개념 이해 — 직선에서 평면으로</h2>
   <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 128·112쪽</span></div>
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 128쪽</span></div>
     <p class="q">"다중 선형 회귀(multiple linear regression)는 영향을 미치는 요인이 여러 개인 경우에 종속 변수를 설명하기 위해 여러 개의 독립 변수를 이용하는 회귀 분석이다." <span class="src">(128쪽)</span></p>
-    <p class="q">"학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다." <span class="src">(112쪽)</span></p>
-    <p class="t">→ 독립 변수가 여러 개면 다중 회귀이다. 그리고 모델의 점수는 학습에 쓰지 않은 문제(테스트 데이터)로 매겨야 믿을 수 있다.</p>
+    <p class="t">→ 독립 변수가 여러 개면 다중 회귀이다.</p>
   </div>
 
   <p>속성이 하나면 예측은 직선입니다. 속성을 하나 더 넣으면 축이 하나 늘어나고, 직선은 <b>평면</b>이 됩니다. 실제 영화로 확인합니다.</p>
@@ -83,10 +82,10 @@
     <p>예측에 쓰는 속성을 <b>독립 변수</b>, 예측하려는 값을 <b>종속 변수</b>라고 부릅니다. 오늘 종속 변수는 총 관객 수 하나이고, 독립 변수는 우리가 고릅니다.</p>
   </div>
   <p>단순 선형회귀는 독립 변수 하나로 예측합니다. 다중 선형회귀는 여러 독립 변수에 각각 가중치를 곱한 뒤 더하고, 절편을 더해 예측합니다. 독립 변수가 둘이면 관계를 평면으로 나타낼 수 있습니다. 가중치는 다른 변수의 값이 같을 때 해당 변수가 1 증가하면 예측값이 얼마나 달라지는지를 나타냅니다. <b>변수의 단위가 다르면 가중치 크기만으로 중요도를 비교할 수 없습니다.</b></p>
-  <h3>점수는 처음 보는 문제로 매긴다.</h3>
-  <p>학습 데이터에서 높은 점수를 얻었다고 새로운 영화도 잘 예측하는 것은 아닙니다. 일부 영화를 <b>테스트 데이터</b>로 먼저 떼어 두고, 나머지 영화로 학습한 뒤 테스트 데이터에서 점수를 계산합니다. 변수 조합을 비교할 때는 같은 분할을 사용합니다.</p>
+  <h3>점수는 테스트용 데이터로 평가한다</h3>
+  <p>학습에 쓰지 않은 영화를 미리 떼어 두고, 그 <b>테스트용 데이터</b>로 점수를 계산합니다. 변수 조합을 비교할 때는 같은 분할을 사용합니다. 왜 학습에 쓴 영화로 점수를 계산하면 안 되는지는 다음 시간에 다룹니다.</p>
   <div style="overflow-x:auto;margin:18px 0">
-    <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화를 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 나머지로 가중치를 학습한 뒤 떼어 둔 영화로 점수를 재는 구조">
+    <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화를 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 나머지로 가중치를 학습한 뒤 떼어 둔 영화로 점수를 평가하는 구조">
       <defs>
         <marker id="arGold8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
         <marker id="arTeal8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
@@ -134,7 +133,7 @@
     <div class="h">🎟️ 우리는 DGV 극장의 데이터 과학 인턴입니다</div>
     <p>DGV는 이 수업에서만 쓰는 가상의 영화사입니다(DG는 당곡입니다). 분석에 쓰는 흥행 기록은 <b>영화진흥위원회의 실제 데이터</b>입니다.</p>
     <p>극장은 영화 한 편에 상영관을 몇 개 잡을지 정해야 합니다. 그러려면 먼저 <b>몇 명이 올지</b>를 예측해야 합니다. 오늘 만드는 것이 그 예측기입니다.</p>
-    <p>인턴은 예측값만 보고하지 않습니다. <b>어떤 속성을 넣었는지, 그 값을 언제 알 수 있는지를 함께 보고합니다.</b> 다음 시간에는 이 예측이 얼마나 맞았는지를 잽니다.</p>
+    <p>인턴은 예측값만 보고하지 않습니다. <b>어떤 속성을 넣었는지, 그 값을 언제 알 수 있는지를 함께 보고합니다.</b> 다음 시간에는 이 예측이 얼마나 맞았는지를 확인합니다.</p>
   </div>
   <p>4차시에 살펴본 영화 데이터를 이용해 예측 앱을 새로 만듭니다. 먼저 기본 변수의 조합을 바꾸어 결과를 비교하고, 첫 주 관객 수를 추가한 결과를 살펴봅니다. 데이터에 실제로 들어 있는 값과 개봉 전에 사용할 수 있는 값을 구분해 기록합니다.</p>
   <div class="callout mini">
@@ -153,11 +152,11 @@
 다중 회귀 모델을 만들어 줘. 이 표는 박스오피스 데이터(kobis_daily.csv)를
 영화 한 편에 한 줄로 정리해 둔 것이야. 기간은 일별 표에서 읽어 화면에 적어 줘.
 어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,
-학습에 쓰지 않은 영화들로 잰 예측 점수와
+학습에 쓰지 않은 영화로 평가한 점수와
 예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.
 영화별 표를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 시험용으로 떼어 놓고 나머지로 학습해 줘.
 영화별 표에 있는 영화를 모두 사용해 줘.
-학습에 쓴 영화 편수와 점수를 잰 영화 편수, 기준 기간을 화면에 적어 줘.
+학습에 쓴 영화 편수와 점수를 평가한 영화 편수, 기준 기간을 화면에 적어 줘.
 시험용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 그리고,
 예측이 실제와 같을 때를 나타내는 기준선도 함께 표시해 줘.
 관객 수는 편차가 크니 두 축을 로그로 그려 줘.
@@ -213,7 +212,7 @@ if not picked:
 model = LinearRegression().fit(train[picked], train["total_audi"])
 pred = model.predict(test[picked])
 c1, c2 = st.columns(2)
-c1.metric("시험용 영화로 잰 점수 (R²)", f"{r2_score(test['total_audi'], pred):.3f}")
+c1.metric("테스트용 데이터로 평가한 점수 (R²)", f"{r2_score(test['total_audi'], pred):.3f}")
 c2.metric("평균 오차", f"{mean_absolute_error(test['total_audi'], pred):,.0f}명")
 
 import plotly.express as px
@@ -260,7 +259,7 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
     <div class="h">✍️ 화면에 보이는 숫자 적기</div>
     <p>같은 데이터라도 어떤 변수를 넣느냐에 따라 점수가 달라집니다. 점수 하나만 적으면 나중에 무엇으로 얻은 값인지 알 수 없습니다. 공책에 그대로 옮겨 적어 두면 다음 차시에서 같은 질문을 다시 만날 때 도움이 됩니다.</p>
     <ol class="steps">
-      <li>학습에 쓴 영화 편수와 점수를 잰 영화 편수</li>
+      <li>학습에 쓴 영화 편수와 점수를 평가한 영화 편수</li>
       <li>내가 고른 변수 조합과 그때 나온 점수.</li>
       <li>변수를 하나 바꿨을 때 점수가 오르는지 내리는지.</li>
     </ol>
@@ -326,8 +325,8 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
   </figure>
 
   <div class="callout theory">
-    <div class="h">📏 오차를 크기로 재는 두 지표 — MAE와 MSE</div>
-    <p>R²는 비율이라 단위가 없습니다. "그래서 몇 명이나 틀렸나"에는 답하지 못합니다. 그 답을 주는 것이 오차를 크기로 재는 지표입니다.</p>
+    <div class="h">📏 오차를 크기로 나타내는 두 지표 — MAE와 MSE</div>
+    <p>R²는 비율이라 단위가 없습니다. "그래서 몇 명이나 틀렸나"에는 답하지 못합니다. 그 답을 주는 것이 오차를 크기로 나타내는 지표입니다.</p>
     <ul>
       <li><b>평균절대오차(MAE)</b> — 영화마다 실제 관객 수와 예측값의 차이를 절댓값으로 바꿔 평균한 값입니다. 단위는 명이고, 앱 화면의 평균 오차가 이 값입니다. 50만 명이면 한 편당 평균 50만 명쯤 빗나갔다는 뜻입니다.</li>
       <li><b>평균제곱오차(MSE)</b> — 교과서 131쪽은 "실젯값과 예측값의 차이를 모두 제곱하여 평균한 값으로, 이 값이 작을수록 예측 성능이 좋다"라고 정의합니다. 크게 빗나간 영화 한 편이 값을 크게 끌어올리므로, 큰 실수를 특히 문제 삼고 싶을 때 사용합니다.</li>
@@ -430,6 +429,83 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
     <figcaption>파란 막대 <b>12·1·7·8월</b>이 전체 중앙값 위로 뚜렷하게 솟아 있습니다. 이 네 달을 성수기로 잡습니다. 방학인 2월이 여기에 들지 않는 것도 그림에서 확인할 수 있습니다. 2004년부터 2026년까지의 기록이라 날마다 갱신되지 않습니다.</figcaption>
   </figure>
 
+
+  <figure class="interactive" data-fig="newcol">
+    <div style="overflow-x:auto">
+      <svg viewBox="0 0 720 176" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화와 개봉일만 있던 표에서 개봉일에서 월을 뽑아 새 열로 만들고, 그 월이 12·1·7·8월이면 1 아니면 0인 성수기 열을 다시 만드는 세 단계 그림">
+        <defs><marker id="arF" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0 0 L7 3.5 L0 7 z" fill="#e8930c"/></marker></defs>
+      <text x="14" y="22" font-size="12.5" font-weight="800" fill="#7a7f95">① 원래 표</text>
+      <rect x="14" y="32" width="116" height="24" fill="#eef0f4" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="72.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">영화</text>
+      <rect x="14" y="56" width="116" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="72.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">아바타: 불과 재</text>
+      <rect x="14" y="80" width="116" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="72.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">살목지</text>
+      <rect x="14" y="104" width="116" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="72.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">오디세이</text>
+      <rect x="14" y="128" width="116" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="72.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">프로젝트 헤일메리</text>
+      <rect x="130" y="32" width="84" height="24" fill="#eef0f4" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="172.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">개봉일</text>
+      <rect x="130" y="56" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="172.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2025-12-17</text>
+      <rect x="130" y="80" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="172.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-04-08</text>
+      <rect x="130" y="104" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="172.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-08-05</text>
+      <rect x="130" y="128" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="172.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-03-18</text>
+      <path d="M216 92 L242 92" stroke="#e8930c" stroke-width="2" marker-end="url(#arF)"/><text x="229" y="82" text-anchor="middle" font-size="11" fill="#e8930c" font-weight="800">뽑아낸다</text>
+      <text x="258" y="22" font-size="12.5" font-weight="800" fill="#7a7f95">② 월을 뽑는다</text>
+      <rect x="258" y="32" width="84" height="24" fill="#eef0f4" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="300.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">개봉일</text>
+      <rect x="258" y="56" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="300.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2025-12-17</text>
+      <rect x="258" y="80" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="300.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-04-08</text>
+      <rect x="258" y="104" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="300.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-08-05</text>
+      <rect x="258" y="128" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="300.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-03-18</text>
+      <rect x="342" y="32" width="42" height="24" fill="#2b7fd6" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="363.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">월</text>
+      <rect x="342" y="56" width="42" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="363.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">12월</text>
+      <rect x="342" y="80" width="42" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="363.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">4월</text>
+      <rect x="342" y="104" width="42" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="363.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">8월</text>
+      <rect x="342" y="128" width="42" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="363.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">3월</text>
+      <path d="M410 92 L436 92" stroke="#e8930c" stroke-width="2" marker-end="url(#arF)"/><text x="423" y="82" text-anchor="middle" font-size="11" fill="#e8930c" font-weight="800">0과 1로</text>
+      <text x="452" y="22" font-size="12.5" font-weight="800" fill="#7a7f95">③ 성수기로 바꾼다</text>
+      <rect x="452" y="32" width="42" height="24" fill="#eef0f4" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="473.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">월</text>
+      <rect x="452" y="56" width="42" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="473.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">12월</text>
+      <rect x="452" y="80" width="42" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="473.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">4월</text>
+      <rect x="452" y="104" width="42" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="473.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">8월</text>
+      <rect x="452" y="128" width="42" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="473.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">3월</text>
+      <rect x="494" y="32" width="54" height="24" fill="#2b7fd6" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="521.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">성수기</text>
+      <rect x="494" y="56" width="54" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="521.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">1</text>
+      <rect x="494" y="80" width="54" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="521.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">0</text>
+      <rect x="494" y="104" width="54" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="521.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">1</text>
+      <rect x="494" y="128" width="54" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="521.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">0</text>
+        <text x="14" y="170" font-size="11" fill="#7a7f95">표에 없던 열이 두 번 늘어납니다. 성수기 열은 개봉일 하나에서 나온 것이며 새로 조사한 값이 아닙니다.</text>
+      </svg>
+    </div>
+    <figcaption>가지고 있던 열은 <b>개봉일</b> 하나입니다. 거기서 <b>월</b>을 뽑아 열을 하나 만들고, 그 월이 12·1·7·8월이면 1 아니면 0인 <b>성수기</b> 열을 다시 만듭니다. 새 속성은 없던 정보를 가져오는 것이 아니라 <b>있는 열에서 꺼내는 것</b>입니다.</figcaption>
+  </figure>
+
   <div class="callout theory">
     <div class="h">📌 성수기 속성 만들기</div>
     <p>그림에서 중앙값이 높은 달을 확인했습니다. 이제 <b>12·1·7·8월에 개봉했으면 1, 아니면 0</b>을 적는 새 열을 만듭니다. 이렇게 만든 열이 <b>성수기</b> 속성입니다.</p>
@@ -488,7 +564,7 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
   <div class="callout lab">
     <div class="h">🔬 심화 탐구 프로젝트 · 속성을 더 모으면 예측이 나아질까</div>
     <p>여기까지 온 사람은 표에 있는 열로 예측을 만들어 봤습니다. 그러면 열을 더 모으면 예측이 나아질까요. 감독, 배우 수, 상영시간 같은 정보를 붙여 보는 일입니다.</p>
-    <p>실험실에서는 여섯 단계로 직접 확인합니다. <b>가설을 세우고 → API 문서에서 그 속성이 있는지 확인하고 → 데이터를 모아 붙이고 → 하나씩 넣어 쓸모를 재고 → 고른 속성으로 다시 학습시키고 → 내가 관심 있는 영화 한 편을 예측합니다.</b></p>
+    <p>실험실에서는 여섯 단계로 직접 확인합니다. <b>가설을 세우고 → API 문서에서 그 속성이 있는지 확인하고 → 데이터를 모아 붙이고 → 하나씩 넣어 쓸모를 확인하고 → 고른 속성으로 다시 학습시키고 → 내가 관심 있는 영화 한 편을 예측합니다.</b></p>
     <p>가설을 세웠는데 데이터가 없어서 확인할 수 없는 경우도 있습니다. 그럴 때 무엇을 할 수 있는지도 실험실에서 다룹니다.</p>
     <p class="labgo"><a href="lesson07-lab.html">심화 탐구 프로젝트 열기 →</a></p>
   </div>
@@ -565,7 +641,7 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets07.js?v=6"></script>
+<script src="assets/widgets07.js?v=7"></script>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="assets/lesson07_situations.js?v=3"></script>
 <script src="assets/answer.js?v=3"></script>

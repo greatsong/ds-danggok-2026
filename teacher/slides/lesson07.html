@@ -206,7 +206,7 @@
   <h2 style="font-size:clamp(20px,2.4vw,32px)">학습 데이터와 평가 데이터의 분리</h2>
   <blockquote style="font-size:clamp(14px,1.6vw,22px);max-width:44em;margin-top:1.6vh">학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다</blockquote>
   <div class="diagram short" style="--dh:24vh;margin-top:2vh">
-    <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화를 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 나머지로 가중치를 학습한 뒤 떼어 둔 영화로 점수를 재는 구조">
+    <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화를 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 나머지로 가중치를 학습한 뒤 떼어 둔 영화로 점수를 평가하는 구조">
       <defs>
         <marker id="arGold8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
         <marker id="arTeal8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
@@ -257,11 +257,11 @@
 박스오피스 데이터(kobis_daily.csv)와 영화 정보 표(kobis_movies.csv)를 합쳐서<br>
 영화의 총 관객 수를 예측하는 다중 회귀 모델을 만들어 줘.<br>
 어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,<br>
-학습에 쓰지 않은 영화들로 잰 예측 점수와<br>
+학습에 쓰지 않은 영화로 평가한 점수와<br>
 예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.<br>
 영화별 표를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 시험용으로 떼어 놓고 나머지로 학습해 줘.<br>
 영화별 표에 있는 영화를 모두 사용해 줘.<br>
-학습에 쓴 영화 편수와 점수를 잰 영화 편수, 기준 기간을 화면에 적어 줘.<br>
+학습에 쓴 영화 편수와 점수를 평가한 영화 편수, 기준 기간을 화면에 적어 줘.<br>
 시험용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 그리고,<br>
 예측이 실제와 같을 때를 나타내는 기준선도 함께 표시해 줘.<br>
 관객 수는 편차가 크니 두 축을 로그로 그려 줘.<br>
@@ -499,7 +499,7 @@
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>7차시 요약</h2>
-  <div class="split" style="margin-top:2.6vh;gap:1.6vw"><div class="card"><div class="t">다중 선형회귀</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">여러 독립 변수 × 가중치의 합에 절편을 더한 예측 · 예측 대상은 종속 변수</div></div><div class="card"><div class="t">속성 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">예측에 쓸 속성은 사람이 결정</div></div><div class="card"><div class="t">속성 만들기</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">표에 없으면 데이터를 그려 규칙을 읽고 새 열로 추가</div></div><div class="card"><div class="t">두 지표</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">평균만 답하는 모델과 비교한 R², 빗나간 크기를 재는 MAE·MSE</div></div><div class="card"><div class="t">예측 시점</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">시점이 달라지면 쓸 수 있는 속성과 문제 자체가 달라짐</div></div></div>
+  <div class="split" style="margin-top:2.6vh;gap:1.6vw"><div class="card"><div class="t">다중 선형회귀</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">여러 독립 변수 × 가중치의 합에 절편을 더한 예측 · 예측 대상은 종속 변수</div></div><div class="card"><div class="t">속성 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">예측에 쓸 속성은 사람이 결정</div></div><div class="card"><div class="t">속성 만들기</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">표에 없으면 데이터를 그려 규칙을 읽고 새 열로 추가</div></div><div class="card"><div class="t">두 지표</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">평균만 답하는 모델과 비교한 R², 빗나간 크기를 나타내는 MAE·MSE</div></div><div class="card"><div class="t">예측 시점</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">시점이 달라지면 쓸 수 있는 속성과 문제 자체가 달라짐</div></div></div>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px)">점수의 크기보다 <b>그 점수를 만든 정보의 시점</b></p>
 </section>
 
