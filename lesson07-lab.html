@@ -332,6 +332,99 @@ st.dataframe(near[[&quot;movieNm&quot;, &quot;total_audi&quot;]])</pre></div></d
 
   <p>여섯 단계를 마쳤습니다. 이 실험실에서 확인한 것은 속성을 많이 모으면 예측이 좋아진다는 규칙이 아닙니다. 넣어 보기 전에는 그 속성이 도움이 되는지 알 수 없다는 것, 그래서 가설을 적고 데이터를 확인하고 하나씩 넣어 보는 순서가 필요하다는 것입니다. 점수가 오른 경우와 그대로인 경우를 모두 기록으로 남기면, 다음에 같은 데이터를 다룰 때 같은 실험을 되풀이하지 않아도 됩니다.</p>
 
+  <h2>7. 전체 코드</h2>
+  <p>여섯 단계를 다 마치면 <b>main.py</b> 한 파일이 완성됩니다. 중간에 어디가 어긋났는지 찾기 어려울 때 아래와 맞춰 봅니다. 이 코드는 선생님이 직접 실행해 화면까지 확인한 것입니다. 화면에 나오는 편수와 점수는 그날 모인 데이터에 따라 달라집니다.</p>
+  <div class="codewrap code"><span class="label">main.py · 전체</span><pre># main.py — 영화 흥행 예측기 (심화 탐구 프로젝트)
+import pandas as pd
+import plotly.express as px
+import streamlit as st
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, r2_score
+
+MOVIES = &quot;https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv&quot;
+PEOPLE = &quot;https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv&quot;
+
+BASE = [&quot;first_scrn&quot;, &quot;first_show&quot;, &quot;peak&quot;]
+EXTRA = {
+    &quot;배우 수&quot;: &quot;actors_n&quot;,
+    &quot;주연 수&quot;: &quot;lead_n&quot;,
+    &quot;상영시간&quot;: &quot;showTm&quot;,
+    &quot;청소년관람불가&quot;: &quot;adult&quot;,
+    &quot;대형 배급사&quot;: &quot;bigco&quot;,
+}
+
+st.title(&quot;영화 흥행 예측기&quot;)
+
+
+@st.cache_data
+def load():
+    movies = pd.read_csv(MOVIES, encoding=&quot;utf-8-sig&quot;, dtype={&quot;movieCd&quot;: str})
+    people = pd.read_csv(PEOPLE, encoding=&quot;utf-8-sig&quot;, dtype={&quot;movieCd&quot;: str})
+    people = people[[&quot;movieCd&quot;, &quot;director&quot;, &quot;actors_n&quot;, &quot;lead_n&quot;, &quot;showTm&quot;, &quot;watchGrade&quot;, &quot;company&quot;]]
+    df = movies.merge(people, on=&quot;movieCd&quot;, how=&quot;inner&quot;)
+    df = df[(df[&quot;total_audi&quot;] &gt; 0) &amp; (df[&quot;first_scrn&quot;] &gt; 0) &amp; (df[&quot;showTm&quot;] &gt; 0)]
+    df = df.sort_values(&quot;movieCd&quot;).reset_index(drop=True)
+    df[&quot;adult&quot;] = (df[&quot;watchGrade&quot;] == &quot;청소년관람불가&quot;).astype(int)
+    big = df[&quot;company&quot;].value_counts().head(5).index
+    df[&quot;bigco&quot;] = df[&quot;company&quot;].isin(big).astype(int)
+    return df
+
+
+def split(df):
+    test = (df.index % 10) &lt; 3          # 열 편마다 앞의 세 편이 시험용
+    return df[~test], df[test]
+
+
+def score(train, test, cols):
+    model = LinearRegression().fit(train[cols], train[&quot;total_audi&quot;])
+    pred = model.predict(test[cols])
+    return r2_score(test[&quot;total_audi&quot;], pred), mean_absolute_error(test[&quot;total_audi&quot;], pred), model
+
+
+df = load()
+train, test = split(df)
+st.write(f&quot;합친 표 {len(df)}편 · 학습용 {len(train)}편 · 시험용 {len(test)}편&quot;)
+st.dataframe(df[[&quot;movieNm&quot;, &quot;director&quot;, &quot;first_scrn&quot;, &quot;actors_n&quot;, &quot;showTm&quot;, &quot;total_audi&quot;]].head(10))
+
+st.header(&quot;속성을 하나씩 넣어 본다&quot;)
+base_r2, base_mae, _ = score(train, test, BASE)
+rows = [{&quot;넣은 속성&quot;: &quot;기본 세 가지만&quot;, &quot;R²&quot;: base_r2, &quot;평균절대오차&quot;: base_mae, &quot;R² 차이&quot;: 0.0}]
+for name, col in EXTRA.items():
+    r2, mae, _ = score(train, test, BASE + [col])
+    rows.append({&quot;넣은 속성&quot;: name, &quot;R²&quot;: r2, &quot;평균절대오차&quot;: mae, &quot;R² 차이&quot;: r2 - base_r2})
+table = pd.DataFrame(rows)
+st.dataframe(table.style.format({&quot;R²&quot;: &quot;{:.3f}&quot;, &quot;평균절대오차&quot;: &quot;{:,.0f}&quot;, &quot;R² 차이&quot;: &quot;{:+.3f}&quot;}))
+st.plotly_chart(px.bar(table, x=&quot;R² 차이&quot;, y=&quot;넣은 속성&quot;, orientation=&quot;h&quot;))
+
+st.header(&quot;고른 속성으로 다시 학습한다&quot;)
+picked = [col for name, col in EXTRA.items() if st.checkbox(name, value=False)]
+cols = BASE + picked
+r2, mae, model = score(train, test, cols)
+c1, c2 = st.columns(2)
+c1.metric(&quot;시험용 R²&quot;, f&quot;{r2:.3f}&quot;)
+c2.metric(&quot;시험용 평균절대오차&quot;, f&quot;{mae:,.0f}명&quot;)
+weight = pd.DataFrame({&quot;속성&quot;: cols, &quot;가중치&quot;: model.coef_})
+st.plotly_chart(px.bar(weight, x=&quot;가중치&quot;, y=&quot;속성&quot;, orientation=&quot;h&quot;))
+st.caption(&quot;단위가 다르면 가중치의 크기를 그대로 비교할 수 없습니다.&quot;)
+look = test.assign(예측=model.predict(test[cols]))
+st.plotly_chart(px.scatter(look, x=&quot;total_audi&quot;, y=&quot;예측&quot;, hover_name=&quot;movieNm&quot;, log_x=True, log_y=True))
+
+st.header(&quot;내가 고른 영화를 예측한다&quot;)
+name = st.text_input(&quot;영화 이름&quot;, &quot;블루웨일의 대모험&quot;)
+값 = {}
+값[&quot;first_scrn&quot;] = st.number_input(&quot;첫 관측일 스크린수&quot;, value=800)
+값[&quot;first_show&quot;] = st.number_input(&quot;첫 관측일 상영횟수&quot;, value=3000)
+값[&quot;peak&quot;] = 1 if st.checkbox(&quot;성수기 개봉&quot;, value=True) else 0
+for col in picked:
+    값[col] = st.number_input(col, value=float(df[col].median()))
+mine = pd.DataFrame([[값[c] for c in cols]], columns=cols)
+pred = float(model.predict(mine)[0])
+st.metric(f&quot;{name}의 예측 총 관객 수&quot;, f&quot;{pred:,.0f}명&quot;)
+near = df.assign(차이=(df[&quot;total_audi&quot;] - pred).abs()).nsmallest(5, &quot;차이&quot;)
+st.dataframe(near[[&quot;movieNm&quot;, &quot;total_audi&quot;]])
+</pre></div>
+  <p class="mini">함께 저장할 requirements.txt는 <code>streamlit</code>, <code>pandas</code>, <code>scikit-learn</code>, <code>plotly</code> 네 줄입니다. 버전 숫자는 적지 않습니다.</p>
+
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
     <li>흥행에 영향을 줄 것 같은 가설을 적고, 표의 한 열로 옮길 수 있는지 판단했다.</li>
