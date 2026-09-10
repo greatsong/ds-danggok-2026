@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>7차시 · 다중 선형회귀 — 영화 흥행 예측 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb11">
+<link rel="stylesheet" href="assets/style.css?v=tb12">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -58,6 +58,33 @@
     <p class="q">"학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다." <span class="src">(112쪽)</span></p>
     <p class="t">→ 독립 변수가 여러 개면 다중 회귀이다. 그리고 모델의 점수는 학습에 쓰지 않은 문제(테스트 데이터)로 매겨야 믿을 수 있다.</p>
   </div>
+
+  <p>속성이 하나면 예측은 직선입니다. 속성을 하나 더 넣으면 축이 하나 늘어나고, 직선은 <b>평면</b>이 됩니다. 실제 영화로 확인합니다.</p>
+  <figure class="interactive" data-fig="plane3d">
+    <div class="widget" data-w="plane3d">
+      <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="스크린수와 총 관객 수의 산점도. 속성이 하나면 예측이 직선으로, 속성이 둘이면 배우 수 축이 늘어나 평면으로 나타납니다.">
+        <line x1="78" y1="268" x2="660" y2="268" stroke="#b9b3a5" stroke-width="1.2"/>
+        <line x1="78" y1="268" x2="78" y2="40" stroke="#b9b3a5" stroke-width="1.2"/>
+        <text x="78" y="290" font-size="12" fill="#7a7f95">스크린 100관</text>
+        <text x="560" y="290" font-size="12" fill="#7a7f95">1,600관</text>
+        <text x="30" y="46" font-size="12" fill="#7a7f95">340만</text>
+        <text x="42" y="268" font-size="12" fill="#7a7f95">0</text>
+        <g data-dyn="ax"></g>
+        <g data-dyn="fit"></g>
+        <g data-dyn="dots"></g>
+        <text data-t="eq" x="78" y="26" font-size="13" font-weight="700" fill="#2b7fd6"></text>
+        <text data-t="r2" x="660" y="26" text-anchor="end" font-size="13" font-weight="800" fill="#1c2230"></text>
+      </svg>
+      <div class="wctl">
+        <button class="wbtn on" type="button" data-act="one" aria-pressed="true">속성 하나</button>
+        <button class="wbtn" type="button" data-act="two" aria-pressed="false">속성 둘</button>
+        <label class="angwrap" hidden>돌려 보기 <input type="range" class="ang" min="8" max="72" step="1" value="32" aria-label="보는 각도"></label>
+        <span class="wout" data-t="dep"></span>
+      </div>
+    </div>
+    <figcaption>가로축은 첫 관측일 스크린수, 세로축은 총 관객 수입니다. <b>속성 하나</b>는 스크린수만으로 예측한 직선이고, <b>속성 둘</b>은 배우 수 축을 더해 만든 평면입니다. 평면일 때는 슬라이더로 각도를 돌려 봅니다. 점에 마우스를 올리면 영화 이름이 나옵니다. 화면에 담기도록 스크린 100~1,600관·배우 2~20명·총 관객 3~340만 명인 77편만 그렸습니다. 앱에서 전체 영화로 학습하면 값이 달라집니다.</figcaption>
+  </figure>
+
   <div class="callout theory">
     <div class="h">🧩 속성과 feature — 같은 것을 부르는 두 이름</div>
     <p class="q">"선형 회귀는 두 가지 이상의 <b>속성</b> 사이에 선 모양의 관계가 있다고 가정하고 데이터를 가장 잘 대표하는 선을 찾는 분석 방법이다." <span class="src">(교과서 119쪽)</span></p>
