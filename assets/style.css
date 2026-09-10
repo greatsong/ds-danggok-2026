@@ -288,6 +288,10 @@ table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var
 .quiz details.reveal[open] summary::before { content: "▾ "; }
 .quiz details.reveal p { margin: 0; padding: 0 14px 12px; font-size: 0.9rem; }
 @media print { .quiz .fb { display: block; } .quiz details.reveal { display: block; } }
+/* 질문 콜아웃 안에 끼우는 선택형 문항 — 카드 장식 없이 선택지만 */
+.callout.ask .quiz { background: transparent; border: 0; box-shadow: none; padding: 0; margin: 8px 0 0; }
+.callout.ask .quiz .opt { background: #fff; }
+
 
 /* 교과서 인용 박스 — 정의·핵심 명제만 짧게 인용(출처 쪽수 필수), 이어서 우리말 풀이 */
 .tbquote { border: 1px solid var(--border); border-left: 4px solid var(--accent); background: #fffdf6; border-radius: var(--radius-sm); padding: 14px 16px; margin: 18px 0; }

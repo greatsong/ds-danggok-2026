@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>13차시 · 데이터베이스와 수파베이스 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb12">
+<link rel="stylesheet" href="assets/style.css?v=tb13">
 <style>/* 긴 열 이름과 설계표를 좁은 화면에서도 읽을 수 있도록 */
 main{overflow-wrap:anywhere}
 main code:not(pre code){white-space:normal;word-break:break-all}
@@ -756,8 +756,18 @@ st.caption("조회 도중 들어온 새 기록은 다시 불러오면 반영됩�
     <ul>
       <li>승률 1위와 승리 수 1위는 같은 반찬입니까? 다르다면 어느 쪽 숫자로 "가장 좋아하는 반찬"을 정하겠습니까?</li>
       <li>겨룬 횟수가 유독 많은 반찬은 무엇입니까? 왜 그 반찬의 분모가 커졌습니까?</li>
-      <li>대결 기록 수와 참여한 사람 수는 같습니까? 이 승률을 우리 반의 선호도라고 말해도 됩니까?</li>
-      <li>겨룬 횟수가 한두 번뿐인 반찬의 승률은 얼마나 믿을 수 있습니까? 12차시에서 동시 등장 한 번짜리 규칙을 어떻게 다루었는지 떠올려 봅니다.</li>
+      <li>대결 기록 수와 참여한 사람 수는 같습니까? 이 승률을 우리 반의 선호도라고 말해도 됩니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">말해도 된다 — 우리 반 학생들이 직접 기록한 값이므로</button><button class="opt data-ok="1"">말할 수 없다 — 한 사람이 여러 번 기록할 수 있어 사람 수와 기록 수가 다르다</button></div>
+          <div class="fb">기록이 많은 사람의 취향이 더 크게 반영됩니다. 승률을 반 전체의 선호도로 읽으려면 누가 몇 번 참여했는지 함께 확인해야 합니다.</div>
+        </div></div>
+      </li>
+      <li>겨룬 횟수가 한두 번뿐인 반찬의 승률은 얼마나 믿을 수 있습니까? 12차시에서 동시 등장 한 번짜리 규칙을 어떻게 다루었는지 떠올려 봅니다.
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">승률이 100퍼센트라면 가장 좋아하는 반찬으로 볼 수 있다</button><button class="opt data-ok="1"">분모가 작아 크게 흔들리므로, 최소 대결 횟수를 정해 놓고 읽어야 한다</button></div>
+          <div class="fb">12차시에서 동시 등장이 한 번뿐인 규칙을 다룬 방식과 같습니다. 비율은 분모가 작을수록 믿기 어렵습니다.</div>
+        </div></div>
+      </li>
     </ul>
   </div>
   <figure class="interactive" data-fig="rankcross13">

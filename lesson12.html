@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>12차시 · 연관 분석 — 급식에서 규칙 찾기 · 데이터 과학 당곡고</title>
-<link rel="stylesheet" href="assets/style.css?v=tb12">
+<link rel="stylesheet" href="assets/style.css?v=tb13">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
@@ -338,8 +338,18 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
     <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
     <ul>
       <li>신뢰도 순으로 정렬했을 때의 1위와 향상도 순으로 정렬했을 때의 1위는 같은 규칙입니까? 다르다면 어느 쪽 숫자를 근거로 삼겠습니까?</li>
-      <li>향상도가 가장 큰 규칙의 동시 등장 일수는 며칠입니까? 그 일수만으로 규칙을 믿어도 됩니까?</li>
-      <li>내가 예상한 쌍은 결과 표에 있었습니까? 없었다면 실제로 함께 나오지 않은 것입니까, 최소 횟수 기준에 걸린 것입니까?</li>
+      <li>향상도가 가장 큰 규칙의 동시 등장 일수는 며칠입니까? 그 일수만으로 규칙을 믿어도 됩니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">믿어도 된다 — 향상도가 가장 큰 규칙이므로</button><button class="opt data-ok="1"">믿을 수 없다 — 동시 등장 일수가 적으면 향상도가 크게 나오기 쉽다</button></div>
+          <div class="fb">분모가 작을수록 비율은 크게 흔들립니다. 향상도를 볼 때는 그 규칙이 며칠에서 나온 값인지 함께 확인합니다.</div>
+        </div></div>
+      </li>
+      <li>내가 예상한 쌍은 결과 표에 있었습니까? 없었다면 실제로 함께 나오지 않은 것입니까, 최소 횟수 기준에 걸린 것입니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">결과 표에 없으면 실제로 함께 나오지 않은 것이다</button><button class="opt data-ok="1"">최소 등장 기준에 걸려 표에서 빠졌을 수도 있으므로 기준을 낮춰 확인해야 한다</button></div>
+          <div class="fb">결과 표는 최소 등장 기준을 넘긴 규칙만 보여 줍니다. 표에 없다는 사실과 함께 나오지 않았다는 사실은 다릅니다.</div>
+        </div></div>
+      </li>
     </ul>
   </div>
 
@@ -533,7 +543,12 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
     <div class="h">❓ 손으로 구한 값과 화면의 값을 맞춰 본 뒤 답할 질문</div>
     <ul>
       <li>손으로 구한 향상도와 4절 표에 적은 향상도가 같습니까? 다르다면 어느 단계에서 갈렸습니까?</li>
-      <li>같은 규칙인데도 저장본과 내 화면의 등장 일수가 다를 수 있습니다. 그 까닭을 무엇으로 설명하겠습니까?</li>
+      <li>같은 규칙인데도 저장본과 내 화면의 등장 일수가 다를 수 있습니다. 그 까닭을 무엇으로 설명하겠습니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">계산식이 사람마다 다르기 때문</button><button class="opt data-ok="1"">두 데이터의 대상 기간이 달라 세는 날수 자체가 다르기 때문</button><button class="opt">연관 분석은 실행할 때마다 결과가 달라지기 때문</button></div>
+          <div class="fb">같은 계산이라도 어느 기간을 세었는지에 따라 값이 달라집니다. 숫자를 적을 때 대상 기간을 함께 적습니다.</div>
+        </div></div>
+      </li>
       <li>신뢰도가 높은데도 향상도가 1 언저리인 규칙을 급식실에 어떻게 설명하겠습니까? 한 문장으로 적습니다.</li>
     </ul>
   </div>
