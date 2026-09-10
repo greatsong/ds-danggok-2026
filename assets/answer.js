@@ -13,6 +13,7 @@
     (scope || document).querySelectorAll('.callout.ask').forEach(function (box) {
       if (box.dataset.answerReady) return;
       box.querySelectorAll('li').forEach(function (li, i) {
+        if (li.querySelector('.quiz')) return;   // 선택형 문항은 답을 고르므로 입력칸을 붙이지 않는다
         var ta = document.createElement('textarea');
         ta.className = 'answer-in';
         ta.rows = 1;
