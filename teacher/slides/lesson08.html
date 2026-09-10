@@ -87,13 +87,24 @@
 <body>
 
 <section class="slide chapter on">
-  <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 제8강</div>
+  <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 8차시</div>
   <h1>회귀 평가 손계산</h1>
-  <p class="sub">오차·평균제곱오차·결정계수의 계산과 해석</p>
+  <p class="sub">손으로 계산하는 MAE·MSE·결정계수</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">8-1 · 교과서 120쪽</div>
+  <div class="kicker">8-1 · 목표</div>
+  <h2>오늘의 목표</h2>
+  <ul class="facts">
+    <li>실젯값과 예측값에서 구하는 <b>오차·절대오차·제곱오차</b></li>
+    <li>손으로 계산하는 <b>MAE와 MSE</b> · 두 값의 단위 차이</li>
+    <li>평균값 기준과 비교해 구하는 <b>결정계수 R²</b> · 잰 자료의 명시</li>
+  </ul>
+  <p class="point">오차 → 절대오차·제곱오차 → MAE·MSE → R²</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">8-2 · 교과서 120쪽</div>
   <h2>오차의 정의</h2>
   <blockquote style="margin-top:3vh">실젯값과 예측값의 차이를 오차라고 하는데, 두 직선을 비교하여 오차가 더 작은 것을 선택해야 한다</blockquote>
   <p class="point">오차 = 실젯값 − 예측값</p>
@@ -101,7 +112,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-2 · 원리</div>
+  <div class="kicker">8-3 · 원리</div>
   <h2>오차에서 결정계수까지의 층위</h2>
   <table class="mini">
     <tr><th>계산</th><th>구하는 법</th></tr>
@@ -115,9 +126,9 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-3 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">오차·절댓값·제곱의 계단</h2>
-  <div class="diagram short" style="--dh:40vh"><svg viewBox="0 0 680 310" style="min-width:560px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="점과 회귀 직선 사이의 세로 거리가 오차이고, 그 거리를 한 변으로 하는 정사각형이 제곱오차임을 나타낸 그림. 오른쪽에는 오차에서 결정계수까지 이어지는 네 단계 계단이 있다">
+  <div class="kicker">8-4 · 그림</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">오차·절댓값·제곱의 단계</h2>
+  <div class="diagram short" style="--dh:40vh"><svg viewBox="0 0 680 310" style="min-width:560px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="점과 회귀 직선 사이의 세로 거리가 오차이고, 그 거리를 한 변으로 하는 정사각형이 제곱오차임을 나타낸 그림. 오른쪽에는 오차에서 결정계수까지 이어지는 네 단계가 있다">
       <defs>
         <marker id="arStep9" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
       </defs>
@@ -152,53 +163,160 @@
       <rect x="440" y="216" width="220" height="36" rx="9" fill="#fdeeba" stroke="#f4b400"/>
       <text x="550" y="239" text-anchor="middle" font-size="12.5" font-weight="800" fill="#5a4300">R² — 평균값 기준과 비교하기</text>
       <!-- 캡션 -->
-      <text x="340" y="296" text-anchor="middle" font-size="12.5" fill="#7a7f95">오늘 활동지의 계단 — 왼쪽 그림의 세로 거리 하나에서 출발</text>
+      <text x="340" y="296" text-anchor="middle" font-size="12.5" fill="#7a7f95">오늘 활동지의 계산 순서 — 왼쪽 그림의 세로 거리 하나에서 출발</text>
     </svg></div>
   <p class="small">양수 오차와 음수 오차의 상쇄를 막는 계산이 절댓값과 제곱</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">8-4 · 실습</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">활동지 문제 1 — 두 회귀선의 비교</h2>
-  <ul class="facts">
-    <li>교과서 120쪽의 두 회귀선을 비교 대상으로 사용</li>
-    <li>순서 — 어느 직선이 더 잘 맞아 보이는지 예상, 다섯 점의 오차 계산, 절댓값의 합으로 판정</li>
-    <li>예상과 계산이 어긋난 경우 차이가 생긴 점을 확인</li>
-  </ul>
-  <p class="point">계산 과정을 남긴 활동지로만 검산 가능</p>
-  <p class="small">막힐 때의 출발점은 ‘실젯값 − 예측값’ 한 칸</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">8-5 · 실습</div>
-  <h2>활동지의 구성</h2>
-  <table class="mini">
-    <tr><th>활동지</th><th>내용</th></tr>
-    <tr><td>문제 1</td><td>교과서 120쪽 해 보기 ① — 두 회귀선의 오차 비교</td></tr>
-    <tr><td>문제 2~3</td><td>오차를 그대로 더했을 때의 결과 · MAE와 MSE의 비교</td></tr>
-    <tr><td>문제 4~6</td><td>평균 모델과 비교한 R² 계산(기온·영화 자작 표)</td></tr>
-    <tr><td>문제 7</td><td>수업의 실측 숫자 해석(0.70 ↔ 0.39)</td></tr>
-    <tr><td>심화 도전</td><td>교과서 121쪽 해 보기 ② — 공식으로 최적 직선 구하기</td></tr>
+  <div class="kicker">8-5 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">기본 문제 — 상영관을 몇 개 잡을까</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(14px,1.7vw,24px)">
+    <thead><tr><th>영화</th><th>실젯값</th><th>모델 가</th><th>모델 나</th></tr></thead>
+    <tbody>
+      <tr><td>블루웨일의 대모험</td><td>14</td><td>12</td><td>14</td></tr>
+      <tr><td>보라매공원의 밤</td><td>12</td><td>14</td><td>12</td></tr>
+      <tr><td>포켓몬스터 극장판: 관악산 대소동</td><td>20</td><td>19</td><td>20</td></tr>
+      <tr><td>귀멸의 칼날: 나비저택 외전</td><td>16</td><td>17</td><td>16</td></tr>
+      <tr><td>떡볶이 원정대</td><td>18</td><td>18</td><td>14</td></tr>
+    </tbody>
   </table>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">단위 만 명 · 적게 잡으면 <b>매진</b>, 많이 잡으면 <b>빈 좌석</b></p>
+  <p class="small" style="margin-top:1.4vh">한 편에서 크게 빗나가는 쪽이 여러 편에서 조금씩 빗나가는 쪽보다 나쁨 · 계산이 떨어지도록 고른 값, 실제 관측값 아님</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">8-6 · 교과서 131쪽</div>
-  <h2>평균제곱오차의 정의</h2>
-  <blockquote style="margin-top:3vh">평균제곱오차(MSE: Mean Squared Error)는 실젯값과 예측값의 차이를 모두 제곱하여 평균한 값으로, 이 값이 작을수록 예측 성능이 좋다</blockquote>
-  <p class="point">MAE는 원래 단위, MSE는 제곱된 단위</p>
-  <p class="small">제곱은 큰 오차 하나의 비중을 키우는 계산</p>
+  <div class="kicker">8-6 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">오차를 그대로 더하면</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">
+    <thead><tr><th>영화</th><th>모델 가의 오차</th><th>모델 나의 오차</th></tr></thead>
+    <tbody>
+      <tr><td>블루웨일</td><td>+2</td><td>0</td></tr>
+      <tr><td>보라매공원</td><td>−2</td><td>0</td></tr>
+      <tr><td>포켓몬스터</td><td>+1</td><td>0</td></tr>
+      <tr><td>귀멸의 칼날</td><td>−1</td><td>0</td></tr>
+      <tr><td>떡볶이 원정대</td><td>0</td><td>+4</td></tr>
+      <tr><td>합</td><td><em>0</em></td><td><em>+4</em></td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">모델 가는 다섯 편 모두 빗나갔는데도 합이 <b>0</b></p>
+  <p class="small" style="margin-top:1.4vh">오차 = 실젯값 − 예측값 · 남는 쪽과 모자라는 쪽의 부호가 서로 지워져 크기 판별 불가</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">8-7 · 교과서 132쪽</div>
+  <div class="kicker">8-7 · 원리</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">절댓값과 제곱 — 부호를 없애는 두 방법</h2>
+  <table class="mini" style="margin-top:2.4vh">
+    <thead><tr><th>다섯 편의 합</th><th>모델 가</th><th>모델 나</th></tr></thead>
+    <tbody>
+      <tr><td>오차의 합</td><td>0</td><td>+4</td></tr>
+      <tr><td>절댓값의 합</td><td><em>6</em></td><td><em>4</em></td></tr>
+      <tr><td>제곱의 합</td><td><em>10</em></td><td><em>16</em></td></tr>
+    </tbody>
+  </table>
+  <p class="point">제곱은 큰 오차에 더 무거운 벌점</p>
+  <p class="small" style="margin-top:1.6vh">모델 나의 오차는 한 편에서 4 · 제곱하면 16으로 확대</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">8-8 · 교과서 131쪽 MSE 정의</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">평균절대오차와 평균제곱오차</h2>
+  <blockquote style="font-size:clamp(15px,1.75vw,24px);max-width:40em;margin-top:1.6vh">평균제곱오차(MSE: Mean Squared Error)는 실젯값과 예측값의 차이를 모두 제곱하여 평균한 값으로, 이 값이 작을수록 예측 성능이 좋다</blockquote>
+  <ul class="facts" style="margin-top:1.2vh">
+    <li><b>MAE</b> — 절대오차의 평균 · 실젯값과 같은 단위</li>
+    <li><b>MSE</b> — 제곱오차의 평균 · 단위는 제곱</li>
+    <li>MSE는 크게 빗나간 한 편에 민감</li>
+  </ul>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px);margin-top:1.8vh">MAE는 원래 단위로 판독, MSE는 크기 비교에만 사용</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">8-9 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">두 지표가 가리키는 모델</h2>
+  <table class="mini" style="margin-top:2.4vh">
+    <thead><tr><th>지표</th><th>모델 가</th><th>모델 나</th></tr></thead>
+    <tbody>
+      <tr><td>MAE = 절댓값의 합 ÷ 5</td><td>1.2</td><td><em>0.8</em></td></tr>
+      <tr><td>MSE = 제곱의 합 ÷ 5</td><td><em>2.0</em></td><td>3.2</td></tr>
+    </tbody>
+  </table>
+  <p class="point">MAE는 <b>모델 나</b>, MSE는 <b>모델 가</b></p>
+  <p class="small" style="margin-top:1.6vh">모델 나는 네 편 정확·한 편에서 4만큼 빗나감 · 모델 가는 다섯 편에서 조금씩 빗나감</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">8-10 · 판단</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">상영관 배정에서 볼 지표</h2>
+  <ul class="facts">
+    <li>손해가 크게 빗나간 한 편에 집중</li>
+    <li>매진으로 돌려보낸 손님 · 그대로 남은 빈 좌석</li>
+    <li>여러 편에서 조금씩 빗나가는 쪽이 유리</li>
+    <li>큰 오차에 더 무겁게 벌점을 주는 지표 선택</li>
+  </ul>
+  <p class="point">고를 지표 <b>MSE</b> · 고를 모델 <b>모델 가</b></p>
+</section>
+
+<section class="slide">
+  <div class="kicker">8-11 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">연습 문제 — 매점 재료를 얼마나 준비할까</h2>
+  <table class="mini" style="margin-top:2.4vh">
+    <thead><tr><th>지표</th><th>모델 다</th><th>모델 라</th></tr></thead>
+    <tbody>
+      <tr><td>MAE</td><td><em>1.4</em></td><td>1.6</td></tr>
+      <tr><td>MSE</td><td><em>3.0</em></td><td>3.2</td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">지표가 모델을 고르는 것이 아니라 <b>하려는 일이 지표를 고름</b></p>
+  <p class="small" style="margin-top:1.4vh">단위 만 원 · 어느 날 조금 남거나 모자라도 다음 날 보충 → MAE를 보고 모델 다<br>이번에는 두 지표가 같은 모델을 지시 · 지표가 늘 갈리지는 않음</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">8-12 · 진행</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">위젯은 선생님 화면</h2>
+  <div class="diagram" style="--wh:48vh;margin-top:1.6vh"><div class="widget" data-w="handcheck">
+  <svg viewBox="0 0 720 424" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="활동지 기본 문제의 실젯값 다섯 개를 점으로 찍고 두 모델의 예측을 두 선으로 그린 그림, 그리고 오차·절댓값·제곱·합·MAE와 MSE·평균값 기준의 제곱오차 합·결정계수를 한 단계씩 채워 보이는 표">
+    <text data-t="title" x="30" y="22" font-size="13.5" font-weight="800" fill="#2b2d3a">기본 문제 · 다음 주 관객 수 예측</text>
+    <g data-dyn="cht"></g>
+    <line x1="496" y1="230" x2="496" y2="406" stroke="#e3ddcf" stroke-width="1"/>
+    <g data-dyn="tbl"></g>
+    <g data-dyn="pan"></g>
+    <text x="30" y="416" font-size="11" fill="#7a7f95">계산이 떨어지도록 고른 값 · 실제 측정값 아님</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-act="p-0">기본 문제</button>
+    <button class="wbtn" type="button" data-act="p-1">연습 문제</button>
+    <button class="wbtn on" type="button" data-act="m-0">모델 가</button>
+    <button class="wbtn" type="button" data-act="m-1">모델 나</button>
+    <button class="wbtn" type="button" data-act="next">다음 단계 →</button>
+    <button class="wbtn" type="button" data-act="reset">처음부터</button>
+    <span class="wout" data-t="out">단계 0 · 실젯값과 두 모델의 예측값</span>
+  </div>
+</div></div>
+  <p class="small" style="margin-top:1.4vh">학생은 활동지에 손으로 먼저 계산 · 화면은 다 푼 뒤 대조에만 사용 · “다음 단계”로 ①부터 ⑦까지 한 칸씩 표시</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">8-13 · 교과서 132쪽</div>
   <h2>결정계수의 정의</h2>
   <blockquote style="margin-top:3vh">결정 계수(R² score: R-squared score)는 회귀 모델이 실제 데이터와 얼마나 유사하게 예측하고 구체적으로 설명하는지를 나타낸다</blockquote>
   <p class="point">비교 상대는 평가 대상 실젯값의 평균을 항상 예측하는 기준선</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">8-8 · 원리</div>
+  <div class="kicker">8-14 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">기본 문제의 R²</h2>
+  <ul class="facts">
+    <li>실젯값의 평균 <b>16</b>만 명</li>
+    <li>평균값 기준의 제곱오차 합 <b>40</b></li>
+    <li>모델 가 — 1 − (10 ÷ 40) = <b>0.75</b></li>
+    <li>모델 나 — 1 − (16 ÷ 40) = <b>0.6</b></li>
+  </ul>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">평균값 기준보다 제곱오차 합 <b>75%</b> 감소</p>
+  <p class="small" style="margin-top:1.4vh">R²는 제곱오차로 만든 값 · MSE와 늘 같은 순서를 지시</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">8-15 · 원리</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">결정계수의 계산 구조</h2>
   <div class="diagram short" style="--dh:38vh"><svg viewBox="0 0 700 310" style="min-width:600px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="같은 점 다섯 개를 두고, 평균 수평선을 쓰는 평균값 기준과 내 회귀 직선의 제곱오차 넓이를 비교한 그림. 평균값 기준의 정사각형은 크고 내 직선의 정사각형은 작다">
       <!-- 좌 패널: 평균값 기준 -->
@@ -247,14 +365,14 @@
       <circle cx="645" cy="80" r="4.5" fill="#9a9a9a"/>
       <text x="530" y="235" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">제곱오차 합 = 5</text>
       <!-- 중앙 식과 캡션 -->
-      <text x="350" y="270" text-anchor="middle" font-size="13.5" font-weight="800" fill="#a97a00">R² = 1 − (5 ÷ 20) = 0.75 — 기준보다 제곱오차 합이 75% 작습니다.</text>
-      <text x="350" y="296" text-anchor="middle" font-size="11.5" fill="#7a7f95">점 배치는 이해를 위한 가상의 예(본문의 수치와 동일).</text>
+      <text x="350" y="270" text-anchor="middle" font-size="13.5" font-weight="800" fill="#a97a00">R² = 1 − (5 ÷ 20) = 0.75 · 기준보다 제곱오차 합 75% 감소</text>
+      <text x="350" y="296" text-anchor="middle" font-size="11.5" fill="#7a7f95">점 배치는 이해를 돕기 위한 예 · 교재 3절의 수치와 동일</text>
     </svg></div>
   <p class="small">0.75는 예측의 75%가 정답이라는 뜻이 아니라 제곱오차 합의 감소 비율 · 실젯값이 모두 같으면 분모가 0이 되어 계산 불가</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">8-9 · 그림</div>
+  <div class="kicker">8-16 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">기준 넓이와 내 넓이</h2>
   <div class="diagram" style="--wh:36vh"><div class="widget" data-w="r2denom">
   <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="실젯값 세 개의 퍼짐과 예측값을 따로 움직여 기준 제곱오차 합과 내 제곱오차 합의 비율이 어떻게 바뀌는지 보이는 그림">
@@ -329,19 +447,19 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-10 · 원리</div>
+  <div class="kicker">8-17 · 원리</div>
   <h2>결정계수 눈금 읽기</h2>
   <ul class="facts">
     <li><b>1에 가까움</b> → 평균값 기준보다 제곱오차 합이 매우 작음</li>
-    <li><b>0</b> → 평균만 찍는 경우와 차이 없음</li>
-    <li><b>음수</b> → 평균값 기준보다도 못한 예측(활동지 문제 5)</li>
+    <li><b>0</b> → 평균만 답하는 경우와 차이 없음 · 연습 문제의 평균 모델이 그 예</li>
+    <li><b>음수</b> → 평균값 기준보다도 큰 제곱오차 합</li>
   </ul>
   <p class="point">점수를 읽기 전에 확인할 것 — 어떤 자료에서 어떤 변수로 평가했는지</p>
   <p class="small">교과서 132쪽 — “결정 계수가 0에 가깝다면 회귀 모델이 데이터의 평균을 맞추는 정도로 예측했고, 회귀 모델의 유의미성이 떨어진다는 뜻이다”</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">8-11 · 실습</div>
+  <div class="kicker">8-18 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성</h2>
   <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.<br>
 서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.<br>
@@ -357,7 +475,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-12 · 발견</div>
+  <div class="kicker">8-19 · 발견</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">관측일 필터와 학습 결정계수</h2>
   <ul class="facts">
     <li>필터 적용 114개 연도 학습 R² <b>0.70</b>, 미적용 117개 연도 학습 R² <b>0.39</b></li>
@@ -369,7 +487,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-13 · 그림</div>
+  <div class="kicker">8-20 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">학습 자료와 평가 자료의 분리</h2>
   <div class="diagram" style="--wh:30vh"><div class="widget" data-w="r2swap">
 <svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 자료와 평가 자료를 따로 바꿔 가며 결정계수가 0.39·0.68·0.70으로 달라지는 것을 보이는 산점도와 사다리">
@@ -451,7 +569,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-14 · 판단</div>
+  <div class="kicker">8-21 · 판단</div>
   <h2>자료 제외의 근거</h2>
   <ul class="facts">
     <li>제외 기준의 근거 — 연간 기온을 충분히 대표하는지 여부</li>
@@ -463,7 +581,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-15 · 실습</div>
+  <div class="kicker">8-22 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">도전 프롬프트 — 직선 대신 곡선</h2>
   <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">좋아, 이번엔 직선 대신 곡선을 시험해 보자.<br>
 - 연평균기온을 2005년 이전은 공부용, 2005년부터는 시험용으로 나눠 줘.<br>
@@ -476,7 +594,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-16 · 발견</div>
+  <div class="kicker">8-23 · 발견</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">차수별 평가 오차와 2050년 예측</h2>
   <table class="mini">
     <tr><th>곡선</th><th>시험용 오차</th><th>2050년 예측</th></tr>
@@ -489,7 +607,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-17 · 그림</div>
+  <div class="kicker">8-24 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">차수와 두 오차</h2>
   <div class="diagram" style="--wh:40vh"><div class="widget" data-w="degsplit">
   <svg viewBox="0 0 720 430" role="img" aria-label="곡선의 차수를 1에서 9까지 바꾸면 학습 오차 막대는 줄고 평가 오차 막대는 커지는 것을 보이는 산점도와 막대 그림">
@@ -580,7 +698,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-18 · 그림</div>
+  <div class="kicker">8-25 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">예측 시점과 외삽의 어긋남</h2>
   <div class="diagram" style="--wh:34vh"><div class="widget" data-w="nearfar">
   <svg viewBox="0 0 720 250" role="img" aria-label="예측 연도를 2006년에서 2050년까지 옮기며 1차와 9차 예측값이 실제 기온에서 얼마나 멀어지는지 보이는 그림">
@@ -660,7 +778,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-19 · 원리</div>
+  <div class="kicker">8-26 · 원리</div>
   <h2>과대적합과 외삽</h2>
   <ul class="facts">
     <li><b>과대적합</b> — 학습 자료에 지나치게 맞추어 새 자료의 예측 성능이 떨어지는 현상</li>
@@ -672,7 +790,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-20 · 사례</div>
+  <div class="kicker">8-27 · 사례</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">넷플릭스 프라이즈 (2006~2009)</h2>
   <div class="withimg"><div class="txt">  <ul class="facts">
       <li>2006년 넷플릭스 공개 대회 — 예측 오차 10퍼센트 감소에 상금 100만 달러</li>
@@ -684,7 +802,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-21 · 사례</div>
+  <div class="kicker">8-28 · 사례</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">미국 국립허리케인센터의 진로 예보 오차</h2>
   <div class="withimg"><div class="txt">  <ul class="facts">
       <li>1970년 이후 NHC의 연례 공개 — 예보 위치와 실제 위치의 거리 평균</li>
@@ -696,7 +814,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-22 · 판단</div>
+  <div class="kicker">8-29 · 판단</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">수업에서 나온 점수의 재해석</h2>
   <table class="mini">
     <tr><th>숫자</th><th>어디서 나왔나</th><th>손계산 뒤의 읽기</th></tr>
@@ -710,9 +828,10 @@
 
 <section class="slide">
   <div class="kicker">정리</div>
-  <h2>제8강 요약</h2>
-  <div class="split" style="margin-top:2.6vh"><div class="card"><div class="t">계산</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">오차 → 절대오차·제곱오차 → MAE·MSE → R²</div></div><div class="card"><div class="t">기준</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">R²의 분모는 평가 대상 실젯값의 평균을 찍는 기준선</div></div><div class="card"><div class="t">자료</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">필터에 따라 학습·평가 자료가 함께 변화, 0.70과 0.39는 같은 조건의 점수가 아님</div></div><div class="card"><div class="t">한계</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">학습 자료의 점수와 새 자료의 예측력은 별개, 범위 밖은 외삽</div></div></div>
-  <p class="point">점수 하나가 아니라 <b>어떤 자료에서 어떤 기준과 비교했는지</b> 확인</p>
+  <h2>8차시 요약</h2>
+  <div class="split" style="margin-top:1.8vh;gap:1.2vw"><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">계산</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">오차 → 절대오차·제곱오차 → MAE·MSE → R²</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">지표 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">큰 실수 하나가 치명적이면 MSE, 평소의 정확도가 중요하면 MAE</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">기준</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">R²의 분모는 평가 대상 실젯값의 평균을 찍는 기준선</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">자료</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">필터에 따라 학습·평가 자료가 함께 변화, 0.70과 0.39는 같은 조건의 점수가 아님</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">한계</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">학습 자료의 점수와 새 자료의 예측력은 별개, 범위 밖은 외삽</div></div></div>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px);margin-top:1.8vh">지표가 모델을 고르는 것이 아니라 <b>하려는 일이 지표를 고름</b></p>
+  <p class="small" style="margin-top:1vh">집에서 혼자 확인하기 — 교재 8절에서 손으로 구한 값의 정오만 확인, 정답은 미표시</p>
 </section>
 
 <div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
