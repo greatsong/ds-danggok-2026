@@ -108,6 +108,16 @@
   <p class="sub">여럿이 함께 쓰는 저장소와 대결 기록의 집계</p>
 </section>
 
+<section class="slide">
+  <div class="kicker">13-1 · 목표</div>
+  <h2>오늘의 목표</h2>
+  <ul class="facts">
+    <li>오늘 실습의 예에 대응하는 <b>데이터셋·데이터베이스·테이블</b></li>
+    <li>대결 한 번이 표의 <b>한 행</b>으로 저장되는 구조 · 그 행을 구분하는 <b>기본 키</b></li>
+    <li>분모가 서로 다른 <b>승리 수와 승률</b> · 두 숫자를 함께 보는 순위 판단</li>
+  </ul>
+  <p class="point">표와 행 → 기본 키 → 승리 수와 승률의 분모</p>
+</section>
 <!-- 2 데이터셋 -->
 <section class="slide q-lg">
   <div class="kicker">13-1 · 교과서 25쪽</div>
@@ -219,6 +229,7 @@
     <li style="font-size:inherit">SQL Editor에서 3절 ‘SQL · 표 만들기’ 코드 전체를 한 번만 실행 · 표 생성부터 권한 정책까지</li>
     <li style="font-size:inherit">Table Editor에서 public 스키마의 <b>menu_duels</b> 확인 · 일곱 열과 RLS 활성화 · 새 표는 0행</li>
     <li style="font-size:inherit">Connect에서 Project URL과 publishable 키 복사 · DB 연결 문자열·DB 비밀번호·secret·service_role 키는 사용하지 않음</li>
+<li style="font-size:inherit">학생 안내는 교재의 <b>준비 안내</b> 페이지(lesson13-setup.html) · 본 교재에는 링크만 둠</li>
   </ul>
 </section>
 
@@ -514,7 +525,7 @@ menu_duels에 저장된 전체 기록을 대상으로 해. id, game_id, round, l
     <tr><th>낱말</th><th>뜻</th><th>우리말로 읽으면</th></tr>
     <tr><td>SELECT</td><td>가져올 열 고르기 · *는 모든 열</td><td>"메뉴와 저장 시각을 보여 줘"</td></tr>
     <tr><td>FROM</td><td>어느 테이블에서 가져올지</td><td>"대결 기록 표에서"</td></tr>
-    <tr><td>WHERE</td><td>조건에 맞는 행만 남기기</td><td>"제육볶음을 선택한 표만"</td></tr>
+    <tr><td>WHERE</td><td>조건에 맞는 행만 남기기</td><td>"제육볶음이 이긴 대결만"</td></tr>
     <tr><td>ORDER BY</td><td>정렬 기준 · DESC는 내림차순, ASC는 오름차순</td><td>"최근 대결부터"</td></tr>
   </table>
   <div class="prompt">SELECT id, winner, created_at FROM menu_duels ORDER BY created_at DESC, id DESC LIMIT 20;<br>
