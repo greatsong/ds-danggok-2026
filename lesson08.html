@@ -50,7 +50,7 @@
   </ul>
 
   <h2>1. 개념 이해 — 오차에서 R²까지</h2>
-  <p>MAE와 MSE와 R²가 각각 무엇을 재는 값인지는 7차시 3절에서 읽었습니다. 오늘은 그 정의를 다시 읽지 않고, 세 값이 어떤 계산을 거쳐 나오는지를 봅니다. 계산은 실젯값과 예측값의 차이 한 칸에서 시작해 일곱 단계로 이어집니다.</p>
+  <p>MAE와 MSE, R²가 각각 무엇을 재는 값인지는 7차시 3절에서 읽었습니다. 오늘은 정의를 다시 읽는 대신 세 값이 어떤 계산을 거쳐 나오는지를 봅니다. 계산은 실젯값과 예측값의 차이 한 칸에서 시작해 일곱 단계로 이어집니다.</p>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 120쪽</span></div>
     <p class="q">"실젯값과 예측값의 차이를 오차라고 하는데, 두 직선을 비교하여 오차가 더 작은 것을 선택해야 한다." <span class="src">(120쪽)</span></p>
@@ -157,8 +157,8 @@
   <div class="wctl">
     <button class="wbtn on" type="button" data-act="p-0">기본 문제</button>
     <button class="wbtn" type="button" data-act="p-1">연습 문제</button>
-    <button class="wbtn on" type="button" data-act="m-0">모델 가</button>
-    <button class="wbtn" type="button" data-act="m-1">모델 나</button>
+    <button class="wbtn on" type="button" data-act="m-0">모델 A</button>
+    <button class="wbtn" type="button" data-act="m-1">모델 B</button>
     <button class="wbtn" type="button" data-act="next">다음 단계 →</button>
     <button class="wbtn" type="button" data-act="reset">처음부터</button>
     <span class="wout" data-t="out">단계 0 · 실젯값과 두 모델의 예측값</span>
@@ -185,9 +185,9 @@
     <text x="48" y="149.4" text-anchor="end" font-size="13" fill="#6b7385">50</text>
     <text x="48" y="199" text-anchor="end" font-size="13" fill="#6b7385">25</text>
     <text x="48" y="248.5" text-anchor="end" font-size="13" fill="#6b7385">0</text>
-    <text x="120" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 가</text>
-    <text x="243" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 나</text>
-    <text x="366" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 다</text>
+    <text x="120" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 A</text>
+    <text x="243" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 B</text>
+    <text x="366" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 C</text>
     <!-- 넓이 · 오차 · 점 -->
     <g data-dyn="base"></g>
     <g data-dyn="mine"></g>
@@ -197,9 +197,9 @@
     <g data-dyn="dots"></g>
     <text data-t="mean" x="62" y="118.1" font-size="12" fill="#7a7f95" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" paint-order="stroke">평균 60만 명</text>
     <!-- 예측 점 조작 영역 -->
-    <rect class="hit" x="105" y="154.7" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 가의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="40" style="touch-action:none;cursor:ns-resize"/>
-    <rect class="hit" x="228" y="115.1" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 나의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="60" style="touch-action:none;cursor:ns-resize"/>
-    <rect class="hit" x="351" y="75.5" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 다의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="80" style="touch-action:none;cursor:ns-resize"/>
+    <rect class="hit" x="105" y="154.7" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 A의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="40" style="touch-action:none;cursor:ns-resize"/>
+    <rect class="hit" x="228" y="115.1" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 B의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="60" style="touch-action:none;cursor:ns-resize"/>
+    <rect class="hit" x="351" y="75.5" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 C의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="80" style="touch-action:none;cursor:ns-resize"/>
     <text x="243" y="288" text-anchor="middle" font-size="11.5" fill="#7a7f95">빨간 선분 = 오차 · 노란 넓이 = 오차² · 회색 넓이 = 기준 오차²</text>
     <!-- 우 · 계산표 -->
     <text x="474" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">실젯값</text>
@@ -267,7 +267,7 @@
     <p class="t">→ 점수를 적을 때는 값만 적지 않고 어느 자료에서 잰 값인지 함께 적습니다.</p>
   </div>
 
-  <h2>4. 기온 모델 다시 보기 — 자료 선택에 따른 R² 비교</h2>
+  <h2>4. 기온 모델 C시 보기 — 자료 선택에 따른 R² 비교</h2>
   <p>기온 예측기를 새로 만들어 자료 선택에 따라 R²가 어떻게 달라지는지 확인합니다. 여기서는 <b>연도</b>가 독립 변수이고 <b>연평균기온</b>이 종속 변수입니다. 이번 절에서 계산하는 것은 직선을 학습한 자료에 그대로 예측한 <b>학습 자료의 R²</b>입니다. 따로 떼어 둔 자료에서 평가한 7차시의 테스트 R²와는 평가 조건이 다릅니다.</p>
   <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.
 서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv)로 연도별 평균기온을 구해 줘.
@@ -386,7 +386,7 @@ plotly</pre></div></details>
 <text x="486" y="186" font-size="13" fill="#7a7f95">R²</text>
 <text class="v-r2" data-t="r2" x="712" y="186" text-anchor="end" font-size="30" font-weight="800" fill="#a97a00">—</text>
 <text x="486" y="212" font-size="10.5" fill="#7a7f95">R² = 1 − (SSE ÷ SST)</text>
-<text x="56" y="276" font-size="11" fill="#7a7f95">버튼을 누를 때마다 오른쪽 네 숫자가 함께 바뀝니다.</text>
+<text x="56" y="276" font-size="11" fill="#7a7f95">버튼을 누를 때마다 오른쪽 네 숫자가 함께 바뀝니다. · 교재를 만든 시점의 기온 자료로 그렸습니다.</text>
 </svg>
 <div class="wctl">
 <button class="wbtn on" type="button" data-act="s-a">짧은 해 제외 · 학습·평가 같음</button>
@@ -395,7 +395,7 @@ plotly</pre></div></details>
 <span class="wout" data-t="out">버튼을 누르면 값이 표시됩니다</span>
 </div>
 </div>
-    <figcaption>선생님 화면으로 함께 봅니다. 앞의 두 버튼으로 관측 기간이 짧은 해를 빼고 넣습니다. 자료를 바꾸면 회귀선만 달라지는 것이 아니라 평가 대상과 R²의 분모인 SST까지 함께 달라집니다. 오른쪽 표에서 SSE와 SST 가운데 어느 쪽이 더 크게 움직이는지 확인합니다.</figcaption>
+    <figcaption>선생님 화면으로 함께 봅니다. 앞의 두 버튼으로 관측 기간이 짧은 해를 빼고 넣습니다. 자료를 바꾸면 회귀선만 달라지는 것이 아니라 평가 대상과 R²의 분모인 기준 제곱오차 합까지 함께 달라집니다. 오른쪽 표에서 내 제곱오차 합과 기준 제곱오차 합 가운데 어느 쪽이 더 크게 움직이는지 확인합니다.</figcaption>
   </figure>
 
   <div class="callout tip"><div class="h">자료를 제외하는 기준</div><p>연간 기온을 충분히 대표하는지 확인한 뒤 제외 기준을 정합니다. 점수가 높아졌다는 이유만으로 자료 제외를 정당화해서는 안 됩니다. 전처리 방법의 예측 성능을 비교하려면 같은 평가 자료를 사용해야 합니다.</p></div>
@@ -527,6 +527,7 @@ st.caption(f"학습 {len(학습)}개 연도 · 평가 {len(평가)}개 연도 ·
     </g>
     <polyline class="trace" points="" fill="none" stroke="#d64545" stroke-width="1.4" opacity="0.5"/>
     <g class="tdots"></g>
+    <text x="56" y="424" font-size="12" fill="#6b7385">교재를 만든 시점의 기온 자료입니다.</text>
   </svg>
   <div class="wctl">
     <label>곡선의 차수 <input type="range" min="1" max="9" step="1" value="1" data-k="deg" aria-label="곡선의 차수"></label>
@@ -618,8 +619,8 @@ st.caption(f"학습 {len(학습)}개 연도 · 평가 {len(평가)}개 연도 ·
   </div></details>
 
   <div class="callout warn">
-    <div class="h">⚠️ 2050년도 2200년도 외삽입니다</div>
-    <p>도전 활동의 모델은 2005년 이전 자료로 학습했습니다. 따라서 2050년과 2200년의 예측은 모두 학습 범위 밖의 <b>외삽</b>입니다. 미래 시점이 비교적 가깝다는 이유만으로 정확하다고 볼 수 없습니다. 여기서 계산한 값은 회귀 모델을 범위 밖에 적용한 예시이며, 기후 예보를 뜻하지 않습니다.</p>
+    <div class="h">⚠️ 2050년 예측도 학습 범위 밖입니다</div>
+    <p>도전 활동의 모델은 2005년 이전 자료로 학습했습니다. 따라서 2050년 예측은 학습 범위 밖의 <b>외삽</b>입니다. 미래 시점이 비교적 가깝다는 이유만으로 정확하다고 볼 수 없습니다. 여기서 계산한 값은 회귀 모델을 범위 밖에 적용한 예시이며, 기후 예보를 뜻하지 않습니다.</p>
   </div>
 
 <h2>6. 개념 정리 — 평가 점수의 의미와 한계</h2>
@@ -701,7 +702,7 @@ st.caption(f"학습 {len(학습)}개 연도 · 평가 {len(평가)}개 연도 ·
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 4</span> 9차 곡선은 학습 자료의 점들에 가장 가깝게 붙었는데, 평가 자료의 오차는 세 곡선 가운데 가장 컸고 2050년 예측값도 현실과 동떨어졌습니다. 이유로 알맞은 것은?</div>
+    <div class="qq"><span class="qn">문제 4</span> 5절 표를 보면 9차 곡선은 학습 자료의 점들에 가장 가깝게 붙었는데도 평가 자료의 오차는 1차 직선보다 훨씬 컸고, 2050년 예측값도 현실과 동떨어진 값이었습니다. 이유로 알맞은 것은?</div>
     <div class="qitem">
       <div class="qopts qopts-col"><button class="opt">9차 곡선은 계산이 복잡해 컴퓨터가 틀리게 계산했기 때문이다</button><button class="opt" data-ok="1">학습 자료에 지나치게 맞추어 새로운 자료에서 예측 오차가 커졌기 때문이다</button><button class="opt">평가 자료(2005년 이후)가 학습 자료보다 기온이 높아서 어떤 곡선도 맞힐 수 없기 때문이다</button></div>
       <div class="fb">학습한 자료에서 잘 맞는 것과 처음 보는 자료에서 잘 맞는 것은 다릅니다. 차수가 낮은 곡선은 학습 자료의 점들에서 더 멀더라도 평가 자료에서는 더 잘 맞을 수 있습니다. 점수는 반드시 학습에 쓰지 않은 자료로 따로 봐야 합니다.</div>

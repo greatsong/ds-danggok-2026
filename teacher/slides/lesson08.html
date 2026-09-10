@@ -172,7 +172,7 @@
   <div class="kicker">8-5 · 활동지</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">기본 문제 — 상영관을 몇 개 잡을까</h2>
   <table class="mini" style="margin-top:2vh;font-size:clamp(14px,1.7vw,24px)">
-    <thead><tr><th>영화</th><th>실젯값</th><th>모델 가</th><th>모델 나</th></tr></thead>
+    <thead><tr><th>영화</th><th>실젯값</th><th>모델 A</th><th>모델 B</th></tr></thead>
     <tbody>
       <tr><td>블루웨일의 대모험</td><td>14</td><td>12</td><td>14</td></tr>
       <tr><td>보라매공원의 밤</td><td>12</td><td>14</td><td>12</td></tr>
@@ -189,7 +189,7 @@
   <div class="kicker">8-6 · 활동지</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">오차를 그대로 더하면</h2>
   <table class="mini" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">
-    <thead><tr><th>영화</th><th>모델 가의 오차</th><th>모델 나의 오차</th></tr></thead>
+    <thead><tr><th>영화</th><th>모델 A의 오차</th><th>모델 B의 오차</th></tr></thead>
     <tbody>
       <tr><td>블루웨일</td><td>+2</td><td>0</td></tr>
       <tr><td>보라매공원</td><td>−2</td><td>0</td></tr>
@@ -199,7 +199,7 @@
       <tr><td>합</td><td><em>0</em></td><td><em>+4</em></td></tr>
     </tbody>
   </table>
-  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">모델 가는 다섯 편 모두 빗나갔는데도 합이 <b>0</b></p>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">모델 A는 다섯 편 모두 빗나갔는데도 합이 <b>0</b></p>
   <p class="small" style="margin-top:1.4vh">오차 = 실젯값 − 예측값 · 남는 쪽과 모자라는 쪽의 부호가 서로 지워져 크기 판별 불가</p>
 </section>
 
@@ -207,7 +207,7 @@
   <div class="kicker">8-7 · 원리</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">절댓값과 제곱 — 부호를 없애는 두 방법</h2>
   <table class="mini" style="margin-top:2.4vh">
-    <thead><tr><th>다섯 편의 합</th><th>모델 가</th><th>모델 나</th></tr></thead>
+    <thead><tr><th>다섯 편의 합</th><th>모델 A</th><th>모델 B</th></tr></thead>
     <tbody>
       <tr><td>오차의 합</td><td>0</td><td>+4</td></tr>
       <tr><td>절댓값의 합</td><td><em>6</em></td><td><em>4</em></td></tr>
@@ -215,7 +215,7 @@
     </tbody>
   </table>
   <p class="point">제곱은 큰 오차에 더 무거운 벌점</p>
-  <p class="small" style="margin-top:1.6vh">모델 나의 오차는 한 편에서 4 · 제곱하면 16으로 확대</p>
+  <p class="small" style="margin-top:1.6vh">모델 B의 오차는 한 편에서 4 · 제곱하면 16으로 확대</p>
 </section>
 
 <section class="slide">
@@ -234,14 +234,14 @@
   <div class="kicker">8-9 · 활동지</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">두 지표가 가리키는 모델</h2>
   <table class="mini" style="margin-top:2.4vh">
-    <thead><tr><th>지표</th><th>모델 가</th><th>모델 나</th></tr></thead>
+    <thead><tr><th>지표</th><th>모델 A</th><th>모델 B</th></tr></thead>
     <tbody>
       <tr><td>MAE = 절댓값의 합 ÷ 5</td><td>1.2</td><td><em>0.8</em></td></tr>
       <tr><td>MSE = 제곱의 합 ÷ 5</td><td><em>2.0</em></td><td>3.2</td></tr>
     </tbody>
   </table>
-  <p class="point">MAE는 <b>모델 나</b>, MSE는 <b>모델 가</b></p>
-  <p class="small" style="margin-top:1.6vh">모델 나는 네 편 정확·한 편에서 4만큼 빗나감 · 모델 가는 다섯 편에서 조금씩 빗나감</p>
+  <p class="point">MAE는 <b>모델 B</b>, MSE는 <b>모델 A</b></p>
+  <p class="small" style="margin-top:1.6vh">모델 B는 네 편 정확·한 편에서 4만큼 빗나감 · 모델 A는 다섯 편에서 조금씩 빗나감</p>
 </section>
 
 <section class="slide">
@@ -253,21 +253,21 @@
     <li>여러 편에서 조금씩 빗나가는 쪽이 유리</li>
     <li>큰 오차에 더 무겁게 벌점을 주는 지표 선택</li>
   </ul>
-  <p class="point">고를 지표 <b>MSE</b> · 고를 모델 <b>모델 가</b></p>
+  <p class="point">고를 지표 <b>MSE</b> · 고를 모델 <b>모델 A</b></p>
 </section>
 
 <section class="slide">
   <div class="kicker">8-11 · 활동지</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">연습 문제 — 매점 재료를 얼마나 준비할까</h2>
   <table class="mini" style="margin-top:2.4vh">
-    <thead><tr><th>지표</th><th>모델 다</th><th>모델 라</th></tr></thead>
+    <thead><tr><th>지표</th><th>모델 C</th><th>모델 D</th></tr></thead>
     <tbody>
       <tr><td>MAE</td><td><em>1.4</em></td><td>1.6</td></tr>
       <tr><td>MSE</td><td><em>3.0</em></td><td>3.2</td></tr>
     </tbody>
   </table>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px)">지표가 모델을 고르는 것이 아니라 <b>하려는 일이 지표를 고름</b></p>
-  <p class="small" style="margin-top:1.4vh">단위 만 원 · 어느 날 조금 남거나 모자라도 다음 날 보충 → MAE를 보고 모델 다<br>이번에는 두 지표가 같은 모델을 지시 · 지표가 늘 갈리지는 않음</p>
+  <p class="small" style="margin-top:1.4vh">단위 만 원 · 어느 날 조금 남거나 모자라도 다음 날 보충 → MAE를 보고 모델 C<br>이번에는 두 지표가 같은 모델을 지시 · 지표가 늘 갈리지는 않음</p>
 </section>
 
 <section class="slide">
@@ -285,8 +285,8 @@
   <div class="wctl">
     <button class="wbtn on" type="button" data-act="p-0">기본 문제</button>
     <button class="wbtn" type="button" data-act="p-1">연습 문제</button>
-    <button class="wbtn on" type="button" data-act="m-0">모델 가</button>
-    <button class="wbtn" type="button" data-act="m-1">모델 나</button>
+    <button class="wbtn on" type="button" data-act="m-0">모델 A</button>
+    <button class="wbtn" type="button" data-act="m-1">모델 B</button>
     <button class="wbtn" type="button" data-act="next">다음 단계 →</button>
     <button class="wbtn" type="button" data-act="reset">처음부터</button>
     <span class="wout" data-t="out">단계 0 · 실젯값과 두 모델의 예측값</span>
@@ -308,8 +308,8 @@
   <ul class="facts">
     <li>실젯값의 평균 <b>16</b>만 명</li>
     <li>평균값 기준의 제곱오차 합 <b>40</b></li>
-    <li>모델 가 — 1 − (10 ÷ 40) = <b>0.75</b></li>
-    <li>모델 나 — 1 − (16 ÷ 40) = <b>0.6</b></li>
+    <li>모델 A — 1 − (10 ÷ 40) = <b>0.75</b></li>
+    <li>모델 B — 1 − (16 ÷ 40) = <b>0.6</b></li>
   </ul>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px)">평균값 기준보다 제곱오차 합 <b>75%</b> 감소</p>
   <p class="small" style="margin-top:1.4vh">R²는 제곱오차로 만든 값 · MSE와 늘 같은 순서를 지시</p>
@@ -389,9 +389,9 @@
     <text x="48" y="149.4" text-anchor="end" font-size="13" fill="#6b7385">50</text>
     <text x="48" y="199" text-anchor="end" font-size="13" fill="#6b7385">25</text>
     <text x="48" y="248.5" text-anchor="end" font-size="13" fill="#6b7385">0</text>
-    <text x="120" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 가</text>
-    <text x="243" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 나</text>
-    <text x="366" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 다</text>
+    <text x="120" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 A</text>
+    <text x="243" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 B</text>
+    <text x="366" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 C</text>
     <!-- 넓이 · 오차 · 점 -->
     <g data-dyn="base"></g>
     <g data-dyn="mine"></g>
@@ -401,9 +401,9 @@
     <g data-dyn="dots"></g>
     <text data-t="mean" x="62" y="118.1" font-size="12" fill="#7a7f95" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" paint-order="stroke">평균 60만 명</text>
     <!-- 예측 점 조작 영역 -->
-    <rect class="hit" x="105" y="154.7" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 가의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="40" style="touch-action:none;cursor:ns-resize"/>
-    <rect class="hit" x="228" y="115.1" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 나의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="60" style="touch-action:none;cursor:ns-resize"/>
-    <rect class="hit" x="351" y="75.5" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 다의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="80" style="touch-action:none;cursor:ns-resize"/>
+    <rect class="hit" x="105" y="154.7" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 A의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="40" style="touch-action:none;cursor:ns-resize"/>
+    <rect class="hit" x="228" y="115.1" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 B의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="60" style="touch-action:none;cursor:ns-resize"/>
+    <rect class="hit" x="351" y="75.5" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 C의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="80" style="touch-action:none;cursor:ns-resize"/>
     <text x="243" y="288" text-anchor="middle" font-size="11.5" fill="#7a7f95">빨간 선분 = 오차 · 노란 넓이 = 오차² · 회색 넓이 = 기준 오차²</text>
     <!-- 우 · 계산표 -->
     <text x="474" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">실젯값</text>
