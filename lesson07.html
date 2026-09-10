@@ -404,39 +404,13 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
   </div></details>
     <h2>4. 속성 만들기 — 데이터를 보고 새 단서를 찾는다</h2>
   <p>지금까지는 표에 이미 있는 속성만 썼습니다. 그런데 표에 없는 속성이 예측에 더 도움이 될 때가 있습니다. 새 속성은 상상으로 만드는 것이 아니라, <b>가진 데이터를 그려 보고 눈에 띄는 규칙에서</b> 나옵니다.</p>
-  <h3>먼저 그려 본다</h3>
-  <p>개봉한 달에 따라 관객 수가 달라질까요. 짐작만으로는 알 수 없으므로 개봉월별로 흩어 놓고 봅니다.</p>
   
-  <figure class="interactive" data-fig="monthaudi">
-    <div class="widget" data-w="monthaudi">
-<svg viewBox="0 0 720 336" role="img" aria-label="개봉월별 총 관객 수 분포 · 점 하나가 영화 한 편 · 굵은 선이 그 달 중앙값 · 버튼으로 중앙값 꺾은선, 성수기 달 강조 선택">
-  <g class="bgs" visibility="hidden"></g>
-  <g class="grid"></g>
-  <line x1="56" y1="36" x2="56" y2="252" stroke="#6b7385" stroke-width="1.2"/>
-  <line x1="56" y1="252" x2="696" y2="252" stroke="#6b7385" stroke-width="1.2"/>
-  <text x="20" y="20" font-size="14" fill="#6b7385">총 관객 수(만 명) · 로그 눈금</text>
-  <text x="696" y="20" text-anchor="end" font-size="14" fill="#6b7385">점 · 영화 한 편 · 굵은 선 · 그 달 중앙값</text>
-  <g class="pts"></g>
-  <g class="meds"></g>
-  <g class="mline" visibility="hidden"></g>
-  <g class="labs"></g>
-  <g class="xlab"></g>
-  <g class="cmp" visibility="hidden"></g>
-  <text x="20" y="322" font-size="14" fill="#6b7385">그림에서 읽은 규칙 → 새 단서 · 방학·연말 개봉 → 성수기</text>
-</svg>
-<div class="wctl">
-  <button class="wbtn ball on" type="button" aria-pressed="true">전체 보기</button>
-  <button class="wbtn bmed" type="button" aria-pressed="false">중앙값만</button>
-  <button class="wbtn bpk" type="button" aria-pressed="false">성수기 표시</button>
-</div>
-</div>
-    <figcaption>개봉월별 총 관객 수를 로그 눈금 위에 흩뿌려 그리고, 달마다 중앙값을 굵은 선으로 얹습니다. '중앙값만'은 점을 흐리게 하고 열두 달의 중앙값을 꺾은선으로 이어 달 사이의 높낮이를 드러내고, '성수기 표시'는 성수기 달의 배경을 칠한 뒤 성수기와 나머지 달의 편수·중앙값을 그림 아래에 나란히 보여 줍니다. 그림에서 규칙을 먼저 읽고 그 규칙을 성수기라는 새 단서로 굳히는 순서를 그대로 밟게 하는 화면입니다. 성수기 달은 데이터의 성수기 열에서 직접 읽고 편수·중앙값·축 범위·이름표 네 편도 모두 D에서 계산하므로, 영화진흥위원회 데이터가 갱신되면 그림과 숫자가 함께 바뀝니다. 애니메이션은 없습니다.</figcaption>
-  </figure>
+  
 
   <div class="callout theory">
     <div class="h">🎬 성수기 — 관객이 몰리는 시기</div>
-    <p>영화계에서 <b>성수기</b>는 관객이 몰리는 시기를 뜻합니다. 배급사는 기대작을 이 시기에 맞춰 개봉시키고, 그만큼 상영관도 많이 잡습니다. 그렇다면 어느 달이 성수기입니까. 방학이라고 답하기 쉽지만 데이터는 그렇게 말하지 않습니다.</p>
-    <p>우리 표는 최근 1년치라 달마다 스무 편 안팎이어서 달 사이의 차이를 판단하기에는 편수가 적습니다. 아래 그림은 2004년부터 2026년까지 주간 10위권에 든 영화 3,789편을 개봉월별로 모아 중앙값을 그린 것입니다.</p>
+    <p>영화계에서 <b>성수기</b>는 관객이 몰리는 시기를 뜻합니다. 배급사는 기대작을 이 시기에 맞춰 개봉시키고, 그만큼 상영관도 많이 잡습니다. 어느 달이 성수기인지는 짐작하지 말고 그려서 확인합니다.</p>
+    <p>아래는 2004년부터 2026년까지 주간 10위권에 든 영화 3,789편을 개봉월별로 모아 중앙값을 그린 것입니다.</p>
   </div>
 
   <figure class="interactive" data-fig="monthlong">
@@ -450,19 +424,16 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
         <text x="30" y="288" font-size="11" fill="#7a7f95">2004~2026년 주간 10위권 진입작 3,789편 · 전체 영화가 아니라 10위권에 든 영화의 중앙값입니다</text>
       </svg>
       <div class="wctl">
-        <button class="wbtn on" type="button" data-act="peak" aria-pressed="true">성수기 표시</button>
-        <button class="wbtn" type="button" data-act="vac" aria-pressed="false">방학 표시</button>
         <span class="wout" data-t="out"></span>
       </div>
     </div>
-    <figcaption>단추로 표시를 바꾸어 봅니다. 방학이 낀 달은 1·2·7·8월인데, 그 가운데 2월만 전체 중앙값 아래에 있습니다. 반대로 방학이 아닌 12월이 열두 달 가운데 가장 높습니다. 그래서 이 수업에서는 방학이 아니라 <b>12·1·7·8월</b>을 성수기로 잡습니다. 2004년부터 2026년까지의 기록이라 날마다 갱신되지 않습니다.</figcaption>
+    <figcaption>파란 막대 <b>12·1·7·8월</b>이 전체 중앙값 위로 뚜렷하게 솟아 있습니다. 이 네 달을 성수기로 잡습니다. 방학인 2월이 여기에 들지 않는 것도 그림에서 확인할 수 있습니다. 2004년부터 2026년까지의 기록이라 날마다 갱신되지 않습니다.</figcaption>
   </figure>
 
   <div class="callout theory">
     <div class="h">📌 성수기 속성 만들기</div>
     <p>그림에서 중앙값이 높은 달을 확인했습니다. 이제 <b>12·1·7·8월에 개봉했으면 1, 아니면 0</b>을 적는 새 열을 만듭니다. 이렇게 만든 열이 <b>성수기</b> 속성입니다.</p>
     <p>성수기냐 아니냐처럼 수의 크기가 아니라 갈래를 나타내는 속성을 <b>범주형 속성</b>이라고 합니다. 회귀는 수를 계산하므로 범주형 속성은 이렇게 0과 1로 바꾸어 넣습니다.</p>
-    <p class="mini">2월을 넣을지 말지는 데이터를 보고 정한 것입니다. 방학이라는 이유만으로 넣었다면 예측에 도움이 되지 않는 열을 하나 늘렸을 것입니다.</p>
   </div>
   <p>성수기 속성은 이미 우리 표에 들어 있습니다. 앱에서 이 속성을 켜고 끄며 점수가 어떻게 달라지는지 확인합니다. 데이터를 그려 규칙을 찾고, 그 규칙을 새 열로 만들어 모델에 주는 일을 <b>속성 만들기</b>라고 합니다.</p>
   <div class="callout mini">
@@ -594,7 +565,7 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets07.js?v=5"></script>
+<script src="assets/widgets07.js?v=6"></script>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="assets/lesson07_situations.js?v=3"></script>
 <script src="assets/answer.js?v=3"></script>

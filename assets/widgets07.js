@@ -513,8 +513,7 @@ function initW_monthlong(root, D) {
   // 22년치 개봉월별 중앙값. scripts/lesson07_month_medians.py 가 값을 다시 쓴다.
   const M = window.MONTH_LONG;
   if (!M) return;
-  const VAC = [1, 2, 7, 8];              // 방학이 낀 달
-  const PEAK = [12, 1, 7, 8];            // 성수기
+  const PEAK = [12, 1, 7, 8];
   const X0 = 66, X1 = 700, Y0 = 44, Y1 = 250;
   const top = Math.max.apply(null, M.months.map(r => r[2])) * 1.12;
   const bw = (X1 - X0) / 12 * 0.62;
@@ -525,54 +524,26 @@ function initW_monthlong(root, D) {
   const gBar = q('[data-dyn="bars"]'), gLab = q('[data-dyn="labs"]');
   const line = q('[data-dyn="base"]'), tBase = q('[data-t="base"]');
   const tOut = q('[data-t="out"]');
-  const btns = Array.prototype.slice.call(root.querySelectorAll('.wbtn'));
-  let mode = 'peak';
 
   const NS = 'http://www.w3.org/2000/svg';
   const mk = (tag, at) => { const e = document.createElementNS(NS, tag);
     for (const k in at) e.setAttribute(k, at[k]); return e; };
 
-  function draw() {
-    gBar.textContent = ''; gLab.textContent = '';
-    M.months.forEach(function (r, i) {
-      const m = r[0], med = r[2];
-      const on = mode === 'peak' ? PEAK.indexOf(m) >= 0 : VAC.indexOf(m) >= 0;
-      const fill = on ? (mode === 'peak' ? '#2b7fd6' : '#e8930c') : '#cfd4de';
-      gBar.appendChild(mk('rect', { x: cx(i) - bw / 2, y: py(med), width: bw,
-        height: Y1 - py(med), fill: fill, rx: 3 }));
-      const lab = mk('text', { x: cx(i), y: Y1 + 18, 'text-anchor': 'middle',
-        'font-size': 13, fill: on ? '#1c2230' : '#7a7f95',
-        'font-weight': on ? 800 : 500 });
-      lab.textContent = m + '월';
-      gLab.appendChild(lab);
-      if (m === 2) {
-        const t = mk('text', { x: cx(i), y: py(med) - 8, 'text-anchor': 'middle',
-          'font-size': 12, 'font-weight': 800, fill: '#e45756' });
-        t.textContent = '2월';
-        gLab.appendChild(t);
-      }
-    });
-    line.setAttribute('x1', X0); line.setAttribute('x2', X1);
-    line.setAttribute('y1', py(M.med)); line.setAttribute('y2', py(M.med));
-    tBase.setAttribute('y', py(M.med) - 6);
-    tBase.textContent = '전체 중앙값 ' + M.med.toLocaleString() + '명';
-    const feb = M.months[1][2], ratio = (feb / M.med).toFixed(2);
-    tOut.textContent = mode === 'peak'
-      ? '성수기 네 달(12·1·7·8월)이 전체 중앙값 위에 있습니다'
-      : '방학이 낀 네 달 가운데 2월만 전체 중앙값 아래입니다 · 2월 ' + ratio + '배';
-  }
-
-  btns.forEach(function (b) {
-    b.addEventListener('click', function () {
-      mode = b.dataset.act;
-      btns.forEach(function (x) {
-        x.classList.toggle('on', x === b);
-        x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
-      });
-      draw();
-    });
+  gBar.textContent = ''; gLab.textContent = '';
+  M.months.forEach(function (r, i) {
+    const m = r[0], med = r[2], on = PEAK.indexOf(m) >= 0;
+    gBar.appendChild(mk('rect', { x: cx(i) - bw / 2, y: py(med), width: bw,
+      height: Y1 - py(med), fill: on ? '#2b7fd6' : '#cfd4de', rx: 3 }));
+    const lab = mk('text', { x: cx(i), y: Y1 + 18, 'text-anchor': 'middle',
+      'font-size': 13, fill: on ? '#1c2230' : '#7a7f95', 'font-weight': on ? 800 : 500 });
+    lab.textContent = m + '월';
+    gLab.appendChild(lab);
   });
-  draw();
+  line.setAttribute('x1', X0); line.setAttribute('x2', X1);
+  line.setAttribute('y1', py(M.med)); line.setAttribute('y2', py(M.med));
+  tBase.setAttribute('y', py(M.med) - 6);
+  tBase.textContent = '전체 중앙값 ' + M.med.toLocaleString() + '명';
+  tOut.textContent = '성수기 네 달 12·1·7·8월이 전체 중앙값 위에 있습니다';
 }
 
 function initW_plane3d(root, D) {
