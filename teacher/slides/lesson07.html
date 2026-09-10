@@ -96,7 +96,7 @@
   <h2>오늘의 목표</h2>
   <ul class="facts">
     <li>문제 해결에 필요한 <b>속성</b> 선택</li>
-    <li>자료 관찰을 통한 <b>새 속성</b> 생성</li>
+    <li>데이터 관찰을 통한 <b>새 속성</b> 생성</li>
     <li><b>R²·평균절대오차·평균제곱오차</b>로 판단하는 모델 성능</li>
   </ul>
   <p class="point">속성 고르기 → 없으면 만들기 → 쓸 만한지 판단</p>
@@ -203,7 +203,7 @@
 
 <section class="slide">
   <div class="kicker">7-5 · 교과서 112쪽</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">학습 자료와 평가 자료의 분리</h2>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">학습 데이터와 평가 데이터의 분리</h2>
   <blockquote style="font-size:clamp(14px,1.6vw,22px);max-width:44em;margin-top:1.6vh">학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다</blockquote>
   <div class="diagram short" style="--dh:24vh;margin-top:2vh">
     <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화를 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 나머지로 가중치를 학습한 뒤 떼어 둔 영화로 점수를 재는 구조">
@@ -247,7 +247,7 @@
     <li>두 표의 연결 열 — <b>movieCd</b></li>
     <li>예측 대상 — <b>total_audi</b></li>
   </ul>
-  <p class="small">수집 기간과 상위 10위 기록에 한정된 자료 · 어제까지 모인 자료이므로 화면의 편수와 점수는 날마다 상이</p>
+  <p class="small">수집 기간과 상위 10위 기록에 한정된 데이터 · 어제까지 모인 데이터이므로 화면의 편수와 점수는 날마다 상이</p>
 </section>
 
 <section class="slide">
@@ -282,7 +282,7 @@
 &nbsp;&nbsp;&nbsp;peak(성수기 개봉이면 1, 아니면 0 — 1월·7월·12월이 성수기)·<br>
 &nbsp;&nbsp;&nbsp;first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)<br>
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
-  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 뒷부분에 담긴 조건 — 자료 주소 · 열 이름 · 인코딩 · requirements.txt</p>
+  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 뒷부분에 담긴 조건 — 데이터 주소 · 열 이름 · 인코딩 · requirements.txt</p>
 </section>
 
 <section class="slide">
@@ -403,18 +403,18 @@
   <ul class="facts">
     <li>개봉 전 — 개봉 예정일 · 장르 · 국적 · 예정 스크린 수와 상영 횟수</li>
     <li>첫 주 뒤 — 확정된 첫 주 관객 수 사용 가능</li>
-    <li>예측 시점에 확보한 자료만 사용</li>
+    <li>예측 시점에 확보한 데이터만 사용</li>
     <li>새로운 영화에서 같은 방식으로 재평가</li>
   </ul>
-  <p class="small">수업 자료의 first_scrn · first_show는 개봉 전 계획값이 아니라 10위권 첫 등장일의 집계값 · 교육용 비교에 한정</p>
+  <p class="small">수업 데이터의 first_scrn · first_show는 개봉 전 계획값이 아니라 10위권 첫 등장일의 집계값 · 교육용 비교에 한정</p>
 </section>
 
 <section class="slide">
   <div class="kicker">7-15 · 속성 만들기</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">자료를 그려 규칙을 찾는 순서</h2>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">데이터를 그려 규칙을 찾는 순서</h2>
   <ul class="facts">
     <li>표에 있는 속성만으로 부족한 경우 발생</li>
-    <li>새 속성의 출발 — 상상이 아니라 가진 자료의 관찰</li>
+    <li>새 속성의 출발 — 상상이 아니라 가진 데이터의 관찰</li>
     <li>개봉월별 총 관객 수 분포 확인</li>
     <li>달별 중앙값 비교</li>
   </ul>
@@ -480,7 +480,7 @@
     <li>첫 주 관객 수를 개봉 전 예측에 사용하는 경우가 그 예</li>
     <li>점수 상승 = 성능 향상 아님</li>
     <li>높은 점수 자체가 누수의 증거는 아님 · 판정 기준은 정보의 시점</li>
-    <li>이 자료의 기본 변수에도 사후 집계값 포함</li>
+    <li>이 데이터의 기본 변수에도 사후 집계값 포함</li>
   </ul>
 </section>
 
@@ -499,7 +499,7 @@
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>7차시 요약</h2>
-  <div class="split" style="margin-top:2.6vh;gap:1.6vw"><div class="card"><div class="t">다중 선형회귀</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">여러 독립 변수 × 가중치의 합에 절편을 더한 예측 · 예측 대상은 종속 변수</div></div><div class="card"><div class="t">속성 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">예측에 쓸 속성은 사람이 결정</div></div><div class="card"><div class="t">속성 만들기</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">표에 없으면 자료를 그려 규칙을 읽고 새 열로 추가</div></div><div class="card"><div class="t">두 지표</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">평균만 답하는 모델과 비교한 R², 빗나간 크기를 재는 MAE·MSE</div></div><div class="card"><div class="t">예측 시점</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">시점이 달라지면 쓸 수 있는 속성과 문제 자체가 달라짐</div></div></div>
+  <div class="split" style="margin-top:2.6vh;gap:1.6vw"><div class="card"><div class="t">다중 선형회귀</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">여러 독립 변수 × 가중치의 합에 절편을 더한 예측 · 예측 대상은 종속 변수</div></div><div class="card"><div class="t">속성 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">예측에 쓸 속성은 사람이 결정</div></div><div class="card"><div class="t">속성 만들기</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">표에 없으면 데이터를 그려 규칙을 읽고 새 열로 추가</div></div><div class="card"><div class="t">두 지표</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">평균만 답하는 모델과 비교한 R², 빗나간 크기를 재는 MAE·MSE</div></div><div class="card"><div class="t">예측 시점</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">시점이 달라지면 쓸 수 있는 속성과 문제 자체가 달라짐</div></div></div>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px)">점수의 크기보다 <b>그 점수를 만든 정보의 시점</b></p>
 </section>
 

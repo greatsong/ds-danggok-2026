@@ -480,10 +480,10 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
   <p class="point" style="margin-top:1.6vh">모델의 종류는 같고, <b>사람이 정한 기준 하나</b>가 결과를 바꾼 것</p>
 </section>
 
-<!-- 19 특성 중요도 -->
+<!-- 19 feature importance -->
 <section class="slide">
   <div class="kicker">9-16 · 도전</div>
-  <h2>특성 중요도 — 모델이 삼은 단서</h2>
+  <h2>feature importance — 모델이 삼은 단서</h2>
   <table class="mini">
     <tr><th>변수</th><th>중요도 (트리, 깊이 3)</th></tr>
     <tr><td>첫 관측일 스크린 수</td><td><em>0.476</em></td></tr>
@@ -525,7 +525,7 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
 <!-- 22 확인 2 -->
 <section class="slide">
   <div class="kicker">9-19 · 확인</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">특성 중요도의 해석</h2>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">feature importance의 해석</h2>
   <p class="point" style="margin-top:2vh">첫 관측일 스크린 수가 0.476으로 1위 · 이 결과에서 끌어낼 수 있는 말은</p>
   <ul class="facts">
     <li>스크린 확보가 흥행 성공의 원인으로 밝혀짐</li>
@@ -539,7 +539,7 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>9차시 요약</h2>
-  <div class="split" style="margin-top:2.6vh"><div class="card"><div class="t">문제</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">묻는 말이 "얼마나"면 회귀, "어느 쪽"이면 분류</div></div><div class="card"><div class="t">확률</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">로지스틱 회귀는 확률을 추정하고 문턱값 0.5로 범주를 결정</div></div><div class="card"><div class="t">규칙</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">의사결정트리는 질문의 순서로 답함 · 같은 시험용에서 두 정확도가 갈림</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">라벨 기준도 사람의 판단, 특성 중요도는 원인의 증거가 아님</div></div></div>
+  <div class="split" style="margin-top:2.6vh"><div class="card"><div class="t">문제</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">묻는 말이 "얼마나"면 회귀, "어느 쪽"이면 분류</div></div><div class="card"><div class="t">확률</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">로지스틱 회귀는 확률을 추정하고 문턱값 0.5로 범주를 결정</div></div><div class="card"><div class="t">규칙</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">의사결정트리는 질문의 순서로 답함 · 같은 시험용에서 두 정확도가 갈림</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">라벨 기준도 사람의 판단, feature importance는 원인의 증거가 아님</div></div></div>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px);margin-top:2.6vh">다음 시간 — 항상 다수 범주로 예측하는 기준 모델과의 비교, 성공작을 찾아낸 비율</p>
 </section>
 

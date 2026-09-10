@@ -98,7 +98,7 @@
   <ul class="facts">
     <li>실젯값과 예측값에서 구하는 <b>오차·절대오차·제곱오차</b></li>
     <li>손으로 계산하는 <b>MAE와 MSE</b> · 두 값의 단위 차이</li>
-    <li>평균값 기준과 비교해 구하는 <b>결정계수 R²</b> · 잰 자료의 명시</li>
+    <li>평균값 기준과 비교해 구하는 <b>결정계수 R²</b> · 잰 데이터의 명시</li>
   </ul>
   <p class="point">오차 → 절대오차·제곱오차 → MAE·MSE → R²</p>
 </section>
@@ -454,7 +454,7 @@
     <li><b>0</b> → 평균만 답하는 경우와 차이 없음 · 연습 문제의 평균 모델이 그 예</li>
     <li><b>음수</b> → 평균값 기준보다도 큰 제곱오차 합</li>
   </ul>
-  <p class="point">점수를 읽기 전에 확인할 것 — 어떤 자료에서 어떤 변수로 평가했는지</p>
+  <p class="point">점수를 읽기 전에 확인할 것 — 어떤 데이터에서 어떤 변수로 평가했는지</p>
   <p class="small">교과서 132쪽 — “결정 계수가 0에 가깝다면 회귀 모델이 데이터의 평균을 맞추는 정도로 예측했고, 회귀 모델의 유의미성이 떨어진다는 뜻이다”</p>
 </section>
 
@@ -464,14 +464,14 @@
   <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.<br>
 서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.<br>
 이 파일의 열 이름은 날짜, 지점, 평균기온, 최저기온, 최고기온이고, 인코딩은 UTF-8이야.<br>
-수업의 기준 기간은 2025년까지야. 그 이후 자료는 빼 줘.<br>
+수업의 기준 기간은 2025년까지야. 그 이후 데이터는 빼 줘.<br>
 관측일이 300일이 안 되는 해를 뺄지 말지 고르는 스위치를 달아 줘.<br>
-각 경우를 따로 학습한 R²를 나란히 보여 주고, 학습 자료에서 계산한 점수라고 표시해 줘.<br>
+각 경우를 따로 학습한 R²를 나란히 보여 주고, 학습 데이터에서 계산한 점수라고 표시해 줘.<br>
 스위치에 따라 산점도와 회귀선이 바뀌게 하고, 제외 후보인 연도와 관측일 수도 보여 줘.<br>
 그래프는 plotly로 그려 줘.<br>
 직선을 만든 해의 개수와 시작 연도, 끝 연도를 화면에 적어 줘.<br>
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
-  <p class="small">교재 ①과 같은 문장 · 기준 기간 2025년, 관측일 300일 필터 스위치, 학습 자료 기준 점수 표시가 프롬프트에 포함</p>
+  <p class="small">교재 ①과 같은 문장 · 기준 기간 2025년, 관측일 300일 필터 스위치, 학습 데이터 기준 점수 표시가 프롬프트에 포함</p>
 </section>
 
 <section class="slide">
@@ -481,16 +481,16 @@
     <li>필터 적용 114개 연도 학습 R² <b>0.70</b>, 미적용 117개 연도 학습 R² <b>0.39</b></li>
     <li>필터 해제 시 포함되는 해 — 1907년 92일, 1950년 243일, 1953년 31일</li>
     <li>1953년의 겨울 한 달 평균은 다른 해의 연평균과 비교하기 어려운 값, 큰 잔차가 제곱오차 합에 영향</li>
-    <li>자료가 달라지면 회귀선과 R²의 분모도 함께 변화</li>
+    <li>데이터가 달라지면 회귀선과 R²의 분모도 함께 변화</li>
   </ul>
-  <p class="point">두 점수는 <b>같은 평가 자료에서 나온 값이 아님</b></p>
+  <p class="point">두 점수는 <b>같은 평가 데이터에서 나온 값이 아님</b></p>
 </section>
 
 <section class="slide">
   <div class="kicker">8-20 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">학습 자료와 평가 자료의 분리</h2>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">학습 데이터와 평가 데이터의 분리</h2>
   <div class="diagram" style="--wh:30vh"><div class="widget" data-w="r2swap">
-<svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 자료와 평가 자료를 따로 바꿔 가며 결정계수가 0.39·0.68·0.70으로 달라지는 것을 보이는 산점도와 사다리">
+<svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 데이터와 평가 데이터를 따로 바꿔 가며 결정계수가 0.39·0.68·0.70으로 달라지는 것을 보이는 산점도와 사다리">
 <!-- 좌 · 산점도(연도 × 연평균기온) -->
 <g stroke="#e3ddcf" stroke-width="1">
 <line x1="56" y1="227.4" x2="470" y2="227.4"/>
@@ -522,8 +522,8 @@
 <text class="extx" x="240.0" y="205.9" font-size="11" fill="#e45756">1953년 · 0.64℃ · 31일</text>
 <!-- 우 · 상태 패널 -->
 <g font-size="12" fill="#7a7f95">
-<text x="486" y="44">학습 자료</text>
-<text x="486" y="70">평가 자료</text>
+<text x="486" y="44">학습 데이터</text>
+<text x="486" y="70">평가 데이터</text>
 <text x="486" y="104">내 제곱오차 합(SSE)</text>
 <text x="486" y="128">기준 제곱오차 합(SST)</text>
 </g>
@@ -541,7 +541,7 @@
 <polyline points="602,236 646,224"/>
 </g>
 <g font-size="12" font-weight="700" fill="#1c2230">
-<text x="401" y="224" text-anchor="middle">평가 자료가 바뀐 몫 +0.29</text>
+<text x="401" y="224" text-anchor="middle">평가 데이터가 바뀐 몫 +0.29</text>
 <text x="680" y="220" text-anchor="end">직선이 바뀐 몫 +0.02</text>
 <text x="212.8" y="250" text-anchor="middle">0.39</text>
 <text x="585" y="250" text-anchor="end">0.68</text>
@@ -564,20 +564,20 @@
 <span class="wout" data-t="out">SSE 39.12 · SST 130.99 · R² 0.70</span>
 </div>
 </div></div>
-  <p class="point">0.39 → 0.70 상승분의 대부분은 평가 자료 교체에서 발생</p>
-  <p class="small">평가 자료가 바뀐 몫 +0.29(R² 0.68), 직선이 바뀐 몫 +0.02</p>
+  <p class="point">0.39 → 0.70 상승분의 대부분은 평가 데이터 교체에서 발생</p>
+  <p class="small">평가 데이터가 바뀐 몫 +0.29(R² 0.68), 직선이 바뀐 몫 +0.02</p>
 </section>
 
 <section class="slide">
   <div class="kicker">8-21 · 판단</div>
-  <h2>자료 제외의 근거</h2>
+  <h2>데이터 제외의 근거</h2>
   <ul class="facts">
     <li>제외 기준의 근거 — 연간 기온을 충분히 대표하는지 여부</li>
-    <li>점수 상승만으로는 자료 제외의 정당화 불가</li>
-    <li>전처리 방법의 예측 성능 비교 조건 — 같은 평가 자료 사용</li>
-    <li>높은 학습 R²의 뜻 — 학습 자료를 잘 설명, 새 자료의 예측력은 별도 평가</li>
+    <li>점수 상승만으로는 데이터 제외의 정당화 불가</li>
+    <li>전처리 방법의 예측 성능 비교 조건 — 같은 평가 데이터 사용</li>
+    <li>높은 학습 R²의 뜻 — 학습 데이터를 잘 설명, 새 데이터의 예측력은 별도 평가</li>
   </ul>
-  <p class="point">확인 항목 세 가지 — 사용한 자료, 평가 방법, 비교 기준</p>
+  <p class="point">확인 항목 세 가지 — 사용한 데이터, 평가 방법, 비교 기준</p>
 </section>
 
 <section class="slide">
@@ -590,7 +590,7 @@
 - 공부용과 시험용에 각각 몇 개 연도가 들어갔는지도 화면에 적어 줘.<br>
 - 반드시 학습에 안 쓴 시험용으로 채점해 줘.<br>
 &nbsp;&nbsp;연도 숫자가 커서 고차 곡선이 불안하면 연도를 작은 수로 바꿔서 계산해 줘.</div>
-  <p class="small">교재 도전 프롬프트와 같은 문장 · 학습 자료 2005년 이전, 평가 자료 2005~2025년, 지표는 평균절대오차(MAE)</p>
+  <p class="small">교재 도전 프롬프트와 같은 문장 · 학습 데이터 2005년 이전, 평가 데이터 2005~2025년, 지표는 평균절대오차(MAE)</p>
 </section>
 
 <section class="slide">
@@ -602,8 +602,8 @@
     <tr><td>3차</td><td>1.01℃</td><td>19.1℃</td></tr>
     <tr><td>9차</td><td>12.44℃</td><td>2,445℃</td></tr>
   </table>
-  <p class="point">학습 자료에 지나치게 맞추어 새 자료의 예측 성능이 떨어지는 현상 = <b>과대적합</b></p>
-  <p class="small">이번 비교의 결과일 뿐, 모든 자료에서 직선이 최선이라는 뜻은 아님</p>
+  <p class="point">학습 데이터에 지나치게 맞추어 새 데이터의 예측 성능이 떨어지는 현상 = <b>과대적합</b></p>
+  <p class="small">이번 비교의 결과일 뿐, 모든 데이터에서 직선이 최선이라는 뜻은 아님</p>
 </section>
 
 <section class="slide">
@@ -781,12 +781,12 @@
   <div class="kicker">8-26 · 원리</div>
   <h2>과대적합과 외삽</h2>
   <ul class="facts">
-    <li><b>과대적합</b> — 학습 자료에 지나치게 맞추어 새 자료의 예측 성능이 떨어지는 현상</li>
+    <li><b>과대적합</b> — 학습 데이터에 지나치게 맞추어 새 데이터의 예측 성능이 떨어지는 현상</li>
     <li>고차 다항식 — 외삽에서 특히 불안정한 값</li>
     <li>도전 활동의 학습 범위는 2005년 이전, 2050년·2200년 예측은 모두 범위 밖</li>
     <li>계산한 값의 성격 — 회귀 모델을 범위 밖에 적용한 예시, 기후 예보와 무관</li>
   </ul>
-  <p class="point">점수는 학습에 쓰지 않은 자료로 따로 확인</p>
+  <p class="point">점수는 학습에 쓰지 않은 데이터로 따로 확인</p>
 </section>
 
 <section class="slide">
@@ -810,7 +810,7 @@
       <li>2024년 대서양 48시간 예보 45.4해리(약 84킬로미터), 12~120시간 전 구간 역대 최소</li>
     </ul></div><img src="../../img/lesson08_case2.jpg" style="max-width:30vw" alt="미국 국립허리케인센터의 대서양 진로 예보 연평균 오차 그래프. 가로축은 1970년부터 2025년까지의 연도, 세로축은 해리 단위 오차이며 24·48·72·96·120시간 예보가 각각 다른 색 선과 추세선으로 그려져 있다"></div>
   <p class="small">1970년대의 48시간 오차는 200해리를 넘는 해가 대부분 · 점 하나는 그해 모든 예보의 오차 평균, 세로축 단위가 해리여서 원래 단위로 판독 가능</p>
-  <p class="src">출처 — 미국 국립허리케인센터(NHC/NOAA) 예보 검증 자료 · 대서양 진로 예보 연평균 오차 1970–2025 · nhc.noaa.gov</p>
+  <p class="src">출처 — 미국 국립허리케인센터(NHC/NOAA) 예보 검증 데이터 · 대서양 진로 예보 연평균 오차 1970–2025 · nhc.noaa.gov</p>
 </section>
 
 <section class="slide">
@@ -820,7 +820,7 @@
     <tr><th>숫자</th><th>어디서 나왔나</th><th>손계산 뒤의 읽기</th></tr>
     <tr><td><em>0.70</em></td><td>기온 · 필터 적용 · 학습 R²</td><td>114개 연도에서 평균값 기준보다 제곱오차 합 약 70% 감소</td></tr>
     <tr><td><em>0.39</em></td><td>기온 · 필터 해제 · 학습 R²</td><td>관측 기간이 짧은 3개 연도 포함, 학습·평가 대상 117개로 변경</td></tr>
-    <tr><td><em>0.24</em></td><td>영화 · 기본 변수 3종 · 테스트 R²</td><td>해당 테스트 자료에서 평균값 기준보다 제곱오차 합 약 24% 감소</td></tr>
+    <tr><td><em>0.24</em></td><td>영화 · 기본 변수 3종 · 테스트 R²</td><td>해당 테스트 데이터에서 평균값 기준보다 제곱오차 합 약 24% 감소</td></tr>
     <tr><td><em>0.90</em></td><td>영화 · 첫 주 관객 추가 · 테스트 R²</td><td>개봉 전에는 알 수 없는 정보 포함, 개봉 전 성능으로 해석 불가</td></tr>
   </table>
   <p class="small">10차시 분류에서는 한 종류만 예측하는 기준과 비교, 12차시 연관 분석에서는 우연히 함께 나타날 가능성 고려</p>
@@ -829,7 +829,7 @@
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>8차시 요약</h2>
-  <div class="split" style="margin-top:1.8vh;gap:1.2vw"><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">계산</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">오차 → 절대오차·제곱오차 → MAE·MSE → R²</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">지표 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">큰 실수 하나가 치명적이면 MSE, 평소의 정확도가 중요하면 MAE</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">기준</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">R²의 분모는 평가 대상 실젯값의 평균을 찍는 기준선</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">자료</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">필터에 따라 학습·평가 자료가 함께 변화, 0.70과 0.39는 같은 조건의 점수가 아님</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">한계</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">학습 자료의 점수와 새 자료의 예측력은 별개, 범위 밖은 외삽</div></div></div>
+  <div class="split" style="margin-top:1.8vh;gap:1.2vw"><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">계산</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">오차 → 절대오차·제곱오차 → MAE·MSE → R²</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">지표 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">큰 실수 하나가 치명적이면 MSE, 평소의 정확도가 중요하면 MAE</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">기준</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">R²의 분모는 평가 대상 실젯값의 평균을 찍는 기준선</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">데이터</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">필터에 따라 학습·평가 데이터가 함께 변화, 0.70과 0.39는 같은 조건의 점수가 아님</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">한계</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">학습 데이터의 점수와 새 데이터의 예측력은 별개, 범위 밖은 외삽</div></div></div>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px);margin-top:1.8vh">지표가 모델을 고르는 것이 아니라 <b>하려는 일이 지표를 고름</b></p>
   <p class="small" style="margin-top:1vh">집에서 혼자 확인하기 — 교재 8절에서 손으로 구한 값의 정오만 확인, 정답은 미표시</p>
 </section>
