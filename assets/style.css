@@ -179,7 +179,9 @@ code:not(pre code) { background: var(--card); border: 1px solid var(--border); p
 }
 .quote .q { font-weight: 700; font-size: 1.02rem; letter-spacing: -0.01em; }
 .quote .by { display: block; margin-top: 6px; font-size: 0.86rem; color: var(--text-soft); }
-.quote .who { display: block; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); font-size: 0.82rem; line-height: 1.6; color: var(--muted); font-weight: 400; }
+.quote .who { display: flex; gap: 12px; align-items: flex-start; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.82rem; line-height: 1.6; color: var(--muted); font-weight: 400; }
+.quote .who img { flex: 0 0 auto; width: 54px; height: 54px; border-radius: 50%; object-fit: cover; object-position: center top; border: 1px solid var(--border); background: #fff; }
+.quote .who .cred { display: block; margin-top: 3px; font-size: 0.72rem; color: var(--border-strong, #9a927f); }
 
 /* ---------- 미니 과제 ---------- */
 .callout.mini { border-left-color: var(--teal); background: var(--teal-soft); }
