@@ -183,7 +183,7 @@ def load():
 
 
 def split(df):
-    test = (df.index % 10) &lt; 3          # 열 편마다 앞의 세 편이 시험용
+    test = (df.index % 10) &lt; 3          # 열 편마다 앞의 세 편이 테스트용
     return df[~test], df[test]
 
 
@@ -194,7 +194,7 @@ def score(train, test, cols):
 
 df = load()
 train, test = split(df)
-st.write(f&quot;합친 표 {len(df)}편 · 학습용 {len(train)}편 · 시험용 {len(test)}편&quot;)
+st.write(f&quot;합친 표 {len(df)}편 · 훈련용 {len(train)}편 · 테스트용 {len(test)}편&quot;)
 st.dataframe(df[[&quot;movieNm&quot;, &quot;director&quot;, &quot;first_scrn&quot;, &quot;actors_n&quot;, &quot;showTm&quot;, &quot;total_audi&quot;]].head(10))</pre></div></details>
 <p>합친 표가 원래 표보다 적어졌다면 한쪽에만 있는 영화가 있었다는 뜻입니다. 값이 비어 있는 영화가 몇 편인지도 함께 확인합니다. 빈 값을 그대로 두고 학습하면 오류가 나거나 그 영화가 통째로 빠지고, 그러면 앞의 결과와 같은 조건에서 비교할 수 없습니다.</p>
   <p>두 표에는 이름이 같은 열이 몇 개 있습니다. 영화 이름과 개봉일이 양쪽에 모두 들어 있습니다. 합칠 때 이런 열은 하나만 남기거나 이름을 구분해 두어야 나중에 어느 쪽 값인지 알 수 있습니다. 합친 표가 제대로 만들어졌는지는 영화 한 편을 골라 두 원본 표의 값과 맞추어 보면 확인할 수 있습니다.</p>
@@ -205,7 +205,7 @@ st.dataframe(df[[&quot;movieNm&quot;, &quot;director&quot;, &quot;first_scrn&quo
   <p>한 번에 하나씩 넣는 까닭은 원인을 좁히기 위해서입니다. 배우 수와 상영시간을 함께 넣고 점수가 올랐다면 둘 가운데 무엇이 올렸는지 알 수 없고, 점수가 내려갔다면 무엇이 내렸는지도 알 수 없습니다. 다섯 개를 한 줄씩 다섯 번 확인하는 편이 결과를 설명하기에 낫습니다.</p>
 
   <div class="codewrap improve"><span class="label">② 개선</span><button class="copy-btn">복사</button><pre>합친 표로 총 관객 수를 예측하는 다중 선형회귀를 만들어 줘.
-영화를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 시험용으로 떼어 놓고
+영화를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 테스트용으로 떼어 놓고
 나머지로 학습해 줘. 어떤 속성을 넣든 이 나누기는 똑같이 유지해 줘.
 기본 변수는 첫 관측일 스크린수·첫 관측일 상영횟수·성수기 개봉 세 가지야.
 관람등급이 청소년관람불가이면 1, 아니면 0인 열을 만들어 줘.
@@ -247,18 +247,18 @@ st.plotly_chart(px.bar(table, x=&quot;R² 차이&quot;, y=&quot;넣은 속성&qu
   </div>
 
   <h2>5. 프롬프트로 모델 학습 — 고른 속성으로 다시 학습한다</h2>
-  <p>4단계 표를 보고 사용할 속성을 정합니다. 차이가 거의 없는 속성을 굳이 남길 이유는 없습니다. 다만 넣었을 때 점수가 조금이라도 오르고 그 까닭을 한 문장으로 설명할 수 있으면 남겨 둡니다. 정했으면 그 속성만으로 모델을 다시 학습시킵니다. 이때도 <b>학습 데이터와 평가 데이터를 나누는 조건은 그대로 유지합니다.</b> 조건을 바꾸면 4단계의 표와 비교할 수 없습니다.</p>
+  <p>4단계 표를 보고 사용할 속성을 정합니다. 차이가 거의 없는 속성을 굳이 남길 이유는 없습니다. 다만 넣었을 때 점수가 조금이라도 오르고 그 까닭을 한 문장으로 설명할 수 있으면 남겨 둡니다. 정했으면 그 속성만으로 모델을 다시 학습시킵니다. 이때도 <b>훈련용 데이터와 테스트용 데이터를 나누는 조건은 그대로 유지합니다.</b> 조건을 바꾸면 4단계의 표와 비교할 수 없습니다.</p>
 
   <div class="codewrap prompt"><span class="label">③ 프롬프트</span><button class="copy-btn">복사</button><pre>지금까지 살펴본 속성 가운데 내가 고른 것만으로 총 관객 수를 예측하는 모델을 다시 학습시켜 줘.
 쓸 속성은 화면에서 체크박스로 고를 수 있게 하고, 처음에는 기본 변수 세 가지가 켜져 있게 해 줘.
-학습용과 시험용 나누기는 앞과 똑같이 해 줘. 영화코드 순으로 정렬한 다음
-열 편마다 앞의 세 편이 시험용이야. 시험용 영화는 학습에 쓰지 마.
+훈련용과 테스트용 나누기는 앞과 똑같이 해 줘. 영화코드 순으로 정렬한 다음
+열 편마다 앞의 세 편이 테스트용이야. 테스트용 영화는 학습에 쓰지 마.
 학습에 쓴 영화 편수와 점수를 평가한 영화 편수를 화면에 적어 줘.
-테스트용 데이터로 평가한 R²와 평균절대오차를 큰 숫자로 보여 주고, 학습용 데이터로 평가한 값도 작게 함께 보여 줘.
+테스트용 데이터로 평가한 R²와 평균절대오차를 큰 숫자로 보여 주고, 훈련용 데이터로 평가한 값도 작게 함께 보여 줘.
 속성마다 가중치를 0을 가운데 두고 좌우로 뻗는 막대그래프로 그리고,
 부호가 음수인 속성은 색을 다르게 해 줘.
 단위가 다르면 가중치의 크기를 그대로 비교할 수 없다는 안내를 그래프 아래에 적어 줘.
-시험용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도도 그려 줘.
+테스트용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도도 그려 줘.
 예측이 실제와 같을 때를 나타내는 기준선을 함께 그리고, 두 축은 로그로 그려 줘.
 그래프는 plotly로 그려 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
@@ -269,8 +269,8 @@ picked = [col for name, col in EXTRA.items() if st.checkbox(name, value=False)]
 cols = BASE + picked
 r2, mae, model = score(train, test, cols)
 c1, c2 = st.columns(2)
-c1.metric(&quot;시험용 R²&quot;, f&quot;{r2:.3f}&quot;)
-c2.metric(&quot;시험용 평균절대오차&quot;, f&quot;{mae:,.0f}명&quot;)
+c1.metric(&quot;테스트용 데이터의 R²&quot;, f&quot;{r2:.3f}&quot;)
+c2.metric(&quot;테스트용 평균절대오차&quot;, f&quot;{mae:,.0f}명&quot;)
 weight = pd.DataFrame({&quot;속성&quot;: cols, &quot;가중치&quot;: model.coef_})
 st.plotly_chart(px.bar(weight, x=&quot;가중치&quot;, y=&quot;속성&quot;, orientation=&quot;h&quot;))
 st.caption(&quot;단위가 다르면 가중치의 크기를 그대로 비교할 수 없습니다.&quot;)
@@ -310,14 +310,14 @@ near = df.assign(차이=(df[&quot;total_audi&quot;] - pred).abs()).nsmallest(5, 
 st.dataframe(near[[&quot;movieNm&quot;, &quot;total_audi&quot;]])</pre></div></details>
 <div style="overflow-x:auto">
   <table class="daymap">
-    <thead><tr><th>영화 이름</th><th>넣은 값</th><th>예측값</th><th>실제값</th><th>차이</th></tr></thead>
+    <thead><tr><th>영화 이름</th><th>넣은 값</th><th>예측값</th><th>실젯값</th><th>차이</th></tr></thead>
     <tbody>
             <tr><td></td><td></td><td></td><td></td><td></td></tr>
       <tr><td></td><td></td><td></td><td></td><td></td></tr>
     </tbody>
   </table>
   </div>
-  <p class="mini">아직 개봉하지 않은 영화라면 실제값과 차이는 비워 두고, 개봉 뒤에 확인해 채웁니다.</p>
+  <p class="mini">아직 개봉하지 않은 영화라면 실젯값과 차이는 비워 두고, 개봉 뒤에 확인해 채웁니다.</p>
 
   <p>기본 변수 세 가지만 쓴 모델의 예측값과 새 속성을 더한 모델의 예측값이 거의 같을 수도 있습니다. 두 값을 모두 적어 두면 새 속성이 이 영화의 예측을 얼마나 바꾸었는지 바로 보입니다. 차이가 없다면 그것도 적어 둘 결과입니다. 속성을 더 모으면 예측이 좋아진다는 규칙은 없고, 넣어 본 다음에야 알 수 있습니다.</p>
   <p>예측값 하나만 적어 두면 나중에 그 숫자가 무엇을 뜻하는지 알 수 없습니다. 어떤 속성을 넣었는지, 어느 시점을 가정했는지, 학습에 몇 편을 사용했는지를 함께 적어 두어야 다른 사람이 같은 조건에서 다시 해 볼 수 있습니다.</p>
@@ -371,7 +371,7 @@ def load():
 
 
 def split(df):
-    test = (df.index % 10) &lt; 3          # 열 편마다 앞의 세 편이 시험용
+    test = (df.index % 10) &lt; 3          # 열 편마다 앞의 세 편이 테스트용
     return df[~test], df[test]
 
 
@@ -383,7 +383,7 @@ def score(train, test, cols):
 
 df = load()
 train, test = split(df)
-st.write(f&quot;합친 표 {len(df)}편 · 학습용 {len(train)}편 · 시험용 {len(test)}편&quot;)
+st.write(f&quot;합친 표 {len(df)}편 · 훈련용 {len(train)}편 · 테스트용 {len(test)}편&quot;)
 st.dataframe(df[[&quot;movieNm&quot;, &quot;director&quot;, &quot;first_scrn&quot;, &quot;actors_n&quot;, &quot;showTm&quot;, &quot;total_audi&quot;]].head(10))
 
 st.header(&quot;속성을 하나씩 넣어 본다&quot;)
@@ -401,8 +401,8 @@ picked = [col for name, col in EXTRA.items() if st.checkbox(name, value=False)]
 cols = BASE + picked
 r2, mae, model = score(train, test, cols)
 c1, c2 = st.columns(2)
-c1.metric(&quot;시험용 R²&quot;, f&quot;{r2:.3f}&quot;)
-c2.metric(&quot;시험용 평균절대오차&quot;, f&quot;{mae:,.0f}명&quot;)
+c1.metric(&quot;테스트용 데이터의 R²&quot;, f&quot;{r2:.3f}&quot;)
+c2.metric(&quot;테스트용 평균절대오차&quot;, f&quot;{mae:,.0f}명&quot;)
 weight = pd.DataFrame({&quot;속성&quot;: cols, &quot;가중치&quot;: model.coef_})
 st.plotly_chart(px.bar(weight, x=&quot;가중치&quot;, y=&quot;속성&quot;, orientation=&quot;h&quot;))
 st.caption(&quot;단위가 다르면 가중치의 크기를 그대로 비교할 수 없습니다.&quot;)

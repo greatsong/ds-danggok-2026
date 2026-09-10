@@ -76,7 +76,7 @@
   
   <figure class="interactive" data-fig="sigmoidPath">
     <div class="widget" data-w="sigmoidPath">
-<svg viewBox="0 0 720 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="시험용 영화의 가중합과 추정 확률을 시그모이드 곡선 위에 나타낸 그림. 문턱값 슬라이더를 옮기면 성공으로 예측하는 편수와 정확도가 바뀜">
+<svg viewBox="0 0 720 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="테스트용 영화의 가중합과 추정 확률을 시그모이드 곡선 위에 나타낸 그림. 문턱값 슬라이더를 옮기면 성공으로 예측하는 편수와 정확도가 바뀜">
   <!-- 축선: 본판 가로·세로, 확률 띠 세로 -->
   <g stroke="#e3ddcf" stroke-width="1">
     <line x1="56" y1="268" x2="556" y2="268"/>
@@ -107,7 +107,7 @@
   </g>
   <!-- 시그모이드 곡선 -->
   <polyline class="curve" fill="none" stroke="#6b7385" stroke-width="2.5" points=""/>
-  <!-- 시험용 영화: 본판 점 · 띠 착지 점 · 클릭 히트원 -->
+  <!-- 테스트용 영화: 본판 점 · 띠 착지 점 · 클릭 히트원 -->
   <g class="mpts"></g>
   <g class="bpts"></g>
   <g class="hits"></g>
@@ -150,7 +150,7 @@
     <img src="img/lesson09_case1.png" alt="발사 기온과 O-링 손상 여부의 산점도 위에 로지스틱 회귀 곡선을 그린 그래프. 손상 있음 7회는 빨간 점, 손상 없음 16회는 회색 점이며 화씨 53도 아래는 데이터가 없는 구간으로 음영 처리되어 있다" style="width:100%;height:auto">
     <figcaption style="margin-top:6px;font-size:.84rem;color:var(--text-soft)">데이터는 사고 이전 23회 발사의 O-링 기록 · 곡선은 이 데이터로 수업용 재계산 · 확률 계산은 Dalal 외(1989, JASA)</figcaption>
   </figure>
-  <p>오늘 만든 로지스틱 회귀와 같은 형태로 입력 하나(기온)에서 확률을 추정하고 문턱값으로 판단을 정합니다. 학습 데이터에 화씨 53도보다 낮은 발사가 하나도 없어 데이터 바깥 구간의 확률을 그대로 받아들일 수 없다는 한계가 있습니다. 기준과 입력을 사람이 정한다는 이 차시의 논점으로 이어집니다.</p>
+  <p>오늘 만든 로지스틱 회귀와 같은 형태로 입력 하나(기온)에서 확률을 추정하고 문턱값으로 판단을 정합니다. 훈련용 데이터에 화씨 53도보다 낮은 발사가 하나도 없어 데이터 바깥 구간의 확률을 그대로 받아들일 수 없다는 한계가 있습니다. 기준과 입력을 사람이 정한다는 이 차시의 논점으로 이어집니다.</p>
   <p class="mini">출처: <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1989.10478858" target="_blank" rel="noopener">Dalal, Fowlkes &amp; Hoadley (1989), JASA 84(408)</a></p>
   </div></details>
 
@@ -197,12 +197,12 @@
 
     <g class="cpanel">
       <rect x="452" y="144" width="244" height="112" rx="6" fill="#fff" stroke="#2b7fd6" stroke-width="2"/>
-      <text x="464" y="168" font-size="14" font-weight="800" fill="#6b7385">시험용 데이터의 정확도</text>
+      <text x="464" y="168" font-size="14" font-weight="800" fill="#6b7385">테스트용 데이터의 정확도</text>
       <text x="464" y="196" font-size="14" fill="#1c2230">로지스틱 회귀</text>
       <text class="clog" x="684" y="196" text-anchor="end" font-size="17" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
       <text x="464" y="222" font-size="14" fill="#1c2230">의사결정트리</text>
       <text class="ctree" x="684" y="222" text-anchor="end" font-size="17" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
-      <text x="464" y="246" font-size="14" fill="#6b7385">학습용 데이터로 학습 · 문턱값 0.5</text>
+      <text x="464" y="246" font-size="14" fill="#6b7385">훈련용 데이터로 학습 · 문턱값 0.5</text>
     </g>
     <g class="cover">
       <rect x="452" y="144" width="244" height="112" rx="6" fill="#fff" opacity="0.92"/>
@@ -260,13 +260,13 @@ total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 분�
 입력은 first_scrn·first_show·peak·genre·nation을 사용해 줘.
 first_scrn·first_show는 개봉일이 아니라 10위권에 처음 관측된 날의 집계야.
 first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
-영화 코드 순으로 정렬해 열 편 중 앞 세 편을 시험용으로 고정하고,
-학습용으로만 학습과 표준화를 해 줘. 두 모델은 같은 시험용 데이터로 평가해 줘.
-학습용과 시험용의 영화 편수를 화면에 적어 줘.
-시험용 데이터로 계산한 정확도를 화면에 표시해 줘.
-시험용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.
+영화 코드 순으로 정렬해 열 편 중 앞 세 편을 테스트용으로 고정하고,
+훈련용으로만 학습과 표준화를 해 줘. 두 모델은 같은 테스트용 데이터로 평가해 줘.
+훈련용과 테스트용의 영화 편수를 화면에 적어 줘.
+테스트용 데이터로 계산한 정확도를 화면에 표시해 줘.
+테스트용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.
 확률이 0.5 이상이면 성공으로 분류하고 실제 라벨도 함께 보여 줘.
-시험용 영화의 추정 확률을 높은 순으로 막대그래프로 그리고,
+테스트용 영화의 추정 확률을 높은 순으로 막대그래프로 그리고,
 문턱값 0.5 선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘.
 영화 제목이 겹치지 않게 가로축 글자를 기울여 줘.
 그래프는 plotly로 그려 줘.
@@ -303,8 +303,8 @@ features = df[["first_scrn", "first_show", "peak", "장르", "국가"]]
 Xtr = pd.get_dummies(features[~is_test])
 Xte = pd.get_dummies(features[is_test]).reindex(columns=Xtr.columns, fill_value=0)
 X = pd.concat([Xtr, Xte]).sort_index()
-is_test = df.index % 10 &lt; 3                      # 열 편 중 앞 세 편을 시험용으로
-st.caption(f"학습용 {(~is_test).sum()}편 · 시험용 {is_test.sum()}편 · 전체 {len(df)}편")
+is_test = df.index % 10 &lt; 3                      # 열 편 중 앞 세 편을 테스트용으로
+st.caption(f"훈련용 {(~is_test).sum()}편 · 테스트용 {is_test.sum()}편 · 전체 {len(df)}편")
 Xtr, Xte = X[~is_test], X[is_test]
 ytr, yte = df["성공"][~is_test], df["성공"][is_test]
 
@@ -325,10 +325,10 @@ fig = px.bar(확률표, x="영화", y="추정 확률", color="실제",
 fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
 fig.update_layout(xaxis_tickangle=-60, height=460, xaxis_title=None)
 st.plotly_chart(fig, width="stretch")
-st.caption("막대는 시험용 영화의 추정 확률입니다. 색은 실제 라벨입니다.")
+st.caption("막대는 테스트용 영화의 추정 확률입니다. 색은 실제 라벨입니다.")
 
 choices = df.loc[is_test].copy()
-selected = st.selectbox("시험용 영화", list(range(len(choices))),
+selected = st.selectbox("테스트용 영화", list(range(len(choices))),
                         format_func=lambda i: choices.iloc[i]["movieNm"])
 p = float(prob[selected])
 st.write(f"추정 성공 확률: {p:.1%}")
@@ -341,7 +341,7 @@ plotly
 scikit-learn</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 확률을 읽는다</span><br>
-      받은 코드를 <b>main.py</b> 파일과 <b>requirements.txt</b> 파일 두 개로 저장해 실행합니다. 화면에 새로 나타나는 그림에는 시험용 영화의 추정 확률이 막대로 표시되고 문턱값 0.5 선이 함께 그려집니다. 시험용 영화를 하나 고르면 추정 성공 확률이 나타납니다. 확률이 0.5 이상이면 성공, 미만이면 기준 미달로 분류합니다. 실제 라벨과 비교해 맞힌 사례와 틀린 사례를 찾아봅니다. 화면에 함께 표시되는 <b>정확도</b>를 기록해 두세요.</li>
+      받은 코드를 <b>main.py</b> 파일과 <b>requirements.txt</b> 파일 두 개로 저장해 실행합니다. 화면에 새로 나타나는 그림에는 테스트용 영화의 추정 확률이 막대로 표시되고 문턱값 0.5 선이 함께 그려집니다. 테스트용 영화를 하나 고르면 추정 성공 확률이 나타납니다. 확률이 0.5 이상이면 성공, 미만이면 기준 미달로 분류합니다. 실제 라벨과 비교해 맞힌 사례와 틀린 사례를 찾아봅니다. 화면에 함께 표시되는 <b>정확도</b>를 기록해 두세요.</li>
     <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>의사결정트리로도 만들어서 어떤 질문을 어떤 순서로 던지는지
 그림으로 보여 줘. 두 모델의 정확도를 나란히 비교해 줘.</pre></div>
@@ -350,7 +350,7 @@ st.subheader("트리는 어떤 질문을 먼저 던지나")
 st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=list(X.columns),
                                   class_names=["기준 미달", "성공"], filled=True))
 st.code(export_text(tree, feature_names=list(X.columns), max_depth=3))
-st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도는 달라집니다.")</pre></div></details>
+st.caption("훈련용과 테스트용을 어떻게 나누느냐에 따라 정확도는 달라집니다.")</pre></div></details>
     </li>
   </ol>
 
@@ -381,10 +381,10 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
       <tr><td><b>의사결정트리</b></td><td>질문의 순서(규칙)</td><td></td></tr>
     </tbody>
   </table>
-  <p class="mini">두 모델은 같은 학습용 데이터와 시험용 데이터를 사용합니다. 시험용 데이터는 학습과 표준화의 기준 계산에서 제외합니다. 데이터가 날마다 쌓이고 분할과 설정에 따라 값이 달라지므로, 화면에 나온 숫자를 그대로 적습니다.</p>
+  <p class="mini">두 모델은 같은 훈련용 데이터와 테스트용 데이터를 사용합니다. 테스트용 데이터는 학습과 표준화의 기준 계산에서 제외합니다. 데이터가 날마다 쌓이고 분할과 설정에 따라 값이 달라지므로, 화면에 나온 숫자를 그대로 적습니다.</p>
   <figure class="interactive" data-fig="twoDials">
     <div class="widget" data-w="twoDials">
-<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="위는 실제 관객 수, 아래는 추정 확률. 같은 시험용 영화를 두 층에 나란히 놓고 라벨 기준선과 문턱선을 각각 움직이는 그림">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="위는 실제 관객 수, 아래는 추정 확률. 같은 테스트용 영화를 두 층에 나란히 놓고 라벨 기준선과 문턱선을 각각 움직이는 그림">
 <!-- 위 = 정답 층: 가로축 누적 관객 수 로그 척도(10^3~10^7.25 → 72~676) -->
 <text x="56" y="32" font-size="15" fill="#6b7385">정답 층 · 가로축 누적 관객 수(명)</text>
 <rect x="56" y="40" width="640" height="92" fill="#b07a00" opacity=".06"/>
@@ -431,7 +431,7 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
   </figure>
 
   <table class="daymap">
-    <thead><tr><th>라벨 기준</th><th>시험용에 남은 성공 라벨(편)</th><th>로지스틱 회귀 정확도</th><th>의사결정트리 정확도</th></tr></thead>
+    <thead><tr><th>라벨 기준</th><th>테스트용에 남은 성공 라벨(편)</th><th>로지스틱 회귀 정확도</th><th>의사결정트리 정확도</th></tr></thead>
     <tbody>
       <tr><td>50만 명</td><td></td><td></td><td></td></tr>
       <tr><td>100만 명</td><td></td><td></td><td></td></tr>
@@ -460,7 +460,7 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
   </div>
   <figure class="interactive" data-fig="labelcurve">
     <div class="widget" data-w="labelcurve">
-  <svg viewBox="0 0 720 252" role="img" aria-label="성공 기준 열 지점의 두 모델 정확도 꺾은선과 시험용 성공 라벨 편수 막대. 기준을 올릴수록 정확도는 오르고 성공 라벨은 줄어드는 엇갈림">
+  <svg viewBox="0 0 720 252" role="img" aria-label="성공 기준 열 지점의 두 모델 정확도 꺾은선과 테스트용 성공 라벨 편수 막대. 기준을 올릴수록 정확도는 오르고 성공 라벨은 줄어드는 엇갈림">
     <g stroke="#e3ddcf" stroke-width="1" stroke-dasharray="4 4">
       <line x1="84" y1="186" x2="624" y2="186"/>
       <line x1="84" y1="125" x2="624" y2="125"/>
@@ -493,7 +493,7 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
       <circle cx="600" cy="22" r="4.5" fill="#b07a00"/>
       <text x="609.5" y="26">의사결정트리</text>
       <rect x="489" y="38" width="12" height="12" fill="#b9b3a5"/>
-      <text x="507" y="48">시험용 성공 라벨 편수</text>
+      <text x="507" y="48">테스트용 성공 라벨 편수</text>
     </g>
     <g class="hits"></g>
   </svg>
@@ -502,7 +502,7 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
     <button class="wbtn" type="button" data-d="1">높은 기준 ▶</button>
   </div>
 </div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 정확도가 오르는 것이 늘 좋은 소식인가. 기준을 열 지점으로 옮기며 꺾은선(정확도)과 회색 막대(시험용에 남은 성공 라벨 편수)가 어느 쪽으로 움직이는지 함께 봅니다. 정확도가 가장 높은 지점에서 성공 라벨이 몇 편 남았는지가 다음 시간의 물음으로 이어집니다. 열 지점의 학습 결과이며, 어제까지 모인 데이터로 갱신할 때 미리 계산해 둔 값입니다.</figcaption>
+    <figcaption><b>무엇을 묻는 그림인가:</b> 정확도가 오르는 것이 늘 좋은 소식인가. 기준을 열 지점으로 옮기며 꺾은선(정확도)과 회색 막대(테스트용에 남은 성공 라벨 편수)가 어느 쪽으로 움직이는지 함께 봅니다. 정확도가 가장 높은 지점에서 성공 라벨이 몇 편 남았는지가 다음 시간의 물음으로 이어집니다. 열 지점의 학습 결과이며, 어제까지 모인 데이터로 갱신할 때 미리 계산해 둔 값입니다.</figcaption>
   </figure>
 
   <p>이 과정 전체는 교과서 116쪽 탐구활동의 스팸 메일 예측 모델을 만드는 과정과 같은 뼈대입니다. 폼 Ⅲ-01b에서 우리 실습을 그 단계에 맞춰 봅니다. 시간이 남으면 폼 Ⅲ-02e(교과서 142쪽 탐구활동 '데이터로 예측하기')에 내 분류기의 예측 하나를 기록합니다.</p>
@@ -511,7 +511,7 @@ st.caption("학습용과 시험용을 어떻게 나누느냐에 따라 정확도
   <table class="daymap">
     <thead><tr><th>단계 (교과서 116쪽)</th><th>스팸 예측이라면</th><th>오늘 우리가 한 일</th></tr></thead>
     <tbody>
-      <tr><td><b>데이터 전처리</b></td><td>스팸을 나타내는 속성 선택 · 훈련/테스트 분리</td><td>관객 수 기준으로 라벨을 만들고, 입력의 수집 시점을 확인함</td></tr>
+      <tr><td><b>데이터 전처리</b></td><td>스팸을 나타내는 속성 선택 · 훈련용/테스트용 분리</td><td>관객 수 기준으로 라벨을 만들고, 입력의 수집 시점을 확인함</td></tr>
       <tr><td><b>모델 학습</b></td><td>예측에 적합한 알고리즘 선택</td><td>로지스틱 회귀와 의사결정트리에 같은 문제를 맡김</td></tr>
       <tr><td><b>모델 평가</b></td><td>올바르게 예측했는지 지표로 확인</td><td>정확도 확인 — 이 지표로 충분한지는 10차시에서 다룸</td></tr>
     </tbody>
@@ -540,7 +540,7 @@ st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보�
   </table>
   <div class="callout warn">
     <div class="h">⚠️ 영향력은 원인이 아니다</div>
-    <p>feature importance 값은 현재 데이터·모델·설정에 따른 결과입니다. 관련된 변수가 함께 있거나 학습 데이터가 바뀌면 중요도의 분배도 달라질 수 있습니다. 스크린을 많이 확보해서 관객이 늘었는지, 흥행을 기대해서 스크린을 많이 배정했는지는 이 값만으로 구분할 수 없습니다. <b>feature importance는 인과관계의 증거가 아닙니다.</b></p>
+    <p>feature importance 값은 현재 데이터·모델·설정에 따른 결과입니다. 관련된 변수가 함께 있거나 훈련용 데이터가 바뀌면 중요도의 분배도 달라질 수 있습니다. 스크린을 많이 확보해서 관객이 늘었는지, 흥행을 기대해서 스크린을 많이 배정했는지는 이 값만으로 구분할 수 없습니다. <b>feature importance는 인과관계의 증거가 아닙니다.</b></p>
   </div>
 
   <details class="glossary"><summary>더 알아보기 — 실제 사례 · 타이타닉 생존 트리와 질문의 순서</summary><div class="gin">
@@ -568,7 +568,7 @@ st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보�
     <div class="h">❓ 이 숫자, 믿어도 되는가</div>
     <ul>
       <li>4절 표에 적은 두 정확도를 다시 봅니다. 두 모델 가운데 어느 쪽이 높았고, 차이는 얼마였습니까.</li>
-      <li>성공 라벨이 붙은 영화가 시험용 데이터에 몇 편 있었습니까. 모든 영화를 기준 미달로만 찍는 모델의 정확도는 얼마가 되겠습니까.</li>
+      <li>성공 라벨이 붙은 영화가 테스트용 데이터에 몇 편 있었습니까. 모든 영화를 기준 미달로만 찍는 모델의 정확도는 얼마가 되겠습니까.</li>
       <li>그 값과 내 모델의 정확도를 나란히 놓으면, 내 모델이 실제로 무엇을 더 해낸 것입니까.
         <div class="quiz qinline"><div class="qitem">
           <div class="qopts qopts-col"><button class="opt" data-ok="1">기준 모델보다 성공작을 얼마나 더 찾아냈는지가 실제 성과다</button><button class="opt">정확도 숫자가 크므로 그만큼 좋은 모델이다</button><button class="opt">기준 모델과 비교할 필요 없이 정확도만 보면 된다</button></div>
@@ -649,7 +649,7 @@ st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보�
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets09.js"></script>
+<script src="assets/widgets09.js?v=2"></script>
 <script src="assets/answer.js?v=3"></script>
 </body>
 </html>

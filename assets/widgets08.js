@@ -395,8 +395,8 @@ function initW_degsplit(root, D) {
   q('.test').innerHTML = EV.map(function (r) {
     return '<circle cx="' + f1(sx(r[0])) + '" cy="' + f1(sy(r[1])) + '" r="3.2"/>';
   }).join('');
-  q('.nTr').textContent = '학습 ' + TR.length + '개';
-  q('.nEv').textContent = '평가 ' + EV.length + '개';
+  q('.nTr').textContent = '훈련용 ' + TR.length + '개';
+  q('.nEv').textContent = '평가 대상 ' + EV.length + '개';
 
   // 곡선: 1908~2050을 0.5년 간격으로 285점 표본, 상자 밖 구간은 잘라 낸다
   var LO = 8, HI = 16;
@@ -515,10 +515,10 @@ function initW_degsplit(root, D) {
     trace(k);
 
     out.textContent = (k === 1 ? '1차(직선)' : k + '차')
-      + ' · 학습 오차 ' + f3(eTr) + '℃'
-      + ' · 평가 오차 ' + f3(eEv) + '℃'
+      + ' · 훈련 오차 ' + f3(eTr) + '℃'
+      + ' · 테스트 오차 ' + f3(eEv) + '℃'
       + ' · 2050년 예측 ' + f50(p50) + '℃'
-      + (k === 2 ? ' · 직선보다 평가 오차 작음' : '');
+      + (k === 2 ? ' · 직선보다 테스트 오차 작음' : '');
 
     // 첫 그림은 전환 없이 완성 상태로 두고, 그다음부터 막대 폭·곡선 크로스페이드에만 시간을 쓴다
     if (first) {

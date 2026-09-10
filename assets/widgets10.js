@@ -156,7 +156,7 @@ function initW_matrix(root, D) {
 }
 
 function initW_threshold(root, D) {
-  // 시험용 66편 [확률, 실제라벨] — 확률 내림차순. 순위 등간격 축.
+  // 테스트용 66편 [확률, 실제라벨] — 확률 내림차순. 순위 등간격 축.
   var T = D.T66, N = T.length, X0 = 36, X1 = 700, STEP = 10.06, W = 230;
   var P = [], POS = 0, i;
   for (i = 0; i < N; i++) { P.push(Math.round(T[i][0] * 10000)); if (T[i][1] === 1) POS++; }
@@ -394,7 +394,7 @@ function initW_threshold(root, D) {
 }
 
 function initW_walk(root, D) {
-  // 시험용 66편을 한 편씩 넘기며 기준 모델(전부 기준 미달)과 선택 모델의 혼동행렬·점수판을 나란히 누적한다.
+  // 테스트용 66편을 한 편씩 넘기며 기준 모델(전부 기준 미달)과 선택 모델의 혼동행렬·점수판을 나란히 누적한다.
   var q = function (s) { return root.querySelector(s); };
   var qa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
 
@@ -618,7 +618,7 @@ function initW_walk(root, D) {
 }
 
 function initW_dial(root) {
-  // 시험용 66편의 성공 편수 k만 바꾼다. 기준 모델은 다수 범주를 그대로 예측하므로
+  // 테스트용 66편의 성공 편수 k만 바꾼다. 기준 모델은 다수 범주를 그대로 예측하므로
   // 성공작이 줄수록 정확도가 올라간다. 외부 데이터는 쓰지 않는다(상수 66과 정수 k만 사용).
   var N = 66, NS = 'http://www.w3.org/2000/svg';
   var q = function (s) { return root.querySelector(s); };
@@ -730,7 +730,7 @@ function initW_dial(root) {
       }
     }
 
-    title.textContent = '시험용 ' + N + '편 · 성공 ' + k + '편 · 기준 미달 ' + neg + '편';
+    title.textContent = '테스트용 ' + N + '편 · 성공 ' + k + '편 · 기준 미달 ' + neg + '편';
     baseLab.textContent = '기준 모델 · 다수 범주 예측 · ' + (s.major === 'pos' ? '전부 성공' : '전부 기준 미달');
     setRow('acc', s.acc);
     setRow('rec', s.rec);
