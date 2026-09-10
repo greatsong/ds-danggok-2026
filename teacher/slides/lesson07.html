@@ -127,7 +127,7 @@
   <h2>직선에서 평면으로</h2>
   <ul class="facts">
     <li>단순 회귀 — 독립 변수 하나로 예측</li>
-    <li>다중 회귀 — 변수마다 가중치를 곱해 더한 뒤 절편 추가</li>
+    <li>다중 회귀 — 변수마다 가중치를 곱해 더한 뒤 편향 추가</li>
     <li>독립 변수 둘 — 평면으로 표현</li>
     <li>가중치 — 다른 변수의 값이 같을 때 1 증가당 예측값의 변화량</li>
   </ul>
@@ -179,7 +179,7 @@
     <text x="464" y="95" text-anchor="end">20</text>
     <text x="585" y="330" text-anchor="middle">스크린(100관)</text>
     <text x="452" y="352">실선 · 성수기 0 / 점선 · 성수기 1</text>
-    <text x="452" y="374">같은 기울기, 다른 절편</text>
+    <text x="452" y="374">같은 기울기, 다른 편향</text>
   </g>
   <g class="dots"></g>
   <line class="ref" x1="0" y1="0" x2="0" y2="0" stroke="#b9b3a5" stroke-width="2" visibility="hidden"/>
@@ -191,7 +191,7 @@
 <div class="wctl">
   <label>w₁ 스크린(만명/100관) <input type="range" class="s1" min="-1" max="4" step="0.01" value="1"> <span class="v1">1.00</span></label>
   <label>w₂ 성수기(만명) <input type="range" class="s2" min="-8" max="4" step="0.01" value="0"> <span class="v2">0.00</span></label>
-  <label>b 절편(만명) <input type="range" class="s3" min="0" max="6" step="0.01" value="0"> <span class="v3">0.00</span></label>
+  <label>b 편향(만명) <input type="range" class="s3" min="0" max="6" step="0.01" value="0"> <span class="v3">0.00</span></label>
   <button class="wbtn bfix" type="button" aria-pressed="false">성수기 가중치 0 고정</button>
   <button class="wbtn bbest" type="button">최소제곱 정답</button>
   <button class="wbtn bref" type="button" aria-pressed="false">따로 구한 직선 겹치기</button>
@@ -499,7 +499,7 @@
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>7차시 요약</h2>
-  <div class="split" style="margin-top:2.6vh;gap:1.6vw"><div class="card"><div class="t">다중 선형회귀</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">여러 독립 변수 × 가중치의 합에 절편을 더한 예측 · 예측 대상은 종속 변수</div></div><div class="card"><div class="t">속성 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">예측에 쓸 속성은 사람이 결정</div></div><div class="card"><div class="t">속성 만들기</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">표에 없으면 데이터를 그려 규칙을 읽고 새 열로 추가</div></div><div class="card"><div class="t">두 지표</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">평균만 답하는 모델과 비교한 R², 빗나간 크기를 나타내는 MAE·MSE</div></div><div class="card"><div class="t">예측 시점</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">시점이 달라지면 쓸 수 있는 속성과 문제 자체가 달라짐</div></div></div>
+  <div class="split" style="margin-top:2.6vh;gap:1.6vw"><div class="card"><div class="t">다중 선형회귀</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">여러 독립 변수 × 가중치의 합에 편향을 더한 예측 · 예측 대상은 종속 변수</div></div><div class="card"><div class="t">속성 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">예측에 쓸 속성은 사람이 결정</div></div><div class="card"><div class="t">속성 만들기</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">표에 없으면 데이터를 그려 규칙을 읽고 새 열로 추가</div></div><div class="card"><div class="t">두 지표</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">평균만 답하는 모델과 비교한 R², 빗나간 크기를 나타내는 MAE·MSE</div></div><div class="card"><div class="t">예측 시점</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">시점이 달라지면 쓸 수 있는 속성과 문제 자체가 달라짐</div></div></div>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px)">점수의 크기보다 <b>그 점수를 만든 정보의 시점</b></p>
 </section>
 

@@ -156,7 +156,7 @@ function initW_matrix(root, D) {
 }
 
 function initW_threshold(root, D) {
-  // 테스트용 66편 [확률, 실제라벨] — 확률 내림차순. 순위 등간격 축.
+  // 테스트용 66편 [확률, 실제레이블] — 확률 내림차순. 순위 등간격 축.
   var T = D.T66, N = T.length, X0 = 36, X1 = 700, STEP = 10.06, W = 230;
   var P = [], POS = 0, i;
   for (i = 0; i < N; i++) { P.push(Math.round(T[i][0] * 10000)); if (T[i][1] === 1) POS++; }
