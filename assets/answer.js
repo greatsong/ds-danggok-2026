@@ -31,7 +31,9 @@
       if (table.dataset.answerReady) return;
       var blanks = 0;
       table.querySelectorAll('tbody td').forEach(function (td) {
+        // 여백용 칸(colspan)과 이미 채워진 칸은 건너뛴다
         if (td.textContent.trim() !== '' || td.querySelector('input')) return;
+        if (td.hasAttribute('colspan')) return;
         var inp = document.createElement('input');
         inp.type = 'text';
         inp.className = 'answer-cell';
