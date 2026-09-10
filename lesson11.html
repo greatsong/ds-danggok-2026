@@ -189,7 +189,7 @@
 
   <h2>2. 실습 — 타자 43명을 묶어 본다 (바이브 코딩)</h2>
   <p>데이터는 <b>2025 정규시즌 규정타석을 채운 타자 43명</b>의 공식 기록(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025.csv" target="_blank" rel="noopener"><code>kbo_hitters_2025.csv</code></a> — 원출처: <a href="https://www.koreabaseball.com" target="_blank" rel="noopener">KBO 공식 기록실</a>)입니다. 행 하나가 선수 한 명, 열은 홈런·도루·볼넷·삼진·출루율·장타율·타율 등 20개 항목입니다. 홈런 1위 디아즈(50개), 도루 1위 박해민(49개), 타율 1위 양의지(0.337)가 모두 이 표 안에 있습니다.</p>
-  <p class="mini">📌 <b>스냅샷 표기:</b> 다른 차시와 달리 오늘 자료는 날마다 갱신되지 않습니다. 2025 정규시즌이 끝난 뒤 확정된 기록을 파일 하나로 고정해 두었고, 링크도 그 고정본을 가리킵니다. 그래서 이 페이지에 적힌 수치는 언제 실행해도 같은 값이 나옵니다. 다만 표준화 여부·k·초기 중심을 바꾸면 결과는 달라집니다.</p>
+  <p class="mini">📌 <b>스냅샷 표기:</b> 다른 차시와 달리 오늘 데이터는 날마다 갱신되지 않습니다. 2025 정규시즌이 끝난 뒤 확정된 기록을 파일 하나로 고정해 두었고, 링크도 그 고정본을 가리킵니다. 그래서 이 페이지에 적힌 수치는 언제 실행해도 같은 값이 나옵니다. 다만 표준화 여부·k·초기 중심을 바꾸면 결과는 달라집니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"타자 유형 군집" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로.
@@ -461,14 +461,14 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
       <tr><td><b>음악 장르 지도</b><br>Every Noise at Once, 2013~</td><td>템포와 음량, 에너지, 분위기 같은 음향 특성과 청취 기록이 비슷한 아티스트를 묶어 장르를 만들었다.</td><td>장르 이름과 개수는 지도 제작자 글렌 맥도널드가 직접 정했다</td></tr>
     </tbody>
   </table>
-  <figure class="case" style="margin:16px 0"><img src="img/lesson11_case1.png" loading="lazy" alt="어두운 배경 위에 점과 선이 이어진 그물 모양 지도. 분당 득점이 낮은 쪽은 초록, 높은 쪽은 주황과 빨강으로 표시되고 갈라진 가지마다 Role Player, Scoring Rebounder, Paint Protector, One-of-a-kind 같은 유형 이름 13개가 붙어 있습니다." style="width:100%;max-width:560px;display:block;border:1px solid #e3ddcf;border-radius:6px"><figcaption style="font-size:.85rem;color:#6b5836;margin-top:6px">그림: 무투 알라가판, 「From 5 to 13: Redefining the Positions in Basketball」, MIT 슬론 스포츠 애널리틱스 콘퍼런스 2012 (<a href="https://www.sloansportsconference.com/research-papers/from-5-to-13-redefining-the-positions-in-basketball" target="_blank" rel="noopener">발표 자료</a>)</figcaption></figure>
+  <figure class="case" style="margin:16px 0"><img src="img/lesson11_case1.png" loading="lazy" alt="어두운 배경 위에 점과 선이 이어진 그물 모양 지도. 분당 득점이 낮은 쪽은 초록, 높은 쪽은 주황과 빨강으로 표시되고 갈라진 가지마다 Role Player, Scoring Rebounder, Paint Protector, One-of-a-kind 같은 유형 이름 13개가 붙어 있습니다." style="width:100%;max-width:560px;display:block;border:1px solid #e3ddcf;border-radius:6px"><figcaption style="font-size:.85rem;color:#6b5836;margin-top:6px">그림: 무투 알라가판, 「From 5 to 13: Redefining the Positions in Basketball」, MIT 슬론 스포츠 애널리틱스 콘퍼런스 2012 (<a href="https://www.sloansportsconference.com/research-papers/from-5-to-13-redefining-the-positions-in-basketball" target="_blank" rel="noopener">발표 데이터</a>)</figcaption></figure>
   <figure class="case" style="margin:16px 0"><img src="img/lesson11_case2.png" loading="lazy" alt="흰 바탕에 장르 이름 수천 개가 흩어진 화면. 왼쪽에는 metalcore와 thrash metal이 붉은색으로, 가운데와 오른쪽 아래에는 k-pop과 j-pop, trap이 노란색과 주황색으로 모여 있습니다." style="width:100%;max-width:560px;display:block;border:1px solid #e3ddcf;border-radius:6px"><figcaption style="font-size:.85rem;color:#6b5836;margin-top:6px">화면: <a href="https://everynoise.com/" target="_blank" rel="noopener">everynoise.com</a> — 스포티파이 장르 6,291개(2023년 12월 기준, 아티스트 약 100만 명)를 소리의 비슷함으로 배치한 지도, 글렌 맥도널드 제작</figcaption></figure>
   <p>두 사례의 공통점은 정답 라벨을 쓰지 않고 기록 사이의 비슷한 정도로 묶으며 묶음의 개수와 이름을 사람이 정한다는 점입니다. 3절에서 세 묶음에 이름을 붙이는 일은 실제 분석에서도 사람의 몫입니다. 묶는 기준으로 어떤 기록을 쓰느냐에 따라 결과가 달라지며 이 점은 2절의 표준화 실험과 이어집니다.</p>
   </div></details>
 
   <h3>시연 — 군집과 분류는 다르다 (축구 선수 800명)</h3>
   <p>선생님 화면으로 한 장면을 더 봅니다. 축구 게임(EA FC)의 필드플레이어 800명을 능력치 6종으로 묶으면, k=2에서 공격형(메시·음바페)과 수비형(판다이크·캉테)으로 나뉩니다. 그런데 이 묶음을 실제 포지션(공격수·미드필더·수비수)과 대조하면 겹치되 일치하지는 않습니다. 공격수처럼 뛰는 미드필더, 수비에 가담하는 공격수가 섞여 있기 때문입니다. 교과서 155쪽의 참고가 말하는 바가 이것입니다. 군집은 데이터의 유사도로, 분류는 정해진 체계로 나눕니다. 둘의 결과는 다를 수 있습니다. 덧붙여 이 능력치는 게임 회사가 매긴 주관적 평가라는 점도 기억해 둡니다. 데이터의 출처를 따지는 습관(14차시)은 여기서도 유효합니다.</p>
-  <p class="mini">자료: <a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/eafc_players.csv" target="_blank" rel="noopener"><code>eafc_players.csv</code></a> — 필드플레이어 800명 × 14열, 게임 능력치 공개 미러를 정리한 고정 스냅샷입니다. 게임사가 공식 배포한 자료가 아니며, 수치의 근거는 게임 회사의 평가에 있습니다.</p>
+  <p class="mini">데이터: <a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/eafc_players.csv" target="_blank" rel="noopener"><code>eafc_players.csv</code></a> — 필드플레이어 800명 × 14열, 게임 능력치 공개 미러를 정리한 고정 스냅샷입니다. 게임사가 공식 배포한 데이터가 아니며, 수치의 근거는 게임 회사의 평가에 있습니다.</p>
 
   <details class="glossary">
     <summary>🏋️ 도전 — 확장 데이터 3종</summary>
@@ -536,7 +536,7 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
     <div class="h">❓ 점수를 읽고 답할 질문</div>
     <ul>
       <li>가장 애매한 선수와 가장 뚜렷한 선수를 눌러 봅니다. 두 선수의 a와 b는 어떻게 달랐습니까.</li>
-      <li>시작 중심점을 ①②③으로 바꾸면 같은 선수의 소속과 점수가 달라집니다. 그렇다면 한 번 실행해 얻은 점수를 그 자료의 성질이라고 말할 수 있습니까.</li>
+      <li>시작 중심점을 ①②③으로 바꾸면 같은 선수의 소속과 점수가 달라집니다. 그렇다면 한 번 실행해 얻은 점수를 그 데이터의 성질이라고 말할 수 있습니까.</li>
       <li>오늘 만든 묶음을 "이 선수는 원래 이런 유형"이라고 말하지 않으려면, 결과를 어떻게 적어 두어야 합니까.</li>
     </ul>
   </div>
@@ -559,7 +559,7 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
   <div class="quiz">
     <div class="qq"><span class="qn">문제 3</span> 실루엣 점수는 k=2가 더 높은데 해석은 k=3이 자연스러웠습니다. 이 상황이 군집 분석에 대해 말해 주는 바를 서술해 본 뒤 펼쳐 보세요.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>실루엣 점수는 군집 안에서의 거리와 다른 군집까지의 거리를 비교하며, 선수 유형의 의미 자체를 평가하지는 않습니다. 같은 자료와 거리 기준에서 점수를 비교하되, 군집 수의 선택은 분석 목적과 해석 근거를 함께 고려해야 합니다.</p>
+      <p>실루엣 점수는 군집 안에서의 거리와 다른 군집까지의 거리를 비교하며, 선수 유형의 의미 자체를 평가하지는 않습니다. 같은 데이터와 거리 기준에서 점수를 비교하되, 군집 수의 선택은 분석 목적과 해석 근거를 함께 고려해야 합니다.</p>
     </details>
   </div>
 

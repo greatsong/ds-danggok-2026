@@ -28,9 +28,9 @@
     <span class="by">속담 — 함께 등장하는 메뉴를 찾고, 규칙의 방향과 등장 빈도를 비교합니다</span>
   </div>
 
-  <p class="lead">“제육볶음이 나오는 날 배추김치도 나올까?” <b>지지도·신뢰도·향상도</b>를 손으로 계산한 뒤 당곡고 급식 자료에서 메뉴의 동시 등장 패턴을 찾습니다. 세 지표의 차이를 이해하고, 표본에서 찾은 규칙을 어디까지 해석할 수 있는지 판단합니다.</p>
+  <p class="lead">“제육볶음이 나오는 날 배추김치도 나올까?” <b>지지도·신뢰도·향상도</b>를 손으로 계산한 뒤 당곡고 급식 데이터에서 메뉴의 동시 등장 패턴을 찾습니다. 세 지표의 차이를 이해하고, 표본에서 찾은 규칙을 어디까지 해석할 수 있는지 판단합니다.</p>
 
-  <p class="mini">이 수업에서 사용하는 급식 자료는 <b>어제까지 모인 자료</b>입니다. 조회하는 날에 따라 급식 일수와 메뉴 종류가 달라지므로, 화면에 나오는 숫자는 사람마다 조금씩 다릅니다. 숫자가 다른 것은 잘못이 아니며, 그 숫자를 어떻게 읽을지가 오늘의 과제입니다. 아래 손계산과 검산의 기준은 3절에 연결한 <b>184일 저장본</b>입니다.</p>
+  <p class="mini">이 수업에서 사용하는 급식 데이터는 <b>어제까지 모인 데이터</b>입니다. 조회하는 날에 따라 급식 일수와 메뉴 종류가 달라지므로, 화면에 나오는 숫자는 사람마다 조금씩 다릅니다. 숫자가 다른 것은 잘못이 아니며, 그 숫자를 어떻게 읽을지가 오늘의 과제입니다. 아래 손계산과 검산의 기준은 3절에 연결한 <b>184일 저장본</b>입니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
@@ -101,7 +101,7 @@
   </div>
 
   <h2>3. 실습 — 급식 184일에서 규칙 찾기 (바이브 코딩)</h2>
-  <p>분석 전에 함께 나올 것 같은 메뉴 쌍 세 개와 그 이유를 적습니다. 실습 후에는 예상과 결과를 대조합니다. 앱은 5차시의 인증키로 급식 API에서 2025년 9월 1일~2026년 9월 30일 중식을 조회합니다. <b>기간이 같아도 원자료의 수정·추가에 따라 결과가 달라질 수 있습니다.</b> 본문 손계산은 <a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/danggok_meals_live.csv" target="_blank" rel="noopener">184일 급식 저장본</a>을 기준으로 합니다. 실행 결과와 다르면 조회 시점·일수·메뉴 정리 기준부터 확인합니다.</p>
+  <p>분석 전에 함께 나올 것 같은 메뉴 쌍 세 개와 그 이유를 적습니다. 실습 후에는 예상과 결과를 대조합니다. 앱은 5차시의 인증키로 급식 API에서 2025년 9월 1일~2026년 9월 30일 중식을 조회합니다. <b>기간이 같아도 원데이터의 수정·추가에 따라 결과가 달라질 수 있습니다.</b> 본문 손계산은 <a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/danggok_meals_live.csv" target="_blank" rel="noopener">184일 급식 저장본</a>을 기준으로 합니다. 실행 결과와 다르면 조회 시점·일수·메뉴 정리 기준부터 확인합니다.</p>
   <div class="specimen-row" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
     <div class="specimen st">
       <div class="tag">원본 — 급식 API가 준 하루</div>
@@ -187,7 +187,7 @@
 함께 자주 나오는 메뉴 쌍을 찾아 줘.
 - 인증키는 비밀 금고에 NEIS_API_KEY라는 이름으로 넣어 뒀어. 코드에 직접 적지 말고 거기서 꺼내 써.
 - 기간은 2025년 9월 1일부터 2026년 9월 30일까지, 중식만. 조회된 모든 페이지를 받아 날짜별로 한 건씩 세어 줘.
-- 조회 자료 없음과 인증·통신 오류를 구분하고, 일부만 받은 자료로 계산하지 않게 해 줘.
+- 조회 데이터 없음과 인증·통신 오류를 구분하고, 일부만 받은 데이터로 계산하지 않게 해 줘.
 - 하루 식단을 메뉴별로 나누고, 메뉴 이름의 괄호와 그 안의 내용은 전부 제외해 세 줘.
 - 화면 맨 위에 조회 기간과 분석한 날 수, 메뉴 종류 수를 적어 줘.
 - 결과 표의 열은 조건, 결과, 동시, 지지도, 신뢰도, 향상도 여섯 개로 하고, 향상도가 높은 순으로 정렬해 줘.
@@ -206,7 +206,7 @@
   MLSV_YMD(급식일자, 하이픈 없는 여덟 자리) ·
   DDISH_NM(식단 이름, 메뉴 사이 구분은 &lt;br/&gt;, 괄호 안은 알레르기 번호이거나 (자율)·(대)·(소스) 같은 표기) ·
   CAL_INFO(칼로리)
-  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다.</pre></div>
+  ※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 함께 자주 나오는 메뉴 쌍을 찾는다
 import re
 from collections import Counter
@@ -240,7 +240,7 @@ def load_baskets(api_key):
         total = next(item["list_total_count"] for item in head if "list_total_count" in item)
         chunk = next((block["row"] for block in blocks if "row" in block), [])
         if not chunk:
-            raise ValueError("전체 자료를 받기 전에 빈 페이지가 반환되었습니다.")
+            raise ValueError("전체 데이터를 받기 전에 빈 페이지가 반환되었습니다.")
         rows.extend(chunk)
         if len(rows) &gt;= total:
             break
@@ -270,7 +270,7 @@ except (requests.RequestException, ValueError, KeyError, StopIteration):
     st.error("급식을 모두 조회하지 못했습니다. 인증키·조회 조건·연결 상태를 확인하세요.")
     st.stop()
 if not baskets:
-    st.info("조회 기간에 분석할 중식 자료가 없습니다.")
+    st.info("조회 기간에 분석할 중식 데이터가 없습니다.")
     st.stop()
 n = len(baskets)
 single = Counter(item for b in baskets for item in b)
@@ -344,7 +344,7 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
   </div>
 
   <h2>4. 결과 해석 — 기본 등장률과 비교하기</h2>
-  <p>아래 세 규칙을 화면에서 찾아 직접 채웁니다. 등장 칸에는 앞 메뉴와 뒤 메뉴가 각각 나온 일수를, 판정 칸에는 향상도를 기본 등장률과 비교한 결과를 적습니다. 세 번째 규칙은 동시 등장이 드물어 결과 표에 나오지 않을 수 있습니다. 그때는 메뉴로 좁혀 보기 기능이나 원자료에서 두 메뉴를 따로 세어 비교합니다. 세 규칙의 판정이 어떻게 갈리는지가 오늘의 발견입니다.</p>
+  <p>아래 세 규칙을 화면에서 찾아 직접 채웁니다. 등장 칸에는 앞 메뉴와 뒤 메뉴가 각각 나온 일수를, 판정 칸에는 향상도를 기본 등장률과 비교한 결과를 적습니다. 세 번째 규칙은 동시 등장이 드물어 결과 표에 나오지 않을 수 있습니다. 그때는 메뉴로 좁혀 보기 기능이나 원데이터에서 두 메뉴를 따로 세어 비교합니다. 세 규칙의 판정이 어떻게 갈리는지가 오늘의 발견입니다.</p>
   <div style="overflow-x:auto">
   <table class="daymap" style="min-width:620px">
     <thead><tr><th>규칙</th><th>등장 (앞 · 뒤)</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr></thead>
@@ -599,7 +599,7 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
   <ul class="checklist">
     <li>지지도·신뢰도·향상도의 분모가 각각 무엇인지 말할 수 있다.</li>
     <li>교과서 해 보기 ①의 두 규칙을 손으로 계산하고 판정했다.</li>
-    <li>급식 자료에서 향상도가 높은 규칙과 기본 등장률에 가까운 규칙을 비교했다.</li>
+    <li>급식 데이터에서 향상도가 높은 규칙과 기본 등장률에 가까운 규칙을 비교했다.</li>
     <li>향상도만으로 인과관계나 미래의 식단을 보장할 수 없는 이유를 설명할 수 있다.</li>
   </ul>
 

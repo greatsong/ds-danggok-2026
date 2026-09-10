@@ -79,7 +79,7 @@
   </table>
   <div class="callout warn">
     <div class="h">⚠️ 전체 건수와 실제로 받은 건수는 다를 수 있다</div>
-    <p>교재 작성 당시 2025년 9월부터 2026년 9월까지의 중식을 조회하니 전체 건수는 184건으로 표시되었지만, 인증키 없이 받은 목록에는 5건만 있었습니다. 오류가 표시되지 않아도 일부 자료만 받았을 수 있습니다. 한 번에 받을 행 수를 늘리는 항목도 인증키가 없으면 무시되어 언제나 첫 5건만 옵니다. 응답의 전체 건수와 목록 길이를 비교하고, 더 많은 자료가 필요하면 3절의 인증키 안내를 따릅니다.</p>
+    <p>교재 작성 당시 2025년 9월부터 2026년 9월까지의 중식을 조회하니 전체 건수는 184건으로 표시되었지만, 인증키 없이 받은 목록에는 5건만 있었습니다. 오류가 표시되지 않아도 일부 데이터만 받았을 수 있습니다. 한 번에 받을 행 수를 늘리는 항목도 인증키가 없으면 무시되어 언제나 첫 5건만 옵니다. 응답의 전체 건수와 목록 길이를 비교하고, 더 많은 데이터가 필요하면 3절의 인증키 안내를 따릅니다.</p>
   </div>
 
   <h2>2. 요청 주소를 열고 급식 JSON 읽기</h2>
@@ -165,7 +165,7 @@
   </div>
   <ul>
     <li><b>값 꺼내기는 2차시와 같다</b> — KOBIS의 <code>boxOfficeResult</code> → <code>dailyBoxOfficeList</code>와 이름만 다를 뿐, 상자에서 상자를 꺼내는 읽기는 같습니다.</li>
-    <li><b>👀 눈여겨볼 것 — 메뉴 일곱 개가 한 칸에 들어 있다.</b> <code>DDISH_NM</code>에는 그날 메뉴 전체가 <code>&lt;br/&gt;</code>라는 구분 기호로 이어진 <b>한 덩어리 글자</b>로 옵니다. 메뉴 뒤 괄호 속 숫자는 알레르기 유발 식품 번호입니다. 이대로는 "배추김치가 며칠 나왔나"를 셀 수 없습니다. 원본은 보존하고, 집계용 자료에서 메뉴를 나누고 알레르기 번호를 정리합니다.</li>
+    <li><b>👀 눈여겨볼 것 — 메뉴 일곱 개가 한 칸에 들어 있다.</b> <code>DDISH_NM</code>에는 그날 메뉴 전체가 <code>&lt;br/&gt;</code>라는 구분 기호로 이어진 <b>한 덩어리 글자</b>로 옵니다. 메뉴 뒤 괄호 속 숫자는 알레르기 유발 식품 번호입니다. 이대로는 "배추김치가 며칠 나왔나"를 셀 수 없습니다. 원본은 보존하고, 집계용 데이터에서 메뉴를 나누고 알레르기 번호를 정리합니다.</li>
   </ul>
 
   <div class="tbquote">
@@ -175,7 +175,7 @@
   </div>
 
   <h2>3. 인증키 — 없어도 되지만, 넓게 보려면 팀당 하나</h2>
-  <p>조회할 급식일이 적으면 인증키 없이 시작할 수 있습니다. 여러 달의 자료가 필요하면 팀당 인증키 한 개를 준비해 사용합니다. 인증키를 붙이면 이 기간의 184건이 한 번에 옵니다. 다만 한 번에 받을 수 있는 행 수에는 상한이 있으므로, 그보다 많은 자료를 물을 때는 전체 건수와 받은 개수를 비교해 나눠 받습니다.</p>
+  <p>조회할 급식일이 적으면 인증키 없이 시작할 수 있습니다. 여러 달의 데이터가 필요하면 팀당 인증키 한 개를 준비해 사용합니다. 인증키를 붙이면 이 기간의 184건이 한 번에 옵니다. 다만 한 번에 받을 수 있는 행 수에는 상한이 있으므로, 그보다 많은 데이터를 물을 때는 전체 건수와 받은 개수를 비교해 나눠 받습니다.</p>
   <ol class="steps">
     <li><span class="st">① 회원 가입</span><br>
       <a href="https://open.neis.go.kr/" target="_blank" rel="noopener">나이스 교육정보 개방 포털</a>에 회원 가입을 합니다.</li>
@@ -224,7 +224,7 @@
 요청변수: Type=json · SCHUL_NM(학교 이름, 일부만 적어도 검색된다)
 응답 구조: schoolInfo의 두 번째 상자 안 row 목록에 학교별로
   SCHUL_NM(학교명) · ATPT_OFCDC_SC_CODE(교육청 코드) · SD_SCHUL_CODE(학교 코드) · LCTN_SC_NM(지역)
-  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증키 없이 한 번에 5건까지 온다.
+  ※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다. 인증키 없이 한 번에 5건까지 온다.
 [급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo
 요청변수: Type=json · ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE(위에서 찾은 두 코드) · MMEAL_SC_CODE=2(중식) ·
   MLSV_FROM_YMD, MLSV_TO_YMD(조회 시작일과 끝일, 하이픈 없는 여덟 자리) ·
@@ -232,7 +232,7 @@
 응답 구조: mealServiceDietInfo의 첫 번째 상자 head의 list_total_count에 조건에 맞는 전체 건수가 오고,
   두 번째 상자 안 row 목록에 날짜별로
   MLSV_YMD(급식일) · DDISH_NM(메뉴 전체 - &lt;br/&gt;로 구분되고, 메뉴 뒤 괄호 숫자는 알레르기 번호) · CAL_INFO(칼로리)
-  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.
+  ※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.
   ※ 인증키가 없으면 pSize와 pIndex가 무시되어 언제나 첫 5건만 온다.</pre></div>
     </li>
     <li><span class="st">④ 만들고, 다른 팀이 쓸 수 있게 공개한다</span><br>
@@ -319,7 +319,7 @@
 요청변수: Type=json · SCHUL_NM(학교 이름, 일부만 적어도 검색된다)
 응답 구조: schoolInfo의 두 번째 상자 안 row 목록에 학교별로
   SCHUL_NM(학교명) · ATPT_OFCDC_SC_CODE(교육청 코드) · SD_SCHUL_CODE(학교 코드) · LCTN_SC_NM(지역)
-  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증키 없이 한 번에 5건까지 온다.
+  ※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다. 인증키 없이 한 번에 5건까지 온다.
 [급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo
 요청변수: Type=json · ATPT_OFCDC_SC_CODE, SD_SCHUL_CODE(위에서 찾은 두 코드) · MMEAL_SC_CODE=2(중식) ·
   MLSV_FROM_YMD, MLSV_TO_YMD(조회 시작일과 끝일, 하이픈 없는 여덟 자리) ·
@@ -327,7 +327,7 @@
 응답 구조: mealServiceDietInfo의 첫 번째 상자 head의 list_total_count에 조건에 맞는 전체 건수가 오고,
   두 번째 상자 안 row 목록에 날짜별로
   MLSV_YMD(급식일) · DDISH_NM(메뉴 전체 - &lt;br/&gt;로 구분되고, 메뉴 뒤 괄호 숫자는 알레르기 번호) · CAL_INFO(칼로리)
-  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.
+  ※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.
   ※ 인증키가 없으면 pSize와 pIndex가 무시되어 언제나 첫 5건만 온다.</pre></div>
     <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">main.py</button></span><button class="copy-btn">복사</button><pre># main.py — 학교를 검색해 고르면 그 학교의 급식을 보여 주는 첫 화면
 import datetime
@@ -425,7 +425,7 @@ plotly</pre></div>
 응답 구조: mealServiceDietInfo의 두 번째 상자 안 row 목록에 날짜별로
   MLSV_YMD(급식일) · DDISH_NM(메뉴 전체 - &lt;br/&gt;로 구분되고, 메뉴 뒤 괄호 숫자는 알레르기 번호) ·
   CAL_INFO(칼로리) · ORPLC_INFO(원산지)
-  ※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.
+  ※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다. 인증 오류 등 다른 CODE와 구분한다.
   ※ 인증키 없이 부를 수 있고, 한 번에 오는 건수에 제한이 있다. 조회 기간은 짧게 잡는다.</pre></div>
       <div class="codewrap code"><span class="label">AI가 준 코드 예시 — <button type="button" class="fname">pages/1_달력별_급식.py</button></span><button class="copy-btn">복사</button><pre># pages/1_달력별_급식.py — 나이스 급식 API로 그날 식단을 카드로 보여 주는 페이지
 import datetime
@@ -481,12 +481,12 @@ else:
     for i, dish in enumerate(dishes):
         with cols[i % 3].container(border=True):
             st.write(dish)</pre></div>
-    <p><b>예시 3 — 조회 기간에 가장 자주 등장한 메뉴를 세는 화면</b>은 인증키를 사용해 조회 기간의 자료를 모으며, 그 결과는 5절에서 확인합니다.</p>
+    <p><b>예시 3 — 조회 기간에 가장 자주 등장한 메뉴를 세는 화면</b>은 인증키를 사용해 조회 기간의 데이터를 모으며, 그 결과는 5절에서 확인합니다.</p>
     <div class="codewrap improve"><span class="label">③ 페이지 추가 프롬프트</span><button class="copy-btn">복사</button><pre>pages 폴더에 '우리 학교 메뉴별 급식' 페이지를 하나 더 추가해 줘. 파일 이름은 2_메뉴별_급식.py.
 앞 페이지는 그대로 두고 새 파일로.
 - 2025년 9월부터 2026년 9월까지의 중식이 궁금해. 인증키를 붙여 한 번에 받아 줘.
   인증키는 Secrets 설정에 NEIS_API_KEY라는 이름으로 넣어 뒀어. 코드에 직접 적지 말고 거기서 꺼내 써.
-  중식만 골라 줘. 응답의 전체 건수만큼 모두 받을 때까지 다음 자료도 요청해 줘.
+  중식만 골라 줘. 응답의 전체 건수만큼 모두 받을 때까지 다음 데이터도 요청해 줘.
 - 메뉴는 한 덩어리 글자로 오니까 &lt;br/&gt; 기준으로 낱개로 나누고, 뒤에 붙은 괄호 속 알레르기 번호는 떼 줘.
 - 같은 날 같은 메뉴가 두 번 적혀 있어도 하루로 세 줘.
 - 이 기간에 가장 자주 나온 메뉴 TOP 10을 가로 막대그래프로 보여 줘.
@@ -525,7 +525,7 @@ def load_lunch(frm, to, api_key):
             result = res.get("RESULT", {})
             if result.get("CODE") == "INFO-200" and page == 1:
                 return {}
-            raise ValueError("급식 자료를 모두 받지 못했습니다. " + result.get("MESSAGE", "응답을 확인해 주세요."))
+            raise ValueError("급식 데이터를 모두 받지 못했습니다. " + result.get("MESSAGE", "응답을 확인해 주세요."))
         head = res["mealServiceDietInfo"][0]["head"]
         total = next(item["list_total_count"] for item in head if "list_total_count" in item)
         rows = res["mealServiceDietInfo"][1]["row"]
@@ -631,13 +631,13 @@ st.caption(f"중식 {days}일 기준 · 이 그래프로 알 수 있는 것: (�
     <div class="qq"><span class="qn">문제 1</span> 일요일 날짜로 급식 API를 불렀더니 식단 없이 "해당하는 데이터가 없습니다"라는 안내만 왔습니다. 가장 알맞은 해석은 무엇일까요?</div>
     <div class="qitem">
       <div class="qopts"><button class="opt">주소가 틀렸다</button><button class="opt">서버가 고장 났다</button><button class="opt" data-ok="1">그날 급식이 없어 데이터가 없는 것이다</button></div>
-      <div class="fb">해당 조건에 등록된 급식 자료가 없다는 뜻입니다. 급식이 없거나 식단이 아직 등록되지 않았을 수 있으므로, 앱에는 "조회한 날짜의 급식 정보가 없습니다"라고 안내합니다. 인증 오류나 요청 실패와는 구분해야 합니다.</div>
+      <div class="fb">해당 조건에 등록된 급식 데이터가 없다는 뜻입니다. 급식이 없거나 식단이 아직 등록되지 않았을 수 있으므로, 앱에는 "조회한 날짜의 급식 정보가 없습니다"라고 안내합니다. 인증 오류나 요청 실패와는 구분해야 합니다.</div>
     </div>
   </div>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 2</span> KOBIS와 나이스 급식 API의 차이를 인증키를 중심으로 두 가지 써 보세요.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>① KOBIS는 요청에 인증키가 필요하지만, 나이스 급식 API는 인증키 없이도 호출할 수 있다. ② 나이스는 인증키가 없으면 한 번에 받는 건수가 제한되고 pSize와 pIndex도 무시된다. 넓은 기간을 조회할 때는 인증키를 사용하고 전체 자료를 받았는지 확인한다. 두 API 모두 발급받은 키는 코드에 직접 쓰지 않고 Secrets에 저장한다.</p>
+      <p>① KOBIS는 요청에 인증키가 필요하지만, 나이스 급식 API는 인증키 없이도 호출할 수 있다. ② 나이스는 인증키가 없으면 한 번에 받는 건수가 제한되고 pSize와 pIndex도 무시된다. 넓은 기간을 조회할 때는 인증키를 사용하고 전체 데이터를 받았는지 확인한다. 두 API 모두 발급받은 키는 코드에 직접 쓰지 않고 Secrets에 저장한다.</p>
     </details>
   </div>
   <div class="quiz">

@@ -239,7 +239,7 @@ main.eth .quiz details.reveal{border-radius:12px}
   </section>
   <section class="l14-scene">
   <h3>장면 2 — 급식 데이터는 되고, 위치 데이터는 왜 조심스러운가</h3>
-  <p>급식 식단은 학교 단위의 공개 정보이며, 이번 자료에는 개별 학생이 무엇을 먹었는지 담겨 있지 않습니다. 그렇더라도 제공 조건과 출처를 확인하고, 다른 자료와 결합했을 때 개인을 알아볼 가능성이 있는지 살펴야 합니다. 위치·이동 기록은 이름이 없어도 시간 순으로 연결하면 생활 패턴이나 특정 개인의 동선이 드러날 수 있습니다. <b>공개 여부만으로 재사용의 적절성을 판단할 수는 없습니다.</b></p>
+  <p>급식 식단은 학교 단위의 공개 정보이며, 이번 데이터에는 개별 학생이 무엇을 먹었는지 담겨 있지 않습니다. 그렇더라도 제공 조건과 출처를 확인하고, 다른 데이터와 결합했을 때 개인을 알아볼 가능성이 있는지 살펴야 합니다. 위치·이동 기록은 이름이 없어도 시간 순으로 연결하면 생활 패턴이나 특정 개인의 동선이 드러날 수 있습니다. <b>공개 여부만으로 재사용의 적절성을 판단할 수는 없습니다.</b></p>
   <details class="glossary">
     <summary>🔬 그림으로 — 급식과 위치 데이터의 차이</summary>
     <div class="gin">
@@ -559,7 +559,7 @@ main.eth .quiz details.reveal{border-radius:12px}
   </section>
   <section class="l14-scene">
   <h3>장면 3 — 모델이 사회의 편향을 학습한다</h3>
-  <p>7차시의 입력에는 첫 관측일 스크린 수가 포함되었습니다. 이 자료에서 스크린 배정의 공정성이나 특정 배급사에 대한 차별을 직접 입증한 것은 아닙니다. 다만 <b>배정 기회가 일부 영화에 치우쳐 있다고 가정</b>하면, 관객 수를 예측한 결과가 다시 배정에 사용될 때 기존 차이가 커질 수 있습니다. 이것은 모델 활용 시 검토할 가능성입니다. 관객 수 예측을 영화의 예술적 가치나 완성도 평가로 소개해서도 안 됩니다.</p>
+  <p>7차시의 입력에는 첫 관측일 스크린 수가 포함되었습니다. 이 데이터에서 스크린 배정의 공정성이나 특정 배급사에 대한 차별을 직접 입증한 것은 아닙니다. 다만 <b>배정 기회가 일부 영화에 치우쳐 있다고 가정</b>하면, 관객 수를 예측한 결과가 다시 배정에 사용될 때 기존 차이가 커질 수 있습니다. 이것은 모델 활용 시 검토할 가능성입니다. 관객 수 예측을 영화의 예술적 가치나 완성도 평가로 소개해서도 안 됩니다.</p>
   <div class="l14-fig l14-loop">
   <div class="l14-scroll">
     <svg tabindex="0" viewBox="0 0 780 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="치우친 스크린 배정이 데이터와 모델을 거쳐 다시 배정의 근거가 되는 순환 구조">
@@ -611,7 +611,7 @@ main.eth .quiz details.reveal{border-radius:12px}
   </div>
   <div class="l14-ctl"><button type="button" class="l14-btn l14-primary l14-play" aria-label="되먹임 고리 애니메이션 재생"></button><button type="button" class="l14-btn l14-step" aria-label="되먹임 고리 다음 단계"></button></div>
   </div>
-  <p class="l14-cap">이 그림은 편향이 반복될 수 있는 과정을 설명한 가상 사례입니다. 현재 영화 자료만으로 실제 배정의 원인이나 공정성을 판정하지는 않습니다.</p>
+  <p class="l14-cap">이 그림은 편향이 반복될 수 있는 과정을 설명한 가상 사례입니다. 현재 영화 데이터만으로 실제 배정의 원인이나 공정성을 판정하지는 않습니다.</p>
   <figure class="interactive" data-fig="screenSkew">
     <div class="widget" data-w="screenSkew">
   <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화 216편의 첫 관측일 스크린 수를 내림차순으로 세운 막대그래프: 상위 비율 슬라이더를 옮기면 파란 막대 구간과 그 구간이 차지하는 스크린 수 비율이 함께 바뀜">
@@ -881,14 +881,14 @@ main.eth .quiz details.reveal{border-radius:12px}
   </div>
   <p class="l14-cap">같은 사진 1,270장을 대상으로 MIT 미디어랩의 조이 부올람위니와 팀닛 게브루가 평가를 진행했습니다(<a href="https://news.mit.edu/2018/study-finds-gender-skin-type-bias-artificial-intelligence-systems-0212" target="_blank" rel="noopener">연구 소개 보기</a>).</p>
   <p>9차시에 만든 분류 모델과 10차시에 손으로 계산한 정확도 개념을 떠올리면, 이 사례는 전체 정확도를 하나의 숫자로 보지 않고 집단별로 나누어 계산한 경우입니다. 교과서 38쪽에서 다룬 데이터 편향성과 연결되며, 치우친 데이터로 만든 모델이 특정 대상에게 불리하게 작동할 수 있음을 보여 줍니다. 회사별 최대 격차는 20.8%p, 33.8%p, 34.4%p까지 벌어졌습니다.</p>
-  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson14_case2.png" alt="위쪽에 평가 대상 네 집단을 나타내는 흐릿한 합성 얼굴 네 장, 아래쪽에 마이크로소프트·페이스++·아이비엠의 집단별 정확도와 최대 격차를 막대와 함께 정리한 표." loading="lazy" width="1172" height="747" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>같은 모델 안에서도 집단을 나누면 정확도가 최대 34.4%p까지 갈립니다. 이미지: 젠더 셰이드 프로젝트(gendershades.org, MIT 미디어랩 2018) 공개 자료이고, 수치 출처는 Buolamwini &amp; Gebru(2018), PMLR 81입니다.</figcaption></figure>
+  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson14_case2.png" alt="위쪽에 평가 대상 네 집단을 나타내는 흐릿한 합성 얼굴 네 장, 아래쪽에 마이크로소프트·페이스++·아이비엠의 집단별 정확도와 최대 격차를 막대와 함께 정리한 표." loading="lazy" width="1172" height="747" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>같은 모델 안에서도 집단을 나누면 정확도가 최대 34.4%p까지 갈립니다. 이미지: 젠더 셰이드 프로젝트(gendershades.org, MIT 미디어랩 2018) 공개 데이터이고, 수치 출처는 Buolamwini &amp; Gebru(2018), PMLR 81입니다.</figcaption></figure>
   <p>전체 정확도를 하나의 숫자로만 보면 모델 내부의 문제를 확인하기 어렵습니다. 어떤 집단으로 나누어 볼지는 사람이 정하며, 그 선택에 따라 모델의 평가가 달라집니다.</p>
   </div></details>
 
   </section>
   <section class="l14-scene">
   <h3>장면 4 — AI가 짠 코드의 책임은 누구에게</h3>
-  <p>AI가 작성한 코드의 결과를 앱으로 공개할 때는 개발자가 검증 과정에 참여해야 합니다. 결과가 잘못되었다면 데이터를 다시 확인하고, 오류를 고쳐 이용자에게 알려야 합니다. 8·10·12차시의 손계산과 예시 자료 검산은 그 방법입니다. 책임을 한 사람에게만 돌리기보다, 데이터 제공자·도구 제공자·앱 운영자가 맡은 역할을 구분하고 자신이 확인한 범위와 한계를 밝힙니다.</p>
+  <p>AI가 작성한 코드의 결과를 앱으로 공개할 때는 개발자가 검증 과정에 참여해야 합니다. 결과가 잘못되었다면 데이터를 다시 확인하고, 오류를 고쳐 이용자에게 알려야 합니다. 8·10·12차시의 손계산과 예시 데이터 검산은 그 방법입니다. 책임을 한 사람에게만 돌리기보다, 데이터 제공자·도구 제공자·앱 운영자가 맡은 역할을 구분하고 자신이 확인한 범위와 한계를 밝힙니다.</p>
   </section>
   </div>
 
@@ -900,14 +900,14 @@ main.eth .quiz details.reveal{border-radius:12px}
     <ul class="l14-items">
       <li><b>키</b> — 비공개용 키를 비밀 금고에 두었는가? 공개 가능한 키는 접근 권한 설정과 함께 확인했는가?</li>
       <li><b>출처</b> — 데이터의 출처·수집 시점·이용 조건을 확인하고 화면에 표기했는가?</li>
-      <li><b>사람</b> — 자료를 결합하면 개인이 드러날 수 있는가? 분석·공개가 특정 대상에게 불리하게 작용할 가능성을 점검했는가?</li>
+      <li><b>사람</b> — 데이터를 결합하면 개인이 드러날 수 있는가? 분석·공개가 특정 대상에게 불리하게 작용할 가능성을 점검했는가?</li>
     </ul>
   </div>
   <p>점검 중 확인하지 못한 항목은 그대로 표시하고, 필요한 조치를 적습니다. 출처를 쓰는 것만으로 이용 조건을 충족하는 것은 아닙니다. 13차시 반찬 월드컵처럼 이름을 받지 않는 앱도 반복 참여와 참여자 구성을 확인해야 결과를 적절히 해석할 수 있습니다.</p>
   <figure class="interactive" data-fig="openCheck">
     <div class="widget" data-w="openCheck">
-  <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="자료 네 가지와 점검 3항목 판정 그림">
-    <text x="135" y="26" text-anchor="middle" font-size="14" fill="#6b7385">자료</text>
+  <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="데이터 네 가지와 점검 3항목 판정 그림">
+    <text x="135" y="26" text-anchor="middle" font-size="14" fill="#6b7385">데이터</text>
     <g class="ocCard" data-s="0">
       <rect x="20" y="40" width="230" height="52" rx="10" fill="#fff" stroke="#2b7fd6" stroke-width="2"/>
       <text x="135" y="71" text-anchor="middle" font-size="15" fill="#1c2230">급식 식단</text>
@@ -961,12 +961,12 @@ main.eth .quiz details.reveal{border-radius:12px}
     <span class="wout">열어 본 항목 0/3</span>
   </div>
 </div>
-    <figcaption>자료를 바꾸고 세 줄을 열면 같은 항목이라도 자료마다 걸리는 곳이 달라집니다. 판정은 이 화면이 아니라 자료의 제공 조건에서 확인합니다.</figcaption>
+    <figcaption>데이터를 바꾸고 세 줄을 열면 같은 항목이라도 데이터마다 걸리는 곳이 달라집니다. 판정은 이 화면이 아니라 데이터의 제공 조건에서 확인합니다.</figcaption>
   </figure>
 
 
   <h2>4. 사례 토론 — 내 경험과 세계의 문제</h2>
-  <p>교과서 39쪽 조사하기 ①을 바탕으로 직접 겪었거나 자료로 확인한 데이터 윤리 사례를 모둠에서 토의합니다. 어떤 데이터를 누가 사용했는지, 누구에게 어떤 영향이 있었는지, 확인된 사실과 추측은 무엇인지 구분해 설명합니다.</p>
+  <p>교과서 39쪽 조사하기 ①을 바탕으로 직접 겪었거나 데이터로 확인한 데이터 윤리 사례를 모둠에서 토의합니다. 어떤 데이터를 누가 사용했는지, 누구에게 어떤 영향이 있었는지, 확인된 사실과 추측은 무엇인지 구분해 설명합니다.</p>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 36쪽</span></div>
     <p class="q">"세계 연합(UN)은 전 세계 빈곤을 종식시키고, 지구를 보호하며, 2030년까지 모든 사람들이 평화와 번영을 누릴 수 있는 지속 가능한 미래를 만들기 위한 17개의 지속 가능 발전 목표(SDGs: Sustainable Development Goals)를 제시하였다." <span class="src">(36쪽)</span></p>
@@ -986,10 +986,10 @@ main.eth .quiz details.reveal{border-radius:12px}
         <button class="opt">데이터의 양이 많은가 적은가</button>
         <button class="opt" data-ok="1">기록을 이어 붙였을 때 특정 개인을 추적할 수 있는가</button>
       </div>
-      <div class="fb">이번 급식 자료에는 개인별 섭취 기록이 없습니다. 반면 위치 기록은 이름이 없어도 시간·장소를 결합하면 개인의 동선이 드러날 수 있습니다. 공개 여부만으로 민감도를 판단할 수는 없습니다. 정보의 내용과 다른 자료와의 결합 가능성을 함께 확인해야 합니다.</div>
+      <div class="fb">이번 급식 데이터에는 개인별 섭취 기록이 없습니다. 반면 위치 기록은 이름이 없어도 시간·장소를 결합하면 개인의 동선이 드러날 수 있습니다. 공개 여부만으로 민감도를 판단할 수는 없습니다. 정보의 내용과 다른 데이터와의 결합 가능성을 함께 확인해야 합니다.</div>
     </div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>이번 급식 자료는 개인별 섭취 기록을 담고 있지 않습니다. 반면 개인 위치 기록은 이름을 제거해도 시간과 장소를 결합하면 개인의 동선이 드러날 수 있습니다. 따라서 공개 여부뿐 아니라 개인 식별 가능성, 다른 자료와의 결합 가능성, 이용 조건을 함께 확인해야 합니다.</p>
+      <p>이번 급식 데이터는 개인별 섭취 기록을 담고 있지 않습니다. 반면 개인 위치 기록은 이름을 제거해도 시간과 장소를 결합하면 개인의 동선이 드러날 수 있습니다. 따라서 공개 여부뿐 아니라 개인 식별 가능성, 다른 데이터와의 결합 가능성, 이용 조건을 함께 확인해야 합니다.</p>
     </details>
   </div>
   <div class="quiz">
