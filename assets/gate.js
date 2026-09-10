@@ -46,7 +46,7 @@
   // 2) 이 페이지를 잠글지 판정
   var path = location.pathname;
   var released = (typeof window.RELEASED_LESSON === 'number') ? window.RELEASED_LESSON : 1;
-  var m = path.match(/lesson(\d{2})(?:-deep|-lab)?\.html$/);
+  var m = path.match(/lesson(\d{2})(?:-deep|-lab|-setup)?\.html$/);
   var locked = false;
   if (!teacher) {
     if (path.indexOf('/teacher/') !== -1) locked = true;
@@ -87,7 +87,7 @@
       var links = document.querySelectorAll('a[href*="lesson"], a[href*="glossary"], a[href*="concepts"], a[href*="teacher/"], a[href*="extra-movie"], a[href*="extra-api"], a[href*="extra-models"], a[href*="project"]');
       Array.prototype.forEach.call(links, function (a) {
         var href = a.getAttribute('href') || '';
-        var lm = href.match(/lesson(\d{2})(?:-deep|-lab)?\.html/);
+        var lm = href.match(/lesson(\d{2})(?:-deep|-lab|-setup)?\.html/);
         var blocked =
           (lm && parseInt(lm[1], 10) > released) ||
           (/(glossary|concepts|study-guide|eval-workbook)\.html/.test(href) && released < 15) ||
