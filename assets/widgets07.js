@@ -576,12 +576,10 @@ function initW_monthlong(root, D) {
 }
 
 function initW_plane3d(root, D) {
-  // 속성 하나(직선)와 둘(평면)을 같은 영화로 비교한다.
+  // 속성 하나(직선)와 둘(평면)을 같은 영화로 비교한다. 3차원은 plotly로 자유롭게 돌린다.
   // 값은 scripts/lesson07_plane_data.py 가 다시 쓴다. [스크린수, 배우 수, 총 관객(만명), 제목]
   const P = window.PLANE_DATA;
   if (!P) return;
-  const X0 = 78, X1 = 660, Y0 = 40, Y1 = 268;          // 그림 영역
-  const sMin = 100, sMax = 1600, aMin = 0, aMax = 20, yMax = 340;
 
   function ols(two) {                                   // 정규방정식을 가우스 소거로 푼다
     const k = two ? 3 : 2, A = [], b = [];
@@ -616,92 +614,65 @@ function initW_plane3d(root, D) {
   }
   const W1 = ols(false), W2 = ols(true);
   const R1 = r2(W1, false), R2 = r2(W2, true);
+  const sc = P.map(r => r[0]), ac = P.map(r => r[1]), au = P.map(r => r[2]), nm = P.map(r => r[3]);
+  const sMin = Math.min.apply(null, sc), sMax = Math.max.apply(null, sc);
+  const aMin = Math.min.apply(null, ac), aMax = Math.max.apply(null, ac);
 
-  let two = false, ang = 32;                            // 보기 각도(도)
-  const q = sel => root.querySelector(sel);
-  const NS = 'http://www.w3.org/2000/svg';
-  const mk = (t, at) => { const e = document.createElementNS(NS, t);
-    for (const k in at) e.setAttribute(k, at[k]); return e; };
-  const gFit = q('[data-dyn="fit"]'), gDot = q('[data-dyn="dots"]'), gAx = q('[data-dyn="ax"]');
-  const tR2 = q('[data-t="r2"]'), tEq = q('[data-t="eq"]'), tDep = q('[data-t="dep"]');
-  const rng = q('.ang'), rngWrap = q('.angwrap');
+  const host = root.querySelector('.plot');
+  const tOut = root.querySelector('[data-t="out"]');
   const btns = Array.prototype.slice.call(root.querySelectorAll('.wbtn'));
+  const FONT = { family: 'inherit', size: 12, color: '#3a2e1a' };
+  const BASE = { displayModeBar: false, responsive: true };
+  const put = v => (v < 0 ? ' − ' : ' + ') + Math.abs(v).toFixed(1);
 
-  // 3차원 좌표를 화면으로. 깊이축(배우 수)은 오른쪽 위로 비스듬히 눕힌다.
-  function proj(scrn, actors, audi) {
-    const u = (scrn - sMin) / (sMax - sMin);
-    const v = two ? (actors - aMin) / (aMax - aMin) : 0;
-    const rad = ang * Math.PI / 180;
-    const DX = 138, DY = 26;                            // 깊이축이 쓰는 화면 폭과 높이
-    const x = X0 + u * (X1 - X0) * 0.72 + v * DX * Math.cos(rad);
-    const y = Y1 - (audi / yMax) * (Y1 - Y0 - DY) - v * DY * Math.sin(rad);
-    return [x, y];
-  }
-  const pred = (s, a) => two ? W2[0] + W2[1] * s + W2[2] * a : W1[0] + W1[1] * s;
-
-  function draw() {
-    gAx.textContent = ''; gFit.textContent = ''; gDot.textContent = '';
-
-    if (two) {                                          // 깊이축 눈금
-      const c0 = proj(sMin, 0, 0), c1 = proj(sMin, aMax, 0);
-      gAx.appendChild(mk('line', { x1: c0[0], y1: c0[1], x2: c1[0], y2: c1[1],
-        stroke: '#b9b3a5', 'stroke-width': 1.2 }));
-      const lab = mk('text', { x: c1[0] + 6, y: c1[1] - 4, 'font-size': 12, fill: '#7a7f95' });
-      lab.textContent = '배우 ' + aMax + '명';
-      gAx.appendChild(lab);
+  function draw(two) {
+    if (typeof Plotly === 'undefined') { tOut.textContent = '그래프를 불러오지 못했습니다'; return; }
+    if (!two) {
+      const xs = [Math.max(sMin, -W1[0] / W1[1]), sMax];
+      Plotly.newPlot(host, [
+        { x: sc, y: au, text: nm, type: 'scatter', mode: 'markers', name: '영화',
+          marker: { size: 7, color: '#1c2230', opacity: 0.62 },
+          hovertemplate: '%{text}<br>스크린 %{x}관 · %{y}만 명<extra></extra>' },
+        { x: xs, y: xs.map(v => W1[0] + W1[1] * v), type: 'scatter', mode: 'lines', name: '예측',
+          line: { color: '#2b7fd6', width: 3 }, hoverinfo: 'skip' }
+      ], { margin: { l: 56, r: 16, t: 12, b: 44 }, showlegend: false, font: FONT,
+           paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
+           xaxis: { title: '첫 관측일 스크린수(관)' }, yaxis: { title: '총 관객(만 명)' } }, BASE);
+      tOut.textContent = '예측 = ' + W1[1].toFixed(3) + ' × 스크린수' + put(W1[0]) + ' · R² ' + R1.toFixed(3);
+      return;
     }
-
-    // 적합면: 격자 몇 줄만 그린다
-    // 예측이 0보다 작아지는 구간은 그리지 않는다. 축 아래로 삐져나간다
-    const from = a => {
-      const w = two ? W2 : W1, base = two ? w[0] + w[2] * a : w[0];
-      return Math.max(sMin, Math.min(sMax, -base / w[1]));
-    };
-    const AS = two ? [0, 7, 14, aMax] : [0];
-    AS.forEach(function (a, i) {
-      const s0 = from(a);
-      const p1 = proj(s0, a, pred(s0, a)), p2 = proj(sMax, a, pred(sMax, a));
-      gFit.appendChild(mk('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1],
-        stroke: '#2b7fd6', 'stroke-width': i === 0 ? 2.4 : 1.2,
-        opacity: i === 0 ? 1 : 0.5 }));
-    });
-    if (two) {
-      [sMin, (sMin + sMax) / 2, sMax].forEach(function (s) {
-        const a0 = Math.max(0, Math.min(aMax, -(W2[0] + W2[1] * s) / W2[2]));
-        const p1 = proj(s, a0, pred(s, a0)), p2 = proj(s, aMax, pred(s, aMax));
-        gFit.appendChild(mk('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1],
-          stroke: '#2b7fd6', 'stroke-width': 1.2, opacity: 0.5 }));
-      });
-    }
-
-    P.forEach(function (r) {
-      const p = proj(r[0], two ? r[1] : 0, r[2]);
-      const c = mk('circle', { cx: p[0], cy: p[1], r: 3.4, fill: '#1c2230', opacity: 0.62 });
-      const ttl = mk('title'); ttl.textContent = r[3] + ' · 스크린 ' + r[0] + '관 · 배우 ' + r[1] + '명 · ' + r[2] + '만 명';
-      c.appendChild(ttl); gDot.appendChild(c);
-    });
-
-    tR2.textContent = 'R² ' + (two ? R2 : R1).toFixed(3);
-    const put = v => (v < 0 ? ' − ' : ' + ') + Math.abs(v).toFixed(1);
-    tEq.textContent = two
-      ? '예측 = ' + W2[1].toFixed(3) + ' × 스크린수 + ' + W2[2].toFixed(2) + ' × 배우 수' + put(W2[0])
-      : '예측 = ' + W1[1].toFixed(3) + ' × 스크린수' + put(W1[0]);
-    tDep.textContent = two ? '축이 하나 늘어 직선이 평면이 됩니다' : '속성 하나로는 직선입니다';
-    rngWrap.hidden = !two;
+    const gx = [sMin, sMax], gy = [aMin, aMax];
+    const gz = gy.map(a => gx.map(s => W2[0] + W2[1] * s + W2[2] * a));
+    Plotly.newPlot(host, [
+      { x: sc, y: ac, z: au, text: nm, type: 'scatter3d', mode: 'markers',
+        marker: { size: 3.4, color: '#1c2230', opacity: 0.75 },
+        hovertemplate: '%{text}<br>스크린 %{x}관 · 배우 %{y}명 · %{z}만 명<extra></extra>' },
+      { x: gx, y: gy, z: gz, type: 'surface', showscale: false, opacity: 0.5,
+        colorscale: [[0, '#2b7fd6'], [1, '#2b7fd6']], hoverinfo: 'skip' }
+    ], { margin: { l: 0, r: 0, t: 0, b: 0 }, showlegend: false, font: FONT,
+         paper_bgcolor: 'rgba(0,0,0,0)',
+         scene: { xaxis: { title: '스크린수' }, yaxis: { title: '배우 수' }, zaxis: { title: '총 관객(만 명)' },
+                  camera: { eye: { x: 1.7, y: -1.5, z: 0.8 } } } }, BASE);
+    tOut.textContent = '예측 = ' + W2[1].toFixed(3) + ' × 스크린수 + ' + W2[2].toFixed(2) +
+      ' × 배우 수' + put(W2[0]) + ' · R² ' + R2.toFixed(3);
   }
 
   btns.forEach(function (b) {
     b.addEventListener('click', function () {
-      two = b.dataset.act === 'two';
       btns.forEach(function (x) {
         x.classList.toggle('on', x === b);
         x.setAttribute('aria-pressed', x === b ? 'true' : 'false');
       });
-      draw();
+      draw(b.dataset.act === 'two');
     });
   });
-  rng.addEventListener('input', function () { ang = +rng.value; draw(); });
-  draw();
+
+  // plotly는 이 파일 뒤에서 불린다. 준비되면 그린다.
+  (function wait(n) {
+    if (typeof Plotly !== 'undefined') { draw(false); return; }
+    if (n > 40) { draw(false); return; }
+    setTimeout(function () { wait(n + 1); }, 100);
+  })(0);
 }
   const WIDGET_INIT = {wplane: initW_wplane, r2meaning: initW_r2meaning, monthaudi: initW_monthaudi, monthlong: initW_monthlong, plane3d: initW_plane3d};
   function initWidgets(scope) { (scope || document).querySelectorAll('.widget[data-w]').forEach(el => { if (el.dataset.ready) return; const f = WIDGET_INIT[el.dataset.w]; if (f) { f(el, window.LESSON_DATA); el.dataset.ready = '1'; } }); }

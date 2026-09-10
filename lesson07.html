@@ -62,27 +62,14 @@
   <p>속성이 하나면 예측은 직선입니다. 속성을 하나 더 넣으면 축이 하나 늘어나고, 직선은 <b>평면</b>이 됩니다. 실제 영화로 확인합니다.</p>
   <figure class="interactive" data-fig="plane3d">
     <div class="widget" data-w="plane3d">
-      <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="스크린수와 총 관객 수의 산점도. 속성이 하나면 예측이 직선으로, 속성이 둘이면 배우 수 축이 늘어나 평면으로 나타납니다.">
-        <line x1="78" y1="268" x2="660" y2="268" stroke="#b9b3a5" stroke-width="1.2"/>
-        <line x1="78" y1="268" x2="78" y2="40" stroke="#b9b3a5" stroke-width="1.2"/>
-        <text x="78" y="290" font-size="12" fill="#7a7f95">스크린 100관</text>
-        <text x="560" y="290" font-size="12" fill="#7a7f95">1,600관</text>
-        <text x="30" y="46" font-size="12" fill="#7a7f95">340만</text>
-        <text x="42" y="268" font-size="12" fill="#7a7f95">0</text>
-        <g data-dyn="ax"></g>
-        <g data-dyn="fit"></g>
-        <g data-dyn="dots"></g>
-        <text data-t="eq" x="78" y="26" font-size="13" font-weight="700" fill="#2b7fd6"></text>
-        <text data-t="r2" x="660" y="26" text-anchor="end" font-size="13" font-weight="800" fill="#1c2230"></text>
-      </svg>
+      <div class="plot" style="width:100%;min-height:380px"></div>
       <div class="wctl">
         <button class="wbtn on" type="button" data-act="one" aria-pressed="true">속성 하나</button>
         <button class="wbtn" type="button" data-act="two" aria-pressed="false">속성 둘</button>
-        <label class="angwrap" hidden>돌려 보기 <input type="range" class="ang" min="8" max="72" step="1" value="32" aria-label="보는 각도"></label>
-        <span class="wout" data-t="dep"></span>
+        <span class="wout" data-t="out"></span>
       </div>
     </div>
-    <figcaption>가로축은 첫 관측일 스크린수, 세로축은 총 관객 수입니다. <b>속성 하나</b>는 스크린수만으로 예측한 직선이고, <b>속성 둘</b>은 배우 수 축을 더해 만든 평면입니다. 평면일 때는 슬라이더로 각도를 돌려 봅니다. 점에 마우스를 올리면 영화 이름이 나옵니다. 화면에 담기도록 스크린 100~1,600관·배우 2~20명·총 관객 3~340만 명인 77편만 그렸습니다. 앱에서 전체 영화로 학습하면 값이 달라집니다.</figcaption>
+    <figcaption><b>속성 하나</b>는 첫 관측일 스크린수만으로 예측한 직선이고, <b>속성 둘</b>은 배우 수 축을 더해 만든 평면입니다. 평면은 마우스로 끌어 자유롭게 돌려 볼 수 있습니다. 점에 마우스를 올리면 영화 이름이 나옵니다. 그림에 담기도록 스크린 100~1,600관·배우 2~20명·총 관객 3~340만 명인 77편만 그렸습니다. 앱에서 전체 영화로 학습하면 값이 달라집니다.</figcaption>
   </figure>
 
   <div class="callout theory">
@@ -577,7 +564,7 @@ st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets07.js?v=4"></script>
+<script src="assets/widgets07.js?v=5"></script>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="assets/lesson07_situations.js?v=3"></script>
 <script src="assets/answer.js?v=2"></script>
