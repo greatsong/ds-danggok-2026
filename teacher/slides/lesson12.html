@@ -85,47 +85,55 @@
 </head>
 <body>
 
-<!-- 1 표지 -->
 <section class="slide chapter on">
   <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 12차시</div>
   <h1>연관 분석</h1>
-  <p class="sub">함께 등장하는 메뉴 규칙의 계산과 판정</p>
+  <p class="sub">함께 나오는 규칙의 손계산과 판정</p>
 </section>
 
-<!-- 2 지지도·신뢰도 -->
 <section class="slide">
-  <div class="kicker">12-1 · 교과서 159쪽</div>
+  <div class="kicker">12-1 · 목표</div>
+  <h2>오늘의 목표</h2>
+  <ul class="facts">
+    <li>지지도·신뢰도·향상도, 세 지표의 <b>분모</b></li>
+    <li>규칙의 <b>방향</b>이 바뀔 때 달라지는 신뢰도</li>
+    <li>결과 메뉴의 <b>기본 등장률</b>과 비교해 내리는 판정</li>
+  </ul>
+  <p class="point">함께 나온 횟수만으로는 판정 불가. <b>각 메뉴의 기본 등장률</b>까지 확인</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-2 · 교과서 159쪽</div>
   <h2>지지도와 신뢰도의 정의</h2>
   <blockquote style="margin-top:2.6vh">지지도는 두 개의 사건이 동시에 발생하는 비율이며 …</blockquote>
   <blockquote style="margin-top:2.2vh">신뢰도는 규칙의 결과 부분이 발생할 가능성을 측정한다.</blockquote>
-  <p class="small">『데이터 과학』 159쪽 · 지지도의 분모는 전체 일수, 신뢰도의 분모는 A가 등장한 일수</p>
+  <p class="small">『데이터 과학』 159쪽 · 지지도의 분모는 전체, 신뢰도의 분모는 앞 항목이 등장한 횟수</p>
 </section>
 
-<!-- 3 향상도 -->
 <section class="slide">
-  <div class="kicker">12-2 · 교과서 160쪽</div>
+  <div class="kicker">12-3 · 교과서 160쪽</div>
   <h2>향상도의 정의</h2>
   <blockquote style="margin-top:3vh">두 사건 A와 B가 서로 영향을 주지 않고 독립적으로 발생한다면, 향상도는 1에 가까워진다.</blockquote>
   <p class="point">향상도 1 = 표본에서 두 비율이 같음</p>
   <p class="small">향상도 1은 독립이나 우연의 증명이 아님. 표본에서 관찰된 비의 값임</p>
 </section>
 
-<!-- 4 세 지표의 분모 -->
 <section class="slide">
-  <div class="kicker">12-3 · 원리</div>
+  <div class="kicker">12-4 · 원리</div>
   <h2>세 지표의 분모</h2>
   <table class="mini">
-    <tr><th>숫자</th><th>계산식 (N: 전체 일수)</th><th>묻는 말</th></tr>
-    <tr><td>지지도</td><td>A·B 동시 일수 ÷ N</td><td>이 조합, 다룰 만큼 자주 나오는가</td></tr>
-    <tr><td>신뢰도</td><td>A·B 동시 일수 ÷ A 등장 일수</td><td>A가 나오면 B도 나오는가</td></tr>
-    <tr><td>향상도</td><td>신뢰도 ÷ (B 등장 일수 ÷ N)</td><td>A가 있을 때 B의 등장률은 전체 등장률의 몇 배인가</td></tr>
+    <thead><tr><th>숫자</th><th>계산식 (N: 전체 횟수)</th><th>묻는 말</th></tr></thead>
+    <tbody>
+      <tr><td>지지도</td><td>동시 등장 횟수 ÷ N</td><td>이 조합, 얼마나 자주 있는 일인가</td></tr>
+      <tr><td>신뢰도</td><td>동시 등장 횟수 ÷ 앞 항목의 횟수</td><td>앞이 나오면 뒤도 나오는가</td></tr>
+      <tr><td>향상도</td><td>신뢰도 ÷ (뒤 항목의 횟수 ÷ N)</td><td>우연히 겹치는 것보다 나은가</td></tr>
+    </tbody>
   </table>
-  <p class="point">세 지표의 차이는 분모의 차이</p>
+  <p class="point">세 지표의 차이는 <b>분모의 차이</b></p>
 </section>
 
-<!-- 5 교과서 예시 -->
 <section class="slide">
-  <div class="kicker">12-4 · 교과서 160쪽</div>
+  <div class="kicker">12-5 · 교과서 160쪽</div>
   <h2>교과서 예시 — {삼겹살} → {쌈채소}</h2>
   <ul class="facts">
     <li>향상도 <b>1.67</b></li>
@@ -136,50 +144,156 @@
   <p class="point">동시 등장 횟수와 함께 <b>각 항목의 기본 등장률</b>도 확인</p>
 </section>
 
-<!-- 6 사례: 팝타르트 -->
 <section class="slide">
-  <div class="kicker">12-5 · 사례</div>
-  <h2>허리케인 직전의 딸기 팝타르트</h2>
-  <div class="withimg"><div class="txt"><ul class="facts">
-    <li>2004년 미국 월마트, 허리케인 찰리 때의 판매 기록 재계산</li>
-    <li>허리케인 직전 딸기 팝타르트, 평소의 약 <b>7배</b> 판매. 최다 판매 품목은 맥주</li>
-    <li>다음 허리케인의 진로에 있는 매장으로 두 품목 사전 배송</li>
-    <li>팝타르트, 전체 판매 비중이 작아 지지도 낮음. 지지도로 걸렀다면 놓쳤을 규칙</li>
-  </ul></div><img src="img/lesson12_case1.jpg" alt="하늘색 바탕 위에 겹쳐 놓인 딸기 맛 팝타르트 두 장. 흰 아이싱 위에 빨강·초록·노랑 알갱이가 뿌려져 있습니다."></div>
-  <p class="src">뉴욕타임스 2004년 11월 14일 보도 · 사진: 위키미디어 공용(퍼블릭 도메인)</p>
-</section>
-
-<!-- 7 사례: 아마존 -->
-<section class="slide">
-  <div class="kicker">12-6 · 사례</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">아마존의 자주 함께 구매하는 품목</h2>
-  <ul class="facts" style="font-size:clamp(14px,1.5vw,20px);margin-top:0">
-    <li style="margin:1.1vh 0">2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록 비교</li>
-    <li style="margin:1.1vh 0">상품 페이지의 '자주 함께 구매하는 품목' 칸으로 현재도 작동함</li>
-    <li style="margin:1.1vh 0">파는 상품이 많으면 어떤 두 상품의 지지도든 낮음. 신뢰도와 향상도가 높으면 추천 대상</li>
-    <li style="margin:1.1vh 0">어느 규칙에 재고와 화면 자리를 걸지는 사람이 결정</li>
+  <div class="kicker">12-6 · 진행</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">위젯은 선생님 화면</h2>
+  <ul class="facts">
+    <li>이 차시의 위젯, 선생님이 앞에서 보여 주는 시연용</li>
+    <li>화면이 대신 계산하면 계산 순서가 손에 남지 않음</li>
+    <li>학생은 활동지에 손으로 먼저 계산</li>
+    <li>화면은 다 푼 뒤 <b>마지막 대조 순서</b>에서만 사용</li>
   </ul>
-  <div class="shot wide" style="margin-top:1.4vh"><img src="img/lesson12_case2.jpg" style="max-height:35vh" alt="아마존 상품 페이지의 자주 함께 구매하는 품목 영역 화면. 세 권의 책이 더하기 기호로 이어져 있고 오른쪽에 총액과 장바구니 추가 단추가 있습니다."></div>
-  <p class="src">화면 — 아마존 『사피엔스』 상품 페이지(2026년 9월 갈무리) · 방식 출처: Linden 외, IEEE Internet Computing(2003)</p>
+  <p class="point">계산 순서 ① 횟수 → ② 지지도 → ③ 신뢰도 → ④ 등장률 → ⑤ 향상도 → ⑥ 판단</p>
 </section>
 
-<!-- 8 장바구니 변환 -->
 <section class="slide">
-  <div class="kicker">12-7 · 실습</div>
+  <div class="kicker">12-7 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">기본 문제 — 급식 안내 화면에 무엇을 띄울까</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(14px,1.7vw,24px)">
+    <thead><tr><th>지난 스무 날</th><th>규칙 A · 제육볶음 → 배추김치</th><th>규칙 B · 순대국 → 석박지</th></tr></thead>
+    <tbody>
+      <tr><td>앞 메뉴가 나온 날</td><td>10일</td><td>4일</td></tr>
+      <tr><td>뒤 반찬이 나온 날</td><td>12일</td><td>5일</td></tr>
+      <tr><td>함께 나온 날</td><td>6일</td><td>3일</td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">안내 화면에 예고 하나만 게시. <b>어느 규칙을 띄울 것인가</b></p>
+  <p class="small" style="margin-top:1.4vh">아무 날에나 나오는 반찬의 예고는 아무 정보도 주지 못함 · 계산이 떨어지도록 고른 값, 실제 관측값 아님</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-8 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">①② 지지도 — 얼마나 자주 있는 일인가</h2>
+  <table class="mini" style="margin-top:2.4vh">
+    <thead><tr><th>계산</th><th>규칙 A</th><th>규칙 B</th></tr></thead>
+    <tbody>
+      <tr><td>함께 나온 날</td><td>6</td><td>3</td></tr>
+      <tr><td>지지도 = 함께 나온 날 ÷ 20</td><td><em>0.30</em></td><td>0.15</td></tr>
+    </tbody>
+  </table>
+  <p class="point">지지도로 보면 규칙 A가 <b>두 배</b> 자주 있는 일</p>
+  <p class="small" style="margin-top:1.6vh">순서를 지켜 지지도부터 계산 · 향상도를 먼저 구하면 이 차시가 보여 주려는 것이 사라짐</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-9 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">③ 신뢰도 — 앞이 나오면 뒤도 나오는가</h2>
+  <table class="mini" style="margin-top:2.4vh">
+    <thead><tr><th>계산</th><th>규칙 A</th><th>규칙 B</th></tr></thead>
+    <tbody>
+      <tr><td>앞 메뉴가 나온 날</td><td>10</td><td>4</td></tr>
+      <tr><td>신뢰도 = 함께 나온 날 ÷ 앞 메뉴가 나온 날</td><td>6 ÷ 10 = 0.60</td><td><em>3 ÷ 4 = 0.75</em></td></tr>
+    </tbody>
+  </table>
+  <p class="point">여기서 순위가 <b>뒤집힘</b> — 신뢰도로 보면 규칙 B</p>
+  <p class="small" style="margin-top:1.6vh">분모가 전체에서 앞 메뉴로 바뀜 · 지지도와 분모가 다름</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-10 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">④⑤ 등장률과 향상도 — 우연보다 나은가</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(14px,1.7vw,24px)">
+    <thead><tr><th>계산</th><th>규칙 A</th><th>규칙 B</th></tr></thead>
+    <tbody>
+      <tr><td>뒤 반찬이 나온 날</td><td>12</td><td>5</td></tr>
+      <tr><td>등장률 = 뒤 반찬이 나온 날 ÷ 20</td><td>0.60</td><td>0.25</td></tr>
+      <tr><td>향상도 = 신뢰도 ÷ 등장률</td><td>0.60 ÷ 0.60 = <em>1.00</em></td><td>0.75 ÷ 0.25 = <em>3.00</em></td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">향상도가 다툼을 끝냄 — 규칙 B가 <b>3.00</b></p>
+  <p class="small" style="margin-top:1.4vh">분모는 <b>뒤 항목</b>의 등장률. 앞 항목의 등장률이 아님</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-11 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">향상도가 1이라는 뜻</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
+    <li style="margin:2vh 0">규칙 A의 신뢰도 <b>0.60</b> = 배추김치의 등장률 <b>0.60</b></li>
+    <li style="margin:2vh 0">제육볶음이 나오든 나오지 않든 배추김치는 열 날 중 여섯 날 등장</li>
+    <li style="margin:2vh 0">제육볶음이라는 조건이 아무것도 바꾸지 못함</li>
+    <li style="margin:2vh 0">1.00을 "관계가 100퍼센트"로 읽는 것은 오답</li>
+  </ul>
+  <p class="point">향상도 1 = <b>우연과 같음</b></p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-12 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">⑥ 판단 — 안내 화면에 띄울 규칙</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
+    <li style="margin:1.8vh 0">고를 규칙 <b>규칙 B</b> · 결정적인 근거가 된 지표 <b>향상도</b></li>
+    <li style="margin:1.8vh 0">순대국이 나온 날 넷 중 셋에서 석박지 등장. 석박지는 스무 날 중 다섯 날만 등장</li>
+    <li style="margin:1.8vh 0">순대국이라는 정보가 실제로 예측을 바꿈</li>
+    <li style="margin:1.8vh 0">규칙 A를 띄우면 학생이 새로 알게 되는 것 없음. 등장률 0.60은 안내 없이도 예상 가능</li>
+  </ul>
+  <p class="point">지지도가 두 배여도 향상도가 1이면 <b>안내가 되지 못함</b></p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-13 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">연습 문제 — 매점 묶음 할인을 하나만 한다면</h2>
+  <table class="mini" style="margin-top:1.6vh;font-size:clamp(13px,1.55vw,22px)">
+    <thead><tr><th>거래 50건</th><th>규칙 C · 삼각김밥 → 컵라면</th><th>규칙 D · 떡볶이 → 치즈스틱</th></tr></thead>
+    <tbody>
+      <tr><td>지지도</td><td>15 ÷ 50 = <em>0.30</em></td><td>4 ÷ 50 = 0.08</td></tr>
+      <tr><td>신뢰도</td><td>15 ÷ 20 = 0.75</td><td>4 ÷ 4 = 1.00</td></tr>
+      <tr><td>뒤 상품의 등장률</td><td>25 ÷ 50 = 0.50</td><td>5 ÷ 50 = 0.10</td></tr>
+      <tr><td>향상도</td><td>0.75 ÷ 0.50 = 1.50</td><td>1.00 ÷ 0.10 = <em>10.00</em></td></tr>
+    </tbody>
+  </table>
+  <p class="small" style="margin-top:1.4vh">기본 문제와 같은 순서로 혼자 풀기 · 삼각김밥 20건 · 컵라면 25건 · 함께 15건 / 떡볶이 4건 · 치즈스틱 5건 · 함께 4건</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-14 · 판단</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">목적이 지표를 고른다</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
+    <li style="margin:1.8vh 0">향상도로 보면 규칙 D가 규칙 C의 <b>여섯 배</b> 이상</li>
+    <li style="margin:1.8vh 0">지지도로 보면 규칙 C가 규칙 D의 거의 <b>네 배</b></li>
+    <li style="margin:1.8vh 0">할인이 많은 손님에게 닿을수록 매출 상승 → 고를 규칙은 <b>규칙 C</b></li>
+    <li style="margin:1.8vh 0">목표가 "떡볶이 손님이 하나라도 더 사게 하기"로 바뀌면 <b>규칙 D</b></li>
+  </ul>
+  <p class="point">지표가 규칙을 고르는 것이 아니라 <b>목적이 지표를 고름</b></p>
+  <p class="small" style="margin-top:1.2vh">규칙 D는 50건 중 4건에서만 성립. 할인을 걸어도 움직일 손님이 적음</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-15 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">기준과 비교 — 딱 한 번의 우연</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
+    <li style="margin:1.8vh 0">거래 50건 중 <b>단 한 건</b>. 두 상품 모두 그 한 건에서만 판매</li>
+    <li style="margin:1.8vh 0">지지도 1 ÷ 50 = 0.02 · 신뢰도 1 ÷ 1 = 1.00 · 등장률 1 ÷ 50 = 0.02</li>
+    <li style="margin:1.8vh 0">향상도 1.00 ÷ 0.02 = <b>50.00</b> — 규칙 D의 다섯 배</li>
+    <li style="margin:1.8vh 0">근거는 단 한 건. 우연인지 확인할 방법 없음</li>
+  </ul>
+  <p class="point">등장 횟수가 적을수록 향상도는 부풀려짐 → <b>최소 지지도의 문턱</b>을 먼저 결정</p>
+  <p class="small" style="margin-top:1.2vh">교과서 162쪽</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-16 · 실습</div>
   <h2>장바구니로의 변환</h2>
   <ul class="facts" style="font-size:clamp(16px,1.9vw,26px)">
     <li style="margin:1.6vh 0"><b>하루 중식 식단 한 줄이 장바구니 1건, 메뉴 하나가 상품 하나</b></li>
     <li style="margin:1.6vh 0">중식 184일 = 장바구니 184건</li>
     <li style="margin:1.6vh 0">원본 열은 MLSV_YMD와 DDISH_NM, 메뉴 사이 구분은 &lt;br/&gt;</li>
     <li style="margin:1.6vh 0">괄호 두 가지 — 알레르기 번호, (자율)·(대)·(소스) 같은 표기</li>
-    <li style="margin:1.6vh 0">이 실습의 기준, 괄호와 그 안의 내용을 제거한 이름으로 집계. 저장본에서 506종</li>
+    <li style="margin:1.6vh 0">이 실습의 기준, 괄호와 그 안의 내용을 제거한 이름으로 집계</li>
     </ul>
-  <p class="small">괄호를 그대로 두면 이름 510개. 괄호를 제거하면 용량·소스 구분은 사라짐 · 알레르기 안내에는 원래 식단을 사용 · 손계산 기준은 modudata의 184일 급식 저장본(danggok_meals_live.csv)</p>
+  <p class="small">괄호를 제거하면 용량·소스 구분은 사라짐 · 알레르기 안내에는 원래 식단을 사용 · 손계산 대조 기준은 modudata의 184일 급식 저장본(danggok_meals_live.csv)</p>
 </section>
 
-<!-- 9 위젯: 장바구니 -->
 <section class="slide">
-  <div class="kicker">12-8 · 그림</div>
+  <div class="kicker">12-17 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">장바구니 한 건과 누적 메뉴 종류</h2>
   <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="basket">
 <svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="고른 날의 급식 메뉴를 칩으로 늘어놓은 그림과, 1일차부터 184일차까지 누적 메뉴 종류 수를 나타낸 꺾은선. 정리 기준에 따라 마지막 값이 506종과 510개로 갈립니다.">
@@ -233,32 +347,18 @@
   <button class="wbtn" type="button" data-m="raw">괄호 그대로</button>
 </div>
 </div></div>
-  <p class="small">하루 메뉴 6~8개 → 그날의 쌍 15~28개 · 괄호 그대로 510개, 괄호 제거 506종 · 누적 곡선, 184일째까지 꺾이지 않음. 마지막 46일에도 새 메뉴 82종 · 서로 다른 쌍 3,146개</p>
+  <p class="small">하루 메뉴 6~8개 → 그날의 쌍 15~28개 · 누적 곡선, 184일째까지 꺾이지 않음 · 저장본 기준 수치이며 실행한 날의 조회 결과와 다를 수 있음</p>
 </section>
 
-<!-- 10 손 활동지 ① -->
 <section class="slide">
-  <div class="kicker">12-9 · 교과서 158·160쪽</div>
-  <h2>손 활동지 ① — 개나리 마트</h2>
-  <ul class="facts">
-    <li>교과서 158쪽의 거래 목록 10건 사용</li>
-    <li>활동지 문제 1 — <b>{쌀} → {김치}</b>, <b>{삼겹살, 쌈채소} → {고추장}</b>의 세 지표 계산</li>
-    <li>교과서 ③번 토의 — 영향이 가장 큰 규칙을 짝과 비교</li>
-    <li>두 규칙 모두 그럴듯해 보이나, 향상도를 구하면 판단이 달라짐</li>
-  </ul>
-  <p class="point">이 판정 기준을 가지고 급식 자료로 이동</p>
-</section>
-
-<!-- 11 프롬프트 1/2 -->
-<section class="slide">
-  <div class="kicker">12-10 · 실습</div>
+  <div class="kicker">12-18 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (1/2)</h2>
   <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">"급식 규칙 찾기" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py.<br>
 당곡고 급식을 나이스 급식 API로 받아서 하루 중식 식단을 장바구니 하나로 보고,<br>
 함께 자주 나오는 메뉴 쌍을 찾아 줘.<br>
 - 인증키는 비밀 금고에 NEIS_API_KEY라는 이름으로 넣어 뒀어. 코드에 직접 적지 말고 거기서 꺼내 써.<br>
 - 기간은 2025년 9월 1일부터 2026년 9월 30일까지, 중식만. 조회된 모든 페이지를 받아 날짜별로 한 건씩 세어 줘.<br>
-- 조회 자료 없음과 인증·통신 오류를 구분하고, 일부만 받은 자료로 계산하지 않게 해 줘.<br>
+- 조회 데이터 없음과 인증·통신 오류를 구분하고, 일부만 받은 데이터로 계산하지 않게 해 줘.<br>
 - 하루 식단을 메뉴별로 나누고, 메뉴 이름의 괄호와 그 안의 내용은 전부 제외해 세 줘.<br>
 - 화면 맨 위에 조회 기간과 분석한 날 수, 메뉴 종류 수를 적어 줘.<br>
 - 결과 표의 열은 조건, 결과, 동시, 지지도, 신뢰도, 향상도 여섯 개로 하고, 향상도가 높은 순으로 정렬해 줘.<br>
@@ -268,9 +368,8 @@
   <p class="small">교재 ①과 같은 문장 · 파일명 main.py, 인증키는 비밀 금고, 기간 2025-09-01~2026-09-30 중식, 괄호 제거, 동시 5회 이상, plotly 지정까지 프롬프트에 포함</p>
 </section>
 
-<!-- 12 프롬프트 2/2 -->
 <section class="slide">
-  <div class="kicker">12-11 · 실습</div>
+  <div class="kicker">12-19 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (2/2) — 포털 문서 붙여넣기</h2>
   <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">──── 아래는 나이스 교육정보 개방 포털 문서에서 복사한 부분 ────<br>
 [급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo<br>
@@ -283,13 +382,12 @@
 &nbsp;&nbsp;MLSV_YMD(급식일자, 하이픈 없는 여덟 자리) ·<br>
 &nbsp;&nbsp;DDISH_NM(식단 이름, 메뉴 사이 구분은 &lt;br/&gt;, 괄호 안은 알레르기 번호이거나 (자율)·(대)·(소스) 같은 표기) ·<br>
 &nbsp;&nbsp;CAL_INFO(칼로리)<br>
-&nbsp;&nbsp;※ 조회 자료가 없으면 RESULT의 CODE가 INFO-200이다.</div>
+&nbsp;&nbsp;※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다.</div>
   <p class="small">교재 ①과 같은 문장 · 열 이름·인코딩·응답 구조를 프롬프트에 적어 두면 AI의 열 이름 추측 방지</p>
 </section>
 
-<!-- 13 개선 프롬프트 -->
 <section class="slide">
-  <div class="kicker">12-12 · 실습</div>
+  <div class="kicker">12-20 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">개선 프롬프트 — 판정 표시와 메뉴 좁히기</h2>
   <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">향상도가 높은 순서로 정렬하고, 향상도가 1에 가까운 규칙(0.9~1.1)은<br>
 "기본 등장률과 비슷함"이라고 표시해 줘. 이 구간은 관찰용 기준이며 통계 검정 결과가 아니라고 안내해 줘.<br>
@@ -297,22 +395,23 @@
   <p class="small">교재 ③과 같은 문장 · ② 단계에서 표를 신뢰도 순으로 한 번, 향상도 순으로 한 번 정렬. 두 순위의 차이가 오늘의 발견</p>
 </section>
 
-<!-- 14 결과 표 -->
 <section class="slide">
-  <div class="kicker">12-13 · 결과</div>
-  <h2>급식 184일의 세 규칙</h2>
-  <table class="mini" style="font-size:clamp(14px,1.6vw,22px)">
-    <tr><th>규칙</th><th>등장</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr>
-    <tr><td>제육볶음 → 배추김치</td><td>10일 · 102일</td><td>6일</td><td><em>0.60</em></td><td><em>1.08</em></td><td>기본 등장률과 비슷함 (배추김치는 전체의 약 55%)</td></tr>
-    <tr><td>순대국 → 석박지</td><td>5일 · 20일</td><td>5일</td><td><em>1.00</em></td><td><em>9.2</em></td><td>표본의 순대국 5일 모두 석박지와 함께 등장</td></tr>
-    <tr><td>배추김치 ↔ 깍두기</td><td>102일 · 32일</td><td>0일</td><td>0</td><td>0</td><td>독립을 가정한 기대 동시 일수는 약 17.7일</td></tr>
+  <div class="kicker">12-21 · 결과</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">화면에서 찾아 채울 세 규칙</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(14px,1.7vw,24px)">
+    <thead><tr><th>규칙</th><th>등장 (앞 · 뒤)</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr></thead>
+    <tbody>
+      <tr><td>제육볶음 → 배추김치</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>순대국 → 석박지</td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>배추김치 → 깍두기</td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
   </table>
-  <p class="small">184일 급식 저장본으로 검산한 값 · 등장 열은 앞 메뉴와 뒤 메뉴가 각각 나온 일수 · 마지막 행, 동시 0회라 '동시 5회 이상' 결과 표에 나오지 않음</p>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">세 규칙의 판정이 어떻게 갈리는지가 <b>오늘의 발견</b></p>
+  <p class="small" style="margin-top:1.4vh">실행한 날에 따라 급식 일수와 규칙 수가 달라짐 · 세 번째 규칙은 동시 등장이 드물어 결과 표에 없을 수 있음. 메뉴로 좁혀 보기나 원데이터에서 따로 확인</p>
 </section>
 
-<!-- 15 위젯: 기본 등장률 -->
 <section class="slide">
-  <div class="kicker">12-14 · 그림</div>
+  <div class="kicker">12-22 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">신뢰도와 기본 등장률의 비교</h2>
   <div class="diagram" style="--wh:42vh">    <div class="widget" data-w="baseline">
   <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="0에서 1까지의 같은 눈금 위에 신뢰도 막대와 기본 등장률 막대를 나란히 놓고, 두 길이의 비가 향상도임을 보이는 그림. 아래 격자는 전체 일수와 각 메뉴의 등장 일수를 칸 수로 나타냅니다.">
@@ -372,24 +471,34 @@
     <button class="wbtn dir" type="button">방향 바꾸기</button>
   </div>
 </div></div>
-  <p class="small">같은 눈금 위의 두 막대 — 위는 신뢰도, 아래는 B의 기본 등장률. 두 길이의 비가 향상도</p>
+  <p class="small">같은 눈금 위의 두 막대 — 위는 신뢰도, 아래는 뒤 항목의 기본 등장률. 두 길이의 비가 향상도</p>
 </section>
 
-<!-- 16 발견 -->
 <section class="slide">
-  <div class="kicker">12-15 · 발견</div>
-  <h2>결과 표에서 확인할 세 가지</h2>
+  <div class="kicker">12-23 · 원리</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">규칙에는 방향이 있다</h2>
   <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:2vh 0"><b>신뢰도는 기본 등장률과 비교</b> — 0.60이 전체 등장률 약 0.55보다 얼마나 높은지 함께 확인</li>
-    <li style="margin:2vh 0"><b>신뢰도는 규칙의 방향에 따라 달라짐</b> — 순대국 → 석박지 1.00, 석박지 → 순대국 0.25(5÷20). 같은 두 메뉴의 지지도와 향상도는 방향을 바꾸어도 같음</li>
-    <li style="margin:2vh 0"><b>동시 0회도 관찰 결과</b> — 이 기간에 두 김치가 함께 나오지 않았다는 뜻. 실제 운영 원칙인지는 별도 확인</li>
+    <li style="margin:2vh 0">규칙 B를 뒤집으면 "석박지 → 순대국"</li>
+    <li style="margin:2vh 0">신뢰도 3 ÷ 5 = <b>0.60</b> — 0.75에서 달라짐</li>
+    <li style="margin:2vh 0">향상도 0.60 ÷ 0.20 = <b>3.00</b> — 그대로</li>
+    <li style="margin:2vh 0">지지도도 방향과 무관</li>
   </ul>
-  <p class="small">정렬을 바꾸면 신뢰도 1위와 향상도 1위가 서로 다름. 신뢰도 1.00인 규칙 여섯 개의 향상도는 1.80부터 9.20까지</p>
+  <p class="point">신뢰도는 방향에 따라 달라지고, 지지도와 향상도는 <b>대칭</b></p>
 </section>
 
-<!-- 17 위젯: 최소 동시 등장 -->
 <section class="slide">
-  <div class="kicker">12-16 · 그림</div>
+  <div class="kicker">12-24 · 발견</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">결과 표에서 확인할 세 가지</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
+    <li style="margin:2vh 0"><b>신뢰도는 혼자 읽지 않음</b> — 결과 메뉴가 원래 얼마나 자주 나오는지를 함께 확인</li>
+    <li style="margin:2vh 0"><b>정렬 기준을 바꾸면 순위가 갈림</b> — 신뢰도 1위와 향상도 1위가 다를 수 있음</li>
+    <li style="margin:2vh 0"><b>동시 0회도 관찰 결과</b> — 실제 운영 원칙인지는 별도 확인</li>
+  </ul>
+  <p class="point">어느 숫자를 근거로 삼을지는 <b>무엇을 묻고 있는지</b>에 따라 결정</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-25 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">최소 동시 등장 기준과 규칙 수</h2>
   <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="minco">
   <div class="wctl"><label>최소 동시 등장 <input class="thr" type="range" min="1" max="10" step="1" value="5"></label> <span class="wout">5일</span></div>
@@ -470,55 +579,78 @@
     </g>
   </svg>
 </div></div>
-  <p class="small">쌍 3,146개 중 동시 1일 2,845쌍으로 전체의 90% · 동시 2일 이상 301쌍 · 오른쪽 끝 9·16·17일 각 1쌍</p>
+  <p class="small">슬라이더로 기준을 옮기면 남는 규칙 수와 상위 규칙이 함께 바뀜 · 흐려진 구간은 표에서 빠진 조합</p>
 </section>
 
-<!-- 18 기준의 효과 -->
 <section class="slide">
-  <div class="kicker">12-17 · 발견</div>
-  <h2>기준을 바꾸면 달라지는 것</h2>
-  <ul class="facts">
-    <li>기준 1일 — 규칙 <b>6,292개</b>, 그중 328개가 동시 등장 한 번에 향상도 184.0으로 표 위쪽 차지</li>
-    <li>기준 5일 — 이 실습의 설정. 동시 5회 이상 26쌍 × 양방향 = 규칙 <b>52개</b></li>
-    <li>기준 8일 — 규칙 <b>6개</b>만 남음</li>
-    <li>흐려진 구간은 표에서 빠진 조합. 관련이 없다고 확인된 조합 아님</li>
-  </ul>
-  <p class="point">결과 표에 없다는 것과 관련이 없다는 것은 다름</p>
-</section>
-
-<!-- 19 손 활동지 ② -->
-<section class="slide">
-  <div class="kicker">12-18 · 실습</div>
-  <h2>손 활동지 ② — 실측 수치 검산 (활동지 문제 4~6)</h2>
-  <ul class="facts">
-    <li>급식 184일 · 제육볶음 10일 · 배추김치 102일 · 동시 6일</li>
-    <li>신뢰도 = 6 ÷ 10 = <b>0.60</b></li>
-    <li>기본 등장률 = 102 ÷ 184 ≈ <b>0.554</b></li>
-    <li>향상도 = 0.60 ÷ (102 ÷ 184) ≈ <b>1.08</b></li>
-    <li>중간 값은 반올림하지 않고 마지막에 반올림</li>
-  </ul>
-  <p class="point">나눗셈 세 번으로 화면의 1.08을 <b>직접 검산</b></p>
-</section>
-
-<!-- 20 판단 -->
-<section class="slide">
-  <div class="kicker">12-19 · 판단</div>
-  <h2>향상도와 인과관계</h2>
+  <div class="kicker">12-26 · 원리</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">최소 지지도 — 후보를 걸러 내는 문턱</h2>
   <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:1.8vh 0">향상도 9.2는 순대국이 석박지의 등장을 일으킨다는 증명 아님</li>
-    <li style="margin:1.8vh 0">식단 구성 방침 등 다른 요인이 두 메뉴에 함께 작용했을 수 있음</li>
-    <li style="margin:1.8vh 0">신뢰도 1.00도 이 표본의 5일에서 관찰된 값. 다음 식단을 보장하지 않음</li>
-    <li style="margin:1.8vh 0">동시 5회 이상은 드문 조합을 제외하는 실습 기준. 184일에서 최소 지지도 5÷184 ≈ 0.027</li>
-    <li style="margin:1.8vh 0">이 기준도 우연을 완전히 배제하지 못함</li>
+    <li style="margin:1.8vh 0"><b>최소 지지도</b> — 규칙 후보로 남길 최소 등장 비율 (교과서 162쪽)</li>
+    <li style="margin:1.8vh 0">이 실습의 기준 — 동시 등장 5회 이상</li>
+    <li style="margin:1.8vh 0">기준을 낮추면 우연한 조합이 섞여 들어옴. 단 하루 겹친 조합이 표의 맨 위 차지</li>
+    <li style="margin:1.8vh 0">기준을 높이면 드물지만 의미 있는 조합까지 사라짐</li>
   </ul>
-  <p class="small">세 지표와 함께 관측 기간과 등장 횟수를 기록</p>
+  <p class="point">결과 표에 없다는 것과 <b>관련이 없다는 것</b>은 다름</p>
 </section>
 
-<!-- 21 정리 -->
+<section class="slide">
+  <div class="kicker">12-27 · 대조</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">손으로 구한 값과 화면의 값</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">
+    <thead><tr><th>대조할 값</th><th>손으로 구한 값</th><th>화면의 값</th><th>같으면 ○</th></tr></thead>
+    <tbody>
+      <tr><td>규칙 A의 향상도</td><td></td><td></td><td></td></tr>
+      <tr><td>규칙 B의 향상도</td><td></td><td></td><td></td></tr>
+      <tr><td>규칙 C의 지지도</td><td></td><td></td><td></td></tr>
+      <tr><td>규칙 D의 향상도</td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">같은 지표를 <b>손과 화면</b> 두 방법으로 확인</p>
+  <p class="small" style="margin-top:1.2vh">값이 다르면 어느 단계에서 갈렸는지 되짚기 · AI가 계산한 숫자를 스스로 검산할 수 있는 사람 되기</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-28 · 판단</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">향상도와 인과관계</h2>
+  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
+    <li style="margin:1.8vh 0">향상도가 커도 앞 메뉴가 뒤 메뉴의 등장을 일으켰다는 증명 아님</li>
+    <li style="margin:1.8vh 0">식단 구성 방침 등 다른 요인이 두 메뉴에 함께 작용했을 수 있음</li>
+    <li style="margin:1.8vh 0">신뢰도 1.00도 조건 메뉴가 나온 며칠에서 관찰된 값. 다음 식단을 보장하지 않음</li>
+    <li style="margin:1.8vh 0">동시 5회 이상은 드문 조합을 제외하는 실습 기준. 통계적 유의성 보장 아님</li>
+  </ul>
+  <p class="small">세 지표와 함께 <b>관측 기간과 등장 횟수</b>를 기록</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-29 · 사례</div>
+  <h2>허리케인 직전의 딸기 팝타르트</h2>
+  <div class="withimg"><div class="txt"><ul class="facts">
+    <li>2004년 미국 월마트, 허리케인 찰리 때의 판매 기록 재계산</li>
+    <li>허리케인 직전 딸기 팝타르트, 평소의 약 <b>7배</b> 판매. 최다 판매 품목은 맥주</li>
+    <li>다음 허리케인의 진로에 있는 매장으로 두 품목 사전 배송</li>
+    <li>팝타르트, 전체 판매 비중이 작아 지지도 낮음. 지지도로 걸렀다면 놓쳤을 규칙</li>
+  </ul></div><img src="img/lesson12_case1.jpg" alt="하늘색 바탕 위에 겹쳐 놓인 딸기 맛 팝타르트 두 장. 흰 아이싱 위에 빨강·초록·노랑 알갱이가 뿌려져 있습니다."></div>
+  <p class="src">뉴욕타임스 2004년 11월 14일 보도 · 사진: 위키미디어 공용(퍼블릭 도메인)</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-30 · 사례</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">아마존의 자주 함께 구매하는 품목</h2>
+  <ul class="facts" style="font-size:clamp(14px,1.5vw,20px);margin-top:0">
+    <li style="margin:1.1vh 0">2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록 비교</li>
+    <li style="margin:1.1vh 0">상품 페이지의 '자주 함께 구매하는 품목' 칸으로 현재도 작동함</li>
+    <li style="margin:1.1vh 0">파는 상품이 많으면 어떤 두 상품의 지지도든 낮음. 신뢰도와 향상도가 높으면 추천 대상</li>
+    <li style="margin:1.1vh 0">어느 규칙에 재고와 화면 공간을 걸지는 사람이 결정</li>
+  </ul>
+  <div class="shot wide" style="margin-top:1.4vh"><img src="img/lesson12_case2.jpg" style="max-height:35vh" alt="아마존 상품 페이지의 자주 함께 구매하는 품목 영역 화면. 세 권의 책이 더하기 기호로 이어져 있고 오른쪽에 총액과 장바구니 추가 단추가 있습니다."></div>
+  <p class="src">화면 — 아마존 『사피엔스』 상품 페이지(2026년 9월 갈무리) · 방식 출처: Linden 외, IEEE Internet Computing(2003)</p>
+</section>
+
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>12차시 요약</h2>
-  <div class="split" style="margin-top:2.2vh;gap:2vw"><div class="card"><div class="t">세 숫자</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">지지도는 전체 대비 동시 비율, 신뢰도는 A 등장일 중 B 비율, 향상도는 신뢰도 ÷ B의 기본 등장률</div></div><div class="card"><div class="t">방향</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">신뢰도는 방향에 따라 달라짐. 지지도와 향상도는 방향을 바꾸어도 같음</div></div><div class="card"><div class="t">기준</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">동시 5회 이상은 실습 기준. 184일에서 최소 지지도 약 0.027</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">향상도 9.2도 인과의 증명 아님. 표본과 관측 기간 함께 기록</div></div></div>
+  <div class="split" style="margin-top:2.2vh;gap:2vw"><div class="card"><div class="t">세 숫자</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">지지도는 전체 대비 동시 비율, 신뢰도는 앞 항목이 나온 횟수 중 뒤 항목의 비율, 향상도는 신뢰도 ÷ 뒤 항목의 기본 등장률</div></div><div class="card"><div class="t">순서</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">지지도 → 신뢰도 → 향상도. 지표마다 가리키는 규칙이 달라짐. 향상도 1은 우연과 같음</div></div><div class="card"><div class="t">문턱</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">등장 횟수가 적을수록 향상도가 부풀려짐. 최소 지지도를 먼저 정함</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">향상도가 커도 인과의 증명 아님. 목적이 지표를 고름</div></div></div>
   <p class="point">세 지표 함께 확인. <b>관측 기간과 등장 횟수</b>까지 기록</p>
 </section>
 
