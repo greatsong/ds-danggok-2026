@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>10차시 슬라이드 · 혼동행렬 — 데이터 과학</title>
+<title>10차시 슬라이드 · 분류 평가 손계산 — 데이터 과학</title>
 <script src="../../assets/release.js"></script>
 <script src="../../assets/gate.js"></script>
 <style>
@@ -88,35 +88,47 @@
 <!-- 1 표지 -->
 <section class="slide chapter on">
   <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 10차시</div>
-  <h1>혼동행렬</h1>
-  <p class="sub">네 칸으로 나눈 판정과 지표의 선택</p>
+  <h1>분류 평가 손계산</h1>
+  <p class="sub">혼동행렬 네 칸과 지표의 선택</p>
 </section>
 
-<!-- 2 오분류표의 정의 -->
+<!-- 2 오늘의 목표 -->
 <section class="slide">
-  <div class="kicker">10-1 · 교과서 139쪽</div>
+  <div class="kicker">10-1 · 목표</div>
+  <h2>오늘의 목표</h2>
+  <ul class="facts">
+    <li>실제 범주와 예측 범주로 나눈 <b>혼동행렬 네 칸</b> · TP·FP·FN·TN</li>
+    <li>네 칸에서 손으로 구하는 <b>정확도·정밀도·재현율</b> · 정밀도와 재현율의 분모 차이</li>
+    <li>세 지표가 갈릴 때 <b>오류의 대가</b>를 근거로 한 지표 선택 · <b>기준 모델</b>과의 비교</li>
+  </ul>
+  <p class="point">네 칸 → 세 지표 → 지표 선택 → 기준과 비교</p>
+</section>
+
+<!-- 3 오분류표의 정의 -->
+<section class="slide">
+  <div class="kicker">10-2 · 교과서 139쪽</div>
   <h2>오분류표의 정의</h2>
   <blockquote style="margin-top:3vh">오분류표란 각각의 실제 클래스와 예측 결과를 행렬로 나타낸 것이다</blockquote>
   <p class="point">실제 범주와 예측 범주를 교차해 나타낸 표</p>
-  <p class="small">이 차시의 양성은 기록된 관객 수 100만 명 이상인 성공, 음성은 기준 미달 · 실제 흑자·적자 구분이 아님</p>
+  <p class="small">이 차시의 양성은 기록된 관객 수 100만 명 이상인 성공, 음성은 기준 미달 · 활동지의 '실패'가 교재와 앱의 '기준 미달'</p>
 </section>
 
-<!-- 3 정확도의 한계 -->
+<!-- 4 정확도의 한계 -->
 <section class="slide">
-  <div class="kicker">10-2 · 교과서 139쪽</div>
+  <div class="kicker">10-3 · 교과서 139쪽</div>
   <h2>정확도의 한계</h2>
   <blockquote style="margin-top:2.4vh;font-size:clamp(18px,2.1vw,30px)">정확도는 전체 데이터 중 실제와 같게 예측한 데이터의 비율을 나타내며, 레이블별 분포가 균일하지 않은 경우 정확도로 모델을 평가하는 것은 부적절하다</blockquote>
   <ul class="facts" style="margin-top:2vh">
     <li>중요한 메일을 스팸으로 분류하는 오류와 스팸을 받은편지함에 남기는 오류는 영향이 서로 다름</li>
     <li>정확도는 두 오류를 구분하지 않음</li>
-    <li>9차시 분류기의 기록 — 정확도 <b>0.924</b>와 <b>0.939</b></li>
+    <li>한 범주가 대부분인 데이터에서는 그 범주로만 찍어도 정확도가 높게 나옴</li>
   </ul>
   <p class="point" style="margin-top:2.4vh">어떤 오류를 줄일지 판단하려면 혼동행렬과 여러 지표가 함께 필요</p>
 </section>
 
-<!-- 4 네 칸의 이름 -->
+<!-- 5 네 칸의 이름 -->
 <section class="slide">
-  <div class="kicker">10-3 · 원리</div>
+  <div class="kicker">10-4 · 원리</div>
   <h2>네 칸의 이름</h2>
   <table class="mini" style="margin-top:2.4vh;font-size:clamp(15px,1.7vw,24px)">
     <tr><th>칸</th><th>우리말로</th><th>영화라면</th></tr>
@@ -129,9 +141,9 @@
   <p class="small" style="margin-top:1.6vh">영어 약자보다 우리말 표현이 먼저</p>
 </section>
 
-<!-- 5 세 지표의 계산 -->
+<!-- 6 세 지표의 계산 -->
 <section class="slide">
-  <div class="kicker">10-4 · 교과서 140쪽</div>
+  <div class="kicker">10-5 · 교과서 140쪽</div>
   <h2>세 지표의 계산</h2>
   <table class="mini" style="margin-top:2.6vh">
     <tr><th>지표</th><th>계산 (140쪽 공식)</th><th>묻는 말</th></tr>
@@ -139,15 +151,133 @@
     <tr><td>정밀도</td><td>TP ÷ (TP+FP)</td><td>"성공"이라 말한 것 중 진짜 성공은 얼마인가</td></tr>
     <tr><td>재현율</td><td>TP ÷ (TP+FN)</td><td>실제 성공작 중 얼마나 잡아냈는가</td></tr>
   </table>
-  <p class="point" style="margin-top:2.6vh">정밀도는 <b>예측 양성</b>, 재현율은 <b>실제 양성</b>이 분모</p>
+  <p class="point" style="margin-top:2.6vh">맞힌 두 칸을 하나로 묶은 값이 <b>정확도</b></p>
+  <p class="small" style="margin-top:1.6vh">네 칸을 먼저 채운 뒤 공식에 대입 · 순서를 건너뛰면 어느 칸에서 나온 값인지 확인 불가</p>
+</section>
+
+<!-- 7 분자는 같고 분모가 다름 -->
+<section class="slide">
+  <div class="kicker">10-6 · 원리</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">정밀도와 재현율 — 분자는 같고 분모가 다름</h2>
+  <table class="mini" style="margin-top:2.6vh">
+    <tr><th>지표</th><th>분모</th><th>표에서 세는 방향</th></tr>
+    <tr><td>정밀도</td><td>성공이라고 예측한 건수 TP+FP</td><td>세로 한 줄 · <em>예측</em>이 기준</td></tr>
+    <tr><td>재현율</td><td>실제로 성공한 건수 TP+FN</td><td>가로 한 줄 · <em>실제</em>가 기준</td></tr>
+  </table>
+  <p class="point" style="margin-top:2.6vh">분자는 둘 다 <b>TP</b> · 다른 것은 분모</p>
   <p class="small" style="margin-top:1.6vh">분모가 0이면 계산 불가 · 코드에서 0으로 표시하는 경우는 계산을 위한 처리로 구분</p>
 </section>
 
-<!-- 6 그림: 분모의 범위 -->
+<!-- 8 기본 문제 -->
 <section class="slide">
-  <div class="kicker">10-4 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">지표가 분모로 삼는 범위</h2>
-  <div class="diagram" style="--wh:42vh">    <div class="widget" data-w="matrix">
+  <div class="kicker">10-7 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">기본 문제 — 어떤 영화를 미리 찾아낼까</h2>
+  <ul class="facts" style="margin-top:1.8vh">
+    <li>배급사 발굴팀 · 개봉 전에 흥행 성공작을 골라 계약</li>
+    <li>성공작을 놓치면 다른 회사가 가져감 · 실패작을 계약하면 계약금 손해</li>
+    <li>발굴팀에게는 <b>놓치는 쪽</b>이 더 아까운 손해</li>
+    <li>지난 영화 <b>20편</b> · 실제 성공 8편 · 실패 12편</li>
+  </ul>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">① 네 칸 → ② 정확도 → ③ 정밀도·재현율 → ④ 판단 → ⑤ 기준과 비교</p>
+  <p class="small" style="margin-top:1.4vh">계산이 떨어지도록 고른 값, 실제 관측값 아님 · 계산기 미사용 · 선생님과 함께 한 단계씩</p>
+</section>
+
+<!-- 9 혼동행렬 두 개 -->
+<section class="slide">
+  <div class="kicker">10-8 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">① 두 모델의 혼동행렬</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">
+    <thead><tr><th>칸</th><th>뜻</th><th>모델 A</th><th>모델 B</th></tr></thead>
+    <tbody>
+      <tr><td>TP</td><td>성공 예측 · 실제 성공</td><td><em>6</em></td><td><em>4</em></td></tr>
+      <tr><td>FN</td><td>실패 예측 · 실제 성공</td><td><em>2</em></td><td><em>4</em></td></tr>
+      <tr><td>FP</td><td>성공 예측 · 실제 실패</td><td><em>6</em></td><td><em>1</em></td></tr>
+      <tr><td>TN</td><td>실패 예측 · 실제 실패</td><td><em>6</em></td><td><em>11</em></td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">성공이라고 예측한 편수 — 모델 A <b>12편</b> · 모델 B <b>5편</b></p>
+  <p class="small" style="margin-top:1.2vh">행의 합은 실제 편수(8·12), 열의 합은 예측 편수 · 두 합이 맞아야 다음 단계로 진행</p>
+</section>
+
+<!-- 10 세 지표 -->
+<section class="slide">
+  <div class="kicker">10-9 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">②③ 세 지표</h2>
+  <table class="mini" style="margin-top:2.4vh;font-size:clamp(15px,1.8vw,25px)">
+    <thead><tr><th>지표</th><th>모델 A</th><th>모델 B</th></tr></thead>
+    <tbody>
+      <tr><td>정확도 = (TP+TN) ÷ 20</td><td>(6+6)÷20 = 0.60</td><td>(4+11)÷20 = <em>0.75</em></td></tr>
+      <tr><td>정밀도 = TP ÷ (TP+FP)</td><td>6÷12 = 0.50</td><td>4÷5 = <em>0.80</em></td></tr>
+      <tr><td>재현율 = TP ÷ (TP+FN)</td><td>6÷8 = <em>0.75</em></td><td>4÷8 = 0.50</td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="margin-top:2.4vh">정확도·정밀도는 <b>모델 B</b> · 재현율은 <b>모델 A</b></p>
+</section>
+
+<!-- 11 세 지표가 갈린다 -->
+<section class="slide">
+  <div class="kicker">10-10 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">세 지표가 같은 모델을 가리키지 않음</h2>
+  <ul class="facts" style="margin-top:1.8vh">
+    <li>모델 B — 확실할 때만 성공이라고 예측 · <b>5편</b>을 골라 4편 적중</li>
+    <li>그 대신 실제 성공작 8편 가운데 <b>4편</b>을 놓침</li>
+    <li>모델 A — <b>12편</b>을 골라 6편 적중 · 놓친 것은 2편</li>
+    <li>정확도 하나로는 두 예측 방식의 차이가 드러나지 않음</li>
+  </ul>
+  <p class="point">지표가 갈리면 계산이 아니라 <b>하려는 일</b>부터 확인</p>
+</section>
+
+<!-- 12 판단 -->
+<section class="slide">
+  <div class="kicker">10-11 · 판단</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">④ 발굴팀이 볼 지표</h2>
+  <ul class="facts" style="margin-top:1.8vh">
+    <li>놓친 성공작은 다른 회사가 가져감 · 되돌릴 수 없음</li>
+    <li>잘못 계약한 영화는 계약금 손해로 끝남</li>
+    <li>놓치는 쪽의 대가가 더 큼</li>
+    <li>정확도는 실패작을 걸러낸 것까지 함께 세는 값</li>
+  </ul>
+  <p class="point">고를 지표 <b>재현율</b> · 고를 모델 <b>모델 A</b></p>
+  <p class="small" style="margin-top:1.2vh">같은 표에서 투자자라면 정밀도를 보고 모델 B · 입장이 바뀌면 답도 바뀜</p>
+</section>
+
+<!-- 13 기준선 -->
+<section class="slide">
+  <div class="kicker">10-12 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">⑤ 기준 — 스무 편을 전부 계약한다면</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">
+    <thead><tr><th>네 칸</th><th>지표</th><th>값</th></tr></thead>
+    <tbody>
+      <tr><td>TP 8 · FN 0</td><td>정확도 8÷20</td><td>0.40</td></tr>
+      <tr><td>FP 12 · TN 0</td><td>정밀도 8÷20</td><td>0.40</td></tr>
+      <tr><td>모든 영화를 성공이라고 예측</td><td>재현율 8÷8</td><td><em>1.00</em></td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="margin-top:2.2vh">재현율은 <b>두 모델보다 높음</b> · 한 편도 놓치지 않음</p>
+  <p class="small" style="margin-top:1.2vh">계약한 20편 가운데 12편이 실패작 · 지표 하나만 보면 아무 판단도 하지 않는 방법에 짐</p>
+</section>
+
+<!-- 14 연습 문제 -->
+<section class="slide">
+  <div class="kicker">10-13 · 활동지</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">연습 문제 — 스팸함으로 보낼까</h2>
+  <table class="mini" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">
+    <thead><tr><th>지표</th><th>필터 C</th><th>필터 D</th><th>전부 스팸함으로</th></tr></thead>
+    <tbody>
+      <tr><td>정확도</td><td><em>0.92</em></td><td>0.86</td><td>0.20</td></tr>
+      <tr><td>정밀도</td><td><em>0.80</em></td><td>0.60</td><td>0.20</td></tr>
+      <tr><td>재현율</td><td>0.80</td><td>0.90</td><td><em>1.00</em></td></tr>
+    </tbody>
+  </table>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">정상 메일이 스팸함으로 가는 것이 사고 → 정밀도를 보고 <b>필터 C</b></p>
+  <p class="small" style="margin-top:1.2vh">메일 100통 · 스팸 20통 · 정상 80통 · 필터 C는 TP 16·FN 4·FP 4·TN 76, 필터 D는 TP 18·FN 2·FP 12·TN 68<br>이번에는 정확도와 정밀도가 같은 필터를 지시 · 지표가 늘 갈리지는 않음</p>
+</section>
+
+<!-- 15 위젯은 선생님 화면 -->
+<section class="slide">
+  <div class="kicker">10-14 · 진행</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">위젯은 선생님 화면</h2>
+  <div class="diagram" style="--wh:42vh;margin-top:1.4vh"><div class="widget" data-w="matrix">
   <svg viewBox="0 0 720 300" role="img" aria-label="혼동행렬 네 칸과 정확도·정밀도·재현율. 지표를 고르면 분모 범위가 테두리로 켜지고, 사례를 바꾸면 네 칸의 수와 세 값이 함께 바뀜">
     <text class="mx-case" x="24" y="22" font-size="14" fill="#6b7385"></text>
     <text class="mx-h" data-k="0" x="222" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
@@ -198,34 +328,20 @@
     <text x="24" y="258" font-size="14" fill="#6b7385">정밀도 · 재현율 → 분자 같음 · 분모 다름</text>
   </svg>
   <div class="wctl">
-    <button class="wbtn on" type="button" data-case="tomato" aria-pressed="true">토마토 200개</button>
-    <button class="wbtn" type="button" data-case="A" aria-pressed="false">모델 A</button>
+    <button class="wbtn on" type="button" data-case="A" aria-pressed="true">모델 A</button>
     <button class="wbtn" type="button" data-case="B" aria-pressed="false">모델 B</button>
+    <button class="wbtn" type="button" data-case="all" aria-pressed="false">전부 성공 예측</button>
     <button class="wbtn" type="button" data-m="acc" aria-pressed="false">정확도</button>
     <button class="wbtn on" type="button" data-m="prec" aria-pressed="true">정밀도</button>
     <button class="wbtn" type="button" data-m="rec" aria-pressed="false">재현율</button>
     <button class="wbtn" type="button" data-act="reveal" aria-pressed="false">값 확인</button>
-  </div>
-</div></div>
-  <p class="small" style="margin-top:1.6vh">활동지 문제 1과 문제 4의 세 행렬 · 지표 버튼을 누르면 그 지표가 분모로 삼는 범위가 테두리로 켜짐 · 손계산 뒤 값 확인</p>
+  </div></div>
+  <p class="small" style="margin-top:1.4vh">활동지 기본 문제의 세 행렬 · 사례 버튼으로 모델 A·모델 B·전부 성공 예측 전환 · 지표 버튼을 누르면 그 지표가 분모로 삼는 범위가 테두리로 표시<br>"값 확인" 버튼은 활동지 정답을 그대로 표시 · 학생 기기에서 열지 않음 · 손계산을 마친 뒤 대조에만 사용</p>
 </section>
 
-<!-- 7 활동지 문제 1 -->
+<!-- 16 지표 선택의 기준 -->
 <section class="slide">
-  <div class="kicker">10-5 · 활동</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">활동지 2 문제 1 — 토마토 농장</h2>
-  <ul class="facts" style="margin-top:2vh">
-    <li>교과서 139~140쪽 해 보기 ④ · 토마토 농장 사례 — 과일 이미지를 토마토인지 아닌지 분류한 결과가 본문에 있음</li>
-    <li>활동지에서 오분류표 네 칸 채움 · 정밀도·재현율·정확도 순 계산</li>
-    <li>마지막 물음 "정밀도가 낮으면 이 농장에 무슨 일이 벌어지는가"까지 문장으로 작성</li>
-    <li>같은 계산 폼 Ⅲ-02d에 기록</li>
-  </ul>
-  <p class="small">문제 2~5는 영화와 스팸 필터 · 혼동행렬 채우고 기준 모델과 비교 뒤 놓친 성공작과 잘못 추천한 영화의 비용 토의</p>
-</section>
-
-<!-- 8 지표 선택의 기준 -->
-<section class="slide">
-  <div class="kicker">10-6 · 교과서 140쪽</div>
+  <div class="kicker">10-15 · 교과서 140쪽</div>
   <h2>지표 선택의 기준</h2>
   <blockquote style="margin-top:2.4vh;font-size:clamp(19px,2.3vw,32px)">문제 상황에 따라 적합한 성능 지표가 다르므로, 상황에 맞는 지표를 선택해야 한다</blockquote>
   <ul class="facts" style="margin-top:1.6vh">
@@ -236,11 +352,11 @@
   <p class="point" style="margin-top:2.2vh">지표 선택은 계산이 아니라 판단</p>
 </section>
 
-<!-- 9 그림: 문턱값 -->
+<!-- 17 그림: 문턱값 -->
 <section class="slide">
-  <div class="kicker">10-6 · 그림</div>
+  <div class="kicker">10-16 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">문턱값과 네 칸</h2>
-  <div class="diagram" style="--wh:48vh">    <div class="widget" data-w="threshold">
+  <div class="diagram" style="--wh:48vh"><div class="widget" data-w="threshold">
   <svg viewBox="0 0 720 400" role="img" aria-label="시험용 영화 66편을 예측 확률 높은 순으로 늘어놓고 문턱값을 옮기면 혼동행렬 네 칸과 정확도·정밀도·재현율이 함께 바뀌는 그림">
     <g class="dots"></g>
     <line x1="36" y1="134" x2="700" y2="134" stroke="#e3ddcf" stroke-width="1.2"/>
@@ -300,14 +416,13 @@
     <button class="wbtn" type="button" data-slot="scout" aria-pressed="false">발굴팀으로 기록</button>
     <button class="wbtn" type="button" data-act="clear">기록 지우기</button>
     <span class="wout">문턱값 0.50</span>
-  </div>
-</div></div>
-  <p class="small" style="margin-top:1.4vh">9차시 로지스틱 회귀가 시험용 66편에 매긴 예측 확률 · 가장 낮은 확률 0.001 · 두 입장에서 각각 문턱값 기록</p>
+  </div></div>
+  <p class="small" style="margin-top:1.4vh">9차시 로지스틱 회귀가 시험용 영화에 매긴 예측 확률 · 교재 제작 시점의 데이터 · 왼쪽이 확률이 높은 쪽 · 두 입장에서 각각 문턱값 기록</p>
 </section>
 
-<!-- 10 실사례 표 -->
+<!-- 18 실사례 표 -->
 <section class="slide">
-  <div class="kicker">10-7 · 사례</div>
+  <div class="kicker">10-17 · 사례</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">지표 선택이 갈린 두 현장</h2>
   <table class="mini" style="margin-top:2.2vh;font-size:clamp(13px,1.4vw,20px)">
     <tr><th>사례</th><th>무엇을 예측·분류했나</th><th>이 차시 개념과의 연결</th></tr>
@@ -318,56 +433,56 @@
   <p class="src">ProPublica, Machine Bias(2016) · Apple Heart Study, NEJM 381:1909(2019)</p>
 </section>
 
-<!-- 11 그림: COMPAS -->
+<!-- 19 그림: COMPAS -->
 <section class="slide">
-  <div class="kicker">10-7 · 그림</div>
+  <div class="kicker">10-18 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">사례 — COMPAS 위험 점수의 분포</h2>
   <div class="shot wide"><img src="img/lesson10_case1.png" alt="프로퍼블리카가 공개한 COMPAS 위험 점수 분포 막대그래프 두 장. 흑인 피고인은 1점부터 10점까지 고르게 퍼져 있고, 백인 피고인은 낮은 점수에 몰려 있습니다."></div>
   <p class="src">출처 ProPublica, Machine Bias(2016) · 브라워드 카운티 피고인 7,214명의 COMPAS 위험 점수 분포</p>
   <p class="small" style="margin-top:1.2vh">재범하지 않았는데 고위험으로 분류된 비율 흑인 44.85% · 백인 23.45% / 재범했는데 저위험으로 분류된 비율 흑인 27.99% · 백인 47.72%</p>
 </section>
 
-<!-- 12 그림: 애플워치 -->
+<!-- 20 그림: 애플워치 -->
 <section class="slide">
-  <div class="kicker">10-7 · 그림</div>
+  <div class="kicker">10-19 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">사례 — 애플워치 알림과 정밀도</h2>
   <div class="shot wide"><img src="img/lesson10_case2.jpg" alt="애플워치의 불규칙 맥박 알림 화면 사진과 참가자 419,297명, 알림 2,161명, 분석 가능 450명, 심방세동 확인 34%로 이어지는 단계별 수치."></div>
   <p class="src">사진 Apple 뉴스룸(2018) · 수치 Apple Heart Study, NEJM 381:1909(2019)</p>
   <p class="small" style="margin-top:1.2vh">알림 2,161명 가운데 분석 가능 450명 · 심방세동 확인 34% = 정밀도 · 재현율은 이 연구로 계산 불가</p>
 </section>
 
-<!-- 13 기준 모델 -->
+<!-- 21 기준 모델 -->
 <section class="slide">
-  <div class="kicker">10-8 · 비교</div>
+  <div class="kicker">10-20 · 비교</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">다수 범주만 예측하는 기준 모델</h2>
   <ul class="facts" style="margin-top:2vh">
-    <li>전체 영화 <b>216편</b> 중 성공 라벨 <b>23편</b></li>
-    <li>전부 기준 미달로 예측하면 193편을 맞혀 전체 자료의 정확도 약 <b>89%</b></li>
-    <li>공정한 비교의 조건 — 같은 시험용 자료</li>
-    <li>다음 표의 기준은 9차시 코드의 시험용 <b>66편</b> · 실제 성공 6편, 기준 미달 60편</li>
+    <li>성공 라벨이 붙은 영화는 전체의 일부</li>
+    <li>전부 기준 미달로 예측하기만 해도 정확도는 높게 나옴</li>
+    <li>공정한 비교의 조건 — <b>같은 시험용 데이터</b></li>
+    <li>앱 화면의 값을 교재 4절 표에 옮겨 적기 · 데이터가 날마다 쌓여 값은 사람마다 다름</li>
   </ul>
   <p class="point">성공작을 한 편도 찾지 않고 얻은 정확도</p>
 </section>
 
-<!-- 14 네 모델 비교표 -->
+<!-- 22 네 모델 비교표 -->
 <section class="slide">
-  <div class="kicker">10-8 · 비교</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">같은 시험용 66편의 네 모델</h2>
+  <div class="kicker">10-21 · 비교</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">같은 시험용 데이터의 네 모델</h2>
   <table class="mini" style="margin-top:2.4vh;font-size:clamp(14px,1.6vw,23px)">
     <tr><th>모델</th><th>정확도</th><th>성공 재현율</th><th>판정</th></tr>
-    <tr><td>전부 기준 미달로 예측<br>(기준 모델)</td><td><em>0.909</em></td><td>0.000 (0/6)</td><td>60편을 맞히지만 성공작을 전부 놓침</td></tr>
-    <tr><td>로지스틱 회귀</td><td>0.924</td><td>0.167 (1/6)</td><td>61편을 맞히고 성공작 1편을 찾음</td></tr>
-    <tr><td>의사결정트리 (깊이 3)</td><td>0.939</td><td>0.333 (2/6)</td><td>62편을 맞히고 성공작 2편을 찾음</td></tr>
-    <tr><td>로지스틱 + 첫 주 관객</td><td><em>0.955</em></td><td>0.500 (3/6)</td><td>개봉 전 예측의 개선으로 해석할 수 없음</td></tr>
+    <tr><td>전부 기준 미달로 예측<br>(기준 모델)</td><td></td><td></td><td>성공작을 한 편도 찾지 못함</td></tr>
+    <tr><td>로지스틱 회귀</td><td></td><td></td><td></td></tr>
+    <tr><td>의사결정트리 (깊이 3)</td><td></td><td></td><td></td></tr>
+    <tr><td>로지스틱 + 첫 주 관객</td><td></td><td></td><td>개봉 전 예측의 개선으로 해석 불가</td></tr>
   </table>
-  <p class="small" style="margin-top:1.8vh">영화 코드 순 정렬 후 열 편 중 앞 세 편 시험용 고정 · 양성 기준 관객 100만 명, 확률 문턱값 0.5 · 성공작 6편이므로 한 편 차이로 재현율 약 0.167 변동 · 이 표의 성능을 다른 영화 전체로 일반화 불가</p>
+  <p class="small" style="margin-top:1.8vh">빈칸은 앱 화면의 값으로 채움 · 영화 코드 순 정렬 후 열 편 중 앞 세 편 시험용 고정 · 양성 기준 관객 100만 명, 확률 문턱값 0.5 · 시험용 성공작이 적어 한 편 차이로 재현율이 크게 변동 · 이 표의 성능을 다른 영화 전체로 일반화 불가</p>
 </section>
 
-<!-- 15 그림: 한 편씩 -->
+<!-- 23 그림: 한 편씩 -->
 <section class="slide">
-  <div class="kicker">10-8 · 그림</div>
+  <div class="kicker">10-22 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">한 편씩 쌓아 본 두 모델</h2>
-  <div class="diagram" style="--wh:48vh">    <div class="widget" data-w="walk">
+  <div class="diagram" style="--wh:48vh"><div class="widget" data-w="walk">
   <svg viewBox="0 0 720 350" role="img" aria-label="시험용 영화 66편을 한 편씩 넘기며, 전부 기준 미달로 예측하는 기준 모델과 선택한 분류기의 혼동행렬·정확도·찾아낸 성공작 수를 나란히 쌓아 비교하는 그림">
     <rect x="40" y="10" width="640" height="48" rx="8" fill="#fff" stroke="#e3ddcf"></rect>
     <text class="bw-head" x="54" y="40" font-size="16" font-weight="700" fill="#1c2230">66번째 · 정동원 팬콘서트 필름 : 다…</text>
@@ -523,17 +638,16 @@
     <label>진행 <input class="bw-range" type="range" min="0" max="66" step="1" value="66"></label>
     <button class="wbtn on" type="button" data-ax="zero" aria-pressed="true">0부터</button>
     <button class="wbtn" type="button" data-ax="zoom" aria-pressed="false">0.90부터</button>
-    <span class="wout">정확도 0.909 · 0.924 · 성공작 0/6 · 1/6</span>
-  </div>
-</div></div>
-  <p class="small" style="margin-top:1.4vh">진행 위치 27번째에서 두 모델 판정 처음 갈라짐 · 그 전 26편에서는 기준 모델과 분류기의 네 칸 완전히 같음</p>
+    <span class="wout"></span>
+  </div></div>
+  <p class="small" style="margin-top:1.4vh">교재 제작 시점의 데이터 · 진행 위치를 한 편씩 옮기면 두 모델의 판정이 처음 갈라지는 지점이 나옴 · 그 전까지는 기준 모델과 분류기의 네 칸이 완전히 같음</p>
 </section>
 
-<!-- 16 그림: 성공 편수 -->
+<!-- 24 그림: 성공 편수 -->
 <section class="slide">
-  <div class="kicker">10-9 · 그림</div>
+  <div class="kicker">10-23 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">성공 편수와 기준 모델의 정확도</h2>
-  <div class="diagram" style="--wh:44vh">    <div class="widget" data-w="dial">
+  <div class="diagram" style="--wh:44vh"><div class="widget" data-w="dial">
   <svg viewBox="0 0 720 300" role="img" aria-label="시험용 66편 중 성공작 수를 바꾸면 다수 범주를 그대로 예측하는 기준 모델의 정확도·재현율·정밀도가 어떻게 달라지는지, 무작위 50 대 50 모델과 비교해 보여 주는 그림">
     <text class="dl-title" x="40" y="26" font-size="14" font-weight="700" fill="#6b7385"></text>
     <g class="dl-grid"></g>
@@ -569,109 +683,108 @@
   </svg>
   <div class="wctl">
     <label>성공 편수 <input class="dl-range" type="range" min="0" max="66" step="1" value="6"></label>
-    <button class="wbtn on" type="button" data-k="6" aria-pressed="true">6편 (실제 자료)</button>
+    <button class="wbtn on" type="button" data-k="6" aria-pressed="true">6편 (실제 데이터)</button>
     <button class="wbtn" type="button" data-k="1" aria-pressed="false">1편</button>
     <button class="wbtn" type="button" data-k="33" aria-pressed="false">33편</button>
     <button class="wbtn" type="button" data-k="40" aria-pressed="false">40편</button>
     <span class="wout"></span>
-  </div>
-</div></div>
-  <p class="small" style="margin-top:1.4vh">성공 편수 1편으로 줄이면 아무것도 찾지 않는 기준 모델의 정확도 0.985로 상승 · 치우친 자료에서 정확도 높게 나오는 구조</p>
+  </div></div>
+  <p class="small" style="margin-top:1.4vh">성공 편수를 줄일수록 아무것도 찾지 않는 기준 모델의 정확도가 오히려 상승 · 치우친 데이터에서 정확도가 움직이는 구조</p>
 </section>
 
-<!-- 17 프롬프트 1/2 -->
+<!-- 25 프롬프트 1/2 -->
 <section class="slide">
-  <div class="kicker">10-10 · 실습</div>
+  <div class="kicker">10-24 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (1/2)</h2>
   <div class="prompt" style="font-size:clamp(12px,1.25vw,17px);line-height:1.6;max-width:46em;margin-top:2vh">"흥행 채점표" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로 해 줘.<br>
 영화 데이터로 관객 수 기준 충족 여부를 예측하는 분류기를 만들고, 그 결과를 혼동행렬로 보여 줘.<br>
-데이터: https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv<br>
+데이터: https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv<br>
 이 파일의 열 이름은 movieCd, movieNm, openDt, genre, nation, first_scrn, first_show, first_date, peak, first_week_audi, total_audi, days_in_top10이고, 인코딩은 UTF-8이야.<br>
-주소에 적힌 고정 커밋이 수업 기준 시점이야. 최신 자료로 바꾸지 말아 줘.<br>
 total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 봐 줘.<br>
 기본 입력은 first_scrn, first_show, peak, genre, nation 다섯 열만 쓰고, total_audi와 days_in_top10은 입력에서 제외해 줘.<br>
 first_scrn과 first_show는 10위권에 처음 관측된 날의 집계라 개봉 전 정보가 아니야.</div>
-  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 데이터 주소·열 이름·인코딩·고정 커밋·양성 기준·입력 제한이 프롬프트 안에 있음</p>
+  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 데이터 주소·열 이름·인코딩·양성 기준·입력 제한이 프롬프트 안에 있음</p>
 </section>
 
-<!-- 18 프롬프트 2/2 -->
+<!-- 26 프롬프트 2/2 -->
 <section class="slide">
-  <div class="kicker">10-10 · 실습</div>
+  <div class="kicker">10-25 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (2/2)</h2>
   <div class="prompt" style="font-size:clamp(12px,1.25vw,17px);line-height:1.6;max-width:46em;margin-top:2vh">영화 코드 순으로 정렬하고 열 편 중 앞 세 편을 시험용으로 고정해 줘.<br>
-학습과 표준화의 기준 계산에는 시험용 자료를 쓰지 말아 줘.<br>
+학습과 표준화의 기준 계산에는 시험용 데이터를 쓰지 말아 줘.<br>
 first_week_audi를 더한 비교 모델도 만들고, 개봉 전에는 사용할 수 없는 값이라고 표시해 줘.<br>
 '무조건 기준 미달로만 찍는 모델'과 로지스틱 회귀, 깊이 3 의사결정트리의 정확도·정밀도·성공 재현율을 한 표에 나란히 보여 줘.<br>
 고른 모델의 혼동행렬 네 칸을 표와 히트맵으로 보여 주고, 그래프는 plotly로 그려 줘.<br>
 학습에 쓴 영화 편수와 시험용 편수, 시험용 성공작 편수를 화면에 적어 줘.<br>
-개봉 전 예측 성능이 아니라 기록된 자료의 분류 연습임을 표시해 줘.<br>
+개봉 전 예측 성능이 아니라 기록된 데이터의 분류 연습임을 표시해 줘.<br>
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
   <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 두 장을 이으면 교재 ① 원문 전체 · main.py와 requirements.txt 두 파일로 저장</p>
 </section>
 
-<!-- 19 레이블 누수 -->
+<!-- 27 레이블 누수 -->
 <section class="slide">
-  <div class="kicker">10-11 · 원리</div>
+  <div class="kicker">10-26 · 원리</div>
   <h2>레이블 누수</h2>
   <ul class="facts" style="margin-top:1.4vh;">
-    <li style="margin:1.8vh 0">7차시 — 첫 주 관객 수 추가 시 테스트 R² 약 <b>0.24</b>에서 <b>0.90</b>으로 상승</li>
-    <li style="margin:1.8vh 0">이번 분류 예제 — 같은 시험용 자료에서 정확도 <b>0.924 → 0.955</b></li>
+    <li style="margin:1.8vh 0">7차시 — 첫 주 관객 수를 더하면 테스트 R²가 크게 상승</li>
+    <li style="margin:1.8vh 0">이번 분류 예제 — 같은 시험용 데이터에서 정확도 상승</li>
     <li style="margin:1.8vh 0">개봉 전 흥행 예측이라는 목표에서 첫 주 관객 수는 사용할 수 없는 미래 정보</li>
     <li style="margin:1.8vh 0">총 관객 수와 관련이 높다는 사실 자체는 누수의 이유가 아님 · 예측 시점에 확보할 수 없는 값을 학습·평가에 쓴 것이 핵심</li>
     <li style="margin:1.8vh 0">first_scrn·first_show도 첫 관측일 집계이므로 개봉 전 확보로 보기 어려움</li>
   </ul>
   <p class="point" style="margin-top:2vh">판정 기준은 점수의 크기가 아니라 입력의 수집 시점</p>
-  <p class="small" style="margin-top:1.2vh">활동지 문제 6 — 예측 시점을 먼저 적고 변수별 사용 가능 여부를 판단</p>
 </section>
 
-<!-- 20 정확도만 보면 -->
+<!-- 28 정확도만 보면 -->
 <section class="slide">
-  <div class="kicker">10-12 · 판단</div>
+  <div class="kicker">10-27 · 판단</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">정확도만 보면 놓치는 세 가지</h2>
   <ul class="facts" style="margin-top:1.8vh">
-    <li><b>기준 모델과 비교</b> — 90.9%는 성공작을 한 편도 찾지 않고 얻은 정확도 · 높은 정확도만으로 목적 달성 판단 불가</li>
-    <li><b>오류의 종류 확인</b> — 로지스틱 회귀는 92.4%를 맞혔으나 성공작 6편 중 5편 놓침 · 성공작 발굴이 목적이면 이 한계 함께 확인</li>
+    <li><b>기준 모델과 비교</b> — 한 범주로만 찍어도 나오는 정확도 · 높은 정확도만으로 목적 달성 판단 불가</li>
+    <li><b>오류의 종류 확인</b> — 전체에서 맞힌 비율이 높아도 성공작을 대부분 놓칠 수 있음</li>
     <li><b>입력의 수집 시점 확인</b> — 점수가 올랐다는 사실만으로 개선인지 누수인지 판정 불가</li>
   </ul>
   <p class="point">기준 모델보다 정확도가 낮아도 중요한 오류를 줄이는 모델은 유용</p>
-  <p class="small">시험용 자료를 보고 반복해 모델을 고르면 평가가 그 자료에 맞춰짐 · 이번 비교는 탐색 결과로 기록, 적용 전 별도 자료로 검증</p>
+  <p class="small">시험용 데이터를 보고 반복해 모델을 고르면 평가가 그 데이터에 맞춰짐 · 이번 비교는 탐색 결과로 기록, 적용 전 별도 데이터로 검증</p>
 </section>
 
-<!-- 21 확인 문제 -->
+<!-- 29 확인 문제 1·2 -->
 <section class="slide">
-  <div class="kicker">10-13 · 확인</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">확인 문제 — 기준 모델의 성적</h2>
-  <p class="point" style="margin-top:2vh;font-size:clamp(17px,2vw,28px)">영화 216편 중 성공작이 23편 · 전부 "기준 미달"로만 찍는 모델의 성적</p>
+  <div class="kicker">10-28 · 확인</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">확인 문제 — 분모와 기준</h2>
   <table class="mini" style="margin-top:2.2vh;font-size:clamp(14px,1.6vw,23px)">
-    <tr><th>물음</th><th>선택지</th><th>정답과 계산</th></tr>
-    <tr><td>(a) 정확도</td><td>0.11 / <em>0.89</em> / 1.00</td><td>기준 미달 193편 전부 맞히므로 193÷216 ≈ 0.89</td></tr>
-    <tr><td>(b) 성공 재현율</td><td>0.89 / 1.00 / <em>0.00</em></td><td>실제 성공작 23편 중 잡아낸 것 0편, 0÷23 = 0.00</td></tr>
+    <tr><th>물음</th><th>답</th><th>계산</th></tr>
+    <tr><td>모델 A의 정밀도</td><td><em>0.50</em></td><td>분모는 성공이라고 예측한 12편 · 6 ÷ 12</td></tr>
+    <tr><td>모델 A의 재현율</td><td><em>0.75</em></td><td>분모는 실제 성공작 8편 · 6 ÷ 8</td></tr>
+    <tr><td>전부 성공이라고 찍는 방법을<br>쓰지 않는 까닭</td><td><em>정밀도 0.40</em></td><td>재현율은 1.00이지만 계약한 20편 가운데 12편이 실패작</td></tr>
   </table>
-  <p class="point" style="margin-top:2.4vh">정확도 0.89와 재현율 0.00의 공존</p>
+  <p class="point" style="margin-top:2.2vh">정밀도와 재현율의 분자는 같은 <b>6</b> · 분모만 교체</p>
 </section>
 
-<!-- 22 확인 문제 2·3 -->
+<!-- 30 확인 문제 3·4 -->
 <section class="slide">
-  <div class="kicker">10-13 · 확인</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">확인 문제 — 정확도와 레이블 누수</h2>
+  <div class="kicker">10-29 · 확인</div>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">확인 문제 — 지표 선택과 레이블 누수</h2>
   <table class="mini" style="margin-top:2.2vh;font-size:clamp(14px,1.6vw,23px)">
     <tr><th>물음</th><th>답</th><th>근거</th></tr>
-    <tr><td>정확도 0.924만으로<br>성공작 발굴의 충분함 판단</td><td style="white-space:nowrap"><em>불가</em></td><td>시험용 66편 중 기준 미달 60편 · 전부 기준 미달로 예측해도 0.909 · 재현율 1÷6 ≈ 0.167도 함께 보고</td></tr>
+    <tr><td>스팸 필터에서<br>볼 지표와 고를 필터</td><td style="white-space:nowrap"><em>정밀도 · 필터 C</em></td><td>정상 메일이 스팸함으로 가면 사용자가 읽지 못함 · 정밀도 0.80과 0.60 · 스팸함으로 잘못 보낸 정상 메일 4통과 12통</td></tr>
     <tr><td>첫 주 관객 수를 넣어 오른 점수<br>= 개봉 전 예측 성능의 개선</td><td style="white-space:nowrap"><em>아님</em></td><td>개봉 전에는 알 수 없는 미래 정보가 섞인 레이블 누수 · 판단 기준은 점수의 크기가 아니라 입력의 확보 시점</td></tr>
   </table>
 </section>
 
-<!-- 23 정리 -->
+<!-- 31 정리 -->
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>10차시 요약</h2>
-  <div class="split" style="margin-top:2.6vh">
-    <div class="card"><div class="t">표</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">실제 범주와 예측 범주를 교차한 네 칸</div></div>
-    <div class="card"><div class="t">분모</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">정확도 전체 · 정밀도 예측 양성 · 재현율 실제 양성</div></div>
-    <div class="card"><div class="t">기준선</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">시험용 66편 · 기준 모델 0.909 · 성공 재현율 0/6</div></div>
-    <div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">오류의 종류와 입력의 수집 시점 확인</div></div>
+  <div class="split" style="margin-top:1.8vh;gap:1.2vw">
+    <div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">표</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">실제 범주와 예측 범주를 교차한 네 칸</div></div>
+    <div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">분모</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">정확도 전체 · 정밀도 예측 양성 · 재현율 실제 양성</div></div>
+    <div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">갈림</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">기본 문제에서 정확도·정밀도는 모델 B, 재현율은 모델 A</div></div>
+    <div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">기준선</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">전부 성공이라고 찍는 방법의 재현율 1.00 · 정밀도 0.40</div></div>
+    <div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">판단</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">오류의 대가와 입력의 수집 시점 확인</div></div>
   </div>
-  <p class="point">어떤 오류를 줄일지 정하는 일은 데이터 밖의 판단</p>
+  <p class="point" style="font-size:clamp(16px,1.9vw,26px);margin-top:1.8vh">지표가 모델을 고르는 것이 아니라 <b>하려는 일이 지표를 고름</b></p>
+  <p class="small" style="margin-top:1vh">집에서 혼자 확인하기 — 교재 8절에서 손으로 구한 값의 정오만 확인, 정답은 미표시</p>
 </section>
 
 <div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
