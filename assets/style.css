@@ -383,3 +383,22 @@ figure.case { margin: 12px 0 0; }
 figure.case img { width: 100%; height: auto; display: block; border-radius: var(--radius-sm); }
 figure.case figcaption { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
 @media (max-width: 600px) { .situation { padding: 8px 8px 10px; } .situation .plot { min-height: 260px; } }
+
+/* ── 답 적는 칸 (assets/answer.js) — 저장하지 않고 화면에만 남는다 ── */
+.callout.ask li { margin-bottom: 10px; }
+.answer-in { display: block; width: 100%; margin-top: 6px; padding: 8px 10px; box-sizing: border-box;
+  font-family: var(--font); font-size: 0.94rem; line-height: 1.6; color: var(--text);
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  resize: vertical; overflow: hidden; }
+.answer-in:focus { outline: none; border-color: #2b7fd6; box-shadow: 0 0 0 2px rgba(43,127,214,.15); }
+.answer-in::placeholder { color: var(--muted); }
+.answer-bar { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+.answer-copy { font-family: var(--font); font-size: 0.86rem; font-weight: 700; color: var(--text);
+  background: #fff; border: 1.5px solid var(--border); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+.answer-copy:hover { border-color: #2b7fd6; }
+.answer-msg { font-size: 0.84rem; color: var(--text-soft); }
+.answer-cell { width: 100%; box-sizing: border-box; padding: 5px 7px;
+  font-family: var(--font); font-size: 0.92rem; color: var(--text);
+  background: #fffdf7; border: 1px dashed var(--border); border-radius: 6px; }
+.answer-cell:focus { outline: none; border-style: solid; border-color: #2b7fd6; background: #fff; }
+@media print { .answer-bar { display: none; } .answer-in, .answer-cell { border-color: #ccc; } }
