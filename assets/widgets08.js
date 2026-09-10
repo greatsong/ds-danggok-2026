@@ -3,7 +3,7 @@
 // 계약: system/widgets/WIDGET_BRIEF_TEMPLATE.md. <body> 끝에서 로드한다.
   window.LESSON_DATA = {"SEOUL_YEARLY_OBS":[[1907,5.103,92],[1908,10.427,366],[1909,10.609,365],[1910,10.412,365],[1911,10.655,365],[1912,10.124,366],[1913,10.086,365],[1914,12.029,365],[1915,10.898,365],[1916,10.911,366],[1917,9.859,365],[1918,10.54,365],[1919,11.151,365],[1920,11.408,366],[1921,10.969,365],[1922,10.873,365],[1923,10.699,365],[1924,11.07,366],[1925,10.787,365],[1926,10.557,365],[1927,11.068,365],[1928,11.126,366],[1929,11.49,365],[1930,11.794,365],[1931,10.956,365],[1932,11.676,366],[1933,10.586,365],[1934,10.2,365],[1935,11.269,365],[1936,9.778,366],[1937,11.455,365],[1938,11.013,365],[1939,11.781,365],[1940,10.772,366],[1941,11.223,365],[1942,10.973,365],[1943,11.723,365],[1944,10.892,366],[1945,10.438,365],[1946,11.388,365],[1947,9.656,365],[1948,11.758,366],[1949,11.7,365],[1950,13.478,243],[1953,0.642,31],[1954,11.488,365],[1955,11.513,365],[1956,10.113,366],[1957,10.516,365],[1958,11.637,365],[1959,12.08,365],[1960,12.105,366],[1961,12.455,365],[1962,11.757,365],[1963,11.313,365],[1964,12.221,366],[1965,11.396,365],[1966,11.578,365],[1967,11.676,365],[1968,11.788,366],[1969,10.928,365],[1970,11.422,365],[1971,11.551,365],[1972,11.917,366],[1973,12.097,365],[1974,11.155,365],[1975,12.52,365],[1976,11.48,366],[1977,12.373,365],[1978,12.45,365],[1979,12.507,365],[1980,10.824,366],[1981,11.227,365],[1982,12.559,365],[1983,12.454,365],[1984,11.597,366],[1985,11.618,365],[1986,11.306,365],[1987,11.986,365],[1988,12.121,366],[1989,13.011,365],[1990,12.839,365],[1991,12.398,365],[1992,12.501,366],[1993,12.085,365],[1994,13.612,365],[1995,12.267,365],[1996,12.258,366],[1997,12.957,365],[1998,13.836,365],[1999,13.257,365],[2000,12.714,366],[2001,12.86,365],[2002,12.914,365],[2003,12.87,365],[2004,13.352,366],[2005,12.139,365],[2006,13.062,365],[2007,13.283,365],[2008,12.964,366],[2009,12.953,365],[2010,12.141,365],[2011,12.082,365],[2012,12.269,366],[2013,12.564,365],[2014,13.4,365],[2015,13.622,365],[2016,13.593,366],[2017,13.073,365],[2018,13.002,365],[2019,13.599,365],[2020,13.272,366],[2021,13.752,365],[2022,13.296,365],[2023,14.109,365],[2024,14.875,366],[2025,14.15,365]],"SEOUL_POLY":{"1":[2.37988106,11.40355878],"2":[2.33890375,2.10360671,11.22066603],"3":[4.90152638,1.43516351,1.46667371,11.26414749],"4":[-2.33904775,5.45332529,1.86488875,1.4127803,11.25364381],"5":[39.03417703,-14.30365814,-3.29804002,3.68183865,1.81437816,11.22148225],"6":[-194.02061548,107.74587294,38.2526018,-17.20602359,-0.06854896,2.34326759,11.26726064],"7":[-1239.16635036,336.29145369,482.17218159,-97.16052545,-50.55480291,8.38939854,3.11836635,11.18705392],"8":[140.47188125,-1305.63519092,288.18161498,502.41114087,-91.80337655,-52.28551932,8.18284075,3.15428529,11.1886208],"9":[9699.95950441,-5179.33378784,-4847.83060574,2177.73977785,938.03250774,-300.94682163,-72.77377062,15.59622411,3.42954213,11.14387688]}};
 function initW_r2denom(root, D) {
-  // D는 받되 사용하지 않는다 — 활동지 문제 6의 고정 수치(영화 가·나·다)만 쓴다.
+  // D는 받되 사용하지 않는다 — 선생님 시연용 고정 수치(영화 가·나·다)만 쓴다.
   const CX = [120, 243, 366];              // 슬롯 가로 위치
   const K = 1.98182;                       // 1만 명당 세로 픽셀 (0~110 → y 244~26)
   const MN = '−';                     // 빼기 기호
@@ -242,7 +242,8 @@ function initW_r2swap(root, D) {
   var lead = q('.exlead'), extx = q('.extx');
   var vTr = q('.v-train'), vEv = q('.v-eval'), vSse = q('.v-sse'), vSst = q('.v-sst'), vR2 = q('.v-r2');
   var out = q('.wout');
-  var dots = [q('.d0'), q('.d1'), q('.d2')];
+  // 하단 눈금은 고정 수치를 담고 있어 제거했다. 점이 없어도 동작하도록 걸러 둔다.
+  var dots = ['.d0', '.d1', '.d2'].map(q).filter(Boolean);
   var btns = Array.prototype.slice.call(root.querySelectorAll('.wbtn'));
 
   // 관측일 300일 이상 연도의 점
@@ -671,7 +672,188 @@ function initW_nearfar(root, D) {
   sl.addEventListener('input', () => draw(Number(sl.value)));
   draw(Number(sl.value));
 }
-  const WIDGET_INIT = {r2denom: initW_r2denom, r2swap: initW_r2swap, degsplit: initW_degsplit, nearfar: initW_nearfar};
+// 손계산 대조 — 선생님 시연용. 활동지의 두 문제를 단계 순서대로 채워 보인다.
+function initW_handcheck(root, D) {
+  // D는 받되 사용하지 않는다. 활동지의 고정 수치만 쓴다.
+  const MN = '−', BLUE = '#2b7fd6', GREEN = '#2f9e5f', RED = '#e45756',
+        AMB = '#a97a00', GRAY = '#7a7f95', DIM = '#b9b3a5', INK = '#1c2230', HOLD = '#c8c2b4';
+  const SETS = [
+    { t: '기본 문제 · 다음 주 관객 수 예측', u: '만 명', rh: '영화',
+      lab: ['블루웨일', '보라매공원', '포켓몬스터', '귀멸의 칼날', '떡볶이 원정대'],
+      y: [14, 12, 20, 16, 18],
+      m: [{ n: '모델 가', p: [12, 14, 19, 17, 18] }, { n: '모델 나', p: [14, 12, 20, 16, 14] }] },
+    { t: '연습 문제 · 하루 매점 매출 예측', u: '만 원', rh: '날',
+      lab: ['1일', '2일', '3일', '4일', '5일'],
+      y: [20, 22, 26, 28, 29],
+      m: [{ n: '모델 다', p: [23, 20, 25, 29, 29] }, { n: '모델 라', p: [22, 24, 24, 26, 29] }] }
+  ];
+  const STEP = ['실젯값과 두 모델의 예측값', '① 오차 · 실젯값 − 예측값, 부호 그대로',
+    '② 절댓값 · 부호 없이 크기만', '③ 제곱 · 큰 오차일수록 훨씬 큰 값', '④ 합 · 세 열의 합계',
+    '⑤ MAE와 MSE · 두 모델 비교', '⑥ 평균값 기준 · 실젯값의 평균과 제곱오차 합',
+    '⑦ 결정계수 R² · 평균값 기준과의 비교'];
+  const CX = [100, 240, 380, 520, 660], PT = 44, PB = 174, GL = 70, GR = 700;
+  const TX = [32, 168, 222, 276, 334, 388, 448];
+  const HD = ['', '실젯값', '예측값', '① 오차', '② 절댓값', '③ 제곱', '(실젯값 − 평균)²'];
+  const RY = [268, 292, 316, 340, 364], SY = 392;
+  const MC = [620, 688];
+
+  let key = 0, mi = 0, step = 0;
+  const q = s => root.querySelector(s);
+  const gCht = q('[data-dyn="cht"]'), gTbl = q('[data-dyn="tbl"]'), gPan = q('[data-dyn="pan"]');
+  const tTitle = q('[data-t="title"]'), tOut = q('[data-t="out"]');
+  const btns = Array.from(root.querySelectorAll('.wbtn'));
+
+  const sgn = v => (v === 0 ? '0' : (v < 0 ? MN : '+') + Math.abs(v));
+  const d1 = v => v.toFixed(1);
+  const whole = v => (Math.round(v) === v ? String(v) : v.toFixed(1));
+  const trim = v => { let s = v.toFixed(2); while (s.indexOf('.') >= 0 && (s.slice(-1) === '0')) s = s.slice(0, -1); return s.slice(-1) === '.' ? s.slice(0, -1) : s; };
+  const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+  const T = (x, y, s, fs, fill, w, an) =>
+    '<text x="' + x + '" y="' + y + '" text-anchor="' + (an || 'middle') + '" font-size="' + fs +
+    '" fill="' + fill + '"' + (w ? ' font-weight="' + w + '"' : '') + '>' + esc(s) + '</text>';
+  const L = (x1, y1, x2, y2, st, w, dash) =>
+    '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + st +
+    '" stroke-width="' + w + '"' + (dash ? ' stroke-dasharray="' + dash + '"' : '') + '/>';
+
+  function calc() {
+    const s = SETS[key], n = s.y.length, sum = a => a.reduce((x, y) => x + y, 0);
+    const mean = sum(s.y) / n, dev = s.y.map(v => (v - mean) * (v - mean)), sst = sum(dev);
+    const ms = s.m.map(m => {
+      const e = s.y.map((v, i) => v - m.p[i]), ab = e.map(Math.abs), sq = e.map(v => v * v);
+      return { n: m.n, p: m.p, e: e, ab: ab, sq: sq, se: sum(e), sab: sum(ab), sse: sum(sq),
+               mae: sum(ab) / n, mse: sum(sq) / n, r2: 1 - sum(sq) / sst };
+    });
+    return { s: s, n: n, mean: mean, dev: dev, sst: sst, ms: ms };
+  }
+
+  function chart(c) {
+    const s = c.s, all = s.y.concat(s.m[0].p, s.m[1].p);
+    const lo = Math.min.apply(null, all) - 2, hi = Math.max.apply(null, all) + 2;
+    const yv = v => PB - (v - lo) / (hi - lo) * (PB - PT);
+    let o = '';
+    [lo, hi].forEach(t => {
+      o += L(GL, yv(t), GR, yv(t), '#e3ddcf', 1);
+      o += T(62, yv(t) + 4, t, 11, GRAY, null, 'end');
+    });
+    if (step >= 6) {
+      o += L(GL, yv(c.mean), GR, yv(c.mean), '#9a9a9a', 2, '7 5');
+      o += T(GL + 4, yv(c.mean) - 7, '평균 ' + whole(c.mean) + s.u, 11.5, '#6b7385', 700, 'start');
+      for (let i = 0; i < c.n; i++) o += L(CX[i] - 10, yv(s.y[i]), CX[i] - 10, yv(c.mean), DIM, 2.5);
+    }
+    [1, 0].forEach(k => {
+      const on = k === mi, col = k === 0 ? BLUE : GREEN;
+      const pts = c.ms[k].p.map((v, i) => CX[i] + ',' + yv(v)).join(' ');
+      o += '<polyline points="' + pts + '" fill="none" stroke="' + col + '" stroke-width="' +
+           (on ? 3.2 : 2.2) + '" opacity="' + (on ? 1 : 0.6) + '"/>';
+      c.ms[k].p.forEach((v, i) => {
+        o += '<rect x="' + (CX[i] - 4) + '" y="' + (yv(v) - 4) + '" width="8" height="8" fill="' +
+             col + '" opacity="' + (on ? 1 : 0.6) + '"/>';
+      });
+    });
+    const m = c.ms[mi];
+    for (let i = 0; i < c.n; i++) {
+      if (step >= 1 && m.e[i] !== 0) {
+        o += L(CX[i], yv(s.y[i]), CX[i], yv(m.p[i]), RED, 3);
+        o += T(CX[i] + 9, (yv(s.y[i]) + yv(m.p[i])) / 2 + 4, sgn(m.e[i]), 12, RED, 700, 'start');
+      }
+      o += '<circle cx="' + CX[i] + '" cy="' + yv(s.y[i]) + '" r="5" fill="' + INK + '"/>';
+      o += T(CX[i], 194, s.lab[i], 11.5, GRAY);
+    }
+    let lg = '', x = 70;
+    const item = (draw, txt, w) => { lg += draw(x); lg += T(x + 28, 216, txt, 11.5, GRAY, null, 'start'); x += 28 + w + 14; };
+    item(p => '<circle cx="' + (p + 11) + '" cy="212" r="5" fill="' + INK + '"/>', '실젯값', 36);
+    item(p => L(p, 212, p + 22, 212, BLUE, 3), c.ms[0].n, 36);
+    item(p => L(p, 212, p + 22, 212, GREEN, 3), c.ms[1].n, 36);
+    if (step >= 1) item(p => L(p + 11, 204, p + 11, 220, RED, 3), '① 오차', 40);
+    if (step >= 6) {
+      item(p => L(p, 212, p + 22, 212, '#9a9a9a', 2, '7 5'), '평균', 28);
+      item(p => L(p + 11, 204, p + 11, 220, DIM, 2.5), '실젯값 − 평균', 76);
+    }
+    return o + lg;
+  }
+
+  function table(c) {
+    const s = c.s, m = c.ms[mi];
+    let o = T(TX[0], 240, s.rh, 11, GRAY, 700, 'start');
+    for (let i = 1; i < HD.length; i++) o += T(TX[i], 240, HD[i], i === 6 ? 9 : 11, GRAY, 700);
+    o += L(30, 248, 488, 248, '#b9b3a5', 1.2) + L(30, 376, 488, 376, '#e3ddcf', 1);
+    for (let i = 0; i < c.n; i++) {
+      o += T(TX[0], RY[i], s.lab[i], 11, GRAY, null, 'start');
+      o += T(TX[1], RY[i], s.y[i], 13, INK, 700);
+      o += T(TX[2], RY[i], m.p[i], 13, mi === 0 ? BLUE : GREEN, 700);
+      o += step >= 1 ? T(TX[3], RY[i], sgn(m.e[i]), 13, RED, 700) : T(TX[3], RY[i], '?', 13, HOLD, 700);
+      o += step >= 2 ? T(TX[4], RY[i], m.ab[i], 13, INK) : T(TX[4], RY[i], '?', 13, HOLD, 700);
+      o += step >= 3 ? T(TX[5], RY[i], m.sq[i], 13, AMB, 700) : T(TX[5], RY[i], '?', 13, HOLD, 700);
+      o += step >= 6 ? T(TX[6], RY[i], c.dev[i], 13, GRAY) : T(TX[6], RY[i], '?', 13, HOLD, 700);
+    }
+    o += T(TX[0], SY, '④ 합', 11, GRAY, 700, 'start');
+    o += step >= 4 ? T(TX[3], SY, sgn(m.se), 13, RED, 700) : T(TX[3], SY, '?', 13, HOLD, 700);
+    o += step >= 4 ? T(TX[4], SY, m.sab, 13, INK, 700) : T(TX[4], SY, '?', 13, HOLD, 700);
+    o += step >= 4 ? T(TX[5], SY, m.sse, 13, AMB, 700) : T(TX[5], SY, '?', 13, HOLD, 700);
+    o += step >= 6 ? T(TX[6], SY, c.sst, 13, INK, 700) : T(TX[6], SY, '?', 13, HOLD, 700);
+    return o;
+  }
+
+  function panel(c) {
+    const s = c.s;
+    let o = T(MC[0], 246, c.ms[0].n, 11, mi === 0 ? BLUE : GRAY, 700)
+          + T(MC[1], 246, c.ms[1].n, 11, mi === 1 ? GREEN : GRAY, 700);
+    [['⑤ MAE · ' + s.u, 268, m => d1(m.mae)], ['⑤ MSE', 292, m => d1(m.mse)]].forEach(r => {
+      o += T(504, r[1], r[0], 11, GRAY, null, 'start');
+      c.ms.forEach((m, k) => {
+        o += step >= 5 ? T(MC[k], r[1], r[2](m), 14, INK, k === mi ? 800 : 400)
+                       : T(MC[k], r[1], '?', 14, HOLD, 700);
+      });
+    });
+    o += T(504, 320, '⑥ 실젯값의 평균', 11, GRAY, null, 'start');
+    o += step >= 6 ? T(700, 320, whole(c.mean) + s.u, 14, INK, 700, 'end') : T(700, 320, '?', 14, HOLD, 700, 'end');
+    o += T(504, 344, '⑥ 평균값 기준의 제곱오차 합', 10.5, GRAY, null, 'start');
+    o += step >= 6 ? T(700, 344, c.sst, 14, INK, 700, 'end') : T(700, 344, '?', 14, HOLD, 700, 'end');
+    const m = c.ms[mi];
+    o += T(504, 374, '⑦ R² · ' + m.n, 11, GRAY, null, 'start');
+    if (step >= 7) {
+      o += T(504, 416, '제곱오차 합 ' + Math.round(m.r2 * 100) + ' % 감소', 10, GRAY, null, 'start');
+      o += T(504, 400, '1 ' + MN + ' (' + m.sse + ' ÷ ' + c.sst + ')', 11.5, GRAY, null, 'start');
+      o += T(700, 402, trim(m.r2), 26, AMB, 800, 'end');
+    } else {
+      o += T(700, 402, '?', 26, HOLD, 800, 'end');
+    }
+    return o;
+  }
+
+  function render() {
+    const c = calc();
+    tTitle.textContent = c.s.t;
+    gCht.innerHTML = chart(c);
+    gTbl.innerHTML = table(c);
+    gPan.innerHTML = panel(c);
+    tOut.textContent = '단계 ' + step + ' · ' + STEP[step];
+    btns.forEach(b => {
+      const a = b.dataset.act;
+      if (a === 'p-0' || a === 'p-1') b.classList.toggle('on', a === 'p-' + key);
+      if (a === 'm-0' || a === 'm-1') {
+        const k = a === 'm-0' ? 0 : 1;
+        b.textContent = c.ms[k].n;
+        b.classList.toggle('on', k === mi);
+      }
+      if (a === 'next') b.disabled = step >= 7;
+    });
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => {
+    const a = b.dataset.act;
+    if (a === 'p-0') { key = 0; mi = 0; step = 0; }
+    else if (a === 'p-1') { key = 1; mi = 0; step = 0; }
+    else if (a === 'm-0') mi = 0;
+    else if (a === 'm-1') mi = 1;
+    else if (a === 'next') { if (step < 7) step++; }
+    else if (a === 'reset') { mi = 0; step = 0; }
+    render();
+  }));
+  render();
+}
+  const WIDGET_INIT = {r2denom: initW_r2denom, r2swap: initW_r2swap, degsplit: initW_degsplit, nearfar: initW_nearfar, handcheck: initW_handcheck};
   function initWidgets(scope) { (scope || document).querySelectorAll('.widget[data-w]').forEach(el => { if (el.dataset.ready) return; const f = WIDGET_INIT[el.dataset.w]; if (f) { f(el, window.LESSON_DATA); el.dataset.ready = '1'; } }); }
   window.initWidgets = initWidgets;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => initWidgets()); else initWidgets();
