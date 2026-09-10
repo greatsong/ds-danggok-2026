@@ -436,3 +436,11 @@ details.selfcheck-fold > summary { cursor: pointer; display: inline-block; paddi
 details.selfcheck-fold > summary::-webkit-details-marker { display: none; }
 details.selfcheck-fold > summary::before { content: "▸ "; }
 details.selfcheck-fold[open] > summary::before { content: "▾ "; }
+
+/* ── 심화 실험실 안내 카드 ── */
+.callout.lab { border: 2px solid var(--accent); background: linear-gradient(180deg, #fffaf0 0%, #fff 60%); }
+.callout.lab .h { color: var(--accent); font-size: 1.02rem; }
+.callout.lab .labgo { margin: 12px 0 2px; }
+.callout.lab .labgo a { display: inline-block; padding: 9px 20px; font-size: 0.95rem; font-weight: 800;
+  color: #fff; background: var(--accent); border-radius: 999px; text-decoration: none; }
+.callout.lab .labgo a:hover { filter: brightness(1.06); }
