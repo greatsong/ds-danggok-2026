@@ -146,7 +146,7 @@
 - https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
   (열: movieCd(영화코드)·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·
    first_scrn(첫 관측일 스크린수)·first_show(첫 관측일 상영횟수)·first_date(10위권 첫 등장일)·
-   peak(성수기 개봉이면 1, 아니면 0 — 1월·7월·12월이 성수기)·
+   peak(성수기 개봉이면 1, 아니면 0 — 12·1·7·8월이 성수기)·
    first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 여러 변수로 총 관객을 예측한다
@@ -338,7 +338,7 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
     <ol>
       <li>변수를 하나 쓸 때와 세 가지를 쓸 때, 테스트 점수는 어느 쪽이 높았습니까? 변수를 늘리면 점수가 반드시 오릅니까?</li>
       <li>첫 주 관객 수를 넣었을 때 점수는 얼마나 달라졌습니까? 그 점수를 <b>개봉 전 예측 성적</b>이라고 말할 수 있습니까?</li>
-      <li>첫 주 관객 수는 언제 알 수 있는 값입니까? 개봉 전에 예측하려는 사람에게 이 값이 손에 있습니까?</li>
+      <li>첫 주 관객 수는 언제 알 수 있는 값입니까? 개봉 전에 예측하려는 사람이 이 값을 사용할 수 있습니까?</li>
       <li>세 조합 가운데 <b>개봉 전에 실제로 쓸 수 있는</b> 것은 어느 것입니까? 그 조합의 점수를 보고 무엇을 결정하겠습니까?</li>
     </ol>
   </div>
@@ -391,9 +391,34 @@ st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개�
 
   <div class="callout theory">
     <div class="h">🎬 성수기 — 관객이 몰리는 시기</div>
-    <p>영화계에서 <b>성수기</b>는 관객이 몰리는 시기를 뜻합니다. 우리나라에서는 여름 방학과 겨울 방학, 연말연시가 여기에 해당합니다. 배급사는 기대작을 이 시기에 맞춰 개봉시키고, 그만큼 상영관도 많이 잡습니다.</p>
-    <p class="mini">우리 표는 최근 1년치라 달마다 스무 편 안팎입니다. 2004년부터 쌓인 주간 데이터 3,789편으로 보면 1·7·8·12월 개봉작의 관객 수 중앙값은 다른 달의 1.8배입니다. 방학과 연말에 관객이 몰린다는 것이 오랜 경향입니다.</p>
-    <p>위 그림에서 어느 달의 중앙값이 높은지 확인한 뒤, 그 달에 개봉했으면 1, 아니면 0을 적는 새 열을 만듭니다. 이렇게 만든 열이 <b>성수기</b> 속성입니다. 값이 0과 1뿐인 이런 속성을 여러 갈래 가운데 하나를 고르는 <b>범주형 속성</b>이라 하고, 회귀에서는 0과 1로 바꿔 넣습니다.</p>
+    <p>영화계에서 <b>성수기</b>는 관객이 몰리는 시기를 뜻합니다. 배급사는 기대작을 이 시기에 맞춰 개봉시키고, 그만큼 상영관도 많이 잡습니다. 그렇다면 어느 달이 성수기입니까. 방학이라고 답하기 쉽지만 데이터는 그렇게 말하지 않습니다.</p>
+    <p>우리 표는 최근 1년치라 달마다 스무 편 안팎이어서 달 사이의 차이를 판단하기에는 편수가 적습니다. 아래 그림은 2004년부터 2026년까지 주간 10위권에 든 영화 3,789편을 개봉월별로 모아 중앙값을 그린 것입니다.</p>
+  </div>
+
+  <figure class="interactive" data-fig="monthlong">
+    <div class="widget" data-w="monthlong">
+      <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="개봉월별 최종 관객 수 중앙값 막대그래프. 12·1·7·8월이 전체 중앙값 위로 뚜렷하게 솟아 있고, 방학이 낀 2월은 전체 중앙값 아래에 있습니다.">
+        <text x="30" y="24" font-size="13.5" font-weight="800" fill="#2b2d3a">개봉월별 최종 관객 수의 중앙값</text>
+        <line data-dyn="base" stroke="#e45756" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text data-t="base" x="700" y="0" text-anchor="end" font-size="12" fill="#e45756"></text>
+        <g data-dyn="bars"></g>
+        <g data-dyn="labs"></g>
+        <text x="30" y="288" font-size="11" fill="#7a7f95">2004~2026년 주간 10위권 진입작 3,789편 · 전체 영화가 아니라 10위권에 든 영화의 중앙값입니다</text>
+      </svg>
+      <div class="wctl">
+        <button class="wbtn on" type="button" data-act="peak" aria-pressed="true">성수기 표시</button>
+        <button class="wbtn" type="button" data-act="vac" aria-pressed="false">방학 표시</button>
+        <span class="wout" data-t="out"></span>
+      </div>
+    </div>
+    <figcaption>단추로 표시를 바꾸어 봅니다. 방학이 낀 달은 1·2·7·8월인데, 그 가운데 2월만 전체 중앙값 아래에 있습니다. 반대로 방학이 아닌 12월이 열두 달 가운데 가장 높습니다. 그래서 이 수업에서는 방학이 아니라 <b>12·1·7·8월</b>을 성수기로 잡습니다. 2004년부터 2026년까지의 기록이라 날마다 갱신되지 않습니다.</figcaption>
+  </figure>
+
+  <div class="callout theory">
+    <div class="h">📌 성수기 속성 만들기</div>
+    <p>그림에서 중앙값이 높은 달을 확인했습니다. 이제 <b>12·1·7·8월에 개봉했으면 1, 아니면 0</b>을 적는 새 열을 만듭니다. 이렇게 만든 열이 <b>성수기</b> 속성입니다.</p>
+    <p>성수기냐 아니냐처럼 수의 크기가 아니라 갈래를 나타내는 속성을 <b>범주형 속성</b>이라고 합니다. 회귀는 수를 계산하므로 범주형 속성은 이렇게 0과 1로 바꾸어 넣습니다.</p>
+    <p class="mini">2월을 넣을지 말지는 데이터를 보고 정한 것입니다. 방학이라는 이유만으로 넣었다면 예측에 도움이 되지 않는 열을 하나 늘렸을 것입니다.</p>
   </div>
   <p>성수기 속성은 이미 우리 표에 들어 있습니다. 앱에서 이 속성을 켜고 끄며 점수가 어떻게 달라지는지 확인합니다. 데이터를 그려 규칙을 찾고, 그 규칙을 새 열로 만들어 모델에 주는 일을 <b>속성 만들기</b>라고 합니다.</p>
   <div class="callout mini">
