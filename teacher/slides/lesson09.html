@@ -151,9 +151,9 @@
 <!-- 7 시그모이드 곡선 -->
 <section class="slide">
   <div class="kicker">9-6 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">시그모이드 곡선 위의 시험용 영화</h2>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">시그모이드 곡선 위의 테스트용 영화</h2>
   <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="sigmoidPath">
-<svg viewBox="0 0 720 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="시험용 영화의 가중합과 추정 확률을 시그모이드 곡선 위에 나타낸 그림. 문턱값 슬라이더를 옮기면 성공으로 예측하는 편수와 정확도가 바뀜">
+<svg viewBox="0 0 720 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="테스트용 영화의 가중합과 추정 확률을 시그모이드 곡선 위에 나타낸 그림. 문턱값 슬라이더를 옮기면 성공으로 예측하는 편수와 정확도가 바뀜">
   <!-- 축선: 본판 가로·세로, 확률 띠 세로 -->
   <g stroke="#e3ddcf" stroke-width="1">
     <line x1="56" y1="268" x2="556" y2="268"/>
@@ -174,14 +174,8 @@
     <text class="note1" x="156" y="62">확률 1 = 닿지 않는 선</text>
     <text class="note2" x="156" y="82">σ(5)=0.9933 · σ(10)=0.99995</text>
   </g>
-  <!-- 가중합 눈금 -->
-  <g font-size="14" fill="#6b7385" text-anchor="middle">
-    <text x="131" y="286">−6</text>
-    <text x="231" y="286">−4</text>
-    <text x="331" y="286">−2</text>
-    <text x="431" y="286">0</text>
-    <text x="531" y="286">2</text>
-  </g>
+  <!-- 가중합 눈금 — 데이터의 가중합 범위에 맞추어 그린다 -->
+  <g class="zticks" font-size="14" fill="#6b7385" text-anchor="middle"></g>
   <!-- 확률 눈금 -->
   <g font-size="14" fill="#6b7385" text-anchor="end">
     <text x="48" y="273">0</text>
@@ -190,7 +184,7 @@
   </g>
   <!-- 시그모이드 곡선 -->
   <polyline class="curve" fill="none" stroke="#6b7385" stroke-width="2.5" points=""/>
-  <!-- 시험용 영화: 본판 점 · 띠 착지 점 · 클릭 히트원 -->
+  <!-- 테스트용 영화: 본판 점 · 띠 착지 점 · 클릭 히트원 -->
   <g class="mpts"></g>
   <g class="bpts"></g>
   <g class="hits"></g>
@@ -214,7 +208,7 @@
   <button class="wbtn" type="button" data-k="miss">확률은 낮고 실제는 성공</button>
 </div>
 </div></div>
-  <p class="small">시험용 영화 · 레이블 기준 100만 명 · 확률은 4절 표와 같은 모델에서 갱신 시점에 미리 계산한 값</p>
+  <p class="small">테스트용 영화 · 레이블 기준 100만 명 · 확률은 4절 표와 같은 모델에서 갱신 시점에 미리 계산한 값</p>
 </section>
 
 <!-- 8 챌린저호 -->
@@ -248,12 +242,12 @@
   <p class="small">수업의 정의 — 기록된 누적 관객 수 100만 명 이상이면 성공(1), 미만이면 기준 미달(0) · 제작비·수익 데이터가 없으므로 실제 흑자·적자와 무관</p>
 </section>
 
-<!-- 11 성공 기준선 -->
+<!-- 11 성공 레이블 기준 -->
 <section class="slide">
   <div class="kicker">9-9 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">성공 기준선의 결정</h2>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">성공 레이블 기준의 결정</h2>
   <div class="diagram" style="--wh:36vh">    <div class="widget" data-w="labelline">
-  <svg viewBox="0 0 720 348" role="img" aria-label="전체 영화의 관객 수 분포와 성공 기준선. 기준선을 옮기면 성공 레이블 편수와 경계에 걸린 두 편이 바뀌고, 이유를 적어야 정확도가 공개되는 그림">
+  <svg viewBox="0 0 720 348" role="img" aria-label="분석 대상 영화의 관객 수 분포와 성공 레이블 기준. 레이블 기준을 옮기면 성공 레이블 편수와 경계에 걸린 두 편이 바뀌고, 이유를 적어야 정확도가 공개되는 그림">
     <text x="56" y="26" text-anchor="start" font-size="15" font-weight="800" fill="#1c2230">관객 수 분포 · 가로축 로그</text>
     <g class="bars"></g>
     <line x1="56" y1="214" x2="430" y2="214" stroke="#e3ddcf" stroke-width="1.5"/>
@@ -274,12 +268,12 @@
 
     <g class="cpanel">
       <rect x="452" y="144" width="244" height="112" rx="6" fill="#fff" stroke="#2b7fd6" stroke-width="2"/>
-      <text x="464" y="168" font-size="14" font-weight="800" fill="#6b7385">시험용 정확도</text>
+      <text x="464" y="168" font-size="14" font-weight="800" fill="#6b7385">테스트용 정확도</text>
       <text x="464" y="196" font-size="14" fill="#1c2230">로지스틱 회귀</text>
       <text class="clog" x="684" y="196" text-anchor="end" font-size="17" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
       <text x="464" y="222" font-size="14" fill="#1c2230">의사결정트리</text>
       <text class="ctree" x="684" y="222" text-anchor="end" font-size="17" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
-      <text x="464" y="246" font-size="14" fill="#6b7385">학습용 영화 · 문턱값 0.5</text>
+      <text x="464" y="246" font-size="14" fill="#6b7385">훈련용 영화 · 문턱값 0.5</text>
     </g>
     <g class="cover">
       <rect x="452" y="144" width="244" height="112" rx="6" fill="#fff" opacity="0.92"/>
@@ -305,7 +299,7 @@
     <span class="wout"></span>
   </div>
 </div></div>
-  <p class="small">기준선을 옮기면 성공 레이블 수와 경계의 영화가 바뀜 · 정확도는 기준을 제출해야 공개, 기준을 다시 옮기면 '다시 학습' 필요</p>
+  <p class="small">레이블 기준을 옮기면 성공 레이블 수와 경계의 영화가 바뀜 · 정확도는 기준을 제출해야 공개, 기준을 다시 옮기면 '다시 학습' 필요</p>
 </section>
 
 <!-- 12 입력의 집계 시점 -->
@@ -326,43 +320,47 @@
 <section class="slide">
   <div class="kicker">9-11 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 — 데이터와 레이블</h2>
-  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">"흥행 분류기" 스트림릿 앱을 파일 하나로 만들어 줘.<br>
-데이터: https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kobis_movies.csv<br>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.55;max-width:46em;margin-top:1.6vh">"흥행 분류기" 스트림릿 앱을 파일 하나로 만들어 줘.<br>
+데이터: https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv<br>
 이 파일의 열 이름은 movieCd, movieNm, openDt, genre, nation, first_scrn, first_show, first_date, peak, first_week_audi, total_audi, days_in_top10이고, 인코딩은 UTF-8이야.<br>
-수업의 분석 대상은 어제까지 모인 개봉 기록이야.<br>
+영화별 표에 있는 영화를 모두 사용해 줘.<br>
 total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 분류해 줘.<br>
 기준은 50만·100만·300만 명 중 고를 수 있게 해 줘.<br>
 입력은 first_scrn·first_show·peak·genre·nation을 사용해 줘.<br>
 first_scrn·first_show는 개봉일이 아니라 10위권에 처음 관측된 날의 집계야.<br>
+genre에 여러 장르가 세로막대(|)로 적힌 영화는 첫 번째 장르만 써 줘.<br>
+장르와 국가는 갈래를 나타내는 값이니 0과 1의 열로 바꿔 줘.<br>
 first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
-  <p class="small">교재 ①과 같은 문장 · 데이터 주소·열 이름 전체·인코딩·레이블 기준·입력 목록이 프롬프트 안에 있음</p>
+  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 데이터 주소·열 이름 전체·인코딩·레이블 기준·입력 목록·장르 전처리가 프롬프트 안에 있음</p>
 </section>
 
 <!-- 14 샘플 프롬프트 2 -->
 <section class="slide">
   <div class="kicker">9-11 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 — 분할과 화면</h2>
-  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">영화 코드 순으로 정렬해 열 편 중 앞 세 편을 시험용으로 고정하고,<br>
-학습용으로만 학습과 표준화를 해 줘. 두 모델은 같은 시험용 데이터로 평가해 줘.<br>
-학습용과 시험용의 영화 편수를 화면에 적어 줘.<br>
-시험용 데이터로 계산한 정확도를 화면에 표시해 줘.<br>
-시험용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.<br>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.55;max-width:46em;margin-top:1.6vh">영화 코드 순으로 정렬해 열 편 중 앞 세 편을 테스트용으로 고정하고,<br>
+훈련용으로만 학습과 표준화를 해 줘. 이 모델은 같은 테스트용 데이터로 평가해 줘.<br>
+훈련용과 테스트용의 영화 편수를 화면에 적어 줘.<br>
+테스트용 데이터로 계산한 정확도를 화면에 표시해 줘.<br>
+테스트용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.<br>
 확률이 0.5 이상이면 성공으로 분류하고 실제 레이블도 함께 보여 줘.<br>
-시험용 영화의 추정 확률을 높은 순으로 막대그래프로 그리고,<br>
+테스트용 영화의 추정 확률을 높은 순으로 막대그래프로 그리고,<br>
 문턱값 0.5 선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘.<br>
 영화 제목이 겹치지 않게 가로축 글자를 기울여 줘.<br>
 그래프는 plotly로 그려 줘.<br>
+테스트용 영화의 실제 레이블·예측 확률·스크린 수·개봉일을 표로 보여 줘.<br>
 이 코드의 평가는 기록된 데이터의 분류 연습이며, 개봉 전 예측 성능이 아님을 표시해 줘.<br>
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
-  <p class="small">학습용과 시험용을 나눈 뒤 main.py와 requirements.txt 두 파일로 저장</p>
+  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 표준화 — 입력마다 다른 값의 크기를 훈련용 데이터의 평균과 퍼짐을 기준으로 맞추는 처리, 11차시에서 다시 다룸<br>훈련용과 테스트용을 나눈 뒤 main.py와 requirements.txt 두 파일로 저장</p>
 </section>
 
 <!-- 15 개선 프롬프트 -->
 <section class="slide">
   <div class="kicker">9-12 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">개선 프롬프트 — 같은 문제를 트리에게</h2>
-  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">의사결정트리로도 만들어서 어떤 질문을 어떤 순서로 던지는지<br>
-그림으로 보여 줘. 두 모델의 정확도를 나란히 비교해 줘.</div>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">앞 코드에 이어서 의사결정트리로도 만들어 줘.<br>
+어떤 질문을 어떤 순서로 던지는지 그림으로 보여 줘.<br>
+로지스틱 회귀와 의사결정트리의 정확도를 나란히 보여 줘.</div>
   <p class="small">교재 ③과 같은 문장 · 앞 코드 끝에 이어 붙임 · 트리 그림에서 먼저 던진 질문을 읽고 정확도를 기록</p>
 </section>
 
@@ -371,11 +369,11 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
   <div class="kicker">9-13 · 원리</div>
   <h2>두 모델이 답하는 방식</h2>
   <table class="mini">
-    <tr><th>모델</th><th>답하는 방식</th><th>정확도 (기준 100만, 같은 시험용)</th></tr>
+    <tr><th>모델</th><th>답하는 방식</th><th>정확도 (기준 100만, 같은 테스트용)</th></tr>
     <tr><td>로지스틱 회귀</td><td>0~1 사이의 성공 확률</td><td><em>화면의 값</em></td></tr>
     <tr><td>의사결정트리</td><td>질문의 순서(규칙)</td><td><em>화면의 값</em></td></tr>
   </table>
-  <p class="small">같은 학습용과 시험용 사용 · 시험용 데이터는 학습과 표준화의 기준 계산에서 제외 · 이 데이터·분할·설정에서 얻은 값</p>
+  <p class="small">정확도 — 예측이 실제와 같았던 편수의 비율, 맞힌 편수 ÷ 전체 편수 · 네 칸으로 나누어 보는 방법은 10차시<br>같은 훈련용과 테스트용 사용 · 테스트용 데이터는 학습과 표준화의 기준 계산에서 제외 · 이 데이터·분할·설정에서 얻은 값</p>
 </section>
 
 <!-- 17 두 다이얼 -->
@@ -383,7 +381,7 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
   <div class="kicker">9-14 · 그림</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">레이블 기준과 문턱값의 두 다이얼</h2>
   <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="twoDials">
-<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="위는 실제 관객 수, 아래는 추정 확률. 같은 영화들을 두 층에 나란히 놓고 레이블 기준선과 문턱선을 각각 움직이는 그림">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="위는 실제 관객 수, 아래는 추정 확률. 같은 테스트용 영화를 두 층에 나란히 놓고 레이블 기준과 문턱선을 각각 움직이는 그림">
 <!-- 위 = 정답 층: 가로축 누적 관객 수 로그 척도(10^3~10^7.25 → 72~676) -->
 <text x="56" y="32" font-size="15" fill="#6b7385">정답 층 · 가로축 누적 관객 수(명)</text>
 <rect x="56" y="40" width="640" height="92" fill="#b07a00" opacity=".06"/>
@@ -429,12 +427,12 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
   <p class="small">레이블 기준 3종의 학습 결과는 미리 계산해 저장한 값 · 교재 3절 예시 코드와 같은 데이터·분할·설정</p>
 </section>
 
-<!-- 18 기준선과 정확도 -->
+<!-- 18 레이블 기준과 정확도 -->
 <section class="slide">
   <div class="kicker">9-15 · 발견</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">기준선과 정확도의 엇갈림</h2>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">레이블 기준과 정확도의 엇갈림</h2>
   <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="labelcurve">
-  <svg viewBox="0 0 720 252" role="img" aria-label="성공 기준 열 지점의 두 모델 정확도 꺾은선과 시험용 성공 레이블 편수 막대. 기준을 올릴수록 정확도는 오르고 성공 레이블은 줄어드는 엇갈림">
+  <svg viewBox="0 0 720 252" role="img" aria-label="성공 기준 열 지점의 두 모델 정확도 꺾은선과 테스트용 성공 레이블 편수 막대. 기준을 올릴수록 정확도는 오르고 성공 레이블은 줄어드는 엇갈림">
     <g stroke="#e3ddcf" stroke-width="1" stroke-dasharray="4 4">
       <line x1="84" y1="186" x2="624" y2="186"/>
       <line x1="84" y1="125" x2="624" y2="125"/>
@@ -467,7 +465,7 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
       <circle cx="600" cy="22" r="4.5" fill="#b07a00"/>
       <text x="609.5" y="26">의사결정트리</text>
       <rect x="489" y="38" width="12" height="12" fill="#b9b3a5"/>
-      <text x="507" y="48">시험용 성공 레이블 편수</text>
+      <text x="507" y="48">테스트용 성공 레이블 편수</text>
     </g>
     <g class="hits"></g>
   </svg>
@@ -476,7 +474,7 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
     <button class="wbtn" type="button" data-d="1">높은 기준 ▶</button>
   </div>
 </div></div>
-  <p class="small">기준을 올릴수록 정확도는 대체로 오르지만 20만 명에서는 내려감 · 시험용의 성공 레이블은 기준을 올릴수록 줄어들어 한 편으로 감소(회색 막대)</p>
+  <p class="small">기준을 올릴수록 정확도는 대체로 오르지만 20만 명에서는 내려감 · 테스트용의 성공 레이블은 기준을 올릴수록 줄어들어 한 편으로 감소(회색 막대)</p>
   <p class="point" style="margin-top:1.6vh">모델의 종류는 같고, <b>사람이 정한 기준 하나</b>가 결과를 바꾼 것</p>
 </section>
 
@@ -491,8 +489,8 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
     <tr><td>장르 · 판타지</td><td>0.131</td></tr>
     <tr><td>장르 · 드라마</td><td>0.116</td></tr>
   </table>
-  <p class="point">중요도는 <b>단서의 무게</b>일 뿐 인과관계의 증거가 아님</p>
-  <p class="small">스크린을 많이 확보해 관객이 늘었는지, 흥행을 기대해 스크린을 많이 배정했는지는 이 값으로 구분 불가 · 데이터와 설정이 바뀌면 중요도 배분도 달라짐</p>
+  <p class="point">feature importance는 이 모델이 무엇을 <b>단서</b>로 삼았는지 보여 줄 뿐 인과관계의 증거가 아님</p>
+  <p class="small">데이터와 설정이 바뀌면 중요도 배분도 달라짐 · 자세한 논의는 9-19 확인 문제</p>
 </section>
 
 <!-- 20 타이타닉 -->
@@ -539,7 +537,7 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.</div>
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>9차시 요약</h2>
-  <div class="split" style="margin-top:2.6vh"><div class="card"><div class="t">문제</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">묻는 말이 "얼마나"면 회귀, "어느 쪽"이면 분류</div></div><div class="card"><div class="t">확률</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">로지스틱 회귀는 확률을 추정하고 문턱값 0.5로 범주를 결정</div></div><div class="card"><div class="t">규칙</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">의사결정트리는 질문의 순서로 답함 · 같은 시험용에서 두 정확도가 갈림</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">레이블 기준도 사람의 판단, feature importance는 원인의 증거가 아님</div></div></div>
+  <div class="split" style="margin-top:2.6vh"><div class="card"><div class="t">문제</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">묻는 말이 "얼마나"면 회귀, "어느 쪽"이면 분류</div></div><div class="card"><div class="t">확률</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">로지스틱 회귀는 확률을 추정하고 문턱값 0.5로 범주를 결정</div></div><div class="card"><div class="t">규칙</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">의사결정트리는 질문의 순서로 답함 · 같은 테스트용에서 두 정확도가 갈림</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--ink);margin-top:.6vh">레이블 기준도 사람의 판단, feature importance는 원인의 증거가 아님</div></div></div>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px);margin-top:2.6vh">다음 시간 — 항상 다수 범주로 예측하는 기준 모델과의 비교, 성공작을 찾아낸 비율</p>
 </section>
 

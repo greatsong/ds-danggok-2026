@@ -97,7 +97,7 @@
   <ul class="facts">
     <li>문제 해결에 필요한 <b>속성</b> 선택</li>
     <li>데이터 관찰을 통한 <b>새 속성</b> 생성</li>
-    <li><b>R²·평균절대오차·평균제곱오차</b>로 판단하는 모델 성능</li>
+    <li><b>R²와 평균절대오차(MAE)</b>가 나타내는 값</li>
   </ul>
   <p class="point">속성 고르기 → 없으면 만들기 → 쓸 만한지 판단</p>
 </section>
@@ -235,7 +235,7 @@
       <text x="472" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">점수(R²)</text>
     </svg>
   </div>
-  <p class="small" style="margin-top:1.6vh">영화코드 순 정렬 → 열 편마다 앞 세 편 시험용 · 모든 변수 조합에 같은 분할</p>
+  <p class="small" style="margin-top:1.6vh">영화코드 순 정렬 → 열 편마다 앞 세 편 테스트용 · 모든 변수 조합에 같은 분할</p>
 </section>
 
 <section class="slide">
@@ -253,21 +253,23 @@
 <section class="slide">
   <div class="kicker">7-7 · 실습</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (1)</h2>
-  <div class="prompt" style="font-size:clamp(11px,1.2vw,17px);line-height:1.55;max-width:58em;margin-top:1.6vh">"영화 흥행 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.<br>
-박스오피스 데이터(kobis_daily.csv)와 영화 정보 표(kobis_movies.csv)를 합쳐서<br>
-영화의 총 관객 수를 예측하는 다중 회귀 모델을 만들어 줘.<br>
+  <div class="prompt" style="font-size:clamp(11px,1.2vw,17px);line-height:1.5;max-width:58em;margin-top:1.2vh">"영화 흥행 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.<br>
+영화 정보 표(kobis_movies.csv)로 영화의 총 관객 수를 예측하는<br>
+다중 회귀 모델을 만들어 줘. 이 표는 박스오피스 데이터(kobis_daily.csv)를<br>
+영화 한 편에 한 줄로 정리해 둔 것이야. 기간은 일별 표에서 읽어 화면에 적어 줘.<br>
 어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,<br>
 학습에 쓰지 않은 영화로 평가한 점수와<br>
 예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.<br>
-영화별 표를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 시험용으로 떼어 놓고 나머지로 학습해 줘.<br>
+영화별 표를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 테스트용으로 떼어 놓고 나머지로 학습해 줘.<br>
 영화별 표에 있는 영화를 모두 사용해 줘.<br>
 학습에 쓴 영화 편수와 점수를 평가한 영화 편수, 기준 기간을 화면에 적어 줘.<br>
-시험용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 그리고,<br>
-예측이 실제와 같을 때를 나타내는 기준선도 함께 표시해 줘.<br>
+영화별 표의 맨 위 열 줄도 그대로 화면에 보여 줘.<br>
+테스트용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 그리고,<br>
+실젯값과 예측값이 같은 점을 잇는 대각선도 함께 표시해 줘.<br>
 관객 수는 편차가 크니 두 축을 로그로 그려 줘.<br>
 예측이 1,000명보다 작게 나온 영화는 그래프 바닥에 붙여 표시하고 몇 편인지 적어 줘.<br>
 그래프는 plotly로 그려 줘.</div>
-  <p class="small" style="margin-top:1.6vh">교재 ①과 같은 문장 · 앞부분에 담긴 조건 — 두 표의 결합 · 체크박스 변수 선택 · 분할 규칙 · 화면 표기 항목 · 산점도와 로그 축</p>
+  <p class="small" style="margin-top:1.2vh">교재 ①과 같은 문장 · 앞부분에 담긴 조건 — 영화별 표 사용 · 체크박스 변수 선택 · 분할 규칙 · 화면 표기 항목 · 표 미리보기 · 산점도와 로그 축</p>
 </section>
 
 <section class="slide">
@@ -290,10 +292,10 @@
   <h2>예시 코드가 하는 일</h2>
   <ul class="facts" style="margin-top:.4vh">
     <li>두 표를 읽어 들임 · 두 표를 잇는 열은 영화코드</li>
-    <li>영화코드 순 정렬 후 열 편마다 앞 세 편 시험용 지정</li>
-    <li>체크박스로 변수 선택 · 학습 편수 · 시험 편수 · 기준 기간 화면 표기</li>
+    <li>영화코드 순 정렬 후 열 편마다 앞 세 편 테스트용 지정</li>
+    <li>체크박스로 변수 선택 · 학습 편수 · 테스트 편수 · 기준 기간 화면 표기 · 표 맨 위 열 줄 미리보기</li>
     <li>R²와 평균 오차 두 지표 표시</li>
-    <li>실제 대 예측 산점도 · 로그 축 · 기준선 · 1,000명 미만 예측은 그래프 바닥에 표시</li>
+    <li>실제 대 예측 산점도 · 로그 축 · 대각선 · 1,000명 미만 예측은 그래프 바닥에 표시</li>
   </ul>
   <p class="small">main.py와 requirements.txt, 두 파일로 저장</p>
 </section>
@@ -379,7 +381,7 @@
       <tr><td>기본 변수 + 첫 주 관객 수</td><td></td><td></td></tr>
     </tbody>
   </table>
-  <p class="small" style="margin-top:2vh">변수 하나 → 세 가지, 점수의 변화 방향 · 첫 주 관객 수 추가 시 점수 변화의 크기<br>그 값을 알 수 있는 시점 · 개봉 전에 실제로 쓸 수 있는 조합</p>
+  <p class="small" style="margin-top:2vh">변수 하나 → 세 가지, 점수의 변화 방향 · 첫 주 관객 수 추가 시 점수 변화의 크기<br>표에 적은 평균 오차의 크기 · 첫 관측일 집계가 끝난 시점에 실제로 쓸 수 있는 조합</p>
 </section>
 
 <section class="slide">
@@ -388,8 +390,9 @@
   <table class="mini" style="margin-top:2.2vh;font-size:clamp(14px,1.7vw,24px)">
     <thead><tr><th>속성</th><th>알 수 있는 시점</th><th>개봉 전 예측</th><th>첫 주 뒤 예측</th></tr></thead>
     <tbody>
-      <tr><td>스크린 수 · 상영 횟수</td><td>개봉 무렵</td><td>쓸 수 있음</td><td>쓸 수 있음</td></tr>
+      <tr><td>첫 관측일 스크린 수 · 상영 횟수</td><td>10위권에 처음 든 날</td><td><em>쓸 수 없음</em></td><td>쓸 수 있음</td></tr>
       <tr><td>성수기 개봉</td><td>개봉일이 정해지면</td><td>쓸 수 있음</td><td>쓸 수 있음</td></tr>
+      <tr><td>장르 · 국가</td><td>개봉 전</td><td>쓸 수 있음</td><td>쓸 수 있음</td></tr>
       <tr><td>첫 주 관객 수</td><td>개봉 7일 뒤</td><td><em>쓸 수 없음</em></td><td>쓸 수 있음</td></tr>
       <tr><td>톱10에 머문 일수</td><td>상영이 끝난 뒤</td><td><em>쓸 수 없음</em></td><td><em>쓸 수 없음</em></td></tr>
     </tbody>
@@ -467,15 +470,16 @@
 그 시점에 알 수 있는 정보로 새 속성을 만들어 보자.<br>
 - 박스오피스 표에서 영화마다 10위권에 처음 든 날의 일관객을 상영횟수로 나눠<br>
 &nbsp;&nbsp;'상영당 관객 수'라는 새 열을 만들어 줘. 한 번 상영에 몇 명이 들었는지야.<br>
+- 만든 열의 값이 어떻게 흩어져 있는지 히스토그램으로 먼저 그려 줘. 그래프는 plotly로 그려 줘.<br>
 - 기본 변수 세 개만 쓴 경우와 거기에 상영당 관객 수를 더한 경우의 R²를 나란히 보여 줘.<br>
-- 학습용과 시험용 나누기는 앞과 똑같이 해 줘.</div>
-  <p class="small" style="margin-top:1.8vh">요청에 담긴 네 가지 — 무엇으로 만드는지 · 그 값의 뜻 · 비교 대상 · 유지할 조건<br>예측 시점은 첫 관측일 집계 이후 · 개봉 전 예측에는 사용 불가</p>
+- 훈련용과 테스트용 나누기는 앞과 똑같이 해 줘.</div>
+  <p class="small" style="margin-top:1.8vh">요청에 담긴 다섯 가지 — 무엇으로 만드는지 · 그 값의 뜻 · 분포 먼저 그리기 · 비교 대상 · 유지할 조건<br>예측 시점은 첫 관측일 집계 이후 · 개봉 전 예측에는 사용 불가</p>
 </section>
 
 <section class="slide">
   <div class="kicker">7-18 · 판단</div>
   <h2>데이터 누수</h2>
-  <p class="point" style="margin-top:1.4vh">예측 시점에 알 수 없는 정보가 변수로 새어 들어와 <b>점수를 부풀리는 것</b></p>
+  <p class="point" style="margin-top:1.4vh">예측 시점에 알 수 없는 값이 변수로 들어가 <b>점수를 부풀리는 일</b> · 10차시에서 상술</p>
   <ul class="facts" style="margin-top:.6vh">
     <li>첫 주 관객 수를 개봉 전 예측에 사용하는 경우가 그 예</li>
     <li>점수 상승 = 성능 향상 아님</li>

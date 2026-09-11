@@ -299,7 +299,7 @@
   <div class="kicker">8-13 · 교과서 132쪽</div>
   <h2>결정계수의 정의</h2>
   <blockquote style="margin-top:3vh">결정 계수(R² score: R-squared score)는 회귀 모델이 실제 데이터와 얼마나 유사하게 예측하고 구체적으로 설명하는지를 나타낸다</blockquote>
-  <p class="point">비교 상대는 평가 대상 실젯값의 평균을 항상 예측하는 기준선</p>
+  <p class="point">비교 상대는 평가 대상 실젯값의 평균을 항상 예측하는 기준 모델(평균값 기준)</p>
 </section>
 
 <section class="slide">
@@ -343,11 +343,11 @@
       <rect x="243" y="80" width="52" height="52" fill="#9a9a9a" opacity="0.18" stroke="#aaaaaa" stroke-width="1"/>
       <line x1="295" y1="80" x2="295" y2="132" stroke="#e45756" stroke-width="2"/>
       <circle cx="295" cy="80" r="4.5" fill="#9a9a9a"/>
-      <text x="180" y="235" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">제곱오차 합 = 20</text>
+      <text x="180" y="235" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">제곱오차 합 = 40</text>
       <!-- 우 패널: 내 직선 -->
       <text x="530" y="30" text-anchor="middle" font-size="13" font-weight="800" fill="#a97a00">내 직선</text>
       <line x1="385" y1="163" x2="675" y2="99" stroke="#f4b400" stroke-width="3"/>
-      <!-- 같은 위치의 점 5개 — 오차 길이가 절반으로 줄어, 정사각형 넓이는 4분의 1 (20 대 5) -->
+      <!-- 같은 위치의 점 5개 — 오차 길이가 절반으로 줄어, 정사각형 넓이는 4분의 1 (40 대 10) -->
       <rect x="405" y="159" width="26" height="26" fill="#f4b400" opacity="0.35" stroke="#e8930c" stroke-width="1"/>
       <line x1="405" y1="159" x2="405" y2="185" stroke="#e45756" stroke-width="2"/>
       <circle cx="405" cy="185" r="4.5" fill="#9a9a9a"/>
@@ -363,19 +363,19 @@
       <rect x="645" y="80" width="26" height="26" fill="#f4b400" opacity="0.35" stroke="#e8930c" stroke-width="1"/>
       <line x1="645" y1="80" x2="645" y2="106" stroke="#e45756" stroke-width="2"/>
       <circle cx="645" cy="80" r="4.5" fill="#9a9a9a"/>
-      <text x="530" y="235" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">제곱오차 합 = 5</text>
+      <text x="530" y="235" text-anchor="middle" font-size="13" font-weight="800" fill="#2b2d3a">제곱오차 합 = 10</text>
       <!-- 중앙 식과 캡션 -->
-      <text x="350" y="270" text-anchor="middle" font-size="13.5" font-weight="800" fill="#a97a00">R² = 1 − (5 ÷ 20) = 0.75 · 기준보다 제곱오차 합 75% 감소</text>
-      <text x="350" y="296" text-anchor="middle" font-size="11.5" fill="#7a7f95">점 배치는 이해를 돕기 위한 예 · 교재 3절의 수치와 동일</text>
+      <text x="350" y="270" text-anchor="middle" font-size="13.5" font-weight="800" fill="#a97a00">R² = 1 − (10 ÷ 40) = 0.75 · 평균값 기준보다 제곱오차 합 75% 감소</text>
+      <text x="350" y="296" text-anchor="middle" font-size="11.5" fill="#7a7f95">점 배치는 이해를 돕기 위한 예 · 수치는 활동지 기본 문제와 동일</text>
     </svg></div>
   <p class="small">0.75는 예측의 75%가 정답이라는 뜻이 아니라 제곱오차 합의 감소 비율 · 실젯값이 모두 같으면 분모가 0이 되어 계산 불가</p>
 </section>
 
 <section class="slide">
   <div class="kicker">8-16 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">기준 넓이와 내 넓이</h2>
+  <h2 style="font-size:clamp(20px,2.4vw,32px)">평균값 기준 넓이와 내 넓이</h2>
   <div class="diagram" style="--wh:36vh"><div class="widget" data-w="r2denom">
-  <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="실젯값 세 개의 퍼짐과 예측값을 따로 움직여 기준 제곱오차 합과 내 제곱오차 합의 비율이 어떻게 바뀌는지 보이는 그림">
+  <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="실젯값 세 개의 퍼짐과 예측값을 따로 움직여 평균값 기준의 제곱오차 합과 내 제곱오차 합의 비율이 어떻게 바뀌는지 보이는 그림">
     <!-- 좌 · 좌표평면 격자와 축 -->
     <line x1="56" y1="194.5" x2="430" y2="194.5" stroke="#e3ddcf" stroke-width="1"/>
     <line x1="56" y1="144.9" x2="430" y2="144.9" stroke="#e3ddcf" stroke-width="1"/>
@@ -419,7 +419,7 @@
     <text x="634" y="157" text-anchor="middle" font-size="10" fill="#7a7f95">SSE</text>
     <text x="688" y="157" text-anchor="middle" font-size="10" fill="#7a7f95">SST</text>
     <text x="452" y="176" font-size="10.5" fill="#7a7f95">기준² = (실젯값 − 평균)²</text>
-    <text x="452" y="190" font-size="10.5" fill="#7a7f95">SSE = 내 제곱오차 합 · SST = 기준 제곱오차 합</text>
+    <text x="452" y="190" font-size="10.5" fill="#7a7f95">SSE = 내 제곱오차 합 · SST = 평균값 기준의 제곱오차 합</text>
     <text x="452" y="208" font-size="13" fill="#7a7f95">R² = 1 − (SSE ÷ SST)</text>
     <text data-t="r2" x="452" y="238" font-size="30" font-weight="800" fill="#a97a00">0.89</text>
     <!-- R² 게이지 -->
@@ -438,9 +438,9 @@
     <button class="wbtn" type="button" data-act="mean">평균만 찍기</button>
     <button class="wbtn" type="button" data-act="reset">원래 예측</button>
     <button class="wbtn on" type="button" data-act="area-both">둘 다</button>
-    <button class="wbtn" type="button" data-act="area-base">기준 넓이</button>
+    <button class="wbtn" type="button" data-act="area-base">평균값 기준 넓이</button>
     <button class="wbtn" type="button" data-act="area-mine">내 넓이</button>
-    <span class="wout" data-t="out">기준 제곱오차 합 1800 · 내 제곱오차 합 200 · R² 0.89</span>
+    <span class="wout" data-t="out">평균값 기준의 제곱오차 합 1800 · 내 제곱오차 합 200 · R² 0.89</span>
   </div>
 </div></div>
   <p class="small">퍼짐 슬라이더는 실젯값만 평균 둘레로 벌리고 좁힘 · 노란 넓이의 합은 그대로, 회색 넓이의 합만 변해 R²가 달라짐 · 예측 점을 세로로 끌면 그 점의 오차와 노란 넓이가 변화</p>
@@ -525,7 +525,7 @@
 <text x="486" y="44">학습 데이터</text>
 <text x="486" y="70">평가 데이터</text>
 <text x="486" y="104">내 제곱오차 합(SSE)</text>
-<text x="486" y="128">기준 제곱오차 합(SST)</text>
+<text x="486" y="128">평균값 기준의 제곱오차 합(SST)</text>
 </g>
 <text class="v-train" x="712" y="44" text-anchor="end" font-size="13" font-weight="700" fill="#1c2230">114개 연도</text>
 <text class="v-eval" x="712" y="70" text-anchor="end" font-size="13" font-weight="700" fill="#1c2230">114개 연도</text>
@@ -581,23 +581,23 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-22 · 실습</div>
+  <div class="kicker">8-22 · 실험실 · lesson08-lab</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">도전 프롬프트 — 직선 대신 곡선</h2>
-  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">좋아, 이번엔 직선 대신 곡선을 시험해 보자.<br>
-- 연평균기온을 2005년 이전은 공부용, 2005년부터는 시험용으로 나눠 줘.<br>
-- 1차(직선), 3차, 9차 곡선을 각각 공부용으로만 맞추고,<br>
-&nbsp;&nbsp;시험용에서 평균 몇 도나 빗나가는지와 2050년 예측값을 한 표로 보여 줘.<br>
-- 공부용과 시험용에 각각 몇 개 연도가 들어갔는지도 화면에 적어 줘.<br>
-- 반드시 학습에 안 쓴 시험용으로 채점해 줘.<br>
+  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.6;max-width:46em;margin-top:2vh">좋아, 이번엔 직선 대신 곡선을 써 보자.<br>
+- 연평균기온을 2005년 이전은 훈련용, 2005년부터는 테스트용으로 나눠 줘.<br>
+- 1차(직선), 3차, 9차 곡선을 각각 훈련용으로만 맞추고,<br>
+&nbsp;&nbsp;테스트용 데이터에서 평균 몇 도나 빗나가는지와 2050년 예측값을 한 표로 보여 줘.<br>
+- 훈련용과 테스트용에 각각 몇 개 연도가 들어갔는지도 화면에 적어 줘.<br>
+- 반드시 학습에 안 쓴 테스트용 데이터로 채점해 줘.<br>
 &nbsp;&nbsp;연도 숫자가 커서 고차 곡선이 불안하면 연도를 작은 수로 바꿔서 계산해 줘.</div>
-  <p class="small">교재 도전 프롬프트와 같은 문장 · 학습 데이터 2005년 이전, 평가 데이터 2005~2025년, 지표는 평균절대오차(MAE)</p>
+  <p class="small">실험실 lesson08-lab 1단계의 도전 프롬프트와 같은 문장 · 훈련용 2005년 이전, 테스트용 2005~2025년, 지표는 평균절대오차(MAE)</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">8-23 · 발견</div>
+  <div class="kicker">8-23 · 실험실 · lesson08-lab</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">차수별 평가 오차와 2050년 예측</h2>
   <table class="mini">
-    <tr><th>곡선</th><th>시험용 오차</th><th>2050년 예측</th></tr>
+    <tr><th>곡선</th><th>테스트용 오차</th><th>2050년 예측</th></tr>
     <tr><td>1차(직선)</td><td><em>0.54℃</em></td><td><em>13.8℃</em></td></tr>
     <tr><td>3차</td><td>1.01℃</td><td>19.1℃</td></tr>
     <tr><td>9차</td><td>12.44℃</td><td>2,445℃</td></tr>
@@ -607,7 +607,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-24 · 그림</div>
+  <div class="kicker">8-24 · 실험실 · lesson08-lab</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">차수와 두 오차</h2>
   <div class="diagram" style="--wh:40vh"><div class="widget" data-w="degsplit">
   <svg viewBox="0 0 720 430" role="img" aria-label="곡선의 차수를 1에서 9까지 바꾸면 학습 오차 막대는 줄고 평가 오차 막대는 커지는 것을 보이는 산점도와 막대 그림">
@@ -698,7 +698,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-25 · 그림</div>
+  <div class="kicker">8-25 · 실험실 · lesson08-lab</div>
   <h2 style="font-size:clamp(20px,2.4vw,32px)">예측 시점과 외삽의 어긋남</h2>
   <div class="diagram" style="--wh:34vh"><div class="widget" data-w="nearfar">
   <svg viewBox="0 0 720 250" role="img" aria-label="예측 연도를 2006년에서 2050년까지 옮기며 1차와 9차 예측값이 실제 기온에서 얼마나 멀어지는지 보이는 그림">
@@ -778,7 +778,7 @@
 </section>
 
 <section class="slide">
-  <div class="kicker">8-26 · 원리</div>
+  <div class="kicker">8-26 · 실험실 · lesson08-lab</div>
   <h2>과대적합과 외삽</h2>
   <ul class="facts">
     <li><b>과대적합</b> — 학습 데이터에 지나치게 맞추어 새 데이터의 예측 성능이 떨어지는 현상</li>
@@ -817,7 +817,7 @@
 <section class="slide">
   <div class="kicker">정리</div>
   <h2>8차시 요약</h2>
-  <div class="split" style="margin-top:1.8vh;gap:1.2vw"><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">계산</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">오차 → 절대오차·제곱오차 → MAE·MSE → R²</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">지표 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">큰 실수 하나가 치명적이면 MSE, 평소의 정확도가 중요하면 MAE</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">기준</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">R²의 분모는 평가 대상 실젯값의 평균을 찍는 기준선</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">데이터</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">필터에 따라 학습·평가 데이터가 함께 변화, 0.70과 0.39는 같은 조건의 점수가 아님</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">한계</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">학습 데이터의 점수와 새 데이터의 예측력은 별개, 범위 밖은 외삽</div></div></div>
+  <div class="split" style="margin-top:1.8vh;gap:1.2vw"><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">계산</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">오차 → 절대오차·제곱오차 → MAE·MSE → R²</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">지표 선택</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">큰 실수 하나가 치명적이면 MSE, 평소의 정확도가 중요하면 MAE</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">기준</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">R²의 분모는 평가 대상 실젯값의 평균을 찍는 기준 모델(평균값 기준)</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">데이터</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">필터에 따라 학습·평가 데이터가 함께 변화, 0.70과 0.39는 같은 조건의 점수가 아님</div></div><div class="card" style="flex:1 1 16em;min-width:0;padding:1.8vh 1.4vw"><div class="t">한계</div><div class="d" style="font-size:clamp(14px,1.6vw,21px);color:var(--ink);margin-top:.6vh">학습 데이터의 점수와 새 데이터의 예측력은 별개, 범위 밖은 외삽</div></div></div>
   <p class="point" style="font-size:clamp(16px,1.9vw,26px);margin-top:1.8vh">지표가 모델을 고르는 것이 아니라 <b>하려는 일이 지표를 고름</b></p>
   <p class="small" style="margin-top:1vh">집에서 혼자 확인하기 — 교재 8절에서 손으로 구한 값의 정오만 확인, 정답은 미표시</p>
 </section>
