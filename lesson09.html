@@ -25,7 +25,7 @@
 
   <div class="quote">
     <div class="q">"문제를 잘 정의하면 절반은 푼 것이다."</div>
-    <span class="by">존 듀이가 한 말로 전해집니다 — 성공의 기준선을 정하는 일부터가 분류 문제의 절반입니다</span>
+    <span class="by">존 듀이가 한 말로 전해집니다 — 성공의 레이블 기준을 정하는 일부터가 분류 문제의 절반입니다</span>
     <span class="who"><img src="img/people/dewey.jpg" alt="존 듀이" loading="lazy" width="54" height="54"><span><b>존 듀이</b>(1859~1952)는 학교를 바꾼 미국의 철학자이자 교육학자입니다. 배움은 설명을 듣는 데서가 아니라 문제를 직접 겪고 해결하는 과정에서 일어난다고 주장하며 1896년 시카고에 실험학교를 세웠고, 오늘날 여러분이 앉아서 듣는 대신 만들고 판단하는 수업 방식이 여기에서 나왔습니다. 위 문장은 그의 1938년 저서 『논리학: 탐구의 이론』에 나오는 구절이 압축되어 전해지는 것으로 알려져 있습니다.<span class="cred">사진: Underwood & Underwood · 퍼블릭 도메인(위키미디어 공용)</span></span></span>
   </div>
 
@@ -36,7 +36,7 @@
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>기준 정하기</b> — "흥행 성공"의 관객 수 기준선을 학급이 함께 정한다 (레이블은 사람이 정한다)</li>
+      <li><b>기준 정하기</b> — "흥행 성공"의 레이블 기준이 되는 관객 수를 학급이 함께 정한다 (레이블은 사람이 정한다)</li>
       <li><b>바이브 코딩</b> — 로지스틱 회귀로 성공 확률을, 의사결정트리로 판단 규칙을 만든다</li>
       <li><b>관찰</b> — 트리 그림에서 모델이 질문을 던지는 순서를 읽는다</li>
     </ul>
@@ -68,7 +68,7 @@
   <p>범주가 두 개면 이진 분류, 세 개 이상이면 다중 분류입니다. 오늘의 "성공/기준 미달"은 이진 분류입니다. 교과서의 책 장르처럼 여러 범주 중 하나를 고르는 문제는 다중 분류입니다.</p>
   <div class="callout theory">
     <div class="h">🧮 시그모이드와 문턱값 — 확률을 범주로 바꾸는 두 단계</div>
-    <p>로지스틱 회귀는 입력 변수의 가중합에 <b>시그모이드 함수</b>를 적용해 양성일 확률을 추정합니다. 시그모이드는 어떤 실수든 0과 1 사이의 값으로 바꾸는 S자 곡선입니다. 선형 회귀를 먼저 학습한 뒤 출력을 바꾸는 방식이 아니라, 처음부터 분류에 맞게 가중치를 학습합니다.</p>
+    <p>로지스틱 회귀는 입력마다 가중치를 곱해 모두 더한 값, 곧 <b>가중합</b>에 <b>시그모이드 함수</b>를 적용해 양성일 확률을 추정합니다. 시그모이드는 어떤 실수든 0과 1 사이의 값으로 바꾸는 S자 곡선입니다. 교과서의 "결합"은 직선의 계산 결과를 로지스틱 함수에 넣는다는 뜻입니다. 선형 회귀를 먼저 학습한 뒤 출력을 바꾸는 방식이 아니라, 처음부터 분류에 맞게 가중치를 학습합니다.</p>
     <p>추정한 확률은 아직 범주가 아닙니다. 확률을 성공과 기준 미달로 가르는 경계를 <b>문턱값</b>이라고 하며, 위 교과서 인용의 0.5가 그 값입니다. 0.5는 관례이고 바꿀 수 있습니다. <b>관객 수로 정답을 만드는 레이블 기준과, 확률을 범주로 바꾸는 문턱값은 서로 다른 층위입니다.</b> 앞의 것은 정답 쪽을, 뒤의 것은 예측 쪽을 움직입니다.</p>
   </div>
   <p>의사결정트리도 확률을 추정할 수 있지만, 이 시간에는 <b>조건에 따라 가지가 나뉘는 판단 과정</b>에 주목합니다.</p>
@@ -150,11 +150,11 @@
     <img src="img/lesson09_case1.png" alt="발사 기온과 O-링 손상 여부의 산점도 위에 로지스틱 회귀 곡선을 그린 그래프. 손상 있음 7회는 빨간 점, 손상 없음 16회는 회색 점이며 화씨 53도 아래는 데이터가 없는 구간으로 음영 처리되어 있다" style="width:100%;height:auto">
     <figcaption style="margin-top:6px;font-size:.84rem;color:var(--text-soft)">데이터는 사고 이전 23회 발사의 O-링 기록 · 곡선은 이 데이터로 수업용 재계산 · 확률 계산은 Dalal 외(1989, JASA)</figcaption>
   </figure>
-  <p>오늘 만든 로지스틱 회귀와 같은 형태로 입력 하나(기온)에서 확률을 추정하고 문턱값으로 판단을 정합니다. 훈련용 데이터에 화씨 53도보다 낮은 발사가 하나도 없어 데이터 바깥 구간의 확률을 그대로 받아들일 수 없다는 한계가 있습니다. 기준과 입력을 사람이 정한다는 이 차시의 논점으로 이어집니다.</p>
+  <p>오늘 만든 로지스틱 회귀와 같은 형태로 입력 하나(기온)에서 확률을 추정하고 문턱값으로 판단을 정합니다. 기준과 입력을 사람이 정한다는 이 차시의 논점으로 이어집니다.</p>
   <p class="mini">출처: <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1989.10478858" target="_blank" rel="noopener">Dalal, Fowlkes &amp; Hoadley (1989), JASA 84(408)</a></p>
   </div></details>
 
-  <h2>2. 성공의 기준선 — 레이블은 사람이 정한다</h2>
+  <h2>2. 성공의 레이블 기준 — 레이블은 사람이 정한다</h2>
   <div class="callout tip">
     <div class="h">🎬 우리는 DGV 배급사의 데이터 과학 인턴입니다</div>
     <p>DGV는 이 수업에서만 쓰는 가상의 영화사입니다(DG는 당곡입니다). 분석에 쓰는 흥행 기록은 영화진흥위원회의 실제 데이터입니다.</p>
@@ -170,13 +170,13 @@
     <div class="h">🏷️ 레이블 — 데이터에 없던 정답을 사람이 만든다</div>
     <p>스팸 메일 판정처럼 레이블이 이미 붙어 있는 문제도 있고, 오늘처럼 <b>없는 레이블을 사람이 만들어 붙이는</b> 문제도 있습니다. 영화 표에는 관객 수가 있지만 "흥행 성공"이라는 열은 없습니다. 이 수업에서는 <b>기록된 누적 관객 수가 100만 명 이상이면 성공(1), 미만이면 기준 미달(0)</b>로 정합니다. 제작비와 수익 데이터가 없으므로 실제 흑자와 적자를 뜻하지 않습니다.</p>
     <p><b>오해하기 쉬운 지점:</b> 레이블은 데이터에 원래 있던 사실처럼 보이지만 사람의 판단입니다. 기준을 바꾸면 정답이 바뀌고, 정답이 바뀌면 같은 모델의 성능 수치도 바뀝니다.</p>
-    <p>기준선을 어디에 그을지는 <b>무엇을 하려는 일이냐</b>가 정합니다. 광고비를 크게 쓸 대상을 고르는 일이라면 기준을 높게 긋고, 상영관을 조금 더 얹어 줄 대상을 고르는 일이라면 낮게 긋습니다. 같은 데이터에 같은 모델이어도 기준선이 달라지면 성공으로 뽑히는 편수도, 정확도도, 쓸모 있는 모델도 달라집니다.</p>
+    <p>레이블 기준을 어디에 그을지는 <b>무엇을 하려는 일이냐</b>가 정합니다. 광고비를 크게 쓸 대상을 고르는 일이라면 기준을 높게 긋고, 상영관을 조금 더 얹어 줄 대상을 고르는 일이라면 낮게 긋습니다. 같은 데이터에 같은 모델이어도 레이블 기준이 달라지면 성공으로 뽑히는 편수도, 정확도도, 쓸모 있는 모델도 달라집니다.</p>
   </div>
 
   
   <figure class="interactive" data-fig="labelline">
     <div class="widget" data-w="labelline">
-  <svg viewBox="0 0 720 348" role="img" aria-label="분석 대상 영화의 관객 수 분포와 성공 기준선. 기준선을 옮기면 성공 레이블 편수와 경계에 걸린 두 편이 바뀌고, 이유를 적어야 정확도가 공개되는 그림">
+  <svg viewBox="0 0 720 348" role="img" aria-label="분석 대상 영화의 관객 수 분포와 성공 레이블 기준. 레이블 기준을 옮기면 성공 레이블 편수와 경계에 걸린 두 편이 바뀌고, 이유를 적어야 정확도가 공개되는 그림">
     <text x="56" y="26" text-anchor="start" font-size="15" font-weight="800" fill="#1c2230">분석 대상 영화의 관객 수 분포 · 가로축 로그</text>
     <g class="bars"></g>
     <line x1="56" y1="214" x2="430" y2="214" stroke="#e3ddcf" stroke-width="1.5"/>
@@ -228,11 +228,11 @@
     <span class="wout"></span>
   </div>
 </div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 이 기준선을 왜 여기에 두었는가. 기준을 고르고 <b>이유를 먼저 적어야</b> 정확도가 열립니다. 숫자를 보고 기준을 고르는 것이 아니라, 기준을 정한 뒤 결과를 확인하는 순서를 연습하는 그림입니다. 분포는 어제까지 모인 데이터를 그대로 세어 그립니다. 정확도는 같은 데이터로 갱신할 때 미리 계산해 둔 값이라 내 앱 화면과 다를 수 있습니다.</figcaption>
+    <figcaption><b>무엇을 묻는 그림인가:</b> 이 레이블 기준을 왜 여기에 두었는가. 기준을 고르고 <b>이유를 먼저 적어야</b> 정확도가 열립니다. 숫자를 보고 기준을 고르는 것이 아니라, 기준을 정한 뒤 결과를 확인하는 순서를 연습하는 그림입니다. 분포는 어제까지 모인 데이터를 그대로 세어 그립니다. 정확도는 같은 데이터로 갱신할 때 미리 계산해 둔 값이라 내 앱 화면과 다를 수 있습니다.</figcaption>
   </figure>
 
   <div class="callout ask">
-    <div class="h">❓ 기준선을 정하기 전에 답할 질문</div>
+    <div class="h">❓ 레이블 기준을 정하기 전에 답할 질문</div>
     <ul>
       <li>DGV 배급팀이 "흥행 성공"이라고 부를 관객 수는 몇 명입니까. 그 숫자를 고른 이유는 무엇입니까.</li>
       <li>기준을 낮추면 성공 레이블이 붙는 영화가 늘어납니다. 성공이라는 말이 그만큼 흔해져도 괜찮습니까.</li>
@@ -247,7 +247,8 @@
 
 
   <h2>3. 실습 — 영화 흥행 분류기 (바이브 코딩)</h2>
-  <p>4차시의 영화별 표(<a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a>)로 앱을 만듭니다. <b>개봉 전 흥행 예측이 목표라면 입력도 개봉 전에 확보한 값이어야 합니다.</b> 그러나 이 표의 <code>first_scrn</code>·<code>first_show</code>는 10위권에 처음 관측된 날의 집계값이고, <code>total_audi</code>도 수집 기간에 기록된 누적값입니다. 아래 결과는 개봉 전 예측 성능이 아니라 기록된 데이터의 분류 연습입니다.</p>
+  <p>4차시의 영화별 표(<a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a>)로 앱을 만듭니다. <b>개봉 전 흥행 예측이 목표라면 입력도 개봉 전에 확보한 값이어야 합니다.</b> 7차시의 예측 시점 표에서 첫 관측일 스크린 수와 상영 횟수는 개봉 전에 쓸 수 없다고 판정했고, 기본 변수 세 가지 가운데 개봉 전에 쓸 수 있는 것은 성수기 개봉 하나뿐이었습니다. 이 표의 <code>first_scrn</code>·<code>first_show</code>는 10위권에 처음 관측된 날의 집계값이고, <code>total_audi</code>도 수집 기간에 기록된 누적값입니다. 그래서 오늘의 문제는 개봉 전 예측이 아니라 기록이 끝난 영화를 분류하는 연습으로 시점을 옮깁니다. 첫 주 관객 수는 그 시점에서도 총 관객 수와 너무 가까워 입력에서 뺍니다. 7차시의 기본 변수 세 가지에 개봉 전에 알 수 있는 장르와 국가를 더해 입력을 다섯으로 늘립니다. 장르가 여럿 적힌 영화는 첫 장르만 쓰고, 갈래마다 "액션인가 아닌가" 식의 0과 1 열이 하나씩 생깁니다. 7차시 4절에서 성수기 개봉을 0과 1로 바꾼 것과 같은 처리입니다. 상영당 관객 수는 첫 관측일 집계가 끝나야 알 수 있으므로 이번 입력에는 넣지 않습니다.</p>
+  <p>스크린 수는 수백, 성수기는 0과 1이라 값의 크기가 크게 다릅니다. 로지스틱 회귀는 값의 크기에 민감하므로 훈련용 데이터의 평균과 퍼짐을 기준으로 모든 입력의 크기를 맞춥니다. 이것을 <b>표준화</b>라고 하며 11차시에서 다시 다룹니다.</p>
 
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
@@ -259,9 +260,11 @@ total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 분�
 기준은 50만·100만·300만 명 중 고를 수 있게 해 줘.
 입력은 first_scrn·first_show·peak·genre·nation을 사용해 줘.
 first_scrn·first_show는 개봉일이 아니라 10위권에 처음 관측된 날의 집계야.
+genre에 여러 장르가 세로막대(|)로 적힌 영화는 첫 번째 장르만 써 줘.
+장르와 국가는 갈래를 나타내는 값이니 0과 1의 열로 바꿔 줘.
 first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
 영화 코드 순으로 정렬해 열 편 중 앞 세 편을 테스트용으로 고정하고,
-훈련용으로만 학습과 표준화를 해 줘. 두 모델은 같은 테스트용 데이터로 평가해 줘.
+훈련용으로만 학습과 표준화를 해 줘. 이 모델은 같은 테스트용 데이터로 평가해 줘.
 훈련용과 테스트용의 영화 편수를 화면에 적어 줘.
 테스트용 데이터로 계산한 정확도를 화면에 표시해 줘.
 테스트용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.
@@ -270,6 +273,7 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
 문턱값 0.5 선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘.
 영화 제목이 겹치지 않게 가로축 글자를 기울여 줘.
 그래프는 plotly로 그려 줘.
+테스트용 영화의 실제 레이블·예측 확률·스크린 수·개봉일을 표로 보여 줘.
 이 코드의 평가는 기록된 데이터의 분류 연습이며, 개봉 전 예측 성능이 아님을 표시해 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 데이터가 날마다 쌓이므로 편수와 정확도는 실행하는 날에 따라 달라집니다. 라이브러리 버전이나 설정을 바꾸어도 결과가 달라질 수 있습니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 기록된 관객 수의 기준 충족 여부를 분류한다
@@ -277,7 +281,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier, export_text, export_graphviz
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 
@@ -310,15 +313,14 @@ ytr, yte = df["성공"][~is_test], df["성공"][is_test]
 
 scaler = StandardScaler().fit(Xtr)
 logi = LogisticRegression(max_iter=2000).fit(scaler.transform(Xtr), ytr)
-tree = DecisionTreeClassifier(max_depth=3, random_state=0).fit(Xtr, ytr)
 
-c1, c2 = st.columns(2)
 prob = logi.predict_proba(scaler.transform(Xte))[:, 1]
-c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(yte, (prob &gt;= 0.5).astype(int)):.3f}")
-c2.metric("의사결정트리 정확도", f"{accuracy_score(yte, tree.predict(Xte)):.3f}")
+st.metric("로지스틱 회귀 정확도", f"{accuracy_score(yte, (prob &gt;= 0.5).astype(int)):.3f}")
 확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
                      "추정 확률": prob,
-                     "실제": ["성공" if v else "기준 미달" for v in yte]})
+                     "실제": ["성공" if v else "기준 미달" for v in yte],
+                     "스크린 수": df.loc[is_test, "first_scrn"].values,
+                     "개봉일": df.loc[is_test, "openDt"].values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.bar(확률표, x="영화", y="추정 확률", color="실제",
              color_discrete_map={"성공": "#b07a00", "기준 미달": "#b9b3a5"})
@@ -326,6 +328,8 @@ fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
 fig.update_layout(xaxis_tickangle=-60, height=460, xaxis_title=None)
 st.plotly_chart(fig, width="stretch")
 st.caption("막대는 테스트용 영화의 추정 확률입니다. 색은 실제 레이블입니다.")
+st.dataframe(확률표, width="stretch")
+st.caption("표는 테스트용 영화의 실제 레이블과 추정 확률, 스크린 수, 개봉일입니다.")
 
 choices = df.loc[is_test].copy()
 selected = st.selectbox("테스트용 영화", list(range(len(choices))),
@@ -341,11 +345,22 @@ plotly
 scikit-learn</pre></div></details>
     </li>
     <li><span class="st">② AI가 준 코드 — 실행하고 확률을 읽는다</span><br>
-      받은 코드를 <b>main.py</b> 파일과 <b>requirements.txt</b> 파일 두 개로 저장해 실행합니다. 화면에 새로 나타나는 그림에는 테스트용 영화의 추정 확률이 막대로 표시되고 문턱값 0.5 선이 함께 그려집니다. 테스트용 영화를 하나 고르면 추정 성공 확률이 나타납니다. 확률이 0.5 이상이면 성공, 미만이면 기준 미달로 분류합니다. 실제 레이블과 비교해 맞힌 사례와 틀린 사례를 찾아봅니다. 화면에 함께 표시되는 <b>정확도</b>를 기록해 두세요.</li>
+      받은 코드를 <b>main.py</b> 파일과 <b>requirements.txt</b> 파일 두 개로 저장해 실행합니다. 화면에 새로 나타나는 그림에는 테스트용 영화의 추정 확률이 막대로 표시되고 문턱값 0.5 선이 함께 그려집니다. 테스트용 영화를 하나 고르면 추정 성공 확률이 나타납니다. 확률이 0.5 이상이면 성공, 미만이면 기준 미달로 분류합니다. 실제 레이블과 비교해 맞힌 사례와 틀린 사례를 찾아봅니다. 확률이 0.5를 넘었는데 실제는 기준 미달인 영화를 한 편 찾아, 그 영화의 스크린 수와 개봉일을 표에서 확인합니다. 화면에 표시되는 <b>로지스틱 회귀 정확도</b>를 기록해 둡니다.</li>
     <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>의사결정트리로도 만들어서 어떤 질문을 어떤 순서로 던지는지
-그림으로 보여 줘. 두 모델의 정확도를 나란히 비교해 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 트리가 던지는 질문의 순서
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>앞 코드에 이어서 의사결정트리로도 만들어 줘.
+어떤 질문을 어떤 순서로 던지는지 그림으로 보여 줘.
+로지스틱 회귀와 의사결정트리의 정확도를 나란히 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 의사결정트리를 학습하고 두 모델의 정확도를 나란히 본다
+from sklearn.tree import DecisionTreeClassifier, export_text, export_graphviz
+
+tree = DecisionTreeClassifier(max_depth=3, random_state=0).fit(Xtr, ytr)
+
+st.subheader("두 모델의 정확도")
+c1, c2 = st.columns(2)
+c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(yte, (prob &gt;= 0.5).astype(int)):.3f}")
+c2.metric("의사결정트리 정확도", f"{accuracy_score(yte, tree.predict(Xte)):.3f}")
+
+# 트리가 던지는 질문의 순서
 st.subheader("트리는 어떤 질문을 먼저 던지나")
 st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=list(X.columns),
                                   class_names=["기준 미달", "성공"], filled=True))
@@ -354,10 +369,9 @@ st.caption("훈련용과 테스트용을 어떻게 나누느냐에 따라 정확
     </li>
   </ol>
 
-  <div class="callout tip">
-    <div class="h">💡 변수 이름보다 실제 집계 시점을 확인합니다</div>
-    <p>미래에 알게 되는 값을 빼 달라는 문장만으로는 누수를 막을 수 없습니다. 다음 시간에는 예측 시점에 사용할 수 없는 값을 입력에 넣었을 때의 문제를 살펴봅니다.</p>
-  </div>
+  <details class="glossary"><summary>더 알아보기 — 변수 이름보다 실제 집계 시점을 확인합니다</summary><div class="gin">
+  <p>미래에 알게 되는 값을 빼 달라는 문장만으로는 누수를 막을 수 없습니다. 다음 시간에는 예측 시점에 사용할 수 없는 값을 입력에 넣었을 때의 문제를 살펴봅니다.</p>
+  </div></details>
 
   <h2>4. 두 모델 비교 — 확률로 답하는 모델, 질문으로 답하는 모델</h2>
   <p>트리는 조건을 따라 데이터를 나누는 과정을 보여 줍니다. 위에서부터 조건과 가지를 읽으며 한 영화가 어느 끝마디에 도착하는지 따라가 봅니다.</p>
@@ -370,10 +384,15 @@ st.caption("훈련용과 테스트용을 어떻게 나누느냐에 따라 정확
       <p class="t">→ 아래에서 말하는 "덜 섞이게 자른다"가 교과서의 <b>불순도를 낮춘다</b>와 같은 뜻입니다.</p>
     </div>
     <p>트리는 한 마디에서 "어느 변수를 어느 값에서 자를 때 두 갈래가 가장 덜 섞이는가"를 따져 분기를 고릅니다. 한쪽에 성공만, 다른 쪽에 기준 미달만 모이면 잘 나뉜 것이고, 양쪽에 두 범주가 뒤섞이면 못 나뉜 것입니다. 가장 덜 섞이게 만드는 분기를 고른 다음, 갈라진 각 갈래에서 같은 일을 되풀이합니다.</p>
-    <p>여러 분기에서 각 변수가 섞임을 줄인 정도를 그 마디에 놓인 데이터 수로 가중해 합산한 값을 <b>feature importance</b>라고 합니다. 어떤 속성이 예측에 얼마나 기여했는지 나타내는 값이며, 5절에서 직접 확인합니다.</p>
+    <p>먼저 한 분기가 섞임을 얼마나 줄였는지 계산합니다. 그 값을 그 분기에 놓인 데이터가 많을수록 더 크게 세어 변수별로 더한 값을 <b>feature importance</b>라고 합니다. 어떤 속성이 예측에 얼마나 기여했는지 나타내는 값이며, 5절에서 직접 확인합니다.</p>
     <p class="mini">교과서 본문은 로지스틱 회귀를 다루고, 의사결정트리는 부록 220~223쪽에서 설명합니다. 부록도 분기 계산의 수식과 feature importance까지는 다루지 않으므로, 위 설명은 이 실습이 사용하는 라이브러리의 기본 설정을 풀어 쓴 것입니다.</p>
   </div>
   <p>첫 번째 분기만으로 변수의 중요도 전체를 판단할 수는 없습니다. 두 모델의 정확도를 같은 테스트용 데이터에서 평가해 아래 표에 적습니다.</p>
+  <div class="callout theory">
+    <div class="h">🧩 정확도</div>
+    <p>정확도는 테스트용 영화 가운데 예측이 실제와 같았던 편수의 비율입니다. 맞힌 편수 ÷ 전체 편수로 구합니다. 맞힌 것과 틀린 것을 네 칸으로 나누어 보는 방법은 10차시에서 다룹니다.</p>
+  </div>
+  <p class="mini">이 표는 ③까지 마친 뒤 채웁니다.</p>
   <table class="daymap">
     <thead><tr><th>모델</th><th>답하는 방식</th><th>내 앱의 정확도</th></tr></thead>
     <tbody>
@@ -384,7 +403,7 @@ st.caption("훈련용과 테스트용을 어떻게 나누느냐에 따라 정확
   <p class="mini">두 모델은 같은 훈련용 데이터와 테스트용 데이터를 사용합니다. 테스트용 데이터는 학습과 표준화의 기준 계산에서 제외합니다. 데이터가 날마다 쌓이고 분할과 설정에 따라 값이 달라지므로, 화면에 나온 숫자를 그대로 적습니다.</p>
   <figure class="interactive" data-fig="twoDials">
     <div class="widget" data-w="twoDials">
-<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="위는 실제 관객 수, 아래는 추정 확률. 같은 테스트용 영화를 두 층에 나란히 놓고 레이블 기준선과 문턱선을 각각 움직이는 그림">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="위는 실제 관객 수, 아래는 추정 확률. 같은 테스트용 영화를 두 층에 나란히 놓고 레이블 기준과 문턱선을 각각 움직이는 그림">
 <!-- 위 = 정답 층: 가로축 누적 관객 수 로그 척도(10^3~10^7.25 → 72~676) -->
 <text x="56" y="32" font-size="15" fill="#6b7385">정답 층 · 가로축 누적 관객 수(명)</text>
 <rect x="56" y="40" width="640" height="92" fill="#b07a00" opacity=".06"/>
@@ -452,7 +471,7 @@ st.caption("훈련용과 테스트용을 어떻게 나누느냐에 따라 정확
       <li>정확도가 높아진 모델을 두고 "더 좋은 모델이 되었다"라고 말할 수 있습니까. 무엇이 달라진 것입니까.
         <div class="quiz qinline"><div class="qitem">
           <div class="qopts qopts-col"><button class="opt">말할 수 있다 — 숫자가 올라갔으므로</button><button class="opt" data-ok="1">말할 수 없다 — 정답 레이블을 바꾼 것이므로 같은 문제를 더 잘 푼 것이 아니다</button></div>
-          <div class="fb">기준선을 바꾸면 문제 자체가 바뀝니다. 점수를 비교하려면 레이블 기준을 고정해야 합니다.</div>
+          <div class="fb">레이블 기준을 바꾸면 문제 자체가 바뀝니다. 점수를 비교하려면 레이블 기준을 고정해야 합니다.</div>
         </div></div>
       </li>
           <li>팀장이 "정확도가 이만큼 높은데 왜 이 모델을 쓰면 안 되느냐"고 묻는다면 무엇을 근거로 답하겠습니까.</li>
@@ -538,10 +557,7 @@ st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보�
       <tr><td>4위</td><td></td><td></td></tr>
     </tbody>
   </table>
-  <div class="callout warn">
-    <div class="h">⚠️ 영향력은 원인이 아니다</div>
-    <p>feature importance 값은 현재 데이터·모델·설정에 따른 결과입니다. 관련된 변수가 함께 있거나 훈련용 데이터가 바뀌면 중요도의 분배도 달라질 수 있습니다. 스크린을 많이 확보해서 관객이 늘었는지, 흥행을 기대해서 스크린을 많이 배정했는지는 이 값만으로 구분할 수 없습니다. <b>feature importance는 인과관계의 증거가 아닙니다.</b></p>
-  </div>
+  <p>feature importance는 이 모델이 무엇을 단서로 삼았는지 보여 줄 뿐 인과관계의 증거가 아닙니다.</p>
 
   <details class="glossary"><summary>더 알아보기 — 실제 사례 · 타이타닉 생존 트리와 질문의 순서</summary><div class="gin">
   <h3>타이타닉 생존 트리와 질문의 순서</h3>
@@ -563,18 +579,12 @@ st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보�
   </div></details>
 
 <h2>6. 개념 정리 — 질문이 모델을 고른다</h2>
-  <p>회귀와 분류는 모두 정답 값을 이용하는 지도학습입니다. 회귀는 수치를, 분류는 범주를 예측합니다. 오늘은 관객 수에 기준을 적용해 분류용 레이블을 직접 만들었습니다. 레이블의 의미와 만든 기준을 먼저 확인해야 결과를 해석할 수 있습니다.</p>
+  <p>정답이 붙어 있는 데이터로 배우는 방식을 <b>지도학습</b>이라고 합니다. 회귀와 분류는 모두 지도학습이며, 회귀는 수치를, 분류는 범주를 예측합니다. 오늘은 관객 수에 기준을 적용해 분류용 레이블을 직접 만들었습니다. 레이블의 의미와 만든 기준을 먼저 확인해야 결과를 해석할 수 있습니다.</p>
+  <p>8차시의 R²가 평균만 답하는 기준 모델과 비교한 값이었듯, 분류의 정확도도 비교할 상대가 필요합니다.</p>
   <div class="callout ask">
     <div class="h">❓ 이 숫자, 믿어도 되는가</div>
     <ul>
       <li>4절 표에 적은 두 정확도를 다시 봅니다. 두 모델 가운데 어느 쪽이 높았고, 차이는 얼마였습니까.</li>
-      <li>성공 레이블이 붙은 영화가 테스트용 데이터에 몇 편 있었습니까. 모든 영화를 기준 미달로만 찍는 모델의 정확도는 얼마가 되겠습니까.</li>
-      <li>그 값과 내 모델의 정확도를 나란히 놓으면, 내 모델이 실제로 무엇을 더 해낸 것입니까.
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt" data-ok="1">기준 모델보다 성공작을 얼마나 더 찾아냈는지가 실제 성과다</button><button class="opt">정확도 숫자가 크므로 그만큼 좋은 모델이다</button><button class="opt">기준 모델과 비교할 필요 없이 정확도만 보면 된다</button></div>
-          <div class="fb">한쪽으로만 찍는 모델도 정확도가 높게 나옵니다. 그 값을 넘어선 만큼이 모델이 실제로 해낸 일입니다.</div>
-        </div></div>
-      </li>
     </ul>
     <p class="mini">다음 시간에는 항상 다수 범주로 예측하는 기준 모델과 비교하고, 성공작을 얼마나 찾아냈는지도 계산합니다.</p>
   </div>
@@ -599,7 +609,7 @@ st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보�
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 흥행 성공 기준선을 100만 명에서 300만 명으로 올리면 무엇이 달라지는지 두 가지 이상 쓰시오. 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <div class="qq"><span class="qn">문제 2</span> 흥행 성공의 레이블 기준을 100만 명에서 300만 명으로 올리면 무엇이 달라지는지 두 가지 이상 쓰시오. 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
       <p>① 성공 레이블이 붙는 영화 수가 줄어든다(정답 자체가 바뀐다). ② 모델이 새 레이블로 다시 학습되므로 예측 결과와 정확도가 달라진다. 즉 레이블 기준은 데이터에 원래 있던 사실이 아니라 사람의 판단이며, 그 판단이 모델의 성능 수치까지 바꾼다.</p>
     </details>
@@ -621,20 +631,24 @@ st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보�
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
     <li>회귀와 분류는 묻는 말과 답의 형태로 구분할 수 있다.</li>
-    <li>우리 반이 정한 흥행 성공 기준선과 그 이유를 말할 수 있다.</li>
-    <li>내 분류기가 산출한 성공 확률과 정확도를 확인했다.</li>
+    <li>우리 반이 정한 흥행 성공의 레이블 기준과 그 이유를 말할 수 있다.</li>
+    <li>내 분류기의 성공 확률을 읽고, 문턱값 0.5가 그 확률을 어떻게 범주로 바꾸는지 설명할 수 있다.</li>
     <li>트리 그림에서 모델이 먼저 던진 질문(변수)을 찾아 읽었다.</li>
+    <li>두 모델의 정확도를 같은 테스트용 데이터에서 비교해 표에 적었다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">지도학습</td><td>정답이 붙어 있는 데이터로 배우는 방식. 회귀와 분류가 모두 여기에 속한다.</td></tr>
     <tr><td class="term">분류</td><td>정해진 범주 중 하나를 예측하는 문제(이진 분류: 두 범주)</td></tr>
     <tr><td class="term">레이블</td><td>모델이 예측하려는 정답 값. 없으면 사람이 기준을 정해 붙인다.</td></tr>
     <tr><td class="term">로지스틱 회귀</td><td>입력의 가중합에 시그모이드를 적용해 확률을 추정하고 분류하는 모델</td></tr>
     <tr><td class="term">시그모이드 함수</td><td>실수 입력을 0과 1 사이 값으로 바꾸는 S자 형태의 함수</td></tr>
     <tr><td class="term">의사결정트리</td><td>질문을 차례로 던져 가지를 나누며 분류하는 모델. 판단 순서가 그림으로 보인다.</td></tr>
     <tr><td class="term">문턱값</td><td>확률을 범주로 바꾸는 경계(이 실습: 0.5 이상이면 양성)</td></tr>
+    <tr><td class="term">표준화</td><td>입력마다 다른 값의 크기를 훈련용 데이터의 평균과 퍼짐을 기준으로 맞추는 처리. 11차시에서 다시 다룬다.</td></tr>
+    <tr><td class="term">정확도</td><td>테스트용 데이터에서 예측이 실제와 같았던 비율. 맞힌 편수 ÷ 전체 편수로 구한다.</td></tr>
       <tr><td class="term">feature importance</td><td>모델이 예측할 때 각 변수를 얼마나 무겁게 사용했는지 나타낸 값. 단서의 무게일 뿐 원인의 증거는 아니다.</td></tr>
 </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
