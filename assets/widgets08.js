@@ -122,7 +122,7 @@ function initW_r2denom(root, D) {
     tR2.textContent = f2(s.r2);
     tR2.setAttribute('fill', Number(s.r2.toFixed(2)) >= 0 ? '#a97a00' : '#e45756');
     dv.textContent = d + '만 명';
-    tOut.textContent = '기준 제곱오차 합 ' + Math.round(s.sst) + ' · 내 제곱오차 합 ' +
+    tOut.textContent = '평균값 기준의 제곱오차 합 ' + Math.round(s.sst) + ' · 내 제곱오차 합 ' +
                        Math.round(s.sse) + ' · R² ' + f2(s.r2);
 
     const nx = gx(s.r2);

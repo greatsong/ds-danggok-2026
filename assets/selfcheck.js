@@ -12,37 +12,39 @@
             '수업에서 다루는 부분이고, 답이 하나로 정해지는 문제가 아니기 때문입니다.',
       parts: [
         {
-          title: '기본 문제 · 다음 주 관객 수 예측',
+          title: '기본 문제 · 상영관을 몇 개 잡을까',
           unit: '만 명',
           steps: [
             { name: '① 오차를 그대로 더한 합',
-              cells: [['모델 가', 0], ['모델 나', 4]] },
+              cells: [['모델 A', 0], ['모델 B', 4]] },
             { name: '②③④ 절댓값의 합과 제곱의 합',
-              cells: [['모델 가 · 절댓값의 합', 6], ['모델 가 · 제곱의 합', 10],
-                      ['모델 나 · 절댓값의 합', 4], ['모델 나 · 제곱의 합', 16]] },
+              cells: [['모델 A · 절댓값의 합', 6], ['모델 A · 제곱의 합', 10],
+                      ['모델 B · 절댓값의 합', 4], ['모델 B · 제곱의 합', 16]] },
             { name: '⑤ MAE와 MSE',
-              cells: [['모델 가 · MAE', 1.2], ['모델 가 · MSE', 2],
-                      ['모델 나 · MAE', 0.8], ['모델 나 · MSE', 3.2]] },
+              cells: [['모델 A · MAE', 1.2], ['모델 A · MSE', 2],
+                      ['모델 B · MAE', 0.8], ['모델 B · MSE', 3.2]] },
             { name: '⑥ 실젯값의 평균과 평균값 기준의 제곱오차 합',
               cells: [['실젯값의 평균', 16], ['평균값 기준의 제곱오차 합', 40]] },
+            // ⑦ 고른 모델이 A든 B든 채점한다. A는 0.75, B는 0.6.
             { name: '⑦ 고른 모델의 R²',
-              cells: [['모델 가의 R²', 0.75]] }
+              cells: [['고른 모델의 R²', [0.75, 0.6]]] }
           ]
         },
         {
-          title: '연습 문제 · 하루 매점 매출 예측',
+          title: '연습 문제 · 매점 재료를 얼마나 준비할까',
           unit: '만 원',
           steps: [
             { name: '②③④ 절댓값의 합과 제곱의 합',
-              cells: [['모델 다 · 절댓값의 합', 7], ['모델 다 · 제곱의 합', 15],
-                      ['모델 라 · 절댓값의 합', 8], ['모델 라 · 제곱의 합', 16]] },
+              cells: [['모델 C · 절댓값의 합', 7], ['모델 C · 제곱의 합', 15],
+                      ['모델 D · 절댓값의 합', 8], ['모델 D · 제곱의 합', 16]] },
             { name: '⑤ MAE와 MSE',
-              cells: [['모델 다 · MAE', 1.4], ['모델 다 · MSE', 3],
-                      ['모델 라 · MAE', 1.6], ['모델 라 · MSE', 3.2]] },
+              cells: [['모델 C · MAE', 1.4], ['모델 C · MSE', 3],
+                      ['모델 D · MAE', 1.6], ['모델 D · MSE', 3.2]] },
             { name: '⑥ 실젯값의 평균과 평균값 기준의 제곱오차 합',
               cells: [['실젯값의 평균', 25], ['평균값 기준의 제곱오차 합', 60]] },
+            // ⑦ C는 0.75, D는 1 − 16÷60 = 0.7333…이다. 0.73으로 반올림한 값도 받는다.
             { name: '⑦ 고른 모델의 R²',
-              cells: [['모델 다의 R²', 0.75]] },
+              cells: [['고른 모델의 R²', [0.75, 0.733333, 0.73]]] },
             { name: '⑦ 평균만 답하는 모델의 R²',
               cells: [['평균만 답하는 모델의 R²', 0]] }
           ]
@@ -106,8 +108,14 @@
     return parseFloat(s);
   }
 
+  // want는 수 하나이거나 여러 정답을 담은 배열이다. 배열이면 그 가운데 하나만 맞아도 된다.
   function same(got, want) {
-    return got !== null && !isNaN(got) && Math.abs(got - want) < 5e-4;
+    if (got === null || isNaN(got)) return false;
+    var list = Array.isArray(want) ? want : [want];
+    for (var i = 0; i < list.length; i++) {
+      if (Math.abs(got - list[i]) < 5e-4) return true;
+    }
+    return false;
   }
 
   function el(tag, cls, text) {
@@ -133,7 +141,7 @@
         inp.className = 'sc-in';
         inp.inputMode = 'decimal';
         inp.setAttribute('aria-label', part.title + ' ' + step.name + ' ' + cell[0]);
-        inp.dataset.want = String(cell[1]);
+        inp.dataset.want = JSON.stringify(cell[1]);
         row.appendChild(inp);
         row.appendChild(el('span', 'sc-mark', ''));
         grid.appendChild(row);
@@ -168,7 +176,7 @@
           var got = toNum(inp.value);
           var mark = inp.parentNode.querySelector('.sc-mark');
           if (got === null) { blank++; return; }
-          if (same(got, parseFloat(inp.dataset.want))) {
+          if (same(got, JSON.parse(inp.dataset.want))) {
             mark.textContent = '○'; mark.className = 'sc-mark ok';
           } else {
             mark.textContent = '✗'; mark.className = 'sc-mark no'; wrong++;

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>심화 탐구 프로젝트 · 8차시 실험실 · 직선 대신 곡선을 쓰면 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<script src="assets/release.js"></script>
+<script src="assets/gate.js"></script>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 8차시</span>
+  <h1>심화 탐구 프로젝트 · <span class="a">직선 대신 곡선을 쓰면</span></h1>
+  <div class="under"></div>
+
+  <p class="lead">8차시 본문에서는 기온을 직선 하나로 예측하고 그 점수를 읽었습니다. 이 실험실에서는 직선 대신 곡선을 사용합니다. 곡선의 차수를 올리면 훈련용 데이터의 점들에는 더 가깝게 붙지만 테스트용 데이터의 오차는 오히려 커질 수 있습니다. 세 모델의 오차를 표에 적어 그 변화를 확인합니다.</p>
+  <p class="mini"><a href="lesson08.html">← 8차시 교재로</a></p>
+
+  <div class="make-banner">
+    <div class="t">🎯 세 단계</div>
+    <ul>
+      <li><b>1 만들기</b> — 1차·3차·9차 모델을 훈련용 데이터로만 학습시킨다</li>
+      <li><b>2 비교</b> — 같은 테스트용 데이터에서 세 모델의 오차를 표에 적는다</li>
+      <li><b>3 판단</b> — 과대적합과 학습 범위 밖 예측이 무엇인지 확인한다</li>
+    </ul>
+  </div>
+
+  <p class="mini">본문 7절까지 마친 뒤 시간이 남으면 이어서 합니다. 4절에서 만든 기온 예측기의 코드를 그대로 사용합니다.</p>
+
+  <h2>1. 곡선을 만들어 표에 적기</h2>
+  <p>곡선이 직선보다 항상 더 잘 예측할까요? 2005년 이전 데이터로 1차·3차·9차 모델을 각각 학습하고, 2005년부터의 데이터는 테스트용으로 남겨 둡니다. 여기서 차수는 곡선이 휘어질 수 있는 정도를 나타냅니다. 직선은 1차, 굽이가 하나 생기면 3차처럼 부를 수 있습니다. 차수가 클수록 곡선이 더 여러 번 휘어질 수 있어 점들 사이를 더 촘촘히 지나갑니다. 교과서는 이렇게 고차 항을 넣은 회귀를 <b>다항 회귀</b>라고 부릅니다(130쪽). 같은 테스트용 데이터에서 평균절대오차(MAE)를 비교합니다.</p>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 주의 <span class="src">『데이터 과학』 130쪽</span></div>
+    <p class="q">"다항 선형 회귀는 독립 변수 간의 관계를 고차 항의 형태로 회귀식에 반영하기 때문에 훈련 데이터에 더욱 적합한 회귀식을 찾을 수 있다. 하지만 훈련 데이터에 과대적합되면 시험 데이터의 성능이 낮아질 수 있다는 점에 주의해야 한다." <span class="src">(130쪽)</span></p>
+    <p class="t">→ 아래에서 1차·3차·9차 모델을 비교하며 이 문장을 숫자로 확인합니다.</p>
+  </div>
+  <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 이번엔 직선 대신 곡선을 써 보자.
+- 연평균기온을 2005년 이전은 훈련용, 2005년부터는 테스트용으로 나눠 줘.
+- 1차(직선), 3차, 9차 곡선을 각각 훈련용으로만 맞추고,
+  테스트용 데이터에서 평균 몇 도나 빗나가는지와 2050년 예측값을 한 표로 보여 줘.
+- 훈련용과 테스트용에 각각 몇 개 연도가 들어갔는지도 화면에 적어 줘.
+- 반드시 학습에 안 쓴 테스트용 데이터로 채점해 줘.
+  연도 숫자가 커서 고차 곡선이 불안하면 연도를 작은 수로 바꿔서 계산해 줘.</pre></div>
+  <p class="mini">마지막 줄은 이런 뜻입니다. 2005 같은 연도를 그대로 9제곱하면 수가 지나치게 커져 계산이 흔들립니다. 그래서 연도에서 1900이나 1950 같은 수를 빼서 작은 수로 바꾼 뒤 계산합니다.</p>
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 직선 대신 곡선을 쓰면 (main.py 끝에 이어 붙일 부분)
+import numpy as np
+
+st.subheader("도전 — 직선 대신 곡선을 쓰면")
+연평균 = all_years[all_years["count"] &gt;= 300].rename(columns={"mean": "기온"})   # 앞에서 만든 연평균 표
+학습 = 연평균[연평균["연도"] &lt; 2005]                             # 2005년 이전은 훈련용
+평가 = 연평균[연평균["연도"] &gt;= 2005]                            # 그 뒤는 한 번도 안 본 테스트용
+x = lambda y: (y - 1950) / 100                                   # 연도를 작은 수로 바꿔야 고차 곡선이 안정된다
+
+rows = []
+for 차수 in [1, 3, 9]:
+    계수 = np.polyfit(x(학습["연도"]), 학습["기온"], 차수)
+    평가오차 = np.abs(np.polyval(계수, x(평가["연도"])) - 평가["기온"]).mean()
+    rows.append({"곡선": f"{차수}차", "테스트 오차(℃)": round(평가오차, 2),
+                 "2050년 예측(℃)": round(np.polyval(계수, x(2050)), 1)})
+st.dataframe(pd.DataFrame(rows), hide_index=True)
+st.caption(f"훈련용 {len(학습)}개 연도 · 테스트용 {len(평가)}개 연도 · 테스트 오차는 평균절대오차(MAE)입니다.")</pre></div></details>
+  <table class="daymap">
+    <thead><tr><th>곡선</th><th>테스트용 데이터의 오차(MAE)</th><th>2050년 예측</th></tr></thead>
+    <tbody>
+      <tr><td>1차 (직선)</td><td></td><td></td></tr>
+      <tr><td>3차</td><td></td><td></td></tr>
+      <tr><td>9차</td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <p class="mini">앱 화면의 표를 보고 숫자를 위 표에 옮겨 적습니다.</p>
+
+  <h2>2. 표를 채운 뒤 답할 질문</h2>
+  <div class="callout ask">
+    <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
+    <ol>
+      <li>훈련용 데이터의 점들에 가장 가깝게 붙은 곡선은 몇 차입니까? 아래 화면의 그림에서 확인합니다.</li>
+      <li>테스트용 데이터의 오차가 가장 작은 곡선은 몇 차입니까?</li>
+      <li>두 물음의 답이 서로 다르다면, 그 까닭을 한 문장으로 적어 봅니다.
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">차수가 높을수록 계산이 정확해지기 때문</button><button class="opt" data-ok="1">훈련용 데이터에 가깝게 맞출수록 새로운 데이터의 오차는 오히려 커질 수 있기 때문</button><button class="opt">테스트용 데이터의 개수가 훈련용 데이터보다 적기 때문</button></div>
+          <div class="fb">학습에 사용한 점에만 맞춘 곡선은 그 점들만 잘 지나갑니다. 테스트용 데이터로 확인하는 이유가 여기에 있습니다.</div>
+        </div></div>
+      </li>
+      <li>세 곡선의 2050년 예측값을 나란히 놓으면 어떤 차이가 있습니까? 그 값을 기후 예보로 읽어도 됩니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">읽어도 된다 — 데이터로 계산한 값이므로</button><button class="opt" data-ok="1">읽을 수 없다 — 학습 범위 밖의 값이고 곡선마다 결과가 크게 갈리므로</button></div>
+          <div class="fb">학습 범위를 벗어난 예측은 곡선의 모양에 따라 값이 크게 달라집니다. 기후 예보는 이런 방식으로 만들지 않습니다.</div>
+        </div></div>
+      </li>
+    </ol>
+  </div>
+  <figure class="interactive" data-fig="degsplit">
+    <div class="widget" data-w="degsplit">
+  <svg viewBox="0 0 720 430" role="img" aria-label="곡선의 차수를 1에서 9까지 바꾸면 훈련 오차 막대는 줄고 테스트 오차 막대는 커지는 것을 보이는 산점도와 막대 그림">
+    <rect x="56" y="20" width="640" height="230" fill="#fff" stroke="#e3ddcf"/>
+    <rect x="493.2" y="20" width="202.8" height="230" fill="#d64545" opacity="0.05"/>
+    <g stroke="#e3ddcf">
+      <line x1="56" y1="192.5" x2="696" y2="192.5"/>
+      <line x1="56" y1="135" x2="696" y2="135"/>
+      <line x1="56" y1="77.5" x2="696" y2="77.5"/>
+    </g>
+    <g font-size="14" fill="#6b7385" text-anchor="end">
+      <text x="50" y="197">10</text>
+      <text x="50" y="139.5">12</text>
+      <text x="50" y="82">14</text>
+      <text x="50" y="26">16℃</text>
+    </g>
+    <g stroke="#b9b3a5">
+      <line x1="56" y1="250" x2="696" y2="250"/>
+      <line x1="110.1" y1="250" x2="110.1" y2="253"/>
+      <line x1="245.3" y1="250" x2="245.3" y2="253"/>
+      <line x1="380.5" y1="250" x2="380.5" y2="253"/>
+      <line x1="515.7" y1="250" x2="515.7" y2="253"/>
+      <line x1="650.9" y1="250" x2="650.9" y2="253"/>
+    </g>
+    <g font-size="14" fill="#6b7385" text-anchor="middle">
+      <text x="110.1" y="264">1920</text>
+      <text x="245.3" y="264">1950</text>
+      <text x="380.5" y="264">1980</text>
+      <text x="515.7" y="264">2010</text>
+      <text x="650.9" y="264">2040</text>
+    </g>
+    <line x1="493.2" y1="20" x2="493.2" y2="250" stroke="#6b7385" stroke-width="1.2" stroke-dasharray="5 4"/>
+    <g class="train" fill="#2b7fd6" opacity="0.55"></g>
+    <g class="test" fill="#fff" stroke="#d64545" stroke-width="1.4"></g>
+    <g class="cvA" opacity="0">
+      <path class="cs" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linejoin="round"/>
+      <path class="cd" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="6 4"/>
+    </g>
+    <g class="cvB" opacity="0">
+      <path class="cs" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linejoin="round"/>
+      <path class="cd" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linejoin="round" stroke-dasharray="6 4"/>
+    </g>
+    <g class="marks"></g>
+    <g font-size="14" stroke="#fff" stroke-width="3" paint-order="stroke">
+      <text class="nTr" x="68" y="38" fill="#2b7fd6">학습</text>
+      <text x="493.2" y="38" fill="#6b7385" text-anchor="middle">2005년</text>
+      <text class="nEv" x="656" y="38" fill="#d64545" text-anchor="end">평가</text>
+    </g>
+
+    <g stroke="#e3ddcf">
+      <line x1="156" y1="300" x2="156" y2="376"/>
+      <line x1="256" y1="300" x2="256" y2="376"/>
+    </g>
+    <line x1="56" y1="300" x2="56" y2="376" stroke="#b9b3a5"/>
+    <text x="56" y="296" font-size="14" font-weight="700" fill="#2b7fd6">훈련 오차</text>
+    <rect class="bar1" x="56" y="302" width="0" height="20" rx="2" fill="#2b7fd6"/>
+    <text class="v1" x="64" y="317" font-size="14" fill="#2b7fd6"></text>
+    <text x="56" y="342" font-size="14" font-weight="700" fill="#d64545">테스트 오차</text>
+    <rect class="bar2" x="56" y="350" width="0" height="20" rx="2" fill="#d64545"/>
+    <text class="v2" x="64" y="365" font-size="14" fill="#d64545"></text>
+    <g font-size="14" fill="#6b7385" text-anchor="middle">
+      <text x="56" y="392">0</text>
+      <text x="156" y="392">1</text>
+      <text x="256" y="392">2℃</text>
+    </g>
+
+    <text x="400" y="296" font-size="14" fill="#1c2230">차수별 테스트 오차</text>
+    <text x="690" y="316" font-size="13" fill="#6b7385" text-anchor="end">1.2℃ 위는 잘림</text>
+    <line x1="410" y1="300" x2="690" y2="300" stroke="#e3ddcf" stroke-dasharray="4 4"/>
+    <line x1="410" y1="410" x2="690" y2="410" stroke="#b9b3a5"/>
+    <g font-size="13" fill="#6b7385" text-anchor="middle">
+      <text x="420" y="406">1</text>
+      <text x="484" y="406">3</text>
+      <text x="548" y="406">5</text>
+      <text x="612" y="406">7</text>
+      <text x="676" y="406">9</text>
+    </g>
+    <polyline class="trace" points="" fill="none" stroke="#d64545" stroke-width="1.4" opacity="0.5"/>
+    <g class="tdots"></g>
+    <text x="56" y="424" font-size="12" fill="#6b7385">교재를 만든 시점의 기온 데이터입니다.</text>
+  </svg>
+  <div class="wctl">
+    <label>곡선의 차수 <input type="range" min="1" max="9" step="1" value="1" data-k="deg" aria-label="곡선의 차수"></label>
+    <span class="wticks">1 · 3 · 5 · 7 · 9</span>
+    <span class="wout" data-t="out"></span>
+  </div>
+</div>
+    <figcaption>선생님 화면으로 함께 봅니다. 차수를 올리면 파란 훈련 오차 막대는 조금씩 줄어들지만, 붉은 테스트 오차 막대는 높은 차수에서 눈금을 벗어납니다. 오른쪽 궤적을 보면 차수와 테스트 오차가 언제나 나란히 커지지는 않습니다.</figcaption>
+  </figure>
+
+  <h2>3. 과대적합과 학습 범위 밖의 예측</h2>
+  <p>훈련용 데이터에 지나치게 맞추어 새로운 데이터의 예측 성능이 떨어지는 현상을 <b>과대적합</b>이라고 합니다. 차수가 높은 곡선은 훈련용 데이터의 점들에 더 가깝게 붙지만, 학습 범위 밖을 예측할 때 특히 불안정한 값을 냅니다. 어느 차수가 가장 좋았는지는 위 표에 적은 숫자로 판단합니다. 다만 그 결과를 모든 데이터에 그대로 적용해서는 안 됩니다.</p>
+  <details class="glossary"><summary>더 알아보기 — 가까운 미래와 먼 미래의 외삽</summary><div class="gin">
+  <figure class="interactive" data-fig="nearfar">
+    <div class="widget" data-w="nearfar">
+  <svg viewBox="0 0 720 250" role="img" aria-label="예측 연도를 2006년에서 2050년까지 옮기며 1차와 9차 예측값이 실제 기온에서 얼마나 멀어지는지 보이는 그림">
+    <g stroke="#e3ddcf" stroke-width="1">
+      <line x1="52" y1="18" x2="420" y2="18"/>
+      <line x1="52" y1="67.3" x2="420" y2="67.3"/>
+      <line x1="52" y1="116.5" x2="420" y2="116.5"/>
+      <line x1="52" y1="165.8" x2="420" y2="165.8"/>
+    </g>
+    <line x1="52" y1="215" x2="420" y2="215" stroke="#b9b3a5" stroke-width="1.2"/>
+    <line x1="52" y1="18" x2="52" y2="215" stroke="#b9b3a5" stroke-width="1.2"/>
+    <g font-size="14" fill="#6b7385" text-anchor="end">
+      <text x="46" y="22">20℃</text>
+      <text x="46" y="71.3">17</text>
+      <text x="46" y="120.5">14</text>
+      <text x="46" y="169.8">11</text>
+      <text x="46" y="219">8</text>
+    </g>
+    <g font-size="14" fill="#6b7385" text-anchor="middle">
+      <text x="52" y="230" text-anchor="start">1995</text>
+      <text x="118.9" y="230">2005</text>
+      <text x="185.8" y="230">2015</text>
+      <text x="252.7" y="230">2025</text>
+      <text x="319.6" y="230">2035</text>
+      <text x="420" y="230" text-anchor="end">2050</text>
+    </g>
+    <line x1="118.9" y1="18" x2="118.9" y2="215" stroke="#6b7385" stroke-width="1" stroke-dasharray="3 4"/>
+    <text x="113" y="78" font-size="14" fill="#6b7385" text-anchor="end">2005년</text>
+    <path class="c1s" fill="none" stroke="#2b7fd6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="c1d" fill="none" stroke="#2b7fd6" stroke-width="2" stroke-dasharray="6 5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="c9s" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path class="c9d" fill="none" stroke="#b07a00" stroke-width="2.2" stroke-dasharray="6 5" stroke-linecap="round" stroke-linejoin="round"/>
+    <g class="ptr1" fill="#2b7fd6" opacity=".55"></g>
+    <g class="ptr2" fill="#ffffff" stroke="#d64545" stroke-width="1.6"></g>
+    <line class="hl" x1="252.7" y1="18" x2="252.7" y2="215" stroke="#333333" stroke-width="1.2"/>
+    <text class="hlab" x="252.7" y="31" font-size="14" font-weight="700" fill="#333333" text-anchor="middle">2025년</text>
+    <g class="ptr" fill="#b07a00">
+      <path class="ptri" d="M204.3 40 L209.8 50 L198.8 50 Z"/>
+      <text class="ptxt" x="215.8" y="50" font-size="14" font-weight="700">축 밖</text>
+    </g>
+    <g>
+      <line x1="58" y1="178" x2="80" y2="178" stroke="#2b7fd6" stroke-width="2"/>
+      <text x="86" y="183" font-size="14" fill="#6b7385">1차</text>
+      <line x1="58" y1="199" x2="80" y2="199" stroke="#b07a00" stroke-width="2.2"/>
+      <text x="86" y="204" font-size="14" fill="#6b7385">9차</text>
+    </g>
+    <line x1="432" y1="18" x2="432" y2="232" stroke="#e3ddcf" stroke-width="1"/>
+    <g stroke="#e3ddcf" stroke-width="1">
+      <line x1="440" y1="62" x2="700" y2="62"/>
+      <line x1="440" y1="106" x2="700" y2="106"/>
+      <line x1="440" y1="150" x2="700" y2="150"/>
+    </g>
+    <line x1="440" y1="194" x2="700" y2="194" stroke="#b9b3a5" stroke-width="1.2"/>
+    <g font-size="14.5" fill="#6b7385">
+      <text x="440" y="48">선택 연도</text>
+      <text x="440" y="92">1차(직선) 예측</text>
+      <text x="440" y="136">9차 예측</text>
+      <text x="440" y="180">실제</text>
+      <text x="440" y="222">9차 − 실제</text>
+    </g>
+    <g text-anchor="end" font-weight="700" style="font-variant-numeric:tabular-nums">
+      <text class="v0" x="700" y="48" font-size="20" fill="#1c2230">—</text>
+      <text class="v1" x="700" y="92" font-size="20" fill="#2b7fd6">—</text>
+      <text class="v9" x="700" y="136" font-size="20" fill="#b07a00">—</text>
+      <text class="va" x="700" y="180" font-size="20" fill="#1c2230">—</text>
+      <text class="vd" x="700" y="222" font-size="20" fill="#d64545" style="transition:fill .25s">—</text>
+    </g>
+  </svg>
+  <div class="wctl">
+    <label>예측 연도 <input type="range" min="2006" max="2050" step="1" value="2025" data-k="yr" aria-label="예측 연도"></label>
+    <span data-t="ticks">2006 · 2025 · 2050</span>
+    <span class="wout" data-t="out">예측 연도를 옮기면 값이 표시됩니다</span>
+  </div>
+</div>
+    <figcaption>선생님 화면으로 함께 봅니다. 예측 연도를 2006년부터 2050년까지 옮기면 2004년까지 학습한 1차 예측값과 9차 예측값이 함께 바뀝니다. 학습 구간에서 멀어질수록 9차 예측값과 실제 기온의 차이가 커집니다. 예측 시점이 가깝다는 이유만으로 학습 범위 밖의 예측을 믿을 수는 없습니다.</figcaption>
+  </figure>
+  </div></details>
+
+  <div class="callout warn">
+    <div class="h">⚠️ 2050년 예측도 학습 범위 밖입니다</div>
+    <p>도전 활동의 모델은 2005년 이전 데이터로 학습했습니다. 따라서 2050년 예측은 학습 범위 밖의 <b>외삽</b>입니다. 미래 시점이 비교적 가깝다는 이유만으로 정확하다고 볼 수 없습니다. 여기서 계산한 값은 회귀 모델을 범위 밖에 적용한 예시이며, 기후 예보를 뜻하지 않습니다.</p>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>1차·3차·9차 모델을 훈련용 데이터로만 학습시키고, 같은 테스트용 데이터에서 오차를 비교했다.</li>
+    <li>훈련용 데이터에 가장 가깝게 붙은 곡선과 테스트용 데이터의 오차가 가장 작은 곡선이 서로 다를 수 있음을 표로 확인했다.</li>
+    <li>학습 범위 밖의 예측을 점수만으로 믿을 수 없는 까닭을 설명할 수 있다.</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson08.html"><div class="dir">← 이전</div><div class="tt">8차시 · 회귀 평가 손계산</div></a>
+    <a class="next" href="lesson08.html#sec6"><div class="dir">다음 →</div><div class="tt">8차시 6절 · 개념 정리로 돌아가기</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/widgets08.js?v=2"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>
