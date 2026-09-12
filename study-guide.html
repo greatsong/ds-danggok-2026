@@ -88,7 +88,7 @@
   <span class="eyebrow">중간고사 대비 · 이론 정리</span>
   <h1>『데이터 과학』 <span class="a">이론 정리</span></h1>
   <div class="under"></div>
-  <p class="lead">교과서 『데이터 과학』의 핵심 정의를 원문 그대로 인용하고(쪽수 표기), 우리 교재에서 추가로 배운 내용(API, 평가 손계산, 새 모델, SQL 기초)을 웹 교재의 차시 순서(1~14차시)에 맞춰 정리했습니다. 배포·코드·도구 사용법 같은 실습 절차는 싣지 않았습니다. 계산은 별도 문서 <a href="eval-workbook.html">평가 손계산 활동지</a>에서 손으로 연습합니다.</p>
+  <p class="lead">교과서 『데이터 과학』의 핵심 정의를 원문 그대로 인용하고(쪽수 표기), 우리 교재에서 추가로 배운 내용(API, 평가 손계산, 새 모델, SQL 기초)을 웹 교재의 차시 순서(1~15차시)에 맞춰 정리했습니다. 배포·코드·도구 사용법 같은 실습 절차는 싣지 않았습니다. 계산은 별도 문서 <a href="eval-workbook.html">평가 손계산 활동지</a>에서 손으로 연습합니다.</p>
 
   <div class="keypt">
     <div class="h">📖 이 문서로 공부하는 순서</div>
@@ -109,6 +109,7 @@
     <li><a href="#l12">12차시 연관 분석 ★</a></li>
     <li><a href="#l13">13차시 데이터베이스와 SQL 기초</a></li>
     <li><a href="#l14">14차시 데이터 윤리</a></li>
+    <li><a href="#l15">15차시 수파베이스 · 급식 월드컵과 팀 구성</a></li>
     <li><a href="#x1">심화 모델 도감 — kNN·랜덤 포레스트·XGBoost</a></li>
     <li><a href="#apB">부록 B 핵심 용어</a></li>
     <li><a href="#apC">부록 C 확인 문제 정답</a></li>
@@ -525,13 +526,14 @@
   </div>
 
   <!-- ================================================================ -->
-  <h2 id="l13"><span class="unit">13차시 · 데이터베이스와 수파베이스</span>데이터베이스와 SQL 기초</h2>
+  <h2 id="l13"><span class="unit">13차시 · 데이터베이스와 SQL</span>앱 뒤에서 벌어지는 일</h2>
+
   <div class="def">
-    <div class="h">교과서의 정의 <span class="src">25~27쪽</span></div>
-    <p class="q">"데이터셋(dataset)이란 하나의 주제에 대한 여러 데이터들이 모인 집합(set)을 말한다." (25쪽)</p>
-    <p class="q">"데이터베이스(database)는 여러 사람이 공유하여 사용하기 위해 통합 관리되는 데이터의 집합으로, 데이터베이스 시스템을 사용하면 대규모의 데이터를 효율적으로 저장하고 검색하며, 업데이트하고 관리할 수 있다." (26쪽)</p>
-    <p class="q">"데이터베이스에는 여러 종류의 데이터셋이 들어가는데, 이때 각각의 데이터셋은 표 형태로 저장되며 이를 테이블(table)이라고 한다." (27쪽)</p>
-    <p class="t">→ CSV 파일 하나가 데이터셋입니다. 여러 사람이 함께 쓰도록 통합 관리하는 것이 데이터베이스(우리 학급의 공용 데이터베이스)이고, 그 안의 표 하나하나가 테이블(방명록 표, 갤러리 표)입니다.</p>
+    <div class="h">교과서의 정의 <span class="src">『데이터 과학』 25~27쪽</span></div>
+    <p class="q">"데이터셋(dataset)이란 하나의 주제에 대한 여러 데이터들이 모인 집합(set)을 말한다." <span class="src">(25쪽)</span></p>
+    <p class="q">"데이터베이스(database)는 여러 사람이 공유하여 사용하기 위해 통합 관리되는 데이터의 집합으로, 데이터베이스 시스템을 사용하면 대규모의 데이터를 효율적으로 저장하고 검색하며, 업데이트하고 관리할 수 있다." <span class="src">(26쪽)</span></p>
+    <p class="q">"데이터베이스에는 여러 종류의 데이터셋이 들어가는데, 이때 각각의 데이터셋은 표 형태로 저장되며 이를 테이블(table)이라고 한다." <span class="src">(27쪽)</span></p>
+    <p class="t">→ CSV 파일 하나가 데이터셋입니다. 여러 사람이 함께 쓰도록 통합 관리하는 것이 데이터베이스이고, 그 안의 표 하나하나가 테이블입니다. 인스타그램의 게시물 테이블, 카카오톡의 메시지 테이블, 게임의 전적 테이블이 각각 하나의 테이블입니다.</p>
   </div>
 
   <h3>파일로 부족해지는 세 순간</h3>
@@ -539,144 +541,99 @@
   <table class="tb">
     <tr><th>부족해지는 순간</th><th>CSV 파일이라면</th><th>데이터베이스라면</th></tr>
     <tr><td class="k">동시에 쓰기</td><td>두 사람이 같은 파일을 고쳐 저장하면 나중에 저장한 쪽이 앞 사람의 작업을 덮는다</td><td>여러 사람의 기록이 각각 한 행으로 안전하게 들어간다</td></tr>
-    <tr><td class="k">계속 쌓기</td><td>새 글이 올 때마다 파일을 열어 고치고 다시 저장해야 한다</td><td>새 데이터가 자동으로 누적된다</td></tr>
+    <tr><td class="k">계속 쌓기</td><td>새 기록이 올 때마다 파일을 열어 고치고 다시 저장해야 한다</td><td>새 데이터가 자동으로 누적된다</td></tr>
     <tr><td class="k">골라 읽기</td><td>전체를 내려받아 눈으로 찾아야 한다</td><td>조건에 맞는 것만 즉시 검색해 가져온다</td></tr>
   </table>
 
   <h3>데이터베이스의 이점 네 가지와 네 가지 동작</h3>
   <p>교과서 26쪽은 데이터베이스의 이점을 네 가지로 정리합니다.</p>
   <table class="tb">
-    <tr><th>이점</th><th>뜻</th><th>방명록 표의 예</th></tr>
-    <tr><td class="k">편리한 버전 관리</td><td>누가 언제 무엇을 고쳤는지 기록이 남는다</td><td>작성 시각(created_at) 열이 자동으로 채워진다</td></tr>
-    <tr><td class="k">데이터 무결성 유지</td><td>잘못된 값이 들어오지 않도록 제약을 건다</td><td>빈 칸으로 제출하면 저장하지 않기</td></tr>
-    <tr><td class="k">데이터 보안 강화</td><td>사용자마다 할 수 있는 일(권한)을 나눈다</td><td>비밀번호가 맞을 때만 고치고 지운다</td></tr>
-    <tr><td class="k">체계적인 데이터 관리</td><td>조건으로 검색하고 정렬한다</td><td>최신순으로 정렬해 보여 주기</td></tr>
+    <tr><th>이점</th><th>뜻</th><th>메시지 테이블의 예</th></tr>
+    <tr><td class="k">편리한 버전 관리</td><td>누가 언제 무엇을 고쳤는지 기록이 남는다</td><td>보낸 시각 열이 자동으로 채워진다</td></tr>
+    <tr><td class="k">데이터 무결성 유지</td><td>잘못된 값이 들어오지 않도록 제약을 건다</td><td>빈 메시지는 저장하지 않기</td></tr>
+    <tr><td class="k">데이터 보안 강화</td><td>사용자마다 할 수 있는 일(권한)을 나눈다</td><td>내가 보낸 메시지만 지울 수 있다</td></tr>
+    <tr><td class="k">체계적인 데이터 관리</td><td>조건으로 검색하고 정렬한다</td><td>최근 대화부터 보여 주기</td></tr>
   </table>
-  <p>데이터베이스가 하는 일은 결국 네 동작으로 요약됩니다(29쪽). <b>생성(Create), 읽기(Read), 갱신(Update), 삭제(Delete)</b>, 앞 글자를 따서 CRUD라고 부릅니다. 갱신과 삭제는 데이터를 바꾸는 동작이라 "누가 할 수 있는가"라는 권한 문제가 반드시 따라옵니다.</p>
+  <p>데이터베이스가 하는 일은 결국 네 동작으로 요약됩니다(29쪽). 생성(Create), 읽기(Read), 갱신(Update), 삭제(Delete), 앞 글자를 따서 <b>CRUD</b>라고 부릅니다. 갱신과 삭제는 데이터를 바꾸는 동작이라 "누가 할 수 있는가"를 함께 정해야 합니다.</p>
 
-  <h3>테이블 설계 — 속성명·데이터형·조건</h3>
-  <p>교과서 31쪽 탐구활동은 쇼핑몰 데이터베이스의 테이블(사용자·제품·장바구니)을 설계합니다. 테이블을 설계한다는 것은 열마다 <b>속성명</b>(무엇을 담는가), <b>데이터형</b>(글자인가 숫자인가 날짜인가), <b>조건</b>(비워도 되는가, 중복되면 안 되는가)을 정하는 일입니다. 우리 방명록 테이블을 같은 양식으로 적으면 다음과 같습니다.</p>
+  <h3>SQL 문장을 읽는 법 — 낱말의 자리는 정해져 있다</h3>
+  <p>SQL(Structured Query Language)은 테이블에 데이터를 넣고, 꺼내고, 고치고, 지우라고 지시하는 언어입니다. 외울 것이 많지 않은 까닭은 <b>낱말이 앉는 자리가 정해져 있기 때문</b>입니다.</p>
+  <div class="code">SELECT 작성자, 해시태그 FROM posts WHERE 작성자 = '석리송' ORDER BY 올린시각 DESC LIMIT 5;</div>
   <table class="tb">
-    <tr><th>속성명</th><th>설명</th><th>데이터형</th><th>조건</th></tr>
-    <tr><td class="k">id</td><td>글 번호</td><td>정수</td><td>자동 증가, 중복 불가(기본 키)</td></tr>
-    <tr><td class="k">name</td><td>작성자 이름</td><td>문자열</td><td>비워 둘 수 없음</td></tr>
-    <tr><td class="k">message</td><td>한 줄 소감</td><td>문자열</td><td>비워 둘 수 없음</td></tr>
-    <tr><td class="k">password</td><td>네 자리 비밀번호</td><td>문자열</td><td>고치기·지우기 확인용</td></tr>
-    <tr><td class="k">created_at</td><td>작성 시각</td><td>날짜·시각</td><td>저장 시각이 자동으로 들어감</td></tr>
+    <tr><th>낱말</th><th>묻는 것</th><th>비고</th></tr>
+    <tr><td class="k">SELECT</td><td>무엇을 가져올까</td><td>*는 모든 열</td></tr>
+    <tr><td class="k">FROM</td><td>어디서 가져올까</td><td>테이블 이름</td></tr>
+    <tr><td class="k">WHERE</td><td>어떤 행만 남길까</td><td>이 줄이 없으면 테이블의 모든 행이 대상</td></tr>
+    <tr><td class="k">ORDER BY</td><td>어떤 순서로 늘어놓을까</td><td>DESC 내림차순 · ASC 오름차순</td></tr>
+    <tr><td class="k">LIMIT</td><td>몇 개만 가져올까</td><td>피드를 스무 개씩 가져오는 것이 이것</td></tr>
   </table>
-  <p>기본 키(primary key)는 행 하나를 유일하게 가리키는 열입니다. 같은 이름의 사람이 두 번 글을 남겨도 id가 다르므로 두 행을 구별할 수 있습니다. 갱신과 삭제가 "7번 글"처럼 특정 행 하나를 정확히 가리킬 수 있는 것도 기본 키 덕분입니다. 다른 표의 기본 키를 가리켜 표와 표를 잇는 열은 <b>외래 키</b>라 합니다. 교과서 31쪽의 장바구니 표가 사용자 id와 제품 id를 열로 갖는 것이 그 예입니다.</p>
-  <div class="scene">
-    <div class="h">우리 실습 장면 — "내 파일"에서 "우리의 저장소"로</div>
-    <p>방명록에 글을 남기고 새로고침해도 글이 남아 있습니다. 친구의 컴퓨터에서 열어도 같은 글이 보입니다. 두 사람이 거의 동시에 글을 남겨도 한쪽이 사라지지 않고 각각 한 행으로 쌓입니다. 한 학기 내내 작품을 올리고 피드백을 남긴 갤러리도 같은 원리의 데이터베이스였습니다.</p>
-  </div>
-  <h3>SQL — 테이블을 다루는 언어 (교재 보충)</h3>
-  <div class="extra">
-    <div class="h">🔎 교재에서 추가한 내용</div>
-    <p>교과서는 데이터베이스의 개념과 설계까지 다룹니다. 우리 교재는 여기에 SQL 기초를 보탭니다. 데이터베이스에 직접 지시할 때 쓰는 문장이고, AI가 짜 준 코드도 결국 이 문장을 대신 쓴 것이기 때문입니다. 문장을 외우는 것이 목적이 아니라, 네 동작(CRUD)이 어떤 문장으로 표현되는지 읽을 수 있으면 됩니다.</p>
-  </div>
-  <p><b>SQL</b>(Structured Query Language, 구조화 질의 언어)은 테이블에 데이터를 넣고, 꺼내고, 고치고, 지우라고 지시하는 언어입니다. 우리가 쓴 것처럼 표(테이블) 형태로 데이터를 관리하는 데이터베이스를 <b>관계형 데이터베이스</b>라고 하며, 관계형 데이터베이스는 대부분 SQL로 다룹니다. SQL 문장은 영어 문장과 비슷하게 읽힙니다. 대문자로 쓴 낱말이 명령어이고, 나머지가 테이블 이름과 열 이름입니다.</p>
+  <p>자리 순서는 바뀌지 않습니다 — <b>SELECT → FROM → WHERE → GROUP BY → ORDER BY → LIMIT</b>. 필요 없는 자리는 통째로 비웁니다. 조건이 없으면 WHERE를 쓰지 않습니다.</p>
 
-  <h3>읽기(Read) — SELECT</h3>
-  <p>가장 자주 쓰는 문장입니다. 어느 테이블(FROM)에서 어느 열(SELECT)을 가져올지 말하고, 필요하면 조건(WHERE)과 정렬(ORDER BY)을 덧붙입니다.</p>
-<pre class="sql"><span class="cm">-- 방명록의 이름·소감·작성 시각을 최신순으로 가져온다</span>
-<span class="kw">SELECT</span> name, message, created_at
-<span class="kw">FROM</span> guestbook
-<span class="kw">ORDER BY</span> created_at <span class="kw">DESC</span>;
+  <h3>읽기 — 인스타그램의 피드와 검색</h3>
+  <div class="code">-- 피드를 연다: 최근 게시물 스무 개
+SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;
 
-<span class="cm">-- 모든 열(*)을 가져오되, 이름이 '민수'인 글만</span>
-<span class="kw">SELECT</span> * <span class="kw">FROM</span> guestbook <span class="kw">WHERE</span> name = '민수';</pre>
-  <table class="tb">
-    <tr><th>낱말</th><th>뜻</th><th>비유</th></tr>
-    <tr><td class="k">SELECT</td><td>가져올 열을 고른다. *는 모든 열</td><td>"이름과 소감 열만 보여 줘"</td></tr>
-    <tr><td class="k">FROM</td><td>어느 테이블에서 가져올지</td><td>"방명록 표에서"</td></tr>
-    <tr><td class="k">WHERE</td><td>조건에 맞는 행만 남긴다</td><td>"이름이 민수인 것만"</td></tr>
-    <tr><td class="k">ORDER BY</td><td>정렬 기준. DESC는 내림차순, ASC는 오름차순</td><td>"최신 글부터"</td></tr>
-  </table>
-  <p>세 번째 한계였던 "골라 읽기"가 바로 WHERE입니다. 파일이라면 전체를 내려받아 눈으로 찾아야 했던 일을, 데이터베이스는 조건 한 줄로 해냅니다.</p>
+-- #고양이를 검색한다
+SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</div>
+  <p><code>LIKE '%#고양이%'</code>의 <b>%</b>는 "앞뒤로 무엇이 오든 상관없다"는 뜻입니다. 한 칸에 태그가 여러 개 들어 있으므로 <code>=</code>로는 찾지 못합니다. 파일이라면 전체를 내려받아 눈으로 찾아야 했던 일을 조건 한 줄로 해냅니다.</p>
 
-  <h3>생성·갱신·삭제 — INSERT, UPDATE, DELETE</h3>
-<pre class="sql"><span class="cm">-- 생성(C): 새 글 한 줄을 넣는다. id와 created_at은 자동으로 채워진다</span>
-<span class="kw">INSERT INTO</span> guestbook (name, message, password)
-<span class="kw">VALUES</span> ('민수', '방명록이 생겨서 신기해요', '1234');
+  <h3>쓰기 — 카카오톡의 전송·읽음·삭제</h3>
+  <div class="code">-- 추가(C): 메시지를 보내면 행이 하나 생긴다
+INSERT INTO messages (방id, 보낸사람, 내용, 읽음)
+VALUES (3, '나', '오늘 급식 뭐야?', false);
 
-<span class="cm">-- 갱신(U): 7번 글의 소감을 고친다</span>
-<span class="kw">UPDATE</span> guestbook <span class="kw">SET</span> message = '정말 신기해요' <span class="kw">WHERE</span> id = 7;
+-- 갱신(U): 상대가 읽으면 노란 1이 사라진다
+UPDATE messages SET 읽음 = true WHERE id = 305;
 
-<span class="cm">-- 삭제(D): 7번 글을 지운다</span>
-<span class="kw">DELETE FROM</span> guestbook <span class="kw">WHERE</span> id = 7;</pre>
+-- 삭제(D): 내가 보낸 메시지를 지운다
+DELETE FROM messages WHERE id = 305 AND 보낸사람 = '나';</div>
   <div class="keypt">
-    <div class="h">⚠️ WHERE가 없는 UPDATE·DELETE</div>
-    <p>UPDATE와 DELETE에서 WHERE를 빼면 테이블의 <b>모든 행</b>이 바뀌거나 지워집니다. 기본 키(id)로 행 하나를 정확히 가리키는 습관이 중요한 까닭입니다. 실제 서비스가 갱신·삭제 권한을 엄격히 나누는 것(데이터 보안 강화)도 같은 이유입니다.</p>
+    <div class="h">WHERE가 없는 UPDATE·DELETE</div>
+    <p>UPDATE와 DELETE에서 WHERE를 빼면 테이블의 <b>모든 행</b>이 바뀌거나 지워집니다. <code>DELETE FROM messages;</code> 한 줄이면 대화가 전부 사라집니다. 실제 서비스가 이 사고를 막는 방법은 두 가지입니다. 문장에 WHERE를 꼭 넣는 것과, 애초에 지울 권한을 주지 않는 것입니다.</p>
   </div>
 
-
-
-  <h3>급식 테이블로 연습 — 세는 일도 SQL이 한다</h3>
-  <p>급식 184일을 meals라는 테이블(열: 날짜 · 월 · 요일 · 식사 · 메뉴 · 칼로리)에 넣어 두었다고 합시다. 연관 분석에서 손으로 세었던 값들은 SQL 한 줄로 셀 수 있습니다.</p>
-<pre class="sql"><span class="cm">-- 배추김치가 나온 날은 며칠인가 (연관 분석의 "기본 등장률"의 분자)</span>
-<span class="kw">SELECT COUNT</span>(*) <span class="kw">FROM</span> meals <span class="kw">WHERE</span> 식사 = '중식' <span class="kw">AND</span> 메뉴 <span class="kw">LIKE</span> '%배추김치%';
-
-<span class="cm">-- 순대국과 석박지가 같은 날 나온 날짜 목록</span>
-<span class="kw">SELECT</span> 날짜 <span class="kw">FROM</span> meals
-<span class="kw">WHERE</span> 식사 = '중식' <span class="kw">AND</span> 메뉴 <span class="kw">LIKE</span> '%순대국%' <span class="kw">AND</span> 메뉴 <span class="kw">LIKE</span> '%석박지%';</pre>
-  <p>COUNT(*)는 조건에 맞는 행의 개수를 세고, LIKE '%배추김치%'는 메뉴 문자열 안에 "배추김치"가 들어 있는 행을 찾습니다. 첫 문장의 답이 86, 두 번째 문장의 행 수가 5입니다. 12차시에서 손으로 센 바로 그 수입니다.</p>
-
-  <h3>묶어서 세기 — GROUP BY와 집계</h3>
-  <p>분석 질문의 대부분은 "무엇별로 얼마나"의 꼴입니다. 영화 216편이 movies 테이블(열: 영화명, 장르, 총관객)에 들어 있다고 합시다. "장르별 평균 관객은 얼마인가"는 GROUP BY 한 줄로 답합니다.</p>
-<pre class="sql"><span class="cm">-- 장르별로 묶어 편수·총 관객·평균 관객을 구하고, 평균이 큰 순으로 상위 5개만</span>
-<span class="kw">SELECT</span> 장르, <span class="kw">COUNT</span>(*) <span class="kw">AS</span> 편수, <span class="kw">SUM</span>(총관객) <span class="kw">AS</span> 총관객합, <span class="kw">AVG</span>(총관객) <span class="kw">AS</span> 평균관객
-<span class="kw">FROM</span> movies
-<span class="kw">GROUP BY</span> 장르
-<span class="kw">ORDER BY</span> 평균관객 <span class="kw">DESC</span>
-<span class="kw">LIMIT</span> 5;</pre>
+  <h3>묶어서 세기 — 게임의 전적과 랭킹</h3>
+  <p>분석 질문의 대부분은 "무엇별로 얼마나"의 꼴입니다. 전적 한 판이 <code>matches</code> 테이블의 한 행이라면, "캐릭터별 평균 점수"는 GROUP BY 한 줄로 답합니다.</p>
+  <div class="code">SELECT 캐릭터, COUNT(*) AS 판수, AVG(점수) AS 평균점수
+FROM matches
+GROUP BY 캐릭터
+ORDER BY 평균점수 DESC;</div>
   <table class="tb">
     <tr><th>낱말</th><th>뜻</th></tr>
-    <tr><td class="k">GROUP BY</td><td>같은 값끼리 묶는다. "장르별로"</td></tr>
-    <tr><td class="k">COUNT · SUM · AVG · MAX · MIN</td><td>묶음마다 개수 · 합계 · 평균 · 최댓값 · 최솟값을 구한다</td></tr>
+    <tr><td class="k">COUNT(*)</td><td>조건에 맞는 행이 몇 개인지 센다</td></tr>
+    <tr><td class="k">GROUP BY</td><td>같은 값끼리 한 묶음으로 합친다. 캐릭터가 네 종류면 결과도 네 줄</td></tr>
+    <tr><td class="k">COUNT · SUM · AVG · MAX · MIN</td><td>묶음마다 개수 · 합계 · 평균 · 최댓값 · 최솟값</td></tr>
     <tr><td class="k">AS</td><td>결과 열에 붙일 이름</td></tr>
-    <tr><td class="k">LIMIT</td><td>앞에서 몇 행만 가져온다. "상위 5개"</td></tr>
   </table>
-  <p>4차시의 도넛(장르별 편수)과 트리맵(장르별 총 관객)이 이 문장의 편수 열과 총관객합 열입니다.</p>
+  <p><b>묶으면 줄이 합쳐집니다.</b> 그래서 묶은 열이 아닌 열은 그대로 가져올 수 없습니다. 네 줄로 합쳐진 칸에 스무 개의 점수를 한꺼번에 넣을 수 없기 때문입니다. 그런 열은 COUNT·AVG 같은 집계 함수로 감싸 하나의 값으로 줄여야 합니다.</p>
 
-  <h4>연습 문제 — 영양사 선생님의 부탁</h4>
-  <div class="scene">
-    <div class="h">이야기</div>
-    <p>학생회 급식부의 지우와 민수에게 영양사 선생님이 부탁을 하나 합니다. "금요일 급식이 유독 무겁다는 의견이 급식 게시판에 여러 번 올라왔어요. 느낌인지 사실인지 확인하고 싶은데, 한 학년도 식단 184일이 meals 테이블에 들어 있으니 요일별로 열량을 비교해 줄 수 있을까요?" 두 사람은 12차시에 급식 규칙을 찾을 때 썼던 바로 그 데이터를 엽니다. 이번에는 파이썬 대신 SQL 편집기입니다.</p>
-  </div>
+  <h3>테이블 설계 — 속성명·데이터형·조건</h3>
+  <p>교과서 31쪽 탐구활동은 쇼핑몰 데이터베이스의 테이블(사용자·제품·장바구니)을 설계합니다. 테이블을 설계한다는 것은 열마다 <b>속성명</b>(무엇을 담는가), <b>데이터형</b>(글자인가 숫자인가 날짜인가), <b>조건</b>(비워도 되는가, 중복되면 안 되는가)을 정하는 일입니다. 이 설계표가 그대로 SQL 문장이 됩니다.</p>
   <table class="tb">
-    <tr><th>속성명</th><th>설명</th><th>데이터형</th><th>예</th></tr>
-    <tr><td class="k">날짜</td><td>급식 날짜</td><td>날짜</td><td>2025-09-02</td></tr>
-    <tr><td class="k">월</td><td>몇 월인지</td><td>정수</td><td>9</td></tr>
-    <tr><td class="k">요일</td><td>월~금</td><td>문자열</td><td>'화'</td></tr>
-    <tr><td class="k">식사</td><td>중식 또는 석식</td><td>문자열</td><td>'중식'</td></tr>
-    <tr><td class="k">메뉴</td><td>그날 메뉴 전체, 세로막대(|)로 구분</td><td>문자열</td><td>'현미밥|근대된장국|제육볶음|배추김치'</td></tr>
-    <tr><td class="k">칼로리</td><td>한 끼 열량(kcal)</td><td>소수</td><td>887.5</td></tr>
+    <tr><th>설계표의 항목</th><th>SQL에서</th><th>예</th></tr>
+    <tr><td class="k">속성명</td><td>열 이름</td><td>id, 작성자, 해시태그, 올린시각</td></tr>
+    <tr><td class="k">데이터형</td><td>text(문자열) · integer/bigint(정수) · numeric(소수) · boolean(참/거짓) · timestamptz(날짜·시각)</td><td>좋아요 수는 정수, 올린 시각은 날짜·시각</td></tr>
+    <tr><td class="k">조건</td><td>NOT NULL(비울 수 없음) · PRIMARY KEY(기본 키) · UNIQUE(중복 불가) · DEFAULT(기본값)</td><td>아이디는 UNIQUE</td></tr>
   </table>
-  <div class="qs">
-    <div class="q"><b>[장면 1 · 지우의 문장]</b> 지우가 먼저 나섭니다. "요일별로(GROUP BY) 평균 열량을 내서(AVG), 높은 요일부터(ORDER BY) 보면 되겠다." 지우가 써야 할 SQL 문장을 완성하시오. 중식만 대상으로 하고, 결과 열의 이름은 요일과 평균칼로리로 하시오.</div>
-    <div class="q"><b>[장면 2 · 민수의 오류]</b> 옆에서 민수가 "요일마다 급식이 며칠씩 있었는지도 같이 보여 드리자"며 문장을 하나 더 씁니다.
-<pre class="sql"><span class="kw">SELECT</span> 요일, 날짜 <span class="kw">FROM</span> meals <span class="kw">WHERE</span> 식사 = '중식' <span class="kw">GROUP BY</span> 요일;</pre>
-      실행 버튼을 누르자 빨간 오류 문장이 뜹니다. 지우가 화면을 보더니 말합니다. "요일로 묶었는데 날짜를 그대로 달라고 하면, 한 칸에 서른 개 넘게 어떻게 넣어?" (가) 지우의 말을 "묶음"이라는 낱말을 써서 오류의 까닭으로 풀어 쓰시오. (나) 민수의 뜻대로 요일별 중식 일수가 나오도록 문장을 고쳐 쓰시오.</div>
-  </div>
+  <p><b>기본 키</b>는 행 하나를 유일하게 가리키는 열입니다. 같은 사람이 글을 두 번 올려도 id가 다르므로 두 행을 구별할 수 있습니다. 갱신과 삭제가 "305번 메시지"처럼 특정 행 하나를 정확히 가리킬 수 있는 것도 기본 키 덕분입니다. 다른 테이블의 기본 키를 가리키는 열을 <b>외래 키</b>라 하고, 그 열로 두 테이블을 이어 붙이는 문장이 <b>JOIN</b>입니다.</p>
+
   <div class="scene">
-    <div class="h">이야기의 끝 — 숫자가 나온 뒤에 남는 판단</div>
-    <p>두 문장을 합쳐 실행하니 이런 표가 나왔습니다(요일별 일수는 184일 실측이고, 칼로리는 연습용 예시 값입니다). 금요일 34일의 평균이 912kcal로 가장 높고, 화요일 39일의 평균이 852kcal로 가장 낮습니다. 지우는 "금요일이 정말 무겁네요"라고 말하려다 멈춥니다. 60kcal 차이가 "유독 무겁다"고 말할 만큼 큰 차이인지, 금요일에 특식이 몇 번 있었던 것은 아닌지, 표만으로는 알 수 없기 때문입니다. SQL은 세는 일을 대신하지만, 그 수가 무엇을 뜻하는지는 1차시부터 배운 대로 사람이 판단합니다.</p>
-    <table class="tb"><tr><th>요일</th><th class="num">일수</th><th class="num">평균칼로리</th></tr><tr><td>금</td><td class="num">29</td><td class="num">912.4</td></tr><tr><td>수</td><td class="num">31</td><td class="num">885.1</td></tr><tr><td>월</td><td class="num">32</td><td class="num">870.3</td></tr><tr><td>목</td><td class="num">30</td><td class="num">866.0</td></tr><tr><td>화</td><td class="num">32</td><td class="num">851.7</td></tr></table>
+    <div class="h">우리 실습 장면 — 단추 하나가 문장 하나</div>
+    <p>하트를 누르면 <code>UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = 8;</code>이 실행됩니다. 메시지를 보내면 INSERT, 상대가 읽으면 UPDATE, 지우면 DELETE입니다. 게임에서 탭을 바꾸면 GROUP BY 뒤의 열이 바뀝니다. 여러분이 쓰는 앱 대부분은 오늘 배운 낱말 열 개의 조합으로 돌아갑니다.</p>
   </div>
-
-
-
 
   <h4>확인 문제</h4>
   <div class="qs">
     <div class="q">모둠 과제 자료를 CSV 파일로 메신저에서 주고받는 방식과 비교해 데이터베이스의 이점을 두 가지 서술하시오.</div>
-    <div class="q">다음 SQL 문장이 하는 일을 우리말로 쓰시오. SELECT name, message FROM guestbook WHERE name = '지우' ORDER BY created_at DESC;</div>
+    <div class="q">다음 문장이 하는 일을 우리말로 쓰시오. <code>SELECT 작성자, 해시태그 FROM posts WHERE 해시태그 LIKE '%#급식%' ORDER BY 올린시각 DESC LIMIT 5;</code></div>
     <div class="q">CRUD 네 동작과 SQL 명령어(SELECT, INSERT, UPDATE, DELETE)를 짝지으시오.</div>
-    <div class="q">DELETE FROM guestbook; 이 문장을 실행하면 어떤 일이 벌어지는지, 그리고 그것이 왜 위험한지 쓰시오.</div>
+    <div class="q"><code>DELETE FROM messages;</code> 이 문장을 실행하면 어떤 일이 벌어지는지, 그리고 그것이 왜 위험한지 쓰시오.</div>
+    <div class="q">"캐릭터별 최고 점수를 높은 순으로 세 줄만" 가져오는 문장을 자리 순서에 맞게 쓰시오.</div>
   </div>
 
   <!-- ================================================================ -->
-  <h2 id="l14"><span class="unit">14차시 · 데이터 윤리 (공통 수업 마지막)</span>데이터 윤리 — 편향 · 소유권 · 책임</h2>
+
+  <h2 id="l14"><span class="unit">14차시 · 데이터 윤리</span>데이터 윤리 — 편향 · 소유권 · 책임</h2>
   <div class="def">
     <div class="h">교과서의 정의 <span class="src">38·39쪽</span></div>
     <p class="q">"수집된 데이터의 분포가 고르지 못하고, 특정한 지역, 연령, 성별 등에 치우쳐 있을 경우 데이터에 편향성이 있다고 한다." (38쪽)</p>
@@ -714,6 +671,48 @@
     <div class="q">영화 흥행 모델을 "좋은 영화를 가려내는 모델"이라고 소개하면 왜 문제가 되는지 교과서 38쪽의 정의와 연결해 설명하시오.</div>
   </div>
 
+  <h2 id="l15"><span class="unit">15차시 · 수파베이스</span>우리 학교 급식 월드컵과 팀 구성</h2>
+
+  <div class="keypt">
+    <div class="h">이 차시가 하는 일</div>
+    <p>13차시에 문장으로 읽은 SQL이 실제로 실행되는 자리를 만듭니다. 반찬 여덟 개로 월드컵을 치르고, 학급 전체의 대결 기록을 한 테이블에 모아 승률을 집계합니다. 그리고 팀을 구성해 프로젝트 주제 후보를 고릅니다.</p>
+  </div>
+
+  <h3>대결 한 번이 한 행</h3>
+  <p>월드컵 한 판은 8강 4경기 · 4강 2경기 · 결승 1경기, 모두 일곱 번의 대결입니다. 한 번 고를 때마다 테이블에 <b>한 행</b>이 들어가므로 한 사람이 한 판을 마치면 일곱 행이 쌓입니다. 각 행에는 판 번호·라운드·겨룬 두 반찬·이긴 반찬이 들어가고, <b>기본 키</b>인 id가 자동으로 붙습니다.</p>
+
+  <h3>승리 수와 승률 — 분모가 다르다</h3>
+  <table class="tb">
+    <tr><th>숫자</th><th>구하는 법</th><th>주의</th></tr>
+    <tr><td class="k">승리 수</td><td>이긴 횟수를 그대로 센다</td><td>분모가 없다</td></tr>
+    <tr><td class="k">승률</td><td>이긴 횟수 ÷ 겨룬 횟수</td><td>겨룬 횟수가 분모다</td></tr>
+  </table>
+  <p>대진표에서 자주 뽑힌 반찬은 겨룬 횟수가 많아 승리 수가 쌓이지만, 진 경기도 함께 늘어 승률은 낮아질 수 있습니다. 그래서 <b>승리 수 1위와 승률 1위가 다를 수 있습니다.</b> 두 숫자를 함께 보아야 순위를 읽을 수 있고, 겨룬 횟수가 한두 번뿐인 반찬의 승률은 분모가 작아 크게 흔들립니다.</p>
+
+  <div class="keypt">
+    <div class="h">대결 기록 수는 참여 인원이 아니다</div>
+    <p>한 사람이 여러 판을 치르면 그만큼 행이 쌓입니다. 기록이 많은 사람의 취향이 결과에 더 크게 반영되므로, 이 승률을 "우리 반 전체의 선호도"라고 말하려면 누가 몇 번 참여했는지 함께 확인해야 합니다.</p>
+  </div>
+
+  <h3>AI에게 데이터베이스를 주문할 때 알려 줄 네 가지</h3>
+  <p>SQL을 직접 쓰지 않더라도, AI가 데이터베이스 코드를 맞게 짜려면 AI가 볼 수 없는 사실을 프롬프트에 적어 주어야 합니다.</p>
+  <table class="tb">
+    <tr><th>알려 줄 것</th><th>왜</th></tr>
+    <tr><td class="k">테이블 이름과 열 이름</td><td>AI는 테이블을 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다</td></tr>
+    <tr><td class="k">새 테이블을 만들지 말 것</td><td>학급 공용 프로젝트에서는 학생이 테이블을 만들 권한이 없다</td></tr>
+    <tr><td class="k">접속 정보는 비밀 금고에</td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td></tr>
+    <tr><td class="k">무결성 조건</td><td>빈 값이나 잘못된 값이 들어가지 않게</td></tr>
+  </table>
+  <p><b>권한 정책(RLS)</b>은 테이블마다 어떤 동작을 허용할지 정해 둔 규칙입니다. 이번 실습은 조회와 추가만 허용하므로, 학생 앱에서는 남의 기록을 고치거나 지울 수 없습니다. 저장이 안 될 때 권한을 열어 버리는 것은 해결이 아닙니다.</p>
+
+  <h4>확인 문제</h4>
+  <div class="qs">
+    <div class="q">어느 반찬이 승리 수 1위인데 승률은 3위였습니다. 어떻게 이런 일이 생기는지 분모를 들어 설명하시오.</div>
+    <div class="q">월드컵 한 판을 마치면 테이블에 몇 행이 쌓이는지, 그렇게 되는 까닭과 함께 쓰시오.</div>
+    <div class="q">AI에게 데이터베이스 코드를 주문할 때 테이블 이름과 열 이름을 반드시 적어 주어야 하는 까닭을 쓰시오.</div>
+  </div>
+
+  <!-- ================================================================ -->
   <!-- ================================================================ -->
   <h2 id="x1"><span class="unit">심화 페이지 · 모델 도감 (교재 보충)</span>모델 도감 — kNN·랜덤 포레스트·XGBoost</h2>
   <div class="extra">
@@ -834,9 +833,9 @@
   <h4>12차시</h4>
   <p class="ans">1. 지지도 6/20 = 0.30, 신뢰도 6/8 = 0.75, 향상도 0.75 ÷ (10/20) = 1.5. 2. 배추김치는 원래 184일 중 102일(55%)에 나오므로 제육볶음이 나온 날의 60%는 우연과 같다(향상도 1.08). 3. 동시 등장 1회는 우연일 가능성을 배제할 수 없고 등장 횟수가 적을수록 향상도가 과장된다. 그래서 최소 지지도 문턱을 먼저 정한다.</p>
   <h4>13차시</h4>
-  <p class="ans">1. 여러 사람이 동시에 입력해도 서로의 작업을 덮지 않고 각각 쌓인다. 데이터가 한곳에 누적되고 조건으로 검색해 읽을 수 있다(그 밖에 버전 관리, 무결성, 권한). 2. 방명록 테이블에서 이름이 '지우'인 글의 이름과 소감을 작성 시각이 늦은 순(최신순)으로 가져온다. 3. 생성-INSERT, 읽기-SELECT, 갱신-UPDATE, 삭제-DELETE. 4. WHERE가 없어 방명록의 모든 행이 지워진다. 조건 없는 삭제·갱신은 테이블 전체에 적용되므로 기본 키로 행을 특정해야 한다.</p>
-  <h4>13차시 · 영양사 선생님의 부탁</h4>
-  <p class="ans">장면 1. SELECT 요일, AVG(칼로리) AS 평균칼로리 FROM meals WHERE 식사 = '중식' GROUP BY 요일 ORDER BY 평균칼로리 DESC; 장면 2. (가) GROUP BY 요일은 요일이 같은 행들을 한 묶음으로 접어 요일마다 한 행만 남긴다. 날짜는 한 묶음 안에 값이 여러 개(29~32개)라 한 칸에 표시할 수 없으므로, GROUP BY에 없는 열은 COUNT·AVG 같은 집계 함수로 감싸야 한다. (나) SELECT 요일, COUNT(*) AS 일수 FROM meals WHERE 식사 = '중식' GROUP BY 요일;</p>
+  <p class="ans">1. 여러 사람이 동시에 입력해도 서로의 작업을 덮지 않고 각각 쌓인다. 데이터가 한곳에 누적되고 조건으로 검색해 읽을 수 있다(그 밖에 버전 관리, 무결성, 권한). 2. 게시물 테이블에서 해시태그에 '#급식'이 들어 있는 글의 작성자와 해시태그를 올린 시각이 늦은 순으로 다섯 줄만 가져온다. 3. 생성-INSERT, 읽기-SELECT, 갱신-UPDATE, 삭제-DELETE. 4. WHERE가 없어 메시지 테이블의 모든 행이 지워진다. 되돌릴 수 없고, 조건 한 줄을 빠뜨린 실수가 전체 데이터를 잃게 만든다. 5. SELECT 캐릭터, MAX(점수) AS 최고점수 FROM matches GROUP BY 캐릭터 ORDER BY 최고점수 DESC LIMIT 3;</p>
+  <h4>15차시</h4>
+  <p class="ans">1. 승리 수는 분모가 없고 승률의 분모는 겨룬 횟수다. 대진표에서 자주 뽑힌 반찬은 겨룬 횟수가 많아 승리 수가 쌓이지만 진 경기도 함께 늘어 승률은 낮아질 수 있다. 2. 일곱 행. 8강 4경기·4강 2경기·결승 1경기이고 대결 한 번이 한 행으로 저장되기 때문이다. 3. AI는 테이블을 직접 볼 수 없다. 이름이 한 글자만 달라도 그 열을 찾지 못해 저장이나 조회가 실패한다.</p>
   <h4>14차시</h4>
   <p class="ans">1. 공개 여부나 양이 아니라, 기록을 이어 붙였을 때 특정 개인을 추적할 수 있는가. 2. 인증키는 요청자를 식별하는 값이라 공개되면 남이 내 이름으로 호출할 수 있다. 호출 한도(일 3,000회)가 키 단위라 남이 쓰면 한도가 소진되고 오·남용의 책임도 키 주인에게 돌아온다. 3. 스크린 배정이라는 사람의 결정에 담긴 치우침을 학습해, 예측이 다시 배정의 근거가 되면 작은 영화에 불리한 구조가 강화된다. 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동한다(38쪽).</p>
   <h4>모델 도감</h4>
