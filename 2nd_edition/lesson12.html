@@ -7,12 +7,6 @@
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <link rel="stylesheet" href="assets/review.css">
-<style data-review-only="lesson12">
-.review-change-note{display:block;color:#b42318;font-size:.9rem;line-height:1.7;margin:10px 0;padding:8px 12px;border-left:3px solid #b42318;background:#fff4f2;scroll-margin-top:90px}
-.review-change-note del{color:inherit;text-decoration-thickness:1px}
-.review-change-index{color:#b42318;border:1px solid #e6aaa4;border-radius:10px;padding:14px 18px;margin:20px 0;line-height:1.8}
-.review-change-index a{color:#b42318;text-decoration:underline;margin-right:14px}
-</style>
 </head>
 <body>
 <div class="topbar"><div class="inner">
@@ -28,7 +22,6 @@
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 12차시</span>
   <h1>연관 분석 · <span class="a">우리 학교 급식에서 규칙 찾기</span></h1>
   <div class="under"></div>
-<aside class="review-change-index" data-review-only="lesson12"><strong>검토용 변경 표시 · 4곳</strong><br>삭제한 문장을 빨간 글씨와 취소선으로 표시했습니다. 최종 교재에는 포함하지 않는 검토용 표시입니다.<br><a href="#review-change-1">① 최소 횟수 설명</a><a href="#review-change-2">② 개념 정리</a><a href="#review-change-3">③ 문제 2 피드백</a><a href="#review-change-4">④ 용어사전</a></aside>
 
   <div class="quote">
     <div class="q">"바늘 가는 데 실 간다."</div>
@@ -447,7 +440,7 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
     <div class="h">🧩 규칙 후보를 걸러 내는 문턱 — 최소 지지도와 최소 횟수</div>
     <p class="q">교과서 162쪽은 규칙 후보를 추리기 전에 최소 지지도를 먼저 정하는 절차를 다룹니다.</p>
     <p><b>최소 지지도</b>는 규칙 후보로 남길 최소 등장 <b>비율</b>입니다. 이번 실습이 사용하는 문턱은 비율이 아니라 <b>동시 등장 횟수</b>이며, 기준은 5회입니다. 두 기준은 단위가 다릅니다. 184일 저장본에서 5회는 지지도 5 ÷ 184 ≈ 0.027에 해당하지만, 조회한 일수가 달라지면 같은 5회가 다른 지지도가 됩니다.</p>
-    <p>문턱이 필요한 까닭은 향상도의 성질에 있습니다. 드물게 등장하는 메뉴는 분모가 작아 향상도가 쉽게 커지므로, 단 하루 겹친 조합이 표의 맨 위를 차지할 수 있습니다. 그래서 앱의 결과 표에는 동시 등장 5회 이상인 규칙만 나옵니다. <b>표에 없다는 것과 관련이 없다는 것은 다릅니다.</b><span class="review-change-note" data-review-only="lesson12" id="review-change-1"><strong>검토 표시 1 · 삭제한 문장</strong><br><del>이 기준은 실습을 위한 선택이며 통계적 유의성을 보장하지 않습니다.</del></span></p>
+    <p>문턱이 필요한 까닭은 향상도의 성질에 있습니다. 드물게 등장하는 메뉴는 분모가 작아 향상도가 쉽게 커지므로, 단 하루 겹친 조합이 표의 맨 위를 차지할 수 있습니다. 그래서 앱의 결과 표에는 동시 등장 5회 이상인 규칙만 나옵니다. <b>표에 없다는 것과 관련이 없다는 것은 다릅니다.</b></p>
   </div>
 
 
@@ -466,7 +459,7 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
   </div>
 
   <h2>6. 개념 정리 — 교과서와 급식이 만나는 대목</h2>
-  <p>지지도는 조합의 빈도를, 신뢰도는 조건부 비율을, 향상도는 기본 등장률과의 비율을 나타냅니다. 세 지표를 함께 보고 <b>관측 기간과 등장 횟수</b>도 기록합니다.<span class="review-change-note" data-review-only="lesson12" id="review-change-2"><strong>검토 표시 2 · 삭제한 문장</strong><br><del>동시 5회 이상이라는 기준은 드문 조합을 제외하는 실습 기준이며, 통계적으로 유의하거나 미래에도 유지되는 규칙을 보장하지 않습니다.</del></span></p>
+  <p>지지도는 조합의 빈도를, 신뢰도는 조건부 비율을, 향상도는 기본 등장률과의 비율을 나타냅니다. 세 지표를 함께 보고 <b>관측 기간과 등장 횟수</b>도 기록합니다.</p>
   <p>향상도가 크게 나온 규칙도 앞 메뉴가 뒤 메뉴의 등장을 일으켰다는 인과관계의 증명은 아닙니다. 식단 구성 방침 등 다른 요인이 두 메뉴에 함께 작용했을 수 있습니다. 신뢰도가 1.00인 규칙도 그 조건 메뉴가 나온 며칠에서 관찰된 값일 뿐이며, 다음 식단을 보장하지 않습니다.</p>
 
   <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
@@ -507,7 +500,7 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
         <button class="opt">써 붙여도 된다 — 두 메뉴의 향상도가 9.2로 충분히 높으므로</button>
         <button class="opt" data-ok="1">안 된다 — 그 문장의 방향인 석박지 → 순대국의 신뢰도는 5÷20 = 0.25에 불과하다</button>
       </div>
-      <div class="fb">규칙에는 방향이 있습니다. 석박지가 나온 20일 중 순대국은 5일뿐이므로, 그 기간의 식단 중 15일은 게시판 문장과 맞지 않습니다.</div><span class="review-change-note" data-review-only="lesson12" id="review-change-3"><strong>검토 표시 3 · 삭제한 문장</strong><br><del>미래 식단도 보장하지 않습니다.</del></span>
+      <div class="fb">규칙에는 방향이 있습니다. 석박지가 나온 20일 중 순대국은 5일뿐이므로, 그 기간의 식단 중 15일은 게시판 문장과 맞지 않습니다.</div>
     </div>
   </div>
   <div class="quiz">
@@ -537,7 +530,7 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
     <tr><td class="term">지지도</td><td>전체 중 A·B가 함께 나온 비율</td></tr>
     <tr><td class="term">신뢰도</td><td>A가 나온 날 중 B도 나온 비율</td></tr>
     <tr><td class="term">향상도</td><td>신뢰도 ÷ B의 기본 등장률. 1이면 두 비율이 같음</td></tr>
-    <tr><td class="term">최소 지지도</td><td>규칙 후보로 남길 최소 등장 비율<span class="review-change-note" data-review-only="lesson12" id="review-change-4"><strong>검토 표시 4 · 삭제한 문장</strong><br><del>통계적 유의성을 보장하는 기준은 아님</del></span></td></tr>
+    <tr><td class="term">최소 지지도</td><td>규칙 후보로 남길 최소 등장 비율</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
