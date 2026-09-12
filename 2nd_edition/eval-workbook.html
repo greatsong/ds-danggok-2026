@@ -200,7 +200,7 @@
       <tr><td class="k">오차²</td><td class="blank"></td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
     </table>
     <p>(1) 오차의 합 <span class="fill"></span> (2) MAE <span class="fill"></span> (3) MSE <span class="fill"></span></p>
-    <p>(4) 오차의 합이 작은데도 이 모델을 "거의 완벽하다"고 말할 수 없는 까닭을 한 문장으로.</p>
+    <p>(4) 오차의 합이 작은데도 이 모델을 "거의 완벽하다"고 말할 수 없는 까닭을 오차 표의 숫자 하나와 함께 한 문장으로 쓰세요.</p>
     <span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in">
       <p>오차 −4, +4, 0, −4 · |오차| 4, 4, 0, 4 · 오차² 16, 16, 0, 16.</p>
@@ -218,7 +218,7 @@
     </table>
     <p>(1) MAE: A <span class="fill"></span> B <span class="fill"></span> (2) MSE: A <span class="fill"></span> B <span class="fill"></span></p>
     <p>(3) MAE로 고르면 <span class="fill"></span>, MSE로 고르면 <span class="fill"></span>이 좋은 모델입니다.</p>
-    <p>(4) 판정이 갈린 까닭을 "제곱"이라는 낱말을 써서 한 문장으로.</p>
+    <p>(4) 판정이 갈린 까닭을 "제곱"이라는 낱말과 표의 오차 하나를 써서 한 문장으로 설명하세요.</p>
     <span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in">
       <p>(1) A = 8 ÷ 4 = <b>2.0</b>, B = 6 ÷ 4 = <b>1.5</b> (2) A = 16 ÷ 4 = <b>4.0</b>, B = 36 ÷ 4 = <b>9.0</b> (3) MAE는 B, MSE는 A (4) B의 4일차 오차 6은 제곱하면 36이 되어, A의 작은 오차 넷(제곱합 16)보다 훨씬 무겁게 취급된다. MSE는 가끔 크게 틀리는 모델에 불리하다.</p>
@@ -366,7 +366,7 @@
       <tr><td class="k">모델 A</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
       <tr><td class="k">모델 B</td><td class="blank"></td><td class="blank"></td><td class="blank"></td></tr>
     </table>
-    <p>(1) 표를 채우세요. (2) 정확도가 높은 모델은 <span class="fill"></span>입니다. (3) 감염자를 한 명도 놓치면 안 되는 검사라면 어느 모델을 골라야 합니까? 지표를 근거로 쓰세요.</p>
+    <p>(1) 표를 채우세요. (2) 정확도가 높은 모델은 <span class="fill"></span>입니다. (3) 감염자를 한 명도 놓치면 안 되는 검사라면 어느 모델을 골라야 합니까? 고른 지표와 그 값, 검사의 목적을 연결해 쓰세요.</p>
     <span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in">
       <p>A: 정확도 32/40 = 0.80 · 정밀도 8/16 = 0.50 · 재현율 8/8 = <b>1.00</b>. B: 정확도 36/40 = <b>0.90</b> · 정밀도 4/4 = 1.00 · 재현율 4/8 = 0.50.</p>
@@ -400,7 +400,7 @@
     </div></details>
   </div>
   <div class="pr self">
-    <div class="h">문제 4. 반칙 판정. "개봉 전에 흥행 성공을 예측하는 모델"의 입력 변수 후보입니다. 누수(반칙)에 해당하는 것을 모두 고르고 까닭을 쓰세요. (가) 장르 (나) 개봉 시기(성수기 여부) (다) 개봉 첫 주 관객 수 (라) 감독의 전작 흥행 성적 (마) 최종 누적 관객 수 (바) 개봉 전에 확정된 계획 스크린 수</div>
+    <div class="h">문제 4. 반칙 판정. "개봉 전에 흥행 성공을 예측하는 모델"의 입력 변수 후보입니다. 누수(반칙)에 해당하는 것을 모두 고르고, 각 값을 언제 알 수 있는지 쓰세요. (가) 장르 (나) 개봉 시기(성수기 여부) (다) 개봉 첫 주 관객 수 (라) 감독의 전작 흥행 성적 (마) 최종 누적 관객 수 (바) 개봉 전에 확정된 계획 스크린 수</div>
     <span class="line"></span><span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in"><p><b>(다), (마)</b>. (마)는 정답(라벨의 재료) 그 자체이고, (다)는 개봉 전에는 알 수 없는 미래 정보다. 나머지는 개봉 전에 알 수 있다. 판단 기준은 점수의 크기가 아니라 변수의 시점이다.</p></div></details>
   </div>
@@ -500,7 +500,7 @@
       <tr><td class="k">R1: 삼각김밥 → 컵라면</td><td>0.30</td><td>0.60</td><td>1.05</td></tr>
       <tr><td class="k">R2: 떡볶이 → 모차렐라스틱</td><td>0.04</td><td>0.80</td><td>6.0</td></tr>
     </table>
-    <p>(1) 각 조합이 함께 구매된 거래의 비율은 얼마입니까? (2) 목표가 "함께 구매된 거래가 많은 조합 안내하기"라면 어느 규칙을 고르겠습니까? "떡볶이와 자주 함께 구매된 상품 안내하기"라면 어느 규칙을 고르겠습니까? 지표를 근거로 쓰세요.</p>
+    <p>(1) 각 조합이 함께 구매된 거래의 비율은 얼마입니까? (2) 목표가 "함께 구매된 거래가 많은 조합 안내하기"라면 어느 규칙을 고르겠습니까? "떡볶이와 자주 함께 구매된 상품 안내하기"라면 어느 규칙을 고르겠습니까? 고른 지표와 표의 숫자 하나를 목적과 연결해 쓰세요.</p>
     <span class="line"></span><span class="line"></span>
     <details class="key"><summary>예시 답</summary><div class="in"><p>(1) R1은 전체 거래의 30%, R2는 4%에서 함께 구매됐다. (2) 함께 구매된 거래가 많은 조합은 지지도가 0.30인 R1이다. 떡볶이와 함께 구매된 상품을 안내하려면 R2를 고른다. 이 기록에서 떡볶이를 산 거래의 80%에 모차렐라스틱이 함께 담겼다. 목적에 맞는 지표와 계산값을 함께 쓴 답을 인정한다.</p></div></details>
   </div>
@@ -564,7 +564,7 @@
 
   <h3><span class="step v">스스로 풀기</span>4부</h3>
   <div class="pr self">
-    <div class="h">문제 1. 어떤 데이터에서 실루엣 점수가 k=2일 때 0.41, k=3일 때 0.40, k=5일 때 0.22입니다. 점수만 보면 k는 몇입니까? 그런데 k=3의 세 묶음에 "공격형·수비형·균형형"이라는 이름이 자연스럽게 붙고 k=2는 "잘하는 선수·나머지"로만 나뉜다면, 어느 k를 고르겠습니까? 근거를 쓰세요.</div>
+    <div class="h">문제 1. 어떤 데이터에서 실루엣 점수가 k=2일 때 0.41, k=3일 때 0.40, k=5일 때 0.22입니다. 점수만 보면 k는 몇입니까? 그런데 k=3의 세 묶음에 "공격형·수비형·균형형"이라는 이름이 자연스럽게 붙고 k=2는 "잘하는 선수·나머지"로만 나뉜다면, 어느 k를 고르겠습니까? 실루엣 점수 하나와 묶음의 해석을 함께 근거로 쓰세요.</div>
     <span class="line"></span><span class="line"></span>
     <details class="key"><summary>예시 답</summary><div class="in"><p>점수만 보면 k=2. 그러나 점수 차이(0.01)가 근소하고 k=3의 해석이 선명하다면 k=3을 고를 수 있다. 실루엣은 묶음의 기하학적 조밀함만 잴 뿐 의미를 재지 못하므로, 점수와 해석이 갈릴 때는 목적에 맞게 사람이 판단한다.</p></div></details>
   </div>
