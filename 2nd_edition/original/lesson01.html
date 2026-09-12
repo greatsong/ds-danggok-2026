@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1차시 · 데이터 분석의 6단계 · 질문 던지기 · 데이터 과학 당곡고 · 현재본 스냅샷</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../index.html">← 목차</a>
+  <span class="badge">학생용</span>
+  <span class="badge review-edition">현재본 스냅샷</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅰ. 데이터 과학의 이해 · 1차시</span>
+  <h1>데이터 분석의 6단계 · <span class="a">질문 던지기</span></h1>
+  <div class="under"></div>
+
+  <div class="quote">
+    <div class="q">"중요한 것은 질문을 멈추지 않는 것이다."</div>
+    <span class="by">알베르트 아인슈타인 (LIFE 인터뷰, 1955) — 데이터 분석 6단계의 첫 단계는 기술이 아니라 질문입니다</span>
+    <span class="who"><img src="img/people/einstein.jpg" alt="알베르트 아인슈타인" loading="lazy" width="54" height="54"><span><b>알베르트 아인슈타인</b>(1879~1955)은 20세기 물리학을 통째로 바꾼 물리학자입니다. 시간과 공간이 보는 사람에 따라 달라진다는 상대성이론을 세웠고, E=mc<sup>2</sup>이라는 식과 1921년 노벨 물리학상으로 알려져 있습니다.<span class="cred">사진: Oren Jack Turner · 퍼블릭 도메인(위키미디어 공용)</span></span></span>
+  </div>
+
+  <p class="lead">데이터 과학 수업의 첫 시간입니다. 오늘은 데이터 분석이 어떤 단계로 진행되는지 전체 흐름을 살펴보고, 그 출발점인 <b>질문 던지기</b>를 직접 해 봅니다. 학기가 끝나면 여러분 각자의 데이터 앱 하나가 인터넷에 올라갑니다. 그 앱의 첫 재료가 오늘 만드는 질문 한 개입니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>학기 지도</b> — 14차시 공통 수업과 팀 프로젝트가 어디로 가는지 한눈에</li>
+      <li><b>데이터 분석의 6단계</b> — 급식 만족도 문제를 예로 흐름을 따라가기</li>
+      <li><b>질문 던지기</b> — 데이터로 답할 수 있는 나의 질문 1개 만들기 (질문 카드)</li>
+    </ul>
+  </div>
+
+  <h2>0. 왜 배우나</h2>
+  <p>기상청은 데이터로 날씨를 예측하고, 스포츠 팀은 선수 기록을 분석해 작전을 세우며, 학교 앞 가게도 어떤 요일에 무엇이 잘 팔리는지 데이터를 봅니다. 교과서 10쪽이 보여 주듯 의료·축산·마케팅·안전까지, 어느 분야에서나 "데이터를 보고 결정하는 사람"이 필요해졌습니다. 그런데 그 일의 출발점은 컴퓨터 화면이 아니라 <b>질문</b>입니다. 무엇이 궁금한지 정하지 못하면, 데이터가 아무리 많아도 분석은 시작되지 않습니다.</p>
+
+  <h3>이번 학기의 지도</h3>
+  <p>먼저 우리가 어디로 가는지 봅니다. 공통 수업 14차시 뒤에는 2~3인 팀 프로젝트와 발표가 이어집니다.</p>
+  <table class="daymap">
+    <thead><tr><th>구간</th><th>하는 일</th><th>남는 것</th></tr></thead>
+    <tbody>
+      <tr><td><b>1차시</b></td><td>질문을 만들고, 100년 서울 기온을 그래프로 그려 첫 앱을 배포한다</td><td>내 질문 카드 · 나의 데이터 앱 주소</td></tr>
+      <tr><td><b>2~4차시</b></td><td>어제의 박스오피스가 API로 내 앱에 들어오고, 갖가지 그래프로 영화 데이터를 읽는다</td><td>박스오피스 대시보드 · 그래프 도감 페이지</td></tr>
+      <tr><td><b>5차시</b></td><td>두 번째 API — 우리 학교 급식을 내 앱에 불러온다</td><td>급식 페이지</td></tr>
+      <tr><td><b>6~12차시</b></td><td>회귀·분류·군집·연관 — 예측하고, 나누고, 묶고, 규칙을 찾는다</td><td>예측기·분류기 등 페이지들</td></tr>
+      <tr><td><b>13~14차시</b></td><td>데이터베이스로 팀 프로젝트를 준비하고, 데이터 윤리로 공통 수업을 마무리한다</td><td>팀 주제 카드</td></tr>
+    </tbody>
+  </table>
+  <p>차시마다 앱을 새로 만들고, 학기말에는 여러 앱이 쌓입니다. 오늘 만드는 질문 하나가 그 출발점입니다.</p>
+
+  <h2>1. 개념 이해 — 데이터 과학과 문제 해결의 6단계</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 11·14쪽</span></div>
+    <p class="q">"데이터 과학은 데이터를 기반으로 실제 현상을 이해하고 분석하기 위해 통계, 데이터 분석, 기계학습 및 관련 방법을 통합하는 학문 분야이다." <span class="src">(11쪽)</span></p>
+    <p class="q">"데이터 과학의 문제 해결 과정은 크게 문제 정의하기, 데이터 수집하기, 전처리 및 탐색하기, 모델링하기, 모델 평가하기, 모델 활용하기의 6단계로 구분할 수 있다. 그러나 6개의 단계를 순서대로 모두 거쳐야 하는 것은 아니다." <span class="src">(14쪽)</span></p>
+    <p class="t">→ 데이터 과학은 여러 방법을 <b>합쳐 쓰는 학문</b>이고, 문제 해결은 <b>6단계의 흐름</b>으로 진행되되 상황에 따라 되돌아가거나 건너뛸 수 있다.</p>
+  </div>
+  <div style="overflow-x:auto">
+  <svg viewBox="0 0 800 228" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="데이터 과학 문제 해결 6단계의 진행 방향과, 평가 단계에서 되돌아가는 두 갈래 길" style="min-width:640px;max-width:100%;display:block">
+    <defs>
+      <marker id="l1s6-fwd" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+      <marker id="l1s6-back" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+    </defs>
+    <!-- 단계 상자 6개 -->
+    <g>
+      <rect x="15" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="70" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">문제 정의하기</text>
+      <circle cx="70" cy="30" r="11" fill="#f4b400"/>
+      <text x="70" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">1</text>
+    </g>
+    <g>
+      <rect x="147" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="202" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">데이터 수집하기</text>
+      <circle cx="202" cy="30" r="11" fill="#f4b400"/>
+      <text x="202" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">2</text>
+    </g>
+    <g>
+      <rect x="279" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="334" y="56" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">전처리 및</text>
+      <text x="334" y="72" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">탐색하기</text>
+      <circle cx="334" cy="30" r="11" fill="#f4b400"/>
+      <text x="334" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">3</text>
+    </g>
+    <g>
+      <rect x="411" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="466" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">모델링하기</text>
+      <circle cx="466" cy="30" r="11" fill="#f4b400"/>
+      <text x="466" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">4</text>
+    </g>
+    <g>
+      <rect x="543" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="598" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">모델 평가하기</text>
+      <circle cx="598" cy="30" r="11" fill="#f4b400"/>
+      <text x="598" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">5</text>
+    </g>
+    <g>
+      <rect x="675" y="30" width="110" height="54" rx="10" fill="#ffffff" stroke="#f0e2bc" stroke-width="2"/>
+      <text x="730" y="63" text-anchor="middle" font-size="12.5" font-weight="700" fill="#2b2d3a">모델 활용하기</text>
+      <circle cx="730" cy="30" r="11" fill="#f4b400"/>
+      <text x="730" y="34.5" text-anchor="middle" font-size="12.5" font-weight="800" fill="#ffffff">6</text>
+    </g>
+    <!-- 진행 방향 실선 화살표 -->
+    <line x1="127" y1="57" x2="143" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <line x1="259" y1="57" x2="275" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <line x1="391" y1="57" x2="407" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <line x1="523" y1="57" x2="539" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <line x1="655" y1="57" x2="671" y2="57" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1s6-fwd)"/>
+    <!-- 되돌아가는 점선 화살표 ⑤→② · ⑤→① -->
+    <path d="M590,84 C 552,135 240,135 204,90" fill="none" stroke="#3ba6a0" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#l1s6-back)"/>
+    <text x="400" y="140" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">평가가 만족스럽지 않으면 데이터부터 다시</text>
+    <path d="M606,84 C 566,185 116,185 72,90" fill="none" stroke="#3ba6a0" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#l1s6-back)"/>
+    <text x="340" y="178" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">문제 정의로 되돌아갈 수도 있다</text>
+    <!-- 캡션 -->
+    <text x="400" y="214" text-anchor="middle" font-size="12.5" fill="#7a7f95">여섯 단계는 순서대로 모두 거쳐야 하는 것은 아니다 — 상황에 따라 되돌아가거나 건너뛴다 (『데이터 과학』 14쪽).</text>
+  </svg>
+  </div>
+  <p>6단계가 낯설게 들리면, 우리에게 가장 가까운 소재인 <b>급식</b>으로 바꿔 읽어 봅니다. "요즘 급식 만족도가 낮다"는 말을 데이터로 다뤄 본다면 다음과 같이 진행됩니다.</p>
+  <table class="daymap">
+    <thead><tr><th>단계</th><th>급식 만족도 문제라면</th><th>이때 필요한 판단</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 문제 정의하기</b></td><td>"만족도가 낮다"를 확인할 수 있는 문제로 바꾼다</td><td>무엇을 '만족'으로 나타낼 것인가 — 잔반량인가, 설문 점수인가</td></tr>
+      <tr><td><b>② 데이터 수집하기</b></td><td>잔반량 기록·설문 응답·식단표를 모은다</td><td>이 데이터가 문제와 맞는가, 양은 충분한가</td></tr>
+      <tr><td><b>③ 전처리 및 탐색하기</b></td><td>빠진 날짜와 잘못 적힌 값을 정리하고 전체를 훑는다</td><td>무엇을 버리고 무엇을 남길 것인가</td></tr>
+      <tr><td><b>④ 모델링하기</b></td><td>메뉴와 잔반량 사이의 패턴을 찾는다</td><td>어떤 패턴이 쓸모 있는 패턴인가</td></tr>
+      <tr><td><b>⑤ 모델 평가하기</b></td><td>찾은 패턴이 다른 달에도 맞는지 확인한다</td><td>이 결과를 어디까지 믿을 것인가</td></tr>
+      <tr><td><b>⑥ 모델 활용하기</b></td><td>다음 달 식단을 정하는 데 반영한다</td><td>결과를 실제 결정에 어떻게 쓸 것인가</td></tr>
+    </tbody>
+  </table>
+  <p>표의 오른쪽 열을 눈여겨보세요. 여섯 단계 모두에 컴퓨터가 대신해 주지 않는 <b>사람의 판단</b>이 들어 있습니다. 계산은 도구가 하지만, 무엇을 쓰고 무엇을 버리고 어디까지 믿을지는 사람이 정합니다. 이 수업에서 기르는 것이 바로 그 판단입니다.</p>
+  <h3>같은 문제, 다른 정의</h3>
+  <p>첫 단계인 문제 정의가 왜 판단인지 교과서 14쪽의 예가 잘 보여 줍니다. 아이스크림 회사가 "올여름 생산량"을 정해야 할 때, 어떤 사람은 기온·장마 같은 날씨 요인으로 판매량을 예측하는 문제로 정의하고, 어떤 사람은 청소년·청년층의 기호에 맞는 신상품을 개발하는 문제로 정의합니다. 같은 상황에서도 문제를 어떻게 정의하느냐에 따라 모아야 할 데이터와 그 뒤의 모든 단계가 달라집니다.</p>
+
+  <h3>데이터 기반 의사 결정</h3>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 11쪽</span></div>
+    <p class="q">"데이터를 수집·분석하여 의사 결정을 내리는 것을 '데이터 기반 의사 결정'이라고 한다." <span class="src">(11쪽)</span></p>
+    <p class="t">→ 기억·경험·주관에만 기대는 결정과 구별되는, 이 수업이 기르려는 결정 방식이다.</p>
+  </div>
+  <p>교과서 11쪽은 이렇게 결정하면 개인의 기억과 경험, 주관에 의한 방식보다 객관적이고 합리적인 선택을 할 수 있다고 말합니다. 선택 과목을 고를 때 이전 학기 성적, 과목에 대한 흥미, 진로 분야와의 관련성 같은 데이터를 함께 보는 일이 그 예입니다.</p>
+  <details class="glossary">
+    <summary>📖 더 알아보기 — 데이터 과학의 네 가지 특징 (교과서 12쪽)</summary>
+    <div class="gin">
+      <p>교과서 12쪽은 데이터 과학의 특징으로 <b>융합적 학문</b>(컴퓨터 과학·수학·통계·분야 지식의 결합), <b>데이터 중심 접근</b>, <b>유연성</b>(도구와 기술이 계속 변한다), 그리고 <b>윤리적 고려</b>를 꼽습니다. 특히 마지막 특징은 개인 정보 같은 민감한 데이터를 다룰 때의 태도로, 14차시에 학기 전체의 실습 사례를 돌아보며 다룹니다.</p>
+    </div>
+  </details>
+
+  <h2>2. 우리 수업의 방식 — 바이브 코딩 ①②③</h2>
+  <p>이 수업에서는 코드 문법을 배우지 않습니다. 대신 세 단계를 반복하며 실습합니다. <b>① 샘플 프롬프트를 AI에게 준다 → ② AI가 준 코드를 실행하고 결과를 읽는다 → ③ 프롬프트를 고쳐 더 나은 결과를 얻는다.</b> 오늘은 선생님 화면을 따라 이 세 단계를 각자 직접 밟습니다.</p>
+  <div style="overflow-x:auto">
+  <svg viewBox="0 0 720 178" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="바이브 코딩 세 단계 — 샘플 프롬프트, AI가 준 코드, 개선이 반복되는 흐름" style="min-width:560px;max-width:100%;display:block">
+    <defs>
+      <marker id="l1vc-fwd" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8930c"/></marker>
+      <marker id="l1vc-back" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+    </defs>
+    <!-- ③→② 반복 곡선 화살표 -->
+    <path d="M610,54 C 610,18 375,18 362,50" fill="none" stroke="#3ba6a0" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#l1vc-back)"/>
+    <text x="487" y="13" text-anchor="middle" font-size="12" font-weight="700" fill="#3ba6a0">고친 프롬프트로 다시 실행 — 이 반복이 실습의 기본 단위</text>
+    <!-- 상자 3개 -->
+    <g>
+      <rect x="20" y="58" width="210" height="62" rx="12" fill="#ffffff" stroke="#f4b400" stroke-width="2"/>
+      <text x="125" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2d3a">① 샘플 프롬프트</text>
+      <text x="125" y="104" text-anchor="middle" font-size="11.5" fill="#7a7f95">우리말로 요청한다</text>
+    </g>
+    <g>
+      <rect x="255" y="58" width="210" height="62" rx="12" fill="#ffffff" stroke="#e8930c" stroke-width="2"/>
+      <text x="360" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2d3a">② AI가 준 코드</text>
+      <text x="360" y="104" text-anchor="middle" font-size="11.5" fill="#7a7f95">실행하고 결과를 읽는다</text>
+    </g>
+    <g>
+      <rect x="490" y="58" width="210" height="62" rx="12" fill="#ffffff" stroke="#54a24b" stroke-width="2"/>
+      <text x="595" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#2b2d3a">③ 개선</text>
+      <text x="595" y="104" text-anchor="middle" font-size="11.5" fill="#7a7f95">프롬프트를 고쳐 다시 요청한다</text>
+    </g>
+    <!-- 진행 실선 화살표 -->
+    <line x1="232" y1="89" x2="251" y2="89" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1vc-fwd)"/>
+    <line x1="467" y1="89" x2="486" y2="89" stroke="#e8930c" stroke-width="2.5" marker-end="url(#l1vc-fwd)"/>
+    <!-- 캡션 -->
+    <text x="360" y="160" text-anchor="middle" font-size="12.5" fill="#7a7f95">코드를 읽는 것이 아니라 결과를 읽고, 프롬프트를 고친다.</text>
+  </svg>
+  </div>
+  <p>실습 재료는 서울의 100년 일별 기온(<a href="https://github.com/greatsong/modudata/blob/main/data/seoul.csv" target="_blank" rel="noopener"><code>seoul.csv</code></a>)입니다. 원출처는 <a href="https://data.kma.go.kr" target="_blank" rel="noopener">기상청 기상자료개방포털</a>의 종관기상관측(ASOS) 서울 지점 기록으로, 수업용 저장소에서 매일 갱신된 사본을 받아 씁니다.</p>
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 자연어로 요청한다</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>서울의 기온 데이터(seoul.csv)를 읽어서, 100년 동안 연평균 기온이
+어떻게 변해 왔는지 한눈에 보이는 그래프를 담은 스트림릿 앱(main.py)을 만들어 줘.
+스트림릿 클라우드에 올릴 거야.
+데이터는 여기야: https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv
+열은 날짜·지점·평균기온·최저기온·최고기온이야. 화면 글자는 한국어로.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">새로 만드는 파일입니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 서울의 100년 기온
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+st.set_page_config(page_title="서울의 100년 기온", layout="wide")
+st.title("서울의 100년 기온")
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
+
+
+@st.cache_data
+def load_data():
+    df = pd.read_csv(DATA_URL)
+    df["날짜"] = pd.to_datetime(df["날짜"])
+    df["연도"] = df["날짜"].dt.year
+    return df
+
+
+df = load_data()
+
+st.header("연평균기온의 흐름")
+yearly = df.groupby("연도", as_index=False)["평균기온"].mean()
+fig = px.line(yearly, x="연도", y="평균기온", markers=True)
+st.plotly_chart(fig, width="stretch")</pre></div></details>
+      프롬프트에 코드 문법이 한 줄도 없다는 점을 확인하세요. 파일 이름과 원하는 결과만 우리말로 적었습니다.</li>
+    <li><span class="st">② AI가 준 코드 — 실행하고 결과를 읽는다</span><br>
+      AI가 코드를 만들어 응답하고, 실행하면 100년 치 기온 그래프가 나타납니다. 코드를 읽는 것이 아니라 <b>결과 그래프를 읽는 것</b>이 우리의 일입니다. 그래프를 어떻게 읽는지는 바로 아래 시연에서 함께 연습합니다.</li>
+    <li><span class="st">③ 개선 — 프롬프트를 고쳐 다시 요청한다</span><br>
+      "제목을 붙여 줘", "다른 그래프로 보여 줘"처럼 프롬프트를 고치면 결과가 달라집니다. 이 세 번째 단계가 이 수업의 핵심이고, 오늘부터 학생의 몫입니다.</li>
+  </ol>
+
+  <h3>첫 배포 — 내 주소 만들기</h3>
+  <p>②에서 받은 코드는 인터넷에 올려 <b>내 주소</b>로 엽니다. 이 관문은 오늘 한 번뿐입니다 — 다음 차시부터는 파일 하나만 바꿔 올려도 앱이 새로 배포됩니다.</p>
+  <ol class="steps">
+    <li><span class="st">깃허브에 저장소 만들기</span><br>
+      깃허브에 로그인해 새 공개 저장소(예: my-data-app)를 만들고, ②에서 받은 <button type="button" class="fname">main.py</button>와 <button type="button" class="fname">requirements.txt</button> 두 파일을 올립니다(이름을 누르면 복사됩니다). requirements.txt는 내 앱이 쓰는 라이브러리 목록입니다 — 2차시에서 다시 만납니다.</li>
+    <li><span class="st">스트림릿 클라우드에 연결하기</span><br>
+      <a href="https://share.streamlit.io" target="_blank" rel="noopener"><code>share.streamlit.io</code></a>에 깃허브 계정으로 로그인해 <b>New app</b>을 누르고, 방금 만든 저장소와 main.py를 고릅니다.</li>
+    <li><span class="st">내 주소 확인</span><br>
+      1~3분 뒤 <code>~.streamlit.app</code> 주소가 생기고, 그 주소에서 내 그래프가 열립니다. 이 주소는 <b>이 차시에서 만든 앱</b>의 주소이며, 앞으로 차시마다 이런 주소를 하나씩 만들게 됩니다.</li>
+  </ol>
+  <details class="glossary">
+    <summary>📖 더 알아보기 — 오늘 쓰는 사이트들</summary>
+    <div class="gin">
+      <p><b>기상자료개방포털</b>(<a href="https://data.kma.go.kr" target="_blank" rel="noopener">data.kma.go.kr</a>)은 기상청이 관측 데이터를 공개하는 곳입니다. 기온만이 아니라 강수·바람·미세먼지 등도 지역과 기간을 골라 CSV(Comma-Separated Values — 값을 쉼표로 구분한 표 파일)로 내려받을 수 있어, "우리 지역은 언제부터 더워졌나" 같은 질문의 재료가 됩니다. 팀 프로젝트에서 날씨가 필요해지면 여기부터 찾아보세요.</p>
+      <p><b>깃허브</b>(<a href="https://github.com" target="_blank" rel="noopener">GitHub</a>)는 코드를 저장·공유하는 세계 최대의 저장소 서비스입니다. 파일을 고칠 때마다 기록(커밋)이 남아, 덮어써도 이전 버전이 사라지지 않습니다. <b>스트림릿 커뮤니티 클라우드</b>(<a href="https://share.streamlit.io" target="_blank" rel="noopener">share.streamlit.io</a>)는 깃허브의 코드를 읽어 무료로 웹 앱으로 띄워 주는 서비스입니다. 저장소에 커밋하면 앱이 스스로 다시 배포됩니다.</p>
+      <p><b>modudata</b>(<a href="https://github.com/greatsong/modudata" target="_blank" rel="noopener">github.com/greatsong/modudata</a>)는 이 수업의 데이터 사본을 모아 둔 깃허브 저장소입니다. seoul.csv는 매일 아침 자동으로 갱신되어, 내려받지 않고 주소만으로 항상 최신을 읽습니다.</p>
+    </div>
+  </details>
+  <div class="callout warn">
+    <div class="h">⚠️ 배포가 안 되어도 오늘은 괜찮습니다</div>
+    <p>계정·연동 문제로 첫 배포는 실패가 잦습니다. 짝의 화면을 함께 보며 진행하고, 안 되면 손을 들어 주세요 — 다음 차시 시작 전까지 반드시 함께 해결합니다.</p>
+  </div>
+
+  <h3>시연 — 같은 데이터에 세 번 묻는다</h3>
+  <p>③이 실제로 어떻게 쓰이는지, 선생님 화면으로 같은 기온 데이터에 그래프를 세 번 요청하며 확인합니다. 그래프는 종류마다 <b>보여 주는 것이 다르기</b> 때문에, 무엇이 궁금한지에 따라 고르는 그래프가 달라집니다.</p>
+  <ol class="steps">
+    <li><span class="st">첫 번째 그래프 — 선 그래프, 시간의 흐름</span><br>
+      ①의 결과입니다. 해마다 오르내리는 들쭉날쭉한 선이지만, 왼쪽에서 오른쪽으로 갈수록 조금씩 높아지는 흐름이 보입니다. 100년의 변화가 한 장에 담겼습니다. 이 그래프 한가운데의 이상한 지점 하나는 6차시에 다시 만나게 됩니다.</li>
+    <li><span class="st">두 번째 그래프 — 히스토그램, 분포의 모양</span>
+      <div class="codewrap prompt"><span class="label">③ 개선 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 일별 평균기온이 어느 구간에 얼마나 몰려 있는지 히스토그램으로 그려 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 일별 평균기온의 분포
+st.header("일별 평균기온은 어느 구간에 몰려 있나")
+fig2 = px.histogram(df, x="평균기온", nbins=50)
+st.plotly_chart(fig2, width="stretch")</pre></div></details>
+      그리기 전에 예상해 봅니다. 키나 시험 점수처럼 가운데가 높고 양옆이 낮은, 산 하나의 모양일까요? 실제 결과는 다릅니다 — <b>봉우리가 둘</b>입니다. 0℃ 부근에 하나, 20℃를 넘는 곳에 하나. 하루하루의 기온이 겨울과 여름, 두 곳에 몰려 있기 때문입니다. 한 그래프에 사계절이 모두 담겨서 생긴 모양입니다. 평균 하나만 보고 넘어갔다면 이 두 봉우리는 영영 몰랐을 것입니다 — <b>요약 숫자로는 안 보이던 것이 그래프에서 보입니다.</b></li>
+    <li><span class="st">세 번째 그래프 — 산점도, 두 값의 관계</span>
+      <div class="codewrap prompt"><span class="label">③ 개선 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 날마다의 최저기온과 최고기온이 어떤 관계인지 산점도로 그려 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 최저기온과 최고기온의 관계
+st.header("최저기온과 최고기온의 관계")
+fig3 = px.scatter(df, x="최저기온", y="최고기온", opacity=0.2)
+st.plotly_chart(fig3, width="stretch")</pre></div></details>
+      점들이 왼쪽 아래에서 오른쪽 위로 곧게 늘어섭니다. 최저기온이 낮은 날은 최고기온도 낮다 — 강한 관계입니다. 다만 이것은 누구나 예상할 수 있는 관계입니다. 분석에서 정말 가치 있는 것은 이런 뻔한 관계가 아니라 <b>"이 둘이 관계가 있다고?" 싶은 뜻밖의 관계</b>를 찾는 일이고, 그 도구들을 6차시부터 하나씩 배웁니다.</li>
+  </ol>
+
+  <h3>그래프에서 인사이트를 찾는 세 물음</h3>
+  <p>방금 시연에서 한 일을 정리하면, 그래프를 읽는 순서는 세 물음으로 요약됩니다. 이 세 물음은 앞으로 모든 차시에서 그래프를 만날 때마다 반복됩니다.</p>
+  <table class="daymap">
+    <thead><tr><th>물음</th><th>하는 일</th><th>시연에서는</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 무엇이 보이는가</b></td><td>모양을 말로 옮긴다</td><td>"오른쪽으로 갈수록 높아진다", "봉우리가 둘이다"</td></tr>
+      <tr><td><b>② 예상과 다른 곳은 어디인가</b></td><td>예상과 비교해 다른 지점을 찾는다 — 거기가 발견의 입구다</td><td>산 하나를 예상했는데 봉우리가 둘이었다</td></tr>
+      <tr><td><b>③ 그래서 다음 질문은 무엇인가</b></td><td>발견을 새 질문으로 잇는다</td><td>"계절별로 나누어 보면 어떤 모양일까?"</td></tr>
+    </tbody>
+  </table>
+  <p>통계학자 존 튜키는 이렇게 데이터를 정해진 답 없이 이리저리 살펴보며 단서를 찾는 일을 <b>탐색적 데이터 분석</b>이라고 불렀습니다. 그래프는 답을 확인하는 도구이기 전에 <b>몰랐던 질문을 발견하는 도구</b>입니다. 관찰을 문장으로 남길 때는 이 틀을 씁니다 — <b>"나는 ○○을 예상했는데, 그래프는 ○○을 보여 준다. 그래서 ○○이 궁금해진다."</b></p>
+
+  <h2>3. 실습 — 질문 던지기</h2>
+  <p>6단계의 첫 단계는 기술이 아니라 질문입니다. 그런데 아무 질문이나 분석의 출발점이 되지는 않습니다. 좋은 질문은 세 가지 조건을 갖춥니다.</p>
+  <ul>
+    <li><b>측정 가능</b> — 질문 속 말을 숫자나 기록으로 나타낼 수 있다.</li>
+    <li><b>데이터로 답 가능</b> — 답의 근거가 될 데이터가 존재하거나 모을 수 있다.</li>
+    <li><b>범위 명확</b> — 언제, 어디, 누구에 대한 질문인지 분명하다.</li>
+  </ul>
+  <p>조건에 맞지 않는 질문은 버리는 것이 아니라 <b>고쳐 쓰면</b> 됩니다.</p>
+  <table class="daymap">
+    <thead><tr><th>처음 질문</th><th>무엇이 걸리나</th><th>고쳐 쓴 질문</th></tr></thead>
+    <tbody>
+      <tr><td>"우리 학교 급식은 맛있는가?"</td><td>'맛있다'를 숫자로 나타낼 방법이 없다</td><td>"요일별로 잔반량은 얼마나 다른가?"</td></tr>
+      <tr><td>"요즘 사람들은 책을 안 읽는가?"</td><td>'요즘'과 '사람들'의 범위가 없다</td><td>"최근 10년 우리나라 청소년의 독서율은 어떻게 변했는가?"</td></tr>
+      <tr><td>"고등학생은 아침을 먹어야 하는가?"</td><td>당위는 데이터가 직접 답하지 못한다</td><td>"아침 식사 여부와 오전 졸음 횟수 사이에 관련이 있는가?"</td></tr>
+    </tbody>
+  </table>
+  <div class="callout mini">
+    <div class="h">✍️ 질문 카드 — 오늘의 산출물</div>
+    <p>내 생활이나 관심 분야에서 궁금한 것 하나를 골라, 세 조건에 맞는 질문 한 개로 다듬어 질문 카드에 적습니다. 이 질문은 버려지지 않습니다 — 학기 내내 배우는 도구들로 답할 수 있는지 비교해 보고, 학기말 팀 프로젝트 주제의 출발점이 됩니다.</p>
+  </div>
+  <div class="callout warn">
+    <div class="h">⚠️ 오늘의 발견 — 좋은 질문이 좋은 분석을 만든다</div>
+    <p>같은 급식 데이터라도 "맛있는가?"로 시작하면 분석이 멈추고, "요일별 잔반량"으로 시작하면 모을 것과 계산할 것이 줄줄이 정해집니다. 6단계의 첫 단계가 기술이 아니라 질문인 이유입니다. 질문의 모양이 그 뒤 다섯 단계의 모양을 정합니다.</p>
+  </div>
+  <h2>4. 개념 정리 — 지도와 출발점</h2>
+  <p>오늘 우리는 학기 전체의 지도를 폈습니다. 데이터 과학은 여러 방법을 통합해 실제 현상을 이해하는 학문이고, 그 문제 해결은 문제 정의에서 모델 활용까지 6단계로 흐르며, 모든 단계에 사람의 판단이 들어 있습니다. 그리고 그 지도의 출발점에서 각자 질문 하나를 만들었습니다. 다음 시간에는 데이터에 어떤 형태가 있는지 배우고, 파일을 내려받지 않아도 데이터가 흘러 들어오는 길(API)을 처음 만납니다 — 어제 극장의 기록이 여러분 앱에 뜹니다.</p>
+
+  <h2>5. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 다음 중 데이터로 답하기 가장 어려운 질문을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">(가) 최근 5년 우리 학교 도서관 대출 권수는 어떻게 변했는가</button>
+        <button class="opt">(나) 우리 반에서 가장 인기 있는 급식 메뉴는 무엇인가</button>
+        <button class="opt" data-ok="1">(다) 우정은 성적보다 소중한가</button>
+      </div>
+      <div class="fb">(다)는 가치 판단을 묻는 질문이라 숫자로 나타낼 대상이 없고 근거가 될 데이터를 정의할 수 없습니다. (가)는 대출 기록, (나)는 선호 설문이나 잔반량처럼 측정할 데이터를 정할 수 있습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 친구가 "이번 학기 선택 과목은 그냥 친한 친구를 따라 정했다"라고 말합니다. 데이터 기반 의사 결정의 관점에서 이 결정 방식과 대안을 설명해 보세요. 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>이 결정은 데이터가 아니라 관계와 주관에 기댄 결정이다. 데이터 기반 의사 결정은 이전 학기 성적, 과목에 대한 흥미, 진로 분야와의 관련성 같은 데이터를 수집·분석해 결정하는 방식으로, 기억·경험·주관에만 기대는 방식보다 객관적이고 합리적인 선택을 할 수 있다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 서울의 일별 평균기온을 히스토그램으로 그렸더니 봉우리가 두 개였습니다. 그 까닭으로 옳은 것을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">기온 데이터에 잘못 입력된 값이 많이 섞여 있기 때문이다</button>
+        <button class="opt" data-ok="1">하루하루의 기온이 겨울과 여름, 두 구간에 몰려 있기 때문이다</button>
+        <button class="opt">데이터의 양이 100년 치로 너무 많아 그래프가 뭉개졌기 때문이다</button>
+      </div>
+      <div class="fb">한 그래프에 사계절이 모두 담겨, 겨울(0℃ 부근)과 여름(20℃ 이상) 두 곳에 값이 몰린 모양입니다. 잘못된 값이나 데이터의 양 때문이 아니라 데이터의 실제 생김새이고, 평균 같은 요약 숫자만 봐서는 알 수 없어 그래프로 확인해야 합니다.</div>
+    </div>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>데이터 과학의 문제 해결 6단계를 순서대로 말할 수 있다.</li>
+    <li>여섯 단계마다 사람의 판단이 들어가는 지점을 예로 들 수 있다.</li>
+    <li>바이브 코딩의 세 단계(① 샘플 프롬프트 → ② 코드 실행과 결과 읽기 → ③ 프롬프트 개선)를 설명할 수 있다.</li>
+    <li>그래프를 읽는 세 물음(무엇이 보이나 · 예상과 다른 곳 · 다음 질문)을 말할 수 있다.</li>
+    <li>세 조건(측정 가능·데이터로 답 가능·범위 명확)에 맞는 내 질문 1개를 질문 카드에 적었다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">데이터 과학</td><td>데이터를 기반으로 실제 현상을 이해·분석하기 위해 통계, 데이터 분석, 기계학습 등을 통합하는 학문 분야</td></tr>
+    <tr><td class="term">데이터 기반 의사 결정</td><td>데이터를 수집·분석하여 의사 결정을 내리는 것</td></tr>
+    <tr><td class="term">문제 정의</td><td>6단계의 첫 단계. 맥락을 바탕으로 문제를 어떻게 정의할지 결정하고 전체 계획을 세우는 단계</td></tr>
+    <tr><td class="term">전처리</td><td>비어 있는 값이나 극단적으로 벗어난 값 등의 오류를 확인하고 분석 전에 처리하는 일</td></tr>
+    <tr><td class="term">모델링</td><td>데이터에서 유용한 패턴을 추출하고 그 패턴을 기반으로 모델을 만드는 단계</td></tr>
+    <tr><td class="term">바이브 코딩</td><td>①샘플 프롬프트 → ②AI가 준 코드 실행·읽기 → ③프롬프트 개선을 반복하는 실습 방식</td></tr>
+  </table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="../index.html"><div class="dir">← 이전</div><div class="tt">목차</div></a>
+    <a class="next" href="lesson02.html"><div class="dir">다음 →</div><div class="tt">2차시 · 반정형 데이터 · API와 JSON · 어제의 박스오피스</div></a>
+  </div>
+</main>
+</div>
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>

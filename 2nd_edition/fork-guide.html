@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 학교 교재로 만들기 — 포크와 커스텀 안내 · 개정 검토본</title>
+<meta name="description" content="당곡고 데이터 과학 웹 교재를 다른 학교에서 포크해 쓰는 방법. 포크·배포·학교 이름 바꾸기·원본 업데이트 받기까지.">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #fffdf7; --card: #ffffff; --ink: #23272f; --dim: #6b7280;
+    --line: #e7e3d8; --accent: #f4b400; --accent-ink: #8a6100;
+    --blue: #2563eb; --green: #1f883d; --warn: #e45756;
+    --code-bg: #0f1720; --code-ink: #d9e2ec;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--ink); line-height: 1.75;
+    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+    font-size: 16px; -webkit-text-size-adjust: 100%; }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px 100px; }
+
+  header.top { background: #fff; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+  header.top .inner { max-width: 880px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 10px; }
+  header.top .logo { font-weight: 800; }
+  header.top .sub { color: var(--dim); font-size: .85rem; }
+  header.top a.back { margin-left: auto; font-size: .85rem; color: var(--blue); text-decoration: none; }
+
+  h1 { font-size: clamp(26px, 4.4vw, 38px); font-weight: 800; line-height: 1.3; margin: 34px 0 10px; letter-spacing: -.02em; }
+  h1 .a { color: var(--accent-ink); }
+  h2 { font-size: clamp(20px, 2.8vw, 26px); font-weight: 800; margin: 52px 0 14px; padding-top: 12px; border-top: 3px solid var(--line); }
+  h3 { font-size: clamp(16.5px, 2.1vw, 19px); font-weight: 700; margin: 30px 0 10px; }
+  p { margin: 12px 0; }
+  .lead { font-size: 1.06rem; color: #3a3f48; margin: 14px 0 6px; }
+  b { font-weight: 700; }
+  a { color: var(--blue); }
+  ul, ol { margin: 12px 0 12px 22px; }
+  li { margin: 7px 0; }
+
+  .steps { counter-reset: st; list-style: none; margin-left: 0; }
+  .steps > li { counter-increment: st; position: relative; padding-left: 42px; margin: 22px 0; }
+  .steps > li::before { content: counter(st); position: absolute; left: 0; top: 1px;
+    width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #4a3500;
+    font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+  .steps .st { font-weight: 700; display: block; margin-bottom: 2px; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; margin: 18px 0; }
+  .card .h { font-weight: 800; margin-bottom: 8px; }
+  .tip { background: #fffaf0; border-color: #f6dfa6; }
+  .warn { background: #fff5f5; border-color: #f5c6c6; }
+  .warn .h { color: #b42318; }
+  .ok { background: #f2fbf5; border-color: #bfe6cc; }
+
+  .ghshot { width: 100%; height: auto; display: block; margin: 14px 0 6px; border-radius: 10px; }
+  .cap { font-size: .84rem; color: var(--dim); margin: 0 0 18px; }
+
+  .codewrap { position: relative; background: var(--code-bg); border-radius: 12px; margin: 14px 0; overflow: hidden; }
+  .codewrap .label { display: block; background: rgba(255,255,255,.07); color: #9fb3c8;
+    font-size: .78rem; padding: 7px 14px; font-weight: 700; letter-spacing: .02em; }
+  .codewrap pre { color: var(--code-ink); padding: 14px 16px; overflow-x: auto;
+    font-family: "SFMono-Regular", "D2Coding", Menlo, monospace; font-size: .88rem; line-height: 1.65; white-space: pre; }
+  .copy-btn { position: absolute; top: 6px; right: 8px; background: #2b3a4a; color: #d9e2ec;
+    border: 0; border-radius: 8px; padding: 5px 11px; font-size: .78rem; font-weight: 700; cursor: pointer;
+    font-family: inherit; }
+  .copy-btn:hover { background: #38495c; }
+  .copy-btn.done { background: #1f883d; color: #fff; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: .94rem; }
+  th, td { border: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+  th { background: #faf7ee; font-weight: 700; }
+  td code, p code, li code { background: #f1efe6; border-radius: 5px; padding: 1px 6px; font-size: .88em;
+    font-family: "SFMono-Regular", "D2Coding", Menlo, monospace; }
+
+  .tool { background: #fff; border: 2px solid var(--accent); border-radius: 14px; padding: 18px 20px; margin: 18px 0; }
+  .tool .h { font-weight: 800; margin-bottom: 4px; }
+  .tool .d { font-size: .9rem; color: var(--dim); margin-bottom: 12px; }
+  .tool label { display: block; font-size: .86rem; font-weight: 700; margin: 10px 0 4px; }
+  .tool input { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px;
+    font-size: 1rem; font-family: inherit; }
+  .tool .out { margin-top: 12px; background: var(--code-bg); color: var(--code-ink); border-radius: 10px;
+    padding: 12px 14px; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace; font-size: .9rem;
+    word-break: break-all; min-height: 44px; display: flex; align-items: center; }
+  .tool button.go { margin-top: 10px; background: var(--blue); color: #fff; border: 0; border-radius: 9px;
+    padding: 9px 16px; font-weight: 700; font-size: .92rem; cursor: pointer; font-family: inherit; }
+  .tool button.go:hover { filter: brightness(1.08); }
+  .tool .mini { font-size: .82rem; color: var(--dim); margin-top: 8px; }
+
+  .toc { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; margin: 24px 0 8px; }
+  .toc .h { font-weight: 800; margin-bottom: 8px; }
+  .toc ol { margin: 0 0 0 20px; }
+  .toc a { text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+
+  .pill { display: inline-block; background: #f1efe6; border-radius: 999px; padding: 2px 10px;
+    font-size: .8rem; font-weight: 700; color: #5a5346; margin-right: 6px; }
+  .btnlink { display: inline-block; background: var(--green); color: #fff; text-decoration: none;
+    border-radius: 10px; padding: 10px 18px; font-weight: 700; margin: 6px 8px 6px 0; }
+  .btnlink.alt { background: var(--blue); }
+  .btnlink:hover { filter: brightness(1.08); }
+
+  td.bad { color: #b42318; font-weight: 700; }
+  .starbox { background: #fffaf0; border: 1px solid #f6dfa6; border-radius: 14px; padding: 16px 20px; margin: 20px 0; }
+  .starbox .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .starbox p { margin: 12px 0 0; font-size: .92rem; color: #5a5346; }
+  .btnlink.star { background: #f4b400; color: #4a3500; }
+  #star-count { font-weight: 700; opacity: .85; }
+  .neis-result { margin-top: 12px; }
+  .neis-result table { margin: 0; font-size: .9rem; }
+  .neis-result .msg { background: var(--code-bg); color: var(--code-ink); border-radius: 10px; padding: 12px 14px; font-size: .9rem; }
+  .neis-result .pick { background: var(--blue); color: #fff; border: 0; border-radius: 8px; padding: 6px 12px;
+    font-size: .82rem; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
+  .neis-result .pick.done { background: var(--green); }
+  .neis-result code { background: #f1efe6; border-radius: 5px; padding: 1px 6px; font-size: .88em; }
+  footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--dim); font-size: .88rem; }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px 70px; }
+    table { font-size: .88rem; }
+    th, td { padding: 7px 9px; }
+  }
+</style>
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="inner">
+    <span class="logo">🧭 데이터 과학 교재</span>
+    <span class="sub">포크 · 커스텀 안내</span>
+    <a class="back" href="index.html">교재 첫 화면 →</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+<h1>우리 학교 교재로 <span class="a">만들기</span></h1>
+<p class="lead">이 교재는 누구나 복사해 자기 학교 수업에 맞게 고쳐 쓸 수 있습니다. 깃허브를 처음 쓰는 선생님도 따라 할 수 있도록 화면 그림과 함께 순서를 적었습니다. 명령어는 몰라도 됩니다. 웹 브라우저 안에서 끝까지 진행할 수 있습니다.</p>
+
+<div class="starbox">
+  <div class="btns">
+    <a class="btnlink star" href="https://github.com/greatsong/ds-danggok-2026" target="_blank" rel="noopener">⭐ 별 하나 눌러 두기<span id="star-count"></span></a>
+    <a class="btnlink" href="https://github.com/greatsong/ds-danggok-2026/fork" target="_blank" rel="noopener">⑂ 포크하기</a>
+  </div>
+  <p>포크하실 때 별을 한 번 눌러 주시면, 다른 선생님이 이 교재를 더 쉽게 찾고 만든 사람도 사용 현황을 알 수 있습니다. 별을 누르지 않아도 포크와 사용에는 아무 지장이 없습니다.</p>
+</div>
+
+<div class="card ok">
+  <div class="h">✅ 이 문서를 끝까지 따라 하면</div>
+  <ul>
+    <li>우리 학교 주소로 열리는 <b>학생용 38쪽 · 교사용 20쪽</b> 웹 교재가 만들어집니다.</li>
+    <li>학교 이름, 급식 학교 코드, 공개 차시를 <b>우리 수업에 맞게</b> 바꿀 수 있습니다.</li>
+    <li>원본 교재가 고쳐지면 <b>버튼 한 번으로 받아 올</b> 수 있습니다.</li>
+  </ul>
+</div>
+
+<div class="toc">
+  <div class="h">차례</div>
+  <ol>
+    <li><a href="#s1">준비물과 소요 시간</a></li>
+    <li><a href="#s2">1단계 — 내 계정으로 복사하기(포크)</a></li>
+    <li><a href="#s3">2단계 — 우리 학교 주소로 공개하기</a></li>
+    <li><a href="#s4">3단계 — 우리 학교에 맞게 고치기</a></li>
+    <li><a href="#s5">건드리면 안 되는 것</a></li>
+    <li><a href="#s6">4단계 — 원본이 고쳐지면 받아 오기</a></li>
+    <li><a href="#s7">충돌이 났을 때</a></li>
+    <li><a href="#s8">AI에게 맡기는 방법</a></li>
+    <li><a href="#s9">자주 묻는 것</a></li>
+  </ol>
+</div>
+
+<h2 id="s1">준비물과 소요 시간</h2>
+<table>
+  <tr><th>무엇</th><th>설명</th></tr>
+  <tr><td><b>깃허브 계정</b></td><td><a href="https://github.com/signup" target="_blank" rel="noopener">github.com/signup</a>에서 무료로 만듭니다.</td></tr>
+  <tr><td><b>우리 학교 나이스 코드</b></td><td>급식 차시(5·12차시)를 쓰실 때 필요합니다. 아래 3단계 ③번에서 바로 찾을 수 있습니다.</td></tr>
+</table>
+<table>
+  <tr><th>어디까지</th><th>걸리는 시간</th></tr>
+  <tr><td>포크하고 우리 주소로 열기</td><td>10분</td></tr>
+  <tr><td>공개 차시·교사 열쇠·학교 이름까지</td><td>30분</td></tr>
+  <tr><td>급식 학교 코드까지</td><td>45분</td></tr>
+</table>
+
+<h2 id="s2">1단계 — 내 계정으로 복사하기(포크)</h2>
+<p>포크는 남의 저장소를 <b>내 계정으로 통째로 복사</b>하는 기능입니다. 복사한 뒤에는 원본에 영향을 주지 않고 마음대로 고칠 수 있습니다.</p>
+
+<p><a class="btnlink" href="https://github.com/greatsong/ds-danggok-2026/fork" target="_blank" rel="noopener">⑂ 지금 포크하기</a>
+<a class="btnlink alt" href="https://github.com/greatsong/ds-danggok-2026" target="_blank" rel="noopener">원본 저장소 열기</a></p>
+
+<svg viewBox="0 0 760 132" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="깃허브 저장소 화면 위쪽. 저장소 이름 오른쪽에 Fork 버튼이 있고 그 아래 Code, Issues, Pull requests 같은 탭이 있다" class="ghshot">
+  <rect x="0" y="0" width="760" height="132" rx="10" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="24" y="34" font-size="13" fill="#59636e">📖</text>
+  <text x="44" y="34" font-size="15" font-weight="600" fill="#0969da">greatsong</text>
+  <text x="120" y="34" font-size="15" fill="#59636e">/</text>
+  <text x="132" y="34" font-size="15" font-weight="700" fill="#0969da">ds-danggok-2026</text>
+  <rect x="272" y="21" width="52" height="19" rx="9.5" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="298" y="34.5" font-size="11" fill="#59636e" text-anchor="middle">Public</text>
+  <rect x="470" y="18" width="104" height="26" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+  <text x="522" y="35" font-size="12" fill="#1f2328" text-anchor="middle">🔔 Notifications</text>
+  <rect x="582" y="18" width="76" height="26" rx="6" fill="#f6f8fa" stroke="#fb8500" stroke-width="2"/>
+  <text x="620" y="35" font-size="12" font-weight="700" fill="#1f2328" text-anchor="middle">⑂ Fork</text>
+  <rect x="666" y="18" width="70" height="26" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+  <text x="701" y="35" font-size="12" fill="#1f2328" text-anchor="middle">☆ Star</text>
+  <line x1="620" y1="52" x2="620" y2="74" stroke="#fb8500" stroke-width="2"/>
+  <path d="M614,52 L620,44 L626,52 z" fill="#fb8500"/>
+  <text x="620" y="90" font-size="12.5" font-weight="700" fill="#b45309" text-anchor="middle">여기를 누릅니다</text>
+  <line x1="0" y1="104" x2="760" y2="104" stroke="#d1d9e0"/>
+  <text x="30" y="120" font-size="12.5" font-weight="600" fill="#1f2328">&lt;&gt; Code</text>
+  <text x="110" y="120" font-size="12.5" fill="#59636e">⊙ Issues</text>
+  <text x="190" y="120" font-size="12.5" fill="#59636e">⇅ Pull requests</text>
+  <text x="300" y="120" font-size="12.5" fill="#59636e">▷ Actions</text>
+  <text x="380" y="120" font-size="12.5" fill="#59636e">⚙ Settings</text>
+  <rect x="24" y="122" width="62" height="3" fill="#fd8c73"/>
+</svg>
+<p class="cap">저장소 화면 위쪽입니다. 오른쪽 위 Fork를 누릅니다.</p>
+
+<svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="포크 만들기 화면. 주인 칸에서 내 계정을 고르고 저장소 이름을 정한 뒤 아래쪽 초록색 Create fork 버튼을 누른다" class="ghshot">
+  <rect x="0" y="0" width="760" height="250" rx="10" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="28" y="36" font-size="17" font-weight="700" fill="#1f2328">Create a new fork</text>
+  <text x="28" y="58" font-size="12.5" fill="#59636e">A fork is a copy of a repository. Forking a repository allows you to freely experiment with changes.</text>
+  <text x="28" y="92" font-size="12.5" font-weight="600" fill="#1f2328">Owner *</text>
+  <text x="232" y="92" font-size="12.5" font-weight="600" fill="#1f2328">Repository name *</text>
+  <rect x="28" y="100" width="180" height="32" rx="6" fill="#ffffff" stroke="#fb8500" stroke-width="2"/>
+  <text x="42" y="121" font-size="13" fill="#1f2328">내 깃허브 계정 ▾</text>
+  <text x="216" y="121" font-size="15" fill="#59636e">/</text>
+  <rect x="232" y="100" width="300" height="32" rx="6" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="246" y="121" font-size="13" fill="#1f2328">ds-danggok-2026</text>
+  <text x="28" y="156" font-size="12.5" font-weight="600" fill="#1f2328">Description <tspan fill="#59636e" font-weight="400">(optional)</tspan></text>
+  <rect x="28" y="164" width="504" height="30" rx="6" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="42" y="184" font-size="12.5" fill="#59636e">○○고 데이터 과학 웹 교재</text>
+  <rect x="30" y="208" width="13" height="13" rx="3" fill="#0969da"/>
+  <path d="M33,214.5 L35.5,217 L40,212" stroke="#fff" stroke-width="1.8" fill="none"/>
+  <text x="52" y="219" font-size="12.5" fill="#1f2328">Copy the <tspan font-weight="600">main</tspan> branch only</text>
+  <rect x="618" y="202" width="114" height="32" rx="6" fill="#1f883d"/>
+  <text x="675" y="223" font-size="13" font-weight="600" fill="#ffffff" text-anchor="middle">Create fork</text>
+</svg>
+<p class="cap">Owner는 내 계정으로, 저장소 이름은 그대로 두어도 됩니다. 초록 버튼을 누르면 끝입니다.</p>
+
+<ol class="steps">
+  <li><span class="st">Owner를 내 계정으로 맞춥니다</span>학교 계정이 여러 개면 수업에 쓸 계정을 고릅니다.</li>
+  <li><span class="st">저장소 이름 정하기</span>그대로 두어도 되고 <code>ds-우리학교-2026</code>처럼 바꿔도 됩니다. 이 이름이 교재 주소가 됩니다.</li>
+  <li><span class="st">Create fork를 누릅니다</span>몇 초면 내 계정 아래에 같은 저장소가 생깁니다.</li>
+</ol>
+
+<h2 id="s3">2단계 — 우리 학교 주소로 공개하기</h2>
+<p>포크만 하면 파일이 복사될 뿐 교재 주소는 아직 없습니다. 깃허브 페이지스를 켜야 학생이 열 수 있는 주소가 생깁니다.</p>
+
+<ol class="steps">
+  <li><span class="st">내 저장소에서 Settings를 누릅니다</span>저장소 위쪽 탭 맨 오른쪽에 있습니다.</li>
+  <li><span class="st">왼쪽 목록에서 Pages를 누릅니다</span>Code and automation 묶음 안에 있습니다.</li>
+  <li><span class="st">Source를 Deploy from a branch로 둡니다</span>기본값이 이미 그런 경우가 많습니다.</li>
+  <li><span class="st">Branch는 main, 폴더는 / (root)로 두고 Save를 누릅니다</span>1~3분 뒤 화면 위쪽 초록 상자에 내 주소가 나타납니다.</li>
+</ol>
+
+<svg viewBox="0 0 760 236" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="설정의 페이지 화면. 배포 방식을 브랜치에서 배포로 두고 브랜치는 main, 폴더는 루트로 고른 뒤 저장을 누른다" class="ghshot">
+  <rect x="0" y="0" width="760" height="236" rx="10" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="28" y="34" font-size="16" font-weight="700" fill="#1f2328">GitHub Pages</text>
+  <rect x="28" y="48" width="704" height="44" rx="8" fill="#dafbe1" stroke="#4ac26b"/>
+  <text x="44" y="68" font-size="12.5" fill="#1f2328">✓ Your site is live at</text>
+  <text x="160" y="68" font-size="12.5" font-weight="700" fill="#0969da">https://내계정.github.io/ds-danggok-2026/</text>
+  <text x="44" y="84" font-size="11.5" fill="#59636e">Last deployed by github-pages 1 minute ago</text>
+  <text x="28" y="122" font-size="13.5" font-weight="700" fill="#1f2328">Build and deployment</text>
+  <text x="28" y="146" font-size="12.5" font-weight="600" fill="#1f2328">Source</text>
+  <rect x="28" y="154" width="220" height="32" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+  <text x="44" y="175" font-size="13" fill="#1f2328">Deploy from a branch ▾</text>
+  <text x="272" y="146" font-size="12.5" font-weight="600" fill="#1f2328">Branch</text>
+  <rect x="272" y="154" width="140" height="32" rx="6" fill="#f6f8fa" stroke="#fb8500" stroke-width="2"/>
+  <text x="288" y="175" font-size="13" fill="#1f2328">⑂ main ▾</text>
+  <rect x="422" y="154" width="120" height="32" rx="6" fill="#f6f8fa" stroke="#fb8500" stroke-width="2"/>
+  <text x="438" y="175" font-size="13" fill="#1f2328">📁 / (root) ▾</text>
+  <rect x="552" y="154" width="66" height="32" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+  <text x="585" y="175" font-size="13" font-weight="600" fill="#1f2328" text-anchor="middle">Save</text>
+  <text x="28" y="214" font-size="11.5" fill="#59636e">브랜치를 main, 폴더를 / (root) 로 두고 Save 를 누릅니다. 1~3분 뒤 위쪽 초록 상자에 내 주소가 나타납니다.</text>
+</svg>
+<p class="cap">설정 → Pages 화면입니다. 폴더를 <code>/docs</code>로 고르면 빈 사이트가 뜹니다. 반드시 <code>/ (root)</code>로 두십시오.</p>
+
+<div class="tool">
+  <div class="h">🔗 내 교재 주소 만들어 보기</div>
+  <div class="d">깃허브 계정 이름과 저장소 이름을 넣으면 학생에게 안내할 주소가 나옵니다.</div>
+  <label for="gh-user">깃허브 계정 이름</label>
+  <input id="gh-user" type="text" placeholder="예: sunsaeng-kim" autocomplete="off">
+  <label for="gh-repo">저장소 이름</label>
+  <input id="gh-repo" type="text" value="ds-danggok-2026" autocomplete="off">
+  <div class="out" id="url-out">계정 이름을 입력하면 주소가 만들어집니다.</div>
+  <button class="go" type="button" id="url-copy">주소 복사</button>
+  <div class="mini">교사용은 이 주소 뒤에 <code>teacher/</code>를 붙입니다. 여는 방법은 3단계 ②번에 있습니다.</div>
+</div>
+
+<div class="card tip">
+  <div class="h">💡 주소가 안 열릴 때</div>
+  <p>Save 직후에는 404가 뜰 수 있습니다. 1~3분 기다렸다가 새로 고칩니다. 그래도 안 되면 저장소 <b>Actions</b> 탭에서 <b>pages build and deployment</b>가 초록색으로 끝났는지 확인합니다.</p>
+</div>
+
+<h2 id="s4">3단계 — 우리 학교에 맞게 고치기</h2>
+<p>고쳐야 할 것이 다섯 가지입니다. 급한 순서대로 적었습니다. 우리 수업에 해당하는 것만 하시면 됩니다.</p>
+
+<table>
+  <tr><th>순서</th><th>무엇</th><th>안 바꾸면</th><th>걸리는 시간</th></tr>
+  <tr><td><b>①</b></td><td>공개 차시</td><td>우리 진도와 어긋난 차시가 열려 있습니다</td><td>2분</td></tr>
+  <tr><td><b>②</b></td><td>교사용 열쇠</td><td>교사용 페이지를 내가 열 수 없습니다</td><td>5분</td></tr>
+  <tr><td><b>③</b></td><td>급식 학교 코드</td><td class="bad">학생 앱이 당곡고 식단을 불러옵니다</td><td>15분</td></tr>
+  <tr><td><b>④</b></td><td>학교 이름</td><td>본문 곳곳에 당곡고가 나옵니다</td><td>20분</td></tr>
+  <tr><td><b>⑤</b></td><td>급식 실측 수치</td><td class="bad">교재 정답과 학생 화면이 어긋납니다</td><td>반나절</td></tr>
+</table>
+
+<div class="card tip">
+  <div class="h">💡 파일을 여러 개 고칠 때는 브라우저 편집기가 편합니다</div>
+  <p>내 저장소 파일 목록 화면에서 키보드 <b>마침표(.)</b>를 누르면 브라우저 안에 편집기가 열립니다. 왼쪽 돋보기로 <b>찾아 바꾸기</b>를 하면 여러 파일을 한 번에 고칠 수 있습니다. 다 고쳤으면 왼쪽 세 번째 아이콘(소스 제어)에서 메시지를 적고 체크 표시를 눌러 저장합니다.</p>
+  <p style="margin-top:6px"><a href="https://github.dev/greatsong/ds-danggok-2026" target="_blank" rel="noopener">github.dev 편집기가 어떤 화면인지 미리 보기 →</a> (원본 저장소가 열립니다. 고치려면 내 포크에서 여십시오.)</p>
+</div>
+
+<h3 id="c1">① 공개 차시 — 진도에 맞춰 열기</h3>
+<p>이 교재는 진도보다 앞선 차시를 학생 화면에서 잠급니다. 잠금을 푸는 값은 파일 하나에 숫자 한 줄입니다.</p>
+<div class="codewrap"><span class="label">assets/release.js — 파일 전체가 이 한 줄입니다</span><pre>window.RELEASED_LESSON = 6;</pre></div>
+
+<svg viewBox="0 0 760 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="포크한 저장소 화면. 원본보다 뒤처졌다는 안내 줄에서 Sync fork를 누르고 Update branch를 누른다" class="ghshot">
+  <rect x="0" y="0" width="760" height="210" rx="10" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="28" y="32" font-size="14" font-weight="700" fill="#1f2328">○○고 / ds-danggok-2026</text>
+  <text x="230" y="32" font-size="11.5" fill="#59636e">forked from greatsong/ds-danggok-2026</text>
+  <rect x="28" y="48" width="704" height="46" rx="8" fill="#f6f8fa" stroke="#d1d9e0"/>
+  <text x="44" y="70" font-size="12.5" fill="#1f2328">⑂ This branch is</text>
+  <text x="140" y="70" font-size="12.5" font-weight="700" fill="#1f2328">12 commits behind</text>
+  <text x="248" y="70" font-size="12.5" fill="#0969da">greatsong/ds-danggok-2026:main</text>
+  <text x="44" y="86" font-size="11.5" fill="#59636e">원본이 그만큼 앞서 있다는 뜻입니다. 내가 고친 것이 없으면 그대로 받아 올 수 있습니다.</text>
+  <rect x="596" y="56" width="120" height="30" rx="6" fill="#f6f8fa" stroke="#fb8500" stroke-width="2"/>
+  <text x="656" y="76" font-size="12.5" font-weight="600" fill="#1f2328" text-anchor="middle">Sync fork ▾</text>
+  <rect x="520" y="102" width="212" height="88" rx="8" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="536" y="124" font-size="12" fill="#59636e">This branch is out of date.</text>
+  <rect x="536" y="136" width="180" height="30" rx="6" fill="#1f883d"/>
+  <text x="626" y="156" font-size="12.5" font-weight="600" fill="#ffffff" text-anchor="middle">Update branch</text>
+  <text x="536" y="182" font-size="11" fill="#59636e">충돌이 있으면 이 자리에 회색으로 표시됩니다</text>
+  <line x1="656" y1="88" x2="656" y2="100" stroke="#fb8500" stroke-width="2"/>
+  <path d="M650,100 L656,108 L662,100 z" fill="#fb8500"/>
+</svg>
+<p class="cap">파일을 열고 오른쪽 위 연필을 누른 뒤, 숫자를 고치고 초록 버튼을 누릅니다.</p>
+
+<table>
+  <tr><th>숫자</th><th>열리는 것</th></tr>
+  <tr><td><code>1</code></td><td>1차시만 (개강 때)</td></tr>
+  <tr><td><code>6</code></td><td>6차시까지</td></tr>
+  <tr><td><code>15</code> 이상</td><td>용어사전·개념 정리·이론 정리·평가 활동지까지 (시험 대비 시점)</td></tr>
+</table>
+<div class="card tip">
+  <div class="h">💡 부록 네 종은 15부터 열립니다</div>
+  <p>용어사전·개념 정리·이론 정리·평가 활동지는 전 차시 내용을 담고 있어 <code>15</code> 이상일 때 열리도록 되어 있습니다. 공통 수업이 14차시이므로, 시험 대비를 시작할 때 값을 <code>15</code>로 올리시면 됩니다. 그 전에 열고 싶으면 <code>assets/gate.js</code>에서 <code>released &lt; 15</code>의 숫자를 낮추십시오.</p>
+</div>
+
+<h3 id="c2">② 교사용 열쇠 — 내 열쇠로 바꾸기</h3>
+<p>교사용(<code>teacher/</code>)은 학생 화면에서 항상 잠겨 있습니다. 선생님은 주소 뒤에 <code>?teacher=열쇠</code>를 한 번 붙여 열면 그 브라우저가 기억합니다. 포크한 저장소에는 원본 열쇠가 그대로 있으므로 내 것으로 바꾸어야 합니다.</p>
+
+<div class="tool">
+  <div class="h">🔑 내 열쇠 만들기</div>
+  <div class="d">쓰고 싶은 열쇠를 넣으면 <code>assets/gate.js</code>에 붙여 넣을 한 줄이 만들어집니다. 열쇠 자체는 파일에 저장되지 않고 계산값만 들어갑니다.</div>
+  <label for="key-in">내가 쓸 열쇠 (영문·숫자 권장)</label>
+  <input id="key-in" type="text" placeholder="예: our-school-2026" autocomplete="off">
+  <div class="out" id="key-out">열쇠를 입력하면 붙여 넣을 줄이 나옵니다.</div>
+  <button class="go" type="button" id="key-copy">한 줄 복사</button>
+  <div class="mini"><code>assets/gate.js</code> 21행 <code>var KEY_HASH = ...;</code>를 이 줄로 바꿉니다. 그다음 교재 주소 뒤에 <code>?teacher=내열쇠</code>를 붙여 한 번 엽니다. 해제는 <code>?teacher=off</code>입니다.</div>
+</div>
+
+<div class="card warn">
+  <div class="h">⚠️ 이 잠금은 보안이 아닙니다</div>
+  <ul>
+    <li>브라우저 안에서만 도는 잠금이라 개발자 도구를 아는 학생은 우회할 수 있습니다. <b>진도보다 앞서 훑어보는 것을 막는 용도</b>입니다.</li>
+    <li>열쇠는 짧은 글자의 계산값이라 원래 글자를 알아낼 수 있습니다. <b>학교 계정 비밀번호나 다른 서비스와 같은 문자열을 쓰지 마십시오.</b></li>
+    <li>열쇠를 바꾸면 전에 켜 둔 교사 모드가 모든 브라우저에서 풀립니다. 새 열쇠로 다시 한 번 열어 주십시오.</li>
+    <li>시험 문항처럼 정말 감춰야 할 자료는 이 저장소에 올리지 마십시오.</li>
+  </ul>
+</div>
+
+<h3 id="c3">③ 급식 학교 코드 — 우리 학교 식단 불러오기</h3>
+<p>5차시와 12차시는 나이스 급식 API로 <b>우리 학교 식단</b>을 불러옵니다. 학교를 가리키는 코드가 예시 코드·프롬프트·주소에 들어 있어, 안 바꾸면 학생 앱이 당곡고 식단을 보여 줍니다.</p>
+
+<div class="tool">
+  <div class="h">🏫 우리 학교 나이스 코드 찾기</div>
+  <div class="d">학교 이름을 넣고 찾기를 누르면 이 화면에 바로 결과가 나옵니다. 인증키가 없어도 조회됩니다.</div>
+  <label for="neis-in">우리 학교 이름</label>
+  <input id="neis-in" type="text" placeholder="예: 당곡고등학교" autocomplete="off">
+  <button class="go" type="button" id="neis-go">학교 찾기</button>
+  <div id="neis-result" class="neis-result"></div>
+  <div class="mini">인증키 없이 조회하므로 한 번에 다섯 곳까지 나옵니다. 같은 이름 학교가 여럿이면 지역을 보고 고르십시오. 이름을 줄여 쓰면 안 나올 수 있으니 정식 명칭으로 넣으십시오.</div>
+</div>
+
+<p>찾은 값으로 아래 두 코드를 바꿉니다. <code>lesson05.html</code>·<code>lesson05-deep.html</code>·<code>lesson12.html</code>·<code>data.html</code> 네 파일에 흩어져 있습니다.</p>
+<div class="codewrap"><span class="label">바꿀 값 두 개</span><pre>ATPT_OFCDC_SC_CODE = "B10"       ← 교육청 코드 (B10은 서울시교육청)
+SD_SCHUL_CODE      = "7010073"   ← 학교 코드 (당곡고등학교)</pre></div>
+<p>바꾼 뒤 <code>lesson05.html</code>의 급식 주소 링크를 눌러 <b>우리 학교 식단이 실제로 돌아오는지</b> 확인하십시오.</p>
+
+<h3 id="c4">④ 학교 이름 — 우리 학교로</h3>
+<p>"당곡"은 저장소 전체에 약 219곳 나옵니다. 대부분은 페이지 제목과 바닥글이지만, 프롬프트와 예시 코드 안에도 있어 학생이 그대로 복사해 씁니다.</p>
+
+<div class="card warn">
+  <div class="h">⚠️ 반드시 긴 것부터 바꾸십시오</div>
+  <p><code>당곡고</code>를 먼저 바꾸면 <code>당곡고등학교</code>가 <code>○○고등학교등학교</code>처럼 깨집니다. 순서는 <b>당곡고등학교 → 당곡고 → 당곡</b>입니다.</p>
+</div>
+
+<div class="tool">
+  <div class="h">🔤 바꾸는 순서 만들기</div>
+  <div class="d">우리 학교 이름을 넣으면 브라우저 편집기에서 <b>찾아 바꾸기</b>할 순서가 나옵니다. 명령어로 하실 분을 위한 줄도 함께 나옵니다.</div>
+  <label for="school-in">우리 학교 정식 명칭</label>
+  <input id="school-in" type="text" placeholder="예: 한빛고등학교" autocomplete="off">
+  <label for="domain-in">학교 메일 도메인 (저장소 안 갤러리 페이지를 쓰실 때만)</label>
+  <input id="domain-in" type="text" placeholder="예: hanbit.hs.kr" autocomplete="off">
+  <div class="out" id="school-out">학교 이름을 입력하면 순서가 만들어집니다.</div>
+  <button class="go" type="button" id="school-copy">전체 복사</button>
+  <div class="mini">브라우저 편집기(마침표 키)의 찾아 바꾸기에 위에서부터 차례로 넣으십시오.</div>
+</div>
+
+<p><code>assets/gate.js</code> 안에도 학교 이름이 한 곳 있습니다. HTML만 고치면 잠긴 차시를 열 때마다 당곡고가 되살아납니다.</p>
+<div class="codewrap"><span class="label">assets/gate.js — 잠금 안내 화면의 제목</span><pre>document.title = '아직 열리지 않은 페이지 · 데이터 과학 당곡고';</pre></div>
+
+<h3 id="c5">⑤ 급식 실측 수치 — 우리 학교 급식으로 다시</h3>
+<p>12차시(연관 분석)와 5차시 일부는 <b>당곡고 급식을 실제로 세어 얻은 숫자</b>를 본문·표·확인 문제 정답으로 씁니다. 학교 코드를 바꾸면 이 숫자들이 전부 거짓이 됩니다.</p>
+<div class="codewrap"><span class="label">이런 숫자들입니다</span><pre>중식 184일 · 배추김치 102일(55%) · 제육볶음 10일 · 동시 6일 · 향상도 1.08</pre></div>
+<div class="card warn">
+  <div class="h">⚠️ 학교 코드만 바꾸고 수치를 두는 것이 가장 흔한 사고입니다</div>
+  <p>학생 화면에는 우리 학교 값이 뜨는데 교재와 활동지 정답은 당곡고 값이라, 확인 문제와 손계산 활동지가 통째로 정답 시비가 됩니다. 12차시를 쓰실 거라면 <b>교사가 먼저 ① 프롬프트를 우리 학교 코드로 실행해</b> 값을 얻고, 그 값으로 본문·표·확인 문제·이론 정리를 함께 고치십시오.</p>
+  <p style="margin-top:6px">첫 학기에는 <b>12차시만 우리 학교 급식으로 바꾸고 나머지 차시는 그대로 두는 것</b>을 권합니다. 기온·영화·야구 데이터는 전국 공개 자료라 어느 학교에서든 그대로 쓸 수 있습니다.</p>
+</div>
+
+<h2 id="s5">건드리면 안 되는 것</h2>
+
+<div class="card">
+  <div class="h">① "서울"을 학교 지역으로 보고 바꾸지 마십시오</div>
+  <p>1·6·7·8차시의 <b>서울 기온</b>은 학교와 무관한 기상청 전국 공개 데이터입니다. 여기에 <code>+2.60℃/100년</code>, <code>+8.14</code>, <code>114개 연도(1908~2025)</code>, <code>1953년 0.6℃</code> 같은 수치와 확인 문제 정답이 묶여 있습니다. 지역 이름을 바꾸면 데이터 주소와 정답이 모두 어긋납니다. 바꿔야 할 "서울"은 급식 교육청 코드 설명(<code>B10(서울시교육청)</code>) 네댓 곳뿐입니다.</p>
+</div>
+
+<div class="card">
+  <div class="h">③ 숫자를 일괄 치환하지 마십시오</div>
+  <p><code>216</code>은 영화 편수·표의 행 수·나눗셈 값 세 가지로 쓰이고, <code>114</code>는 화면 배치 좌표에도 들어 있습니다. 한꺼번에 바꾸면 화면이 깨집니다. 숫자는 반드시 한 곳씩 확인하며 고치십시오. 그리고 <b>학생용(<code>lessonNN.html</code>)과 자세한 판(<code>lessonNN-deep.html</code>)을 짝으로</b> 고치십시오. 한쪽만 고치면 같은 차시가 두 숫자를 말합니다.</p>
+</div>
+
+<h2 id="s6">4단계 — 원본이 고쳐지면 받아 오기</h2>
+<p>원본 교재는 계속 고쳐집니다. 오탈자를 고치거나 차시를 다듬거나 새 자료가 들어옵니다. 포크한 저장소는 자동으로 따라오지 않으므로 받고 싶을 때 직접 받아 옵니다.</p>
+
+<svg viewBox="0 0 760 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="파일을 열면 오른쪽 위에 연필 모양 버튼이 있고, 내용을 고친 뒤 초록색 Commit changes 버튼을 누른다" class="ghshot">
+  <rect x="0" y="0" width="760" height="190" rx="10" fill="#ffffff" stroke="#d1d9e0"/>
+  <text x="28" y="32" font-size="13.5" fill="#0969da">ds-danggok-2026</text>
+  <text x="150" y="32" font-size="13.5" fill="#59636e">/</text>
+  <text x="162" y="32" font-size="13.5" font-weight="700" fill="#1f2328">assets</text>
+  <text x="212" y="32" font-size="13.5" fill="#59636e">/</text>
+  <text x="224" y="32" font-size="13.5" font-weight="700" fill="#1f2328">release.js</text>
+  <rect x="600" y="18" width="34" height="26" rx="6" fill="#f6f8fa" stroke="#fb8500" stroke-width="2"/>
+  <text x="617" y="36" font-size="13" text-anchor="middle">✏️</text>
+  <text x="617" y="62" font-size="11.5" font-weight="700" fill="#b45309" text-anchor="middle">연필</text>
+  <rect x="644" y="18" width="34" height="26" rx="6" fill="#f6f8fa" stroke="#d1d9e0"/>
+  <text x="661" y="36" font-size="13" text-anchor="middle">⋯</text>
+  <rect x="28" y="76" width="704" height="60" rx="8" fill="#f6f8fa" stroke="#d1d9e0"/>
+  <text x="44" y="100" font-size="11.5" fill="#59636e">1</text>
+  <text x="68" y="100" font-size="12.5" font-family="ui-monospace, Menlo, monospace" fill="#1f2328">window.RELEASED_LESSON = 6;</text>
+  <text x="44" y="122" font-size="11.5" fill="#59636e">2</text>
+  <rect x="596" y="150" width="136" height="30" rx="6" fill="#1f883d"/>
+  <text x="664" y="170" font-size="12.5" font-weight="600" fill="#ffffff" text-anchor="middle">Commit changes...</text>
+  <text x="28" y="170" font-size="11.5" fill="#59636e">고칠 파일을 연 다음 연필을 누르고, 다 고쳤으면 오른쪽 위 초록 버튼을 누릅니다.</text>
+</svg>
+<p class="cap">포크한 저장소 화면입니다. 원본이 앞서 있으면 이런 줄이 보입니다.</p>
+
+<ol class="steps">
+  <li><span class="st">내 포크 저장소 첫 화면을 엽니다</span>뒤처져 있으면 "This branch is N commits behind"라는 줄이 보입니다.</li>
+  <li><span class="st">Sync fork를 누릅니다</span>오른쪽에 있습니다.</li>
+  <li><span class="st">Update branch를 누릅니다</span>몇 초면 끝나고, 1~3분 뒤 내 교재 주소에도 반영됩니다.</li>
+</ol>
+
+<div class="card tip">
+  <div class="h">💡 언제 받아 오면 좋은가</div>
+  <p>학기 중에는 <b>차시 사이</b>가 안전합니다. 수업 직전에 받으면 바뀐 화면을 확인할 시간이 없습니다. 받은 뒤에는 그날 수업할 차시를 한 번 열어 보십시오.</p>
+</div>
+
+<h2 id="s7">충돌이 났을 때</h2>
+<p>내가 고친 파일을 원본에서도 고쳤다면 Sync fork가 자동으로 합치지 못합니다.</p>
+<table>
+  <tr><th>상황</th><th>어떻게</th></tr>
+  <tr><td>내가 고친 것이 <b>설정 몇 곳뿐</b>이다</td><td>원본을 받아 오고 아래 목록의 다섯 곳을 다시 고칩니다. 10분이면 됩니다.</td></tr>
+  <tr><td>내가 <b>본문을 많이 고쳤다</b></td><td>깃허브 화면에서 <b>Resolve conflicts</b>를 누르면 양쪽 내용이 함께 보입니다. 파일별로 골라 합칩니다.</td></tr>
+</table>
+
+<div class="card">
+  <div class="h">📌 원본을 받아 온 뒤 다시 확인할 다섯 곳</div>
+  <ol>
+    <li><code>assets/release.js</code> — 우리 반 진도 숫자</li>
+    <li><code>assets/gate.js</code> — 교사 열쇠 한 줄, 잠금 화면의 학교 이름</li>
+    <li>급식 학교 코드와 학교 이름을 고친 파일들 (5·12차시 중심)</li>
+  </ol>
+</div>
+
+<h2 id="s8">AI에게 맡기는 방법</h2>
+<p>클로드 코드나 커서 같은 AI 코딩 도구를 쓰신다면 저장소를 통째로 맡길 수 있습니다. 저장소의 <code>README.md</code>에 AI가 읽을 규칙을 적어 두었습니다.</p>
+<div class="codewrap"><span class="label">AI에게 그대로 넣어 보십시오</span><pre>이 저장소는 고등학교 데이터 과학 웹 교재야. README.md의 "AI 에이전트를 위한 안내"를 먼저 읽고 그 규칙을 지켜 줘.
+
+우리 학교는 (정식 명칭)이고, 나이스 코드는 교육청 (코드) · 학교 (코드)야.
+학교 메일 도메인은 (도메인)이고, 반은 (반 이름들)이야.
+
+다음을 차례로 해 줘.
+1. 학교 이름을 우리 학교로 바꿔 줘. 긴 것부터 바꿔야 해.
+2. 급식 학교 코드를 우리 학교 것으로 바꿔 줘.
+3. assets/release.js의 공개 차시를 1로 맞춰 줘.
+
+주의할 것
+- "서울 기온"의 서울은 기상청 데이터라 바꾸면 안 돼.
+- 숫자는 일괄 치환하지 말고 한 곳씩 확인해 줘.
+- 학생용과 자세한 판(-deep)을 짝으로 고쳐 줘.
+- 다 고친 뒤 각 페이지의 절 개수와 확인 문제 개수가 그대로인지 확인해 줘.</pre></div>
+<p>AI에게 맡기셨더라도 <b>5차시 급식 화면은 직접 눌러 확인</b>하십시오. 외부 서비스와 연결되어 있어 화면만 보고는 알 수 없습니다.</p>
+
+<h2 id="s9">자주 묻는 것</h2>
+
+<h3>원본 선생님께 허락을 받아야 하나요?</h3>
+<p>포크는 공개 저장소에 열려 있는 기능이라 따로 허락이 필요하지 않습니다. 수업에 쓰셨다면 어떻게 쓰셨는지 알려 주시면 서로 도움이 됩니다.</p>
+
+<h3>고친 내용을 원본에 돌려줄 수 있나요?</h3>
+<p>있습니다. 오탈자나 더 나은 설명을 찾으셨다면 포크한 저장소에서 <b>Contribute → Open pull request</b>를 누르면 원본 쪽에 제안이 갑니다.</p>
+
+<h3>교사용 지도서도 함께 오나요?</h3>
+<p>옵니다. <code>teacher/</code> 아래에 차시별 진행안 14개, 이론 지도서, 수업용 슬라이드, 개강 전 안내가 들어 있습니다. 다만 50분 시간표와 반 구성은 당곡고 기준이므로 우리 학교에 맞게 고쳐 쓰셔야 합니다. 폼·활동지 원본·지필 문항은 이 저장소에 없습니다.</p>
+
+<h3>학생 개인정보가 넘어가나요?</h3>
+<p>교재 자체에는 학생 정보가 오가는 기능이 없습니다. 다만 저장소에 함께 들어 있는 <b>갤러리 페이지</b>를 쓰신다면, 설정을 그대로 둔 채 열지 마십시오. 학생이 올린 이름과 앱 주소가 원본 학교 데이터베이스로 갑니다. 쓰실 계획이면 <code>gallery/config.js</code>를 우리 학교 것으로 바꾸거나, 두 값을 비워 두십시오.</p>
+
+<h3>수업에서 쓰는 데이터는 어디에 있나요?</h3>
+<p>기온·영화·야구 데이터는 <a href="https://github.com/greatsong/modudata" target="_blank" rel="noopener">greatsong/modudata</a> 저장소에 있고 교재가 주소로 직접 읽습니다. 그대로 쓰셔도 되고, 같은 방식으로 우리 학교 저장소를 만들어 주소를 바꾸셔도 됩니다.</p>
+<footer>
+  <p>이 문서는 <a href="https://github.com/greatsong/ds-danggok-2026" target="_blank" rel="noopener">greatsong/ds-danggok-2026</a> 저장소의 안내서입니다. 화면 그림은 실제 깃허브 화면을 본떠 그린 것으로, 깃허브가 개편되면 위치가 조금 다를 수 있습니다.</p>
+  <p style="margin-top:8px"><a href="index.html">← 교재 첫 화면</a></p>
+</footer>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.codewrap').forEach(function (wrap) {
+    var pre = wrap.querySelector('pre');
+    if (!pre) return;
+    var btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'copy-btn'; btn.textContent = '복사';
+    btn.addEventListener('click', function () { copyText(pre.innerText, btn, '복사'); });
+    wrap.appendChild(btn);
+  });
+});
+
+function copyText(text, btn, label) {
+  function done() {
+    btn.textContent = '복사됨 ✓'; btn.classList.add('done');
+    setTimeout(function () { btn.textContent = label; btn.classList.remove('done'); }, 1500);
+  }
+  function fallback() {
+    // 클립보드를 쓸 수 없는 환경에서는 임시 상자에 넣어 선택·복사를 시도한다
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    if (ok) { done(); return; }
+    btn.textContent = '아래 내용을 직접 선택해 복사하세요';
+    setTimeout(function () { btn.textContent = label; }, 2500);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(fallback);
+  } else { fallback(); }
+}
+
+// ⓪ 지금 별 개수 — 실패하면 아무것도 표시하지 않는다
+(async function () {
+  try {
+    var res = await fetch('https://api.github.com/repos/greatsong/ds-danggok-2026');
+    if (!res.ok) return;
+    var data = await res.json();
+    var el = document.getElementById('star-count');
+    if (el && typeof data.stargazers_count === 'number') {
+      el.textContent = ' · 지금 ' + data.stargazers_count + '개';
+    }
+  } catch (e) {}
+})();
+
+// ① 내 교재 주소
+(function () {
+  var u = document.getElementById('gh-user'), r = document.getElementById('gh-repo'),
+      out = document.getElementById('url-out'), btn = document.getElementById('url-copy');
+  function draw() {
+    var user = (u.value || '').trim().replace(/^@/, ''), repo = (r.value || '').trim();
+    if (!user) { out.textContent = '계정 이름을 입력하면 주소가 만들어집니다.'; out.dataset.v = ''; return; }
+    var url = 'https://' + user + '.github.io/' + (repo || 'ds-danggok-2026') + '/';
+    out.textContent = url; out.dataset.v = url;
+  }
+  u.addEventListener('input', draw); r.addEventListener('input', draw);
+  btn.addEventListener('click', function () { out.dataset.v ? copyText(out.dataset.v, btn, '주소 복사') : u.focus(); });
+})();
+
+// ② 교사 열쇠 — gate.js와 같은 계산
+(function () {
+  var i = document.getElementById('key-in'), out = document.getElementById('key-out'), btn = document.getElementById('key-copy');
+  function hash(s) { var v = 5381; for (var k = 0; k < s.length; k++) { v = ((v * 33) ^ s.charCodeAt(k)) >>> 0; } return v; }
+  function draw() {
+    var key = (i.value || '').trim();
+    if (!key) { out.textContent = '열쇠를 입력하면 붙여 넣을 줄이 나옵니다.'; out.dataset.v = ''; return; }
+    var line = '  var KEY_HASH = 0x' + hash(key).toString(16) + ';';
+    out.textContent = line; out.dataset.v = line;
+  }
+  i.addEventListener('input', draw);
+  btn.addEventListener('click', function () { out.dataset.v ? copyText(out.dataset.v, btn, '한 줄 복사') : i.focus(); });
+})();
+
+// ③ 나이스 학교 코드 — 이 화면에서 바로 찾기
+(function () {
+  var i = document.getElementById('neis-in'), box = document.getElementById('neis-result'),
+      btn = document.getElementById('neis-go');
+  function msg(t) { box.innerHTML = '<div class="msg">' + t + '</div>'; }
+  async function search() {
+    var name = (i.value || '').trim();
+    if (!name) { i.focus(); return; }
+    msg('찾는 중입니다...');
+    var url = 'https://open.neis.go.kr/hub/schoolInfo?Type=json&pIndex=1&pSize=5&SCHUL_NM=' + encodeURIComponent(name);
+    try {
+      var res = await fetch(url);
+      var data = await res.json();
+      var rows = (data.schoolInfo && data.schoolInfo[1] && data.schoolInfo[1].row) || [];
+      if (!rows.length) {
+        var r0 = (data.RESULT && data.RESULT.MESSAGE) || '';
+        msg('찾지 못했습니다. 정식 명칭으로 다시 넣어 보십시오. 예를 들어 \'한빛고\'가 아니라 \'한빛고등학교\'입니다.' + (r0 ? '<br><span style="opacity:.7">' + r0 + '</span>' : ''));
+        return;
+      }
+      var html = '<table><tr><th>학교</th><th>지역</th><th>교육청 코드</th><th>학교 코드</th><th></th></tr>';
+      rows.forEach(function (r, k) {
+        html += '<tr><td>' + r.SCHUL_NM + '</td><td>' + (r.LCTN_SC_NM || '') + '</td>'
+             +  '<td><code>' + r.ATPT_OFCDC_SC_CODE + '</code></td>'
+             +  '<td><code>' + r.SD_SCHUL_CODE + '</code></td>'
+             +  '<td><button type="button" class="pick" data-k="' + k + '">이 학교로</button></td></tr>';
+      });
+      html += '</table>';
+      box.innerHTML = html;
+      box.querySelectorAll('.pick').forEach(function (b) {
+        b.addEventListener('click', function () {
+          var r = rows[+b.dataset.k];
+          var text = 'ATPT_OFCDC_SC_CODE = "' + r.ATPT_OFCDC_SC_CODE + '"   ← ' + (r.ATPT_OFCDC_SC_NM || '교육청')
+                   + '\nSD_SCHUL_CODE      = "' + r.SD_SCHUL_CODE + '"   ← ' + r.SCHUL_NM;
+          copyText(text, b, '이 학교로');
+          var si = document.getElementById('school-in');
+          if (si && !si.value) { si.value = r.SCHUL_NM; si.dispatchEvent(new Event('input')); }
+        });
+      });
+    } catch (e) {
+      msg('조회에 실패했습니다. 잠시 뒤 다시 해 보시거나, 아래 주소를 새 탭에서 직접 열어 보십시오.<br>'
+        + '<a href="' + url + '" target="_blank" rel="noopener" style="color:#7cc7ff">' + url + '</a>');
+    }
+  }
+  btn.addEventListener('click', search);
+  i.addEventListener('keydown', function (e) { if (e.key === 'Enter') search(); });
+})();
+
+// ④ 학교 이름 바꾸는 순서
+(function () {
+  var i = document.getElementById('school-in'), d = document.getElementById('domain-in'),
+      out = document.getElementById('school-out'), btn = document.getElementById('school-copy');
+  function draw() {
+    var name = (i.value || '').trim(), dom = (d.value || '').trim();
+    if (!name) { out.textContent = '학교 이름을 입력하면 순서가 만들어집니다.'; out.dataset.v = ''; return; }
+    var mid = name.replace(/등학교$/, '').replace(/학교$/, '');   // 한빛고등학교 → 한빛고
+    var shortName = mid.replace(/(고|중)$/, '');                   // 한빛고 → 한빛
+    var lines = [
+      '찾아 바꾸기 순서 (반드시 위에서부터)',
+      '1. 당곡고등학교  →  ' + name,
+      '2. 당곡고        →  ' + mid,
+      '3. 당곡          →  ' + shortName
+    ];
+    if (dom) lines.push('4. danggok.hs.kr →  ' + dom + '   (app.js와 SQL 파일 모두)');
+    lines.push('');
+    lines.push('명령어로 할 때 (저장소를 내려받은 폴더에서)');
+    lines.push('grep -rln --exclude-dir=.git "당곡" . | xargs sed -i "" \\');
+    lines.push('  -e "s/당곡고등학교/' + name + '/g" \\');
+    lines.push('  -e "s/당곡고/' + mid + '/g" \\');
+    lines.push('  -e "s/당곡/' + shortName + '/g"' + (dom ? ' \\' : ''));
+    if (dom) lines.push('  -e "s/danggok.hs.kr/' + dom + '/g"');
+    var text = lines.join('\n');
+    out.textContent = text; out.dataset.v = text;
+    out.style.whiteSpace = 'pre'; out.style.display = 'block'; out.style.lineHeight = '1.7';
+  }
+  i.addEventListener('input', draw); d.addEventListener('input', draw);
+  btn.addEventListener('click', function () { out.dataset.v ? copyText(out.dataset.v, btn, '전체 복사') : i.focus(); });
+})();
+</script>
+</body>
+</html>

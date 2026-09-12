@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>차시 비교 · 개정 검토본</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="stylesheet" href="assets/review.css">
+<style>
+  body{overflow:hidden}.compare-bar{height:62px;display:flex;align-items:center;gap:12px;padding:0 18px;background:#fff;border-bottom:1px solid #e3ddcf;box-sizing:border-box}
+  .compare-bar a{text-decoration:none;color:#2b2d3a;font-weight:750}.compare-bar h1{font-size:1rem;margin:0}.compare-bar .spacer{flex:1}
+  .lesson-picker{display:flex;align-items:center;gap:6px;font-size:.8rem;font-weight:750}.lesson-picker select{border:1px solid #cdc6b9;border-radius:8px;background:#fff;padding:7px 9px;color:#2b2d3a;font:inherit}
+  .mobile-tabs{display:none;gap:8px;padding:8px 12px;background:#f6f3ec;border-bottom:1px solid #e3ddcf}.mobile-tabs button{flex:1;border:1px solid #cdc6b9;border-radius:8px;background:#fff;padding:9px;font-weight:750}.mobile-tabs button.on{background:#0e9488;color:#fff;border-color:#0e9488}
+  .frames{display:grid;grid-template-columns:1fr 1fr;height:calc(100vh - 62px);padding:0;margin:0;max-width:none;border:0;border-radius:0;box-shadow:none;box-sizing:border-box}.pane{min-width:0;display:flex;flex-direction:column}.pane:first-child{border-right:2px solid #d8d2c5}.pane-head{height:38px;display:flex;align-items:center;justify-content:center;background:#f6f3ec;font-size:.85rem;font-weight:800;border-bottom:1px solid #e3ddcf}.pane iframe{width:100%;min-height:0;flex:1;border:0;background:#fff}
+  @media(max-width:760px){body{overflow:hidden}.compare-bar{height:56px;padding:0 10px}.compare-bar h1{font-size:.84rem}.lesson-picker span{display:none}.lesson-picker select{max-width:82px;padding:6px}.mobile-tabs{display:flex}.frames{display:block;height:calc(100vh - 110px)}.pane{height:100%;display:none}.pane.active{display:flex}.pane:first-child{border-right:0}.pane-head{display:none}}
+</style>
+</head>
+<body>
+<header class="compare-bar"><a href="index.html">← 목차</a><h1 id="title">차시 비교</h1><span class="spacer"></span><label class="lesson-picker"><span>차시 선택</span><select id="lesson-select" aria-label="차시 선택"></select></label></header>
+<div class="mobile-tabs" role="tablist" aria-label="비교 화면 전환"><button type="button" class="on" data-pane="current">현재본</button><button type="button" data-pane="revised">수정본</button></div>
+<main class="frames">
+  <section class="pane active" data-view="current"><div class="pane-head">현재본 스냅샷</div><iframe id="current-frame" title="현재본 스냅샷"></iframe></section>
+  <section class="pane" data-view="revised"><div class="pane-head">개정 검토본</div><iframe id="revised-frame" title="개정 검토본"></iframe></section>
+</main>
+<script>
+(function () {
+  var value = new URLSearchParams(location.search).get("lesson") || "01";
+  if (!/^(0[1-9]|1[0-5])$/.test(value)) value = "01";
+  var number = String(Number(value));
+  document.title = number + "차시 비교 · 개정 검토본";
+  document.getElementById("title").textContent = number + "차시 · 현재본과 수정본";
+  document.getElementById("current-frame").src = "original/lesson" + value + ".html";
+  document.getElementById("revised-frame").src = "lesson" + value + ".html";
+  var select = document.getElementById("lesson-select");
+  for (var i = 1; i <= 15; i++) {
+    var n = String(i).padStart(2, "0");
+    var option = document.createElement("option");
+    option.value = n;
+    option.textContent = i + "차시";
+    option.selected = n === value;
+    select.appendChild(option);
+  }
+  select.addEventListener("change", function () { location.href = "compare.html?lesson=" + select.value; });
+  document.querySelectorAll(".mobile-tabs button").forEach(function (button) {
+    button.addEventListener("click", function () {
+      document.querySelectorAll(".mobile-tabs button").forEach(function (b) { b.classList.toggle("on", b === button); });
+      document.querySelectorAll(".pane").forEach(function (pane) { pane.classList.toggle("active", pane.dataset.view === button.dataset.pane); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

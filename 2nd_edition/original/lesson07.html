@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7차시 · 다중 선형회귀 — 영화 흥행 예측 · 데이터 과학 당곡고 · 현재본 스냅샷</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../index.html">← 목차</a>
+  <span class="badge">학생용</span>
+  <span class="badge review-edition">현재본 스냅샷</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 7차시</span>
+  <h1>다중 선형회귀 · <span class="a">영화 흥행을 예측할 수 있을까</span></h1>
+  <div class="under"></div>
+
+  <div class="quote">
+    <div class="q">"예측은 매우 어렵다. 특히 미래에 관해서는."</div>
+    <span class="by">닐스 보어가 한 말로 전해집니다 · 예측에 필요한 정보와 한계를 살펴봅니다.</span>
+    <span class="who"><img src="img/people/bohr.jpg" alt="닐스 보어" loading="lazy" width="54" height="54"><span><b>닐스 보어</b>(1885~1962)는 덴마크의 물리학자입니다. 원자 속 전자가 정해진 에너지 상태에만 머문다는 것을 밝혀 1922년 노벨 물리학상을 받았고, 자연을 확률로 기술하는 양자역학의 해석을 이끌며 아인슈타인과 오랫동안 논쟁한 것으로도 유명합니다.<span class="cred">사진: 미국 물리학회(AIP) 소장본 · 퍼블릭 도메인(위키미디어 공용)</span></span></span>
+  </div>
+
+  <p class="lead">6차시에는 연도 하나로 기온을 예측했습니다. 오늘은 영화 데이터를 이용해 여러 변수를 사용하는 <b>다중 선형회귀</b>를 만듭니다. 변수를 바꿀 때 점수가 어떻게 달라지는지 관찰하고, 개봉 전 예측에 사용할 수 있는 정보인지 판단합니다.</p>
+
+  <p class="mini">이 수업에서 사용하는 표는 <b>어제까지 모인 데이터</b>입니다. 데이터가 하루씩 쌓이므로 화면에 나오는 편수와 점수는 사람마다, 날마다 조금씩 다릅니다. 숫자가 다른 것은 잘못이 아니며, 그 숫자를 어떻게 읽을지가 오늘의 과제입니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>변수 발상</b> — 흥행을 맞히려면 무엇을 알아야 하는지 폼 Ⅲ-01a에서 고른다</li>
+      <li><b>바이브 코딩</b> — 변수를 골라 끼우는 총 관객 수 예측 앱을 만든다</li>
+      <li><b>발견</b> — 변수 조합별 점수를 비교하고, 그 정보를 알 수 있는 시점을 확인한다</li>
+    </ul>
+  </div>
+
+  <h2>0. 오늘의 목표</h2>
+  <p>영화의 흥행을 미리 가늠하려면 여러 정보를 함께 살펴봐야 합니다. 오늘은 어떤 정보를 쓸지 고르고, 없으면 만들고, 그렇게 만든 모델이 쓸 만한지 판단하는 순서로 진행합니다.</p>
+  <ul class="steps">
+    <li>문제 해결에 필요한 <b>속성</b>을 고를 수 있다.</li>
+    <li>가진 데이터를 살펴보고 필요하면 <b>새로운 속성을 만들 수 있다</b>.</li>
+    <li>회귀 모델을 평가하는 지표인 <b>R²와 평균절대오차(MAE)</b>가 무엇을 나타내는 값인지 설명할 수 있다.</li>
+  </ul>
+
+  <h2>1. 무엇으로 예측할까 — 쓸 수 있는 정보 고르기</h2>
+  <div class="callout mini">
+    <div class="h">📝 먼저 감으로 맞혀 보기 — 폼 Ⅲ-01a</div>
+    <p>아래 표를 보기 전에 폼 Ⅲ-01a를 먼저 엽니다. 상영관 수만 알려 주고 두 영화 중 어느 쪽이 더 흥행했을지 고르는 물음으로 시작합니다. 그다음 수업에서 사용하는 두 표에 실제로 들어 있는 항목을 보고, 개봉 전에 알 수 있는 항목과 예측에 쓰면 안 되는 항목을 고릅니다. 교과서 106쪽이 태풍의 진로를 예측하는 데 필요한 데이터를 묻는 것과 같은 물음을 영화로 옮긴 것입니다.</p>
+  </div>
+  <p>수업용 일별 데이터는 어제까지 쌓인 박스오피스 상위 10위 기록이고, 영화별 표는 그 기간에 10위 안에 든 영화를 한 줄씩 정리한 것입니다. <b>개봉 전에 흥행을 예측하려면 어떤 정보가 필요한가</b>를 생각하며 아래 표를 확인합니다.</p>
+  <p><b>수업 데이터의 한계:</b> 파일의 first_scrn과 first_show는 개봉 전 계획값이 아니라, 일별 데이터에서 각 영화가 10위권에 처음 등장한 날의 집계값과 일치합니다. 개봉일과 첫 관측일이 다른 영화도 적지 않습니다. 따라서 아래에서는 이를 <b>기본 변수</b>라고 부르며 교육용 비교에 사용합니다. 이 데이터로 얻은 점수를 실제 개봉 전 예측 성능으로 해석해서는 안 됩니다. 실제 서비스를 만들려면 예측 시점에 확보한 데이터로 다시 검증해야 합니다.</p>
+  <h3>이 값은 언제 알 수 있는가</h3>
+  <table class="daymap">
+    <thead><tr><th>속성</th><th>알 수 있는 시점</th><th>개봉 전 예측</th><th>첫 주 뒤 예측</th></tr></thead>
+    <tbody>
+      <tr><td>첫 관측일 스크린 수 · 상영 횟수</td><td>10위권에 처음 든 날</td><td><b>쓸 수 없음</b></td><td>쓸 수 있음</td></tr>
+      <tr><td>성수기 개봉</td><td>개봉일이 정해지면</td><td>쓸 수 있음</td><td>쓸 수 있음</td></tr>
+      <tr><td>장르 · 국가</td><td>개봉 전</td><td>쓸 수 있음</td><td>쓸 수 있음</td></tr>
+      <tr><td>첫 주 관객 수</td><td>개봉 7일 뒤</td><td><b>쓸 수 없음</b></td><td>쓸 수 있음</td></tr>
+      <tr><td>톱10에 머문 일수</td><td>상영이 끝난 뒤</td><td><b>쓸 수 없음</b></td><td><b>쓸 수 없음</b></td></tr>
+    </tbody>
+  </table>
+  <p>같은 표를 놓고도 언제 예측하느냐에 따라 쓸 수 있는 속성이 달라집니다. 속성을 고르기 전에 예측 시점부터 정해야 하는 이유입니다.</p>
+  <p>표를 보면 이번 실습에서 <b>개봉 전 예측에 쓸 수 있는 속성은 성수기 개봉 하나뿐</b>입니다. 우리가 기본 변수로 쓰는 스크린 수와 상영 횟수는 개봉 전 계획값이 아니라 <b>10위권에 처음 든 날 집계된 값</b>이기 때문입니다. 그래서 이번에 만드는 모델은 개봉 전 예측이 아니라 <b>첫 관측일 집계가 끝난 뒤의 예측</b>입니다. 점수를 적을 때 이 조건을 함께 밝혀야 합니다.</p>
+
+  <h2>2. 개념 이해 — 직선에서 평면으로</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 128쪽</span></div>
+    <p class="q">"다중 선형 회귀(multiple linear regression)는 영향을 미치는 요인이 여러 개인 경우에 종속 변수를 설명하기 위해 여러 개의 독립 변수를 이용하는 회귀 분석이다." <span class="src">(128쪽)</span></p>
+    <p class="t">→ 독립 변수가 여러 개면 다중 회귀이다.</p>
+  </div>
+
+  <div class="callout theory">
+    <div class="h">🧩 속성과 feature — 같은 것을 부르는 두 이름</div>
+    <p class="q">"선형 회귀는 두 가지 이상의 <b>속성</b> 사이에 선 모양의 관계가 있다고 가정하고 데이터를 가장 잘 대표하는 선을 찾는 분석 방법이다." <span class="src">(교과서 119쪽)</span></p>
+    <p>표의 한 열, 그러니까 영화 한 편에 대해 우리가 아는 항목 하나를 <b>속성</b>이라고 합니다. 스크린 수, 장르, 개봉일이 모두 속성입니다. 영어로는 <b>feature</b>라 하고, 코드와 라이브러리 설명서에는 이 말이 그대로 나옵니다. 교과서와 이 교재는 <b>속성</b>으로 쓰고, 코드 안에서는 feature를 만나게 됩니다. 둘은 같은 것을 가리킵니다.</p>
+    <p>예측에 쓰는 속성을 <b>독립 변수</b>, 예측하려는 값을 <b>종속 변수</b>라고 부릅니다. 오늘 종속 변수는 총 관객 수 하나이고, 독립 변수는 우리가 고릅니다.</p>
+  </div>
+
+  <p>속성이 하나면 예측은 직선입니다. 속성을 하나 더 넣으면 축이 하나 늘어나고, 직선은 <b>평면</b>이 됩니다. 실제 영화로 확인합니다.</p>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 설명 <span class="src">『데이터 과학』 128쪽</span></div>
+    <p class="q">"독립 변수가 두 개인 경우, y값을 가장 잘 설명하는 x<sub>1</sub>과 x<sub>2</sub>의 평면을 찾으면 된다. 따라서 단순 선형 회귀(simple linear regression)의 회귀식은 직선 형태를 띠지만, 다중 선형 회귀의 회귀식은 3차원 이상의 공간에 그려진다." <span class="src">(128쪽)</span></p>
+    <p class="t">→ 교과서 128쪽의 그림Ⅲ-11(직선)과 그림Ⅲ-12(평면)가 이 장면입니다. 아래에서는 같은 장면을 실제 영화 데이터로 만들어 직접 돌려 봅니다.</p>
+  </div>
+  <figure class="interactive" data-fig="plane3d">
+    <div class="widget" data-w="plane3d">
+      <div class="plot" style="width:100%;min-height:380px"></div>
+      <div class="wctl">
+        <button class="wbtn on" type="button" data-act="one" aria-pressed="true">속성 하나</button>
+        <button class="wbtn" type="button" data-act="two" aria-pressed="false">속성 둘</button>
+        <span class="wout" data-t="out"></span>
+      </div>
+    </div>
+    <figcaption><b>속성 하나</b>는 첫 관측일 스크린수만으로 예측한 직선이고, <b>속성 둘</b>은 배우 수 축을 더해 만든 평면입니다. 평면은 마우스로 끌어 자유롭게 돌려 볼 수 있습니다. 점에 마우스를 올리면 영화 이름이 나옵니다. 그림에 담기도록 스크린 100~1,600관·배우 2~20명·총 관객 3~340만 명인 77편만 그렸습니다. 앱에서 전체 영화로 학습하면 값이 달라집니다.</figcaption>
+  </figure>
+
+  <p>단순 선형회귀는 독립 변수 하나로 예측합니다. 다중 선형회귀는 여러 독립 변수에 각각 가중치를 곱한 뒤 더하고, 편향을 더해 예측합니다. 6차시에서 직선을 읽던 기울기가 여기서는 변수마다 하나씩 붙으며, 교과서는 이것을 가중치라고 부릅니다(119쪽). 독립 변수가 둘이면 관계를 평면으로 나타낼 수 있습니다. 가중치는 다른 변수의 값이 같을 때 해당 변수가 1 증가하면 예측값이 얼마나 달라지는지를 나타냅니다. 스크린 수와 상영 횟수가 같은 두 영화가 있고 한쪽의 배우가 한 명 더 많다면, 두 영화의 예측값 차이가 배우 수의 가중치입니다. <b>변수의 단위가 다르면 가중치 크기만으로 중요도를 비교할 수 없습니다.</b></p>
+  <h3>점수는 테스트용 데이터로 평가한다</h3>
+  <p>학습에 쓰지 않은 영화를 미리 떼어 두고, 그 <b>테스트용 데이터</b>로 점수를 계산합니다. 변수 조합을 비교할 때는 같은 분할을 사용합니다. 학습에 쓴 영화로 점수를 계산하면 그 영화를 외워서 맞힌 것인지 알 수 없기 때문입니다.</p>
+  <div style="overflow-x:auto;margin:18px 0">
+    <svg viewBox="0 0 720 204" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화를 코드 순으로 정렬해 10편마다 3편을 테스트로 떼어 두고, 나머지로 가중치를 학습한 뒤 떼어 둔 영화로 점수를 평가하는 구조">
+      <defs>
+        <marker id="arGold8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f4b400"/></marker>
+        <marker id="arTeal8" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#3ba6a0"/></marker>
+        <g id="blk8">
+          <rect x="0" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="10" y="0" width="9" height="24" fill="#3ba6a0"/><rect x="20" y="0" width="9" height="24" fill="#3ba6a0"/>
+          <rect x="30" y="0" width="9" height="24" fill="#f4b400"/><rect x="40" y="0" width="9" height="24" fill="#f4b400"/><rect x="50" y="0" width="9" height="24" fill="#f4b400"/><rect x="60" y="0" width="9" height="24" fill="#f4b400"/><rect x="70" y="0" width="9" height="24" fill="#f4b400"/><rect x="80" y="0" width="9" height="24" fill="#f4b400"/><rect x="90" y="0" width="9" height="24" fill="#f4b400"/>
+        </g>
+      </defs>
+      <text x="20" y="20" font-size="12.5" font-weight="800" fill="#2b2d3a">분석 대상 전체 · 영화 코드 순 정렬</text>
+      <use href="#blk8" x="20" y="30"/><use href="#blk8" x="128" y="30"/><use href="#blk8" x="236" y="30"/><use href="#blk8" x="344" y="30"/><use href="#blk8" x="452" y="30"/><use href="#blk8" x="560" y="30"/>
+      <text x="674" y="48" font-size="15" font-weight="800" fill="#7a7f95">…</text>
+      <rect x="20" y="72" width="13" height="13" fill="#3ba6a0"/>
+      <text x="40" y="83" font-size="12" fill="#2b2d3a">테스트 — 학습에 쓰지 않음</text>
+      <rect x="256" y="72" width="13" height="13" fill="#f4b400"/>
+      <text x="276" y="83" font-size="12" fill="#2b2d3a">학습에 사용</text>
+      <text x="20" y="123" font-size="12.5" font-weight="800" fill="#2b2d3a">학습에 사용</text>
+      <line x1="112" y1="118" x2="180" y2="118" stroke="#f4b400" stroke-width="2.5" marker-end="url(#arGold8)"/>
+      <rect x="188" y="102" width="168" height="32" rx="8" fill="#fff8e6" stroke="#f4b400"/>
+      <text x="272" y="123" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">모델 — 가중치 학습</text>
+      <text x="20" y="163" font-size="12.5" font-weight="800" fill="#2b2d3a">점수 매기기</text>
+      <line x1="112" y1="158" x2="180" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
+      <rect x="188" y="142" width="190" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
+      <text x="283" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">처음 보는 영화로 예측</text>
+      <line x1="384" y1="158" x2="414" y2="158" stroke="#3ba6a0" stroke-width="2.5" marker-end="url(#arTeal8)"/>
+      <rect x="420" y="142" width="104" height="32" rx="8" fill="#eef7f6" stroke="#3ba6a0"/>
+      <text x="472" y="163" text-anchor="middle" font-size="12.5" font-weight="800" fill="#2b2d3a">점수(R²)</text>
+    </svg>
+  </div>
+
+  <h2>3. 속성 만들기 — 성수기를 0과 1로 바꾼다</h2>
+  <p>다음 절에서 만들 예측기에는 <b>기본 변수 세 가지</b>를 넣습니다. 첫 관측일 스크린 수와 상영 횟수는 표에 그대로 들어 있지만, 나머지 하나인 <b>성수기 개봉</b>은 개봉일에서 만들어 낸 속성입니다. 이렇게 없는 속성을 만들어 쓰기도 하며, 새 속성은 상상으로 만드는 것이 아니라 <b>가진 데이터를 그려 보고 눈에 띄는 규칙에서</b> 나옵니다.</p>
+
+  <div class="callout theory">
+    <div class="h">🎬 성수기 — 관객이 몰리는 시기</div>
+    <p>영화계에서 <b>성수기</b>는 관객이 몰리는 시기를 뜻합니다. 배급사는 기대작을 이 시기에 맞춰 개봉시키고, 그만큼 상영관도 많이 잡습니다. 어느 달이 성수기인지는 짐작하지 말고 그려서 확인합니다.</p>
+    <p>아래는 2004년부터 2026년까지 주간 10위권에 든 영화 3,789편을 개봉월별로 모아 중앙값을 그린 것입니다.</p>
+  </div>
+
+  <figure class="interactive" data-fig="monthlong">
+    <div class="widget" data-w="monthlong">
+      <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="개봉월별 최종 관객 수 중앙값 막대그래프. 12·1·7·8월이 전체 중앙값 위로 뚜렷하게 솟아 있고, 방학이 낀 2월은 전체 중앙값 아래에 있습니다.">
+        <text x="30" y="24" font-size="13.5" font-weight="800" fill="#2b2d3a">개봉월별 최종 관객 수의 중앙값</text>
+        <line data-dyn="base" stroke="#e45756" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text data-t="base" x="700" y="0" text-anchor="end" font-size="12" fill="#e45756"></text>
+        <g data-dyn="bars"></g>
+        <g data-dyn="labs"></g>
+        <text x="30" y="288" font-size="11" fill="#7a7f95">2004~2026년 주간 10위권 진입작 3,789편 · 전체 영화가 아니라 10위권에 든 영화의 중앙값입니다</text>
+      </svg>
+      <div class="wctl">
+        <span class="wout" data-t="out"></span>
+      </div>
+    </div>
+    <figcaption>파란 막대 <b>12·1·7·8월</b>이 전체 중앙값 위로 뚜렷하게 솟아 있습니다. 이 네 달을 성수기로 잡습니다. 방학인 2월이 여기에 들지 않는 것도 그림에서 확인할 수 있습니다. 이 그림은 2004년부터 2026년까지 주간 10위권에 든 3,789편을 따로 집계한 것으로, 실습에서 사용하는 영화별 표와는 다른 데이터입니다. 2004년부터 2026년까지의 기록이라 날마다 갱신되지 않습니다.</figcaption>
+  </figure>
+
+  <figure class="interactive" data-fig="newcol">
+    <div style="overflow-x:auto">
+      <svg viewBox="0 0 720 176" style="min-width:640px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화와 개봉일만 있던 표에서 개봉일에서 월을 뽑아 새 열로 만들고, 그 월이 12·1·7·8월이면 1 아니면 0인 성수기 열을 다시 만드는 세 단계 그림">
+        <defs><marker id="arF" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+          <path d="M0 0 L7 3.5 L0 7 z" fill="#e8930c"/></marker></defs>
+      <text x="14" y="22" font-size="12.5" font-weight="800" fill="#7a7f95">① 원래 표</text>
+      <rect x="14" y="32" width="116" height="24" fill="#eef0f4" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="72.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">영화</text>
+      <rect x="14" y="56" width="116" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="72.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">아바타: 불과 재</text>
+      <rect x="14" y="80" width="116" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="72.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">살목지</text>
+      <rect x="14" y="104" width="116" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="72.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">오디세이</text>
+      <rect x="14" y="128" width="116" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="72.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">프로젝트 헤일메리</text>
+      <rect x="130" y="32" width="84" height="24" fill="#eef0f4" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="172.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">개봉일</text>
+      <rect x="130" y="56" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="172.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2025-12-17</text>
+      <rect x="130" y="80" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="172.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-04-08</text>
+      <rect x="130" y="104" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="172.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-08-05</text>
+      <rect x="130" y="128" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="172.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-03-18</text>
+      <path d="M216 92 L242 92" stroke="#e8930c" stroke-width="2" marker-end="url(#arF)"/><text x="229" y="82" text-anchor="middle" font-size="11" fill="#e8930c" font-weight="800">뽑아낸다</text>
+      <text x="258" y="22" font-size="12.5" font-weight="800" fill="#7a7f95">② 월을 뽑는다</text>
+      <rect x="258" y="32" width="84" height="24" fill="#eef0f4" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="300.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">개봉일</text>
+      <rect x="258" y="56" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="300.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2025-12-17</text>
+      <rect x="258" y="80" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="300.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-04-08</text>
+      <rect x="258" y="104" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="300.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-08-05</text>
+      <rect x="258" y="128" width="84" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="300.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">2026-03-18</text>
+      <rect x="342" y="32" width="42" height="24" fill="#2b7fd6" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="363.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">월</text>
+      <rect x="342" y="56" width="42" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="363.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">12월</text>
+      <rect x="342" y="80" width="42" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="363.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">4월</text>
+      <rect x="342" y="104" width="42" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="363.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">8월</text>
+      <rect x="342" y="128" width="42" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="363.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">3월</text>
+      <path d="M410 92 L436 92" stroke="#e8930c" stroke-width="2" marker-end="url(#arF)"/><text x="423" y="82" text-anchor="middle" font-size="11" fill="#e8930c" font-weight="800">0과 1로</text>
+      <text x="452" y="22" font-size="12.5" font-weight="800" fill="#7a7f95">③ 성수기로 바꾼다</text>
+      <rect x="452" y="32" width="42" height="24" fill="#eef0f4" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="473.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#3a2e1a">월</text>
+      <rect x="452" y="56" width="42" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="473.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">12월</text>
+      <rect x="452" y="80" width="42" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="473.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">4월</text>
+      <rect x="452" y="104" width="42" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="473.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">8월</text>
+      <rect x="452" y="128" width="42" height="24" fill="#fff" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="473.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="400">3월</text>
+      <rect x="494" y="32" width="54" height="24" fill="#2b7fd6" stroke="#c9c2b2" stroke-width="0.8"/>
+      <text x="521.0" y="49" text-anchor="middle" font-size="12" font-weight="800" fill="#fff">성수기</text>
+      <rect x="494" y="56" width="54" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="521.0" y="72" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">1</text>
+      <rect x="494" y="80" width="54" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="521.0" y="96" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">0</text>
+      <rect x="494" y="104" width="54" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="521.0" y="120" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">1</text>
+      <rect x="494" y="128" width="54" height="24" fill="#eaf2fc" stroke="#e3ddcf" stroke-width="0.8"/>
+      <text x="521.0" y="144" text-anchor="middle" font-size="11.5" fill="#1c2230" font-weight="800">0</text>
+        <text x="14" y="170" font-size="11" fill="#7a7f95">열이 두 번 늘었지만 새로 조사한 값은 없습니다. 개봉일 하나를 두 번 가공한 결과입니다.</text>
+      </svg>
+    </div>
+    <figcaption>원래 표에 있는 열은 <b>개봉일</b> 하나입니다. 거기서 <b>월</b>을 뽑아 열을 하나 만들고, 그 월이 12·1·7·8월이면 1 아니면 0인 <b>성수기</b> 열을 다시 만듭니다. 새 속성은 없던 정보를 가져오는 것이 아니라 <b>이미 있는 열의 데이터를 가공해서 만들어 내는 것</b>입니다.</figcaption>
+  </figure>
+
+  <div class="callout theory">
+    <div class="h">📌 성수기 속성 만들기</div>
+    <p>그림에서 중앙값이 높은 달을 확인했습니다. 이제 <b>개봉일에서 월을 뽑고</b>, 그 월이 <b>12·1·7·8월이면 1, 아니면 0</b>을 적는 새 열을 만듭니다. 이렇게 만든 열이 <b>성수기</b> 속성입니다. 새로 조사한 값은 하나도 없고 <b>이미 있는 개봉일 열을 두 번 가공한 결과</b>입니다.</p>
+    <p>성수기냐 아니냐처럼 수의 크기가 아니라 갈래를 나타내는 속성을 <b>범주형 속성</b>이라고 합니다. 회귀는 수를 계산하므로 범주형 속성은 이렇게 0과 1로 바꾸어 넣습니다.</p>
+  </div>
+  <p>성수기 속성은 이미 우리 표에 들어 있습니다. 다음 절에서 만드는 앱에서 이 속성을 켜고 끄며 점수가 어떻게 달라지는지 확인합니다. 데이터를 그려 규칙을 찾고, 그 규칙을 새 열로 만들어 모델에 주는 일을 <b>속성 만들기</b>라고 합니다.</p>
+  <div class="callout mini">
+    <div class="h">📖 교과서와 이어지는 대목</div>
+    <p>교과서 142쪽 탐구활동 「데이터를 바탕으로 예측하기」는 예측할 속성을 정하고, 시각화로 사용할 속성을 찾고, 성능을 확인한 뒤 개선 방법까지 적게 합니다. 지금 3절에서 하는 일이 그 절차와 같습니다.</p>
+  </div>
+  <h3>프롬프트로 새 속성 만들기</h3>
+  <p>새 속성은 코드를 직접 고치지 않아도 만들 수 있습니다. 무엇을 어떻게 만들지 말로 적으면 됩니다. 아래 ③ 요청이 그 예입니다.</p>
+  <p>요청에는 네 가지가 들어 있어야 합니다. 무엇으로 만드는지, 그 값이 무엇을 뜻하는지, 무엇과 비교할지, 조건은 무엇을 유지할지입니다. 이 네 가지가 빠지면 AI가 다른 것을 만들거나 비교가 어긋납니다.</p>
+  <div class="callout ask">
+    <div class="h">❓ 만들고 나서 확인할 것</div>
+    <ul>
+      <li>새 속성을 넣으니 R²와 평균 오차가 어떻게 달라졌습니까? 두 지표가 같은 방향으로 움직였습니까?</li>
+      <li>이 속성은 언제 알 수 있는 값입니까? 개봉 전 예측에도 사용할 수 있습니까?</li>
+      <li>점수가 올랐다면, 그 이유를 한 문장으로 설명할 수 있습니까?</li>
+    </ul>
+  </div>
+
+  <h2>4. 실습 — 총 관객 수 예측기 (바이브 코딩)</h2>
+  <div class="callout tip">
+    <div class="h">🎟️ 우리는 DGV 극장의 데이터 과학 인턴입니다</div>
+    <p>DGV는 이 수업에서만 쓰는 가상의 영화사입니다(DG는 당곡입니다). 분석에 쓰는 흥행 기록은 <b>영화진흥위원회의 실제 데이터</b>입니다.</p>
+    <p>극장은 영화 한 편에 상영관을 몇 개 잡을지 정해야 합니다. 그러려면 먼저 <b>몇 명이 올지</b>를 예측해야 합니다. 오늘 만드는 것이 그 예측기입니다.</p>
+    <p>인턴은 예측값만 보고하지 않습니다. <b>어떤 속성을 넣었는지, 그 값을 언제 알 수 있는지를 함께 보고합니다.</b> 다음 시간에는 이 예측이 얼마나 맞았는지를 확인합니다.</p>
+  </div>
+  <p>4차시에 살펴본 영화 데이터를 이용해 예측 앱을 새로 만듭니다. 이번에 쓰는 <b>기본 변수 세 가지</b>는 <b>첫 관측일 스크린 수</b>(그 영화를 튼 상영관 수), <b>첫 관측일 상영 횟수</b>(하루에 몇 번 틀었는지), <b>성수기 개봉 여부</b>(12·1·7·8월이면 1)입니다. 앞의 둘은 극장이 얼마나 밀어주었는지를, 뒤의 하나는 앞 절에서 만든 성수기 속성입니다. 먼저 이 셋의 조합을 바꾸어 결과를 비교하고, 첫 주 관객 수를 추가한 결과를 살펴봅니다. 데이터에 실제로 들어 있는 값과 개봉 전에 사용할 수 있는 값을 구분해 기록합니다. 변수를 켜기 전에 4차시에서 그린 스크린 수와 총 관객 수의 산점도를 떠올려 봅니다. 6차시처럼 먼저 그려 보고 관계가 있을 만한 것부터 켭니다.</p>
+  <div class="callout mini">
+    <div class="h">📦 오늘의 데이터</div>
+    <ul>
+      <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_daily.csv" target="_blank" rel="noopener"><code>kobis_daily.csv</code></a></b> — 어제까지의 일별 박스오피스 톱10 기록. 하루에 열 줄씩 쌓입니다</li>
+      <li><b><a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a></b> — 영화별 표. 개봉일·장르·국적이 결합되어 있고, 한 줄이 영화 한 편입니다</li>
+    </ul>
+    <p>앞서 살펴본 두 표를 예측의 재료로 사용합니다. 이 수업은 영화별 표에 기록된 <code>total_audi</code>를 예측 대상으로 삼습니다. 수집 기간과 상위 10위 기록에 제한된 데이터이므로, 모든 영화의 최종 흥행 성적을 완전하게 담았다고 가정해서는 안 됩니다.</p>
+  </div>
+
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"영화 흥행 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.
+영화 정보 표(kobis_movies.csv)로 영화의 총 관객 수를 예측하는
+다중 회귀 모델을 만들어 줘. 이 표는 박스오피스 데이터(kobis_daily.csv)를
+영화 한 편에 한 줄로 정리해 둔 것이야. 기간은 일별 표에서 읽어 화면에 적어 줘.
+어떤 변수를 쓸지는 내가 체크박스로 고를 수 있게 하고,
+학습에 쓰지 않은 영화로 평가한 점수와
+예측이 실제와 얼마나 빗나가는지도 함께 보여 줘.
+영화별 표를 영화코드 순으로 정렬한 다음, 열 편마다 앞의 세 편을 테스트용으로 떼어 놓고 나머지로 학습해 줘.
+영화별 표에 있는 영화를 모두 사용해 줘.
+학습에 쓴 영화 편수와 점수를 평가한 영화 편수, 기준 기간을 화면에 적어 줘.
+영화별 표의 맨 위 열 줄도 그대로 화면에 보여 줘.
+테스트용 영화의 실제 총 관객 수를 가로축, 예측한 총 관객 수를 세로축에 둔 산점도를 그리고,
+실젯값과 예측값이 같은 점을 잇는 대각선도 함께 표시해 줘.
+관객 수는 편차가 크니 두 축을 로그로 그려 줘.
+예측이 1,000명보다 작게 나온 영화는 그래프 바닥에 붙여 표시하고 몇 편인지 적어 줘.
+그래프는 plotly로 그려 줘.
+두 표는 이 주소에서 불러와. 영화코드(movieCd) 열이 같은 영화를 가리켜. 두 파일 모두 인코딩은 UTF-8이야.
+- https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv
+  (열: 날짜(여덟 자리 숫자)·순위·영화코드·영화명·일관객·누적관객·스크린수·상영횟수)
+- https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
+  (열: movieCd(영화코드)·movieNm(영화명)·openDt(개봉일)·genre(장르)·nation(국가)·
+   first_scrn(첫 관측일 스크린수)·first_show(첫 관측일 상영횟수)·first_date(10위권 첫 등장일)·
+   peak(성수기 개봉이면 1, 아니면 0 — 12·1·7·8월이 성수기)·
+   first_week_audi(첫 주 관객)·total_audi(총 관객)·days_in_top10)
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 여러 변수로 총 관객을 예측한다
+import streamlit as st
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score, mean_absolute_error
+
+DAILY = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_daily.csv"
+MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+
+st.header("영화 흥행 예측")
+st.caption("사후 집계 데이터를 사용한 교육용 비교입니다. 실제 개봉 전 예측 성능을 뜻하지 않습니다.")
+
+@st.cache_data
+def load_data():
+    daily = pd.read_csv(DAILY, dtype={"영화코드": str})
+    movies = pd.read_csv(MOVIES, dtype={"movieCd": str})
+    # 영화별 표는 일별 표에서 만들어진다. 두 표를 잇는 열은 영화코드다.
+    return daily, movies
+
+daily, movies = load_data()
+df = movies.sort_values("movieCd").reset_index(drop=True)
+# 열 편 중 앞 세 편을 테스트용으로 떼어 둔다 (누가 해도 같은 결과가 나오도록)
+is_test = df.index % 10 &lt; 3
+train, test = df[~is_test], df[is_test]
+st.caption(f"훈련용 {len(train)}편 · 테스트용 {len(test)}편 · 전체 {len(df)}편")
+st.caption(f"기준 기간 {daily['날짜'].min()} ~ {daily['날짜'].max()} · 박스오피스 상위 10위 기록")
+st.dataframe(df.head(10))   # 표의 맨 위 열 줄
+
+기본 = {"첫 관측일 스크린수": "first_scrn", "첫 관측일 상영횟수": "first_show", "성수기 개봉": "peak"}
+추가 = {"첫 주 관객": "first_week_audi"}
+
+st.subheader("변수 고르기")
+picked = [col for name, col in {**기본, **추가}.items() if st.checkbox(name, value=col in 기본.values())]
+if not picked:
+    st.warning("변수를 하나 이상 골라 주세요.")
+    st.stop()
+
+model = LinearRegression().fit(train[picked], train["total_audi"])
+pred = model.predict(test[picked])
+c1, c2 = st.columns(2)
+c1.metric("테스트용 데이터로 평가한 점수 (R²)", f"{r2_score(test['total_audi'], pred):.3f}")
+c2.metric("평균 오차", f"{mean_absolute_error(test['total_audi'], pred):,.0f}명")
+
+import plotly.express as px
+
+바닥 = 1000
+표시 = pd.DataFrame({"실제": test["total_audi"].values, "예측": pred})
+표시["예측(표시용)"] = 표시["예측"].clip(lower=바닥)   # 음수 예측도 그래프 바닥에 남긴다
+fig = px.scatter(표시, x="실제", y="예측(표시용)", log_x=True, log_y=True,
+                 labels={"실제": "실제 총 관객 수", "예측(표시용)": "예측 총 관객 수"})
+끝 = [표시["실제"].min(), 표시["실제"].max()]
+fig.add_shape(type="line", x0=끝[0], y0=끝[0], x1=끝[1], y1=끝[1], line=dict(dash="dash"))
+st.plotly_chart(fig, use_container_width=True)
+
+낮음 = int((표시["예측"] &lt; 바닥).sum())
+if 낮음:
+    st.caption(f"예측이 1,000명보다 작게 나온 영화 {낮음}편은 그래프 바닥에 표시했습니다. 회귀는 음수도 예측합니다.")</pre></div><div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+scikit-learn
+plotly</pre></div></details>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 변수를 바꿔 가며 점수를 읽는다</span><br>
+      받은 코드를 <b>main.py</b> 파일 하나로 저장해 실행합니다. 화면 맨 위에는 표의 맨 위 열 줄이 나옵니다. 점수를 읽기 전에 이 열 줄을 살펴보고, 값이 이상해 보이는 열이 있는지 먼저 적어 봅니다. 그 아래에 예측 점수가 표시됩니다. 이 점수는 결정계수(R²)라는 값으로, 지금은 "1에 가까울수록 예측이 잘 맞는다" 정도로만 읽습니다(계산법은 8차시에 살펴봅니다). 첫 관측일 스크린 수 하나만 켜 보고, 변수를 하나씩 더하며 점수가 어떻게 움직이는지 기록합니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 변수의 출처를 나눠서 비교한다</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>기본 변수 세 가지를 쓴 경우와 첫 주 관객 수까지 추가한 경우의 예측 점수를 나란히 보여 줘.
+이 데이터는 사후 집계값이므로 실제 개봉 전 예측 성능이 아니라는 안내도 표시해 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 기본 변수와 첫 주 관객 수 추가 비교
+st.subheader("기본 변수만 vs 첫 주 관객 추가")
+결과 = []
+for 이름, 변수 in [("기본 변수만", list(기본.values())),
+                ("첫 주 관객 추가", list(기본.values()) + list(추가.values()))]:
+    m = LinearRegression().fit(train[변수], train["total_audi"])
+    결과.append({"쓴 변수": 이름, "R²": round(r2_score(test["total_audi"], m.predict(test[변수])), 3)})
+st.dataframe(pd.DataFrame(결과), hide_index=True)
+st.caption("사후 집계값을 사용한 교육용 비교입니다. 실제 개봉 전 예측 성능을 뜻하지 않습니다.")</pre></div></details>
+    </li>
+  </ol>
+
+  <div class="callout tip">
+    <div class="h">💡 프롬프트가 하는 일과 내가 하는 일</div>
+    <p>AI를 활용해 표를 결합하고 모델을 학습하는 코드를 작성합니다. 사용할 데이터, 변수, 평가 조건은 우리가 정합니다. 생성된 코드가 요구 사항을 지키는지 확인하고, 점수를 해석하는 일도 필요합니다.</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">✍️ 화면에 보이는 숫자 적기</div>
+    <p>같은 데이터라도 어떤 변수를 넣느냐에 따라 점수가 달라집니다. 점수 하나만 적으면 나중에 무엇으로 얻은 값인지 알 수 없습니다. 공책에 그대로 옮겨 적어 두면 다음 차시에서 같은 질문을 다시 만날 때 도움이 됩니다.</p>
+    <ol class="steps">
+      <li>학습에 쓴 영화 편수와 점수를 평가한 영화 편수</li>
+      <li>내가 고른 변수 조합과 그때 나온 점수.</li>
+      <li>변수를 하나 바꿨을 때 점수가 오르는지 내리는지.</li>
+    </ol>
+  </div>
+  <div class="situation" data-sit="s01-parity-read">
+    <div class="sit-h"><span class="num">상황 1</span><span class="t">실젯값과 예측값의 대각선 비교</span></div>
+    <p class="intuition">실습 화면의 산점도를 그대로 읽습니다. 가로축은 실제 관객 수, 세로축은 모델이 예측한 관객 수이고, 대각선은 두 값이 같은 곳입니다.</p>
+    <div class="plot"><img src="img/lesson07_sit_s01-parity-read.png" alt="실젯값과 예측값의 대각선 비교"></div>
+    <ul class="reading"><li>대각선보다 위에 있는 점은 어떤 영화입니까? 아래에 있는 점은 어떤 영화입니까?</li><li>점이 대각선 양쪽에 고르게 흩어져 있습니까, 한쪽으로 몰려 있습니까? 몰려 있다면 그 모델은 무엇을 잘못 배운 것입니까?</li><li>가장 크게 빗나간 영화 몇 편이 평균 오차를 얼마나 끌어올리고 있습니까? 평균 오차 하나만 보고 모델을 평가해도 됩니까?</li></ul>
+    <details class="try"><summary>내 앱에서 직접 실험하기 — 프롬프트</summary>
+      <div class="codewrap"><span class="label">실험 프롬프트</span><button class="copy-btn">복사</button><pre>지금 화면에 있는 산점도를 조금 더 자세히 읽고 싶어. 테스트용 영화 가운데 점이 대각선보다 아래에 있는 영화와 위에 있는 영화가 각각 몇 편인지 세어서 그래프 옆에 적어 줘. 예측이 음수로 나온 영화가 몇 편이고 가장 작은 예측값이 몇 명인지도 적어 줘. 그리고 실제 총 관객 수에서 예측값을 뺀 오차를 구해서 절댓값이 큰 여덟 편을 가로 막대그래프로 따로 그려 줘. 0을 가운데 두고 실제가 더 많았던 영화는 오른쪽, 예측이 더 많았던 영화는 왼쪽으로 뻗게 하고 두 방향의 색을 다르게 해 줘. 막대마다 영화 이름과 그 영화의 첫 관측일 스크린 수를 함께 적어 줘. 여덟 편의 절대오차 합이 테스트용 영화 전체 절대오차 합의 몇 퍼센트인지도 계산해서 적어 줘. 그래프는 plotly로 그려 줘. 훈련용과 테스트용 나누기는 앞과 똑같이 해 줘.</pre></div>
+    </details>
+  </div>
+
+
+  <h2>5. 결과 읽기 — 모델을 평가하는 지표</h2>
+  <p>앱은 변수 조합마다 두 숫자를 보여 줍니다. 하나는 <b>R²</b>, 다른 하나는 <b>평균 오차</b>입니다. 두 숫자가 무엇을 나타내는지 알아야 조합을 비교할 수 있습니다. 2절에서 정한 대로 모든 조합에 같은 분할을 사용하므로, 조합끼리는 공정하게 비교됩니다.</p>
+  <div class="callout theory">
+    <div class="h">📏 결정계수 R² — 무엇과 비교해서 잘한 것인가</div>
+    <p>예측이 얼마나 맞았는지 평가하려면 비교 대상이 있어야 합니다. R²가 잡는 비교 대상은 <b>아무 정보도 쓰지 않고 언제나 평균만 답하는 모델</b>입니다. 모든 영화에 "평균 관객 수만큼 들 것"이라고 답하는 모델보다 내 모델이 얼마나 덜 틀렸는지를 비율로 나타낸 값이 R²입니다.</p>
+    <p class="t">R² = 1 − (내 모델의 오차 제곱합 ÷ 평균만 답했을 때의 오차 제곱합)</p>
+    <ul>
+      <li><b>1</b> — 모든 영화를 정확히 맞힘. 오차가 0입니다.</li>
+      <li><b>0</b> — 평균만 답하는 모델과 똑같은 정도. 변수를 쓴 보람이 없습니다.</li>
+      <li><b>음수</b> — 평균만 답하는 것보다 더 틀림. 점수는 0 아래로도 내려갑니다.</li>
+    </ul>
+    <p class="q">"결정 계수가 0에 가깝다면 회귀 모델이 데이터의 평균을 맞추는 정도로 예측했고, 회귀 모델의 유의미성이 떨어진다는 뜻이다." <span class="src">(교과서 132쪽)</span></p>
+    <p>오늘은 이 값이 무엇을 나타내는지까지 알아 두고, 손으로 계산해 확인하는 일은 8차시에서 합니다.</p>
+  </div>
+  
+  <figure class="interactive" data-fig="r2meaning">
+    <div class="widget" data-w="r2meaning">
+  <div style="overflow-x:auto">
+  <svg viewBox="0 0 720 336" style="min-width:660px">
+    <text x="10" y="30" font-size="13" fill="#6b7385">총 관객 수(만 명)</text>
+    <text x="242" y="294" font-size="13" text-anchor="middle" fill="#6b7385">첫 주 관객 수(만 명)</text>
+    <g class="grid"></g>
+    <g class="lines"></g>
+    <g class="marks"></g>
+    <g class="labels"></g>
+    <line x1="446" y1="26" x2="446" y2="288" stroke="#e3ddcf"/>
+    <text x="460" y="40" font-size="14" fill="#6b7385">결정계수 R²</text>
+    <text class="r2val" x="460" y="78" font-size="26" font-weight="700" fill="#1c2230">0.00</text>
+    <text class="why1" x="460" y="106" font-size="14" fill="#1c2230"></text>
+    <text class="why2" x="460" y="128" font-size="14" fill="#1c2230"></text>
+    <text x="460" y="162" font-size="13" fill="#1c2230">내 모델의 오차 제곱합</text>
+    <rect class="bar1" x="460" y="168" width="0" height="16" fill="#d64545"/>
+    <text class="bar1v" x="466" y="181" font-size="12" fill="#6b7385"></text>
+    <text x="460" y="212" font-size="13" fill="#1c2230">평균만 예측했을 때의 오차 제곱합</text>
+    <rect class="bar2" x="460" y="218" width="0" height="16" fill="#b9b3a5"/>
+    <text class="bar2v" x="466" y="231" font-size="12" fill="#6b7385"></text>
+    <text x="460" y="256" font-size="12" fill="#6b7385">단위: (만 명)²</text>
+    <text class="ratio" x="460" y="278" font-size="13" fill="#1c2230"></text>
+    <text x="14" y="322" font-size="13" fill="#6b7385">R² = 1 − (내 모델의 오차 제곱합 ÷ 평균만 예측했을 때의 오차 제곱합)</text>
+  </svg>
+  </div>
+  <div class="wctl">
+    <button class="wbtn" type="button" data-m="perfect">완벽한 예측</button>
+    <button class="wbtn on" type="button" data-m="fit">잘 맞는 직선</button>
+    <button class="wbtn" type="button" data-m="mean">평균만 예측</button>
+    <button class="wbtn" type="button" data-m="wrong">엉뚱한 직선</button>
+    <span class="wout"></span>
+  </div>
+</div>
+    <figcaption>버튼 넷을 차례로 누르면 같은 40편에 서로 다른 예측을 적용합니다. 빨간 선분이 길어질수록 빨간 막대가 회색 막대에 가까워지고, R²는 완벽한 예측에서 1.00, 평균만 예측에서 0.00, 엉뚱한 직선에서 음수가 됩니다.</figcaption>
+  </figure>
+
+  <div class="callout theory">
+    <div class="h">📏 오차를 크기로 나타내는 지표 — 평균절대오차(MAE)</div>
+    <p>R²는 비율이라 단위가 없습니다. "그래서 몇 명이나 틀렸나"에는 답하지 못합니다. 그 답을 주는 것이 오차를 크기로 나타내는 지표입니다.</p>
+    <ul>
+      <li><b>평균절대오차(MAE)</b> — 영화마다 실제 관객 수와 예측값의 차이를 절댓값으로 바꿔 평균한 값입니다. 단위는 명이고, 앱 화면의 평균 오차가 이 값입니다. 50만 명이면 한 편당 평균 50만 명쯤 빗나갔다는 뜻입니다.</li>
+    </ul>
+    <p>MAE와 R²는 서로 다른 것을 알려 줍니다. R²는 평균만 답하는 모델과 비교한 상대적 값이고, MAE는 실제로 얼마나 빗나갔는지의 크기입니다. 하나만 보면 판단이 한쪽으로 기웁니다. 두 지표를 손으로 계산하며 성질을 확인하는 일은 8차시에서 합니다.</p>
+  </div>
+
+  <table class="daymap">
+    <thead><tr><th>변수 조합</th><th>테스트 점수(R²)</th><th>평균 오차(명)</th></tr></thead>
+    <tbody>
+      <tr><td>첫 관측일 스크린 수만</td><td></td><td></td></tr>
+      <tr><td>기본 변수 세 가지<br><span class="mini">스크린 수 · 상영 횟수 · 성수기 개봉</span></td><td></td><td></td></tr>
+      <tr><td>기본 변수 + 첫 주 관객 수</td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <p class="mini">앱에서 변수를 켜고 끄며 화면의 숫자를 위 표에 적습니다. 데이터가 날마다 쌓이므로 값은 사람마다 다를 수 있습니다.</p>
+  <div class="callout ask">
+    <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
+    <ol>
+      <li>변수를 하나 쓸 때와 세 가지를 쓸 때, 테스트 점수는 어느 쪽이 높았습니까? 변수를 늘리면 점수가 반드시 오릅니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">예 — 정보가 늘어나므로 테스트 점수도 반드시 오른다</button><button class="opt" data-ok="1">아니요 — 관련이 적은 변수를 넣으면 테스트 점수는 떨어질 수 있다</button></div>
+          <div class="fb">학습에 사용한 데이터의 점수는 변수를 늘릴수록 올라가기 쉽지만, 떼어 둔 테스트용 데이터의 점수는 그렇지 않습니다.</div>
+        </div></div>
+      </li>
+      <li>첫 주 관객 수를 넣었을 때 점수는 얼마나 달라졌습니까? 그 점수를 <b>개봉 전 예측 결과</b>이라고 말할 수 있습니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">부를 수 있다 — 점수가 실제로 올랐으므로</button><button class="opt" data-ok="1">부를 수 없다 — 개봉 전에는 존재하지 않는 값을 사용했으므로</button></div>
+          <div class="fb">점수는 예측 시점에 확보한 정보로만 만들어야 합니다. 첫 주 관객 수를 넣은 점수는 개봉 첫 주가 끝난 뒤의 예측 결과입니다.</div>
+        </div></div>
+      </li>
+      <li>표에 적은 평균 오차는 몇 명입니까. 그 크기는 우리 표에 있는 영화들의 총 관객 수와 비교해 큰 편입니까.</li>
+      <li><b>첫 관측일 집계가 끝난 시점</b>에 실제로 사용할 수 있는 조합은 어느 것입니까? 그 조합의 점수를 보고 무엇을 결정하겠습니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt" data-ok="1">기본 변수 세 가지 — 첫 관측일 집계가 끝난 뒤에는 확보한 값이다</button><button class="opt">기본 변수 + 첫 주 관객 수 — 점수가 가장 높으므로</button><button class="opt">세 조합 모두 — 데이터 표에 들어 있는 값이므로</button></div>
+          <div class="fb">조합을 고르는 기준은 점수가 아니라 그 정보를 예측 시점에 알 수 있는지입니다. 표에 값이 들어 있다는 사실과 예측 시점에 알 수 있다는 사실은 다릅니다. 첫 주 관객 수는 개봉 7일 뒤에야 나오므로 이 시점에는 아직 없습니다. 개봉 전 예측이라면 이 셋 가운데 성수기 개봉만 남습니다.</div>
+        </div></div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">💡 그렇다면 높은 점수는 쓸모없는 숫자인가</div>
+    <p>예측 시점이 달라지면 사용할 수 있는 정보도 달라집니다. 개봉 첫 주의 집계가 끝난 뒤 전체 관객 수를 전망한다면, 그때 확정된 첫 주 관객 수는 사용할 수 있습니다. 다만 예측 시점에 확보한 데이터만 사용하고, 새로운 영화에서도 같은 방식으로 평가해야 합니다. 예측 시점에 알 수 없는 값이 변수로 들어가 점수를 부풀리는 일을 데이터 누수라고 하며, 10차시에서 자세히 다룹니다.</p>
+  </div>
+  <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
+  <h3>변수를 더한 예측, 그리고 그 예측으로 내린 결정</h3>
+  <p>여러 변수를 조합해 수치를 예측하는 모델은 실제 의사 결정 과정에서 널리 활용됩니다. 그러나 예측 시점에 확보할 수 있는 정보만 변수로 사용해야 한다는 원칙을 지키지 않으면 점수가 부풀려집니다. 다음 두 사례는 이러한 원칙이 실제 현장에서 어떻게 적용되거나 무시되었는지를 보여 줍니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>무엇을 예측·분류했나</th><th>이 차시 개념과의 연결</th></tr></thead>
+    <tbody><tr><td><b>구글의 영화 흥행 예측</b><br>2013<br><a href="https://ssl.gstatic.com/think/docs/quantifying-movie-magic_research-studies.pdf" target="_blank" rel="noopener">백서 원문</a></td><td>구글은 2013년 6월 백서 「Quantifying Movie Magic with Google Search」에서 2012년 개봉작 99편을 분석했다. 개봉 7일 전 검색 질의량 하나만 사용한 단순 회귀가 개봉 주말 흥행 수입 변동의 70%를 설명했다. 검색 광고 클릭 수·상영관 수·시리즈 여부를 더한 다중 회귀는 92%까지 올라갔다. 개봉 4주 전 시점에서도 예고편 검색량·시리즈 여부·계절성 세 변수로 94%를 보고했다.</td><td>변수 하나에서 넷으로 늘렸을 때의 점수 변화는 이 차시 실습에서 변수를 켜고 끄며 점수를 비교하는 활동과 같은 구조다. 구글이 개봉 7일 전 모델과 개봉 4주 전 모델을 따로 만든 것은 예측 시점에 확보한 정보만 변수로 사용할 수 있다는 이 차시의 기준과 이어진다.</td></tr></tbody>
+  </table>
+  <figure class="case"><img src="img/lesson07_case1.png" alt="개봉 7일 전 검색 질의량을 가로축, 개봉 주말 흥행 수입을 세로축에 둔 산점도. 회색 점들 위로 붉은 회귀 직선이 지나가고 오른쪽 위에 R 제곱 70퍼센트가 적혀 있습니다." loading="lazy" style="width:100%;height:auto"><figcaption class="src">출처: Google, 「Quantifying Movie Magic with Google Search」(2013) 그림 3 · 2012년 개봉작 99편 · 개봉 7일 전 검색량과 개봉 주말 흥행 수입 · R²=70%</figcaption></figure>
+  
+  <p>모델의 성능을 판단할 때는 점수의 크기보다 그 점수가 어느 시점의 정보로 나온 값인지를 먼저 확인합니다. 예측 시점에 실제로 확보할 수 있는 정보만으로 구성된 변수인지 검토해야 합니다.</p>
+  </div></details>
+
+  <h2>6. 도전 — 있는 열을 나누어 새 속성 만들기</h2>
+  <p>이번 도전에서는 <b>예측 시점을 해당 영화의 첫 관측일 집계가 끝난 뒤로 바꿉니다.</b> 첫 관측일은 수업 데이터에서 영화가 10위권에 처음 등장한 날입니다. 그날의 관객 수를 상영 횟수로 나누어 <b>상영당 관객 수</b>라는 속성을 만듭니다. 한 번 상영에 평균 몇 명이 관람했는지를 뜻하며, 좌석 수를 고려한 좌석 점유율과는 다릅니다. 이 값은 개봉 전 예측에 사용할 수 없습니다.</p>
+  <p><b>먼저 그려 봅니다.</b> 새 열을 모델에 넣기 전에, 일별 표에서 일관객을 상영횟수로 나눈 값이 영화마다 어떻게 흩어져 있는지 히스토그램으로 확인합니다. 분포를 보고 나면 이 값이 어느 범위에 모여 있는지, 유난히 크거나 작은 영화가 있는지 알 수 있습니다.</p>
+  <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>이번에는 첫 관측일의 집계가 끝난 시점에서 예측한다고 가정해 줘.
+그 시점에 알 수 있는 정보로 새 속성을 만들어 보자.
+- 박스오피스 표에서 영화마다 10위권에 처음 든 날의 일관객을 상영횟수로 나눠
+  '상영당 관객 수'라는 새 열을 만들어 줘. 한 번 상영에 몇 명이 들었는지야.
+- 만든 열의 값이 어떻게 흩어져 있는지 히스토그램으로 먼저 그려 줘. 그래프는 plotly로 그려 줘.
+- 기본 변수 세 개만 쓴 경우와 거기에 상영당 관객 수를 더한 경우의 R²를 나란히 보여 줘.
+- 훈련용과 테스트용 나누기는 앞과 똑같이 해 줘.</pre></div>
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 단서를 하나 만들어 넣으면 (main.py에 이어 붙일 부분)
+st.subheader("도전 — 상영당 관객 수 만들기")
+st.caption("예측 시점: 각 영화의 첫 관측일 집계가 끝난 뒤")
+daily = pd.read_csv(DAILY, dtype={"영화코드": str})
+daily["날짜"] = daily["날짜"].astype(str)
+첫날 = daily.sort_values("날짜").groupby("영화코드").first()          # 10위권에 처음 든 날
+첫날["상영당 관객 수"] = 첫날["일관객"] / 첫날["상영횟수"]                       # 한 번 상영에 몇 명이 들었나
+df2 = df.join(첫날[["상영당 관객 수"]], on="movieCd")
+st.plotly_chart(px.histogram(df2, x="상영당 관객 수"), use_container_width=True)   # 넣기 전에 분포부터 본다
+train2, test2 = df2[~is_test], df2[is_test]
+
+비교 = []
+for 이름, 변수 in [("기본 변수만", list(기본.values())),
+                ("+ 첫 관측일 상영당 관객 수", list(기본.values()) + ["상영당 관객 수"])]:
+    m2 = LinearRegression().fit(train2[변수], train2["total_audi"])
+    비교.append({"쓴 변수": 이름, "R²": round(r2_score(test2["total_audi"], m2.predict(test2[변수])), 3)})
+st.dataframe(pd.DataFrame(비교), hide_index=True)</pre></div></details>
+  <table class="daymap">
+    <thead><tr><th>쓴 변수</th><th>R²</th></tr></thead>
+    <tbody>
+      <tr><td>기본 변수 세 가지</td><td></td></tr>
+      <tr><td>+ 첫 관측일 상영당 관객 수</td><td></td></tr>
+    </tbody>
+  </table>
+  <p>같은 테스트용 데이터에서 기본 변수만 쓴 점수와 상영당 관객 수를 더한 점수를 나란히 적어 비교합니다. 이렇게 있는 열을 조합해 새 열을 만드는 것도 <b>속성 만들기</b>입니다. 영어로는 feature engineering이라고 합니다. R²가 높아졌다는 결과를 예측 성능이 두 배가 되었다고 해석해서는 안 됩니다. 이번 비교는 첫 관측일 집계 이후라는 시점에서 읽어야 합니다.</p>
+
+  <div class="callout lab">
+    <div class="h">🔬 심화 탐구 프로젝트 · 속성을 더 모으면 예측이 나아질까</div>
+    <p>본문 7절까지 마치고 시간이 남으면 실험실에서 이어서 해 봅니다. 여섯 단계로 한 차시 분량입니다. 여기까지 표에 있는 열로 예측을 만들어 봤는데, 열을 더 모으면 예측이 나아질까요. 감독, 배우 수, 상영시간 같은 정보를 붙여 보는 일입니다.</p>
+    <p>실험실에서는 여섯 단계로 직접 확인합니다. <b>가설을 세우고 → API 문서에서 그 속성이 있는지 확인하고 → 데이터를 모아 붙이고 → 하나씩 넣어 쓸모를 확인하고 → 고른 속성으로 다시 학습시키고 → 내가 관심 있는 영화 한 편을 예측합니다.</b></p>
+    <p>가설을 세웠는데 데이터가 없어서 확인할 수 없는 경우도 있습니다. 그럴 때 무엇을 할 수 있는지도 실험실에서 다룹니다.</p>
+    <p class="labgo"><a href="lesson07-lab.html">심화 탐구 프로젝트 열기 →</a></p>
+  </div>
+
+
+<h2 id="sec7">7. 개념 정리 — 좋은 점수가 좋은 모델인가</h2>
+  <p>다중 선형회귀는 여러 독립 변수로 수치를 예측합니다. 새로운 데이터에서의 성능을 확인하려면 훈련용 데이터와 테스트용 데이터를 나누어야 합니다. 변수 조합에 따라 점수가 달라져도, 높은 점수만으로 유용한 모델이라고 판단할 수는 없습니다. <b>변수의 의미와 정보를 알 수 있는 시점</b>을 확인합니다. 이번 데이터의 기본 변수에도 사후 집계값이 있으므로, 결과는 실제 개봉 전 성능을 뜻하지 않습니다.</p>
+  <p>다음 시간에는 MAE·MSE·R²를 손으로 계산하며 무엇을 기준으로 비교하는 값인지 살펴봅니다. 오늘 기록한 변수 조합과 점수, 평가 조건을 다음 시간에 함께 사용합니다.</p>
+
+  <h2>8. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 단순 선형회귀와 다중 선형회귀의 차이를 우리 수업의 두 예측기(기온·영화)를 들어 설명해 보세요. 자기 말로 답한 뒤 펼쳐 봅니다.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>기온 예측기는 연도라는 독립 변수 하나로 연평균기온을 예측하는 단순 선형회귀다. 영화 예측기는 스크린 수, 상영 횟수, 성수기 여부 등 여러 독립 변수를 사용하는 다중 선형회귀다. 두 방법 모두 예측하려는 값은 수치다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 기본 변수 세 가지만 썼을 때보다 첫 주 관객 수를 더했을 때 테스트 점수가 크게 올랐습니다. 이 급등을 "모델이 좋아졌다"라고 결론지으면 안 되는 이유는 무엇일까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">테스트 영화가 적어 어떤 점수도 신뢰할 수 없기 때문이다</button>
+        <button class="opt" data-ok="1">첫 주 관객 수는 개봉 전 예측 시점에는 알 수 없는 미래 정보이므로 — 이를 개봉 전 예측 성능으로 해석할 수 없다</button>
+        <button class="opt">테스트 점수가 높으면 언제나 좋은 모델이기 때문이다</button>
+      </div>
+      <div class="fb">첫 주 관객 수는 개봉 전에는 알 수 없는 정보입니다. 이 값으로 높아진 점수를 개봉 전 예측 성능으로 해석할 수 없습니다. 기본 변수에도 사후 집계값이 있으므로 그 점수 역시 실제 개봉 전 성능을 뜻하지 않습니다. 점수의 크기와 함께 정보의 시점을 확인해야 합니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> "개봉 1주 후에 남은 흥행을 전망하는 서비스"를 만든다면 첫 주 관객 수를 변수로 써도 될까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">안 된다 — 한 번 누수로 판정된 변수는 어떤 문제 설정에서도 쓸 수 없다</button>
+        <button class="opt">안 된다 — 점수를 크게 끌어올리는 변수는 그 자체로 의심 대상이므로 빼야 한다</button>
+        <button class="opt" data-ok="1">써도 된다. 첫 주 집계가 완료된 시점에는 이미 확보한 정보이기 때문이다</button>
+      </div>
+      <div class="fb">개봉 첫 주의 집계가 완료된 뒤라면 첫 주 관객 수를 사용할 수 있습니다. 높은 점수 자체가 데이터 누수를 뜻하지는 않습니다. 실제 서비스에서도 예측 시점에 확보한 데이터만 사용하고, 훈련용 데이터와 테스트용 데이터를 올바르게 분리해야 합니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 4</span> 상영당 관객 수를 더했을 때 R²가 눈에 띄게 올랐습니다. 이때 바뀐 것은 무엇입니까?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col"><button class="opt">모델을 더 센 것으로 바꿨다</button><button class="opt" data-ok="1">모델은 그대로 두고 단서(속성) 하나를 만들어 더했다</button><button class="opt">테스트용 영화를 학습에 함께 넣었다</button></div>
+      <div class="fb">모델의 종류와 데이터 분할은 유지하고 새 속성을 추가했습니다. 첫 관측일의 관객 수와 상영 횟수를 조합한 속성입니다. 이 비교에서는 예측 시점도 첫 관측일 집계 이후로 정했습니다.</div>
+    </div>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>다중 선형회귀가 무엇인지 독립 변수와 가중치로 설명할 수 있다.</li>
+    <li>변수를 골라 끼우는 총 관객 수 예측 앱을 만들어 실행했다.</li>
+    <li>기본 변수의 의미를 확인하고 점수를 실제 개봉 전 성능으로 해석할 수 없는 이유를 말할 수 있다.</li>
+    <li>첫 주 관객 수를 개봉 전 예측에 사용할 수 없는 이유를 설명할 수 있다.</li>
+    <li>개봉일에서 성수기 열을 만드는 순서를 말할 수 있다.</li>
+    <li>R²와 평균 오차가 각각 무엇과 비교한 값인지 구분해 말할 수 있다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">다중 선형 회귀</td><td>여러 독립 변수로 종속 변수를 예측하는 회귀 분석</td></tr>
+    <tr><td class="term">독립 변수 / 종속 변수</td><td>예측에 사용하는 값 / 예측하려는 값</td></tr>
+    <tr><td class="term">가중치</td><td>다른 변수의 값이 같을 때 해당 변수가 1 증가하면 예측값이 변하는 양입니다. 6차시의 기울기와 같은 것입니다.</td></tr>
+    <tr><td class="term">훈련용 데이터 / 테스트용 데이터</td><td>모델을 학습시키는 데이터 / 점수를 매기기 위해 따로 떼어 둔 데이터</td></tr>
+    <tr><td class="term">평균절대오차(MAE)</td><td>절대오차의 평균입니다. 실젯값과 같은 단위를 사용합니다.</td></tr>
+    <tr><td class="term">평균제곱오차(MSE)</td><td>제곱오차의 평균입니다. 큰 오차에 민감하며, 단위도 제곱됩니다.</td></tr>
+    <tr><td class="term">결정계수(R²)</td><td>1 − (내 모델의 제곱오차 합 ÷ 평균 모델의 제곱오차 합). 평균값 기준 대비 제곱오차 합의 감소 비율입니다.</td></tr>
+    <tr><td class="term">데이터 누수</td><td>예측 시점에 알 수 없는 정보가 변수로 새어 들어와 점수를 부풀리는 것</td></tr>
+      <tr><td class="term">속성 만들기</td><td>데이터를 살펴 새 열을 만들어 모델에 주는 일. 영어로 feature engineering. 첫날 관객÷상영횟수로 만든 '상영당 관객 수'가 그 예입니다.</td></tr>
+</table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="lesson06.html"><div class="dir">← 이전</div><div class="tt">6차시 · 회귀 — 직선을 긋다</div></a>
+    <a class="next" href="lesson08.html"><div class="dir">다음 →</div><div class="tt">8차시 · 회귀 평가 손계산</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/widgets07.js?v=7"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="assets/lesson07_situations.js?v=3"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>

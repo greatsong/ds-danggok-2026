@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15차시 · 우리 학교 급식 월드컵 — 만들고, 모으고, 집계하기 · 데이터 과학 당곡고 · 현재본 스냅샷</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<style>/* 긴 열 이름과 설계표를 좁은 화면에서도 읽을 수 있도록 */
+main{overflow-wrap:anywhere}
+main code:not(pre code){white-space:normal;word-break:break-all}
+main .daymap{display:block;max-width:100%;overflow-x:auto}
+</style>
+<style>
+/* ===== 13·15차시 위젯 전용 스타일 — 설계표 조립기(.sch) · 앱 대응표(.app-sql) · SQL 시뮬레이터(.sim) =====
+   셀렉터는 세 루트 아래로만 한정한다. 팔레트는 공용 변수(--accent --gold --teal --blue --violet --green --red)와 어울리는 진한 톤(대비 4.5:1 이상). */
+.sch,.sim,.app-sql-wrap{--w-ink:#2b2418;--w-soft:#6b5836;--w-line:#eadfc4;--w-ring:0 0 0 3px rgba(76,141,246,.38);--w-grad:linear-gradient(120deg,#b45309 0%,#c2417a 55%,#6d3fb5 100%);--w-grad2:linear-gradient(120deg,#1f7f7a 0%,#2f6bd6 100%);--w-shadow:0 2px 10px rgba(120,90,20,.08),0 1px 2px rgba(120,90,20,.06)}
+.sch button,.sim button,.sch select,.sim select,.sch input,.sim input,.sim textarea{font-family:var(--font)}
+.sch button:focus-visible,.sim button:focus-visible,.sch input:focus-visible,.sch select:focus-visible,.sim input:focus-visible,.sim select:focus-visible{outline:none;box-shadow:var(--w-ring)}
+@keyframes simIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes rowIn{from{opacity:0;transform:translateX(-22px) scale(.97)}60%{transform:translateX(4px) scale(1.01)}to{opacity:1;transform:none}}
+@keyframes simOut{to{opacity:0;transform:translateX(48px) scale(.94);height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0}}
+@keyframes simPop{0%{transform:scale(1)}30%{transform:scale(1.7) rotate(-14deg)}55%{transform:scale(.85) rotate(9deg)}75%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes hlFade{from{box-shadow:0 0 0 4px var(--hl,#eadfc4)}to{box-shadow:0 0 0 0 transparent}}
+
+/* ---- 설계표 조립기 ---- */
+.sch{margin:8px 0 4px;font-size:.92rem;color:var(--w-ink)}
+.sch .sch-bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding:12px 14px;border-radius:16px 16px 0 0;background:var(--w-grad2);color:#fff;box-shadow:var(--w-shadow)}
+.sch .sch-bar label{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:.86rem;letter-spacing:.01em}
+.sch .sch-bar select,.sch .sch-bar input{border:none;border-radius:999px;padding:6px 12px;font-size:.88rem;background:#fff;color:var(--w-ink);min-height:32px;box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+.sch .sch-bar .sch-name{width:9em;font-family:var(--mono)}
+.sch .sch-add{margin-left:auto;border:1.5px solid rgba(255,255,255,.6);border-radius:999px;padding:7px 14px;background:rgba(255,255,255,.16);color:#fff;font-weight:800;font-size:.86rem;cursor:pointer;transition:background .15s,transform .1s}
+.sch .sch-add:hover{background:rgba(255,255,255,.3)}
+.sch .sch-add:active{transform:scale(.96)}
+.sch .sch-scroll{overflow-x:auto;background:#fff;border:1px solid var(--w-line);border-top:none;border-radius:0 0 16px 16px;box-shadow:var(--w-shadow)}
+.sch table.sch-table{min-width:640px;margin:0;border-collapse:separate;border-spacing:0;font-size:.88rem}
+.sch table.sch-table th{background:#fbf6ea;color:var(--w-soft);border:none;border-bottom:1px solid var(--w-line);font-size:.76rem;letter-spacing:.05em;padding:9px 12px}
+.sch table.sch-table td{border:none;border-bottom:1px solid #f3ecd9;padding:9px 12px;vertical-align:middle}
+.sch table.sch-table tr:last-child td{border-bottom:none}
+.sch table.sch-table tbody tr:hover td{background:#fffcf4}
+.sch table.sch-table input[type=text]{width:8em;padding:6px 10px;border:1.5px solid var(--w-line);border-radius:10px;font-family:var(--mono);font-size:.86rem;background:#fffdf7;color:var(--w-ink);transition:border-color .15s,box-shadow .15s}
+.sch table.sch-table input[type=text]:focus{outline:none;border-color:#4c8df6;box-shadow:var(--w-ring)}
+.sch table.sch-table select{padding:6px 28px 6px 10px;border:1.5px solid var(--w-line);border-radius:10px;font-size:.86rem;background:#fffdf7;color:var(--w-ink)}
+/* 조건 칸: JS가 넣는 " · " 구분 문자는 글자 크기 0으로 감추고, 칩(label)만 보이게 한다 */
+.sch table.sch-table td.sch-cond{white-space:normal;font-size:0;line-height:1.5;padding-top:6px;padding-bottom:6px}
+.sch table.sch-table td.sch-cond label{display:inline-flex;align-items:center;gap:6px;margin:3px 4px 3px 0;padding:4px 11px 4px 8px;border-radius:999px;border:1.5px solid var(--w-line);background:#fff;font-size:.8rem;font-weight:700;color:var(--w-soft);cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;user-select:none}
+.sch table.sch-table td.sch-cond label:hover{border-color:#3ba6a0}
+.sch table.sch-table td.sch-cond label:active{transform:scale(.97)}
+.sch table.sch-table td.sch-cond label:has(input:checked){background:#e9f6f5;border-color:#1f7f7a;color:#155e5a}
+.sch table.sch-table td.sch-cond label:has(input:focus-visible){box-shadow:var(--w-ring)}
+.sch table.sch-table td.sch-cond label.off{opacity:.45;cursor:not-allowed}
+.sch table.sch-table td.sch-cond input[type=checkbox]{accent-color:#1f7f7a;margin:0;width:15px;height:15px;cursor:inherit}
+.sch table.sch-table td.sch-cond input[type=text]{width:6.5em;padding:2px 8px;border-radius:8px;font-size:.8rem;box-shadow:none}
+.sch table.sch-table td.sch-cond input[type=text]:focus{box-shadow:var(--w-ring)}
+.sch table.sch-table [data-del]{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--w-line);background:#fff;color:#7a6a4a;cursor:pointer;font-size:.85rem;line-height:1;padding:0;transition:background .15s,border-color .15s,color .15s,transform .2s}
+.sch table.sch-table [data-del]:hover{background:var(--red-soft);border-color:var(--red);color:#c23b3a;transform:rotate(90deg)}
+.sch .sch-out{margin-top:14px}
+.sch .sch-out pre{border-radius:14px}
+.sch .sch-tip{margin-top:10px;border-radius:14px}
+.sch .sch-read{margin:4px 0 0;padding-left:1.2em}
+.sch .sch-read li{margin:3px 0}
+
+/* ---- 앱 대응표 ---- */
+.app-sql-wrap{overflow-x:auto;border:1px solid var(--w-line);border-radius:16px;background:#fff;box-shadow:var(--w-shadow);margin:16px 0}
+.app-sql-wrap table.app-sql{min-width:640px;margin:0;font-size:.9rem}
+.app-sql-wrap table.app-sql th{background:var(--w-grad);color:#fff;border:none;font-size:.8rem;letter-spacing:.05em;padding:11px 14px}
+.app-sql-wrap table.app-sql td{border-bottom:1px solid #f3ecd9;padding:12px 14px}
+.app-sql-wrap table.app-sql tr:last-child td{border-bottom:none}
+.app-sql-wrap table.app-sql tr:hover td{background:#fffaf0}
+.app-sql-wrap table.app-sql td:first-child b{display:inline-block;padding:3px 11px;border-radius:999px;background:#fff3d6;color:#7a4a08;font-size:.84rem;line-height:1.5}
+.app-sql-wrap table.app-sql td code{display:inline-block;background:#1b1f2a;color:#e6edf3;border:none;border-radius:8px;padding:5px 10px;font-size:.8rem;line-height:1.55;white-space:normal;word-break:break-all}
+.app-sql-wrap table.app-sql td:last-child{color:var(--w-soft)}
+
+/* ---- SQL 시뮬레이터 ---- */
+.sim{font-size:.92rem;color:var(--w-ink)}
+.sim .sim-tabs{display:flex;flex-wrap:wrap;gap:4px;padding:4px;margin:10px 0 12px;background:#efe6cf;border-radius:16px}
+.sim .sim-tab{flex:1 1 auto;border:none!important;border-radius:12px;padding:9px 14px;background:transparent!important;color:var(--w-soft)!important;font-weight:800;font-size:.88rem;cursor:pointer;transition:background .18s,color .18s,box-shadow .18s,transform .1s}
+.sim .sim-tab:hover{background:rgba(255,255,255,.6)!important}
+.sim .sim-tab:active{transform:scale(.98)}
+.sim .sim-tab.on{background:var(--w-grad)!important;color:#fff!important;box-shadow:0 3px 10px rgba(194,65,122,.3)}
+.sim .sim-intro{margin:6px 0 12px;color:var(--w-soft)}
+.sim .sim-row{display:flex;gap:8px 12px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.sim .sim-row label{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:.88rem}
+.sim .sim-ds{padding:7px 30px 7px 12px;border:1.5px solid var(--w-line);border-radius:999px;font-size:.88rem;background:#fff;color:var(--w-ink);box-shadow:var(--w-shadow)}
+.sim .sim-cols{font-size:.78rem;color:var(--w-soft);background:#fff;border:1px dashed #d9cba3;border-radius:999px;padding:4px 11px}
+.sim .sim-exs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.sim .sim-ex{border:1.5px solid var(--w-line);border-radius:999px;padding:5px 12px;background:#fff;color:var(--w-ink);font-size:.82rem;font-weight:700;cursor:pointer;transition:border-color .15s,color .15s,background .15s,transform .1s,box-shadow .15s}
+.sim .sim-ex:hover{border-color:#c2417a;color:#a2255f;background:#fff5f9;transform:translateY(-1px);box-shadow:0 3px 8px rgba(194,65,122,.18)}
+.sim .sim-ex:active{transform:scale(.97)}
+.sim .sim-editor{position:relative;border-radius:14px;background:#1b1f2a;padding-top:30px;box-shadow:var(--w-shadow);transition:box-shadow .15s}
+.sim .sim-editor::before{content:"";position:absolute;left:14px;top:11px;width:10px;height:10px;border-radius:50%;background:#ff5f57;box-shadow:16px 0 0 #febc2e,32px 0 0 #28c840}
+.sim .sim-editor::after{content:"SQL";position:absolute;right:14px;top:8px;font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.12em;color:#8b95a7}
+.sim .sim-editor:focus-within{box-shadow:var(--w-ring),var(--w-shadow)}
+.sim .sim-q{display:block;width:100%;box-sizing:border-box;resize:vertical;font-family:var(--mono);font-size:.9rem;line-height:1.6;padding:8px 14px 12px;border:none;border-radius:0 0 14px 14px;background:#1b1f2a;color:#e6edf3;caret-color:#f4b400}
+.sim .sim-q:focus{outline:none}
+.sim .sim-runbar{margin:10px 0 6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sim .sim-run{border:none;border-radius:999px;padding:9px 20px;background:var(--w-grad);color:#fff;font-weight:800;font-size:.9rem;cursor:pointer;box-shadow:0 4px 12px rgba(194,65,122,.28);transition:transform .12s,box-shadow .12s}
+.sim .sim-run:hover{transform:translateY(-1px);box-shadow:0 6px 16px rgba(194,65,122,.36)}
+.sim .sim-run:active{transform:scale(.96)}
+.sim .sim-msg{font-size:.88rem;color:var(--w-soft)}
+/* 단계 카드: 번호 배지 + 왼쪽 컬러 바 + 연결선 */
+.sim .sim-steps{position:relative;margin-top:14px;padding-left:30px}
+.sim .sim-card{position:relative;margin:0 0 16px;padding:12px 14px 12px 16px;border-radius:14px;background:#fff;border:1px solid var(--w-line);border-left:5px solid var(--sc);box-shadow:var(--w-shadow);animation:simIn .45s ease both;--sc:#1f7f7a}
+.sim .sim-card:nth-child(6n+2){--sc:#2f6bd6}
+.sim .sim-card:nth-child(6n+3){--sc:#8a5578}
+.sim .sim-card:nth-child(6n+4){--sc:#b45309}
+.sim .sim-card:nth-child(6n+5){--sc:#c2417a}
+.sim .sim-card:nth-child(6n+6){--sc:#3d7a37}
+.sim .sim-card.sim-final{--sc:#3d7a37;background:linear-gradient(180deg,#f2faee 0%,#fff 70%);border-color:#bfe0b8}
+.sim .sim-card.sim-final .sim-card-h{color:#2f6a2a}
+.sim .sim-card:not(:last-child)::after{content:"";position:absolute;left:-23px;top:40px;bottom:-28px;width:2px;border-radius:2px;background:linear-gradient(var(--sc),#eadfc4)}
+.sim .sim-n{position:absolute;left:-36px;top:8px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--sc);color:#fff;font-weight:800;font-size:.8rem;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.sim .sim-card-h{font-weight:800;display:flex;flex-wrap:wrap;align-items:center;gap:6px;line-height:1.4}
+.sim .sim-clause{font-size:.78rem;font-family:var(--mono);background:#1b1f2a;color:#ffd766;border:none;border-radius:6px;padding:2px 8px;white-space:normal;word-break:break-word}
+.sim .sim-p{margin:6px 0 4px;font-size:.88rem;color:var(--w-soft)}
+.sim .sim-scroll{overflow-x:auto;border-radius:10px;border:1px solid #f0e8d4;margin-top:8px;background:#fff}
+.sim table.sim-tbl{font-size:.8rem;margin:0;border-collapse:separate;border-spacing:0}
+.sim table.sim-tbl th{background:#fbf6ea;border:none;border-bottom:1px solid var(--w-line);color:var(--w-soft);font-size:.74rem;letter-spacing:.04em;padding:7px 10px}
+.sim table.sim-tbl td{border:none;border-bottom:1px solid #f5efe0;padding:6px 10px;white-space:nowrap}
+.sim table.sim-tbl tr:last-child td{border-bottom:none}
+.sim .sim-dim{opacity:.28;filter:grayscale(1);transition:opacity .8s ease}
+/* 앱 화면 미리보기: 인스타그램 게시물 카드 */
+.sim .feed-h{font-weight:800;margin-top:16px;display:flex;align-items:center;gap:6px}
+.sim .feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-top:10px}
+.sim .feed .fc{display:flex;flex-direction:column;border:1px solid #efe6d2;border-radius:16px;background:#fff;overflow:hidden;box-shadow:0 4px 14px rgba(120,90,20,.1);animation:simIn .5s ease both;transition:transform .18s,box-shadow .18s}
+.sim .feed .fc:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(120,90,20,.16)}
+.sim .feed .fc .who{order:1;display:flex;align-items:center;gap:8px;padding:9px 10px 7px;font-weight:800;font-size:.82rem;color:var(--w-ink);min-height:44px}
+.sim .feed .fc .who::before{content:"🐾";flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;border:2px solid transparent;background:linear-gradient(#fff,#fff) padding-box,linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7) border-box}
+.sim .feed .fc .who::after{content:"•••";margin-left:auto;color:#8a7a5a;font-size:.55rem;letter-spacing:1px}
+.sim .feed .fc .ph{order:2;font-size:64px;line-height:1;text-align:center;padding:24px 0;background:linear-gradient(135deg,#fff3d6 0%,#ffe4ec 55%,#ede4fb 100%)}
+.sim .feed .fc .lk{order:3;display:flex;align-items:center;gap:12px;padding:9px 10px 2px;font-size:.84rem;font-weight:800;color:#c23b3a}
+.sim .feed .fc .lk::after{content:"💬  ✈";font-size:.85rem;filter:grayscale(1);opacity:.7;white-space:pre}
+.sim .feed .fc .lk:empty{display:none}
+.sim .feed .fc .tx{order:4;font-size:.82rem;padding:4px 10px 12px;color:var(--w-ink);line-height:1.45}
+.sim .feed-note{font-size:.8rem;color:var(--w-soft);margin:10px 0 0}
+/* 쓰기 탭: 네 동작 카드 */
+.sim .w-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:10px 0 14px}
+.sim .w-card{--c:#3d7a37;--c-soft:#eef6e8;position:relative;display:flex;flex-direction:column;gap:8px;border:1px solid var(--w-line);border-top:4px solid var(--c);border-radius:14px;padding:12px;background:#fff;box-shadow:var(--w-shadow)}
+.sim .w-card.upd{--c:#2f6bd6;--c-soft:#eef3ff}
+.sim .w-card.like{--c:#c2417a;--c-soft:#fff0f5}
+.sim .w-card.del{--c:#c23b3a;--c-soft:#fdeeee}
+.sim .w-card .w-h{font-weight:800;font-size:.9rem;color:var(--c);display:flex;align-items:center;gap:9px;line-height:1.3}
+.sim .w-card .w-ico{flex:none;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--c-soft);font-size:1.05rem}
+.sim .w-card input{width:100%;box-sizing:border-box;padding:8px 11px;border:1.5px solid var(--w-line);border-radius:10px;font-size:.88rem;background:#fffdf7;color:var(--w-ink);transition:border-color .15s,box-shadow .15s}
+.sim .w-card input:focus{outline:none;border-color:var(--c);box-shadow:0 0 0 3px var(--c-soft)}
+.sim .w-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.sim .w-card button{border:1.5px solid var(--c);border-radius:999px;padding:7px 14px;background:var(--c);color:#fff;font-weight:800;font-size:.84rem;cursor:pointer;transition:transform .12s,box-shadow .12s,background .15s}
+.sim .w-card button:hover{box-shadow:0 4px 10px rgba(0,0,0,.14);transform:translateY(-1px)}
+.sim .w-card button:active{transform:scale(.96)}
+.sim .w-card button.ghost{background:#fff;color:var(--c)}
+.sim .w-card .w-reset{border-color:var(--w-line);background:#fff;color:var(--w-soft)}
+/* 댓글 표: 구조는 table, 보이기는 말풍선 목록 */
+.sim .w-table{display:block;width:100%;margin:0;border:none;background:transparent}
+.sim .w-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sim .w-table tbody{display:flex;flex-direction:column;gap:8px}
+.sim .w-table tbody tr{display:grid;grid-template-columns:38px 1fr auto;grid-template-areas:"id who time" "id msg msg" "id lk lk";column-gap:10px;row-gap:2px;align-items:center;padding:10px 12px;border:1px solid #efe6d2;border-radius:14px;background:#fff;box-shadow:var(--w-shadow);overflow:hidden;transition:background .4s,border-color .4s}
+.sim .w-table td{border:none;padding:0;background:transparent;font-size:.86rem;line-height:1.4}
+.sim .w-table td:nth-child(1){grid-area:id;align-self:start;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.78rem;color:#fff;background:linear-gradient(135deg,#c2417a,#6d3fb5)}
+.sim .w-table td:nth-child(1)::before{content:"#";font-size:.7em;opacity:.8;margin-right:1px}
+.sim .w-table td:nth-child(2){grid-area:who;font-weight:800;color:var(--w-ink)}
+.sim .w-table td:nth-child(3){grid-area:msg;background:#f6f1e4;border-radius:4px 14px 14px 14px;padding:8px 12px;margin:2px 0 4px;color:var(--w-ink);white-space:normal;word-break:break-word}
+.sim .w-table td:nth-child(4){grid-area:lk;font-weight:800;color:#c23b3a;font-size:.82rem}
+.sim .w-table td:nth-child(5){grid-area:time;font-size:.74rem;color:var(--w-soft);justify-self:end}
+.sim .w-table tr[data-hl]{animation:hlFade 1.2s ease both}
+.sim .w-table tr[data-hl="ins"]{--hl:#bfe0b8;background:#eef6e8;border-color:#bfe0b8}
+.sim .w-table tr[data-hl="upd"]{--hl:#c5d7fb;background:#eef3ff;border-color:#c5d7fb}
+.sim .w-table tr[data-hl="like"]{--hl:#f7c3d6;background:#fff0f5;border-color:#f7c3d6}
+.sim .w-table tr[data-hl] td:nth-child(3){background:rgba(255,255,255,.85)}
+.sim .w-table tr.w-empty{display:block;text-align:center;padding:18px;border:1.5px dashed var(--red);background:var(--red-soft)}
+.sim .w-table tr.w-empty td{display:block;color:#c23b3a;font-weight:800}
+.sim .heart-pop{display:inline-block;animation:simPop .6s cubic-bezier(.36,.07,.19,.97);color:#e0245e;transform-origin:center}
+.sim tr.row-in{animation:rowIn .5s cubic-bezier(.2,.8,.2,1) both}
+.sim tr.row-out{animation:simOut .45s ease forwards}
+.sim .w-code{margin-top:12px}
+.sim .w-code pre{border-radius:14px}
+.sim .w-out{font-size:.9rem;margin:8px 0 0;color:var(--w-soft);padding:10px 12px;background:#fff;border-radius:12px;border:1px solid var(--w-line);line-height:1.6}
+.sim .w-out:empty{display:none}
+.sim .w-code{margin-top:4px}
+.sim .w-code.w-flash{animation:wFlash .9s ease}
+@keyframes wFlash{0%{box-shadow:0 0 0 0 rgba(232,147,12,.0);transform:scale(1)}30%{box-shadow:0 0 0 6px rgba(232,147,12,.35);transform:scale(1.01)}100%{box-shadow:0 0 0 0 rgba(232,147,12,0);transform:scale(1)}}
+.sim .w-listhead{font-weight:800;font-size:.9rem;margin:14px 0 8px;color:var(--text-soft)}
+@media (max-width:480px){
+  .sim .sim-steps{padding-left:26px}
+  .sim .sim-n{left:-33px;width:26px;height:26px;font-size:.74rem}
+  .sim .sim-card:not(:last-child)::after{left:-21px}
+  .sim .feed .fc .ph{font-size:56px;padding:18px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  .sch *,.sim *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+@media print{
+  .sch .sch-bar,.app-sql-wrap table.app-sql th,.sim .sim-tab.on,.sim .sim-run,.sim .sim-n,.sim .w-table td:nth-child(1){-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sim .sim-card,.sim .feed .fc,.sim tr.row-in,.sim .heart-pop,.sim .w-table tr[data-hl]{animation:none!important}
+  .sim .sim-editor{background:#fff;border:1px solid #999;padding-top:6px}
+  .sim .sim-editor::before,.sim .sim-editor::after{display:none}
+  .sim .sim-q{background:#fff;color:#000}
+  .sch table.sch-table,.app-sql-wrap table.app-sql{min-width:0}
+  .sim table.sim-tbl td{white-space:normal}
+  .sim .sim-card,.sim .w-card,.sim .feed .fc,.sim .w-table tbody tr{break-inside:avoid;box-shadow:none}
+  .sim .sim-tabs{background:none;border:1px solid #bbb}
+}
+</style>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../index.html">← 목차</a>
+  <span class="badge">학생용</span>
+  <span class="badge review-edition">현재본 스냅샷</span>
+</div></div>
+
+<div class="wrap">
+
+<main>
+  <span class="eyebrow">Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 15차시</span>
+  <h1>우리 학교 급식 월드컵 · <span class="a">만들고, 모으고, 집계하기</span></h1>
+  <div class="under"></div>
+
+  <div class="quote">
+    <div class="q">"빨리 가려면 혼자 가고, 멀리 가려면 함께 가라."</div>
+    <span class="by">속담 — 오늘 데이터가 '내 파일'에서 '우리의 저장소'가 됩니다</span>
+  </div>
+
+  <p class="lead">“친구들이 가장 좋아하는 반찬은 무엇일까?” 오늘은 <b>급식 월드컵 앱</b>을 만듭니다. 두 반찬 가운데 하나를 고르는 대결을 일곱 번 치러 우승 반찬을 가리고, 학급의 대결 기록을 모아 분석합니다. 13차시에서 읽기만 했던 테이블에 이번에는 우리 손으로 행을 쌓습니다. 공통 수업의 마지막 시간이며, 뒤이어 시작할 팀 프로젝트의 팀과 주제도 오늘 정합니다.</p>
+
+  <p class="mini">오늘 모으는 대결 기록은 <b>지금까지 쌓인 데이터</b>입니다. 친구들이 판을 치를 때마다 표에 행이 늘어나므로, 화면에 나오는 대결 수와 승률은 사람마다, 시간마다 다릅니다. 숫자가 다른 것은 잘못이 아니며, 그 숫자를 어떻게 읽을지가 오늘의 과제입니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 순서</div>
+    <ul>
+      <li><b>① 만들기</b> — 프롬프트를 붙여 넣어 급식 월드컵 앱을 받는다</li>
+      <li><b>② 한 판 치르기</b> — 여덟 반찬으로 토너먼트를 치르고 일곱 행을 쌓는다</li>
+      <li><b>③ 모으기</b> — 학급의 기록이 한 테이블에 합쳐졌는지 확인한다</li>
+      <li><b>④ 집계하기</b> — 반찬별 승리 수와 승률을 구해 순위를 읽는다</li>
+      <li><b>⑤ 팀 짜기</b> — 프로젝트 팀을 구성하고 주제 후보를 고른다</li>
+    </ul>
+  </div>
+
+  <h2>0. 오늘의 목표</h2>
+  <p>13차시에서 SQL 문장이 무엇을 하는지 읽었습니다. 오늘은 그 문장이 실제로 실행되는 데이터베이스를 만들어 씁니다. 순서는 이렇습니다 — <b>앱을 만들고 → 한 판을 치르고 → 학급 기록이 모이는지 확인하고 → 승률을 집계합니다.</b> 그러고 나면 팀을 짜고 프로젝트 주제를 고릅니다.</p>
+  <ul class="steps">
+    <li>프롬프트로 급식 월드컵 앱을 만들어 <b>대결 기록을 테이블에 저장</b>할 수 있다.</li>
+    <li>학급이 함께 쌓은 기록에서 <b>승리 수와 승률</b>을 구하고, 두 순위가 서로 다른 까닭을 분모로 설명할 수 있다.</li>
+    <li>팀의 주제 후보를 <b>데이터가 충분히 있는가</b>·<b>문제 해결에 적합한가</b>·<b>윤리적으로 사용할 수 있는가</b> 세 물음으로 판단할 수 있다.</li>
+  </ul>
+
+  <h2>1. 따라 만들기 — 급식 월드컵 앱</h2>
+  <div class="callout mini">
+    <div class="h">🧩 무엇이 한 행이 되나</div>
+    <p>한 판은 8강 네 번, 4강 두 번, 결승 한 번으로 일곱 번을 고릅니다. <b>대결 한 번이 한 행</b>이므로 한 판을 마치면 테이블에 일곱 행이 쌓입니다. 열은 일곱 개뿐입니다 — id · game_id · round · left_menu · right_menu · winner · created_at. 같은 판에서 나온 일곱 행은 <code>game_id</code> 값이 같아 한 판으로 묶이고, <code>round</code>는 그 행이 8강·4강·결승 가운데 어느 단계의 대결인지 나타냅니다. 이름·학번·비밀번호는 받지 않습니다.</p>
+  </div>
+  <p>좋아하는 급식 반찬을 1대1로 겨루는 8강 토너먼트를 만듭니다. 아래 ① 프롬프트를 그대로 붙여 넣으면 앱이 나옵니다. 받은 코드를 실행해 한 판을 치르고, 학급의 기록이 한곳에 모이는지 확인한 뒤, ③ 프롬프트로 분석 화면을 붙입니다.</p>
+  <details class="glossary">
+    <summary>후보 여덟 가지는 어떻게 골랐나 — 5차시 급식 API 집계</summary><div class="gin">
+    <p>5차시에서 배운 급식 API 집계 방법을 적용하여 후보를 선정합니다. 조회 기간은 2025년 9월부터 2026년 9월까지이며, 중식 184일 동안의 데이터를 대상으로 합니다. 밥과 김치, 국, 곁반찬, 후식을 걸러 낸 뒤 남은 주요리 가운데 자주 나온 여덟 가지를 후보로 정합니다. 아래 후보는 수업에 사용할 목록으로 고정합니다. 같은 기간을 다시 조회해도 원데이터가 수정되거나 반찬 이름 정리·제외 기준이 다르면 결과가 달라질 수 있으므로, 비교할 때는 같은 저장본과 처리 기준을 사용합니다.</p>
+    <table class="daymap">
+      <thead><tr><th>#</th><th>반찬</th><th>등장</th><th>#</th><th>반찬</th><th>등장</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>제육볶음</td><td>10일</td><td>2</td><td>간장찜닭</td><td>7일</td></tr>
+        <tr><td>3</td><td>가자미순살튀김</td><td>6일</td><td>4</td><td>돈육불백</td><td>6일</td></tr>
+        <tr><td>5</td><td>미트볼데리야끼볶음</td><td>5일</td><td>6</td><td>수육</td><td>5일</td></tr>
+        <tr><td>7</td><td>진미채고추장볶음</td><td>5일</td><td>8</td><td>치즈떡닭갈비</td><td>5일</td></tr>
+      </tbody>
+    </table>
+    <p class="mini">5일로 같은 항목이 다섯이라 등장 일수만으로는 여덟 번째를 정할 수 없습니다. 재료나 조리법이 겹치는 항목과 분식이나 곁반찬에 가까운 항목을 더 빼서 여덟을 고정했습니다. 동점을 어떻게 가를지는 데이터가 정해 주지 않습니다.</p>
+    </div>
+  </details>
+  <figure class="interactive" data-fig="menu8pick">
+    <div class="widget" data-w="menu8pick">
+<svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="중식 184일 등장 일수 상위 목록: 제외 기준 다섯 종을 켜고 끄면 회색 처리와 순위가 바뀌고, 수업 후보 여덟에는 파란 점이 붙음">
+<text x="8" y="18" font-size="14" font-weight="800" fill="#1c2230">중식 184일 · 등장 일수 상위</text>
+<text class="hright" x="712" y="18" text-anchor="end" font-size="12" fill="#6b7385"></text>
+<g class="legend" display="none">
+<circle cx="630" cy="34.6" r="3" fill="#2b7fd6"/>
+<text x="712" y="38" text-anchor="end" font-size="10" fill="#2b7fd6">수업 후보 여덟</text>
+</g>
+<!-- 목록 · 최대 14행 · y = 46 + i*19 -->
+<g class="rows"></g>
+<!-- 회색이 아닌 항목의 여덟 번째 아래 -->
+<g class="cut" display="none">
+<line x1="8" y1="185" x2="712" y2="185" stroke="#b07a00" stroke-width="1" stroke-dasharray="4 4"/>
+<text x="712" y="181" text-anchor="end" font-size="10" fill="#b07a00">등장 일수만으로 자른 여덟</text>
+</g>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-cat="밥" aria-pressed="true">밥류</button>
+<button class="wbtn on" type="button" data-cat="김치" aria-pressed="true">김치류</button>
+<button class="wbtn on" type="button" data-cat="국" aria-pressed="true">국·찌개류</button>
+<button class="wbtn on" type="button" data-cat="곁" aria-pressed="true">곁반찬(나물·무침·샐러드·김)</button>
+<button class="wbtn on" type="button" data-cat="후식" aria-pressed="true">후식·음료</button>
+<button class="wbtn" type="button" data-pick="1" aria-pressed="false">수업 후보 여덟 표시</button>
+<span class="wout"></span>
+</div>
+</div>
+    <figcaption>급식 중식 184일 기록에서 5일 이상 등장한 마흔일곱 종을 등장 일수 순으로 보여 줍니다. 밥류·김치류·국과 찌개류·곁반찬·후식과 음료의 제외 기준을 켜고 끄면 해당 분류의 항목이 회색으로 표시되고 남은 항목의 순위가 다시 매겨집니다. 다섯 분류를 모두 걸러 내면 열한 종이 남으며, 그 가운데 일곱 번째부터 열한 번째까지 다섯 항목이 5일로 같아 등장 일수만으로는 여덟 번째를 정할 수 없습니다. 수업 후보 여덟 가지는 여기에서 재료나 조리법이 겹치는 항목, 소스 이름만 적힌 항목, 분식이나 곁반찬에 가까운 항목을 더 빼고 고정한 목록이며, [수업 후보 여덟 표시] 버튼을 켜면 수업 후보 여덟 가지에 파란 점이 붙습니다. 등장 일수는 후보를 정한 기준일 뿐 학생의 선호도가 아닙니다.</figcaption>
+  </figure>
+  <div class="callout tip">
+    <div class="h">💡 수파베이스 — 우리가 쓸 데이터베이스</div>
+    <p>Supabase는 PostgreSQL 데이터베이스에 API·인증 등의 기능을 더한 서비스입니다. 13차시에 문장으로만 읽었던 테이블을 이번에는 실제로 만들어 씁니다. 다만 테이블을 만드는 일은 <b>교사 또는 모둠 대표 한 명</b>이 하고, 다른 학생은 같은 프로젝트에 연결합니다. 그래야 여러 기기에서 보낸 대결 기록이 한곳에 모입니다.</p>
+  </div>
+  <div class="callout mini">
+    <div class="h">🔧 준비 — 테이블과 접속 정보</div>
+    <p>실습에 앞서 대결 기록을 담을 테이블과 접속 정보가 준비되어 있어야 합니다. 이 준비는 교사 또는 모둠의 준비 담당자가 한 번만 하며, 절차는 <a href="lesson13-setup.html">준비 안내</a>에 따로 정리해 두었습니다. 나머지 학생은 준비된 접속 정보와 배포된 앱 주소를 받아 아래 ① 프롬프트부터 시작합니다. 앱을 실행하면 대결을 이어 가기 전에 <b>첫 선택이 테이블에 저장되었는지 먼저 확인합니다.</b> 저장을 확인하지 못한 채 판을 진행하면 학급 기록이 남지 않으므로, 확인되지 않으면 판 번호를 준비 담당자에게 알리고 접속 정보부터 다시 점검합니다.</p>
+  </div>
+
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>급식 월드컵 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로.
+후보는 제육볶음·간장찜닭·가자미순살튀김·돈육불백·미트볼데리야끼볶음·수육·진미채고추장볶음·치즈떡닭갈비 여덟 가지야.
+8강 토너먼트로 진행해 줘. 판을 시작할 때 후보 순서를 섞고, 두 반찬을 나란히 보여 준 뒤 하나를 고르게 해.
+이긴 반찬만 다음 라운드로 올려서 8강 네 번, 4강 두 번, 결승 한 번으로 모두 일곱 번 고르게 해 줘.
+이름·학번·비밀번호는 받지 마.
+반찬 이름은 한글이니까 저장하고 읽을 때 UTF-8로 다뤄서 글자가 깨지지 않게 해 줘.
+서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘.
+표 이름은 menu_duels이고 public 스키마에 있어. 표 이름에 스키마 이름을 붙여 쓰지는 마.
+이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야.
+id는 자동으로 늘어나는 정수이고 created_at은 저장 시각이 기본값이라 앱이 넣지 않아.
+앱이 채우는 열은 game_id(한 판을 묶는 문자열), round('8강'·'4강'·'결승' 가운데 하나), left_menu, right_menu, winner 다섯이고 모두 문자열이야.
+새 표를 만들지 말고 이 표에 그대로 연결해 줘. 수정·삭제 기능은 넣지 마.
+접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘.
+판이 끝나면 우승 반찬을 보여 주고, 다시 시작하는 버튼을 넣어 줘.
+저장 결과를 확인하지 못하면 대결을 진행하지 말고 재선택을 잠근 뒤 확인이 필요하다고 안내해 줘.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>준비 확인 — 만든 표의 열과 행 수 읽기</summary><p class="mini">표 생성은 <a href="lesson13-setup.html">준비 안내</a>의 SQL로 한 번만 합니다. 아래는 생성 뒤 확인하는 조회 코드입니다.</p><div class="codewrap code"><span class="label">SQL · 준비 확인</span><pre>SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_schema = 'public' AND table_name = 'menu_duels'
+ORDER BY ordinal_position;
+SELECT COUNT(*) AS 대결기록수 FROM public.menu_duels;</pre></div></details>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 한 판을 끝까지 해 본다</span><br>
+      배포한 뒤 한 판을 끝까지 진행합니다. 8강 네 번, 4강 두 번, 결승 한 번으로 <b>일곱 번</b>을 고르면 우승 반찬이 나옵니다. 표에는 일곱 행이 쌓입니다. 두 번째 판을 시작하면 대진표가 다시 섞여 다른 상대를 만납니다.
+      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 실제 공유 저장은 <a href="lesson13-setup.html">준비 안내</a> 4절의 두 기기 확인 절차로 점검합니다.</p><div class="codewrap code"><span class="label">main.py</span><button class="copy-btn">복사</button><pre># main.py — 급식 월드컵 8강. 대결 한 번이 표의 한 행이 된다.
+import random
+import uuid
+
+import streamlit as st
+from supabase import create_client
+
+MENUS = ["제육볶음", "간장찜닭", "가자미순살튀김", "돈육불백",
+         "미트볼데리야끼볶음", "수육", "진미채고추장볶음", "치즈떡닭갈비"]
+ROUND = {8: "8강", 4: "4강", 2: "결승"}
+
+st.header("🏆 급식 월드컵")
+st.caption("이름 없이 참여하는 연습 게임입니다. 대결 기록 수는 참여 인원과 다릅니다.")
+
+
+@st.cache_resource
+def connect():
+    return create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
+
+
+try:
+    db = connect()
+except Exception:
+    st.error("연결 정보를 확인하세요. 선생님이 표와 권한을 준비한 뒤 연결합니다.")
+    st.stop()
+
+
+def new_game():
+    order = MENUS[:]
+    random.shuffle(order)                      # 대진표를 판마다 섞는다
+    st.session_state.game_id = uuid.uuid4().hex
+    st.session_state.queue = order             # 이번 라운드에서 겨룰 차례
+    st.session_state.winners = []              # 이번 라운드에서 이긴 반찬
+    st.session_state.size = len(order)         # 이번 라운드의 크기 (8·4·2)
+    st.session_state.save_pending = False
+
+
+if "queue" not in st.session_state:
+    new_game()
+
+# 이번 라운드가 끝났으면 다음 라운드를 준비한다
+if not st.session_state.queue and len(st.session_state.winners) &gt; 1:
+    st.session_state.queue = st.session_state.winners
+    st.session_state.winners = []
+    st.session_state.size = len(st.session_state.queue)
+
+def choose(winner, left, right, round_name):
+    st.session_state.save_pending = True
+    try:
+        db.table("menu_duels").insert({
+            "game_id": st.session_state.game_id,
+            "round": round_name,
+            "left_menu": left,
+            "right_menu": right,
+            "winner": winner,
+        }).execute()
+    except Exception:
+        # 통신 오류여도 DB에는 저장되었을 수 있어 재제출을 잠근다
+        st.rerun()
+    st.session_state.save_pending = False
+    st.session_state.winners.append(winner)
+    st.session_state.queue = st.session_state.queue[2:]
+    st.rerun()
+
+
+if not st.session_state.queue:                 # 결승까지 끝났다
+    st.success("우승: " + st.session_state.winners[0])
+    if st.button("다시 하기"):
+        new_game()
+        st.rerun()
+else:
+    left, right = st.session_state.queue[0], st.session_state.queue[1]
+    round_name = ROUND[st.session_state.size]
+    st.subheader(round_name)
+    if st.session_state.save_pending:
+        st.warning("저장 결과를 확인하지 못했습니다. 재선택을 잠갔습니다. 선생님에게 확인하세요.")
+    col_l, col_r = st.columns(2)
+    if col_l.button(left, use_container_width=True, disabled=st.session_state.save_pending):
+        choose(left, left, right, round_name)
+    if col_r.button(right, use_container_width=True, disabled=st.session_state.save_pending):
+        choose(right, left, right, round_name)
+
+st.caption("판 번호: " + st.session_state.game_id)
+st.caption("반복 참여를 막지는 않습니다. 저장 결과 확인이 필요하면 이 판 번호를 준비 담당자에게 알려 주세요.")</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+supabase
+pandas
+plotly</pre></div></details>
+    </li>
+    <li><span class="st">③ 개선 프롬프트 — 학급의 대결 기록을 분석한다</span>
+      <p>한 판이 끝나면 우승 반찬 하나가 남습니다. 우승만으로는 그 반찬이 정말 인기 있는지 알 수 없습니다. 토너먼트에서는 이긴 반찬만 다음 라운드로 올라갑니다. 그 결과 다음 라운드에 진출한 반찬은 겨룬 횟수가 많아집니다. 승리 수와 함께 이긴 횟수를 겨룬 횟수로 나눈 비율인 승률을 살펴봅니다. 승률도 상대와 대진표의 영향을 받으므로 학급 전체의 선호 비율로 해석하지 않습니다.</p>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>이 앱에 학급 전체의 대결 기록을 분석하는 화면을 추가해 줘.
+menu_duels에 저장된 전체 기록을 대상으로 해. id, game_id, round, left_menu, right_menu, winner 여섯 열을 읽어서 반찬별 대결 수·승리 수·승률·우승 횟수를 비교하게 해 줘.
+대결 수는 left_menu와 right_menu 양쪽을 모두 세고, 우승 횟수는 round가 '결승'인 행의 winner를 세어 줘.
+모든 후보를 표시하고 대결 기록이 없는 후보의 승률은 아직 알 수 없다고 안내해 줘.
+승률은 백분율로 보여 주고 높은 순서의 표와 가로 막대그래프로 비교해 줘.
+그래프는 plotly로 그려 줘.
+집계에 사용한 대결 기록 수와 판 수를 화면에 적어 줘. 기록 수와 참여 인원은 다르며, 진행 중에 남긴 대결도 집계에 들어간다고 표시해 줘.
+한 판이 끝난 화면에서도 분석을 볼 수 있게 하고 결과를 다시 불러오는 버튼을 넣어 줘.
+기록이 아직 없을 때와 조회에 실패했을 때를 구분해 안내해 줘.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다. 실제 데이터베이스의 저장·조회 결과는 배포 후 확인합니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># main.py에 이어 붙일 부분 — 학급의 대결 기록을 분석한다
+import pandas as pd
+import plotly.express as px
+
+st.divider()
+st.subheader("학급 대결 기록")
+
+st.button("결과 새로 불러오기")
+try:
+    # 조회 시작 때의 마지막 id까지만, 빠짐없이 나누어 읽는다
+    latest = db.table("menu_duels").select("id").order("id", desc=True).limit(1).execute().data
+    upper = latest[0]["id"] if latest else 0
+    records = []
+    after = 0
+    while after &lt; upper:
+        page = (db.table("menu_duels")
+                .select("id,game_id,round,left_menu,right_menu,winner")
+                .gt("id", after).lte("id", upper).order("id").limit(500).execute().data)
+        if not page:
+            raise RuntimeError("마지막 기록까지 조회하지 못했습니다.")
+        records.extend(page)
+        after = page[-1]["id"]
+except Exception:
+    st.error("기록을 불러오지 못했습니다.")
+    st.stop()
+
+if not records:
+    st.info("아직 대결 기록이 없습니다.")
+    st.stop()
+
+duels = pd.DataFrame(records)
+# 겨룬 횟수는 왼쪽과 오른쪽을 모두 센다
+fought = pd.concat([duels["left_menu"], duels["right_menu"]]).value_counts()
+won = duels["winner"].value_counts()
+champion = duels[duels["round"] == "결승"]["winner"].value_counts()
+
+board = pd.DataFrame({"겨룬 횟수": fought, "이긴 횟수": won, "우승": champion}).reindex(MENUS).fillna(0).astype(int)
+board["승률(%)"] = (board["이긴 횟수"] / board["겨룬 횟수"].where(board["겨룬 횟수"] &gt; 0) * 100).round(1)
+board = board.sort_values("승률(%)", ascending=False).reset_index(names="반찬")
+
+st.caption("대결 " + str(len(duels)) + "번 · 기록이 있는 판 " + str(duels["game_id"].nunique()) + "개")
+st.caption("결승 기록이 있는 판 " + str(duels.loc[duels["round"] == "결승", "game_id"].nunique()) + "개 · 진행 중 기록도 포함합니다.")
+st.caption("대결이 없는 후보의 승률은 비어 있습니다. 대결 수와 판 수는 참여 인원이 아닙니다.")
+st.dataframe(board, hide_index=True, width="stretch")
+
+fig = px.bar(board.dropna(subset=["승률(%)"]).sort_values("승률(%)"), x="승률(%)", y="반찬", orientation="h",
+             text="승률(%)", color="승률(%)", color_continuous_scale="Oranges",
+             title="반찬별 승률")
+fig.update_layout(coloraxis_showscale=False, yaxis_title="")
+st.plotly_chart(fig, width="stretch")
+st.caption("조회 도중 들어온 새 기록은 다시 불러오면 반영됩니다. 승률은 대진표와 반복 참여의 영향을 받습니다.")</pre></div></details>
+    </li>
+  </ol>
+
+  <p class="mini">앱 배포와 두 기기 완료 확인 절차는 <a href="lesson13-setup.html">준비 안내</a> 3·4절에 있습니다. 배포한 앱에서 한 판을 마친 뒤, 학급의 대결 기록이 실제로 합쳐졌는지 그 절차로 확인합니다.</p>
+  <h3>화면의 숫자를 옮겨 적습니다</h3>
+  <p>분석 화면의 표를 보고 아래에 옮겨 적습니다. 기록은 계속 쌓이므로 적은 시각도 함께 남깁니다. 다 적었으면 승률이 높은 순서와 이긴 횟수가 많은 순서에 각각 1부터 8까지 번호를 매깁니다. 두 순서가 같은지가 다음에 확인할 것입니다. 승률의 분모는 그 반찬이 겨룬 횟수이고, 어떤 상대와 겨루는지는 대진표가 정합니다. 그래서 이 표의 승률은 학급이 남긴 대결 기록 안에서의 비율이며 학급 전체의 선호 비율이 아닙니다.</p>
+  <div style="overflow-x:auto">
+  <table class="daymap" style="min-width:680px">
+    <thead><tr><th>반찬</th><th>겨룬 횟수</th><th>이긴 횟수</th><th>승률(%)</th><th>우승</th><th>승률 순위</th><th>승리 수 순위</th></tr></thead>
+    <tbody>
+      <tr><td><b>제육볶음</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>간장찜닭</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>가자미순살튀김</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>돈육불백</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>미트볼데리야끼볶음</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>수육</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>진미채고추장볶음</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>치즈떡닭갈비</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="mini">적은 시각과 그때의 대결 기록 수도 표 옆에 적어 둡니다. 같은 표를 나중에 다시 보면 숫자가 달라져 있습니다.</p>
+  <figure class="interactive" data-fig="duel28">
+    <div class="widget" data-w="duel28">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="반찬 여덟 가지의 쌍 28칸 격자와 반찬별 승률 표. 한 판에서 채워지는 칸이 일곱 칸이라는 점과 대진표에 따라 우승 반찬이 달라지는 모습을 나타낸 그림">
+  <rect class="champbg" x="508" y="3" width="204" height="22" rx="5" fill="#fff3cf" opacity="0" style="transition:opacity 150ms ease"/>
+  <text class="obs" x="8" y="21" font-size="15" font-weight="800" fill="#b07a00">관측 0 / 28</text>
+  <text class="champ" x="712" y="20" text-anchor="end" font-size="12" font-weight="700" fill="#1c2230">이번 판 우승 · —</text>
+  <line x1="360" y1="36" x2="360" y2="322" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="368" y1="58" x2="712" y2="58" stroke="#e3ddcf" stroke-width="1"/>
+  <text x="368" y="52" font-size="10" font-weight="700" fill="#6b7385">반찬</text>
+  <text x="566" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">대결 수</text>
+  <text x="618" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승리 수</text>
+  <text x="676" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승률</text>
+  <text x="712" y="40" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">리그</text>
+  <text x="712" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승률</text>
+  <g class="collab"></g>
+  <g class="rowlab"></g>
+  <g class="cells"></g>
+  <rect class="foc" x="0" y="0" width="30" height="30" rx="3" fill="none" stroke="#b07a00" stroke-width="2" opacity="0" pointer-events="none"/>
+  <g class="tbl"></g>
+  <text x="8" y="300" font-size="10" fill="#6b7385">칸 = 두 반찬의 대결 · 가운데 숫자 = 승자 번호</text>
+  <text x="8" y="316" font-size="10" fill="#6b7385">진하기 · 오른쪽 아래 숫자 = 같은 쌍의 대결 횟수</text>
+  <text x="368" y="300" font-size="10" fill="#6b7385">리그 승률 = 이긴 쌍 수 / 답한 쌍 수</text>
+  <text x="368" y="316" font-size="10" fill="#6b7385">28칸 완성 → 분모 7 고정</text>
+</svg>
+<div class="wctl pick"><span class="pmsg">한 판 진행 · 일곱 번 선택</span></div>
+<div class="wctl">
+<button class="wbtn" type="button" data-act="play">한 판 진행</button>
+<button class="wbtn" type="button" data-act="redraw">대진표 다시 뽑기</button>
+<button class="wbtn" type="button" data-act="fill">남은 칸 채우기</button>
+<button class="wbtn" type="button" data-act="reset">처음으로</button>
+<span class="wout">관측 0 / 28 · 미관측 28칸</span>
+</div>
+</div>
+    <figcaption>격자 28칸 가운데 한 판에서 채워지는 칸은 일곱 칸입니다. 대진표를 다시 뽑으면 같은 답에서도 우승 반찬이 바뀝니다. 답은 학생이 직접 고른 값이며, 급식 등장 일수는 후보를 정한 기준일 뿐 선호도가 아닙니다.</figcaption>
+  </figure>
+
+
+  <div class="callout theory">
+    <div class="h">🧩 승률의 분모 — 승리 수와 승률은 다른 숫자입니다</div>
+    <p><b>승리 수</b>는 이긴 횟수를 그대로 센 값이고, <b>승률</b>은 그 승리 수를 <b>겨룬 횟수</b>로 나눈 값입니다. 토너먼트에서는 이긴 반찬만 다음 라운드로 올라가므로 반찬마다 겨룬 횟수가 다릅니다. 8강에서 한 번 지고 끝난 반찬의 분모는 1이고, 결승까지 올라간 반찬의 분모는 3입니다. 분모가 다른 값을 나란히 놓고 비교하면 순위가 뒤집힐 수 있습니다.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">❓ 표를 채운 뒤 확인할 것</div>
+    <ul>
+      <li>승률 1위와 승리 수 1위는 같은 반찬입니까? 두 순위를 나란히 적어 봅니다.</li>
+      <li>겨룬 횟수가 유독 많은 반찬은 무엇입니까? 왜 그 반찬의 분모가 커졌습니까?</li>
+      <li>겨룬 횟수가 한두 번뿐인 반찬이 있습니까? 그 반찬의 승률 옆에 겨룬 횟수를 함께 적어 둡니다.</li>
+    </ul>
+  </div>
+  <figure class="interactive" data-fig="rankcross13">
+    <div class="widget" data-w="rankcross13">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="리그 승률 순위와 한 판 지표 순위를 교차선으로 이은 비교 표">
+  <text class="ttlL" x="8" y="24" font-size="12" font-weight="800" fill="#1c2230">리그 승률 · 분모 7</text>
+  <text class="ttlR" x="470" y="24" font-size="12" font-weight="800" fill="#1c2230">한 판 승리 수</text>
+  <line x1="8" y1="32" x2="250" y2="32" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="470" y1="32" x2="712" y2="32" stroke="#e3ddcf" stroke-width="1"/>
+  <g fill="none">
+    <path class="lnk" d="M254,44 C330,44 390,74 466,74" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,134 C330,134 390,164 466,164" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,164 C330,164 390,194 466,194" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,194 C330,194 390,104 466,104" stroke="#d64545" stroke-width="2.2"/>
+    <path class="lnk" d="M254,74 C330,74 390,44 466,44" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,224 C330,224 390,224 466,224" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,254 C330,254 390,254 466,254" stroke="#b9b3a5" stroke-width="1.2"/>
+    <path class="lnk" d="M254,104 C330,104 390,134 466,134" stroke="#b9b3a5" stroke-width="1.2"/>
+  </g>
+  <g class="rowL" transform="translate(0,48)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">1</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">제육볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.71</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">10</text>
+  </g>
+  <g class="rowL" transform="translate(0,138)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">4</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">간장찜닭</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">7</text>
+  </g>
+  <g class="rowL" transform="translate(0,168)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">5</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">가자미순살튀김</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+  </g>
+  <g class="rowL" transform="translate(0,198)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">6</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">돈육불백</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+  </g>
+  <g class="rowL" transform="translate(0,78)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">2</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">미트볼데리야끼볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.57</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,228)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">7</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">수육</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,258)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">8</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">진미채고추장볶음</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowL" transform="translate(0,108)">
+    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">3</text>
+    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">치즈떡닭갈비</text>
+    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.57</text>
+    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+  </g>
+  <g class="rowR" transform="translate(0,78)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">10</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">제육볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">2 / 3</text>
+  </g>
+  <g class="rowR" transform="translate(0,168)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">7</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">간장찜닭</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,198)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">가자미순살튀김</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,108)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">돈육불백</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">1 / 2</text>
+  </g>
+  <g class="rowR" transform="translate(0,48)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">미트볼데리야끼볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">3 / 3</text>
+  </g>
+  <g class="rowR" transform="translate(0,228)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">수육</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,258)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">진미채고추장볶음</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
+  </g>
+  <g class="rowR" transform="translate(0,138)">
+    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
+    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
+    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">치즈떡닭갈비</text>
+    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">1 / 2</text>
+  </g>
+  <text x="360" y="286" font-size="10" text-anchor="middle" fill="#6b7385">굵은 붉은 선 = 순위차 2 이상 · 원 안 숫자 = 중식 등장 일수</text>
+</svg>
+<div class="wctl">
+  <label>대진 번호 <input class="wslider" type="range" min="1" max="315" step="1" value="1"></label>
+  <button class="wbtn wmetric on" type="button" data-m="wins">한 판 승리 수</button>
+  <button class="wbtn wmetric" type="button" data-m="rate">한 판 승률</button>
+  <button class="wbtn wmetric" type="button" data-m="champ">우승 횟수 · 315판 합계</button>
+  <button class="wbtn wans on" type="button" data-a="A">예시 답 A · 엇갈린 반</button>
+  <button class="wbtn wans" type="button" data-a="B">예시 답 B · 일관된 반</button>
+  <button class="wbtn wans wmine" type="button" data-a="M" disabled>내 격자 답 (28칸 완성 후)</button>
+  <span class="wout">대진 1 · 순위가 바뀐 반찬 6종 · 최대 순위차 3 · 이번 판 우승 미트볼데리야끼볶음</span>
+</div>
+</div>
+    <figcaption>예시 학급 답 한 묶음으로 315가지 대진을 모두 계산한 결과입니다. 대진 번호를 바꾸면 한 판 승리 수와 승률 순위가 달라지지만, 분모가 7로 같은 리그 승률 순위는 그대로입니다. 수업 뒤에는 menu_duels에 쌓인 실제 기록으로 같은 표를 만들어 비교합니다.</figcaption>
+  </figure>
+
+  <div class="callout tip">
+    <div class="h">💡 대결 기록 수는 참여 인원이 아니다</div>
+    <p>이 앱은 사람을 구별하지 않으며, 이름과 학번을 받지 않습니다. 한 사람이 여러 판을 할 수도 있으므로 <b>대결 기록의 수는 참여 인원이 아닙니다.</b> 승률을 읽을 때 이 점을 함께 적어 둡니다.</p>
+  </div>
+
+  <details class="glossary"><summary>더 알아보기 — 실제 사례: 챗봇 아레나의 대결 기록과 승률표</summary><div class="gin">
+    <h3>AI 모델 월드컵 — 챗봇 아레나의 대결 기록과 승률표</h3>
+    <p>챗봇 아레나는 2023년 4월에 시작되었습니다. 같은 질문에 두 AI가 답한 내용을 나란히 보여 주고 사람이 더 나은 쪽을 고르는 방식입니다. 캘리포니아대 버클리 연구진이 2024년 3월 공개한 논문 기준으로 9만여 명이 약 24만 건을 투표했고 대상 모델은 50개가 넘습니다.</p>
+    <table class="daymap">
+      <thead><tr><th>구분</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td><b>무엇</b></td><td>같은 질문에 두 AI가 답한 내용을 나란히 보여 주고 사람이 더 나은 쪽을 고르는 방식입니다.</td></tr>
+        <tr><td><b>규모</b></td><td>9만여 명이 약 24만 건을 투표했고 대상 모델은 50개가 넘습니다.</td></tr>
+        <tr><td><b>구조</b></td><td>대결 한 건이 한 행으로 저장되고 그 행들을 모델 쌍별로 묶어 세면 승률표가 됩니다.</td></tr>
+      </tbody>
+    </table>
+    <p class="mini">출처: Chiang 외, <a href="https://arxiv.org/abs/2403.04132" target="_blank" rel="noopener">「Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference」, arXiv:2403.04132</a> (2024)</p>
+    <figure class="case" style="margin:12px 0"><img src="img/lesson13_case2.png" alt="가로축과 세로축에 모델 이름을 놓은 승률 행렬. 각 칸은 비기지 않은 대결에서 세로축 모델이 가로축 모델을 이긴 비율이며, 파란색일수록 높고 붉은색일수록 낮다." width="750" height="750" loading="lazy" style="width:100%;height:auto;border-radius:10px"><figcaption class="mini">그림: 비긴 경기를 제외한 모델 간 승률 행렬 · Chiang 외, 챗봇 아레나 논문(arXiv:2403.04132) 2024, 그림 2</figcaption></figure>
+    <p>오늘 만드는 급식 월드컵과 구조가 같습니다. 대결 한 번이 표의 한 행으로 저장됩니다(INSERT). 그 행들을 이긴 쪽 기준으로 묶어 세면(GROUP BY·COUNT) 승률이 나옵니다. 여러 사람이 서로 다른 기기에서 남긴 기록을 한곳에 모아야 하므로 개인 파일이 아니라 공유 데이터베이스가 필요합니다.</p>
+  </div></details>
+
+  <details class="glossary">
+    <summary>📕 더 알아보기 — 프롬프트와 준비 안내에 나오는 낱말들</summary>
+    <p>아래는 이 차시의 프롬프트와 <a href="lesson13-setup.html">준비 안내</a>에 그대로 나오는 말입니다. 뜻을 몰라도 실습은 되지만, 붙여 넣는 문장에 들어 있는 말이므로 한 번 읽어 둡니다.</p>
+    <table class="daymap">
+      <thead><tr><th>낱말</th><th>뜻</th></tr></thead>
+      <tbody>
+        <tr><td><b>스키마</b></td><td>표들을 묶어 두는 이름 공간입니다. 수파베이스는 우리가 만드는 표를 <code>public</code>에 넣습니다. 이름 공간이 여럿이면 같은 이름의 표가 각각 따로 있을 수 있습니다.</td></tr>
+        <tr><td><b>RLS</b></td><td>Row Level Security를 줄인 말입니다. 표 전체가 아니라 <b>행 하나하나</b>에 대해 누가 무엇을 할 수 있는지 정하는 장치입니다. 켜 두면 정책으로 허용한 동작만 통과합니다.</td></tr>
+        <tr><td><b>publishable 키</b></td><td>앱 코드에 넣어도 되는 공개용 접속 키입니다. 이 키로는 RLS 정책이 허용한 것만 할 수 있습니다. <code>anon</code> 키는 같은 것을 가리키던 옛 이름입니다.</td></tr>
+        <tr><td><b>secret · service_role 키</b></td><td>RLS를 통과해 모든 행을 다룰 수 있는 관리용 키입니다. <b>앱 코드나 화면에 넣지 않습니다.</b> 이 수업에서는 사용하지 않습니다.</td></tr>
+      </tbody>
+    </table>
+    <p class="mini">키 이름은 수파베이스가 바꿔 온 이력이 있습니다. 화면에 anon으로 보이면 publishable과 같은 것으로 읽습니다.</p>
+  </details>
+
+
+
+
+
+  <h2>2. 팀 프로젝트 예고 — 데이터로 답할 수 있는 문제인가</h2>
+  <p>오늘로 공통 수업이 끝납니다. 이제 2~3인 팀으로 공통 수업에서 익힌 도구를 활용해 <b>팀만의 질문</b>에 도전합니다. 오늘은 그 준비로 팀을 구성하고 주제 후보를 고릅니다.</p>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 174쪽</span></div>
+    <p class="q">"데이터 과학은 다양한 분야의 문제를 해결하고 의사 결정을 지원하는 데 큰 도움이 되지만, 모든 문제를 해결할 수 있는 것은 아니다." <span class="src">(174쪽)</span></p>
+    <p class="t">→ 주제를 고를 때는 데이터가 <b>충분히 있는지</b>, 그 데이터가 문제 해결에 <b>적합한지</b>, 법적·윤리적으로 <b>올바르게 사용할 수 있는지</b>를 차례로 확인합니다.</p>
+  </div>
+  <p>세 번째 물음의 기준은 지난 시간 데이터 윤리에서 세웠습니다. 그때 만든 기준으로 오늘 고른 후보를 함께 점검합니다. 데이터가 아무리 많아도 윤리 관문을 통과하지 못하면 프로젝트 주제가 될 수 없습니다. 프로젝트의 5주 흐름, 팀 저장소, 개인의 몫은 <a href="project.html">팀 프로젝트 안내</a>에 정리되어 있습니다. 팀에서는 다음 순서로 주제 카드를 만듭니다.</p>
+  <ul>
+    <li><b>팀 구성(2~3인)</b> — 관심 질문이 비슷한 사람끼리</li>
+    <li><b>틀 고르기</b> — 회귀·분류·군집·연관 중 팀의 질문에 맞는 분석 틀은 무엇인가</li>
+    <li><b>데이터 후보 3개</b> — 각 후보를 세 물음으로 판단해 보기 (교과서 176쪽 탐구활동). 윤리 판단은 14차시에서 세운 기준으로</li>
+  </ul>
+  <h3>주제 카드 초안</h3>
+  <p>팀에서 정한 내용을 아래에 적습니다. 데이터 후보마다 <b>충분히 있는가</b>·<b>문제 해결에 적합한가</b>·<b>윤리적으로 사용할 수 있는가</b> 세 물음에 있음·없음·확인 필요 가운데 하나로 답하고, 그렇게 판단한 근거를 한 줄로 적습니다. 세 번째 물음은 14차시에서 세운 기준으로 판단합니다.</p>
+  <div style="overflow-x:auto">
+  <table class="daymap">
+    <thead><tr><th>항목</th><th>적을 것</th></tr></thead>
+    <tbody>
+      <tr><td><b>팀 구성원</b></td><td></td></tr>
+      <tr><td><b>팀의 질문</b></td><td></td></tr>
+      <tr><td><b>분석 틀</b><br><span class="mini">회귀 · 분류 · 군집 · 연관</span></td><td></td></tr>
+      <tr><td><b>데이터 후보 ①</b><br><span class="mini">이름 · 출처</span></td><td></td></tr>
+      <tr><td><span class="mini">① 세 물음 판정과 근거</span></td><td></td></tr>
+      <tr><td><b>데이터 후보 ②</b><br><span class="mini">이름 · 출처</span></td><td></td></tr>
+      <tr><td><span class="mini">② 세 물음 판정과 근거</span></td><td></td></tr>
+      <tr><td><b>데이터 후보 ③</b><br><span class="mini">이름 · 출처</span></td><td></td></tr>
+      <tr><td><span class="mini">③ 세 물음 판정과 근거</span></td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout ask">
+    <div class="h">❓ 주제 카드를 내기 전에 답할 질문</div>
+    <ul>
+      <li>팀의 질문에 답하려면 어떤 표가 필요합니까? 그 표의 한 행은 무엇 하나를 나타냅니까?</li>
+      <li>세 후보 가운데 가장 손에 잡히는 것은 무엇입니까? 그렇게 판단한 근거는 데이터의 양입니까, 질문과의 맞음입니까?</li>
+      <li>오늘 급식 월드컵처럼 팀이 직접 데이터를 모아야 하는 주제입니까, 이미 공개된 데이터를 쓰는 주제입니까?</li>
+    </ul>
+  </div>
+  <h2>3. 정리 — 오늘 만든 것</h2>
+  <p>오늘 여러분이 만든 것은 <b>학급이 함께 쓰는 테이블 하나</b>입니다. 13차시에 문장으로만 읽었던 INSERT와 SELECT가 이 테이블에서 실제로 실행되었습니다. 대결 한 번이 한 행으로 쌓이고, 그 행들을 이긴 쪽 기준으로 묶어 세면 승률표가 나옵니다.</p>
+
+  <h3>권한 정책 — 허용할 동작을 명시하는 이유</h3>
+  <p>RLS는 <b>활성화된 테이블에서 어떤 행에 접근할 수 있는지</b> 정하는 정책입니다. 일반 앱 역할에는 테이블 권한과 해당 정책이 모두 필요합니다. RLS가 꺼져 있거나 관리자 권한을 사용하면 정책의 보호 범위가 달라집니다. 이번 설계는 로그인 없는 연습용으로 읽기·추가만 허용하며, 누구나 그 권한으로 여러 판을 반복할 수 있다는 한계가 있습니다. 앱의 버튼 숨기기는 DB 권한 검사를 대신하지 못합니다. <a href="https://supabase.com/docs/guides/database/postgres/row-level-security" target="_blank" rel="noopener">Supabase RLS 문서</a>에서 원리를 확인할 수 있습니다.</p>
+  <div class="callout warn">
+    <div class="h">⚠️ 바이브 코딩에서 가장 자주 만나는 DB 오류</div>
+    <p>연결·저장·조회 오류의 원인은 다를 수 있습니다. 표 이름과 열 이름, 접속 대상, 허용된 동작, RLS 정책을 순서대로 확인합니다. 오류를 없애려고 관리자 키를 넣거나 모든 권한을 열지 말고, 필요한 동작만 교사와 확인합니다.</p>
+  </div>
+
+  <h3>AI에게 DB를 주문할 때 알려 줄 네 가지</h3>
+  <p>SQL 문장을 직접 쓰지 않더라도, AI가 데이터베이스 코드를 맞게 짜려면 AI가 볼 수 없는 사실을 프롬프트에 적어 주어야 합니다. 1절의 ① 샘플 프롬프트에 이미 네 가지가 다 들어 있었습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>알려 줄 것</th><th>왜</th><th>①의 문장</th></tr></thead>
+    <tbody>
+      <tr><td><b>표 이름과 열 이름</b>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다.</td><td>"표 이름은 menu_duels이고 public 스키마에 있어. 이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야"</td></tr>
+      <tr><td><b>새 표를 만들지 말 것</b></td><td>학급 공용 프로젝트에서는 학생이 표를 만들 권한이 없다</td><td>"새 표를 만들지 말고 이 표에 그대로 연결해 줘"</td></tr>
+      <tr><td><b>접속 정보는 비밀 금고에</b></td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘"</td></tr>
+      <tr><td><b>무결성 조건</b></td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘"</td></tr>
+    </tbody>
+  </table>
+  <p>팀 프로젝트에서도 앱의 목적, 실제 표의 구조, 접속 정보의 이름, 허용된 입력과 동작을 알려 줍니다. 코드를 받은 뒤에는 저장한 값과 조회·집계 결과가 맞는지 작은 예로 확인합니다.</p>
+
+  <p>1차시에 질문 던지기로 시작한 공통 수업이 여기서 끝납니다. 질문을 세우고 첫 앱을 배포하고(1차시), API로 데이터를 구해 오고(2·5차시), 그래프로 데이터를 읽고(3·4차시), 회귀·분류·군집·연관의 네 가지 틀로 모델을 만들고(6~12차시), 데이터가 저장되는 곳과 그 문장을 읽고(13차시), 그 데이터를 다룰 때의 기준을 세웠습니다(14차시). 이제 같은 도구로 팀의 질문에 답할 차례입니다.</p>
+
+  <h2>4. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 어느 반찬이 <b>승리 수</b> 1위인데 <b>승률</b>은 3위였습니다. 어떻게 이런 일이 생기는지 분모를 들어 설명한 뒤 펼쳐 봅니다.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>승리 수의 분모는 없고, 승률의 분모는 그 반찬이 겨룬 횟수입니다. 대진표에서 자주 뽑힌 반찬은 겨룬 횟수가 많아 승리 수가 쌓이지만, 진 경기도 함께 늘어 승률은 낮아질 수 있습니다. 두 숫자를 함께 보아야 순위를 읽을 수 있습니다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 어느 팀이 "우리 학교 학생들의 등하교 위치 기록을 모아 시간대별 이동 패턴을 분석하겠다"는 주제를 제안했습니다. 주제 판단의 세 물음 중 이 주제가 걸리는 곳은?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">첫째 물음 — 등하교 위치 데이터는 모을 방법이 없기 때문</button>
+        <button class="opt">둘째 물음 — 이동 패턴은 우리가 배운 분석 틀에 맞지 않기 때문</button>
+        <button class="opt" data-ok="1">셋째 물음 — 위치 기록은 이어 붙이면 특정 학생의 동선이 드러나는 민감한 개인정보라, 동의 없는 수집·분석이 사생활을 침해하기 때문</button>
+      </div>
+      <div class="fb">데이터가 있다는 것과 써도 된다는 것은 다릅니다. 개인을 추적할 수 없는 형태로 바꾸어 다시 설계해야 합니다.</div>
+    </div>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>급식 월드컵 앱에서 저장 성공과 반찬별 승률 집계를 확인했다.</li>
+    <li>친구와 같은 대결 기록 표에 연결하여 서로의 대결 기록이 집계에 반영되는지 확인했다.</li>
+    <li>승리 수 순위와 승률 순위가 어디서 달라지는지 분모를 들어 설명할 수 있다.</li>
+    <li>팀을 구성하고, 데이터 후보를 세 물음으로 판단해 주제 카드를 냈다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">행(레코드)</td><td>표의 가로 한 줄. 이 실습에서는 대결 한 번</td></tr>
+    <tr><td class="term">기본 키</td><td>행을 유일하게 구분하는 열. 이 표에서는 자동으로 부여되는 id</td></tr>
+    <tr><td class="term">승률</td><td>이긴 횟수 ÷ 겨룬 횟수. 승리 수와 분모가 다르다</td></tr>
+    <tr><td class="term">비밀 금고(secrets)</td><td>접속 주소와 키를 코드 바깥에 두는 보관처. 공개 저장소로 새어 나가지 않게 한다</td></tr>
+  </table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="lesson14.html"><div class="dir">← 이전</div><div class="tt">14차시 · 데이터 윤리</div></a>
+    <a class="next" href="project.html"><div class="dir">다음 →</div><div class="tt">팀 프로젝트 안내</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/widgets13.js"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10차시 · 분류 평가 손계산 — 혼동행렬 · 데이터 과학 당곡고 · 개정 검토본</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+  <span class="badge review-edition">개정 검토본</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 10차시</span>
+  <h1>분류 평가 손계산 · <span class="a">혼동행렬</span></h1>
+  <div class="under"></div>
+
+  <div class="quote">
+    <div class="q">"셀 수 있다고 다 중요한 것은 아니고, 중요하다고 다 셀 수 있는 것도 아니다."</div>
+    <span class="by">윌리엄 브루스 캐머런 (1963) — 정확도 하나로는 보이지 않는 것을 오늘 손으로 셉니다</span>
+    <span class="who"><b>윌리엄 브루스 캐머런</b>(1915~1983)은 미국의 사회학자입니다. 위 문장은 오랫동안 <b>아인슈타인이 한 말</b>로 퍼져 지금도 그렇게 인용되지만, 실제로 쓴 사람은 캐머런이고 출처는 그가 1963년에 펴낸 사회학 입문서입니다. 유명한 문장일수록 출처가 뒤바뀐 채 도는 일이 흔합니다. 숫자든 인용이든 어디에서 나온 것인지 확인하는 일이 오늘 수업의 주제이기도 합니다.</span>
+  </div>
+
+  <p class="lead">9차시에는 앱이 내놓은 정확도를 읽었습니다. 오늘은 <b>혼동행렬</b>로 맞힌 경우와 틀린 경우를 네 칸으로 나누고, 정확도·정밀도·재현율을 손으로 계산합니다. 세 지표가 서로 다른 모델을 가리키는 경우를 만나면, 지표를 고르기 전에 하려는 일이 무엇인지부터 정합니다.</p>
+
+  <p class="mini">이 수업에서 사용하는 표는 <b>어제까지 모인 데이터</b>입니다. 데이터가 하루씩 쌓이므로 화면에 나오는 편수와 점수는 사람마다, 날마다 조금씩 다릅니다. 숫자가 다른 것은 잘못이 아니며, 그 숫자를 어떻게 읽을지가 오늘의 과제입니다. 선생님 화면의 그림은 교재를 만든 시점의 데이터로 그려졌으므로 앱 화면의 숫자와 조금 다를 수 있습니다. 활동지의 두 문제만은 손으로 계산하기 쉽도록 고른 고정된 수입니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>손계산 활동지</b> — 기본 문제와 연습 문제를 혼동행렬 · 정확도 · 정밀도 · 재현율 · 판단 · 기준 비교의 순서로 손으로 계산한다</li>
+      <li><b>지표의 분모</b> — 정밀도는 예측을 기준으로, 재현율은 실제를 기준으로 나눈 값임을 손계산으로 확인한다</li>
+      <li><b>기준과 비교</b> — 한 범주로만 예측하는 방법의 세 지표를 손으로 구하고, 성공 편수가 줄어들수록 그 정확도가 어떻게 달라지는지 화면에서 확인한다</li>
+    </ul>
+  </div>
+
+  <h2>0. 오늘의 목표</h2>
+  <p>중요한 메일을 스팸으로 분류하는 오류와 스팸을 받은편지함에 남기는 오류는 미치는 영향이 다릅니다. 정확도는 두 오류를 구분하지 않습니다. 오늘은 두 오류를 나누어 세는 방법을 손으로 익힙니다.</p>
+  <ul class="steps">
+    <li>실제 범주와 예측 범주를 <b>혼동행렬</b>의 네 칸(TP·FP·FN·TN)으로 나누어 채울 수 있다.</li>
+    <li>네 칸에서 <b>정확도·정밀도·재현율</b>을 손으로 계산하고, 정밀도와 재현율의 분모가 다른 까닭을 설명할 수 있다.</li>
+    <li>세 지표가 서로 다른 모델을 가리킬 때, <b>오류의 대가</b>를 근거로 볼 지표를 정할 수 있다.</li>
+  </ul>
+
+  <h2>1. 개념 이해 — 네 칸과 세 지표</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 139·140쪽</span></div>
+    <p class="q">"오분류표란 각각의 실제 클래스와 예측 결과를 행렬로 나타낸 것이다." <span class="src">(139쪽)</span></p>
+    <p class="q">"정확도는 전체 데이터 중 실제와 같게 예측한 데이터의 비율을 나타내며, 레이블별 분포가 균일하지 않은 경우 정확도로 모델을 평가하는 것은 부적절하다." <span class="src">(139쪽)</span></p>
+    <p class="q">"문제 상황에 따라 적합한 성능 지표가 다르므로, 상황에 맞는 지표를 선택해야 한다." <span class="src">(140쪽)</span></p>
+    <p class="t">→ 혼동행렬은 실제 범주와 예측 범주를 교차해 나타낸 표입니다. 정확도·정밀도·재현율은 이 표에서 계산합니다. 오늘은 양성을 '기록된 관객 수가 100만 명 이상인 성공', 음성을 '기준 미달'로 정합니다. 실제 흑자·적자 구분은 아닙니다. 본문과 활동지와 위젯에서 같은 이름을 사용합니다.</p>
+  </div>
+  <p>영어 약자보다 우리말이 먼저입니다. '성공'을 양성(Positive)이라 할 때, 예측은 네 가지 중 하나로 결정됩니다. 곧 만날 약자 TP·FP·FN·TN은 True/False(예측이 맞음/틀림)와 Positive/Negative(성공/기준 미달로 예측)의 조합입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>칸</th><th>우리말로</th><th>영화라면</th></tr></thead>
+    <tbody>
+      <tr><td><b>TP</b></td><td>양성 예측 · 실제 양성</td><td>성공이라 예측했고 실제로 성공</td></tr>
+      <tr><td><b>FP</b></td><td>양성 예측 · 실제 음성</td><td>성공이라 예측했지만 실제는 기준 미달</td></tr>
+      <tr><td><b>FN</b></td><td>음성 예측 · 실제 양성</td><td>기준 미달로 예측했지만 실제는 성공 (놓친 성공작)</td></tr>
+      <tr><td><b>TN</b></td><td>음성 예측 · 실제 음성</td><td>기준 미달로 예측했고 실제로 기준 미달</td></tr>
+    </tbody>
+  </table>
+  <div class="callout theory">
+    <div class="h">🧮 혼동행렬 — 맞힘과 틀림을 네 갈래로 나눈다</div>
+    <p>혼동행렬은 실제 범주와 예측 범주를 교차해 만든 표입니다. 맞힌 경우는 TP와 TN 두 갈래로, 틀린 경우는 FP와 FN 두 갈래로 나뉩니다. 정확도는 맞힌 두 칸을 하나로 묶어 세기 때문에 틀린 두 칸의 차이를 보여 주지 못합니다.</p>
+    <p class="t">활동지에서 확인할 것 — ① 네 칸을 먼저 채우고 나서 지표를 계산합니다. 네 칸을 건너뛰고 공식에 수를 넣으면 어느 칸에서 나온 값인지 알 수 없게 됩니다. <span class="src">(교과서 139쪽)</span></p>
+  </div>
+  <p>정확도의 분자는 맞힌 전체 건수(TP+TN)이고, 정밀도와 재현율의 분자는 맞힌 양성 건수(TP)입니다. <b>정밀도는 예측 양성, 재현율은 실제 양성</b>을 분모로 삼습니다. 분모가 0이면 해당 비율은 계산할 수 없습니다. 코드에서 0으로 표시하는 경우에는 계산을 위한 처리임을 구분해야 합니다.</p>
+  <table class="daymap">
+    <thead><tr><th>지표</th><th>계산 (140쪽 공식)</th><th>묻는 말</th></tr></thead>
+    <tbody>
+      <tr><td><b>정확도</b></td><td>(TP+TN) ÷ 전체</td><td>전체 중 얼마나 맞혔는가</td></tr>
+      <tr><td><b>정밀도</b></td><td>TP ÷ (TP+FP)</td><td>'성공'이라 예측한 것 중 실제 성공 비율은 얼마인가</td></tr>
+      <tr><td><b>재현율</b></td><td>TP ÷ (TP+FN)</td><td>실제 성공작 중 얼마나 찾아냈는가</td></tr>
+    </tbody>
+  </table>
+  <div class="callout theory">
+    <div class="h">🧮 정밀도와 재현율 — 분자는 같고 분모가 다르다</div>
+    <div class="tbquote" style="margin:10px 0">
+      <div class="h">📖 교과서의 설명을 공식에 맞게 고쳐 옮깁니다 <span class="src">『데이터 과학』 139쪽</span></div>
+      <p class="q">정밀도는 모델이 양성으로 예측한 것 중 실제 양성인 데이터의 비율을 나타낸다. 재현율은 실제 양성인 데이터 중 모델이 정확하게 예측한 데이터의 비율을 나타낸다.</p>
+      <p class="t">→ "예측한 것 중"과 "실제인 것 중"이 두 지표의 분모를 나눕니다.</p>
+      <p class="t" style="font-size:0.8rem;color:var(--muted)">※ 교과서 139쪽은 정밀도와 재현율의 설명 문장이 서로 바뀌어 있습니다. 같은 쪽의 공식이 기준이며, 위 문장은 따옴표 없이 공식에 맞게 고쳐 옮긴 것입니다.</p>
+    </div>
+    <p>두 지표의 분자는 모두 TP입니다. 다른 것은 분모입니다. <b>정밀도의 분모는 예측이 기준</b>이어서 성공이라고 예측한 건수(TP+FP)를 셉니다. 성공이라고 말한 것 가운데 몇 건이 실제로 성공했는지 묻습니다. <b>재현율의 분모는 실제가 기준</b>이어서 실제로 성공한 건수(TP+FN)를 셉니다. 실제 성공작 가운데 몇 건을 찾아냈는지 묻습니다.</p>
+    <p class="t">활동지에서 확인할 것 — 같은 표에서 두 값을 나란히 구한 뒤, 각각 어느 방향으로 세었는지 화살표를 그어 봅니다. 정밀도는 세로 한 줄, 재현율은 가로 한 줄입니다. <span class="src">(교과서 140쪽)</span></p>
+  </div>
+  <div class="callout theory">
+    <div class="h">🧮 정확도만 보면 안 되는 까닭 — 치우친 데이터</div>
+    <p>한 범주가 데이터의 대부분을 차지하면, 그 범주로만 찍어도 정확도가 높게 나옵니다. 성공작이 백 편 가운데 다섯 편뿐인 데이터에서 전부 기준 미달이라고 찍으면 정확도는 0.95입니다. 성공작은 한 편도 찾지 못했는데도 그렇습니다. 교과서도 "레이블별 분포가 균일하지 않은 경우 정확도로 모델을 평가하는 것은 부적절하다"라고 적습니다.</p>
+    <p><b>기준 모델</b>은 입력 속성을 사용하지 않고 훈련용 데이터에서 가장 많은 범주로만 예측하는 모델입니다. 학습한 모델의 성능을 비교할 출발점으로 삼습니다. 다수 범주가 무엇이냐에 따라 전부 성공으로 예측하기도 하고 전부 기준 미달로 예측하기도 합니다. 활동지 ⑤의 '전부 성공' 규칙은 다수 범주와 상관없이 모든 영화를 성공이라고 예측하는 별도의 비교 규칙이며, 재현율 하나만 보았을 때 무엇이 문제인지 확인하려고 둔 것입니다.</p>
+    <p class="t">활동지에서 확인할 것 — ⑤에서 모든 영화를 성공이라고 예측하는 규칙의 세 지표를 구합니다. 그 규칙이 어느 지표에서 두 모델을 이기는지 확인합니다. <span class="src">(교과서 139쪽)</span></p>
+  </div>
+  <figure class="interactive" data-fig="dial">
+    <div class="widget" data-w="dial">
+  <svg viewBox="0 0 720 300" role="img" aria-label="테스트용 66편 중 성공작 수를 바꾸면 다수 범주를 그대로 예측하는 기준 모델의 정확도·재현율·정밀도가 어떻게 달라지는지, 무작위 50 대 50 모델과 비교해 보여 주는 그림">
+    <text class="dl-title" x="40" y="26" font-size="14" font-weight="700" fill="#6b7385"></text>
+    <g class="dl-grid"></g>
+    <text class="dl-base" x="40" y="244" font-size="15" font-weight="800" fill="#1c2230"></text>
+    <text x="40" y="268" font-size="14" fill="#6b7385">무작위 50:50 · 정확도 0.500 · 재현율 0.500</text>
+    <rect class="dl-panel" x="390" y="32" width="290" height="236" rx="10" fill="#fff" stroke="#e3ddcf"></rect>
+    <g class="dl-m" data-m="acc">
+      <text x="404" y="62" font-size="14" font-weight="700" fill="#1c2230">정확도</text>
+      <rect x="404" y="76" width="262" height="10" rx="5" fill="#ece7d8"></rect>
+      <rect class="dl-bar" x="404" y="76" width="0" height="10" rx="5" fill="#b07a00"></rect>
+      <line x1="535" y1="71" x2="535" y2="91" stroke="#6b7385" stroke-width="1.2" stroke-dasharray="3 3"></line>
+      <text x="535" y="66" text-anchor="middle" font-size="14" fill="#6b7385">무작위 0.500</text>
+      <text class="dl-val" x="666" y="62" text-anchor="end" font-size="24" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <text class="dl-note" x="404" y="98" font-size="14" fill="#9a8b6a"></text>
+    </g>
+    <g class="dl-m" data-m="rec">
+      <text x="404" y="140" font-size="14" font-weight="700" fill="#1c2230">재현율</text>
+      <rect x="404" y="154" width="262" height="10" rx="5" fill="#ece7d8"></rect>
+      <rect class="dl-bar" x="404" y="154" width="0" height="10" rx="5" fill="#b07a00"></rect>
+      <line x1="535" y1="149" x2="535" y2="169" stroke="#6b7385" stroke-width="1.2" stroke-dasharray="3 3"></line>
+      <text x="535" y="144" text-anchor="middle" font-size="14" fill="#6b7385">무작위 0.500</text>
+      <text class="dl-val" x="666" y="140" text-anchor="end" font-size="24" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <text class="dl-note" x="404" y="176" font-size="14" fill="#9a8b6a"></text>
+    </g>
+    <g class="dl-m" data-m="prec">
+      <text x="404" y="218" font-size="14" font-weight="700" fill="#1c2230">정밀도</text>
+      <rect x="404" y="232" width="262" height="10" rx="5" fill="#ece7d8"></rect>
+      <rect class="dl-bar" x="404" y="232" width="0" height="10" rx="5" fill="#b07a00"></rect>
+      <text class="dl-val" x="666" y="218" text-anchor="end" font-size="24" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <text class="dl-note" x="404" y="254" font-size="14" fill="#9a8b6a"></text>
+    </g>
+    <text class="dl-cap" x="40" y="292" font-size="14" fill="#6b7385"></text>
+  </svg>
+  <div class="wctl">
+    <label>성공 편수 <input class="dl-range" type="range" min="0" max="66" step="1" value="6"></label>
+    <button class="wbtn on" type="button" data-k="6" aria-pressed="true">6편 (실제 데이터)</button>
+    <button class="wbtn" type="button" data-k="1" aria-pressed="false">1편</button>
+    <button class="wbtn" type="button" data-k="33" aria-pressed="false">33편</button>
+    <button class="wbtn" type="button" data-k="40" aria-pressed="false">40편</button>
+    <span class="wout"></span>
+  </div>
+</div>
+    <figcaption>선생님 화면으로 함께 봅니다. 성공 편수를 줄일수록, 아무것도 찾지 않고 전부 기준 미달로 찍는 방법의 정확도가 오히려 올라갑니다. 치우친 데이터에서 정확도가 어떻게 움직이는지 확인합니다. 활동지 ⑤에서 같은 계산을 손으로 합니다.</figcaption>
+  </figure>
+
+  <h2>2. 손계산 활동지 — 기본 문제와 연습 문제</h2>
+  <div class="callout tip">
+    <div class="h">🎬 우리는 DGV 배급사의 데이터 과학 인턴입니다</div>
+    <p>9차시에는 기록된 누적 관객 수 100만 명을 기준으로 성공 레이블을 만들었습니다. 오늘은 그 기준으로 만든 분류기가 <b>쓸 만한지</b>를 판단합니다. 활동지의 수는 손으로 계산하기 쉽도록 고른 값이며 실제 관측값이 아닙니다.</p>
+    <p>발굴팀은 계약할 영화를 고릅니다. 지난 배급 결과를 보면 놓친 성공작은 다른 회사가 가져갔고, 기준 미달 영화를 계약한 건에는 계약금이 나갔습니다. <b>어느 오류의 손해가 더 큰지에 따라 볼 지표가 달라집니다.</b></p>
+    <p>인턴은 정확도만 보고하지 않습니다. <b>왜 그 지표를 봤는지 함께 보고합니다.</b></p>
+  </div>
+  <p>오늘의 계산은 활동지에 손으로 적습니다. 활동지에는 문제가 둘 있습니다. <b>기본 문제</b>는 배급사 발굴팀이 지난 배급 결과로 흥행 성공작 발굴 모델을 채점하는 상황이고, 선생님과 함께 한 단계씩 풉니다. <b>연습 문제</b>는 메일 프로그램이 스팸을 걸러내는 상황이고, 같은 순서로 혼자 풉니다. 두 문제 모두 모델이 둘씩 나옵니다. 같은 결과를 두 모델로 채점해 보고, 세 지표가 어느 쪽을 더 나은 예측이라고 말하는지 비교합니다. 두 문제의 수는 계산하기 쉽도록 고른 값이며 실제 측정값이 아닙니다. 나눗셈이 모두 간단해 계산기 없이 끝까지 풀 수 있습니다.</p>
+  <div class="callout warn">
+    <div class="h">🖥️ 위젯은 선생님 화면으로 함께 봅니다</div>
+    <p>이 차시의 위젯은 선생님이 앞에서 보여 주는 시연용입니다. 화면이 답을 대신 계산해 주면 계산 순서가 손에 남지 않습니다. 학생은 활동지에 손으로 적고, 다 푼 뒤에 화면의 값과 대조합니다.</p>
+  </div>
+  <table class="daymap">
+    <thead><tr><th>단계</th><th>활동지에 적는 것</th><th>확인할 점</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 혼동행렬</b></td><td>두 모델 각각에서 TP·FP·FN·TN 네 칸과 합계를 적습니다</td><td>행의 합은 실제 편수, 열의 합은 예측 편수입니다. 두 합이 모두 맞아야 다음으로 넘어갑니다.</td></tr>
+      <tr><td><b>② 정확도</b></td><td>(TP + TN) ÷ 전체</td><td>맞힌 두 칸을 하나로 묶은 값입니다.</td></tr>
+      <tr><td><b>③ 정밀도 · 재현율</b></td><td>TP ÷ (TP + FP)와 TP ÷ (TP + FN)</td><td>분자는 같고 분모가 다릅니다. 정밀도는 예측이 기준, 재현율은 실제가 기준입니다.</td></tr>
+      <tr><td><b>④ 판단</b></td><td>볼 지표와 고를 모델, 그리고 그렇게 정한 까닭</td><td>세 지표가 서로 다른 모델을 가리킬 수 있습니다. 그때는 어느 오류의 대가가 더 큰지를 먼저 정합니다.</td></tr>
+      <tr><td><b>⑤ 기준과 비교</b></td><td>모든 영화를 성공이라고 예측하는 규칙의 네 칸과 세 지표</td><td>아무 판단도 하지 않는 규칙이 어느 지표에서 두 모델을 이기는지 확인합니다.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout tip">
+    <div class="h">💡 활동지 규칙</div>
+    <ul>
+      <li><b>계산 과정을 지우지 않습니다.</b> 답만 적힌 활동지는 검산할 수 없습니다.</li>
+      <li><b>막히면 네 칸부터 채웁니다.</b> 세 지표는 모두 그 네 칸에서 나옵니다.</li>
+      <li><b>값이 화면과 다르면 단계로 돌아갑니다.</b> 대부분 ① 네 칸의 배치나 ③ 분모에서 어긋납니다.</li>
+    </ul>
+  </div>
+  <p>④까지 오면 세 지표가 서로 다른 모델을 가리키는 경우를 만납니다. 그때는 지표를 고르는 것이 아니라 <b>먼저 줄여야 할 오류가 무엇인지</b>를 정합니다. 실제 성공작을 기준 미달로 예측한 FN을 줄이는 일이 중요하면 재현율을 보고, 기준 미달 영화를 성공으로 예측한 FP를 줄이는 일이 중요하면 정밀도를 봅니다. 기본 문제를 손으로 다 푼 뒤, 아래 화면에서 같은 표를 사례 순서대로 확인합니다. 연습 문제는 같은 순서로 혼자 풉니다.</p>
+  <figure class="interactive" data-fig="matrix">
+    <div class="widget" data-w="matrix">
+  <svg viewBox="0 0 720 300" role="img" aria-label="혼동행렬 네 칸과 정확도·정밀도·재현율. 지표를 고르면 분모 범위가 테두리로 켜지고, 사례를 바꾸면 네 칸의 수와 세 값이 함께 바뀜">
+    <text class="mx-case" x="24" y="22" font-size="14" fill="#6b7385"></text>
+    <text class="mx-h" data-k="0" x="222" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-h" data-k="1" x="366" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-r" data-k="0" x="144" y="76" text-anchor="end" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-r" data-k="1" x="144" y="138" text-anchor="end" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-rs" data-k="0" x="144" y="96" text-anchor="end" font-size="14" fill="#6b7385"></text>
+    <text class="mx-rs" data-k="1" x="144" y="158" text-anchor="end" font-size="14" fill="#6b7385"></text>
+    <rect x="150" y="46" width="144" height="62" fill="#54a24b" fill-opacity="0.16" stroke="#f0e2bc"></rect>
+    <rect x="294" y="46" width="144" height="62" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+    <rect x="150" y="108" width="144" height="62" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+    <rect x="294" y="108" width="144" height="62" fill="#3ba6a0" fill-opacity="0.15" stroke="#f0e2bc"></rect>
+    <text x="160" y="68" font-size="14" font-weight="800" fill="#2f6d2a">TP</text>
+    <text x="304" y="68" font-size="14" font-weight="800" fill="#b23c3c">FN</text>
+    <text x="160" y="130" font-size="14" font-weight="800" fill="#b23c3c">FP</text>
+    <text x="304" y="130" font-size="14" font-weight="800" fill="#23706b">TN</text>
+    <text class="mx-v" data-k="tp" x="222" y="92" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="fn" x="366" y="92" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="fp" x="222" y="154" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="tn" x="366" y="154" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-cs" data-k="0" x="222" y="190" text-anchor="middle" font-size="14" fill="#6b7385"></text>
+    <text class="mx-cs" data-k="1" x="366" y="190" text-anchor="middle" font-size="14" fill="#6b7385"></text>
+    <rect class="mx-num" data-k="tn" x="294" y="108" width="144" height="62" fill="none" stroke="#23706b" stroke-width="2" opacity="0"></rect>
+    <rect class="mx-num" data-k="tp" x="150" y="46" width="144" height="62" fill="none" stroke="#2f6d2a" stroke-width="2"></rect>
+    <rect class="mx-den" x="150" y="46" width="144" height="124" rx="2" fill="none" stroke="#e8930c" stroke-width="3"></rect>
+    <g class="mx-m" data-m="acc">
+      <text x="462" y="62" font-size="14" font-weight="700" fill="#1c2230">정확도 = (TP + TN) ÷ 전체</text>
+      <text class="mx-sub" x="462" y="82" font-size="14" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="64" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="92" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="92" width="0" height="8" rx="4" fill="#b07a00"></rect>
+    </g>
+    <g class="mx-m" data-m="prec">
+      <text x="462" y="120" font-size="14" font-weight="700" fill="#1c2230">정밀도 = TP ÷ (TP + FP)</text>
+      <text class="mx-sub" x="462" y="140" font-size="14" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="122" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="150" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="150" width="0" height="8" rx="4" fill="#b07a00"></rect>
+    </g>
+    <g class="mx-m" data-m="rec">
+      <text x="462" y="178" font-size="14" font-weight="700" fill="#1c2230">재현율 = TP ÷ (TP + FN)</text>
+      <text class="mx-sub" x="462" y="198" font-size="14" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="180" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="208" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="208" width="0" height="8" rx="4" fill="#b07a00"></rect>
+    </g>
+    <text class="mx-cap" x="24" y="232" font-size="14" font-weight="700" fill="#1c2230"></text>
+    <text x="24" y="258" font-size="14" fill="#6b7385">정밀도 · 재현율 → 분자 같음 · 분모 다름</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-case="A" aria-pressed="true">모델 A</button>
+    <button class="wbtn" type="button" data-case="B" aria-pressed="false">모델 B</button>
+    <button class="wbtn" type="button" data-case="all" aria-pressed="false">전부 성공 예측</button>
+    <button class="wbtn" type="button" data-m="acc" aria-pressed="false">정확도</button>
+    <button class="wbtn on" type="button" data-m="prec" aria-pressed="true">정밀도</button>
+    <button class="wbtn" type="button" data-m="rec" aria-pressed="false">재현율</button>
+    <button class="wbtn" type="button" data-act="reveal" aria-pressed="false">값 확인</button>
+  </div>
+</div>
+    <figcaption>선생님 화면으로 함께 봅니다. 활동지 기본 문제의 세 행렬입니다. 사례 버튼으로 모델 A, 모델 B, 전부 성공이라고 찍는 방법을 번갈아 봅니다. 지표 버튼을 누르면 그 지표가 분모로 삼는 범위가 테두리로 표시됩니다. 손으로 먼저 계산한 뒤 값 확인을 누릅니다.</figcaption>
+  </figure>
+  <div class="callout ask">
+    <div class="h">❓ 기본 문제를 푼 뒤 함께 답할 질문</div>
+    <ul>
+      <li>정확도가 가리키는 모델과 재현율이 가리키는 모델이 서로 달랐습니다. 두 모델은 각각 어떤 방식으로 예측했기에 이런 차이가 생겼습니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt" data-ok="1">성공이라고 예측하는 범위를 넓힐수록 재현율은 오르지만 헛짚는 건수도 늘어나기 때문</button><button class="opt">재현율은 정확도를 계산하는 과정에서 자동으로 정해지기 때문</button><button class="opt">두 지표는 서로 다른 데이터에서 계산한 값이기 때문</button></div>
+          <div class="fb">같은 혼동행렬에서 나온 값이라도 무엇을 분모로 삼느냐가 다릅니다. 지표마다 좋다고 부르는 모델이 달라집니다.</div>
+        </div></div>
+      </li>
+      <li>발굴팀이 아니라 성공 예측을 믿고 돈을 거는 투자자라면 어느 지표를 보겠습니까? 같은 표에서 답이 달라지는 까닭은 무엇입니까?
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt">재현율 — 성공작을 하나도 놓치지 않아야 하므로</button><button class="opt" data-ok="1">정밀도 — 성공이라 예측한 것이 실제로 성공이어야 하므로</button></div>
+          <div class="fb">놓치는 손해가 큰 쪽은 재현율을, 헛짚는 손해가 큰 쪽은 정밀도를 봅니다. 같은 표에서도 목적에 따라 답이 달라집니다.</div>
+        </div></div>
+      </li>
+      <li>전부 성공이라고 찍는 방법은 재현율이 1.00이었습니다. 그런데도 쓰지 않는 까닭을 나머지 두 지표로 설명해 보십시오.
+        <div class="quiz qinline"><div class="qitem">
+          <div class="qopts qopts-col"><button class="opt" data-ok="1">정밀도와 정확도가 함께 낮아, 성공이라는 예측 자체가 정보를 주지 못하므로</button><button class="opt">재현율 1.00은 계산이 잘못된 값이므로</button><button class="opt">전부 성공이라고 찍으면 혼동행렬을 만들 수 없으므로</button></div>
+          <div class="fb">지표 하나만 보면 이런 모델도 최고가 됩니다. 세 지표를 함께 보아야 하는 이유입니다.</div>
+        </div></div>
+      </li>
+    </ul>
+  </div>
+  <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
+  <h3>지표 선택이 나뉜 두 현장</h3>
+  <p>정확도 하나만 보아서는 드러나지 않는 차이가 실제 현장에서 문제가 된 사례가 있습니다. 어떤 오류를 더 심각한 오류로 볼 것인지는 계산 결과가 아니라 사람이 정합니다. 여기서는 재범 위험 점수와 건강 알림이라는 서로 다른 현장을 살펴봅니다. 두 사례는 같은 혼동행렬을 놓고도 무엇을 분모로 삼느냐에 따라 판단이 달라진다는 점을 보여 줍니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>무엇을 예측·분류했나</th><th>이 차시 개념과의 연결</th></tr></thead>
+    <tbody>
+      <tr><td><b>재범 위험 점수 COMPAS</b><br>미국 2016<br><a href="https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing" target="_blank" rel="noopener">원문 보기</a></td><td>미국 법원이 보석·형량 판단의 참고 자료로 COMPAS라는 재범 위험 점수를 사용했습니다. 탐사보도 매체 프로퍼블리카가 2016년 플로리다주 브라워드 카운티 피고인 7,214명의 점수와 2년간 실제 재범 여부를 대조했습니다. 위험 순위를 맞게 매긴 비율은 63.6%였습니다. 재범하지 않았는데 고위험으로 분류된 비율은 흑인 44.85%, 백인 23.45%였고, 재범했는데 저위험으로 분류된 비율은 흑인 27.99%, 백인 47.72%로 정반대였습니다.</td><td>혼동행렬의 FP와 FN을 집단별로 나눠 계산한 사례입니다. 위양성률은 FP÷(FP+TN), 위음성률은 FN÷(FN+TP)로 구합니다. 정확도 하나만 보면 두 집단의 차이가 드러나지 않습니다. 활동지 ④에서 하는 판단과 같습니다.</td></tr>
+      <tr><td><b>애플워치 심방세동 알림</b><br>2019<br><a href="https://www.nejm.org/doi/full/10.1056/NEJMoa1901183" target="_blank" rel="noopener">원문 보기</a></td><td>애플과 스탠퍼드 대학이 2019년 참가자 419,297명을 대상으로 애플워치의 불규칙 맥박 알림이 심방세동을 찾아내는지 확인했습니다. 알림을 받은 사람은 2,161명으로 전체의 0.52%였습니다. 이 가운데 심전도 패치를 돌려보내 분석이 가능했던 450명 중 실제로 심방세동이 확인된 비율은 34%였습니다. 결과는 뉴잉글랜드 의학 저널에 실렸습니다.</td><td>알림을 양성 예측으로 보면 분모가 예측 양성(TP+FP)이므로 34%가 곧 정밀도입니다. 재현율은 이 연구로 계산할 수 없습니다. 알림을 받지 않은 사람은 패치를 착용하지 않아 FN을 셀 수 없기 때문입니다.</td></tr>
+    </tbody>
+  </table>
+  <figure class="case"><img src="img/lesson10_case1.png" alt="프로퍼블리카가 공개한 COMPAS 위험 점수 분포 막대그래프 두 장. 흑인 피고인은 1점부터 10점까지 고르게 퍼져 있고, 백인 피고인은 낮은 점수에 몰려 있습니다." loading="lazy" style="width:100%;height:auto"><figcaption class="src">출처: ProPublica, Machine Bias(2016) · 브라워드 카운티 피고인 7,214명의 COMPAS 위험 점수 분포</figcaption></figure>
+  <figure class="case"><img src="img/lesson10_case2.jpg" alt="애플워치의 불규칙 맥박 알림 화면 사진과 참가자 419,297명, 알림 2,161명, 분석 가능 450명, 심방세동 확인 34%로 이어지는 단계별 수치." loading="lazy" style="width:100%;height:auto"><figcaption class="src">사진: Apple 뉴스룸(2018) · 수치: Apple Heart Study, NEJM 381:1909(2019)</figcaption></figure>
+  <p>계산 결과는 판단의 근거를 제공할 뿐, 무엇을 더 심각한 오류로 볼지는 사람이 정합니다. 두 사례는 어떤 오류를 줄일지 정하는 일이 데이터 밖의 판단이라는 점을 드러냅니다.</p>
+  </div></details>
+
+  <h2>3. 입력 점검 — 레이블 누수</h2>
+  <p>7차시에서는 첫 주 관객 수를 추가했더니 테스트용 데이터의 R²가 크게 올랐습니다. 분류에서도 마찬가지로 이 값을 입력에 넣으면 정확도가 올라갑니다. 그러나 <b>개봉 전 예측을 새로 만들려면</b> 첫 주 관객 수는 사용할 수 없는 미래 정보입니다.</p>
+  <p>레이블 누수는 정답 관련 정보가 부적절하게 입력에 들어가 평가를 왜곡하는 문제입니다. 총 관객 수와 관련이 높다는 사실 자체가 누수의 이유는 아닙니다. <b>예측할 때 사용할 수 없는 값</b>을 학습·평가에 썼다는 것이 핵심입니다. 이 데이터의 first_scrn·first_show도 첫 관측일 집계이므로 개봉 전에는 확보했다고 볼 수 없습니다. 실제 개봉 전 예측을 검증하려면 입력 데이터부터 다시 설계해야 합니다. 점수가 올랐다는 사실이 아니라 그 값을 언제 알 수 있는지가 판단 근거입니다.</p>
+
+
+  <h2>4. 개념 정리 — 네 칸에서 판단까지</h2>
+  <p>활동지에서 네 칸을 먼저 채우고 세 지표를 계산했습니다. 정확도는 맞힌 두 칸을 하나로 묶은 값이고, 정밀도와 재현율은 분자가 같고 분모가 다릅니다. 세 지표가 서로 다른 모델을 가리킬 때는 <b>어느 오류를 먼저 줄여야 하는지</b>를 정한 다음 볼 지표를 고릅니다. FN을 줄이는 일이 중요하면 재현율을, FP를 줄이는 일이 중요하면 정밀도를 봅니다.</p>
+  <p>활동지 ⑤에서 확인한 대로, 아무 판단도 하지 않고 모든 영화를 성공이라고 예측하는 규칙이 재현율에서는 두 모델을 이깁니다. <b>그 재현율은 기준 미달 영화까지 모두 성공이라고 예측해서 얻은 값입니다.</b> 화면에서 본 기준 모델도 마찬가지입니다. 성공작이 적은 데이터일수록 전부 기준 미달로 예측하는 기준 모델의 정확도가 올라가지만, 그 정확도는 성공작을 한 편도 찾지 않고 얻은 값입니다. 그래서 지표 하나만으로 목적을 달성했다고 판단하지 않고, 네 칸을 함께 봅니다.</p>
+  <p>다음 시간에는 정답이 없는 데이터를 비슷한 것끼리 묶어 봅니다. 맞고 틀림을 셀 정답표가 없을 때 무엇을 근거로 결과를 읽는지 살펴봅니다.</p>
+
+  <h2>5. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 활동지 기본 문제의 모델 A는 성공이라고 예측한 12편 가운데 6편이 실제로 성공했고, 실제 성공작 8편 가운데 6편을 찾아냈습니다.</div>
+    <div class="qitem">
+      <div class="qs">(a) 모델 A의 정밀도는?</div>
+      <div class="qopts"><button class="opt" data-ok="1">0.50</button><button class="opt">0.60</button><button class="opt">0.75</button></div>
+      <div class="fb">정밀도의 분모는 <b>예측</b>이 기준입니다. 성공이라고 예측한 12편이 분모이므로 6 ÷ 12 = <b>0.50</b>입니다.</div>
+    </div>
+    <div class="qitem">
+      <div class="qs">(b) 모델 A의 재현율은?</div>
+      <div class="qopts"><button class="opt">0.50</button><button class="opt">0.60</button><button class="opt" data-ok="1">0.75</button></div>
+      <div class="fb">재현율의 분모는 <b>실제</b>가 기준입니다. 실제 성공작 8편이 분모이므로 6 ÷ 8 = <b>0.75</b>입니다. 분자는 정밀도와 같은 6인데 분모만 바뀌었습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 활동지 기본 문제에서 스무 편을 전부 성공이라고 찍는 방법은 재현율이 1.00이었습니다. 그런데도 이 방법을 쓰지 않는 까닭으로 알맞은 것은?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">재현율이 1.00이면 계산이 잘못된 것이므로</button>
+        <button class="opt" data-ok="1">정밀도가 0.40이어서 계약한 스무 편 가운데 열두 편이 기준 미달이므로</button>
+        <button class="opt">재현율은 원래 판단에 쓰지 않는 지표이므로</button>
+      </div>
+      <div class="fb">한 편도 놓치지 않았으니 재현율은 1.00이 맞습니다. 그러나 정밀도는 8 ÷ 20 = <b>0.40</b>이고 정확도도 0.40입니다. 지표 하나만 보면 아무 판단도 하지 않는 방법이 1등이 됩니다. 그래서 세 지표를 함께 놓고 봅니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 활동지 연습 문제의 필터 D는 스팸 20통 가운데 18통을 잡았지만 정상 메일 12통을 스팸함으로 보냈습니다. 필터 C는 스팸 16통을 잡고 정상 메일 4통을 스팸함으로 보냈습니다. 어느 지표를 보고 어느 필터를 골라야 합니까?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">재현율을 보고 필터 D — 스팸을 더 많이 잡았으므로</button>
+        <button class="opt" data-ok="1">정밀도를 보고 필터 C — 정상 메일이 스팸함으로 가는 것이 더 큰 사고이므로</button>
+        <button class="opt">정확도를 보고 필터 D — 전체에서 맞힌 비율이 더 높으므로</button>
+      </div>
+      <div class="fb">정상 메일이 스팸함으로 가면 사용자가 읽지 못한 채 지나갑니다. 잘못 고르는 쪽의 대가가 크므로 정밀도를 봅니다. 필터 C의 정밀도는 16 ÷ 20 = 0.80, 필터 D는 18 ÷ 30 = 0.60입니다. 이 문제에서는 정확도도 필터 C를 가리킵니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 4</span> 개봉 전에 예측하려는 모델에 첫 주 관객 수를 넣어 평가 점수가 올랐습니다. 이 결과를 개봉 전 예측 성능의 개선이라 부를 수 있을까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">부를 수 있다 — 테스트용 데이터에서 정확도가 올랐으므로</button>
+        <button class="opt" data-ok="1">부를 수 없다 — 개봉 전에는 알 수 없는 미래 정보가 입력에 섞인 레이블 누수이므로</button>
+        <button class="opt">부를 수 있다 — 속성을 많이 넣을수록 모델은 언제나 좋아지므로</button>
+      </div>
+      <div class="fb">개봉 전에는 첫 주 관객 수를 알 수 없습니다. 따라서 이 값을 넣은 평가 점수로 개봉 전 예측 성능을 주장할 수 없습니다. 누수 여부는 점수의 크기가 아니라 입력을 실제로 확보할 수 있는 시점으로 판단합니다.</div>
+    </div>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>혼동행렬 네 칸을 우리말('양성 예측 · 실제 음성' 등)로 설명할 수 있다.</li>
+    <li>활동지의 기본 문제와 연습 문제를 ①부터 ⑤까지 같은 순서로 계산했다.</li>
+    <li>정밀도의 분모는 예측이 기준이고 재현율의 분모는 실제가 기준임을 계산으로 설명할 수 있다.</li>
+    <li>모든 영화를 성공이라고 예측하는 규칙의 세 지표를 손으로 구해, 그 재현율이 무엇을 뜻하는지 설명할 수 있다.</li>
+    <li>개봉 전 예측에서 첫 주 관객 수가 레이블 누수인 이유를 한 문장으로 말할 수 있다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">혼동행렬(오분류표)</td><td>실제 클래스와 예측 결과를 행렬(네 칸)로 나타낸 표</td></tr>
+    <tr><td class="term">정확도</td><td>전체 중 맞힌 비율. 레이블이 치우치면 홀로는 부적절</td></tr>
+    <tr><td class="term">정밀도</td><td>양성이라 예측한 것 중 실제 양성의 비율 (TP÷(TP+FP))</td></tr>
+    <tr><td class="term">재현율</td><td>실제 양성 중 잡아낸 비율 (TP÷(TP+FN))</td></tr>
+    <tr><td class="term">기준 모델</td><td>훈련용 데이터에서 가장 많은 범주로만 예측하는 모델. 성능을 비교할 기준으로 삼는다</td></tr>
+    <tr><td class="term">레이블 누수</td><td>예측 시점에 사용할 수 없는 정답 관련 정보 등이 입력에 섞여 평가를 왜곡하는 문제</td></tr>
+  </table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="lesson09.html"><div class="dir">← 이전</div><div class="tt">9차시 · 분류</div></a>
+    <a class="next" href="lesson11.html"><div class="dir">다음 →</div><div class="tt">11차시 · 군집</div></a>
+  </div>
+</main>
+</div>
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/widgets10.js?v=2"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>

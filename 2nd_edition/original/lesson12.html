@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12차시 · 연관 분석 — 급식에서 규칙 찾기 · 데이터 과학 당곡고 · 현재본 스냅샷</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../index.html">← 목차</a>
+  <span class="badge">학생용</span>
+  <span class="badge review-edition">현재본 스냅샷</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 12차시</span>
+  <h1>연관 분석 · <span class="a">우리 학교 급식에서 규칙 찾기</span></h1>
+  <div class="under"></div>
+
+  <div class="quote">
+    <div class="q">"바늘 가는 데 실 간다."</div>
+    <span class="by">속담 — 함께 등장하는 메뉴를 찾고, 규칙의 방향과 등장 빈도를 비교합니다</span>
+  </div>
+
+  <p class="lead">“제육볶음이 나오는 날 배추김치도 나올까?” <b>지지도·신뢰도·향상도</b>를 손으로 계산한 뒤 당곡고 급식 데이터에서 메뉴의 동시 등장 패턴을 찾습니다. 세 지표의 차이를 이해하고, 표본에서 찾은 규칙을 어디까지 해석할 수 있는지 판단합니다.</p>
+
+  <p class="mini">이 수업에서 사용하는 급식 데이터는 <b>수업의 기준 기간인 2026년 9월 30일까지의 급식</b>입니다. 3절의 프롬프트도 같은 날까지 조회합니다. 같은 기간을 조회해도 원데이터의 수정·추가와 메뉴 정리 기준에 따라 급식 일수와 메뉴 종류가 달라지므로, 화면에 나오는 숫자는 사람마다 조금씩 다릅니다. 숫자가 다른 것은 잘못이 아니며, 그 숫자를 어떻게 읽을지가 오늘의 과제입니다. 아래 손계산과 검산의 기준은 3절에 연결한 <b>184일 저장본</b>입니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>교과서로 손계산</b> — 158·160쪽 〈개나리 마트〉의 세 지표 (활동지 기본 문제·연습 문제)</li>
+      <li><b>바이브 코딩</b> — 급식 184일에서 규칙을 찾는 앱을 만든다</li>
+      <li><b>판정</b> — 신뢰도가 높아도 기본 등장률과 차이가 작을 수 있음을 확인한다</li>
+    </ul>
+  </div>
+
+  <h2>0. 오늘의 목표</h2>
+  <p>연관 분석은 함께 나타나는 항목의 패턴을 찾습니다. 자주 나오는 메뉴는 다른 여러 메뉴와도 자주 겹칩니다. 따라서 동시 등장 횟수뿐 아니라 각 메뉴의 기본 등장률도 함께 살펴야 합니다. 하루 중식 식단을 한 건으로 보고, 두 메뉴의 관계를 비교합니다.</p>
+  <ul class="steps">
+    <li><b>지지도·신뢰도·향상도</b>의 분모가 각각 무엇인지 말할 수 있다.</li>
+    <li>같은 두 메뉴라도 <b>규칙의 방향</b>이 바뀌면 신뢰도가 달라진다는 것을 설명할 수 있다.</li>
+    <li><b>향상도</b>를 결과 메뉴의 기본 등장률과 비교해 규칙을 판정할 수 있다.</li>
+  </ul>
+
+  <h2>1. 개념 이해 — 교과서의 세 숫자</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 157쪽</span></div>
+    <p class="q">"연관 분석(association analysis)이란 데이터베이스에서 그 안에 존재하는 항목 간의 유용한 연관 규칙을 발견하는 것이다." <span class="src">(157쪽)</span></p>
+    <p class="q">"연관 분석은 고객의 구매 내역을 분석하는 데 흔히 쓰여 '장바구니 분석'이라고도 한다." <span class="src">(157쪽)</span></p>
+    <p class="t">→ 오늘은 급식 184일치를 장바구니로 삼아, 같은 날 함께 나온 메뉴의 규칙을 찾습니다.</p>
+  </div>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 159·160쪽</span></div>
+    <p class="q">"지지도는 두 개의 사건이 동시에 발생하는 비율이며 …" <span class="src">(159쪽)</span></p>
+    <p class="q">"신뢰도는 규칙의 결과 부분이 발생할 가능성을 측정한다." <span class="src">(159쪽)</span></p>
+    <p class="q">"두 사건 A와 B가 서로 영향을 주지 않고 독립적으로 발생한다면, 향상도는 1에 가까워진다." <span class="src">(160쪽)</span></p>
+    <p class="t">→ 지지도는 전체에서 함께 나온 비율, 신뢰도는 A가 나온 경우 중 B도 나온 비율, 향상도는 그 신뢰도를 B의 기본 등장률로 나눈 값입니다. 향상도 1은 표본에서 두 비율이 같다는 뜻이며, 그것만으로 우연이나 독립을 증명하지는 않습니다.</p>
+  </div>
+  <table class="daymap">
+    <thead><tr><th>숫자</th><th>계산식 (N: 전체 일수)</th><th>묻는 말</th></tr></thead>
+    <tbody>
+      <tr><td><b>지지도</b></td><td>A·B 동시 일수 ÷ N</td><td>이 조합, 다룰 만큼 자주 나오는가</td></tr>
+      <tr><td><b>신뢰도</b></td><td>A·B 동시 일수 ÷ A 등장 일수</td><td>A가 나오면 B도 나오는가</td></tr>
+      <tr><td><b>향상도</b></td><td>신뢰도 ÷ (B 등장 일수 ÷ N)</td><td>A가 있을 때 B의 등장률은 기본 등장률의 몇 배인가</td></tr>
+    </tbody>
+  </table>
+  <div class="callout theory">
+    <div class="h">🧩 세 지표는 분모가 서로 다릅니다</div>
+    <p class="q">"지지도는 두 개의 사건이 동시에 발생하는 비율이며 …" <span class="src">(교과서 159쪽)</span></p>
+    <p>세 숫자는 모두 동시 등장 일수에서 출발하지만 무엇으로 나누는지가 다릅니다. <b>지지도</b>는 전체 일수로, <b>신뢰도</b>는 조건 메뉴 A가 나온 일수로 나눕니다. <b>향상도</b>는 그 신뢰도를 다시 결과 메뉴 B의 기본 등장률로 나눕니다. 분모가 다르므로 세 숫자는 서로 대신할 수 없습니다.</p>
+    <p>향상도가 <b>1</b>이면 A가 나온 날의 B 비율과 B의 기본 등장률이 같다는 뜻입니다. <b>1보다 크면</b> A가 나온 날에 B가 더 자주 나왔고, <b>1보다 작으면</b> 덜 나왔습니다. 향상도 1은 표본에서 두 비율이 같았다는 관찰이며, 두 메뉴가 서로 무관하다는 증명이 아닙니다.</p>
+    <p>신뢰도가 높다고 향상도가 높지는 않습니다. B가 원래 거의 날마다 나오는 메뉴라면 신뢰도는 저절로 높아지지만 향상도는 1 언저리에 머뭅니다. 그래서 두 숫자를 함께 읽습니다.</p>
+  </div>
+  <p>교과서의 {삼겹살} → {쌈채소} 규칙은 향상도가 1.67입니다. 삼겹살을 산 거래에서 쌈채소를 산 비율이 전체 거래의 쌈채소 구매 비율의 약 1.67배라는 뜻입니다. 구매 원인이나 미래의 구매를 보장하는 값은 아닙니다.</p>
+
+  <h2>2. 손계산 활동지 — 기본 문제와 연습 문제</h2>
+  <p>오늘의 계산은 활동지에 손으로 적습니다. 활동지에는 문제가 둘 있습니다. <b>기본 문제</b>는 선생님과 함께 한 단계씩 풀고, <b>연습 문제</b>는 같은 순서로 혼자 풉니다. 두 문제 모두 규칙이 둘씩 나옵니다. 같은 기록을 두 규칙으로 계산해 보고, 세 지표가 각각 무엇을 보여 주는지 비교합니다. 그다음 각 문제의 목적에 맞는 지표를 근거로 삼아 규칙을 고릅니다. 활동지의 수는 계산이 떨어지도록 고른 값이며 실제 관측값이 아닙니다. 나눗셈이 모두 두 자리 소수에서 끝나 계산기 없이 풀 수 있습니다.</p>
+  <div class="callout warn">
+    <div class="h">🖥️ 위젯은 선생님 화면으로 함께 봅니다</div>
+    <p>이 차시의 위젯은 선생님이 앞에서 보여 주는 시연용입니다. 화면이 답을 대신 계산해 주면 계산 순서가 손에 남지 않습니다. 학생은 활동지에 손으로 적고, 다 푼 뒤에 화면의 값과 대조합니다.</p>
+  </div>
+  <table class="daymap">
+    <thead><tr><th>단계</th><th>활동지에 적는 것</th><th>확인할 점</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 횟수</b></td><td>앞 항목·뒤 항목·함께 나온 횟수</td><td>세 수를 먼저 적어야 나머지가 나옵니다.</td></tr>
+      <tr><td><b>② 지지도</b></td><td>함께 나온 횟수 ÷ 전체</td><td>이 조합이 얼마나 자주 있는 일인지를 봅니다.</td></tr>
+      <tr><td><b>③ 신뢰도</b></td><td>함께 나온 횟수 ÷ 앞 항목의 횟수</td><td>분모가 앞 항목입니다. 지지도와 분모가 다릅니다.</td></tr>
+      <tr><td><b>④ 등장률</b></td><td>뒤 항목의 횟수 ÷ 전체</td><td>비교의 기준이 되는 값입니다.</td></tr>
+      <tr><td><b>⑤ 향상도</b></td><td>신뢰도 ÷ 등장률</td><td>1이면 신뢰도와 뒤 항목의 등장률이 같습니다. 분모는 뒤 항목의 등장률입니다.</td></tr>
+      <tr><td><b>⑥ 판단</b></td><td>어느 규칙을 고를지와 그 까닭</td><td>지표가 서로 다른 규칙을 가리키면 문제의 목적을 먼저 정하고 그에 맞는 지표를 근거로 삼습니다.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout mini">
+    <div class="h">✍️ 기본 문제 · 급식 안내 화면에 무엇을 띄울까</div>
+    <p>지지도만 보면 이기는 규칙과 향상도로 보면 이기는 규칙이 서로 다릅니다. 순서를 지켜 지지도부터 구하고, 신뢰도에서 순위가 뒤집히는 것을 확인한 뒤 향상도로 넘어갑니다. 향상도를 먼저 구해 버리면 이 차시가 보여 주려는 것이 사라집니다.</p>
+  </div>
+  <div class="callout warn">
+    <div class="h">⚠️ 계산이 끝나면 판단이 달라진다</div>
+    <p>두 규칙 모두 그럴듯해 보이지만, 향상도를 구하면 판단이 달라집니다. 교과서의 표는 이 판정 기준을 미리 준비해 둡니다. 이 기준을 가지고 우리 학교 급식으로 넘어갑니다.</p>
+  </div>
+
+  <h2>3. 실습 — 급식 184일에서 규칙 찾기 (바이브 코딩)</h2>
+  <div class="callout tip">
+    <div class="h">🍚 우리는 DG푸드의 데이터 과학 인턴입니다</div>
+    <p>DG푸드는 이 수업에서만 쓰는 가상의 급식 납품 회사입니다(DG는 당곡입니다). 분석에 쓰는 급식 기록은 <b>당곡고에 실제로 나온 식단</b>입니다.</p>
+    <p>식단팀은 어느 반찬이 어느 반찬과 함께 나가는지를 알아야 재료를 미리 준비하고 안내를 붙일 수 있습니다.</p>
+    <p>인턴은 찾은 규칙을 그대로 쓰지 않습니다. <b>어느 규칙에 재료와 진열 공간을 걸지 근거를 들어 보고합니다.</b></p>
+  </div>
+  <p>분석 전에 함께 나올 것 같은 메뉴 쌍 세 개와 그 이유를 적습니다. 실습 후에는 예상과 결과를 대조합니다. 앱은 5차시의 인증키로 급식 API에서 2025년 9월 1일~2026년 9월 30일 중식을 조회합니다. <b>기간이 같아도 원데이터의 수정·추가에 따라 결과가 달라질 수 있습니다.</b> 본문 손계산은 <a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/danggok_meals_live.csv" target="_blank" rel="noopener">184일 급식 저장본</a>을 기준으로 합니다. 실행 결과와 다르면 조회 시점·일수·메뉴 정리 기준부터 확인합니다.</p>
+  <div class="specimen-row" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+    <div class="specimen st">
+      <div class="tag">원본 — 급식 API가 준 하루</div>
+      <div class="body">
+        <div style="overflow-x:auto;width:100%">
+          <table class="minitable">
+            <thead><tr><th>MLSV_YMD</th><th>DDISH_NM</th></tr></thead>
+            <tbody>
+              <tr><td>20250902</td><td>친환경현미밥 &lt;br/&gt;근대된장국 (5.6)&lt;br/&gt;오이상추무침 (6.13)&lt;br/&gt;제육볶음 (6.10.13)&lt;br/&gt;…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="note">괄호가 두 가지 섞여 있습니다. 숫자는 알레르기 번호이고, <b>(자율)·(대)·(소스)</b>처럼 글자가 든 것도 있습니다. 이 실습에서는 괄호 내용을 제거한 이름으로 집계합니다. 용량·소스 등의 구분도 없어지므로, 이 기준이 분석 목적에 맞는지 확인합니다. 알레르기 안내에는 원래 식단을 사용합니다.</div>
+    </div>
+    <div class="specimen semi">
+      <div class="tag">변환 — 장바구니 1건</div>
+      <div class="body"><pre class="mini">{ 친환경현미밥, 근대된장국, 제육볶음, … }</pre></div>
+      <div class="note"><b>하루 식단 하나가 장바구니 한 건이 되고, 메뉴 하나가 상품 하나에 해당합니다.</b> 하루가 장바구니 하나이므로 중식 184일이 곧 장바구니 184건입니다. 메뉴 종류 수는 정리 기준에 따라 달라집니다. 저장본에서 괄호를 제거하고 센 메뉴는 506종입니다.</div>
+    </div>
+  </div>
+  <figure class="interactive" data-fig="basket">
+    <div class="widget" data-w="basket">
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="고른 날의 급식 메뉴를 칩으로 늘어놓은 그림과, 1일차부터 184일차까지 누적 메뉴 종류 수를 나타낸 꺾은선. 정리 기준에 따라 마지막 값이 506종과 510개로 나뉩니다.">
+  <!-- 요약 줄 -->
+  <text class="sum" x="24" y="22" font-size="17" font-weight="800" fill="#1c2230">2025-09-02 · 메뉴 7개 · 만들어지는 쌍 21개</text>
+  <!-- 왼쪽: 하루 메뉴 칩 -->
+  <text x="24" y="44" font-size="14" fill="#6b7385">하루 식단 → 장바구니 1건</text>
+  <g class="chips"></g>
+  <!-- 오른쪽: 누적 메뉴 종류 곡선 -->
+  <text x="396" y="50" font-size="14" fill="#6b7385">누적 메뉴 종류 수</text>
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="396" y1="250" x2="700" y2="250"/>
+    <line x1="396" y1="204" x2="700" y2="204"/>
+    <line x1="396" y1="158" x2="700" y2="158"/>
+    <line x1="396" y1="112" x2="700" y2="112"/>
+    <line x1="396" y1="66" x2="700" y2="66"/>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="end">
+    <text x="390" y="255">0</text>
+    <text x="390" y="209">130</text>
+    <text x="390" y="163">260</text>
+    <text x="390" y="117">390</text>
+    <text x="390" y="71">520</text>
+  </g>
+  <g font-size="14" fill="#6b7385">
+    <text x="396" y="270">1</text>
+    <text x="470.8" y="270" text-anchor="middle">46</text>
+    <text x="547.2" y="270" text-anchor="middle">92</text>
+    <text x="623.6" y="270" text-anchor="middle">138</text>
+    <text x="700" y="270" text-anchor="end">184일</text>
+  </g>
+  <g class="curves" fill="none" stroke-linejoin="round" stroke-linecap="round">
+    <polyline class="craw" points="396,250 700,69.5" stroke="#b9b3a5" stroke-width="1.5" opacity=".6"/>
+    <polyline class="cclean" points="396,250 700,71" stroke="#2b7fd6" stroke-width="2"/>
+  </g>
+  <line class="vline" x1="397.7" y1="66" x2="397.7" y2="250" stroke="#b07a00" stroke-width="1" stroke-dasharray="3 3"/>
+  <circle class="cdot" cx="397.7" cy="245.0" r="4" fill="#b07a00"/>
+  <text class="cval" x="407.7" y="244.0" font-size="16" font-weight="800" fill="#b07a00" stroke="#f7f3e8" stroke-width="4" stroke-linejoin="round" paint-order="stroke">14종</text>
+  <!-- 마지막 값 두 줄 -->
+  <text class="foot1" x="700" y="292" text-anchor="end" font-size="15" fill="#2b7fd6">184일 · 506종</text>
+  <text class="foot2" x="700" y="312" text-anchor="end" font-size="14" fill="#b9b3a5">괄호 그대로면 510개</text>
+  <!-- 고정 안내 -->
+  <text x="24" y="320" font-size="14" fill="#6b7385">중식 184일 = 장바구니 184건 · 하루 6~8개 · 서로 다른 쌍 3,146개</text>
+</svg>
+<div class="wctl">
+  <label>날짜 <input type="range" min="0" max="183" step="1" value="1"></label>
+  <span class="wout">2025-09-02 (2일차)</span>
+</div>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-m="clean">괄호 제거</button>
+  <button class="wbtn" type="button" data-m="raw">괄호 그대로</button>
+</div>
+</div>
+    <figcaption>하루 식단 한 줄이 메뉴 여섯에서 여덟 개의 장바구니 한 건이 되고, 그날에만 쌍 열다섯에서 스물여덟 개가 만들어집니다. 괄호를 그대로 두면 이름이 510개, 괄호를 제거하면 506종입니다. 누적 곡선은 184일째까지 꺾이지 않으며, 마지막 46일에도 새 메뉴가 82종 나옵니다.</figcaption>
+  </figure>
+
+
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"급식 규칙 찾기" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py.
+당곡고 급식을 나이스 급식 API로 받아서 하루 중식 식단을 장바구니 하나로 보고,
+함께 자주 나오는 메뉴 쌍을 찾아 줘.
+- 인증키는 비밀 금고에 NEIS_API_KEY라는 이름으로 넣어 뒀어. 코드에 직접 적지 말고 거기서 꺼내 써.
+- 기간은 2025년 9월 1일부터 2026년 9월 30일까지, 중식만. 조회된 모든 페이지를 받아 날짜별로 한 건씩 세어 줘.
+- 조회 데이터 없음과 인증·통신 오류를 구분하고, 일부만 받은 데이터로 계산하지 않게 해 줘.
+- 하루 식단을 메뉴별로 나누고, 메뉴 이름의 괄호와 그 안의 내용은 전부 제외해 세 줘.
+- 화면 맨 위에 조회 기간과 분석한 날 수, 메뉴 종류 수를 적어 줘.
+- 결과 표의 열은 조건, 결과, 동시, 지지도, 신뢰도, 향상도 여섯 개로 하고, 향상도가 높은 순으로 정렬해 줘.
+- 동시에 나온 횟수가 5회 이상인 규칙만 보이게 해 줘.
+- 향상도 상위 10개 규칙은 가로 막대그래프로도 보여 줘. 그래프는 plotly로 그려 줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.
+
+──── 아래는 나이스 교육정보 개방 포털 문서에서 복사한 부분 ────
+[급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo
+요청변수: Type=json(응답은 JSON, 글자는 UTF-8) · KEY(인증키) ·
+  ATPT_OFCDC_SC_CODE=B10(서울특별시교육청) · SD_SCHUL_CODE=7010073(당곡고등학교) ·
+  MMEAL_SC_CODE=2(중식) · MLSV_FROM_YMD=20250901, MLSV_TO_YMD=20260930 ·
+  pSize(한 번에 받을 행 수, 상한 1000) · pIndex(쪽 번호, 1부터)
+응답 구조: mealServiceDietInfo의 첫 번째 상자 head 안에 list_total_count(전체 건수),
+  두 번째 상자 안 row 목록에 하루마다
+  MLSV_YMD(급식일자, 하이픈 없는 여덟 자리) ·
+  DDISH_NM(식단 이름, 메뉴 사이 구분은 &lt;br/&gt;, 괄호 안은 알레르기 번호이거나 (자율)·(대)·(소스) 같은 표기) ·
+  CAL_INFO(칼로리)
+  ※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 함께 자주 나오는 메뉴 쌍을 찾는다
+import re
+from collections import Counter
+from itertools import combinations
+
+import pandas as pd
+import plotly.express as px
+import requests
+import streamlit as st
+
+
+@st.cache_data(ttl=3600)
+def load_baskets(api_key):
+    rows, page = [], 1
+    params = {"Type": "json", "KEY": api_key,
+              "pSize": 1000, "ATPT_OFCDC_SC_CODE": "B10",
+              "SD_SCHUL_CODE": "7010073", "MMEAL_SC_CODE": "2",
+              "MLSV_FROM_YMD": "20250901", "MLSV_TO_YMD": "20260930"}
+    while True:
+        response = requests.get("https://open.neis.go.kr/hub/mealServiceDietInfo",
+                                params={**params, "pIndex": page}, timeout=20)
+        response.raise_for_status()
+        data = response.json()
+        if "mealServiceDietInfo" not in data:
+            result = data.get("RESULT", {})
+            if result.get("CODE") == "INFO-200" and page == 1:
+                return []
+            raise ValueError("급식 조회 실패: " + result.get("MESSAGE", "응답 확인 필요"))
+        blocks = data["mealServiceDietInfo"]
+        head = next(block["head"] for block in blocks if "head" in block)
+        total = next(item["list_total_count"] for item in head if "list_total_count" in item)
+        chunk = next((block["row"] for block in blocks if "row" in block), [])
+        if not chunk:
+            raise ValueError("전체 데이터를 받기 전에 빈 페이지가 반환되었습니다.")
+        rows.extend(chunk)
+        if len(rows) &gt;= total:
+            break
+        if len(chunk) &lt; params["pSize"]:
+            raise ValueError("전체 건수보다 적게 받았습니다. 인증키를 확인하세요.")
+        page += 1
+    days = {}
+    for row in rows:
+        basket = days.setdefault(row["MLSV_YMD"], set())
+        for dish in re.split(r"&lt;br\s*/?&gt;", row["DDISH_NM"], flags=re.I):
+            name = re.sub(r"\([^)]*\)", "", dish).strip()
+            if name:
+                basket.add(name)
+    return [sorted(basket) for basket in days.values() if basket]
+
+try:
+    api_key = st.secrets["NEIS_API_KEY"]
+except Exception:
+    st.error("비밀 금고에 NEIS_API_KEY를 설정하세요. 5차시 안내를 확인합니다.")
+    st.stop()
+if not api_key.strip():
+    st.error("인증키가 비어 있습니다.")
+    st.stop()
+try:
+    baskets = load_baskets(api_key)
+except (requests.RequestException, ValueError, KeyError, StopIteration):
+    st.error("급식을 모두 조회하지 못했습니다. 인증키·조회 조건·연결 상태를 확인하세요.")
+    st.stop()
+if not baskets:
+    st.info("조회 기간에 분석할 중식 데이터가 없습니다.")
+    st.stop()
+n = len(baskets)
+single = Counter(item for b in baskets for item in b)
+pair = Counter(c for b in baskets for c in combinations(b, 2))
+
+rows = []
+for (a, b), together in pair.items():
+    if together &lt; 5:                       # 동시에 나온 횟수가 5회 미만이면 뺀다
+        continue
+    for x, y in [(a, b), (b, a)]:
+        rows.append({"조건": x, "결과": y, "동시": together,
+                     "지지도": round(together / n, 3),
+                     "신뢰도": round(together / single[x], 3),
+                     "향상도": round((together / single[x]) / (single[y] / n), 2)})
+rules = pd.DataFrame(rows, columns=["조건", "결과", "동시", "지지도", "신뢰도", "향상도"])
+rules = rules.sort_values("향상도", ascending=False)
+if rules.empty:
+    st.info("동시 등장 5회 이상인 규칙이 없습니다.")
+
+st.caption(f"조회 2025-09-01~2026-09-30 · 급식 {n}일 · 메뉴 {len(single)}종 · 규칙 {len(rules)}개 (동시 5회 이상)")
+st.dataframe(rules, hide_index=True)
+top = rules.head(10).copy()
+top["규칙"] = top["조건"] + " → " + top["결과"]
+fig = px.bar(top, x="향상도", y="규칙", orientation="h", text="향상도")
+fig.update_layout(yaxis={"categoryorder": "total ascending"}, height=420)
+st.plotly_chart(fig, use_container_width=True)</pre></div><div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+requests
+plotly</pre></div></details>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 실행하고 표를 읽는다</span><br>
+      표가 나타나면 <b>신뢰도 순</b>으로 한 번, <b>향상도 순</b>으로 한 번 정렬해 봅니다. 두 순위가 서로 다르다는 것이 오늘의 발견입니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 판정 기준을 화면에 표시한다</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>향상도가 높은 순서로 정렬하고, 향상도가 1에 가까운 규칙(0.9~1.1)은
+"기본 등장률과 비슷함"이라고 표시해 줘. 이 구간은 관찰용 기준이며 통계 검정 결과가 아니라고 안내해 줘.
+그리고 메뉴 이름을 고르면 그 메뉴가 낀 규칙만 모아 볼 수 있게 해 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 향상도가 1 언저리인 규칙은 따로 표시하고, 메뉴로 좁혀 본다
+rules["판정"] = rules["향상도"].apply(lambda v: "기본 등장률과 비슷함" if 0.9 &lt;= v &lt;= 1.1 else "")
+메뉴 = st.selectbox("메뉴로 좁혀 보기", ["(전체)"] + sorted(single))
+보기 = rules if 메뉴 == "(전체)" else rules[(rules["조건"] == 메뉴) | (rules["결과"] == 메뉴)]
+st.dataframe(보기, hide_index=True)</pre></div></details>
+    </li>
+  </ol>
+
+  <div class="callout tip">
+    <div class="h">💡 프롬프트에 코드가 없다는 것</div>
+    <p>프롬프트에는 분석 대상, 메뉴 정리 기준, 원하는 결과를 명확히 적습니다. AI가 계산 코드를 작성하더라도 메뉴가 올바르게 나뉘었는지와 분모가 맞는지는 확인해야 합니다. 대표 규칙 몇 개를 직접 세어 보면 오류를 찾는 데 도움이 됩니다.</p>
+  </div>
+
+  <h3>화면의 숫자를 옮겨 적습니다</h3>
+  <p>앱을 실행한 날에 따라 급식 일수와 규칙의 수가 달라집니다. 아래 표에 <b>내 화면의 숫자</b>를 적습니다. 위 칸에는 분석 전에 예상한 메뉴 쌍 세 개를, 아래 칸에는 향상도 순으로 정렬했을 때 맨 위에 올라온 규칙 두 개를 적습니다. 예상한 쌍이 결과 표에 없으면 동시 등장 일수 칸에 '표에 없음'이라고 적고, 최소 횟수 기준에 걸린 것인지 따로 확인합니다.</p>
+  <div style="overflow-x:auto">
+  <table class="daymap" style="min-width:680px">
+    <thead><tr><th>구분</th><th>규칙 (조건 → 결과)</th><th>동시</th><th>신뢰도</th><th>기본 등장률</th><th>향상도</th><th>판정</th></tr></thead>
+    <tbody>
+      <tr><td><b>예상 ①</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>예상 ②</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>예상 ③</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>화면 1위</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>화면 2위</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="callout ask">
+    <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
+    <ul>
+      <li>신뢰도 순으로 정렬했을 때의 1위와 향상도 순으로 정렬했을 때의 1위는 같은 규칙입니까? 두 순위를 나란히 적어 봅니다.</li>
+      <li>향상도가 가장 큰 규칙의 동시 등장 일수는 며칠입니까? 그 규칙이 며칠에서 나온 값인지 표에 함께 적습니다.</li>
+    </ul>
+  </div>
+
+  <h2>4. 결과 해석 — 기본 등장률과 비교하기</h2>
+  <p>아래 세 규칙을 화면에서 찾아 직접 채웁니다. 등장 칸에는 앞 메뉴와 뒤 메뉴가 각각 나온 일수를, 판정 칸에는 향상도를 기본 등장률과 비교한 결과를 적습니다. 세 번째 규칙은 동시 등장이 드물어 결과 표에 나오지 않을 수 있습니다. 그때는 메뉴로 좁혀 보기 기능이나 원데이터에서 두 메뉴를 따로 세어 비교합니다. 세 규칙의 판정이 어떻게 나뉘는지가 오늘의 발견입니다.</p>
+  <div style="overflow-x:auto">
+  <table class="daymap" style="min-width:620px">
+    <thead><tr><th>규칙</th><th>등장 (앞 · 뒤)</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr></thead>
+    <tbody>
+      <tr><td><b>제육볶음 → 배추김치</b></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>순대국 → 석박지</b></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>배추김치 → 깍두기</b></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  </div>
+  
+  <div class="callout theory">
+    <div class="h">🧩 규칙에는 방향이 있습니다</div>
+    <p>A → B와 B → A는 다른 규칙입니다. 신뢰도의 분모가 <b>앞에 오는 메뉴가 나온 일수</b>이기 때문입니다. 184일 저장본으로 확인합니다. 순대국 5일, 석박지 20일, 함께 나온 날 5일이므로 순대국 → 석박지의 신뢰도는 5÷5 = 1.00이고, 석박지 → 순대국의 신뢰도는 5÷20 = 0.25입니다.</p>
+    <p>반면 <b>지지도와 향상도는 방향을 바꾸어도 같습니다</b>. 지지도의 분모는 전체 일수 하나뿐이고, 향상도는 정리하면 동시 등장 비율을 두 메뉴 각각의 등장 비율의 곱으로 나눈 값이 되어 앞뒤 구분이 사라집니다. 위 예에서 두 방향의 향상도는 모두 9.20입니다.</p>
+    <p>그러므로 "B가 나오는 날은 A가 나온다"라고 말하려면 <b>그 문장의 방향에 해당하는 신뢰도</b>를 확인해야 합니다. 아래 위젯의 [방향 바꾸기] 버튼으로 두 값이 어떻게 달라지는지 확인합니다.</p>
+  </div>
+  <figure class="interactive" data-fig="baseline">
+    <div class="widget" data-w="baseline">
+  <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="0에서 1까지의 같은 눈금 위에 신뢰도 막대와 기본 등장률 막대를 나란히 놓고, 두 길이의 비가 향상도임을 보이는 그림. 아래 격자는 전체 일수와 각 메뉴의 등장 일수를 칸 수로 나타냅니다.">
+    <text class="ttl" x="24" y="26" font-size="18" font-weight="800" fill="#1c2230"></text>
+    <g class="bdg" opacity="0">
+      <rect class="bdgbox" x="512" y="8" width="188" height="24" rx="999" fill="#ffffff" stroke="#b07a00"/>
+      <text class="bdgtxt" x="524" y="25" font-size="14" fill="#b07a00"></text>
+    </g>
+    <g stroke="#e3ddcf" stroke-width="1">
+      <line x1="214" y1="44" x2="214" y2="150"/>
+      <line x1="335.5" y1="44" x2="335.5" y2="150"/>
+      <line x1="457" y1="44" x2="457" y2="150"/>
+      <line x1="578.5" y1="44" x2="578.5" y2="150"/>
+      <line x1="700" y1="44" x2="700" y2="150"/>
+    </g>
+    <g font-size="14" fill="#6b7385" text-anchor="middle">
+      <text x="214" y="40">0</text>
+      <text x="335.5" y="40">0.25</text>
+      <text x="457" y="40">0.5</text>
+      <text x="578.5" y="40">0.75</text>
+      <text x="700" y="40">1</text>
+    </g>
+    <rect class="bar2" x="214" y="104" width="0" height="30" fill="#b9b3a5"/>
+    <rect class="bar1" x="214" y="56" width="0" height="30" fill="#2b7fd6"/>
+    <rect class="ov1" x="214" y="56" width="0" height="30" fill="#b07a00" fill-opacity="0.55"/>
+    <line class="cap1" x1="214" y1="56" x2="214" y2="86" stroke="#2b7fd6" stroke-width="2" stroke-opacity="0"/>
+    <line class="baseL" x1="214" y1="104" x2="214" y2="50" stroke="#b07a00" stroke-width="1.5" stroke-dasharray="3 3"/>
+    <text class="l1a" x="24" y="76" font-size="14" fill="#1c2230"></text>
+    <text class="l1b" x="24" y="88" font-size="14" fill="#1c2230"></text>
+    <text class="l2a" x="24" y="124" font-size="14" fill="#1c2230"></text>
+    <text class="l2b" x="24" y="136" font-size="14" fill="#1c2230"></text>
+    <line class="lead1" x1="214" y1="71" x2="214" y2="71" stroke="#b9b3a5" stroke-width="1" stroke-opacity="0"/>
+    <line class="lead2" x1="214" y1="119" x2="214" y2="119" stroke="#b9b3a5" stroke-width="1" stroke-opacity="0"/>
+    <text class="val1" x="222" y="76" font-size="16" font-weight="800" fill="#2b7fd6"></text>
+    <text class="val2" x="222" y="124" font-size="16" font-weight="800" fill="#6b7385"></text>
+    <text x="24" y="170" font-size="14" fill="#6b7385">막대 두 개의 길이 비 = 향상도</text>
+    <text class="gnote" x="24" y="192" font-size="14" fill="#6b7385" opacity="0">배열 순서 무관</text>
+    <g class="grid"></g>
+    <rect x="380" y="188" width="320" height="142" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
+    <text class="c1a" x="392" y="212" font-size="14" fill="#6b7385"></text>
+    <text class="c1b" x="392" y="222" font-size="14" fill="#6b7385"></text>
+    <text class="c2" x="392" y="240" font-size="15" fill="#1c2230"></text>
+    <text class="c3" x="392" y="264" font-size="15" fill="#1c2230"></text>
+    <text class="c4a" x="392" y="298" font-size="15" fill="#b07a00"></text>
+    <text class="c4b" x="560" y="298" font-size="24" font-weight="800" fill="#b07a00"></text>
+    <text class="c5" x="392" y="322" font-size="14" fill="#6b7385"></text>
+  </svg>
+  <div class="wctl">
+    <span><button class="wbtn on" type="button" data-set="meal">급식 184일</button>
+      <button class="wbtn" type="button" data-set="out">표 밖 조합</button>
+      <button class="wbtn" type="button" data-set="hand">손계산 20일</button></span>
+    <span><button class="wbtn on" type="button" data-sort="lift">향상도 순</button>
+      <button class="wbtn" type="button" data-sort="conf">신뢰도 순</button>
+      <button class="wbtn" type="button" data-sort="co">동시 순</button></span>
+    <label>규칙 <input class="rng" type="range" min="0" max="51" step="1" value="40"></label>
+    <span class="wout"></span>
+    <button class="wbtn dir" type="button">방향 바꾸기</button>
+  </div>
+</div>
+    <figcaption>정렬을 바꾸면 신뢰도가 가장 높은 규칙과 향상도가 가장 높은 규칙이 서로 다르게 표시됩니다. 신뢰도가 1.00인 규칙 여섯 개의 향상도는 1.80부터 9.20까지 나타납니다. 표 밖 조합의 앞 두 규칙에서는 기본 등장률 막대가 거의 0에 가까워지고 향상도만 커집니다.</figcaption>
+  </figure>
+
+  <p>분석 전에 적은 메뉴 쌍과 결과를 대조합니다. 동시 등장 횟수, 신뢰도, 기본 등장률, 향상도를 함께 적고 해석합니다. 결과 표에 없다고 반드시 관련이 없는 것은 아닙니다. 최소 횟수 기준 때문에 제외되었는지도 확인합니다. 이 기록을 Ⅲ-04d 과제에 활용합니다.</p>
+  <div class="callout theory">
+    <div class="h">🧩 규칙 후보를 걸러 내는 문턱 — 최소 지지도와 최소 횟수</div>
+    <p class="q">교과서 162쪽은 규칙 후보를 추리기 전에 최소 지지도를 먼저 정하는 절차를 다룹니다.</p>
+    <p><b>최소 지지도</b>는 규칙 후보로 남길 최소 등장 <b>비율</b>입니다. 이번 실습이 사용하는 문턱은 비율이 아니라 <b>동시 등장 횟수</b>이며, 기준은 5회입니다. 두 기준은 단위가 다릅니다. 184일 저장본에서 5회는 지지도 5 ÷ 184 ≈ 0.027에 해당하지만, 조회한 일수가 달라지면 같은 5회가 다른 지지도가 됩니다.</p>
+    <p>문턱이 필요한 까닭은 향상도의 성질에 있습니다. 드물게 등장하는 메뉴는 분모가 작아 향상도가 쉽게 커지므로, 단 하루 겹친 조합이 표의 맨 위를 차지할 수 있습니다. 그래서 앱의 결과 표에는 동시 등장 5회 이상인 규칙만 나옵니다. <b>표에 없다는 것과 관련이 없다는 것은 다릅니다.</b> 이 기준은 실습을 위한 선택이며 통계적 유의성을 보장하지 않습니다.</p>
+  </div>
+
+
+  <h2>5. 연습 문제와 대조 — 손으로 구한 값과 화면의 값</h2>
+  <div class="callout mini">
+    <div class="h">✍️ 연습 문제 · 매점 묶음 할인을 하나만 한다면</div>
+    <p>기본 문제와 같은 순서로 혼자 풉니다. 이번에는 향상도가 훨씬 큰 규칙과 지지도가 훨씬 큰 규칙이 함께 나옵니다. 문제에 적힌 목표를 다시 읽고 고릅니다. 마지막에는 딱 한 건에서만 나타난 규칙의 향상도를 구해, 관측 횟수가 적은 값만으로는 안정적인 패턴이라고 판단할 수 없다는 것을 확인합니다.</p>
+    <p>다 푼 뒤에는 활동지 끝의 <b>화면과 대조하기</b> 표에 4절에서 채운 숫자를 옮겨 적고 손으로 구한 값과 맞춰 봅니다. 같은 지표를 손과 화면 두 방법으로 확인하는 것이 이 활동의 목적입니다. AI가 계산한 숫자를 <b>스스로 검산할 수 있는 사람</b>이 됩니다.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">❓ 손으로 구한 값과 화면의 값을 맞춰 본 뒤 답할 질문</div>
+    <ul>
+      <li>손으로 구한 향상도와 4절 표에 적은 향상도가 같습니까? 다르다면 어느 단계에서 달라졌습니까?</li>
+      <li>신뢰도가 높은데도 향상도가 1 언저리인 규칙을 급식실에 어떻게 설명하겠습니까? 한 문장으로 적습니다.</li>
+    </ul>
+  </div>
+
+  <h2>6. 개념 정리 — 교과서와 급식이 만나는 대목</h2>
+  <p>지지도는 조합의 빈도를, 신뢰도는 조건부 비율을, 향상도는 기본 등장률과의 비율을 나타냅니다. 세 지표를 함께 보고 <b>관측 기간과 등장 횟수</b>도 기록합니다. 동시 5회 이상이라는 기준은 드문 조합을 제외하는 실습 기준이며, 통계적으로 유의하거나 미래에도 유지되는 규칙을 보장하지 않습니다.</p>
+  <p>향상도가 크게 나온 규칙도 앞 메뉴가 뒤 메뉴의 등장을 일으켰다는 인과관계의 증명은 아닙니다. 식단 구성 방침 등 다른 요인이 두 메뉴에 함께 작용했을 수 있습니다. 신뢰도가 1.00인 규칙도 그 조건 메뉴가 나온 며칠에서 관찰된 값일 뿐이며, 다음 식단을 보장하지 않습니다.</p>
+
+  <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
+  <h3>연관 분석이 실제로 쓰인 곳</h3>
+  <p>세 지표는 교과서 안에서만 쓰는 계산이 아닙니다. 실제 매장과 상품 페이지에서도 함께 팔린 기록을 바탕으로 진열과 추천 후보를 정합니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>무엇을 계산했나</th><th>세 지표로 보면</th></tr></thead>
+    <tbody>
+      <tr><td><b>허리케인 직전의<br>딸기 팝타르트</b></td><td>2004년 미국 월마트는 허리케인 찰리 때의 판매 기록을 다시 계산했다. 허리케인 직전에 딸기 팝타르트가 평소의 약 7배 팔렸고 가장 많이 팔린 품목은 맥주였다. 월마트는 다음 허리케인의 진로에 있는 매장으로 두 품목을 미리 실어 보냈다 (<a href="https://www.nytimes.com/2004/11/14/business/yourmoney/what-walmart-knows-about-customers-habits.html" target="_blank" rel="noopener">보도 원문 보기</a>)</td><td>향상도를 실제로 사용한 사례다. 팝타르트는 전체 판매에서 차지하는 비중이 작아 지지도가 낮다. 조건을 허리케인 경보가 내려진 날로 좁히면 판매 비율이 평소의 약 7배가 된다. 지지도가 낮다는 이유로 걸렀다면 찾지 못했을 규칙이다.</td></tr>
+      <tr><td><b>아마존의<br>자주 함께 구매하는 품목</b></td><td>아마존은 2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록을 비교한다. 이 방식은 지금도 상품 페이지의 자주 함께 구매하는 품목 칸으로 작동한다 (<a href="https://www.amazon.com/Sapiens-Humankind-Yuval-Noah-Harari/dp/0062316095" target="_blank" rel="noopener">상품 페이지 보기</a>)</td><td>지지도와 신뢰도의 차이를 보여 준다. 전체 주문 가운데 두 책이 함께 담긴 비율이 지지도이고 한 책을 산 사람 가운데 다른 책도 산 비율이 신뢰도이다. 파는 상품이 많으면 어떤 두 권의 지지도든 낮지만 신뢰도와 향상도가 높으면 추천 대상이 된다.</td></tr>
+    </tbody>
+  </table>
+  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson12_case1.jpg" alt="하늘색 바탕 위에 겹쳐 놓인 딸기 맛 팝타르트 두 장. 흰 아이싱 위에 빨강·초록·노랑 알갱이가 뿌려져 있습니다." loading="lazy" width="849" height="624" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>월마트의 허리케인 판매 분석: 뉴욕타임스 2004년 11월 14일 보도 · 사진: 딸기 팝타르트, 위키미디어 공용(퍼블릭 도메인)</figcaption></figure>
+  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson12_case2.jpg" alt="아마존 상품 페이지의 자주 함께 구매하는 품목 영역 화면. 세 권의 책이 더하기 기호로 이어져 있고 오른쪽에 총액과 장바구니 추가 버튼이 있습니다." loading="lazy" width="1200" height="404" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>화면: 아마존 『사피엔스』 상품 페이지의 자주 함께 구매하는 품목(2026년 9월 갈무리) · 방식 출처: Linden 외, IEEE Internet Computing(2003)</figcaption></figure>
+  <p>두 사례 모두 지표가 판단을 대신하지 않았습니다. 어느 규칙에 재고와 진열 공간을 걸지는 사람이 정했습니다.</p>
+  </div></details>
+
+  <h2>7. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 당곡고 184일 저장본에서 제육볶음 10일, 배추김치 102일, 동시 6일이다. 활동지 기본 문제도 같은 두 메뉴를 다루지만 그쪽은 계산이 떨어지도록 고른 스무 날짜리 설계값이므로 수가 다르다. "제육볶음 → 배추김치"의 신뢰도와 향상도를 손으로 계산한 뒤, 판정을 고릅니다.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">진짜 짝꿍이다 — 제육볶음이 나온 날의 절반 넘게 배추김치가 같이 나오므로</button>
+        <button class="opt" data-ok="1">기본 등장률과 비슷하다 — 0.60과 기본 등장률 약 0.55의 차이가 작다</button>
+        <button class="opt">음의 연관이다 — 향상도가 1보다 작으므로</button>
+      </div>
+      <div class="fb">신뢰도 = 6÷10 = 0.60, 향상도 = 0.60÷(102÷184) ≈ 1.08. 이 표본에서는 기본 등장률보다 약 8% 높은 비율입니다. 강한 연관이나 독립을 확정하려면 이 값만으로는 부족합니다.</div>
+    </div>
+    <details class="reveal"><summary>계산 펼쳐 보기</summary>
+      <p>신뢰도는 6÷10 = 0.60, 향상도는 0.60÷(102÷184) ≈ 1.08입니다. 중간 값을 반올림하지 않고 마지막에 반올림합니다. 향상도가 1에 가까워 기본 등장률과 차이가 작지만, 이를 우연의 증명으로 해석하지는 않습니다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> "순대국 → 석박지"의 신뢰도는 1.00, "석박지 → 순대국"의 신뢰도는 0.25다. 급식실 게시판에 "석박지가 나오는 날은 순대국이 나온다"라고 써 붙여도 될까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">써 붙여도 된다 — 순대국 → 석박지의 신뢰도가 1.00이므로</button>
+        <button class="opt">써 붙여도 된다 — 두 메뉴의 향상도가 9.2로 충분히 높으므로</button>
+        <button class="opt" data-ok="1">안 된다 — 그 문장의 방향인 석박지 → 순대국의 신뢰도는 5÷20 = 0.25에 불과하다</button>
+      </div>
+      <div class="fb">규칙에는 방향이 있습니다. 석박지가 나온 20일 중 순대국은 5일뿐이므로, 그 기간의 식단 중 15일은 게시판 문장과 맞지 않습니다. 미래 식단도 보장하지 않습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 어느 쌍의 향상도가 184로 나왔다(분석 기간 전체에서 동시 등장 1회, 각자 등장도 1회씩). 향상도 9.2인 순대국·석박지보다 20배 강한 규칙이라 말할 수 있을까요?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">말할 수 있다 — 향상도는 우연 대비 배율이므로 184는 9.2보다 20배 강한 끌림이다</button>
+        <button class="opt">말할 수 없다 — 향상도가 100을 넘는 값은 계산 오류이기 때문이다</button>
+        <button class="opt" data-ok="1">말할 수 없다 — 동시 등장 1회만으로는 안정적인 패턴인지 판단하기 어렵고, 드문 항목의 향상도는 매우 클 수 있다</button>
+      </div>
+      <div class="fb">동시 1회만으로 안정적인 패턴이라고 판단하기 어렵습니다. 동시 5회 이상은 이 실습의 최소 횟수 기준이며, 184일에서 최소 지지도 5÷184 ≈ 0.027에 해당합니다. 이 기준도 우연을 완전히 배제하지는 못합니다.</div>
+    </div>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>지지도·신뢰도·향상도의 분모가 각각 무엇인지 말할 수 있다.</li>
+    <li>교과서 해 보기 ①의 두 규칙을 손으로 계산하고 판정했다.</li>
+    <li>급식 데이터에서 향상도가 높은 규칙과 기본 등장률에 가까운 규칙을 비교했다.</li>
+    <li>향상도만으로 인과관계나 미래의 식단을 보장할 수 없는 이유를 설명할 수 있다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">연관 분석</td><td>함께 자주 나타나는 항목을 찾는 분석 (장바구니 분석)</td></tr>
+    <tr><td class="term">지지도</td><td>전체 중 A·B가 함께 나온 비율</td></tr>
+    <tr><td class="term">신뢰도</td><td>A가 나온 날 중 B도 나온 비율</td></tr>
+    <tr><td class="term">향상도</td><td>신뢰도 ÷ B의 기본 등장률. 1이면 두 비율이 같음</td></tr>
+    <tr><td class="term">최소 지지도</td><td>규칙 후보로 남길 최소 등장 비율. 통계적 유의성을 보장하는 기준은 아님</td></tr>
+  </table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="lesson11.html"><div class="dir">← 이전</div><div class="tt">11차시 · 군집 — 스포츠 선수 유형</div></a>
+    <a class="next" href="lesson13.html"><div class="dir">다음 →</div><div class="tt">13차시 · 데이터베이스와 SQL</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/widgets12.js"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>

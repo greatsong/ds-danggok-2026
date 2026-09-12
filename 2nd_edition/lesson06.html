@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>6차시 · 회귀 — 직선을 긋다 · 데이터 과학 당곡고 · 개정 검토본</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+  <span class="badge review-edition">개정 검토본</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 6차시</span>
+  <h1>회귀 · <span class="a">직선을 긋다</span></h1>
+  <div class="under"></div>
+
+  <div class="quote">
+    <div class="q">"모든 모델은 틀렸다. 다만 일부는 쓸모가 있다."</div>
+    <span class="by">조지 박스 (1987) · 모델이 설명할 수 있는 것과 한계를 함께 살펴봅니다.</span>
+    <span class="who"><img src="img/people/box.jpg" alt="조지 박스" loading="lazy" width="54" height="54"><span><b>조지 박스</b>(1919~2013)는 영국 태생의 통계학자입니다. 실험을 설계해 원인을 가려내는 방법을 정리해 오늘날 공장의 품질 관리와 의약품 시험에 쓰이게 했고, 위 문장은 그가 1987년에 쓴 책에 나옵니다.<span class="cred">사진: DavidMCEddy · CC BY-SA 3.0(위키미디어 공용)</span></span></span>
+  </div>
+
+  <p class="lead">오늘은 서울의 연도별 평균기온을 직선으로 나타냅니다. 연도와 기온의 관계를 직선으로 요약하는 방법을 <b>단순 선형회귀</b>라고 합니다. 직선의 기울기를 읽고, 학습에 사용하는 기간을 바꾸었을 때 결과가 어떻게 달라지는지 비교합니다.</p>
+
+  <p class="mini">수업 예시의 재현을 위해 데이터 버전을 고정했습니다. 기온은 2025년까지, 영화는 2025년 9월~2026년 8월 데이터를 기준으로 합니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>상관에서 회귀로</b> — 산점도와 상관계수를 읽고, 그 관계를 회귀 직선으로 나타낸다</li>
+      <li><b>바이브 코딩</b> — 연도를 선택하면 예상 기온이 표시되는 앱을 만든다</li>
+      <li><b>판단</b> — 학습 기간에 따라 기울기와 예측값이 얼마나 달라지는지 비교한다</li>
+    </ul>
+  </div>
+
+  <h2>0. 오늘의 목표</h2>
+  <p>기온이나 전기 사용량처럼 수치로 나타내는 값을 예측할 때 회귀를 사용합니다. 이번 시간에는 연도와 연평균기온의 관계를 직선으로 요약합니다. 예측값을 읽을 때는 어떤 기간의 데이터로 만든 직선인지 함께 확인합니다.</p>
+  <ul class="steps">
+    <li>두 속성이 함께 변하는 정도를 <b>상관계수</b>로 읽고, 상관과 인과를 구분할 수 있다.</li>
+    <li><b>선형 회귀</b>가 가장 잘 대표하는 직선을 찾는 절차임을 설명하고, 그 직선을 <b>기울기와 편향</b> 두 수로 읽을 수 있다.</li>
+    <li>학습에 쓴 기간이 달라지면 기울기와 예측값이 달라진다는 것을 확인하고, 예측값을 읽을 때 그 조건을 함께 밝힐 수 있다.</li>
+  </ul>
+
+  <h2>1. 개념 이해 — 상관에서 회귀로</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 70·119쪽</span></div>
+    <p class="q">"상관계수는 상관관계의 강도와 방향을 나타내는 정량적인 단위로, 값의 범위는 −1부터 +1 까지이다." <span class="src">(70쪽)</span></p>
+    <p class="q">"선형 회귀는 두 가지 이상의 속성 사이에 선 모양의 관계가 있다고 가정하고 데이터를 가장 잘 대표하는 선을 찾는 분석 방법이다." <span class="src">(119쪽)</span></p>
+    <p class="t">→ 이번에 사용하는 상관계수는 두 변수의 <b>선형적 관계</b>를 수치로 나타냅니다. 단순 선형회귀는 그 관계를 직선으로 요약해 값을 예측합니다.</p>
+  </div>
+  <figure class="interactive" data-fig="corr">
+    <div class="widget" data-w="corr">
+<svg viewBox="0 0 720 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="상관계수 r과 산점도의 모양: 슬라이더로 r을 바꾸면 60개 점의 배치와 −1~+1 눈금 막대의 위치가 함께 바뀜">
+<!-- 산점도(속성 A · 속성 B, 눈금 숫자 없음) -->
+<path d="M40,22 V198 H296" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+<g font-size="14" fill="#6b7385">
+<text x="40" y="16">속성 B</text>
+<text x="296" y="216" text-anchor="end">속성 A</text>
+</g>
+<g class="pts" fill="#2b7fd6" opacity=".55"></g>
+<!-- 상관계수 눈금 막대: 위 +1 → 아래 −1, r → y = 110 − 78·r -->
+<line x1="446" y1="32" x2="446" y2="188" stroke="#e3ddcf" stroke-width="6" stroke-linecap="round"/>
+<line class="rfill" x1="446" y1="110" x2="446" y2="47.6" stroke="#b07a00" stroke-width="6" stroke-linecap="round"/>
+<path d="M441,32 H451 M441,110 H451 M441,188 H451" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+<path d="M443,94.4 H449 M443,125.6 H449" fill="none" stroke="#b9b3a5" stroke-width="1.2"/>
+<g font-size="14" fill="#6b7385" text-anchor="middle">
+<text x="446" y="18">+1</text>
+<text x="446" y="210">−1</text>
+</g>
+<circle class="rdot" cx="446" cy="47.6" r="5.5" fill="#b07a00" stroke="#1c2230" stroke-width="1.2"/>
+<text class="rval" x="436" y="55.6" text-anchor="end" font-size="22" font-weight="700" fill="#b07a00">r = +0.80</text>
+<!-- 구간 라벨: 0.2 초과 양 · −0.2 이상 0.2 이하 없음 · −0.2 미만 음 -->
+<g font-size="14">
+<text class="zone" data-z="pos" x="458" y="68" fill="#1c2230" font-weight="700">양의 상관관계</text>
+<text class="zone" data-z="zero" x="458" y="115" fill="#b9b3a5" font-weight="400">상관관계 없음</text>
+<text class="zone" data-z="neg" x="458" y="162" fill="#b9b3a5" font-weight="400">음의 상관관계</text>
+</g>
+<!-- 읽는 법 -->
+<rect x="564" y="22" width="148" height="170" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1.2"/>
+<g font-size="14">
+<text x="574" y="44" font-weight="700" fill="#1c2230">부호 → 방향</text>
+<text x="574" y="62" fill="#6b7385">(같이 커짐 / 반대)</text>
+<text x="574" y="92" font-weight="700" fill="#1c2230">절댓값 → 강도</text>
+<text x="574" y="110" fill="#6b7385">(1에 가까울수록</text>
+<text x="574" y="128" fill="#6b7385">직선에 가까움)</text>
+<text x="574" y="158" font-weight="700" fill="#1c2230">0 → 함께 변하는</text>
+<text x="574" y="176" font-weight="700" fill="#1c2230">경향 없음</text>
+</g>
+<text x="710" y="234" text-anchor="end" font-size="14" fill="#6b7385">중학교 3학년 수학의 산점도·상관관계 → 그 정도를 숫자로 표현</text>
+</svg>
+<div class="wctl">
+<label>r <input type="range" min="-1" max="1" step="0.05" value="0.8"></label>
+<button class="wbtn" type="button" data-r="0.85">양의 상관관계</button>
+<button class="wbtn" type="button" data-r="0">상관관계 없음</button>
+<button class="wbtn" type="button" data-r="-0.85">음의 상관관계</button>
+<span class="wout">r = +0.80</span>
+</div>
+</div>
+    <figcaption>r을 바꾸면 산점도 위 점 60개가 직선에 모이는 정도와 기울어진 방향이 달라집니다.</figcaption>
+  </figure>
+
+  <details class="glossary"><summary>더 알아보기 — 회귀라는 이름의 유래</summary><div class="gin">
+  <h3>회귀라는 이름은 어디서 왔나</h3>
+  <p>회귀(回歸)는 "돌아올 회, 돌아갈 귀"로 되돌아간다는 뜻입니다. 영어 regression도 라틴어 regredi에서 왔고, re는 뒤로, gradi는 걷다를 뜻하므로 의미가 같습니다. 직선을 긋는 계산에 왜 되돌아감이라는 이름이 붙었는지는 1886년 영국의 프랜시스 골턴이 발표한 연구에서 비롯되었습니다.</p>
+  <p>골턴은 부모 205쌍과 그 자녀 928명의 키를 조사했습니다. 키가 아주 큰 부모의 자녀는 평균적으로 부모보다 작았고, 키가 아주 작은 부모의 자녀는 평균적으로 부모보다 컸습니다. 자녀의 키가 전체 평균 쪽으로 되돌아가는 경향이 있었습니다. 골턴은 이 현상에 <b>평범함으로의 회귀</b>라는 이름을 붙였고, 부모 키와 자녀 키의 산점도에 직선을 그어 그 경향을 나타냈습니다.</p>
+  <figure class="interactive" data-fig="galton">
+    <div class="widget" data-w="galton">
+<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="부모 키와 자녀 키의 산점도. 부모와 같은 키를 나타내는 점선보다 회귀선의 기울기가 완만해, 선택한 부모 키에서 예측 자녀 키가 전체 평균 쪽에 놓이는 정도를 보여주는 그림">
+  <!-- 격자 -->
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="97.4" y1="20" x2="97.4" y2="296"/>
+    <line x1="180.3" y1="20" x2="180.3" y2="296"/>
+    <line x1="263.1" y1="20" x2="263.1" y2="296"/>
+    <line x1="346" y1="20" x2="346" y2="296"/>
+    <line x1="56" y1="256.6" x2="346" y2="256.6"/>
+    <line x1="56" y1="177.7" x2="346" y2="177.7"/>
+    <line x1="56" y1="98.9" x2="346" y2="98.9"/>
+    <line x1="56" y1="20" x2="346" y2="20"/>
+  </g>
+  <!-- 축 -->
+  <line x1="56" y1="296" x2="346" y2="296" stroke="#b9b3a5" stroke-width="1.5"/>
+  <line x1="56" y1="20" x2="56" y2="296" stroke="#b9b3a5" stroke-width="1.5"/>
+  <!-- 눈금 -->
+  <g font-size="14" fill="#6b7385">
+    <text x="97.4" y="316" text-anchor="middle">160</text>
+    <text x="180.3" y="316" text-anchor="middle">170</text>
+    <text x="263.1" y="316" text-anchor="middle">180</text>
+    <text x="346" y="316" text-anchor="middle">190</text>
+    <text x="50" y="261.6" text-anchor="end">160</text>
+    <text x="50" y="182.7" text-anchor="end">170</text>
+    <text x="50" y="103.9" text-anchor="end">180</text>
+    <text x="50" y="25" text-anchor="end">190</text>
+    <text x="201" y="335" text-anchor="middle">부모 평균 키 (cm)</text>
+    <text x="20" y="158" text-anchor="middle" transform="rotate(-90 20 158)">자녀 키 (cm)</text>
+  </g>
+  <!-- 배경 점 70개: 결정적 수열 u(i)=((i+1)·m+20 mod p)/(p−1) 3개 합으로 만든 종 모양 산포(초기화 함수와 같은 식) -->
+  <g class="pts" fill="#2b7fd6" opacity=".55">
+    <circle cx="337.7" cy="78.4" r="3.5"/>
+    <circle cx="235.0" cy="171.4" r="3.5"/>
+    <circle cx="121.5" cy="199.8" r="3.5"/>
+    <circle cx="242.4" cy="154.1" r="3.5"/>
+    <circle cx="246.6" cy="109.9" r="3.5"/>
+    <circle cx="132.2" cy="210.0" r="3.5"/>
+    <circle cx="254.0" cy="164.3" r="3.5"/>
+    <circle cx="140.5" cy="264.5" r="3.5"/>
+    <circle cx="261.5" cy="147.7" r="3.5"/>
+    <circle cx="264.8" cy="102.8" r="3.5"/>
+    <circle cx="151.3" cy="131.2" r="3.5"/>
+    <circle cx="272.3" cy="158.0" r="3.5"/>
+    <circle cx="276.4" cy="113.1" r="3.5"/>
+    <circle cx="162.9" cy="141.4" r="3.5"/>
+    <circle cx="166.2" cy="168.3" r="3.5"/>
+    <circle cx="288.0" cy="123.3" r="3.5"/>
+    <circle cx="174.5" cy="151.7" r="3.5"/>
+    <circle cx="177.8" cy="106.7" r="3.5"/>
+    <circle cx="181.9" cy="134.3" r="3.5"/>
+    <circle cx="302.9" cy="89.4" r="3.5"/>
+    <circle cx="189.4" cy="188.8" r="3.5"/>
+    <circle cx="192.7" cy="144.6" r="3.5"/>
+    <circle cx="196.9" cy="172.2" r="3.5"/>
+    <circle cx="200.2" cy="127.2" r="3.5"/>
+    <circle cx="204.3" cy="154.8" r="3.5"/>
+    <circle cx="207.6" cy="109.9" r="3.5"/>
+    <circle cx="211.8" cy="137.5" r="3.5"/>
+    <circle cx="215.9" cy="165.1" r="3.5"/>
+    <circle cx="219.2" cy="192.7" r="3.5"/>
+    <circle cx="105.7" cy="220.3" r="3.5"/>
+    <circle cx="226.7" cy="103.6" r="3.5"/>
+    <circle cx="230.8" cy="130.4" r="3.5"/>
+    <circle cx="117.3" cy="230.5" r="3.5"/>
+    <circle cx="238.3" cy="113.8" r="3.5"/>
+    <circle cx="241.6" cy="140.7" r="3.5"/>
+    <circle cx="128.1" cy="240.8" r="3.5"/>
+    <circle cx="249.9" cy="195.9" r="3.5"/>
+    <circle cx="253.2" cy="79.1" r="3.5"/>
+    <circle cx="139.7" cy="179.3" r="3.5"/>
+    <circle cx="260.7" cy="134.3" r="3.5"/>
+    <circle cx="147.1" cy="161.9" r="3.5"/>
+    <circle cx="151.3" cy="189.5" r="3.5"/>
+    <circle cx="272.3" cy="72.0" r="3.5"/>
+    <circle cx="158.7" cy="244.0" r="3.5"/>
+    <circle cx="162.1" cy="128.0" r="3.5"/>
+    <circle cx="283.9" cy="82.3" r="3.5"/>
+    <circle cx="170.3" cy="110.7" r="3.5"/>
+    <circle cx="173.7" cy="210.0" r="3.5"/>
+    <circle cx="177.8" cy="165.1" r="3.5"/>
+    <circle cx="181.1" cy="192.7" r="3.5"/>
+    <circle cx="185.3" cy="148.5" r="3.5"/>
+    <circle cx="188.6" cy="175.3" r="3.5"/>
+    <circle cx="192.7" cy="131.2" r="3.5"/>
+    <circle cx="196.0" cy="158.8" r="3.5"/>
+    <circle cx="200.2" cy="113.8" r="3.5"/>
+    <circle cx="86.7" cy="285.7" r="3.5"/>
+    <circle cx="207.6" cy="169.0" r="3.5"/>
+    <circle cx="211.8" cy="195.9" r="3.5"/>
+    <circle cx="215.1" cy="79.9" r="3.5"/>
+    <circle cx="101.6" cy="251.8" r="3.5"/>
+    <circle cx="222.5" cy="134.3" r="3.5"/>
+    <circle cx="226.7" cy="161.9" r="3.5"/>
+    <circle cx="230.0" cy="117.0" r="3.5"/>
+    <circle cx="234.1" cy="216.4" r="3.5"/>
+    <circle cx="237.5" cy="172.2" r="3.5"/>
+    <circle cx="241.6" cy="127.2" r="3.5"/>
+    <circle cx="128.1" cy="155.6" r="3.5"/>
+    <circle cx="249.1" cy="110.7" r="3.5"/>
+    <circle cx="253.2" cy="137.5" r="3.5"/>
+    <circle cx="256.5" cy="93.3" r="3.5"/>
+  </g>
+  <!-- 기준선 3개: 전체 평균 · 부모와 같은 키 · 회귀선 -->
+  <line x1="56" y1="154.1" x2="346" y2="154.1" stroke="#b9b3a5" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <line x1="56" y1="296" x2="346" y2="20" stroke="#6b7385" stroke-width="2" stroke-dasharray="7 5"/>
+  <line x1="56" y1="246.3" x2="346" y2="66.9" stroke="#2b7fd6" stroke-width="2.5"/>
+  <!-- 선택한 부모 키 -->
+  <line class="guide" x1="304.6" y1="20" x2="304.6" y2="296" stroke="#b9b3a5" stroke-width="1.2"/>
+  <line class="arr" x1="304.6" y1="59.4" x2="304.6" y2="78.5" stroke="#b07a00" stroke-width="2.5"/>
+  <polygon class="arrh" points="304.6,85.5 299.6,78.5 309.6,78.5" fill="#b07a00"/>
+  <circle class="p-same" cx="304.6" cy="59.4" r="5.5" fill="#b9b3a5" stroke="#6b7385" stroke-width="1.5"/>
+  <circle class="p-pred" cx="304.6" cy="92.5" r="6" fill="#2b7fd6" stroke="#f7f3e8" stroke-width="2"/>
+  <text class="lbl" x="273.5" y="81" text-anchor="end" font-size="14" font-weight="700" fill="#b07a00" paint-order="stroke" stroke="#f7f3e8" stroke-width="4" stroke-linejoin="round">평균 쪽으로 4.2 cm</text>
+  <!-- 범례 -->
+  <g font-size="14" fill="#1c2230">
+    <line x1="362" y1="30" x2="388" y2="30" stroke="#6b7385" stroke-width="2" stroke-dasharray="7 5"/>
+    <text x="394" y="35">부모와 같은 키</text>
+    <line x1="362" y1="56" x2="388" y2="56" stroke="#2b7fd6" stroke-width="2.5"/>
+    <text x="394" y="61">회귀선</text>
+    <line x1="362" y1="82" x2="388" y2="82" stroke="#b9b3a5" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <text x="394" y="87">전체 평균 173</text>
+  </g>
+  <!-- 수치 패널 -->
+  <rect x="504" y="20" width="208" height="240" rx="10" fill="#fdfbf5" stroke="#e3ddcf"/>
+  <g font-size="14" fill="#6b7385">
+    <text x="518" y="54">부모 키</text>
+    <text x="518" y="100">같은 키라면</text>
+    <text x="518" y="146">예측 자녀 키</text>
+    <text x="518" y="192">차이</text>
+    <line x1="518" y1="214" x2="698" y2="214" stroke="#e3ddcf"/>
+    <text x="518" y="242">기울기 0.65 → 약 3분의 2</text>
+  </g>
+  <text x="698" y="54" text-anchor="end"><tspan class="v-parent" font-size="24" font-weight="700" fill="#1c2230">185</tspan><tspan font-size="14" fill="#6b7385"> cm</tspan></text>
+  <text class="v-same" x="698" y="100" text-anchor="end" font-size="20" fill="#6b7385">185.0</text>
+  <text class="v-pred" x="698" y="146" text-anchor="end" font-size="24" font-weight="700" fill="#2b7fd6">180.8</text>
+  <text class="v-diff" x="698" y="192" text-anchor="end" font-size="18" font-weight="700" fill="#b07a00">4.2 → 평균 쪽</text>
+  <text x="712" y="335" text-anchor="end" font-size="14" fill="#6b7385">골턴 1886의 경향을 근사한 모식도</text>
+</svg>
+<div class="wctl">
+  <label>부모 키 <input type="range" min="155" max="190" step="1" value="185"></label>
+  <span class="wout">185 cm</span>
+  <button class="wbtn" type="button" data-v="160">작은 부모 160</button>
+  <button class="wbtn" type="button" data-v="173">평균 173</button>
+  <button class="wbtn on" type="button" data-v="185">큰 부모 185</button>
+</div>
+</div>
+    <figcaption>부모 키를 바꾸면 회귀선 위 예측 자녀 키와 평균 쪽으로 되돌아온 거리가 표시됩니다. 1886년 골턴 연구의 경향을 근사한 모식도입니다.</figcaption>
+  </figure>
+
+
+  <p>오늘날 회귀는 되돌아가는 현상과 관계없이, 데이터의 관계를 선으로 요약해 값을 예측하는 방법 전체를 가리킵니다. 방법에 처음 붙은 이름이 그대로 남은 경우입니다. 용어의 이름이 방법의 내용을 모두 설명하지는 않으므로, 이름의 유래를 알아 두면 혼동이 줄어듭니다.</p>
+  <p>평균으로 되돌아가는 현상 자체는 지금도 <b>평균으로의 회귀</b>라는 이름으로 부릅니다. 시험을 유난히 잘 본 학생이 다음 시험에서는 평소 실력에 가까운 점수를 받는 일이 그 예입니다.</p>
+
+  </div></details>
+  <p>먼저 산점도에서 관계의 모양을 살펴보고, 상관계수와 회귀선을 함께 읽습니다. 상관계수만으로 관계의 모양을 모두 알 수는 없습니다. 우리 문제에서 예측에 사용하는 <b>독립 변수</b>는 연도이며, 예측하려는 <b>종속 변수</b>는 연평균기온입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>단계</th><th>도구</th><th>묻는 말</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 산점도</b></td><td>점 그래프</td><td>두 속성이 함께 움직이는 모양이 보이는가</td></tr>
+      <tr><td><b>② 상관계수</b></td><td>−1 ~ +1의 수치</td><td>그 관계가 얼마나 강한가, 방향은 어느 쪽인가</td></tr>
+      <tr><td><b>③ 회귀선</b></td><td>가장 잘 맞는 직선</td><td>이 관계로 새 값을 예측하면 얼마가 나오는가</td></tr>
+    </tbody>
+  </table>
+  <figure class="interactive" data-fig="procedure">
+    <div class="widget" data-w="procedure">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="회귀 분석의 절차: 산점도 → 상관계수 → 회귀선, 서울 연평균기온 1908~2025">
+<!-- 격자 -->
+<g stroke="#e3ddcf" stroke-width="1">
+<line x1="56" y1="20" x2="470" y2="20"/>
+<line x1="56" y1="89.7" x2="470" y2="89.7"/>
+<line x1="56" y1="159.4" x2="470" y2="159.4"/>
+<line x1="56" y1="229.1" x2="470" y2="229.1"/>
+</g>
+<!-- 축 -->
+<path d="M56,20 V264 H470" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+<g font-size="14" fill="#6b7385">
+<text x="48" y="25" text-anchor="end">16</text>
+<text x="48" y="94.7" text-anchor="end">14</text>
+<text x="48" y="164.4" text-anchor="end">12</text>
+<text x="48" y="234.1" text-anchor="end">10</text>
+<text x="60" y="14">℃</text>
+<text x="72.8" y="284" text-anchor="middle">1910</text>
+<text x="207.5" y="284" text-anchor="middle">1950</text>
+<text x="375.7" y="284" text-anchor="middle">2000</text>
+<text x="459.9" y="284" text-anchor="middle">2025</text>
+<text x="476" y="269">연도</text>
+</g>
+<!-- 진행 표시 -->
+<text x="62" y="44" font-size="14" fill="#b9b3a5"><tspan class="pstep" data-s="1">① 산점도</tspan><tspan> → </tspan><tspan class="pstep" data-s="2">② 상관계수</tspan><tspan> → </tspan><tspan class="pstep" data-s="3">③ 회귀선</tspan></text>
+<!-- 캡션 -->
+<text class="cap" x="62" y="72" font-size="18" font-weight="700" fill="#b07a00">함께 움직이는 모양?</text>
+<!-- ① 산점도 -->
+<g class="pts" fill="#2b7fd6" opacity=".55"></g>
+<!-- ③ 회귀선 -->
+<g class="st3" visibility="hidden" opacity="0">
+<line class="rline" x1="56" y1="264" x2="470" y2="264" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+<rect x="512" y="154" width="200" height="110" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1.2"/>
+<text x="528" y="178" font-size="14" font-weight="700" fill="#1c2230">③ 회귀선</text>
+<line x1="616" y1="173" x2="696" y2="173" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+<text x="528" y="206" font-size="14" fill="#6b7385">기울기</text>
+<text class="slope" x="612" y="244" text-anchor="middle" font-size="22" font-weight="700" fill="#2b7fd6">+2.60℃/100년</text>
+</g>
+<!-- ② 상관계수 -->
+<g class="st2" visibility="hidden" opacity="0">
+<rect x="512" y="20" width="200" height="118" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1.2"/>
+<text x="528" y="44" font-size="14" font-weight="700" fill="#1c2230">② 상관계수</text>
+<text class="rval" x="612" y="80" text-anchor="middle" font-size="26" font-weight="700" fill="#b07a00">r = +0.84</text>
+<line x1="536" y1="106" x2="688" y2="106" stroke="#e3ddcf" stroke-width="6" stroke-linecap="round"/>
+<line class="rfill" x1="612" y1="106" x2="612" y2="106" stroke="#b07a00" stroke-width="6" stroke-linecap="round"/>
+<path d="M536,99 V113 M612,99 V113 M688,99 V113" stroke="#6b7385" stroke-width="1.2"/>
+<circle class="rdot" cx="612" cy="106" r="5.5" fill="#b07a00" stroke="#1c2230" stroke-width="1.2"/>
+<g font-size="14" fill="#6b7385" text-anchor="middle">
+<text x="536" y="130">−1</text>
+<text x="612" y="130">0</text>
+<text x="688" y="130">+1</text>
+</g>
+</g>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-s="1">① 산점도</button>
+<button class="wbtn" type="button" data-s="2">② 상관계수</button>
+<button class="wbtn" type="button" data-s="3">③ 회귀선</button>
+</div>
+</div>
+    <figcaption>버튼을 누르면 서울 114개 해의 실측 데이터로 산점도, 상관계수, 회귀선이 차례로 표시됩니다.</figcaption>
+  </figure>
+
+  <h3>직선을 읽는 두 숫자 — 기울기와 편향</h3>
+  <p>이 실습에서는 1908년을 0으로 두고, 연도에서 1908을 뺀 값을 독립 변수로 사용합니다. 직선은 <b>예측값 = 기울기 × (연도 − 1908) + 편향</b>으로 나타냅니다. 기울기는 1908년부터 지난 연수가 1 증가할 때 예측값이 얼마나 달라지는지를 뜻합니다. 따라서 연도가 1 증가할 때 예상 연평균기온이 변하는 양과 같고, 100을 곱하면 100년 단위의 변화량이 됩니다. <b>편향</b>은 독립 변수가 0일 때, 곧 1908년의 예측값입니다. 수학에서 부르는 이름은 절편이고, 교과서는 기울기를 가중치, 절편을 편향이라고 부릅니다(119쪽).</p>
+  <figure class="interactive" data-fig="slopebias">
+    <div class="widget" data-w="slopebias">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="기울기와 편향 — 서울 연평균기온 산점도 위의 직선">
+  <!-- 격자·축 -->
+  <line x1="56" y1="203" x2="696" y2="203" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="142" x2="696" y2="142" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="81" x2="696" y2="81" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="20" x2="696" y2="20" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="285.7" y1="20" x2="285.7" y2="264" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="559.3" y1="20" x2="559.3" y2="264" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="20" x2="56" y2="264" stroke="#b9b3a5" stroke-width="1.2"/>
+  <line x1="56" y1="264" x2="696" y2="264" stroke="#b9b3a5" stroke-width="1.2"/>
+  <g font-size="14" fill="#6b7385">
+    <text x="48" y="269" text-anchor="end">8</text>
+    <text x="48" y="208" text-anchor="end">10</text>
+    <text x="48" y="147" text-anchor="end">12</text>
+    <text x="48" y="86" text-anchor="end">14</text>
+    <text x="48" y="25" text-anchor="end">16</text>
+    <text x="64" y="16">℃</text>
+    <text x="67" y="280" text-anchor="middle">1910</text>
+    <text x="285.7" y="280" text-anchor="middle">1950</text>
+    <text x="559.3" y="280" text-anchor="middle">2000</text>
+    <text x="711" y="280" text-anchor="end">2025</text>
+    <text text-anchor="end" x="710" y="293">연도</text>
+  </g>
+  <!-- 산점도(초기화 함수가 D로 채움) -->
+  <g class="pts"></g>
+  <!-- 직선(파랑) -->
+  <line class="fit" x1="56" y1="193.8" x2="696" y2="101.1" stroke="#2b7fd6" stroke-width="3" stroke-linecap="round"/>
+  <!-- 편향: 왼쪽 끝 노랑 점 -->
+  <circle class="bdot" cx="56" cy="193.8" r="6" fill="#b07a00" stroke="#ffffff" stroke-width="1.5"/>
+  <text class="blbl" x="112" y="218.8" text-anchor="start" font-size="15" font-weight="700" fill="#b07a00" stroke="#f7f3e8" stroke-width="5" stroke-linejoin="round" paint-order="stroke">편향 10.3℃</text>
+  <!-- 기울기: 직선 오른쪽 위 -->
+  <text class="slbl" x="694" y="89.1" text-anchor="end" font-size="15" font-weight="700" fill="#2b7fd6" stroke="#f7f3e8" stroke-width="5" stroke-linejoin="round" paint-order="stroke">기울기 +2.60℃/100년</text>
+  <!-- 오른쪽 상단 상자: 기울기의 뜻 -->
+  <rect x="430" y="22" width="210" height="46" rx="6" fill="#ffffff" fill-opacity=".94" stroke="#e3ddcf"/>
+  <text class="box1" x="440" y="41" font-size="14" fill="#1c2230">연도 1 증가 → 기온 +0.026℃</text>
+  <text class="box2" x="440" y="61" font-size="14" fill="#1c2230">100년 → +2.60℃</text>
+</svg>
+<div class="wctl">
+  <label>기울기 <input type="range" data-k="slope" min="-5" max="12" step="0.1" value="2.6"></label>
+  <label>편향(1908년 예측값) <input type="range" data-k="bias" min="8" max="16" step="0.1" value="10.3"></label>
+  <button class="wbtn on" type="button" data-act="reset">학습 결과로</button>
+  <span class="wout">기울기 +2.60 · 편향 10.3</span>
+</div>
+</div>
+    <figcaption>두 슬라이더로 기울기와 1908년의 예측값인 편향을 바꾸면 산점도 위 직선의 위치가 달라집니다. '학습 결과로' 버튼을 누르면 학습으로 구한 직선으로 돌아옵니다.</figcaption>
+  </figure>
+
+  <h3>어느 직선이 "가장 잘 맞는" 직선인가</h3>
+  <p>같은 산점도에도 여러 직선을 그을 수 있습니다. 이번 실습에서는 각 점의 실젯값과 예측값의 차이를 제곱해 더한 값이 가장 작아지도록 기울기와 편향을 구합니다. 이 계산이 오늘 수행하는 <b>학습</b>입니다. 8차시에는 오차를 직접 계산하며 이 기준을 확인합니다.</p>
+  <figure class="interactive" data-fig="error">
+    <div class="widget" data-w="error">
+<svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="최근 20년 서울 연평균기온 산점도 위 예측 직선, 각 점의 오차 선분, 제곱오차 합">
+<g stroke="#e3ddcf" stroke-width="1"><line x1="56" y1="156.5" x2="500" y2="156.5"/><line x1="56" y1="113.0" x2="500" y2="113.0"/><line x1="56" y1="69.5" x2="500" y2="69.5"/><line x1="56" y1="26.0" x2="500" y2="26.0"/></g>
+<line x1="56" y1="200" x2="500" y2="200" stroke="#b9b3a5" stroke-width="1.5"/>
+<line x1="56" y1="26" x2="56" y2="200" stroke="#b9b3a5" stroke-width="1.5"/>
+<g font-size="14" fill="#6b7385" text-anchor="end"><text x="48" y="205.0">11</text><text x="48" y="161.5">12</text><text x="48" y="118.0">13</text><text x="48" y="74.5">14</text><text x="48" y="31.0">15</text></g>
+<text x="48" y="14" font-size="14" fill="#6b7385" text-anchor="end">℃</text>
+<g font-size="14" fill="#6b7385" text-anchor="middle"><text x="56.0" y="219">2006</text><text x="149.5" y="219">2010</text><text x="266.3" y="219">2015</text><text x="383.2" y="219">2020</text><text x="500.0" y="219">2025</text></g>
+<text x="500" y="237" font-size="14" fill="#6b7385" text-anchor="end">연도</text>
+<g data-dyn><line x1="56.0" y1="117.3" x2="500.0" y2="95.9" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/><line x1="56.0" y1="110.3" x2="56.0" y2="117.3" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="79.4" y1="100.7" x2="79.4" y2="116.2" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="102.7" y1="114.6" x2="102.7" y2="115.1" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="126.1" y1="115.0" x2="126.1" y2="114.0" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="149.5" y1="150.4" x2="149.5" y2="112.8" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="172.8" y1="152.9" x2="172.8" y2="111.7" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="196.2" y1="144.8" x2="196.2" y2="110.6" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="219.6" y1="132.0" x2="219.6" y2="109.4" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="242.9" y1="95.6" x2="242.9" y2="108.3" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="266.3" y1="85.9" x2="266.3" y2="107.2" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="289.7" y1="87.2" x2="289.7" y2="106.0" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="313.1" y1="109.8" x2="313.1" y2="104.9" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="336.4" y1="112.9" x2="336.4" y2="103.8" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="359.8" y1="86.9" x2="359.8" y2="102.6" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="383.2" y1="101.2" x2="383.2" y2="101.5" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="406.5" y1="80.3" x2="406.5" y2="100.4" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="429.9" y1="100.1" x2="429.9" y2="99.3" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="453.3" y1="64.8" x2="453.3" y2="98.1" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="476.6" y1="31.4" x2="476.6" y2="97.0" stroke="#d64545" stroke-width="2" opacity=".85"/><line x1="500.0" y1="63.0" x2="500.0" y2="95.9" stroke="#d64545" stroke-width="2" opacity=".85"/><circle cx="56.0" cy="110.3" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="79.4" cy="100.7" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="102.7" cy="114.6" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="126.1" cy="115.0" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="149.5" cy="150.4" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="172.8" cy="152.9" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="196.2" cy="144.8" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="219.6" cy="132.0" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="242.9" cy="95.6" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="266.3" cy="85.9" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="289.7" cy="87.2" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="313.1" cy="109.8" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="336.4" cy="112.9" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="359.8" cy="86.9" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="383.2" cy="101.2" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="406.5" cy="80.3" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="429.9" cy="100.1" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="453.3" cy="64.8" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="476.6" cy="31.4" r="3.5" fill="#2b7fd6" opacity=".55"/><circle cx="500.0" cy="63.0" r="3.5" fill="#2b7fd6" opacity=".55"/></g>
+<rect x="524" y="24" width="172" height="84" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+<text x="536" y="44" font-size="14" fill="#6b7385">제곱오차 합</text>
+<text x="684" y="72" font-size="24" font-weight="700" fill="#d64545" text-anchor="end" data-t="sse">7.03</text>
+<text x="536" y="98" font-size="14" fill="#6b7385">최소</text>
+<text x="684" y="98" font-size="16" font-weight="700" fill="#2f9e5f" text-anchor="end" data-t="min">4.76</text>
+<circle cx="544" cy="130" r="3.5" fill="#2b7fd6" opacity=".55"/>
+<text x="556" y="135" font-size="14" fill="#1c2230">실젯값(점)</text>
+<line x1="536" y1="152" x2="552" y2="152" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+<text x="556" y="157" font-size="14" fill="#1c2230">예측 직선(모델)</text>
+<line x1="544" y1="167" x2="544" y2="181" stroke="#d64545" stroke-width="2" opacity=".85"/>
+<text x="556" y="179" font-size="14" fill="#1c2230">오차(세로 선분)</text>
+<text x="536" y="206" font-size="14" fill="#1c2230">기울기 <tspan font-weight="700" data-t="a">+2.60</tspan> ℃/100년</text>
+<text x="536" y="226" font-size="14" fill="#1c2230">2006년 예측값 <tspan font-weight="700" data-t="h">12.9</tspan>℃</text>
+<text x="278" y="253" font-size="14" fill="#6b7385" text-anchor="middle">오차 = 실젯값 − 예측값 · 제곱해서 더한 값이 작을수록 잘 맞는 직선</text>
+</svg>
+<div class="wctl">
+<label>기울기 <input type="range" min="-5" max="20" step="0.1" value="2.6" data-k="a"> <span data-v="a">+2.60 ℃/100년</span></label>
+<label>2006년 예측값 <input type="range" min="11" max="15" step="0.1" value="12.9" data-k="h"> <span data-v="h">12.9℃</span></label>
+<button class="wbtn" type="button" data-act="best">최적 직선</button>
+<span class="wout">제곱오차 합 7.03 · 최소 4.76</span>
+</div>
+</div>
+    <figcaption>직선을 움직이면 빨간 오차 선분과 제곱오차 합이 달라집니다. 최적 직선에서 제곱오차 합이 가장 작은 4.76이 됩니다.</figcaption>
+  </figure>
+
+  <h2>2. 실습 — 기온 예측기 만들기 (바이브 코딩)</h2>
+  <p>새 앱에서 연도와 연평균기온의 산점도를 확인합니다. 점들이 어떤 모양으로 분포하는지 살핀 뒤, 상관계수와 회귀 직선을 함께 읽습니다. 직선으로 충분히 설명되지 않는 부분이 있는지도 관찰합니다.</p>
+  <p>연평균을 구하기 전에 관측 기간을 확인해야 합니다. 서울 기온 데이터에는 한국전쟁 시기의 결측이 있습니다. 일부 계절만 관측한 해의 평균은 한 해를 충분히 대표하지 못할 수 있습니다. 이번 수업에서는 2025년까지의 데이터 가운데 관측일이 300일 이상인 114개 연도(1908~2025)를 사용합니다.</p>
+  <div class="callout tip">
+    <div class="h">💡 전처리 판단의 기준 — 믿을 수 없는 값 제거와 불리한 값 제거</div>
+    <p>관측일 수가 적은 해를 제외하는 이유는 연간 기온을 충분히 대표하기 어려울 수 있기 때문입니다. 300일은 이 수업에서 정한 분석 기준이며, 연평균의 품질을 보장하는 절대 기준은 아닙니다. 어떤 계절의 데이터가 빠졌는지도 확인해야 합니다. <b>제외 기준과 근거를 먼저 정하고</b>, 앱과 보고서에 기록합니다. 점수를 높이기 위해 결과에 불리한 데이터만 골라 제외해서는 안 됩니다.</p>
+  </div>
+
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.
+서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.
+이 파일의 열 이름은 날짜, 지점, 평균기온, 최저기온, 최고기온이고, 인코딩은 UTF-8이야.
+수업의 기준 기간은 2025년까지야. 그 이후 데이터와 관측일이 300일이 안 되는 해는 빼 줘.
+산점도와 상관계수를 보여 주고, 남은 연평균기온에 맞춘 회귀 직선을 함께 표시해 줘. 회귀선은 1908년부터 지난 연수를 독립 변수로 하여 구해 줘.
+그래프는 plotly로 그리되 가로축에는 연도를 그대로 보여 줘.
+연도를 슬라이더로 고르면 그 해의 예상 기온이 크게 표시되게 해 줘.
+슬라이더 범위는 1900년부터 2100년까지.
+직선을 만든 해의 개수와 시작 연도, 끝 연도를 화면에 적어 줘.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 연평균기온에 직선을 맞추고 예측한다
+import streamlit as st
+import pandas as pd
+import numpy as np
+import plotly.express as px
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv"
+
+st.title("기온 예측기")
+
+
+@st.cache_data
+def load_yearly():
+    df = pd.read_csv(DATA_URL)
+    df["연도"] = pd.to_datetime(df["날짜"]).dt.year
+    grouped = df.groupby("연도")["평균기온"].agg(["mean", "count"]).reset_index()
+    # 2026년 수업은 2025년까지, 유효 관측일 300일 이상인 해를 사용한다.
+    valid = (grouped["연도"] &lt;= 2025) &amp; (grouped["count"] &gt;= 300)
+    return grouped[valid].rename(columns={"mean": "연평균기온"})
+
+
+yearly = load_yearly()
+yearly["1908년부터 지난 연수"] = yearly["연도"] - 1908
+a, b = np.polyfit(yearly["1908년부터 지난 연수"], yearly["연평균기온"], 1)   # 기울기, 편향
+
+fig = px.scatter(yearly, x="연도", y="연평균기온", opacity=0.6)
+fig.add_scatter(x=yearly["연도"], y=a * yearly["1908년부터 지난 연수"] + b, mode="lines", name="회귀 직선")
+st.plotly_chart(fig, width="stretch")
+st.caption(f"직선을 만든 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['연도'].max()}년)")
+
+st.metric("연도와 연평균기온의 상관계수", f"{yearly['연도'].corr(yearly['연평균기온']):.3f}")
+year = st.slider("연도를 고르세요", 1900, 2100, 2045)
+st.metric(f"{year}년 예상 연평균기온", f"{a * (year - 1908) + b:.1f}℃")
+if year &lt; yearly["연도"].min() or year &gt; yearly["연도"].max():
+    st.info("학습 범위 밖의 외삽값입니다. 실제 미래 기온을 보장하지 않습니다.")</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+numpy
+plotly</pre></div></details>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 실행하고 직선을 읽는다</span><br>
+      받은 코드를 <b>main.py</b> 파일 하나로 저장해 실행합니다. 오늘 앱은 화면이 하나입니다. 산점도 위에 직선이 표시되는지 먼저 확인합니다. 그다음 슬라이더를 내년으로, 2045년으로 옮겨 봅니다. 값이 바로 계산되어 표시됩니다. 이 값을 얼마나 믿을 수 있는지는 뒤에서 다룹니다. 먼저 직선이 점들의 추세와 어울리는지 눈으로 확인합니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 기울기를 읽을 수 있는 숫자로</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>직선의 기울기를 "100년에 몇 도 오르는가"로 바꿔 화면에 크게 보여 줘.
+그리고 전체 기간으로 구한 기울기와 최근 20년만으로 구한 기울기를
+나란히 비교해서 보여 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 기울기를 100년 단위로, 그리고 최근 20년과 비교
+recent = yearly[yearly["연도"] &gt;= yearly["연도"].max() - 19]
+a2, _ = np.polyfit(recent["연도"], recent["연평균기온"], 1)
+c1, c2 = st.columns(2)
+c1.metric("전체 기간 기울기", f"{a * 100:+.2f}℃ / 100년")
+c2.metric("최근 20년 기울기", f"{a2 * 100:+.2f}℃ / 100년")</pre></div></details>
+    </li>
+  </ol>
+
+  <div class="callout tip">
+    <div class="h">✍️ 화면에 보이는 숫자 적기</div>
+    <p>화면에 보이는 숫자는 언제나 어떤 범위의 데이터에서 나온 값입니다. 그 범위를 적어 두지 않으면 나중에 그 숫자가 어디까지 통하는지 알 수 없습니다. 공책에 그대로 옮겨 적어 두면 다음 차시에서 같은 질문을 다시 만날 때 도움이 됩니다.</p>
+    <ol class="steps">
+      <li>직선을 만드는 데 사용한 해의 개수와 기간</li>
+      <li>내가 슬라이더로 고른 해와 그때 나온 예상 기온</li>
+      <li>그 해가 위의 기간 안쪽인지 바깥쪽인지</li>
+    </ol>
+  </div>
+
+  <h2>3. 결과 비교 — 학습 기간에 따라 달라지는 기울기</h2>
+  <p>③을 실행하면 전체 기간과 최근 20년의 기울기가 표시됩니다. 아래 표는 같은 방법으로 최근 50년과 30년까지 비교한 결과입니다. 최근 기간은 모두 2025년을 끝으로 정했습니다. 기울기의 단위는 ℃/100년입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>학습 기간</th><th>기울기 (℃/100년)</th><th>읽기</th></tr></thead>
+    <tbody>
+      <tr><td><b>전체 114개 해</b></td><td><b>+2.60</b></td><td>한 세기를 관통하는 완만한 상승</td></tr>
+      <tr><td>최근 50년</td><td>+3.96</td><td>1976~2025년의 평균 상승 추세입니다.</td></tr>
+      <tr><td>최근 30년</td><td>+3.82</td><td>1996~2025년의 평균 상승 추세입니다.</td></tr>
+      <tr><td><b>최근 20년</b></td><td><b>+8.14</b></td><td>전체 기간의 3배가 넘는 가파름</td></tr>
+    </tbody>
+  </table>
+  <figure class="interactive" data-fig="range">
+    <div class="widget" data-w="range">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 시작 연도에 따라 달라지는 회귀선의 기울기와 2045년 예측값">
+  <!-- 학습 구간 배경 띠 -->
+  <rect class="band" x="56" y="20" width="546.6" height="244" fill="#2b7fd6" fill-opacity=".08"/>
+  <!-- 격자 -->
+  <line x1="56" y1="229.1" x2="696" y2="229.1" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="159.4" x2="696" y2="159.4" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="89.7" x2="696" y2="89.7" stroke="#e3ddcf" stroke-width="1"/>
+  <line x1="56" y1="20" x2="696" y2="20" stroke="#e3ddcf" stroke-width="1"/>
+  <!-- 축 -->
+  <line x1="56" y1="264" x2="696" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="56" y1="20" x2="56" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="65.3" y1="264" x2="65.3" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="252.2" y1="264" x2="252.2" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="485.8" y1="264" x2="485.8" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="602.6" y1="264" x2="602.6" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="696" y1="264" x2="696" y2="269" stroke="#6b7385" stroke-width="1.2"/>
+  <!-- 눈금 라벨 -->
+  <text x="65.3" y="279" font-size="14" fill="#6b7385" text-anchor="middle">1910</text>
+  <text x="252.2" y="279" font-size="14" fill="#6b7385" text-anchor="middle">1950</text>
+  <text x="485.8" y="279" font-size="14" fill="#6b7385" text-anchor="middle">2000</text>
+  <text x="602.6" y="279" font-size="14" fill="#6b7385" text-anchor="middle">2025</text>
+  <text x="694" y="279" font-size="14" fill="#6b7385" text-anchor="middle">2045</text>
+  <text text-anchor="end" x="712" y="293" font-size="14" fill="#6b7385">연도</text>
+  <text x="48" y="233.5" font-size="14" fill="#6b7385" text-anchor="end">10</text>
+  <text x="48" y="163.9" font-size="14" fill="#6b7385" text-anchor="end">12</text>
+  <text x="48" y="94.2" font-size="14" fill="#6b7385" text-anchor="end">14</text>
+  <text x="48" y="24.5" font-size="14" fill="#6b7385" text-anchor="end">16</text>
+  <text x="48" y="13" font-size="14" fill="#6b7385" text-anchor="end">℃</text>
+  <!-- 산점도 (JS가 D로 채움) -->
+  <g class="pts"></g>
+  <!-- 회귀선: 학습 구간 실선 + 2045년까지 점선 외삽 -->
+  <line class="fit-solid" x1="56.0" y1="218.0" x2="602.6" y2="112.0" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+  <line class="fit-dash" x1="602.6" y1="112.0" x2="696.0" y2="93.8" stroke="#2b7fd6" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/>
+  <!-- 2045년 예측값 표지 -->
+  <circle class="mark" cx="696.0" cy="93.8" r="5" fill="#fff" stroke="#b07a00" stroke-width="2.5"/>
+  <text class="mark-label" x="688" y="84.8" font-size="14" font-weight="700" fill="#b07a00" text-anchor="end">13.9℃</text>
+  <!-- 결과 상자 (오른쪽 상단: 1998·2019·2021·2023~2025 점과 회귀선을 피한 x 364~578, y 20~88) -->
+  <rect x="364" y="20" width="214" height="68" rx="6" fill="#fff" fill-opacity=".92" stroke="#e3ddcf" stroke-width="1"/>
+  <text class="box-n" x="374" y="38" font-size="15" fill="#1c2230">학습 114개 해(1908~2025)</text>
+  <text x="374" y="59" font-size="15" fill="#1c2230">기울기 <tspan class="box-slope" font-weight="700" fill="#2b7fd6">+2.60℃/100년</tspan></text>
+  <text x="374" y="80" font-size="15" fill="#1c2230">2045년 <tspan class="box-pred" font-weight="700" fill="#b07a00">13.9℃</tspan></text>
+  <!-- 범례 (오른쪽 아래 빈 영역) -->
+  <circle cx="386" cy="248" r="3.5" fill="#2b7fd6" opacity=".55"/>
+  <text x="394" y="253" font-size="14" fill="#6b7385">학습 데이터</text>
+  <circle cx="482" cy="248" r="3.5" fill="#b9b3a5" opacity=".6"/>
+  <text x="490" y="253" font-size="14" fill="#6b7385">학습 제외</text>
+  <line x1="562" y1="248" x2="584" y2="248" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="590" y="253" font-size="14" fill="#6b7385">회귀선</text>
+  <line x1="644" y1="248" x2="666" y2="248" stroke="#2b7fd6" stroke-width="2.5" stroke-dasharray="7 6" stroke-linecap="round"/>
+  <text x="672" y="253" font-size="14" fill="#6b7385">외삽</text>
+</svg>
+<div class="wctl">
+  <label>학습 시작 연도 <input type="range" min="1908" max="2006" step="1" value="1908"></label>
+  <button class="wbtn on" type="button" data-start="1908">전체</button>
+  <button class="wbtn" type="button" data-start="1976">최근 50년</button>
+  <button class="wbtn" type="button" data-start="1996">최근 30년</button>
+  <button class="wbtn" type="button" data-start="2006">최근 20년</button>
+  <span class="wout">학습 1908~2025 · 기울기 +2.60℃/100년</span>
+</div>
+</div>
+    <figcaption>학습 시작 연도를 바꾸면 학습 구간과 회귀선, 기울기, 2045년 예측값이 함께 달라집니다. 점은 서울의 실측 연평균기온입니다.</figcaption>
+  </figure>
+
+  <div class="callout tip">
+    <div class="h">🔎 두 직선은 서로 다른 기간을 요약합니다</div>
+    <p>두 직선은 같은 계산 방법으로 서로 다른 기간의 추세를 요약합니다. 전체 기간의 직선과 최근 20년의 직선은 2045년 기온을 각각 13.9℃와 15.7℃로 예측합니다. 두 예측값의 차이를 구하고, <b>학습 기간을 바꾸었을 때 예측값이 얼마나 달라지는지</b> 확인합니다.</p>
+  </div>
+  <p>슬라이더를 2045년과 2100년으로 옮겨 봅니다. 두 연도 모두 학습에 사용한 1908~2025년의 범위 밖에 있습니다. 학습 범위 밖의 값을 추정하는 것을 <b>외삽</b>이라고 합니다. 계산된 수치가 실제 미래 기온을 보장하지는 않습니다.</p>
+  <figure class="interactive" data-fig="extrapolation">
+    <div class="widget" data-w="extrapolation">
+<svg viewBox="0 0 720 290" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서울 연평균기온 산점도, 전체 회귀선(1908~2025 실선·2025~2100 점선), 선택 연도의 예측값과 학습 범위 밖 음영 그림">
+  <!-- 학습 범위 밖(2025~2100) 음영 -->
+  <rect class="shade" x="446" y="20" width="250" height="224" fill="#b9b3a5" opacity="0.22"/>
+  <line class="shade-edge" x1="446" y1="20" x2="446" y2="244" stroke="#b9b3a5" stroke-width="1" stroke-dasharray="3 3"/>
+  <text class="shade-txt" font-size="14" fill="#6b7385" text-anchor="middle"><tspan x="608" y="206">확인할</tspan><tspan x="608" y="224">데이터 없음</tspan></text>
+  <!-- 격자 -->
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="56" y1="219.1" x2="696" y2="219.1"/>
+    <line x1="56" y1="169.3" x2="696" y2="169.3"/>
+    <line x1="56" y1="119.6" x2="696" y2="119.6"/>
+    <line x1="56" y1="69.8" x2="696" y2="69.8"/>
+  </g>
+  <!-- 축 -->
+  <line x1="56" y1="20" x2="56" y2="244" stroke="#b9b3a5" stroke-width="1.5"/>
+  <line x1="56" y1="244" x2="696" y2="244" stroke="#b9b3a5" stroke-width="1.5"/>
+  <g stroke="#b9b3a5" stroke-width="1.5">
+    <line x1="62.7" y1="244" x2="62.7" y2="249"/>
+    <line x1="196" y1="244" x2="196" y2="249"/>
+    <line x1="362.7" y1="244" x2="362.7" y2="249"/>
+    <line x1="446" y1="244" x2="446" y2="249"/>
+    <line x1="696" y1="244" x2="696" y2="249"/>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="middle">
+    <text x="62.7" y="260">1910</text>
+    <text x="196" y="260">1950</text>
+    <text x="362.7" y="260">2000</text>
+    <text x="446" y="260">2025</text>
+    <text x="696" y="260">2100</text>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="end">
+    <text x="48" y="223.6">10</text>
+    <text x="48" y="173.8">12</text>
+    <text x="48" y="124.1">14</text>
+    <text x="48" y="74.3">16</text>
+    <text x="48" y="24">℃</text>
+    <text x="712" y="282">연도</text>
+  </g>
+  <text class="legend" x="56" y="282" font-size="14" fill="#6b7385">회귀선 · 학습 데이터 1908~2025 · 기울기 +2.60℃/100년</text>
+  <!-- 산점도 114개 점(초기값, JS가 같은 값으로 다시 채움) -->
+  <g class="pts" fill="#2b7fd6" opacity="0.55"><circle cx="56.00" cy="208.48" r="3.5"/><circle cx="59.33" cy="203.95" r="3.5"/><circle cx="62.67" cy="208.86" r="3.5"/><circle cx="66.00" cy="202.81" r="3.5"/><circle cx="69.33" cy="216.02" r="3.5"/><circle cx="72.67" cy="216.97" r="3.5"/><circle cx="76.00" cy="168.61" r="3.5"/><circle cx="79.33" cy="196.76" r="3.5"/><circle cx="82.67" cy="196.44" r="3.5"/><circle cx="86.00" cy="222.62" r="3.5"/><circle cx="89.33" cy="205.67" r="3.5"/><circle cx="92.67" cy="190.46" r="3.5"/><circle cx="96.00" cy="184.07" r="3.5"/><circle cx="99.33" cy="194.99" r="3.5"/><circle cx="102.67" cy="197.38" r="3.5"/><circle cx="106.00" cy="201.71" r="3.5"/><circle cx="109.33" cy="192.48" r="3.5"/><circle cx="112.67" cy="199.52" r="3.5"/><circle cx="116.00" cy="205.25" r="3.5"/><circle cx="119.33" cy="192.53" r="3.5"/><circle cx="122.67" cy="191.09" r="3.5"/><circle cx="126.00" cy="182.03" r="3.5"/><circle cx="129.33" cy="174.46" r="3.5"/><circle cx="132.67" cy="195.32" r="3.5"/><circle cx="136.00" cy="177.40" r="3.5"/><circle cx="139.33" cy="204.53" r="3.5"/><circle cx="142.67" cy="214.13" r="3.5"/><circle cx="146.00" cy="187.53" r="3.5"/><circle cx="149.33" cy="224.64" r="3.5"/><circle cx="152.67" cy="182.90" r="3.5"/><circle cx="156.00" cy="193.90" r="3.5"/><circle cx="159.33" cy="174.78" r="3.5"/><circle cx="162.67" cy="199.90" r="3.5"/><circle cx="166.00" cy="188.67" r="3.5"/><circle cx="169.33" cy="194.89" r="3.5"/><circle cx="172.67" cy="176.23" r="3.5"/><circle cx="176.00" cy="196.91" r="3.5"/><circle cx="179.33" cy="208.21" r="3.5"/><circle cx="182.67" cy="184.57" r="3.5"/><circle cx="186.00" cy="227.67" r="3.5"/><circle cx="189.33" cy="175.36" r="3.5"/><circle cx="192.67" cy="176.80" r="3.5"/><circle cx="209.33" cy="182.08" r="3.5"/><circle cx="212.67" cy="181.45" r="3.5"/><circle cx="216.00" cy="216.30" r="3.5"/><circle cx="219.33" cy="206.27" r="3.5"/><circle cx="222.67" cy="178.37" r="3.5"/><circle cx="226.00" cy="167.34" r="3.5"/><circle cx="229.33" cy="166.72" r="3.5"/><circle cx="232.67" cy="158.01" r="3.5"/><circle cx="236.00" cy="175.38" r="3.5"/><circle cx="239.33" cy="186.43" r="3.5"/><circle cx="242.67" cy="163.83" r="3.5"/><circle cx="246.00" cy="184.37" r="3.5"/><circle cx="249.33" cy="179.84" r="3.5"/><circle cx="252.67" cy="177.40" r="3.5"/><circle cx="256.00" cy="174.61" r="3.5"/><circle cx="259.33" cy="196.01" r="3.5"/><circle cx="262.67" cy="183.72" r="3.5"/><circle cx="266.00" cy="180.51" r="3.5"/><circle cx="269.33" cy="171.40" r="3.5"/><circle cx="272.67" cy="166.92" r="3.5"/><circle cx="276.00" cy="190.36" r="3.5"/><circle cx="279.33" cy="156.39" r="3.5"/><circle cx="282.67" cy="182.28" r="3.5"/><circle cx="286.00" cy="160.05" r="3.5"/><circle cx="289.33" cy="158.13" r="3.5"/><circle cx="292.67" cy="156.71" r="3.5"/><circle cx="296.00" cy="198.60" r="3.5"/><circle cx="299.33" cy="188.57" r="3.5"/><circle cx="302.67" cy="155.42" r="3.5"/><circle cx="306.00" cy="158.03" r="3.5"/><circle cx="309.33" cy="179.36" r="3.5"/><circle cx="312.67" cy="178.84" r="3.5"/><circle cx="316.00" cy="186.61" r="3.5"/><circle cx="319.33" cy="169.68" r="3.5"/><circle cx="322.67" cy="166.32" r="3.5"/><circle cx="326.00" cy="144.17" r="3.5"/><circle cx="329.33" cy="148.45" r="3.5"/><circle cx="332.67" cy="159.43" r="3.5"/><circle cx="336.00" cy="156.86" r="3.5"/><circle cx="339.33" cy="167.22" r="3.5"/><circle cx="342.67" cy="129.21" r="3.5"/><circle cx="346.00" cy="162.69" r="3.5"/><circle cx="349.33" cy="162.91" r="3.5"/><circle cx="352.67" cy="145.51" r="3.5"/><circle cx="356.00" cy="123.64" r="3.5"/><circle cx="359.33" cy="138.05" r="3.5"/><circle cx="362.67" cy="151.56" r="3.5"/><circle cx="366.00" cy="147.93" r="3.5"/><circle cx="369.33" cy="146.58" r="3.5"/><circle cx="372.67" cy="147.68" r="3.5"/><circle cx="376.00" cy="135.68" r="3.5"/><circle cx="379.33" cy="165.87" r="3.5"/><circle cx="382.67" cy="142.90" r="3.5"/><circle cx="386.00" cy="137.40" r="3.5"/><circle cx="389.33" cy="145.34" r="3.5"/><circle cx="392.67" cy="145.61" r="3.5"/><circle cx="396.00" cy="165.82" r="3.5"/><circle cx="399.33" cy="167.29" r="3.5"/><circle cx="402.67" cy="162.64" r="3.5"/><circle cx="406.00" cy="155.30" r="3.5"/><circle cx="409.33" cy="134.49" r="3.5"/><circle cx="412.67" cy="128.96" r="3.5"/><circle cx="416.00" cy="129.69" r="3.5"/><circle cx="419.33" cy="142.63" r="3.5"/><circle cx="422.67" cy="144.39" r="3.5"/><circle cx="426.00" cy="129.54" r="3.5"/><circle cx="429.33" cy="137.67" r="3.5"/><circle cx="432.67" cy="125.73" r="3.5"/><circle cx="436.00" cy="137.08" r="3.5"/><circle cx="439.33" cy="116.84" r="3.5"/><circle cx="442.67" cy="97.78" r="3.5"/><circle cx="446.00" cy="115.82" r="3.5"/></g>
+  <!-- 전체 최소제곱 직선: 학습 범위 실선 + 범위 밖 점선 -->
+  <line class="fit-solid" x1="56" y1="211.1" x2="446" y2="135.4" stroke="#2b7fd6" stroke-width="2.5"/>
+  <line class="fit-dash" x1="446" y1="135.4" x2="696" y2="86.9" stroke="#2b7fd6" stroke-width="2.5" stroke-dasharray="7 5"/>
+  <!-- 선택 연도 -->
+  <line class="vline" x1="512.7" y1="50" x2="512.7" y2="244" stroke="#6b7385" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <circle class="apt" cx="512.7" cy="122.5" r="6.5" fill="none" stroke="#1c2230" stroke-width="2" visibility="hidden"/>
+  <circle class="ppt" cx="512.7" cy="122.5" r="5" fill="#d64545" stroke="#ffffff" stroke-width="1.5"/>
+  <text class="lab" x="504.7" y="44" font-size="16" font-weight="700" fill="#1c2230" text-anchor="end">2045년 예측 13.9℃</text>
+  <!-- 배지 -->
+  <rect class="badge-r" x="646" y="22" width="50" height="22" rx="11" fill="#d64545"/>
+  <text class="badge-t" x="671" y="38" font-size="14" font-weight="700" fill="#ffffff" text-anchor="middle">외삽</text>
+</svg>
+<div class="wctl">
+  <label>연도 <input type="range" min="1908" max="2100" step="1" value="2045"></label>
+  <button class="wbtn" type="button" data-year="2025">2025년</button>
+  <button class="wbtn on" type="button" data-year="2045">2045년</button>
+  <button class="wbtn" type="button" data-year="2100">2100년</button>
+  <span class="wout">2045년 → 예측값 13.9℃</span>
+</div>
+</div>
+    <figcaption>연도를 학습 범위인 1908~2025년 안에 두면 실젯값과 예측값이 함께 표시됩니다. 범위 밖으로 옮기면 음영과 외삽 배지가 표시되고 예측값만 남습니다.</figcaption>
+  </figure>
+
+
+  <h2>4. 판단 — 상관은 인과가 아니다</h2>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 72쪽</span></div>
+    <p class="q">"상관관계가 있는 데이터 속성 중에서 원인과 결과의 관계가 있는 데이터 속성 간 관계를 인과관계라고 한다." <span class="src">(72쪽)</span></p>
+    <p class="t">→ 두 변수가 함께 변한다는 사실만으로 한쪽이 다른 쪽의 원인이라고 결론지을 수는 없습니다.</p>
+  </div>
+  <p>여름철에 아이스크림 판매량과 물놀이 사고 건수가 함께 늘었다고 하겠습니다. 기온과 야외 활동량 같은 공통 요인이 두 값에 영향을 주었을 수 있습니다. 상관만으로 아이스크림 판매가 사고의 원인이라고 결론지을 수는 없습니다. 연도와 기온의 관계도 마찬가지입니다. 이번 회귀선은 시간에 따른 기온 추세를 요약하며, 기온 변화의 원인을 확인하려면 별도의 데이터와 검증이 필요합니다.</p>
+  <figure class="interactive" data-fig="causation">
+    <div class="widget" data-w="causation">
+<svg viewBox="0 0 720 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="공통 요인 구조: 여름철 기온 → 아이스크림 판매량·물놀이 사고 건수, 두 값의 상관과 원인 아님 표시">
+  <rect x="166" y="14" width="180" height="50" rx="10" fill="#ffffff" stroke="#b9b3a5" stroke-width="2" data-el="top-box"/>
+  <text x="256" y="45" text-anchor="middle" font-size="17" font-weight="700" fill="#6b7385" data-el="top-text">여름철 기온</text>
+  <rect x="24" y="140" width="184" height="50" rx="10" fill="#ffffff" stroke="#e3ddcf" stroke-width="2"/>
+  <text x="116" y="171" text-anchor="middle" font-size="16" font-weight="700" fill="#1c2230">아이스크림 판매량</text>
+  <rect x="304" y="140" width="184" height="50" rx="10" fill="#ffffff" stroke="#e3ddcf" stroke-width="2"/>
+  <text x="396" y="171" text-anchor="middle" font-size="16" font-weight="700" fill="#1c2230">물놀이 사고 건수</text>
+  <g data-layer="1" style="visibility:visible;opacity:1">
+    <line x1="224" y1="165" x2="288" y2="165" stroke="#6b7385" stroke-width="2" stroke-dasharray="5 4"/>
+    <polygon points="214,165 224,160 224,170" fill="#6b7385"/>
+    <polygon points="298,165 288,160 288,170" fill="#6b7385"/>
+    <text x="256" y="128" text-anchor="middle" font-size="14" fill="#6b7385">함께 늘어남 · 상관</text>
+  </g>
+  <g data-layer="2" style="visibility:hidden;opacity:0">
+    <line x1="222" y1="66" x2="154.1" y2="128.5" stroke="#2b7fd6" stroke-width="2.5"/>
+    <polygon points="146,136 150.4,124.5 157.8,132.6" fill="#2b7fd6"/>
+    <line x1="290" y1="66" x2="357.9" y2="128.5" stroke="#2b7fd6" stroke-width="2.5"/>
+    <polygon points="366,136 354.2,132.6 361.6,124.5" fill="#2b7fd6"/>
+    <text x="256" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#2b7fd6">공통 요인</text>
+  </g>
+  <g data-layer="3" style="visibility:hidden;opacity:0">
+    <path d="M247 156 L265 174 M265 156 L247 174" stroke="#d64545" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <text x="256" y="214" text-anchor="middle" font-size="14" font-weight="700" fill="#d64545">원인 아님</text>
+  </g>
+  <line x1="516" y1="18" x2="516" y2="212" stroke="#e3ddcf" stroke-width="1.5"/>
+  <text x="528" y="92" font-size="14" fill="#6b7385" data-el="p-head">① 관찰</text>
+  <text x="528" y="124" font-size="17" font-weight="700" fill="#1c2230" data-el="p-line">두 값이 함께 변함</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-step="1">① 관찰</button>
+  <button class="wbtn" type="button" data-step="2">② 원인</button>
+  <button class="wbtn" type="button" data-step="3">③ 결론</button>
+</div>
+</div>
+    <figcaption>단계를 넘길 때마다 도식에 공통 요인과 화살표가 추가되어, 두 값의 상관이 어디서 생겼는지가 표시됩니다.</figcaption>
+  </figure>
+
+  <details class="glossary"><summary>더 알아보기 — 상관과 인과의 사례</summary><div class="gin">
+  <h3>실제 사례로 보는 상관과 인과</h3>
+  <p>상관계수의 절댓값이 크다는 사실은 두 값이 함께 움직인다는 관찰일 뿐입니다. 이 관찰은 한쪽이 다른 쪽의 원인이라는 뜻을 포함하지 않습니다. 실제로 발표된 분석에서도 이러한 혼동이 자주 일어납니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>관찰된 상관</th><th>실제로는</th></tr></thead>
+    <tbody>
+      <tr><td><b>초콜릿 소비량과<br>노벨상 수상자 수</b></td><td>2012년 한 의학 학술지에 실린 분석에서 23개국을 비교했더니 상관계수가 약 0.79로 나왔다 (<a href="https://data.europa.eu/apps/data-visualisation-guide/correlation-is-not-causation" target="_blank" rel="noopener">나라별 그래프 보기</a>)</td><td>국가의 소득 수준이 두 값 모두와 관련이 있다. 초콜릿을 많이 먹어서 수상자가 늘어난 것이 아니다</td></tr>
+      <tr><td><b>출동한 소방관 수와<br>화재 피해액</b></td><td>소방관이 많이 출동한 화재일수록 피해액이 컸다</td><td>불이 크기 때문에 소방관이 많이 출동한 것이다. 원인은 화재의 규모다</td></tr>
+      <tr><td><b>흡연과 폐암</b></td><td>1950년대에 흡연자에게 폐암이 많다는 상관이 보고되었다</td><td>상관을 확인한 뒤에도 여러 검증을 거쳐 1964년에야 원인으로 인정되었다</td></tr>
+    </tbody>
+  </table>
+  <p>상관은 원인을 찾는 단서가 될 수 있지만, 그것만으로 인과관계를 입증할 수는 없습니다. 인과를 주장하려면 상관과 별개로 추가 검증이 필요합니다. 흡연과 폐암은 그 검증을 오랜 기간 거친 사례입니다.</p>
+
+  </div></details>
+  <h2>5. 개념 정리 — 모델·학습·예측의 한계</h2>
+  <h3>모델과 모델링 — 오늘 만드는 것의 이름</h3>
+  <p>이 단원의 이름이 "Ⅲ. 데이터 모델링과 평가"이고, 교과서가 정리한 데이터 과학 문제 해결 6단계 가운데 네 번째가 모델링하기, 다섯 번째가 모델 평가하기, 여섯 번째가 모델 활용하기입니다(14쪽). 오늘 긋는 직선이 <b>모델</b>이며, 직선을 만드는 과정이 <b>모델링</b>입니다.</p>
+  <p>모델은 목적에 필요한 관계를 간단한 형태로 나타낸 것입니다. 이번 모델은 기울기와 편향으로 연도와 기온의 관계를 요약합니다. 모든 변동을 설명하지는 못하므로, 어떤 목적에 사용할 수 있는지 판단해야 합니다.</p>
+  <p>데이터 과학의 모델도 이와 같습니다. 서울 기온 데이터에는 하루하루의 날씨와 계절, 관측의 사정이 모두 들어 있지만, 오늘 만드는 모델은 그 가운데 "연도가 1 늘 때 기온이 얼마나 변하는가" 하나만 남깁니다. 100여 년의 기록이 기울기와 편향, 숫자 두 개로 요약됩니다.</p>
+  <figure class="interactive" data-fig="model">
+    <div class="widget" data-w="model">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="모델의 뜻 · 건축 모형(비유)과 기온 모델(실제)의 같은 단계 · 버튼 ①~④ → 단계 전환">
+  <!-- 왼쪽 패널(x 0~300): 건축 축소 모형(비유) -->
+  <text x="150" y="18" font-size="15" fill="#6b7385" text-anchor="middle">건축 모형(비유)</text>
+  <g class="bd-base">
+    <line x1="36" y1="232" x2="276" y2="232" stroke="#b9b3a5" stroke-width="1"/>
+    <rect x="60" y="72" width="120" height="160" fill="#f3ead6" stroke="#6b7385" stroke-width="1.2"/>
+    <path d="M60 82H180M60 92H180M60 102H180M60 112H180M60 122H180M60 132H180M60 142H180M60 152H180M60 162H180M60 172H180M60 182H180M60 192H180M60 202H180M60 212H180M60 222H180" stroke="#d9c9ad" stroke-width="1" fill="none"/>
+    <path d="M70 72v160M90 72v160M110 72v160M130 72v160M150 72v160M170 72v160" stroke="#d9c9ad" stroke-width="1" stroke-dasharray="10 10" fill="none"/>
+    <path d="M80 72v160M100 72v160M120 72v160M140 72v160M160 72v160" stroke="#d9c9ad" stroke-width="1" stroke-dasharray="10 10" stroke-dashoffset="10" fill="none"/>
+    <polygon points="54,72 120,52 186,72" fill="#6b7385"/>
+    <rect x="75" y="82" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M85 82v20M75 92h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="110" y="82" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M120 82v20M110 92h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="145" y="82" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M155 82v20M145 92h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="75" y="138" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M85 138v20M75 148h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="110" y="138" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M120 138v20M110 148h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="145" y="138" width="20" height="20" fill="#dbe8f5" stroke="#6b7385" stroke-width="1"/><path d="M155 138v20M145 148h20" stroke="#6b7385" stroke-width="1"/>
+    <rect x="108" y="194" width="24" height="38" fill="#b07a00"/><circle cx="127" cy="214" r="1.6" fill="#fff"/>
+  </g>
+  <g class="bd-extra">
+    <polygon points="150,54 162,54 162,64.7 150,61.1" fill="#6b7385"/>
+    <path d="M173 232V78h-6" stroke="#6b7385" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <rect x="88" y="166" width="64" height="20" rx="3" fill="#fff" stroke="#b07a00" stroke-width="1"/>
+    <text x="120" y="181" font-size="14" fill="#b07a00" text-anchor="middle">○○상회</text>
+    <rect x="238" y="200" width="8" height="32" fill="#b07a00" opacity=".8"/>
+    <circle cx="228" cy="194" r="16" fill="#2f9e5f" opacity=".75"/>
+    <circle cx="256" cy="194" r="16" fill="#2f9e5f" opacity=".75"/>
+    <circle cx="242" cy="180" r="24" fill="#2f9e5f" opacity=".75"/>
+    <path d="M76 83h5v18h-5zM89 83h5v18h-5zM111 83h5v18h-5zM124 83h5v18h-5zM146 83h5v18h-5zM159 83h5v18h-5zM76 139h5v18h-5zM89 139h5v18h-5zM111 139h5v18h-5zM124 139h5v18h-5zM146 139h5v18h-5zM159 139h5v18h-5z" fill="#b07a00" opacity=".5"/>
+  </g>
+  <g class="bd-outline" style="display:none" fill="none" stroke="#b9b3a5" stroke-width="2">
+    <polyline points="54,72 120,52 186,72"/>
+    <rect x="60" y="72" width="120" height="160"/>
+    <rect x="75" y="82" width="20" height="20"/><rect x="110" y="82" width="20" height="20"/><rect x="145" y="82" width="20" height="20"/>
+    <rect x="75" y="138" width="20" height="20"/><rect x="110" y="138" width="20" height="20"/><rect x="145" y="138" width="20" height="20"/>
+    <rect x="108" y="194" width="24" height="38"/>
+  </g>
+  <g class="bd-dims" style="display:none">
+    <path d="M124 52H200M184 232H200M60 232v18M180 232v18" stroke="#b9b3a5" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+    <path d="M196 52V232M190 52h12M190 232h12M60 246H180M60 242v8M180 242v8" stroke="#b07a00" stroke-width="1.2" fill="none"/>
+    <text x="204" y="136" font-size="14" fill="#1c2230">높이 : 너비</text>
+    <text x="204" y="156" font-size="14" fill="#1c2230">= <tspan font-weight="700" fill="#b07a00">3 : 2</tspan></text>
+    <path d="M85 128H155M85 124v8M120 124v8M155 124v8" stroke="#b07a00" stroke-width="1.2" fill="none"/>
+    <text x="120" y="116" font-size="14" fill="#1c2230" text-anchor="middle">창 간격 <tspan font-weight="700" fill="#b07a00">1 : 1</tspan></text>
+  </g>
+  <text class="llabel" x="150" y="270" font-size="14" fill="#1c2230" text-anchor="middle">실물: 벽돌·배관·간판·나무까지 전부</text>
+
+  <!-- 오른쪽 패널(x 320~720): 서울 연평균기온(실제) · 그림 영역 x 376~696, y 36~218 -->
+  <text x="520" y="18" font-size="15" fill="#6b7385" text-anchor="middle">기온 모델(오늘)</text>
+  <g class="yax1">
+    <line x1="376" y1="151.8" x2="696" y2="151.8" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="376" y1="85.6" x2="696" y2="85.6" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="366" y="221" font-size="14" fill="#6b7385" text-anchor="end">−20</text>
+    <text x="366" y="156.8" font-size="14" fill="#6b7385" text-anchor="end">0</text>
+    <text x="366" y="90.6" font-size="14" fill="#6b7385" text-anchor="end">20</text>
+  </g>
+  <g class="yax2" style="display:none">
+    <line x1="376" y1="192" x2="696" y2="192" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="376" y1="140" x2="696" y2="140" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="376" y1="88" x2="696" y2="88" stroke="#e3ddcf" stroke-width="1"/>
+    <line x1="376" y1="36" x2="696" y2="36" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="366" y="197" font-size="14" fill="#6b7385" text-anchor="end">10</text>
+    <text x="366" y="145" font-size="14" fill="#6b7385" text-anchor="end">12</text>
+    <text x="366" y="93" font-size="14" fill="#6b7385" text-anchor="end">14</text>
+    <text x="366" y="41" font-size="14" fill="#6b7385" text-anchor="end">16</text>
+  </g>
+  <line x1="376" y1="218" x2="696" y2="218" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="376" y1="36" x2="376" y2="218" stroke="#6b7385" stroke-width="1.2"/>
+  <path d="M381.5 218v5M490.9 218v5M627.6 218v5M696 218v5" stroke="#6b7385" stroke-width="1.2" fill="none"/>
+  <text x="381.5" y="238" font-size="14" fill="#6b7385" text-anchor="middle">1910</text>
+  <text x="490.9" y="238" font-size="14" fill="#6b7385" text-anchor="middle">1950</text>
+  <text x="627.6" y="238" font-size="14" fill="#6b7385" text-anchor="middle">2000</text>
+  <text x="696" y="238" font-size="14" fill="#6b7385" text-anchor="middle">2025</text>
+  <text x="366" y="24" font-size="14" fill="#6b7385" text-anchor="end">℃</text>
+  <text x="712" y="256" font-size="14" fill="#6b7385" text-anchor="end">연도</text>
+  <g class="bands"></g>
+  <g class="pts1"></g>
+  <g class="pts2" style="display:none"></g>
+  <line class="fitline" style="display:none" x1="376" y1="184.2" x2="696" y2="105.2" stroke="#2b7fd6" stroke-width="2.5" stroke-linecap="round"/>
+  <g class="numbox" style="display:none">
+    <rect x="386" y="40" width="184" height="50" rx="8" fill="#fff" fill-opacity=".9" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="398" y="61" font-size="14" fill="#1c2230">기울기 <tspan class="nb-slope" font-weight="700" fill="#2b7fd6">+2.60℃/100년</tspan></text>
+    <text x="398" y="83" font-size="14" fill="#1c2230">편향(1908년 예측값) <tspan class="nb-bias" font-weight="700" fill="#2b7fd6">10.3℃</tspan></text>
+  </g>
+  <text class="rlabel" x="520" y="270" font-size="14" fill="#1c2230" text-anchor="middle">하루하루의 기록 41,639일: 날씨·계절·관측 사정 전부</text>
+  <text x="360" y="292" font-size="15" fill="#1c2230" text-anchor="middle">목적에 필요한 것만 남긴 축소판 = 모델</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-step="1">① 실물</button>
+  <button class="wbtn" type="button" data-step="2">② 세부 빼기</button>
+  <button class="wbtn" type="button" data-step="3">③ 형태와 비례</button>
+  <button class="wbtn" type="button" data-step="4">④ 숫자 두 개</button>
+</div>
+</div>
+    <figcaption>단계를 넘기면 건축 모형과 기온 데이터가 나란히 단순해져, 41,639일의 기록이 114개 연평균과 직선을 거쳐 기울기와 편향에 이릅니다.</figcaption>
+  </figure>
+
+  <table class="daymap">
+    <thead><tr><th>모델링 단계</th><th>하는 일</th><th>오늘의 경우</th></tr></thead>
+    <tbody>
+      <tr><td><b>① 형태 정하기</b></td><td>관계를 어떤 모양으로 요약할지 고른다</td><td>직선 하나로 요약한다</td></tr>
+      <tr><td><b>② 학습</b></td><td>데이터에 가장 잘 맞는 숫자를 찾는다</td><td>제곱오차 합이 가장 작은 기울기와 편향</td></tr>
+      <tr><td><b>③ 평가</b></td><td>그 모델을 얼마나 믿을 수 있는지 잰다</td><td>예측값과 실젯값의 차이를 수치로 잰다</td></tr>
+    </tbody>
+  </table>
+  <figure class="interactive" data-fig="modeling3">
+    <div class="widget" data-w="modeling3">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="서울 연평균기온 산점도 위에서 모델링 세 단계 — ① 형태 정하기, ② 학습, ③ 평가">
+  <!-- 격자·축 -->
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="56" y1="229.1" x2="456" y2="229.1"/>
+    <line x1="56" y1="159.4" x2="456" y2="159.4"/>
+    <line x1="56" y1="89.7" x2="456" y2="89.7"/>
+    <line x1="56" y1="20" x2="456" y2="20"/>
+  </g>
+  <line x1="56" y1="264" x2="456" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <line x1="56" y1="20" x2="56" y2="264" stroke="#6b7385" stroke-width="1.2"/>
+  <g font-size="14" fill="#6b7385">
+    <text x="48" y="234" text-anchor="end">10</text>
+    <text x="48" y="164" text-anchor="end">12</text>
+    <text x="48" y="95" text-anchor="end">14</text>
+    <text x="48" y="25" text-anchor="end">16</text>
+    <text x="56" y="13" text-anchor="middle">℃</text>
+    <text x="62.8" y="282" text-anchor="middle">1910</text>
+    <text x="199.6" y="282" text-anchor="middle">1950</text>
+    <text x="370.6" y="282" text-anchor="middle">2000</text>
+    <text x="456" y="282" text-anchor="middle">2025</text>
+    <text x="478" y="259" text-anchor="end">연도</text>
+  </g>
+
+  <!-- ① 후보 형태 셋 — 곡선·계단은 흐리게, 직선(회귀선)만 진하게 -->
+  <g class="shapes">
+    <path class="shape-curve" d="" fill="none" stroke="#b9b3a5" stroke-width="2" opacity=".8"/>
+    <path class="shape-stair" d="" fill="none" stroke="#b9b3a5" stroke-width="2" opacity=".8"/>
+    <line x1="66" y1="34" x2="94" y2="34" stroke="#1c2230" stroke-width="2.5"/>
+    <text x="102" y="39" font-size="14" font-weight="700" fill="#1c2230">직선 → 선택</text>
+    <path d="M66,58 Q80,58 94,48" fill="none" stroke="#b9b3a5" stroke-width="2"/>
+    <text x="102" y="59" font-size="14" fill="#6b7385">곡선</text>
+    <path d="M66,78 h9 v-5 h10 v-5 h9" fill="none" stroke="#b9b3a5" stroke-width="2"/>
+    <text x="102" y="79" font-size="14" fill="#6b7385">계단</text>
+  </g>
+
+  <!-- ② 회색 후보 직선 8개 -->
+  <g class="cands" display="none"></g>
+
+  <!-- 회귀선(최소제곱) -->
+  <line class="fitline" x1="0" y1="0" x2="0" y2="0" stroke="#1c2230" stroke-width="2.5"/>
+
+  <!-- 산점도 -->
+  <g class="pts"></g>
+
+  <!-- ③ 2023·2024·2025 오차 선분 -->
+  <g class="resid" display="none"></g>
+
+  <!-- 패널 구분선 -->
+  <line x1="482" y1="20" x2="482" y2="264" stroke="#e3ddcf" stroke-width="1"/>
+
+  <!-- 패널 ① -->
+  <g data-pnl="1">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#2b7fd6">① 형태 정하기</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">관계를 어떤 모양으로</text>
+    <text x="496" y="86" font-size="14" fill="#1c2230">요약할지</text>
+    <text x="496" y="116" font-size="16" font-weight="700" fill="#1c2230">→ 직선 하나</text>
+    <line x1="496" y1="136" x2="712" y2="136" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="496" y="162" font-size="14" fill="#6b7385">후보: 직선 · 곡선 · 계단</text>
+    <text x="496" y="184" font-size="14" fill="#6b7385">이번 모델 = 직선</text>
+    <text x="496" y="204" font-size="14" fill="#6b7385">남은 일 = 기울기·편향 찾기</text>
+  </g>
+
+  <!-- 패널 ② -->
+  <g data-pnl="2" display="none">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#b07a00">② 학습</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">데이터에 가장 잘 맞는</text>
+    <text x="496" y="86" font-size="14" fill="#1c2230">숫자 찾기</text>
+    <text x="496" y="116" font-size="14" font-weight="700" fill="#1c2230">→ 제곱오차 합이 가장 작은</text>
+    <text x="496" y="136" font-size="14" font-weight="700" fill="#1c2230">기울기·편향</text>
+    <line x1="496" y1="152" x2="712" y2="152" stroke="#e3ddcf" stroke-width="1"/>
+    <text x="496" y="176" font-size="14" fill="#6b7385">제곱오차 합</text>
+    <text class="sse" x="496" y="208" font-size="26" font-weight="700" fill="#b07a00">0.0</text>
+    <text class="slope learned" x="496" y="238" font-size="15" fill="#1c2230" opacity="0"></text>
+    <text class="bias learned" x="496" y="258" font-size="15" fill="#1c2230" opacity="0"></text>
+  </g>
+
+  <!-- 패널 ③ -->
+  <g data-pnl="3" display="none">
+    <text x="496" y="38" font-size="17" font-weight="700" fill="#2f9e5f">③ 평가</text>
+    <text x="496" y="66" font-size="14" fill="#1c2230">얼마나 믿을 수 있는지</text>
+    <text x="496" y="90" font-size="14" font-weight="700" fill="#1c2230">→ 예측값과 실젯값의 차이</text>
+    <line x1="496" y1="104" x2="712" y2="104" stroke="#e3ddcf" stroke-width="1"/>
+    <text y="122" font-size="14" fill="#6b7385"><tspan x="496">연도</tspan><tspan x="590" text-anchor="end">실젯값</tspan><tspan x="652" text-anchor="end">예측값</tspan><tspan x="712" text-anchor="end">차이</tspan></text>
+    <g class="tbl"></g>
+    <text x="496" y="214" font-size="14" fill="#6b7385">차이 = 실젯값 − 예측값</text>
+  </g>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-step="1">① 형태 정하기</button>
+  <button class="wbtn" type="button" data-step="2">② 학습</button>
+  <button class="wbtn" type="button" data-step="3">③ 평가</button>
+</div>
+</div>
+    <figcaption>②에서 후보 직선이 제곱오차 합이 가장 작은 직선으로 모이는 과정이 표시됩니다. ③에서 2023~2025년의 실젯값과 예측값의 차이가 표로 표시됩니다.</figcaption>
+  </figure>
+
+  <p>모델의 매개변수를 데이터에서 구하는 과정을 학습이라고 합니다. 이번 실습에서는 제곱오차 합이 가장 작아지는 기울기와 편향을 구했습니다. 실제 데이터에는 직선으로 설명하지 못하는 변동도 있으므로, 모델을 어디까지 활용할 수 있는지 판단해야 합니다.</p>
+
+  <h3>기계학습은 무엇을 배우는가</h3>
+  <p>교과서 11쪽은 데이터 과학을 통계, 데이터 분석, 기계학습 및 관련 방법을 통합하는 학문 분야로 정의합니다. 오늘 한 일은 이 정의 가운데 <b>기계학습</b>에 해당합니다. 기계학습(machine learning)은 기계가 데이터로부터 배운다는 뜻입니다. 기계가 배우는 대상은 모델을 이루는 숫자입니다.</p>
+  <p>사람이 계산 규칙을 직접 정하는 방식과 비교하면 차이가 분명해집니다. 사람이 기울기와 편향을 지정하면 그대로 계산합니다. 반면 이번 실습에서는 데이터에 맞는 두 값을 계산으로 구합니다.</p>
+  <p>이번 실습에서는 직선이라는 형태와 사용할 데이터를 사람이 정합니다. 계산은 제곱오차 합이 작아지는 기울기와 편향을 찾습니다. 기계학습, 학습, 모델을 구분하면 다음과 같습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>낱말</th><th>무엇을 가리키나</th><th>오늘의 경우</th></tr></thead>
+    <tbody>
+      <tr><td><b>기계학습</b></td><td>데이터에서 규칙을 찾는 방법 전체</td><td>직선의 숫자를 계산이 찾게 한 방식</td></tr>
+      <tr><td><b>학습</b></td><td>모델을 이루는 숫자를 찾는 계산</td><td>제곱오차 합이 가장 작아지는 기울기와 편향을 구한 계산</td></tr>
+      <tr><td><b>모델</b></td><td>학습이 끝나고 남는 결과물</td><td>기울기와 편향으로 정해진 직선</td></tr>
+    </tbody>
+  </table>
+  <figure class="interactive" data-fig="mlLayers">
+    <div class="widget" data-w="mlLayers">
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" aria-label="기계학습·학습·모델의 층위 · 겹상자 클릭 → 설명 전환">
+  <g class="layer" data-k="ml" style="cursor:pointer">
+    <rect class="lbox" x="12" y="12" width="376" height="276" rx="14" fill="#fff" fill-opacity=".4" stroke="#b9b3a5" stroke-width="1.5" style="transition:stroke .25s,stroke-width .25s"/>
+    <text class="lname" x="28" y="40" font-size="18" fill="#6b7385">기계학습</text>
+    <text class="ltag" x="112" y="40" font-size="14" fill="#b9b3a5">방법 전체</text>
+  </g>
+  <g class="layer" data-k="learn" style="cursor:pointer">
+    <rect class="lbox" x="40" y="58" width="320" height="214" rx="10" fill="#fff" fill-opacity=".4" stroke="#b9b3a5" stroke-width="1.5" style="transition:stroke .25s,stroke-width .25s"/>
+    <text class="lname" x="56" y="86" font-size="18" fill="#6b7385">학습</text>
+    <text class="ltag" x="104" y="86" font-size="14" fill="#b9b3a5">숫자를 찾는 계산</text>
+  </g>
+  <g class="layer" data-k="model" style="cursor:pointer">
+    <rect class="lbox" x="68" y="104" width="264" height="152" rx="8" fill="#fff" fill-opacity=".4" stroke="#2b7fd6" stroke-width="3" style="transition:stroke .25s,stroke-width .25s"/>
+    <text class="lname" x="84" y="132" font-size="18" font-weight="700" fill="#2b7fd6">모델</text>
+    <text class="ltag" x="132" y="132" font-size="14" fill="#1c2230">남는 결과물</text>
+    <g class="mini" pointer-events="none">
+      <line x1="140" y1="144" x2="140" y2="222" stroke="#e3ddcf" stroke-width="1"/>
+      <line x1="140" y1="222" x2="260" y2="222" stroke="#e3ddcf" stroke-width="1"/>
+      <g class="dots"></g>
+      <line class="mline" x1="140" y1="207.3" x2="260" y2="173.4" stroke="#2b7fd6" stroke-width="2"/>
+      <text class="mcap" x="200" y="246" font-size="14" text-anchor="middle" fill="#6b7385">기울기 +2.60 ℃/100년</text>
+    </g>
+  </g>
+  <rect x="420" y="12" width="288" height="276" rx="14" fill="#fff" fill-opacity=".5" stroke="#e3ddcf" stroke-width="1"/>
+  <text x="440" y="38" font-size="14" fill="#6b7385">선택한 낱말</text>
+  <text class="p-title" x="440" y="68" font-size="24" font-weight="700" fill="#2b7fd6">모델</text>
+  <line x1="440" y1="82" x2="688" y2="82" stroke="#e3ddcf" stroke-width="1"/>
+  <text x="440" y="108" font-size="14" fill="#6b7385">무엇을 가리키나</text>
+  <text class="p-what" x="440" y="132" font-size="16" fill="#1c2230"><tspan x="440" dy="0">학습이 끝나고 남는</tspan><tspan x="440" dy="22">결과물</tspan></text>
+  <text x="440" y="190" font-size="14" fill="#6b7385">오늘의 경우</text>
+  <text class="p-today" x="440" y="214" font-size="16" fill="#b07a00"><tspan x="440" dy="0">기울기와 편향으로 정해진</tspan><tspan x="440" dy="22">직선</tspan></text>
+  <text x="440" y="272" font-size="14" fill="#b9b3a5">상자·버튼 클릭 → 설명 전환</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn" type="button" data-k="ml">기계학습</button>
+  <button class="wbtn" type="button" data-k="learn">학습</button>
+  <button class="wbtn on" type="button" data-k="model">모델</button>
+</div>
+</div>
+    <figcaption>상자를 클릭하면 세 낱말의 포함 관계와 오늘 실습에서의 예가 표시됩니다. 기계학습 안에 학습이 있고, 학습의 결과가 모델입니다.</figcaption>
+  </figure>
+
+  <p>기계가 학습한다고 해서 사람이 할 일이 없어지지는 않습니다. 어떤 데이터를 사용할지, 믿을 수 없는 값을 어떻게 걸러 낼지, 어떤 형태로 요약할지, 나온 결과를 믿을지는 사람이 판단합니다. 관측일이 300일이 안 되는 해를 걸러 낸 것도 사람의 판단이었습니다.</p>
+
+
+  <p>오늘은 산점도와 상관계수로 관계를 살피고, 단순 선형회귀로 연도와 기온의 관계를 요약했습니다. 학습 기간을 바꾸면 기울기와 예측값도 달라졌습니다. 결과를 설명할 때는 <b>사용한 데이터의 범위, 제외 기준, 예측의 한계</b>를 함께 제시해야 합니다.</p>
+  <p>다음 시간에는 여러 변수를 사용하는 영화 예측 모델을 만듭니다. 8차시에는 오차와 결정계수를 직접 계산하며 모델을 평가하는 기준을 살펴봅니다.</p>
+
+  <h2>6. 확인 문제</h2>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 1</span> 우리 기온 예측기의 전체 기간 기울기는 +2.60℃/100년입니다. 이 숫자의 뜻으로 옳은 것을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">연평균기온이 매년 빠짐없이 2.60℃의 100분의 1씩 똑같이 올랐다는 관측 사실이다</button>
+        <button class="opt" data-ok="1">필터를 통과한 114개 연도의 추세를 직선으로 요약한 것으로, 100년마다 약 2.60℃씩 오르는 평균 속도라는 뜻이다</button>
+        <button class="opt">2100년의 서울 기온이 지금보다 2.60℃ 높아진다는 보장이다</button>
+      </div>
+      <div class="fb">직선은 매년 균일한 상승이라는 관측 사실이 아니라, 전체 기간을 관통하는 평균 추세의 요약입니다. 또한 직선은 학습 범위(1908~2025) 안의 추세를 요약할 뿐, 범위 밖의 미래를 보장하지 않습니다.</div>
+    </div>
+  <figure class="interactive" data-fig="predict2045">
+    <div class="widget" data-w="predict2045">
+<svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="학습 범위별 회귀선과 2045년 예측값 비교">
+  <g stroke="#e3ddcf" stroke-width="1">
+    <line x1="56" y1="210.8" x2="596" y2="210.8"/>
+    <line x1="56" y1="156.3" x2="596" y2="156.3"/>
+    <line x1="56" y1="101.8" x2="596" y2="101.8"/>
+    <line x1="56" y1="47.3" x2="596" y2="47.3"/>
+  </g>
+  <g stroke="#b9b3a5" stroke-width="1.5">
+    <line x1="56" y1="20" x2="56" y2="238"/>
+    <line x1="56" y1="238" x2="596" y2="238"/>
+    <line x1="63.6" y1="238" x2="63.6" y2="243"/>
+    <line x1="215.7" y1="238" x2="215.7" y2="243"/>
+    <line x1="405.9" y1="238" x2="405.9" y2="243"/>
+    <line x1="500.9" y1="238" x2="500.9" y2="243"/>
+    <line x1="577" y1="238" x2="577" y2="243"/>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="end">
+    <text x="48" y="24">℃</text>
+    <text x="48" y="52">16</text>
+    <text x="48" y="106.5">14</text>
+    <text x="48" y="161">12</text>
+    <text x="48" y="215.5">10</text>
+  </g>
+  <g font-size="14" fill="#6b7385" text-anchor="middle">
+    <text x="63.6" y="256">1910</text>
+    <text x="215.7" y="256">1950</text>
+    <text x="405.9" y="256">2000</text>
+    <text x="500.9" y="256">2025</text>
+    <text x="577" y="256" font-weight="700" fill="#1c2230">2045</text>
+  </g>
+  <text x="604" y="256" font-size="14" fill="#6b7385">연도</text>
+  <line x1="577" y1="24" x2="577" y2="238" stroke="#6b7385" stroke-width="1.5" stroke-dasharray="3 4"/>
+  <g class="pts"></g>
+  <g class="lines"></g>
+  <g class="labels"></g>
+  <g class="legend"></g>
+  <text x="360" y="275" font-size="14" fill="#6b7385" text-anchor="middle">둘 다 계산은 정확 · 다른 질문에 답하는 직선</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-range="all" aria-pressed="true">전체</button>
+  <button class="wbtn" type="button" data-range="50" aria-pressed="false">최근 50년</button>
+  <button class="wbtn" type="button" data-range="30" aria-pressed="false">최근 30년</button>
+  <button class="wbtn on" type="button" data-range="20" aria-pressed="true">최근 20년</button>
+</div>
+</div>
+    <figcaption>직선을 하나씩 켜서 겹치면 같은 2045년 예측값이 학습 범위마다 다르게 표시됩니다. 전체는 13.9℃, 최근 20년은 15.7℃입니다.</figcaption>
+  </figure>
+
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 2</span> 전체 기간으로 구한 기울기는 +2.60, 최근 20년으로 구한 기울기는 +8.14였습니다.</div>
+    <div class="qitem">
+      <div class="qs">(가) 한쪽이 계산을 틀린 것일까요?</div>
+      <div class="qopts qopts-col">
+        <button class="opt">최근 20년 쪽이 틀렸다 — 데이터가 적으면 기울기 계산 자체가 성립하지 않는다</button>
+        <button class="opt">전체 기간 쪽이 틀렸다 — 100년 전 데이터는 지금의 추세와 무관하므로 섞으면 안 된다</button>
+        <button class="opt" data-ok="1">각 학습 기간을 올바르게 요약했지만, 미래 예측의 정확성을 보장하지는 않는다</button>
+      </div>
+      <div class="fb">두 직선은 서로 다른 기간의 데이터를 사용했습니다. 따라서 기울기가 달라도 계산 오류라고 단정할 수 없습니다. 각각의 기간에서 얻은 추세를 설명하고, 미래 예측의 정확성은 별도로 평가해야 합니다.</div>
+    </div>
+    <div class="qq">(나) 그렇다면 "서울은 더워지고 있는가"라는 질문에는 어떻게 답해야 할까요? 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
+    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
+      <p>"더워지고 있다"는 방향은 두 직선이 같습니다. 다만 속도를 말할 때는 반드시 어느 기간에서 계산한 기울기인지 밝혀야 합니다. 전체 기간 직선은 한 세기의 평균 추세를, 최근 20년 직선은 최근의 가파름을 요약합니다.</p>
+    </details>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> "아이스크림 판매량과 물놀이 사고 건수의 상관이 강하므로, 사고를 줄이려면 아이스크림 판매를 규제해야 한다." 이 주장에 대한 판단으로 옳은 것을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">표본이 부족해서 상관계수 계산이 잘못되었다</button>
+        <button class="opt" data-ok="1">공통 요인이 있을 수 있는데도, 상관만으로 아이스크림 판매가 사고의 원인이라고 결론지었다</button>
+        <button class="opt">규제 대상을 바꿔 물놀이를 규제하면 논리가 성립한다</button>
+      </div>
+      <div class="fb">상관만으로 원인과 결과를 확정할 수는 없습니다. 기온이나 야외 활동량 같은 공통 요인이 있을 수 있습니다. 정책의 효과를 판단하려면 추가 데이터와 검증이 필요합니다.</div>
+    </div>
+  </div>
+
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 4</span> 골턴이 부모와 자녀의 키를 조사한 뒤 이 방법에 회귀라는 이름을 붙인 까닭으로 옳은 것을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt">계산을 여러 번 되풀이하면 값이 처음 값으로 되돌아가기 때문이다</button>
+        <button class="opt">회귀선이 반드시 그래프의 원점을 지나기 때문이다</button>
+        <button class="opt" data-ok="1">키가 아주 큰 부모의 자녀 키가 평균 쪽으로 되돌아가는 경향을 발견했기 때문이다</button>
+      </div>
+      <div class="fb">골턴은 부모 205쌍과 자녀 928명의 키를 조사하여, 자녀의 키가 전체 평균 쪽으로 되돌아가는 경향을 발견하고 평범함으로의 회귀라는 이름을 붙였습니다. 오늘날 회귀는 되돌아가는 현상과 관계없이 데이터의 관계를 선으로 요약해 값을 예측하는 방법 전체를 가리키므로, 이름은 유래만 남은 채 사용됩니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 5</span> 기온 예측기를 만드는 과정에서 일어난 일 가운데 학습에 해당하는 것을 고르세요.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt" data-ok="1">제곱오차 합이 가장 작아지는 기울기와 편향을 계산으로 찾아낸 일</button>
+        <button class="opt">관측일이 300일이 안 되는 해를 걸러 낸 일</button>
+        <button class="opt">나온 기울기를 100년에 2.60도라고 바꾸어 읽은 일</button>
+      </div>
+      <div class="fb">학습은 모델을 이루는 숫자, 즉 기울기와 편향을 찾는 계산입니다. 관측일이 300일 미만인 해를 걸러 낸 것은 어떤 데이터를 사용할지 사람이 판단한 일이며, 나온 기울기를 100년에 2.60도라고 바꾸어 읽은 것은 결과를 사람이 해석한 일입니다.</div>
+    </div>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>산점도 → 상관계수 → 회귀선의 순서와 각 단계가 답하는 질문을 말할 수 있다.</li>
+    <li>연도를 고르면 예상 기온이 표시되는 예측기 앱을 만들어 실행했다.</li>
+    <li>전체 기간과 최근 20년의 기울기가 +2.60과 +8.14로 갈라지는 이유를 설명할 수 있다.</li>
+    <li>상관관계와 인과관계의 차이를 예를 들어 설명할 수 있다.</li>
+  </ul>
+
+  <h2>📚 오늘의 용어</h2>
+  <table class="glossary-table">
+    <tr><th>용어</th><th>뜻</th></tr>
+    <tr><td class="term">상관관계</td><td>두 속성이 함께 변하는 선형적 관계. 양·음의 방향이 있다</td></tr>
+    <tr><td class="term">상관계수</td><td>상관의 강도와 방향을 −1~+1로 나타낸 수치</td></tr>
+    <tr><td class="term">선형 회귀</td><td>속성 사이에 선 모양의 관계를 가정하고 가장 잘 대표하는 선을 찾는 분석</td></tr>
+    <tr><td class="term">회귀선</td><td>독립 변수와 종속 변수의 관계를 가장 잘 대표하는 직선</td></tr>
+    <tr><td class="term">기울기</td><td>독립 변수가 1 증가할 때 예측값이 변하는 양입니다. 이번 문제의 단위는 ℃/년입니다.</td></tr>
+    <tr><td class="term">편향</td><td>독립 변수가 0일 때의 예측값입니다. 이 실습에서는 1908년의 예측값입니다(교과서 119쪽).</td></tr>
+    <tr><td class="term">모델</td><td>데이터에 담긴 관계를 목적에 맞게 요약한 것. 오늘의 모델은 기울기와 편향으로 정해지는 직선</td></tr>
+    <tr><td class="term">모델링</td><td>모델을 만드는 과정. 형태를 정하고, 데이터에 맞는 숫자를 찾고, 얼마나 맞는지 평가한다</td></tr>
+    <tr><td class="term">학습</td><td>제곱오차 합이 가장 작아지는 기울기와 편향을 계산으로 찾는 것</td></tr>
+    <tr><td class="term">평균으로의 회귀</td><td>극단적인 값 다음에 평균에 가까운 값이 나타나는 경향. 회귀라는 이름의 유래</td></tr>
+    <tr><td class="term">인과관계</td><td>한 변수의 변화가 다른 변수의 변화를 일으키는 관계입니다. 확인하려면 추가 검증이 필요합니다.</td></tr>
+    <tr><td class="term">외삽</td><td>학습에 사용한 데이터의 범위 밖에 있는 값을 추정하는 것입니다.</td></tr>
+  </table>
+  <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+
+  <div class="pager">
+    <a class="prev" href="lesson05.html"><div class="dir">← 이전</div><div class="tt">5차시 · 두 번째 API — 우리 학교 급식</div></a>
+    <a class="next" href="lesson07.html"><div class="dir">다음 →</div><div class="tt">7차시 · 다중 선형회귀</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/widgets06.js"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>

@@ -1,0 +1,461 @@
+/* ============================================================
+   서울대 평생교육원 데이터 분석 강의 · 웹 교재 공용 스타일
+   디자인 계열: modeudata-population-web (따뜻한 크림·골드)
+   ============================================================ */
+
+:root {
+  /* 참고 디자인 팔레트 */
+  --gold: #f4b400;
+  --accent: #e8930c;
+  --bg: #fffdf7;
+  --card: #fff6e0;
+  --border: #f0e2bc;
+  --border-soft: #f7edcf;
+  --text: #3a2e1a;
+  --text-soft: #6b5836;
+  --muted: #9a8b6a;
+  --blue: #4c8df6;
+  --pink: #f4789b;
+
+  /* 시맨틱 (참고 디자인의 band 색과 조화) */
+  --green: #54a24b;
+  --green-soft: #eef6e8;
+  --red: #e45756;
+  --red-soft: #fdeeee;
+  --teal: #3ba6a0;
+  --teal-soft: #e9f6f5;
+  --blue-soft: #eef3ff;
+  --violet: #b279a2;
+
+  --code-bg: #2a2318;
+  --code-text: #f0e8d6;
+
+  --radius: 0.9rem;
+  --radius-sm: 0.7rem;
+  --shadow: 0 1px 4px rgba(180, 140, 20, 0.1);
+  --shadow-lg: 0 8px 24px rgba(180, 140, 20, 0.16);
+  --maxw: 880px;
+  --font: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
+  --mono: "SFMono-Regular", "D2Coding", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.78;
+  -webkit-font-smoothing: antialiased;
+  font-size: 16.5px;
+}
+
+/* ---------- 상단 바 ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(255, 253, 247, 0.9);
+  backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.topbar .inner { max-width: var(--maxw); margin: 0 auto; padding: 11px 20px; display: flex; align-items: center; gap: 12px; }
+.topbar .brand { font-weight: 800; letter-spacing: -0.02em; display: flex; align-items: center; gap: 7px; color: var(--text); text-decoration: none; }
+.topbar .brand .chick { font-size: 1.15rem; }
+.topbar .brand .a { color: var(--accent); }
+.topbar .spacer { flex: 1; }
+.topbar .badge {
+  font-size: 0.72rem; font-weight: 800; padding: 3px 10px; border-radius: 999px;
+  border: 1px solid var(--border); background: var(--card); color: var(--accent);
+}
+.topbar .badge.teacher { border-color: #cfe0ff; background: var(--blue-soft); color: #2f6bd6; }
+.topbar a.home { text-decoration: none; color: var(--muted); font-size: 0.85rem; font-weight: 700; }
+.topbar a.home:hover { color: var(--text); }
+
+/* ---------- 레이아웃 ---------- */
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 30px 20px 96px; }
+main {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 42px clamp(20px, 5vw, 54px); box-shadow: var(--shadow);
+}
+
+/* ---------- 타이포 ---------- */
+h1 { font-size: 1.95rem; font-weight: 800; letter-spacing: -0.02em; margin: 0.2rem 0 0; line-height: 1.32; }
+h1 .a { color: var(--accent); }
+.under { width: 64px; height: 4px; border-radius: 999px; background: linear-gradient(90deg, var(--gold), #ffd766); margin: 0.55rem 0 1.1rem; }
+h2 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.01em; margin: 46px 0 14px; padding-top: 18px; border-top: 1px solid var(--border); }
+h3 { font-size: 1.1rem; font-weight: 800; margin: 30px 0 10px; letter-spacing: -0.01em; }
+p { margin: 12px 0; }
+a { color: #2f6bd6; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+strong { font-weight: 800; }
+ul, ol { padding-left: 22px; }
+li { margin: 6px 0; }
+hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+.lead { font-size: 1.04rem; color: var(--text-soft); margin: 0.2rem 0 1rem; }
+.eyebrow { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); }
+
+/* ---------- 오늘 만드는 것 배너 ---------- */
+.make-banner {
+  background: linear-gradient(135deg, #fff6e0, #fffdf7);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 20px; margin: 22px 0 8px; box-shadow: var(--shadow);
+}
+.make-banner .t { font-weight: 800; margin-bottom: 6px; color: var(--accent); }
+.make-banner ul { margin: 6px 0 0; }
+
+/* ---------- 콜아웃 ---------- */
+.callout { border: 1px solid var(--border); border-left: 4px solid var(--muted); background: var(--card); border-radius: var(--radius-sm); padding: 14px 16px; margin: 18px 0; }
+.callout .h { font-weight: 800; font-size: 0.9rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.callout p:first-of-type { margin-top: 4px; }
+
+.callout.tip { border-left-color: var(--blue); background: var(--blue-soft); }
+.callout.tip .h { color: #2f6bd6; }
+.callout.warn { border-left-color: var(--accent); background: var(--card); }
+.callout.warn .h { color: #b45309; }
+.callout.check { border-left-color: var(--green); background: var(--green-soft); }
+.callout.check .h { color: #3d7a37; }
+
+/* 도입 활동 — 우리 반 데이터 */
+.callout.data { border-left-color: var(--violet); background: linear-gradient(180deg, #fbf4f8 0%, var(--card) 100%); }
+.callout.data .h { color: #8a5578; }
+.callout.data .steps3 { list-style: none; margin: 8px 0 0; padding: 0; }
+.callout.data .steps3 li { display: flex; gap: 9px; align-items: baseline; margin: 7px 0; }
+.callout.data .steps3 .k {
+  flex: none; font-size: 0.72rem; font-weight: 800; color: #8a5578;
+  background: #f3e3ec; border-radius: 999px; padding: 2px 9px; letter-spacing: 0.02em;
+}
+.callout.data .fallback { font-size: 0.85rem; color: var(--muted); margin: 10px 0 0; }
+
+/* 강사 전용 */
+.callout.say { border-left-color: var(--blue); background: var(--blue-soft); }
+.callout.say .h { color: #2f6bd6; }
+.callout.ask { border-left-color: var(--teal); background: var(--teal-soft); }
+.callout.ask .h { color: #2b7a75; }
+.callout.err { border-left-color: var(--red); background: var(--red-soft); }
+.callout.err .h { color: #c23b3a; }
+.callout.theory { border-left-color: var(--violet); background: #f8f0f5; }
+.callout.theory .h { color: #8a5578; }
+
+/* ---------- 단계(따라하기) ---------- */
+.steps { counter-reset: step; margin: 18px 0; padding: 0; list-style: none; }
+.steps > li { position: relative; padding: 3px 0 18px 46px; margin: 0; }
+.steps > li::before {
+  counter-increment: step; content: counter(step);
+  position: absolute; left: 0; top: 0; width: 31px; height: 31px; border-radius: 50%;
+  background: var(--accent); color: #fff; font-weight: 800; font-size: 0.92rem;
+  display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow);
+}
+.steps > li:not(:last-child)::after { content: ""; position: absolute; left: 15px; top: 35px; bottom: 2px; width: 2px; background: var(--border); }
+.steps > li .st { font-weight: 800; }
+
+/* ---------- 코드 / 프롬프트 블록 ---------- */
+.codewrap { position: relative; margin: 14px 0; }
+.codewrap .label { position: absolute; top: 0; left: 0; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em; padding: 4px 11px; border-bottom-right-radius: 8px; color: #fff; z-index: 2; }
+.codewrap.prompt .label { background: var(--teal); }
+.codewrap.code .label { background: #7a6338; }
+.codewrap pre {
+  margin: 0; background: var(--code-bg); color: var(--code-text);
+  border-radius: var(--radius-sm); padding: 34px 16px 16px; overflow-x: auto;
+  font-family: var(--mono); font-size: 0.86rem; line-height: 1.62;
+}
+.codewrap.prompt pre { background: #1c2b26; color: #d7f0ea; }
+.codewrap.improve .label { background: var(--accent); }
+.codewrap.improve pre { background: #2a2012; color: #f6e8cf; }
+.copy-btn {
+  position: absolute; top: 7px; right: 7px; background: rgba(255, 255, 255, 0.12); color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 6px; padding: 4px 11px;
+  font-size: 0.72rem; font-weight: 800; cursor: pointer; font-family: var(--font); transition: background 0.15s;
+}
+.copy-btn:hover { background: rgba(255, 255, 255, 0.25); }
+.copy-btn.done { background: var(--green); border-color: var(--green); }
+code:not(pre code) { background: var(--card); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-family: var(--mono); font-size: 0.86em; color: #7a5a1e; }
+
+/* ---------- 명언(영감 한 조각) ---------- */
+.quote {
+  border: 1px solid var(--border); border-left: 4px solid var(--gold);
+  background: linear-gradient(135deg, #fffaf0, #fff); border-radius: var(--radius-sm);
+  padding: 14px 18px; margin: 20px 0;
+}
+.quote .q { font-weight: 700; font-size: 1.02rem; letter-spacing: -0.01em; }
+.quote .by { display: block; margin-top: 6px; font-size: 0.86rem; color: var(--text-soft); }
+.quote .who { display: flex; gap: 12px; align-items: flex-start; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--border); font-size: 0.82rem; line-height: 1.6; color: var(--muted); font-weight: 400; }
+.quote .who img { flex: 0 0 auto; width: 54px; height: 54px; border-radius: 50%; object-fit: cover; object-position: center top; border: 1px solid var(--border); background: #fff; }
+.quote .who .cred { display: block; margin-top: 3px; font-size: 0.72rem; color: var(--border-strong, #9a927f); }
+
+/* ---------- 미니 과제 ---------- */
+.callout.mini { border-left-color: var(--teal); background: var(--teal-soft); }
+.callout.mini .h { color: var(--teal); }
+
+/* ---------- 체크리스트 ---------- */
+.checklist { list-style: none; padding: 0; margin: 14px 0; }
+.checklist li { padding-left: 30px; position: relative; margin: 8px 0; }
+.checklist li::before { content: "☐"; position: absolute; left: 0; top: 0; font-size: 1.1rem; color: var(--accent); }
+
+/* ---------- 링크 카드 / 목차 ---------- */
+.linkgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 18px 0; }
+.linkcard { display: block; text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; background: #fff; transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s; }
+.linkcard:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.linkcard.locked { opacity: 0.5; cursor: default; pointer-events: none; }
+.linkcard.locked:hover { transform: none; box-shadow: none; border-color: var(--border); }
+.linkcard.locked .d { color: var(--muted); font-weight: 700; }
+.linkcard .n { font-size: 0.72rem; font-weight: 800; color: var(--accent); }
+.linkcard .tt { font-weight: 800; margin: 4px 0 2px; }
+.linkcard .d { font-size: 0.85rem; color: var(--text-soft); }
+
+/* ---------- 일자 맵 테이블 ---------- */
+.daymap { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 0.92rem; }
+.daymap th, .daymap td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.daymap th { background: #fffaee; color: var(--text-soft); font-weight: 800; }
+.daymap tr:hover td { background: #fffaee; }
+
+/* ---------- 진행표(강사용 시간표) ---------- */
+.timetable { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+.timetable th, .timetable td { padding: 9px 11px; border: 1px solid var(--border); vertical-align: top; }
+.timetable th { background: var(--blue-soft); color: #2f6bd6; font-weight: 800; }
+.timetable td:first-child { white-space: nowrap; font-weight: 800; color: var(--muted); font-family: var(--mono); font-size: 0.85rem; }
+
+/* ---------- 칩 ---------- */
+.chip { display: inline-block; padding: 0.1rem 0.55rem; border-radius: 999px; font-size: 0.75rem; font-weight: 800; background: var(--card); color: var(--accent); }
+
+/* ---------- 하단 이동 ---------- */
+.pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 46px; }
+.pager a { flex: 1; text-decoration: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; background: #fff; color: inherit; transition: border-color 0.15s, box-shadow 0.15s; }
+.pager a:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+.pager .dir { font-size: 0.72rem; color: var(--muted); font-weight: 800; }
+.pager .tt { font-weight: 800; }
+.pager a.next { text-align: right; }
+
+footer.foot { max-width: var(--maxw); margin: 0 auto; padding: 10px 20px 40px; color: var(--muted); font-size: 0.82rem; text-align: center; }
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  main { padding: 28px 18px; }
+  h1 { font-size: 1.55rem; }
+}
+
+/* ── 용어사전 ── */
+details.glossary { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); margin: 14px 0; }
+details.glossary summary { cursor: pointer; padding: 12px 16px; font-weight: 800; color: var(--text-soft); list-style: none; }
+details.glossary summary::-webkit-details-marker { display: none; }
+details.glossary summary::before { content: "▸ "; color: var(--accent); }
+details.glossary[open] summary::before { content: "▾ "; }
+details.glossary .gin { padding: 0 16px 14px; }
+table.glossary-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 6px 0 0; }
+table.glossary-table th, table.glossary-table td { padding: 8px 11px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+table.glossary-table th { background: #fff3d6; color: #b45309; font-weight: 800; white-space: nowrap; }
+table.glossary-table td.term { white-space: nowrap; font-weight: 700; }
+table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var(--muted); font-size: 0.82rem; }
+.glossary-more { font-size: 0.9rem; margin: 8px 0 0; }
+
+/* ---------- 실물 표본(specimen) — 같은 데이터의 여러 모습을 실물로 나란히 ---------- */
+.specimen-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(226px, 1fr)); gap: 14px; margin: 18px 0; }
+.specimen { border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow); }
+.specimen .tag { font-size: 0.74rem; font-weight: 800; padding: 6px 12px; color: #fff; letter-spacing: 0.01em; }
+.specimen.st .tag { background: var(--green); }
+.specimen.semi .tag { background: var(--teal); }
+.specimen.un .tag { background: var(--violet); }
+.specimen .body { padding: 12px; flex: 1; display: flex; align-items: center; justify-content: center; }
+.specimen .note { font-size: 0.8rem; line-height: 1.55; color: var(--text-soft); padding: 9px 12px; border-top: 1px dashed var(--border); background: #fffdf6; }
+.specimen pre.mini { margin: 0; width: 100%; background: var(--code-bg); color: var(--code-text); border-radius: 8px; padding: 12px; overflow-x: auto; font-family: var(--mono); font-size: 0.7rem; line-height: 1.6; }
+.specimen pre.mini .k { color: #ffd766; }
+.minitable { width: 100%; border-collapse: collapse; font-size: 0.72rem; font-family: var(--mono); }
+.minitable th, .minitable td { border: 1px solid var(--border); padding: 5px 7px; text-align: left; white-space: nowrap; }
+.minitable td:last-child { white-space: normal; }
+.minitable th { background: var(--green-soft); color: #3d7a37; font-weight: 800; }
+.minitable tr.hl td { background: #fff3d6; }
+.specimen svg { max-width: 100%; height: auto; display: block; }
+
+/* ---------- 인터랙티브 확인 문제(quiz) ---------- */
+.quiz { border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; padding: 16px 18px; margin: 16px 0; box-shadow: var(--shadow); }
+.quiz .qq { font-weight: 700; margin-bottom: 4px; }
+.quiz .qn { display: inline-block; font-size: 0.74rem; font-weight: 800; color: var(--accent); background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 1px 10px; margin-right: 7px; vertical-align: 2px; }
+.quiz .qitem { margin: 12px 0 0; }
+.quiz .qs { font-size: 0.95rem; margin-bottom: 6px; }
+.quiz .qopts { display: flex; flex-wrap: wrap; gap: 8px; }
+.quiz .qopts-col { flex-direction: column; align-items: stretch; }
+.quiz .opt { font-family: var(--font); font-size: 0.88rem; font-weight: 700; text-align: left; color: var(--text); background: #fffdf6; border: 1.5px solid var(--border); border-radius: 999px; padding: 7px 16px; cursor: pointer; transition: border-color 0.15s, background 0.15s, transform 0.12s; }
+.quiz .qopts-col .opt { border-radius: var(--radius-sm); }
+.quiz .opt:hover:not(:disabled) { border-color: var(--accent); }
+.quiz .opt:disabled { cursor: default; opacity: 0.55; }
+.quiz .opt.right { background: var(--green-soft); border-color: var(--green); color: #3d7a37; opacity: 1; }
+.quiz .opt.right::after { content: " ✓"; font-weight: 800; }
+.quiz .opt.wrong { background: var(--red-soft); border-color: var(--red); color: #c23b3a; animation: quiz-shake 0.35s; }
+@keyframes quiz-shake { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.quiz .fb { display: none; margin-top: 10px; font-size: 0.88rem; line-height: 1.6; color: var(--text-soft); background: var(--green-soft); border-left: 3px solid var(--green); border-radius: 0 8px 8px 0; padding: 8px 12px; }
+.quiz .fb.show { display: block; }
+.quiz details.reveal { margin-top: 8px; border: 1px dashed var(--border); border-radius: var(--radius-sm); background: #fffdf6; }
+.quiz details.reveal summary { cursor: pointer; padding: 9px 14px; font-size: 0.86rem; font-weight: 800; color: var(--accent); list-style: none; }
+.quiz details.reveal summary::-webkit-details-marker { display: none; }
+.quiz details.reveal summary::before { content: "▸ "; }
+.quiz details.reveal[open] summary::before { content: "▾ "; }
+.quiz details.reveal p { margin: 0; padding: 0 14px 12px; font-size: 0.9rem; }
+@media print { .quiz .fb { display: block; } .quiz details.reveal { display: block; } }
+/* 질문 콜아웃 안에 끼우는 선택형 문항 — 카드 장식 없이 선택지만 */
+.callout.ask .quiz { background: transparent; border: 0; box-shadow: none; padding: 0; margin: 8px 0 0; }
+.callout.ask .quiz .opt { background: #fff; }
+
+
+/* 교과서 인용 박스 — 정의·핵심 명제만 짧게 인용(출처 쪽수 필수), 이어서 우리말 풀이 */
+.tbquote { border: 1px solid var(--border); border-left: 4px solid var(--accent); background: #fffdf6; border-radius: var(--radius-sm); padding: 14px 16px; margin: 18px 0; }
+.tbquote .h { font-weight: 800; font-size: 0.9rem; margin-bottom: 6px; }
+.tbquote .h .src { font-weight: 600; color: var(--muted); font-size: 0.8rem; margin-left: 8px; }
+.tbquote .q { margin: 4px 0; line-height: 1.7; }
+.tbquote .t { margin: 6px 0 0; color: #6b5d3f; }
+
+/* ---- 주소 만들기 위젯 (2차시 KOBIS — 키 붙여넣기 → 완성 주소·Secrets 동기화) ---- */
+.urlmaker{border:1.5px dashed var(--accent);background:#fffdf6;border-radius:var(--radius-sm);padding:14px 16px;margin:18px 0}
+.urlmaker .um-label{display:block;font-weight:800;color:#b45309;font-size:.92rem;margin-bottom:8px}
+.urlmaker input{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-family:var(--mono);font-size:.9rem;background:#fff;color:var(--text)}
+.urlmaker input:focus{outline:2px solid var(--gold);border-color:var(--gold)}
+.urlmaker .made{margin-top:10px;padding:10px 12px;background:var(--code-bg);color:var(--code-text);border-radius:8px;font-family:var(--mono);font-size:.8rem;word-break:break-all;line-height:1.55;min-height:1.2em}
+.urlmaker .btns{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+.urlmaker .copybtn,.urlmaker .openbtn{display:inline-block;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:.85rem;font-weight:800;cursor:pointer;text-decoration:none;font-family:var(--font)}
+.urlmaker .copybtn{background:var(--accent);border-color:var(--accent);color:#fff}
+.urlmaker .copybtn:disabled{background:var(--card);border-color:var(--border);color:var(--muted);cursor:default}
+.urlmaker .copybtn.done{background:var(--green);border-color:var(--green)}
+.urlmaker .openbtn{background:#fff;color:#b45309}
+.urlmaker .um-note{margin-top:9px;font-size:.8rem;color:var(--text-soft);line-height:1.6}
+
+/* ---- 오늘의 체크 — 클릭 체크박스 (2026-08-27) ---- */
+.checklist li{cursor:pointer;user-select:none;border-radius:8px;padding-top:3px;padding-bottom:3px;transition:background .18s ease,color .18s ease}
+.checklist li:hover{background:var(--green-soft)}
+.checklist li::before{content:"";width:19px;height:19px;box-sizing:border-box;border:2px solid var(--green);border-radius:6px;background:#fff;top:5px;font-size:13px;font-weight:800;line-height:15px;text-align:center;color:#fff;transition:background .18s ease,transform .18s ease}
+.checklist li.done{background:var(--green-soft);color:var(--text-soft)}
+.checklist li.done::before{content:"✓";background:var(--green);border-color:var(--green);animation:checkpop .28s ease}
+@keyframes checkpop{0%{transform:scale(.6)}55%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+/* 파일명 복사 칩 — 파일 이름을 누르면 이름이 그대로 복사된다 */
+.fname { display: inline-flex; align-items: center; gap: 5px; font-family: var(--mono); font-size: 0.85em; font-weight: 700; color: #5b4a22; background: #faf3e3; border: 1px solid #e3d5b3; border-radius: 6px; padding: 1px 8px; cursor: pointer; vertical-align: baseline; line-height: 1.5; }
+.fname::after { content: "📋"; font-size: 0.85em; }
+.fname:hover { background: #f3e8cd; }
+.fname.done { color: #166534; background: #dcfce7; border-color: #86efac; }
+.fname.done::after { content: "✓ 복사됨"; font-size: 0.8em; }
+.codewrap .label .fname { color: #fff; background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.35); margin-left: 6px; font-size: 1em; padding: 0 7px; }
+.codewrap .label .fname:hover { background: rgba(255,255,255,0.28); }
+.codewrap .label .fname.done { background: rgba(255,255,255,0.28); border-color: #86efac; color: #bbf7d0; }
+
+/* 프롬프트 아래 접어 두는 예시 코드 */
+details.sample { margin: -6px 0 14px; }
+details.sample summary { cursor: pointer; display: inline-block; font-size: 0.85rem; font-weight: 700; color: var(--accent); list-style: none; padding: 4px 0; }
+details.sample summary::-webkit-details-marker { display: none; }
+details.sample summary::before { content: "▸ "; }
+details.sample[open] summary::before { content: "▾ "; }
+
+/* ── 인터랙티브 위젯(6차시) ── */
+/* 슬라이드용 위젯(.widget/.wctl/.wbtn/.wout)을 교재의 밝은 배경에 맞춰 다시 씀.
+   마크업: figure.interactive > .widget(svg + .wctl) + figcaption  */
+.interactive { margin: 22px 0; padding: 10px 10px 12px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.interactive .widget { color: #1c2230; }
+.interactive .widget svg { width: 100%; height: auto; display: block; }
+.interactive .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 10px; padding: 0 4px; font-size: 0.9rem; font-weight: 700; color: #1c2230; line-height: 1.5; }
+.interactive .wctl label { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.interactive .wctl input[type="range"] { width: clamp(120px, 40%, 240px); margin: 0; accent-color: #2b7fd6; cursor: pointer; }
+.interactive .wbtn { font-family: var(--font); font-size: 0.88rem; font-weight: 700; line-height: 1.4; color: #1c2230; background: #fff; border: 1.5px solid var(--border); border-radius: 999px; padding: 6px 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s, color 0.15s; }
+.interactive .wbtn:hover { border-color: #2b7fd6; }
+.interactive .wbtn:focus-visible { outline: 2px solid #2b7fd6; outline-offset: 2px; }
+.interactive .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
+.interactive .wout { margin-left: auto; text-align: right; color: #b07a00; font-weight: 800; font-variant-numeric: tabular-nums; }
+.interactive figcaption { margin: 8px 4px 0; font-size: 0.86rem; line-height: 1.6; color: var(--text-soft); }
+.interactive figcaption::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #2b7fd6; margin-right: 7px; vertical-align: 1px; }
+@media (max-width: 600px) {
+  .interactive { padding: 8px 8px 10px; }
+  .interactive .wctl { flex-direction: column; align-items: stretch; gap: 8px; }
+  .interactive .wctl label { white-space: normal; }
+  .interactive .wctl input[type="range"] { flex: 1; width: auto; min-width: 0; }
+  .interactive .wbtn { font-size: 0.84rem; }
+  .interactive .wout { margin-left: 0; text-align: left; }
+}
+@media print {
+  .interactive { box-shadow: none; break-inside: avoid; }
+}
+
+/* ── 상황 갤러리(7차시 실험실) — 사이킷런 계산 + plotly 그래프 + 실험 프롬프트 ── */
+.situation { margin: 22px 0; padding: 12px 12px 14px; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+.situation .sit-h { display: flex; align-items: baseline; gap: 10px; margin: 0 4px 6px; }
+.situation .sit-h .num { font-size: 0.8rem; font-weight: 800; color: #2b7fd6; letter-spacing: .06em; }
+.situation .sit-h .t { font-size: 1.02rem; font-weight: 800; color: var(--text); }
+.situation .intuition { margin: 0 4px 8px; font-size: 0.95rem; color: var(--text); }
+.situation .plot { width: 100%; min-height: 300px; }
+.situation .plot img { width: 100%; height: auto; display: block; }
+.situation .reading { margin: 8px 4px 0; padding-left: 0; list-style: none; font-size: 0.9rem; color: var(--text-soft); }
+.situation .reading li::before { content: "·  "; color: #2b7fd6; font-weight: 800; }
+.situation details.try { margin: 10px 4px 0; }
+.situation details.try summary { cursor: pointer; font-size: 0.88rem; font-weight: 700; color: var(--accent); list-style: none; }
+.situation details.try summary::-webkit-details-marker { display: none; }
+.situation details.try summary::before { content: "▸ "; }
+.situation details.try[open] summary::before { content: "▾ "; }
+.situation details.try .codewrap { margin-top: 6px; }
+figure.case { margin: 12px 0 0; }
+figure.case img { width: 100%; height: auto; display: block; border-radius: var(--radius-sm); }
+figure.case figcaption { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+@media (max-width: 600px) { .situation { padding: 8px 8px 10px; } .situation .plot { min-height: 260px; } }
+
+/* ── 답 적는 칸 (assets/answer.js) — 저장하지 않고 화면에만 남는다 ── */
+.callout.ask li { margin-bottom: 14px; }
+.answer-in { display: block; width: 100%; margin-top: 8px; padding: 10px 12px 10px 34px; box-sizing: border-box;
+  font-family: var(--font); font-size: 0.94rem; line-height: 1.6; color: var(--text);
+  background: #fff url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><path d='M2 12.4V14h1.6l7.1-7.1-1.6-1.6L2 12.4zM13.8 4.3c.2-.2.2-.5 0-.7l-1.4-1.4a.5.5 0 0 0-.7 0l-1.1 1.1 2.1 2.1 1.1-1.1z' fill='%23e8930c'/></svg>") no-repeat 10px 12px;
+  border: 1.5px solid var(--accent); border-radius: var(--radius-sm);
+  box-shadow: 0 1px 0 rgba(232,147,12,.16);
+  resize: vertical; overflow: hidden; transition: box-shadow .12s, border-color .12s; }
+.answer-in:hover { border-color: #d9820a; }
+.answer-in:focus { outline: none; border-color: #2b7fd6; background-color: #fbfdff;
+  box-shadow: 0 0 0 3px rgba(43,127,214,.18); }
+.answer-in::placeholder { color: #b08a4a; }
+.answer-cell { width: 100%; box-sizing: border-box; padding: 7px 8px;
+  font-family: var(--font); font-size: 0.94rem; font-weight: 700; text-align: center; color: var(--text);
+  background: #fffaf0; border: 1.5px solid var(--accent); border-radius: 6px; }
+.answer-cell::placeholder { color: #c9a25e; font-weight: 400; }
+.answer-cell:hover { border-color: #d9820a; }
+.answer-cell:focus { outline: none; border-color: #2b7fd6; background: #fff;
+  box-shadow: 0 0 0 3px rgba(43,127,214,.18); }
+table.daymap td:has(> .answer-cell) { padding: 4px; background: #fffdf7; }
+@media print { .answer-in, .answer-cell { border-color: #ccc; box-shadow: none; background-image: none; } }
+
+/* ── 자가 채점 (assets/selfcheck.js) — 정오만 알리고 정답은 보이지 않는다 ── */
+.selfcheck { margin: 10px 0 0; }
+.sc-note { margin: 0 0 12px; font-size: 0.9rem; color: var(--text-soft); }
+.sc-part { margin: 0 0 18px; padding: 12px 14px 14px; background: #fff;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.sc-title { font-size: 0.98rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+.sc-step { margin: 0 0 10px; padding: 8px 10px; border-left: 3px solid var(--border);
+  border-radius: 0 6px 6px 0; background: #fffdf7; }
+.sc-step.done { border-left-color: var(--green); background: var(--green-soft); }
+.sc-step.here { border-left-color: var(--red); background: var(--red-soft); }
+.sc-step-h { font-size: 0.88rem; font-weight: 700; color: var(--text-soft); margin-bottom: 6px; }
+.sc-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; }
+.sc-row { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text); }
+.sc-lab { flex: 1 1 auto; }
+.sc-in { flex: 0 0 88px; box-sizing: border-box; padding: 5px 7px; text-align: right;
+  font-family: var(--font); font-size: 0.92rem; color: var(--text);
+  background: #fff; border: 1px solid var(--border); border-radius: 6px; }
+.sc-in:focus { outline: none; border-color: #2b7fd6; box-shadow: 0 0 0 2px rgba(43,127,214,.15); }
+.sc-mark { flex: 0 0 16px; font-weight: 800; }
+.sc-mark.ok { color: var(--green); }
+.sc-mark.no { color: var(--red); }
+.sc-bar { display: flex; gap: 8px; margin-top: 12px; }
+.sc-btn { padding: 7px 16px; font-family: var(--font); font-size: 0.9rem; font-weight: 700;
+  color: #fff; background: var(--accent); border: 0; border-radius: 999px; cursor: pointer; }
+.sc-btn.ghost { color: var(--text-soft); background: #fff; border: 1px solid var(--border); }
+.sc-btn:hover { filter: brightness(1.05); }
+.sc-msg { margin: 10px 0 0; font-size: 0.9rem; line-height: 1.6; color: var(--text-soft); }
+.sc-msg.ok { color: var(--green); font-weight: 700; }
+.sc-msg.no { color: var(--red); }
+.sc-msg.hold { color: var(--accent); }
+@media (max-width: 600px) { .sc-grid { grid-template-columns: 1fr; } }
+details.selfcheck-fold { margin: 8px 0 0; }
+details.selfcheck-fold > summary { cursor: pointer; display: inline-block; padding: 7px 16px;
+  font-size: 0.9rem; font-weight: 700; color: var(--text-soft);
+  background: #fff; border: 1px solid var(--border); border-radius: 999px; list-style: none; }
+details.selfcheck-fold > summary::-webkit-details-marker { display: none; }
+details.selfcheck-fold > summary::before { content: "▸ "; }
+details.selfcheck-fold[open] > summary::before { content: "▾ "; }
+
+/* ── 심화 실험실 안내 카드 ── */
+.callout.lab { border: 2px solid var(--accent); background: linear-gradient(180deg, #fffaf0 0%, #fff 60%); }
+.callout.lab .h { color: var(--accent); font-size: 1.02rem; }
+.callout.lab .labgo { margin: 12px 0 2px; }
+.callout.lab .labgo a { display: inline-block; padding: 9px 20px; font-size: 0.95rem; font-weight: 800;
+  color: #fff; background: var(--accent); border-radius: 999px; text-decoration: none; }
+.callout.lab .labgo a:hover { filter: brightness(1.06); }
