@@ -247,7 +247,9 @@
 
 
   <h2>3. 실습 — 영화 흥행 분류기 (바이브 코딩)</h2>
-  <p>4차시의 영화별 표(<a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a>)로 앱을 만듭니다. <b>개봉 전 흥행 예측이 목표라면 입력도 개봉 전에 확보한 값이어야 합니다.</b> 7차시의 예측 시점 표에서 첫 관측일 스크린 수와 상영 횟수는 개봉 전에 쓸 수 없다고 판정했고, 기본 변수 세 가지 가운데 개봉 전에 쓸 수 있는 것은 성수기 개봉 하나뿐이었습니다. 이 표의 <code>first_scrn</code>·<code>first_show</code>는 10위권에 처음 관측된 날의 집계값이고, <code>total_audi</code>도 수집 기간에 기록된 누적값입니다. 그래서 오늘의 문제는 개봉 전 예측이 아니라 기록이 끝난 영화를 분류하는 연습으로 시점을 옮깁니다. 첫 주 관객 수는 그 시점에서도 총 관객 수와 너무 가까워 입력에서 뺍니다. 7차시의 기본 변수 세 가지에 개봉 전에 알 수 있는 장르와 국가를 더해 입력을 다섯으로 늘립니다. 장르가 여럿 적힌 영화는 첫 장르만 쓰고, 갈래마다 "액션인가 아닌가" 식의 0과 1 열이 하나씩 생깁니다. 7차시 4절에서 성수기 개봉을 0과 1로 바꾼 것과 같은 처리입니다. 상영당 관객 수는 첫 관측일 집계가 끝나야 알 수 있으므로 이번 입력에는 넣지 않습니다.</p>
+  <p>4차시의 영화별 표(<a href="https://github.com/greatsong/modudata/blob/main/data/kobis_movies.csv" target="_blank" rel="noopener"><code>kobis_movies.csv</code></a>)로 앱을 만듭니다. 7차시에서 확인한 대로 이 표의 <code>first_scrn</code>·<code>first_show</code>는 10위권에 처음 관측된 날의 집계값이고, <code>total_audi</code>도 수집 기간에 기록된 누적값입니다. 그래서 오늘의 문제는 개봉 전 예측이 아니라 <b>기록이 끝난 영화를 분류하는 연습</b>으로 시점을 옮깁니다.</p>
+  <p>입력은 다섯 가지입니다. 7차시의 기본 변수 세 가지에 장르와 국가를 더합니다. 장르가 여럿 적힌 영화는 첫 장르만 쓰고, 갈래마다 "액션인가 아닌가" 식의 0과 1 열이 하나씩 생깁니다. 7차시 3절에서 성수기 개봉을 0과 1로 바꾼 것과 같은 처리입니다.</p>
+  <p>입력에서 빼는 값도 있습니다. 첫 주 관객 수는 총 관객 수와 너무 가까워 넣지 않고, 상영당 관객 수는 첫 관측일 집계가 끝나야 알 수 있으므로 이번에는 넣지 않습니다.</p>
   <p>스크린 수는 수백, 성수기는 0과 1이라 값의 크기가 크게 다릅니다. 로지스틱 회귀는 값의 크기에 민감하므로 훈련용 데이터의 평균과 퍼짐을 기준으로 모든 입력의 크기를 맞춥니다. 이것을 <b>표준화</b>라고 하며 11차시에서 다시 다룹니다.</p>
 
   <ol class="steps">
@@ -462,19 +464,12 @@ st.caption("훈련용과 테스트용을 어떻게 나누느냐에 따라 정확
     <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
     <ul>
       <li>기준을 100만에서 300만으로 올렸을 때 정확도는 어떻게 달라졌습니까. 성공 레이블의 편수는 어떻게 달라졌습니까.</li>
-      <li>두 숫자는 같은 방향으로 움직였습니까, 반대로 움직였습니까. 반대라면 그 까닭은 무엇이라고 보십니까.
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt" data-ok="1">기준을 올리면 성공작이 줄어, 대부분을 기준 미달로 찍기만 해도 맞히기 쉬워지기 때문</button><button class="opt">기준을 올리면 모델이 더 많은 정보를 사용하게 되기 때문</button><button class="opt">기준과 정확도는 서로 관계가 없기 때문</button></div>
-          <div class="fb">한쪽 레이블이 드물어질수록 정확도는 올라가기 쉽습니다. 정확도만으로는 이 상황을 구분할 수 없으며, 이 문제는 10차시에서 다룹니다.</div>
-        </div></div>
-      </li>
       <li>정확도가 높아진 모델을 두고 "더 좋은 모델이 되었다"라고 말할 수 있습니까. 무엇이 달라진 것입니까.
         <div class="quiz qinline"><div class="qitem">
           <div class="qopts qopts-col"><button class="opt">말할 수 있다 — 숫자가 올라갔으므로</button><button class="opt" data-ok="1">말할 수 없다 — 정답 레이블을 바꾼 것이므로 같은 문제를 더 잘 푼 것이 아니다</button></div>
           <div class="fb">레이블 기준을 바꾸면 문제 자체가 바뀝니다. 점수를 비교하려면 레이블 기준을 고정해야 합니다.</div>
         </div></div>
       </li>
-          <li>팀장이 "정확도가 이만큼 높은데 왜 이 모델을 쓰면 안 되느냐"고 묻는다면 무엇을 근거로 답하겠습니까.</li>
     </ul>
   </div>
   <figure class="interactive" data-fig="labelcurve">

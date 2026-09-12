@@ -29,34 +29,28 @@
     <span class="who"><b>리처드 해밍</b>(1915~1998)은 미국의 수학자입니다. 오류가 생겨도 스스로 찾아 고치는 부호(해밍 코드)를 만들어 오늘날 메모리와 통신에 쓰이게 했고, 컴퓨터 분야의 최고 상인 튜링상을 받았습니다.</span>
   </div>
 
-  <p class="lead">오늘은 작은 표의 실젯값과 예측값을 이용해 <b>오차, 평균제곱오차, 결정계수</b>를 차례로 계산합니다. 각 계산이 무엇을 비교하는지 확인한 뒤, 앞선 실습에서 본 점수를 다시 해석합니다. 계산이 막히면 실젯값과 예측값의 차이를 구하는 첫 칸부터 채웁니다.</p>
+  <p class="lead">오늘은 작은 표의 실젯값과 예측값을 이용해 <b>오차, 평균제곱오차, 결정계수</b>를 차례로 계산합니다. 각 계산이 무엇을 비교하는지 확인합니다. 계산이 막히면 실젯값과 예측값의 차이를 구하는 첫 칸부터 채웁니다.</p>
 
-  <p class="mini">기온 데이터는 <b>6차시와 같은 고정본</b>을 사용합니다. 오늘은 6차시에서 만든 직선을 다시 평가하므로 두 차시가 같은 표를 보아야 합니다. 기온은 해마다 한 번 집계되는 값이라 하루씩 쌓여도 연평균은 거의 달라지지 않고, 진행 중인 해는 관측일이 300일에 못 미쳐 어차피 제외됩니다. 활동지의 두 문제는 손으로 계산이 떨어지도록 고른 수이며 실제 관측값이 아닙니다.</p>
+  <p class="mini">활동지의 두 문제는 손으로 계산이 떨어지도록 고른 수이며 실제 관측값이 아닙니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
       <li><b>손계산 활동지</b> — 기본 문제와 연습 문제를 오차 · 절댓값 · 제곱 · MAE · MSE · R²의 순서로 손으로 계산한다</li>
       <li><b>R²의 뜻</b> — 평균값 기준과 제곱오차 합을 비교한 값임을 손계산으로 확인한다</li>
-      <li><b>내 모델 재해석</b> — 기온 모델의 데이터 선택과 평가 조건을 함께 읽는다</li>
     </ul>
   </div>
 
   <h2>0. 오늘의 목표</h2>
-  <p>7차시에는 앱이 표시한 R²와 평균 오차를 읽었습니다. 오늘은 손으로 떨어지는 작은 표로 같은 지표를 처음부터 계산한 뒤, 6차시의 기온 직선과 7차시의 영화 모델 점수를 그 계산을 근거로 다시 읽습니다. 계산 순서를 직접 밟아 보면 그 점수가 무엇과 무엇을 비교한 값인지 설명할 수 있습니다.</p>
+  <p>7차시에는 앱이 표시한 R²와 평균 오차를 읽었습니다. 오늘은 손으로 떨어지는 작은 표로 같은 지표를 처음부터 계산합니다. 계산 순서를 직접 밟아 보면 그 점수가 무엇과 무엇을 비교한 값인지 설명할 수 있습니다.</p>
   <ul class="steps">
     <li>실젯값과 예측값에서 <b>오차·절대오차·제곱오차</b>를 구할 수 있다.</li>
     <li><b>평균절대오차(MAE)와 평균제곱오차(MSE)</b>를 손으로 계산하고, 두 값의 단위가 다른 까닭을 설명할 수 있다.</li>
-    <li><b>결정계수(R²)</b>를 평균값 기준의 제곱오차 합과 비교해 계산하고, 그 점수를 어느 데이터에서 계산한 값인지 함께 밝힐 수 있다.</li>
+    <li><b>결정계수(R²)</b>를 평균값 기준의 제곱오차 합과 비교해 계산하고, 그 값이 무엇과 무엇을 견준 결과인지 설명할 수 있다.</li>
   </ul>
 
   <h2>1. 개념 이해 — 오차에서 R²까지</h2>
-  <p>MAE와 MSE, R²가 각각 무엇을 나타내는 값인지는 7차시 3절에서 읽었습니다. 오늘은 정의를 다시 읽는 대신 세 값이 어떤 계산을 거쳐 나오는지를 봅니다. 계산은 실젯값과 예측값의 차이 한 칸에서 시작해 일곱 단계로 이어집니다.</p>
-  <div class="tbquote">
-    <div class="h">📖 교과서의 설명 <span class="src">『데이터 과학』 131쪽</span></div>
-    <p class="q">"모델 학습이 완료되면 회귀 계수가 적절한 값인지 평가해야 한다. 예측 성능이 나쁘지 않은지 혹은 과대적합이 발생했는지 판단한다." <span class="src">(131쪽)</span></p>
-    <p class="t">→ 오늘 손으로 계산하는 세 값은 이 판단에 사용하는 지표입니다. <b>과대적합</b>은 모델이 훈련용 데이터에는 잘 맞지만 처음 보는 데이터에서는 성능이 떨어지는 상태를 뜻합니다. 훈련용 데이터의 점수만 보면 알아챌 수 없고, 테스트용 데이터의 점수를 함께 보아야 드러납니다. 폼 Ⅲ-02c와 실험실에서 확인할 수 있습니다.</p>
-  </div>
+  <p>R²와 MAE가 각각 무엇을 나타내는 값인지는 7차시 5절에서 읽었습니다. 오늘은 두 지표에 MSE를 더해, 세 값이 어떤 계산을 거쳐 나오는지를 봅니다. 계산은 실젯값과 예측값의 차이 한 칸에서 시작해 일곱 단계로 이어집니다.</p>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 120쪽</span></div>
     <p class="q">"실젯값과 예측값의 차이를 오차라고 하는데, 두 직선을 비교하여 오차가 더 작은 것을 선택해야 한다." <span class="src">(120쪽)</span></p>
@@ -179,282 +173,21 @@
     <figcaption>선생님 화면으로 함께 봅니다. 그림에서 검은 점이 실젯값이고 두 선이 각 모델의 예측입니다. "다음 단계"를 누르면 활동지와 같은 순서로 ①부터 ⑦까지 한 칸씩 채워집니다. 모델 단추로 두 예측을 번갈아 보고, 문제 단추로 연습 문제의 값을 확인합니다. 화면이 좁아 영화 이름은 앞부분만 적었으며 활동지의 줄 순서와 같습니다.</figcaption>
   </figure>
 
-  <h2>3. R²의 분모 — 평가 대상이 바뀌면 점수도 바뀐다</h2>
-  <p>R²의 분자는 내 모델의 제곱오차 합이고, 분모는 <b>평가 대상 실젯값들의 평균을 항상 예측했을 때의 제곱오차 합</b>입니다. 활동지 기본 문제에서 분모는 40, 고른 모델의 분자는 10이었습니다. R² = 1 − (10 ÷ 40) = 0.75이며, 평균값 기준보다 제곱오차 합이 75% 작다는 뜻입니다. 예측의 75%가 정답이라는 뜻이 아닙니다. 여기서 쓰는 평균은 평가 대상 데이터의 평균이므로, 평가 대상이 달라지면 분모도 함께 달라집니다. 아래 화면에서 실젯값의 퍼짐만 바꾸어 그 변화를 확인합니다.</p>
+  <h3>손으로 구한 R² 읽기</h3>
+  <p>활동지 기본 문제에서 평균값 기준의 제곱오차 합은 40, 고른 모델의 제곱오차 합은 10이었습니다. R² = 1 − (10 ÷ 40) = 0.75입니다. 평균값 기준보다 제곱오차 합이 75% 작다는 뜻이며, <b>예측의 75%가 정답이라는 뜻이 아닙니다.</b></p>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 131쪽</span></div>
     <p class="q">"결정 계수(R² score: R-squared score)는 회귀 모델이 실제 데이터와 얼마나 유사하게 예측하고 구체적으로 설명하는지를 나타낸다. 실제 데이터가 평균값 근처에 집중되지 않을수록, 또한 실젯값과 예측값의 차이가 작을수록, 결정 계수는 1에 가까워진다." <span class="src">(131쪽)</span></p>
     <p class="q">"결정 계수 = 1 − (실젯값 − 예측값)²의 합 ÷ (실젯값 − 실젯값 평균)²의 합" <span class="src">(131쪽 공식)</span></p>
-    <p class="t">→ 분모가 <b>실젯값과 그 평균의 차이</b>로 이루어져 있습니다. 평가 대상이 달라지면 평균도 달라지고, 그래서 같은 모델의 R²도 달라집니다.</p>
-  </div>
-  <figure class="interactive" data-fig="r2denom">
-    <div class="widget" data-w="r2denom">
-  <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="실젯값 세 개의 퍼짐과 예측값을 따로 움직여 평균값 기준의 제곱오차 합과 내 제곱오차 합의 비율이 어떻게 바뀌는지 보이는 그림">
-    <!-- 좌 · 좌표평면 격자와 축 -->
-    <line x1="56" y1="194.5" x2="430" y2="194.5" stroke="#e3ddcf" stroke-width="1"/>
-    <line x1="56" y1="144.9" x2="430" y2="144.9" stroke="#e3ddcf" stroke-width="1"/>
-    <line x1="56" y1="95.4" x2="430" y2="95.4" stroke="#e3ddcf" stroke-width="1"/>
-    <line x1="56" y1="45.8" x2="430" y2="45.8" stroke="#e3ddcf" stroke-width="1"/>
-    <line x1="56" y1="244" x2="430" y2="244" stroke="#b9b3a5" stroke-width="1.5"/>
-    <line x1="56" y1="26" x2="56" y2="244" stroke="#b9b3a5" stroke-width="1.5"/>
-    <text x="48" y="20" text-anchor="end" font-size="13" fill="#6b7385">만 명</text>
-    <text x="48" y="50.3" text-anchor="end" font-size="13" fill="#6b7385">100</text>
-    <text x="48" y="99.9" text-anchor="end" font-size="13" fill="#6b7385">75</text>
-    <text x="48" y="149.4" text-anchor="end" font-size="13" fill="#6b7385">50</text>
-    <text x="48" y="199" text-anchor="end" font-size="13" fill="#6b7385">25</text>
-    <text x="48" y="248.5" text-anchor="end" font-size="13" fill="#6b7385">0</text>
-    <text x="120" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 A</text>
-    <text x="243" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 B</text>
-    <text x="366" y="262" text-anchor="middle" font-size="13" fill="#6b7385">영화 C</text>
-    <!-- 넓이 · 오차 · 점 -->
-    <g data-dyn="base"></g>
-    <g data-dyn="mine"></g>
-    <!-- 평균 수평선 -->
-    <line data-dyn="mean" x1="56" y1="125.1" x2="430" y2="125.1" stroke="#9a9a9a" stroke-width="2.5"/>
-    <g data-dyn="errs"></g>
-    <g data-dyn="dots"></g>
-    <text data-t="mean" x="62" y="118.1" font-size="12" fill="#7a7f95" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" paint-order="stroke">평균 60만 명</text>
-    <!-- 예측 점 조작 영역 -->
-    <rect class="hit" x="105" y="154.7" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 A의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="40" style="touch-action:none;cursor:ns-resize"/>
-    <rect class="hit" x="228" y="115.1" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 B의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="60" style="touch-action:none;cursor:ns-resize"/>
-    <rect class="hit" x="351" y="75.5" width="30" height="20" fill="transparent" tabindex="0" role="slider" aria-label="영화 C의 예측값" aria-valuemin="0" aria-valuemax="110" aria-valuenow="80" style="touch-action:none;cursor:ns-resize"/>
-    <text x="243" y="288" text-anchor="middle" font-size="11.5" fill="#7a7f95">빨간 선분 = 오차 · 노란 넓이 = 오차² · 회색 넓이 = 기준 오차²</text>
-    <!-- 우 · 계산표 -->
-    <text x="474" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">실젯값</text>
-    <text x="534" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">예측값</text>
-    <text x="584" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">오차</text>
-    <text x="634" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">오차²</text>
-    <text x="688" y="42" text-anchor="middle" font-size="11" fill="#7a7f95">기준²</text>
-    <g data-dyn="rows"></g>
-    <line x1="452" y1="122" x2="706" y2="122" stroke="#e3ddcf" stroke-width="1"/>
-    <text x="474" y="140" text-anchor="middle" font-size="11.5" fill="#7a7f95">합계</text>
-    <text data-t="sse" x="634" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#e45756">200</text>
-    <text data-t="sst" x="688" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#9a9a9a">1800</text>
-    <text x="634" y="157" text-anchor="middle" font-size="10" fill="#7a7f95">SSE</text>
-    <text x="688" y="157" text-anchor="middle" font-size="10" fill="#7a7f95">SST</text>
-    <text x="452" y="176" font-size="10.5" fill="#7a7f95">기준² = (실젯값 − 평균)²</text>
-    <text x="452" y="190" font-size="10.5" fill="#7a7f95">SSE = 내 제곱오차 합 · SST = 평균값 기준의 제곱오차 합</text>
-    <text x="452" y="208" font-size="13" fill="#7a7f95">R² = 1 − (SSE ÷ SST)</text>
-    <text data-t="r2" x="452" y="238" font-size="30" font-weight="800" fill="#a97a00">0.89</text>
-    <!-- R² 게이지 -->
-    <rect x="452" y="250" width="169.3" height="14" fill="#e45756" opacity="0.12"/>
-    <rect x="621.3" y="250" width="84.7" height="14" fill="#2f9e5f" opacity="0.12"/>
-    <line x1="452" y1="264" x2="706" y2="264" stroke="#b9b3a5" stroke-width="1"/>
-    <text x="452" y="280" text-anchor="middle" font-size="11" fill="#7a7f95">−2</text>
-    <text x="536.7" y="280" text-anchor="middle" font-size="11" fill="#7a7f95">−1</text>
-    <text x="621.3" y="280" text-anchor="middle" font-size="11" fill="#7a7f95">0</text>
-    <text x="706" y="280" text-anchor="middle" font-size="11" fill="#7a7f95">1</text>
-    <line class="ndl" x1="696.6" y1="246" x2="696.6" y2="268" stroke="#1c2230" stroke-width="2.5"/>
-    <text x="452" y="296" font-size="11" fill="#7a7f95">제곱오차 합 감소 비율 · 0 = 평균만 예측</text>
-  </svg>
-  <div class="wctl">
-    <label>퍼짐 d <input type="range" min="6" max="40" step="1" value="30" data-k="d" aria-label="실젯값의 퍼짐"> <span data-v="d">30만 명</span></label>
-    <button class="wbtn" type="button" data-act="mean">평균만 예측</button>
-    <button class="wbtn" type="button" data-act="reset">원래 예측</button>
-    <button class="wbtn on" type="button" data-act="area-both">둘 다</button>
-    <button class="wbtn" type="button" data-act="area-base">평균값 기준 넓이</button>
-    <button class="wbtn" type="button" data-act="area-mine">내 넓이</button>
-    <span class="wout" data-t="out">이해를 돕기 위해 만든 예시 값입니다</span>
-  </div>
-</div>
-    <figcaption>선생님 화면으로 함께 봅니다. 퍼짐 슬라이더는 실젯값만 평균 둘레로 벌리고 좁힙니다. 오차가 그대로여서 노란 넓이의 합은 변하지 않고 회색 넓이의 합만 달라지므로 R²가 바뀝니다. 예측 점을 세로로 끌면 그 점의 오차가 달라져 노란 넓이가 함께 변합니다.</figcaption>
-  </figure>
-
-  <div class="callout tip">
-    <div class="h">💡 R² 눈금 읽기</div>
-    <ul>
-      <li><b>1에 가까움</b> → 평균값 기준보다 제곱오차 합이 매우 작습니다.</li>
-      <li><b>0</b> → 평균만 예측하는 경우와 다르지 않습니다. 교과서도 "결정 계수가 0에 가깝다면 회귀 모델이 데이터의 평균을 맞추는 정도로 예측했고, 회귀 모델의 유의미성이 떨어진다는 뜻이다"라고 적습니다(132쪽).</li>
-      <li><b>음수</b> → 평균만 예측하는 경우보다도 못하다는 뜻입니다.</li>
-    </ul>
-  </div>
-  <p>7차시 교재의 표에 적어 둔 테스트용 데이터의 R²를 다시 꺼내 봅니다. 그 값은 해당 테스트용 데이터에서 모델의 제곱오차 합이 평균값 기준보다 몇 퍼센트 작았는지를 뜻합니다. 점수를 읽을 때는 <b>어떤 데이터에서 어떤 변수로 평가했는지</b>를 함께 확인합니다. 실젯값이 모두 같으면 분모가 0이 되므로 이 식을 그대로 계산할 수 없습니다.</p>
-
-  <h3>이 점수는 어느 데이터에서 계산한 값인가</h3>
-  <table class="daymap">
-    <thead><tr><th>점수</th><th>어느 데이터에서 계산했나</th><th>무엇을 말해 주나</th></tr></thead>
-    <tbody>
-      <tr><td><b>훈련용 데이터의 R²</b></td><td>직선을 만들 때 사용한 데이터</td><td>그 데이터를 얼마나 잘 설명하는지만 알려 줍니다. 새로운 데이터의 성능은 알 수 없습니다.</td></tr>
-      <tr><td><b>테스트용 데이터의 R²</b></td><td>학습에 쓰지 않고 따로 떼어 둔 데이터</td><td>처음 보는 데이터에서의 성능에 가깝습니다. 7차시에 적은 점수가 이것입니다.</td></tr>
-      <tr><td><b>실제 미래 데이터의 오차</b></td><td>예측한 뒤 실제로 관측된 데이터</td><td>가장 믿을 수 있는 값이지만, 예측하는 시점에는 아직 없습니다.</td></tr>
-    </tbody>
-  </table>
-  <div class="tbquote">
-    <div class="h">📖 교과서의 근거 <span class="src">『데이터 과학』 112쪽</span></div>
-    <p class="q">"학습에 사용한 문제를 그대로 평가에 사용하면, 문제 해결 과정을 이해한 것인지 단지 문제를 외워서 맞힌 것인지 알 수 없어서 평가 결과를 신뢰할 수 없기 때문이다." <span class="src">(112쪽)</span></p>
-    <p class="t">→ 점수를 적을 때는 값만 적지 않고 어느 데이터에서 계산한 값인지 함께 적습니다.</p>
+    <p class="t">→ 활동지 ⑦단계에서 계산한 식이 이 공식입니다. 분자는 내 모델의 제곱오차 합이고, 분모는 평균만 예측했을 때의 제곱오차 합입니다.</p>
   </div>
 
-  <h2>4. 기온 모델 다시 보기 — 데이터 선택에 따른 R² 비교</h2>
-  <p>3절에서 본 대로 평가 대상이 달라지면 점수를 그대로 비교할 수 없습니다. 이 절에서는 그것을 기온 모델에서 확인합니다. 기온 예측기를 새로 만들어 데이터 선택에 따라 R²가 어떻게 달라지는지 확인합니다. 여기서는 <b>연도</b>가 독립 변수이고 <b>연평균기온</b>이 종속 변수입니다. 이번 절에서 계산하는 것은 직선을 학습한 데이터에 그대로 예측한 <b>훈련용 데이터의 R²</b>입니다. 따로 떼어 둔 데이터에서 평가한 7차시의 R²와는 평가 조건이 다릅니다.</p>
-  <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"기온 예측기" 스트림릿 앱을 만들어 줘. 파일 하나로.
-서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.
-이 파일의 열 이름은 날짜, 지점, 평균기온, 최저기온, 최고기온이고, 인코딩은 UTF-8이야.
-아직 한 해가 다 차지 않은 연도가 섞여 있어. 관측일 수로 걸러 줘.
-관측일이 300일이 안 되는 해를 뺄지 말지 고르는 스위치를 달아 줘.
-각 경우를 따로 학습한 R²를 나란히 보여 주고, 훈련용 데이터에서 계산한 점수라고 표시해 줘.
-스위치에 따라 산점도와 회귀선이 바뀌게 하고, 제외 후보인 연도와 관측일 수도 보여 줘.
-그래프는 plotly로 그려 줘.
-직선을 만든 해의 개수와 시작 연도, 끝 연도를 화면에 적어 줘.
-필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 관측일 필터를 켜고 끄며 R²가 어떻게 달라지는지 본다
-import streamlit as st
-import pandas as pd
-import numpy as np
-import plotly.express as px
-
-DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv"
-
-
-@st.cache_data
-def load_all():
-    df = pd.read_csv(DATA_URL)
-    df["연도"] = pd.to_datetime(df["날짜"]).dt.year
-    return df.groupby("연도")["평균기온"].agg(["mean", "count"]).reset_index()
-
-
-def score(yearly):
-    a, b = np.polyfit(yearly["연도"], yearly["mean"], 1)
-    pred = a * yearly["연도"] + b
-    ss_res = ((yearly["mean"] - pred) ** 2).sum()
-    ss_tot = ((yearly["mean"] - yearly["mean"].mean()) ** 2).sum()
-    return 1 - ss_res / ss_tot
-
-
-all_years = load_all().dropna(subset=["mean"])
-# 기간을 고정하지 않는다. 아직 한 해가 다 차지 않은 연도는 아래 관측일 기준에 걸린다.
-on = st.toggle("관측일 300일 미만인 해를 뺀다", value=True)
-used = all_years[all_years["count"] &gt;= 300] if on else all_years
-
-c1, c2 = st.columns(2)
-c1.metric("필터 적용 · 훈련용 데이터의 R²", f"{score(all_years[all_years['count'] &gt;= 300]):.2f}")
-c2.metric("필터 해제 · 훈련용 데이터의 R²", f"{score(all_years):.2f}")
-st.caption(f"지금 쓰는 해: {len(used)}개 · {int(used['연도'].min())}~{int(used['연도'].max())}년 · 뺀 해: {len(all_years) - len(used)}개")
-a, b = np.polyfit(used["연도"], used["mean"], 1)
-fig = px.scatter(used, x="연도", y="mean", labels={"mean": "연평균기온(℃)"})
-fig.add_scatter(x=used["연도"], y=a * used["연도"] + b, mode="lines", name="회귀선")
-st.plotly_chart(fig, width="stretch")
-st.write("관측일이 300일 미만인 해")
-st.dataframe(all_years[all_years["count"] &lt; 300].rename(columns={"mean": "평균기온", "count": "관측일 수"}), hide_index=True)</pre></div>
-      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
-pandas
-numpy
-plotly</pre></div></details>
-  <table class="daymap">
-    <thead><tr><th>관측일 300일 미만 연도</th><th>사용한 연도 수</th><th>훈련용 데이터의 R²</th></tr></thead>
-    <tbody>
-      <tr><td>제외한다(스위치 켬)</td><td></td><td></td></tr>
-      <tr><td>포함한다(스위치 끔)</td><td></td><td></td></tr>
-    </tbody>
-  </table>
-  <p class="mini">앱의 스위치를 켜고 끄며 화면의 숫자를 위 표에 적습니다. 데이터가 날마다 쌓이므로 값은 사람마다 다를 수 있습니다.</p>
-  <div class="callout ask">
-    <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
-    <ol>
-      <li>스위치를 켰을 때와 껐을 때, 사용한 연도 수와 훈련용 데이터의 R²는 각각 얼마나 달랐습니까?</li>
-      <li>두 점수는 같은 데이터에서 계산한 값입니까? 이 비교만으로 전처리가 예측 성능을 올렸다고 말할 수 있습니까?
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">말할 수 있다 — 두 점수 모두 같은 방식으로 계산했으므로</button><button class="opt" data-ok="1">말할 수 없다 — 사용한 연도가 달라 비교 대상 자체가 바뀌었으므로</button></div>
-          <div class="fb">스위치를 켜고 끌 때마다 학습에 들어가는 해가 달라집니다. 두 점수는 서로 다른 데이터에서 계산한 값이므로 나란히 놓고 우열을 가릴 수 없습니다.</div>
-        </div></div>
-      </li>
-      <li>스위치를 끄면 관측일이 한 달 남짓인 해가 함께 들어옵니다. 1953년을 빼는 근거는 점수가 올라간다는 것입니까, 그 해의 관측 기간이 짧다는 것입니까?
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts"><button class="opt">점수가 올라간다는 것</button><button class="opt" data-ok="1">그 해의 관측 기간이 짧아 한 해를 대표하기 어렵다는 것</button></div>
-          <div class="fb">데이터를 빼는 근거는 점수가 아니라 그 데이터의 성질입니다. 점수를 근거로 삼으면 점수가 오르는 데이터만 남기게 됩니다.</div>
-        </div></div>
-      </li>
-      <li>데이터를 빼고 넣을 때마다 R²의 분모인 평균값 기준의 제곱오차 합도 함께 바뀝니다. 그러면 두 점수를 나란히 놓았을 때 무엇이 달라진 것입니까?
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">모델의 성능만 달라졌다</button><button class="opt" data-ok="1">모델의 성능과 함께 비교의 기준이 되는 분모까지 달라졌다</button><button class="opt">두 점수는 같은 기준에서 나왔으므로 아무것도 달라지지 않았다</button></div>
-          <div class="fb">R²는 평균만 예측하는 모델과 비교한 값입니다. 데이터가 바뀌면 그 평균값 기준도 함께 바뀌므로, 두 점수의 차이를 성능의 차이로만 읽을 수 없습니다.</div>
-        </div></div>
-      </li>
-    </ol>
-  </div>
-  <figure class="interactive" data-fig="r2swap">
-    <div class="widget" data-w="r2swap">
-<svg viewBox="0 0 720 282" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="훈련용 데이터와 평가 대상을 따로 바꿔 가며 제곱오차 합과 결정계수가 달라지는 것을 보이는 산점도와 계산 표">
-<!-- 좌 · 산점도(연도 × 연평균기온) -->
-<g stroke="#e3ddcf" stroke-width="1">
-<line x1="56" y1="227.4" x2="470" y2="227.4"/>
-<line x1="56" y1="164.5" x2="470" y2="164.5"/>
-<line x1="56" y1="101.5" x2="470" y2="101.5"/>
-<line x1="56" y1="38.6" x2="470" y2="38.6"/>
-</g>
-<path d="M56,26 V240 H470" fill="none" stroke="#b9b3a5" stroke-width="1.2"/>
-<g font-size="12" fill="#6b7385" text-anchor="end">
-<text x="48" y="20">℃</text>
-<text x="48" y="231.4">0</text>
-<text x="48" y="168.5">5</text>
-<text x="48" y="105.5">10</text>
-<text x="48" y="42.6">15</text>
-</g>
-<g font-size="12" fill="#6b7385" text-anchor="middle">
-<text x="87.8" y="254">1910</text>
-<text x="151.5" y="254">1930</text>
-<text x="278.9" y="254">1970</text>
-<text x="374.5" y="254">2000</text>
-<text x="454.1" y="254">2025</text>
-</g>
-<text x="478" y="254" font-size="12" fill="#6b7385">연도</text>
-<g class="pts" fill="#2b7fd6" opacity="0.55"></g>
-<line class="ghost" x1="56" y1="100.1" x2="470" y2="57.6" stroke="#9a9a9a" stroke-width="2" stroke-dasharray="5 4" opacity="0"/>
-<line class="fit" x1="56" y1="100.1" x2="470" y2="57.6" stroke="#f4b400" stroke-width="2.5"/>
-<g class="exg"></g>
-<polyline class="exlead" points="224.8,219.3 236.0,209.9" fill="none" stroke="#e45756" stroke-width="1"/>
-<text class="extx" x="240.0" y="205.9" font-size="11" fill="#e45756"></text>
-<!-- 우 · 상태 패널 -->
-<g font-size="12" fill="#7a7f95">
-<text x="486" y="44">훈련용 데이터</text>
-<text x="486" y="70">평가 대상</text>
-<text x="486" y="104">내 제곱오차 합(SSE)</text>
-<text x="486" y="128">평균값 기준의 제곱오차 합(SST)</text>
-</g>
-<text class="v-train" x="712" y="44" text-anchor="end" font-size="13" font-weight="700" fill="#1c2230">—</text>
-<text class="v-eval" x="712" y="70" text-anchor="end" font-size="13" font-weight="700" fill="#1c2230">—</text>
-<text class="v-sse" x="712" y="104" text-anchor="end" font-size="14" font-weight="700" fill="#e45756">—</text>
-<text class="v-sst" x="712" y="128" text-anchor="end" font-size="14" font-weight="700" fill="#9a9a9a">—</text>
-<line x1="492" y1="146" x2="706" y2="146" stroke="#e3ddcf" stroke-width="1"/>
-<text x="486" y="186" font-size="13" fill="#7a7f95">R²</text>
-<text class="v-r2" data-t="r2" x="712" y="186" text-anchor="end" font-size="30" font-weight="800" fill="#a97a00">—</text>
-<text x="486" y="212" font-size="10.5" fill="#7a7f95">R² = 1 − (SSE ÷ SST)</text>
-<text x="56" y="276" font-size="11" fill="#7a7f95">버튼을 누를 때마다 오른쪽 네 숫자가 함께 바뀝니다. · 교재를 만든 시점의 기온 데이터로 그렸습니다.</text>
-</svg>
-<div class="wctl">
-<button class="wbtn on" type="button" data-act="s-a">짧은 해 제외 · 학습·평가 같음</button>
-<button class="wbtn" type="button" data-act="s-b">짧은 해 포함 · 학습·평가 같음</button>
-<button class="wbtn" type="button" data-act="s-c">짧은 해 포함 학습 · 제외 평가</button>
-<span class="wout" data-t="out">버튼을 누르면 값이 표시됩니다</span>
-</div>
-</div>
-    <figcaption>선생님 화면으로 함께 봅니다. 앞의 두 버튼으로 관측 기간이 짧은 해를 빼고 넣습니다. 데이터를 바꾸면 회귀선만 달라지는 것이 아니라 평가 대상과 R²의 분모인 평균값 기준의 제곱오차 합까지 함께 달라집니다. 오른쪽 표에서 내 제곱오차 합과 평균값 기준의 제곱오차 합 가운데 어느 쪽이 더 크게 움직이는지 확인합니다.</figcaption>
-  </figure>
-
-  <div class="callout tip"><div class="h">데이터를 제외하는 기준</div><p>연간 기온을 충분히 대표하는지 확인한 뒤 제외 기준을 정합니다. 점수가 높아졌다는 이유만으로 데이터 제외를 정당화해서는 안 됩니다. 전처리 방법의 예측 성능을 비교하려면 같은 평가 대상을 사용해야 합니다.</p></div>
-  <p>이어서 교과서 134쪽 해 보기 ③(폼 Ⅲ-02c)으로 단순 회귀와 다중 회귀의 성능을 MSE와 결정계수 두 지표로 나란히 비교합니다. 몇 행만으로 학습한 모델이 훈련용 데이터에서만 높은 점수를 받는 현상도 여기서 함께 살펴봅니다. 교과서는 이를 <b>과대적합</b>이라고 부릅니다.</p>
-  <div class="callout check">
-    <div class="h">✔️ R²가 높아도 남는 물음</div>
-    <p>훈련용 데이터의 R²가 높다는 것은 그 데이터를 잘 설명한다는 뜻입니다. 새로운 데이터에서도 잘 예측하는지는 따로 평가해야 합니다. 특히 2045년이나 2100년처럼 학습 범위 밖을 예측할 때는 이 점수만으로 정확도를 보장할 수 없습니다.</p>
-  </div>
-  <h2>5. 실험실 — 직선 대신 곡선을 쓰면</h2>
-  <p>직선 대신 곡선을 쓰면 훈련용 데이터의 점수는 올라가지만 테스트용 데이터의 점수는 오히려 내려갈 수 있습니다. 1차·3차·9차 모델의 오차를 한 표에 나란히 적으면 그 차이가 숫자로 드러납니다. 본문 7절까지 마친 뒤 시간이 남으면 아래 실험실에서 이어서 합니다.</p>
+  <h2>3. 실험실 — 직선 대신 곡선을 쓰면</h2>
+  <p>직선 대신 곡선을 쓰면 훈련용 데이터의 점수는 올라가지만 테스트용 데이터의 점수는 오히려 내려갈 수 있습니다. 1차·3차·9차 모델의 오차를 한 표에 나란히 적으면 그 차이가 숫자로 드러납니다. 본문 5절까지 마친 뒤 시간이 남으면 아래 실험실에서 이어서 합니다.</p>
   <p class="mini"><a href="lesson08-lab.html">🧪 8차시 실험실 · 직선 대신 곡선을 쓰면 →</a></p>
-<h2 id="sec6">6. 개념 정리 — 평가 점수의 의미와 한계</h2>
-  <p>활동지에서 오차의 부호가 상쇄되는 것을 확인하고, 절대오차와 제곱오차를 손으로 계산했습니다. MAE와 MSE는 오차의 크기를 요약하고, R²는 제곱오차 합을 평균값 기준과 비교합니다. 한 번 크게 빗나가는 일이 치명적인 판단에는 MSE를, 평소의 정확도가 중요한 판단에는 MAE를 근거로 삼습니다. 오늘 화면에서 읽은 점수도 평가 조건과 함께 아래 표에 정리합니다.</p>
-  <table class="daymap">
-    <thead><tr><th>내가 적은 점수</th><th>어디서 나온 값인가</th><th>읽을 때 확인할 것</th></tr></thead>
-    <tbody>
-      <tr><td></td><td>기온 · 관측일 짧은 해 제외 · 훈련용 데이터의 R²</td><td>직선을 만든 그 데이터에서 계산한 값입니다. 새로운 데이터의 성능은 알 수 없습니다.</td></tr>
-      <tr><td></td><td>기온 · 관측일 짧은 해 포함 · 훈련용 데이터의 R²</td><td>사용한 연도가 달라졌으므로 위 점수와 같은 조건에서 계산한 값이 아닙니다.</td></tr>
-      <tr><td></td><td>영화 · 기본 변수 세 가지 · 테스트용 데이터의 R²</td><td>학습에 쓰지 않은 데이터에서 계산한 값입니다.</td></tr>
-      <tr><td></td><td>영화 · 기본 변수 세 가지 · 테스트용 데이터의 평균 오차(명)</td><td>실젯값과 같은 단위이므로 한 편당 평균 몇 명 빗나갔는지 그대로 읽습니다. 단위가 달라 위의 R²와 나란히 놓고 비교할 수 없습니다.</td></tr>
-      <tr><td></td><td>영화 · 첫 주 관객 수를 더한 경우 · 테스트용 데이터의 R²</td><td>개봉 전에는 알 수 없는 정보가 들어 있어 개봉 전 성능으로 읽을 수 없습니다.</td></tr>
-    </tbody>
-  </table>
-  <p class="mini">왼쪽 칸에는 4절에서 적은 숫자와 7차시 교재의 표에 적어 둔 숫자를 옮겨 적습니다. 활동지에서 손으로 계산한 값은 계산 순서를 익히려고 만든 작은 표에서 나온 것이므로 이 표에는 옮기지 않습니다.</p>
+<h2 id="sec4">4. 개념 정리 — 평가 점수의 의미와 한계</h2>
+  <p>활동지에서 오차의 부호가 상쇄되는 것을 확인하고, 절대오차와 제곱오차를 손으로 계산했습니다. MAE와 MSE는 오차의 크기를 요약하고, R²는 제곱오차 합을 평균값 기준과 비교합니다. 한 번 크게 빗나가는 일이 치명적인 판단에는 MSE를, 평소의 정확도가 중요한 판단에는 MAE를 근거로 삼습니다.</p>
   <p>다음 시간에는 관객 수를 숫자로 맞히는 대신 기준을 넘었는지 아닌지를 예측합니다. 답의 형태가 달라지면 평가 방법도 달라지며, 그 계산은 10차시에 다시 손으로 합니다.</p>
-  <p>점수를 볼 때는 사용한 데이터, 평가 방법, 비교 기준을 확인합니다. 10차시 분류 평가에서는 한 종류만 예측하는 기준과 비교하고, 12차시 연관 분석에서는 우연히 함께 나타날 가능성을 고려합니다.</p>
 
   <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
   <h3>실제로 쓰이는 평가 지표</h3>
@@ -465,7 +198,7 @@ plotly</pre></div></details>
   <p>45.4해리라는 값도 그 자체로는 좋고 나쁨을 말하지 않습니다. 1970년대의 200해리와 나란히 놓았을 때 개선의 크기가 드러납니다. 지표의 값 하나만으로는 판단을 마칠 수 없으며, 그 값이 어떤 데이터에서 어떤 기준과 비교해 나온 것인지를 함께 확인해야 합니다.</p>
   </div></details>
 
-  <h2>7. 확인 문제</h2>
+  <h2>5. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 어느 예측기의 3일간 오차가 +3, −3, 0이었습니다. 두 소문항에 답해 보세요.</div>
     <div class="qitem">
@@ -509,13 +242,7 @@ plotly</pre></div></details>
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 기온 예측기에서 관측일 스위치를 켰을 때와 껐을 때 훈련용 데이터의 R²가 달라졌습니다. 4절 표에 적은 두 숫자를 가져와, 그 차이가 어디서 생겼는지 1953년 데이터와 제곱오차 합으로 설명하고, 높은 점수만으로 데이터 제외를 정당화할 수 있는지도 써 보세요.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>1953년은 관측일이 31일뿐이어서 그 평균으로 한 해 전체의 기온을 대표하기 어렵습니다. 스위치를 끄면 관측 기간이 짧은 해가 함께 들어오고, 큰 오차가 제곱오차 합을 키웁니다. 동시에 회귀선과 기준 평균, R²의 분모도 달라집니다. 두 점수는 같은 평가 대상에서 얻은 값이 아니므로 성능이 좋아졌다고 단정할 수 없습니다. 데이터 제외는 점수가 아니라 관측 기간과 대표성을 근거로 판단합니다.</p>
-    </details>
-  </div>
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 4</span> 문제 1의 예측기는 하루 관객 수를 만 명 단위로 예측했고, 3일간의 오차는 +3, −3, 0이었습니다. 두 소문항에 답해 보세요.</div>
+    <div class="qq"><span class="qn">문제 3</span> 문제 1의 예측기는 하루 관객 수를 만 명 단위로 예측했고, 3일간의 오차는 +3, −3, 0이었습니다. 두 소문항에 답해 보세요.</div>
     <div class="qitem">
       <div class="qs">(가) 이 예측기의 MAE는?</div>
       <div class="qopts">
@@ -536,7 +263,7 @@ plotly</pre></div></details>
     </div>
   </div>
 
-  <h2>8. 집에서 혼자 확인하기</h2>
+  <h2>6. 집에서 혼자 확인하기</h2>
   <p>수업에서는 손으로 풉니다. 이 절은 집에서 활동지를 다시 풀어 본 뒤에 펼칩니다. 손으로 구한 값을 적으면 맞았는지 틀렸는지만 알려 줍니다. 정답은 보여 주지 않습니다. 틀린 칸이 나오면 그 단계로 돌아가 다시 계산합니다.</p>
   <details class="selfcheck-fold">
     <summary>펼쳐서 채점하기</summary>
@@ -548,8 +275,6 @@ plotly</pre></div></details>
     <li>오차 → 절대오차·제곱오차 → MSE → R²의 계산 순서를 손으로 밟았습니다.</li>
     <li>활동지의 기본 문제와 연습 문제를 ①부터 ⑦까지 같은 순서로 계산했습니다.</li>
     <li>R²가 평균값 기준 대비 제곱오차 합의 감소 비율임을 계산으로 설명할 수 있습니다.</li>
-    <li>화면에서 읽은 점수를 표에 옮겨 적고, 그 점수를 어느 데이터에서 계산한 값인지 함께 적었습니다.</li>
-    <li>데이터를 빼고 넣으면 평가 대상과 R²의 분모가 함께 바뀐다는 점을 설명할 수 있습니다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
