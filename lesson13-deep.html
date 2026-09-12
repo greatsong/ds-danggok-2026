@@ -534,7 +534,7 @@ for row in rows:
 
   <h3>도전 — 갱신(U)과 삭제(D)까지, 네 동작 완성</h3>
   <p>기본 실습으로 생성(C)과 읽기(R)를 마쳤다면, 남은 두 동작을 해 봅니다.</p>
-  <div class="codewrap improve"><span class="label">③ 개선(도전)</span><button class="copy-btn">복사</button><pre>내가 남긴 글 옆에 고치기와 지우기 단추를 달아 줘.
+  <div class="codewrap improve"><span class="label">③ 개선(도전)</span><button class="copy-btn">복사</button><pre>내가 남긴 글 옆에 고치기와 지우기 버튼을 달아 줘.
 글을 남길 때 password 열에 저장한 네 자리 비밀번호가
 맞을 때만 고치거나 지울 수 있게 해 줘.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">수파베이스 접속 정보가 있어야 돌아가는 코드라서, 문법과 구조만 확인했습니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 비밀번호가 맞을 때만 고치고 지운다 (앞 코드 끝에 이어 붙일 부분)
@@ -557,7 +557,7 @@ for row in rows:
                 st.error("비밀번호가 다릅니다.")</pre></div></details>
   <div class="callout tip">
     <div class="h">💡 판단 — 왜 비밀번호가 필요한가</div>
-    <p>고치기·지우기 단추를 아무 조건 없이 달면, 누구든 남의 글을 지울 수 있게 됩니다. 갱신과 삭제는 데이터를 바꾸는 동작이라 <b>"누가 할 수 있는가"라는 권한의 문제</b>가 반드시 따라옵니다. 교과서 26쪽의 "데이터 보안 강화"가 실습에서 처음으로 필요해지는 순간입니다. 실제 서비스는 이 권한 규칙을 데이터베이스에 세워 둡니다. 우리 학급 공용 프로젝트는 도전 과제를 해 볼 수 있도록 읽기·쓰기·고치기·지우기를 모두 열어 두었고, 비밀번호 확인은 여러분이 만든 앱이 맡습니다. 그래서 앱에서 확인을 빠뜨리면 누구든 남의 글을 지울 수 있습니다.</p>
+    <p>고치기·지우기 버튼을 아무 조건 없이 달면, 누구든 남의 글을 지울 수 있게 됩니다. 갱신과 삭제는 데이터를 바꾸는 동작이라 <b>"누가 할 수 있는가"라는 권한의 문제</b>가 반드시 따라옵니다. 교과서 26쪽의 "데이터 보안 강화"가 실습에서 처음으로 필요해지는 순간입니다. 실제 서비스는 이 권한 규칙을 데이터베이스에 세워 둡니다. 우리 학급 공용 프로젝트는 도전 과제를 해 볼 수 있도록 읽기·쓰기·고치기·지우기를 모두 열어 두었고, 비밀번호 확인은 여러분이 만든 앱이 맡습니다. 그래서 앱에서 확인을 빠뜨리면 누구든 남의 글을 지울 수 있습니다.</p>
   </div>
 
   <h2>3. SQL — 테이블을 다루는 언어</h2>
@@ -881,7 +881,7 @@ LIMIT 5;</pre></div>
 </script>
 
   <h3>실생활 앱에서 SQL이 하는 일 — 인스타그램으로 읽기</h3>
-  <p>인스타그램 같은 앱의 화면 뒤에는 게시물 표(posts), 댓글 표(comments), 사용자 표(users) 같은 테이블이 있고, 화면의 단추 하나를 누를 때마다 SQL 문장 하나가 실행됩니다. 문장을 읽는 순서는 늘 같습니다. <b>어느 표에서(FROM) · 어떤 행을(WHERE) · 무엇을(SELECT) · 어떤 순서로(ORDER BY) · 몇 개(LIMIT)</b>. 아래 표의 계정 이름과 글은 모두 가상의 예입니다.</p>
+  <p>인스타그램 같은 앱의 화면 뒤에는 게시물 표(posts), 댓글 표(comments), 사용자 표(users) 같은 테이블이 있고, 화면의 버튼 하나를 누를 때마다 SQL 문장 하나가 실행됩니다. 문장을 읽는 순서는 늘 같습니다. <b>어느 표에서(FROM) · 어떤 행을(WHERE) · 무엇을(SELECT) · 어떤 순서로(ORDER BY) · 몇 개(LIMIT)</b>. 아래 표의 계정 이름과 글은 모두 가상의 예입니다.</p>
   <div class="app-sql-wrap"><table class="daymap app-sql">
     <thead><tr><th>앱에서 하는 일</th><th>뒤에서 실행되는 SQL</th><th>읽는 법</th></tr></thead>
     <tbody>
@@ -906,7 +906,7 @@ LIMIT 5;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="read">
-          <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 단추를 누르거나 직접 고쳐 써 보세요. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, "GROUP BY에 없는 열"을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
+          <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 버튼을 누르거나 직접 고쳐 써 보세요. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, "GROUP BY에 없는 열"을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
           <div class="sim-row">
             <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 표 posts</option><option value="meals">급식 표 meals</option></select></label>
             <span class="sim-cols"></span>
@@ -1157,7 +1157,7 @@ LIMIT 5;</pre></div>
     var id = +W.querySelector(".w-lid").value; if (!id) { say("-- 실행하지 않음", "좋아요를 누를 댓글 번호(id)를 적어 주세요.", true); return; }
     var r = find(id), sql = "UPDATE comments SET 좋아요 = 좋아요 + 1 WHERE id = " + id + ";";
     if (!r) { drawW(); say(sql, "id가 " + id + "인 행이 없어 바뀐 행이 0개입니다.", true); return; }
-    r[3] += 1; drawW(id, "like"); say(sql, "좋아요 단추 한 번 = UPDATE 한 문장. id가 " + id + "인 행의 좋아요 값을 지금 값에 1을 더한 값으로 바꿉니다(" + (r[3] - 1) + " → " + r[3] + "). 게시물의 ❤ 숫자가 올라가는 원리입니다.");
+    r[3] += 1; drawW(id, "like"); say(sql, "좋아요 버튼 한 번 = UPDATE 한 문장. id가 " + id + "인 행의 좋아요 값을 지금 값에 1을 더한 값으로 바꿉니다(" + (r[3] - 1) + " → " + r[3] + "). 게시물의 ❤ 숫자가 올라가는 원리입니다.");
   });
   W.querySelector(".w-delete").addEventListener("click", function () {
     var id = +W.querySelector(".w-did").value; if (!id) { say("-- 실행하지 않음", "지울 댓글 번호(id)를 적어 주세요.", true); return; }
@@ -1170,7 +1170,7 @@ LIMIT 5;</pre></div>
     wtb.querySelectorAll("tr").forEach(function (tr, i) { tr.style.animationDelay = (i * 0.08) + "s"; tr.classList.add("row-out"); });
     setTimeout(function () { gb = []; drawW(); say("DELETE FROM comments;", "WHERE가 없어서 " + before + "행이 전부 지워졌습니다. 조건 없는 삭제·갱신은 표 전체에 적용됩니다. 실제 서비스라면 이 게시물의 댓글이 모두 사라지고 되돌릴 수 없습니다. 여기서는 \"처음으로\"를 누르면 됩니다.", true); }, 450 + before * 80);
   });
-  W.querySelector(".w-reset").addEventListener("click", function () { gb = START.map(function (r) { return r.slice(); }); nextId = 6; drawW(); say("-- 표를 처음 상태로 되돌렸습니다", "다섯 행이 다시 나타났습니다. 실제 데이터베이스에는 이런 단추가 없으므로 WHERE를 늘 확인합니다."); });
+  W.querySelector(".w-reset").addEventListener("click", function () { gb = START.map(function (r) { return r.slice(); }); nextId = 6; drawW(); say("-- 표를 처음 상태로 되돌렸습니다", "다섯 행이 다시 나타났습니다. 실제 데이터베이스에는 이런 버튼이 없으므로 WHERE를 늘 확인합니다."); });
   drawW();
 })();
 </script>
@@ -1187,7 +1187,7 @@ LIMIT 5;</pre></div>
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">장면 2</span> 옆에서 민수가 "요일마다 급식이 며칠씩 있었는지도 같이 보여 드리자"며 문장을 하나 더 씁니다. <code>SELECT 요일, 날짜 FROM meals WHERE 식사 = '중식' GROUP BY 요일;</code> 실행 단추를 누르자 빨간 오류 문장이 뜹니다. 지우가 화면을 보더니 말합니다. "요일로 묶었는데 날짜를 그대로 달라고 하면, 한 칸에 서른 개 넘게 어떻게 넣어?" 오류의 까닭은 무엇일까요?</div>
+    <div class="qq"><span class="qn">장면 2</span> 옆에서 민수가 "요일마다 급식이 며칠씩 있었는지도 같이 보여 드리자"며 문장을 하나 더 씁니다. <code>SELECT 요일, 날짜 FROM meals WHERE 식사 = '중식' GROUP BY 요일;</code> 실행 버튼을 누르자 빨간 오류 문장이 뜹니다. 지우가 화면을 보더니 말합니다. "요일로 묶었는데 날짜를 그대로 달라고 하면, 한 칸에 서른 개 넘게 어떻게 넣어?" 오류의 까닭은 무엇일까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
         <button class="opt">날짜 열은 SQL에서 가져올 수 없는 데이터형이기 때문</button>

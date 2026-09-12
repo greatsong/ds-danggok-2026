@@ -406,7 +406,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"단추 하나를 누르면, 어딘가에서 한 줄의 문장이 실행된다."</div>
+    <div class="q">"버튼 하나를 누르면, 어딘가에서 한 줄의 문장이 실행된다."</div>
     <span class="by">오늘은 그 문장을 읽습니다 — 인스타그램·카카오톡·게임이 데이터를 다루는 방식</span>
   </div>
 
@@ -683,10 +683,10 @@ SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
           </div>
           <div class="ig-stories">
             <div class="ig-st"><div class="ig-ring"><i>🧑</i></div><span>내 스토리</span></div>
-            <div class="ig-st"><div class="ig-ring"><i>🐱</i></div><span>cat_mong</span></div>
-            <div class="ig-st"><div class="ig-ring"><i>🐶</i></div><span>dog_bori</span></div>
-            <div class="ig-st"><div class="ig-ring seen"><i>🍜</i></div><span>dg_foodie</span></div>
-            <div class="ig-st"><div class="ig-ring seen"><i>🐦</i></div><span>bird_kkuk</span></div>
+            <div class="ig-st"><div class="ig-ring"><i>🐱</i></div><span>석리송</span></div>
+            <div class="ig-st"><div class="ig-ring"><i>🐶</i></div><span>수정반</span></div>
+            <div class="ig-st"><div class="ig-ring seen"><i>🍜</i></div><span>먹부림</span></div>
+            <div class="ig-st"><div class="ig-ring seen"><i>🔥</i></div><span>렌고쿠</span></div>
           </div>
           <div class="ig-feed"></div>
           <div class="ig-tabbar">
@@ -720,14 +720,14 @@ SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
   var SAVE = '<svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
   var FILL = '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>';
   var POSTS = [
-    { id: 8, u: "dg_foodie", e: "🍜", bg: "linear-gradient(135deg,#fde4c4,#f7c59f)", t: "야자 끝나고 라면", h: "#야식 #라면", k: 142, c: 12, d: "1시간 전" },
-    { id: 7, u: "cat_mong", e: "🐱", bg: "linear-gradient(135deg,#ffe9b0,#ffd0dd)", t: "박스 새로 샀는데 포장지에 들어감", h: "#고양이 #박스", k: 268, c: 34, d: "5시간 전" },
-    { id: 6, u: "dog_bori", e: "🐶", bg: "linear-gradient(135deg,#d9f0e3,#bfe3f5)", t: "급식실 앞에서 기다리는 중", h: "#강아지 #학교", k: 77, c: 8, d: "11시간 전" },
-    { id: 5, u: "cat_mong", e: "😻", bg: "linear-gradient(135deg,#ffeccf,#e7d9ff)", t: "창가 자리 사수", h: "#고양이 #낮잠", k: 193, c: 21, d: "어제" },
-    { id: 4, u: "dg_foodie", e: "🍚", bg: "linear-gradient(135deg,#fff0c9,#ffe0e0)", t: "오늘 급식 제육볶음", h: "#급식 #제육볶음", k: 121, c: 15, d: "어제" },
-    { id: 3, u: "bird_kkuk", e: "🐦", bg: "linear-gradient(135deg,#d6ecff,#eae0ff)", t: "창문 두드린 손님", h: "#새 #아침", k: 54, c: 3, d: "2일 전" },
-    { id: 2, u: "cat_mong", e: "🐈", bg: "linear-gradient(135deg,#ffe3ef,#ffe9c9)", t: "동생 고양이 데려옴", h: "#고양이 #새식구", k: 310, c: 47, d: "3일 전" },
-    { id: 1, u: "dog_bori", e: "🦴", bg: "linear-gradient(135deg,#e8f0d9,#cfe8e6)", t: "간식은 언제 나오나요", h: "#강아지 #간식", k: 88, c: 9, d: "4일 전" }
+    { id: 8, u: "먹부림", e: "🍜", bg: "linear-gradient(135deg,#fde4c4,#f7c59f)", t: "야자 끝나고 라면", h: "#야식 #라면", k: 142, c: 12, d: "1시간 전" },
+    { id: 7, u: "석리송", e: "🐱", bg: "linear-gradient(135deg,#ffe9b0,#ffd0dd)", t: "박스 새로 샀는데 포장지에 들어감", h: "#고양이 #박스", k: 268, c: 34, d: "5시간 전" },
+    { id: 6, u: "수정반", e: "🐶", bg: "linear-gradient(135deg,#d9f0e3,#bfe3f5)", t: "급식실 앞에서 기다리는 중", h: "#강아지 #학교", k: 77, c: 8, d: "11시간 전" },
+    { id: 5, u: "석리송", e: "😻", bg: "linear-gradient(135deg,#ffeccf,#e7d9ff)", t: "창가 자리 사수", h: "#고양이 #낮잠", k: 193, c: 21, d: "어제" },
+    { id: 4, u: "먹부림", e: "🍚", bg: "linear-gradient(135deg,#fff0c9,#ffe0e0)", t: "오늘 급식 제육볶음", h: "#급식 #제육볶음", k: 121, c: 15, d: "어제" },
+    { id: 3, u: "렌고쿠", e: "🔥", bg: "linear-gradient(135deg,#ffe0c2,#ffd0d0)", t: "오늘 훈련 끝. 마음을 불태워라", h: "#운동 #오운완", k: 54, c: 3, d: "2일 전" },
+    { id: 2, u: "석리송", e: "🐈", bg: "linear-gradient(135deg,#ffe3ef,#ffe9c9)", t: "동생 고양이 데려옴", h: "#고양이 #새식구", k: 310, c: 47, d: "3일 전" },
+    { id: 1, u: "수정반", e: "🦴", bg: "linear-gradient(135deg,#e8f0d9,#cfe8e6)", t: "간식은 언제 나오나요", h: "#강아지 #간식", k: 88, c: 9, d: "4일 전" }
   ];
   var liked = {};
   var feed = root.querySelector(".ig-feed"), log = root.querySelector(".ig-log"),
@@ -893,10 +893,11 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</pre></div>
       q = root.querySelector(".kt-q"), send = root.querySelector(".kt-send"),
       readBtn = root.querySelector(".kt-read"), reset = root.querySelector(".kt-reset");
   var SEED = [
-    { id: 301, u: "지우", av: "🐱", me: false, t: "다들 오늘 야자 하냐", time: "오후 4:12", un: 0 },
-    { id: 302, u: "서준", av: "🐶", me: false, t: "난 학원 감 ㅠ", time: "오후 4:13", un: 0 },
+    { id: 301, u: "수정반", av: "🐶", me: false, t: "다들 오늘 야자 하냐", time: "오후 4:12", un: 0 },
+    { id: 302, u: "렌고쿠", av: "🔥", me: false, t: "난 학원 감 ㅠ", time: "오후 4:13", un: 0 },
     { id: 303, u: "나", av: "🙂", me: true, t: "오늘 급식 뭐야?", time: "오후 4:15", un: 0 },
-    { id: 304, u: "지우", av: "🐱", me: false, t: "제육볶음! 줄 개길듯", time: "오후 4:16", un: 0 }
+    { id: 304, u: "석리송", av: "🐱", me: false, t: "제육볶음! 줄 개길듯", time: "오후 4:16", un: 0 },
+    { id: 305, u: "수정반", av: "🐶", me: false, t: "제육 나오는 날은 일찍 내려가야 함", time: "오후 4:17", un: 0 }
   ];
   var msgs, nextId;
   function esc(x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
@@ -928,7 +929,7 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</pre></div>
   }
   function start() {
     msgs = SEED.map(function (m) { return Object.assign({}, m); });
-    nextId = 305;
+    nextId = 306;
     render();
   }
   send.addEventListener("click", function () {
@@ -1010,8 +1011,8 @@ LIMIT 3;</pre></div>
           <div class="gm-hd">
             <div class="gm-season"><span class="live"></span>SEASON 3 · 랭킹</div>
             <div class="gm-me">
-              <span class="gm-face">🗡️</span>
-              <span class="gm-mine"><b>보리</b><span class="gm-rec"></span></span>
+              <span class="gm-face">🐱</span>
+              <span class="gm-mine"><b>석리송</b><span class="gm-rec"></span></span>
               <span class="gm-wr"><b class="gm-wrv"></b><span>승률</span></span>
             </div>
           </div>
@@ -1040,20 +1041,20 @@ LIMIT 3;</pre></div>
 (function () {
   var root = document.querySelector('[data-appw="gm"]'); if (!root) return;
   var ROWS = window.GAME20 || (window.GAME20 = [
-    [1,"보리","검사","승",320], [2,"하늘","궁수","패",180],
-    [3,"지우","마법사","승",290], [4,"서준","힐러","승",240],
-    [5,"민아","검사","패",150], [6,"보리","궁수","승",310],
-    [7,"하늘","마법사","승",275], [8,"지우","검사","패",160],
-    [9,"서준","궁수","패",195], [10,"민아","마법사","승",330],
-    [11,"보리","힐러","패",205], [12,"하늘","검사","승",300],
-    [13,"지우","궁수","승",285], [14,"서준","마법사","패",170],
-    [15,"민아","힐러","패",145], [16,"보리","검사","승",340],
-    [17,"하늘","힐러","패",165], [18,"지우","마법사","승",295],
-    [19,"서준","검사","승",265], [20,"민아","궁수","패",175]
+    [1,"석리송","검사","승",320], [2,"하늘","궁수","패",180],
+    [3,"수정반","마법사","승",290], [4,"렌고쿠","힐러","승",240],
+    [5,"민아","검사","패",150], [6,"석리송","궁수","승",310],
+    [7,"하늘","마법사","승",275], [8,"수정반","검사","패",160],
+    [9,"렌고쿠","궁수","패",195], [10,"민아","마법사","승",330],
+    [11,"석리송","힐러","패",205], [12,"하늘","검사","승",300],
+    [13,"수정반","궁수","승",285], [14,"렌고쿠","마법사","패",170],
+    [15,"민아","힐러","패",145], [16,"석리송","검사","승",340],
+    [17,"하늘","힐러","패",165], [18,"수정반","마법사","승",295],
+    [19,"렌고쿠","검사","승",265], [20,"민아","궁수","패",175]
   ]);
   var list = root.querySelector(".gm-list"), log = root.querySelector(".gm-log");
   var ICON = { "검사": "🗡️", "궁수": "🏹", "마법사": "🔮", "힐러": "✨",
-               "보리": "🐶", "하늘": "☁️", "지우": "🐱", "서준": "⚡", "민아": "🌙", "승": "🏆", "패": "💧" };
+               "석리송": "🐱", "하늘": "☁️", "수정반": "🐶", "렌고쿠": "🔥", "민아": "🌙", "승": "🏆", "패": "💧" };
   var g = "캐릭터", f = "COUNT";
   var FN = { COUNT: { sql: "COUNT(*)", as: "판수", unit: "판" },
              AVG: { sql: "AVG(점수)", as: "평균점수", unit: "점" },
@@ -1116,7 +1117,7 @@ LIMIT 3;</pre></div>
     });
   });
   // 내 전적 요약
-  var mine = ROWS.filter(function (r) { return r[1] === "보리"; });
+  var mine = ROWS.filter(function (r) { return r[1] === "석리송"; });
   var win = mine.filter(function (r) { return r[3] === "승"; }).length;
   root.querySelector(".gm-rec").textContent = mine.length + "전 " + win + "승 " + (mine.length - win) + "패";
   root.querySelector(".gm-wrv").textContent = mine.length ? Math.round(win / mine.length * 100) + "%" : "-";
@@ -1147,16 +1148,16 @@ LIMIT 3;</pre></div>
   var box = document.querySelector(".sqlb"); if (!box) return;
   // 연습용 게임 전적 20판 (열: id, 플레이어, 캐릭터, 결과, 점수) — 예시 값. 아래 SQL 시뮬레이터도 같은 표를 쓴다
   var rows = window.GAME20 || (window.GAME20 = [
-    [1,"보리","검사","승",320], [2,"하늘","궁수","패",180],
-    [3,"지우","마법사","승",290], [4,"서준","힐러","승",240],
-    [5,"민아","검사","패",150], [6,"보리","궁수","승",310],
-    [7,"하늘","마법사","승",275], [8,"지우","검사","패",160],
-    [9,"서준","궁수","패",195], [10,"민아","마법사","승",330],
-    [11,"보리","힐러","패",205], [12,"하늘","검사","승",300],
-    [13,"지우","궁수","승",285], [14,"서준","마법사","패",170],
-    [15,"민아","힐러","패",145], [16,"보리","검사","승",340],
-    [17,"하늘","힐러","패",165], [18,"지우","마법사","승",295],
-    [19,"서준","검사","승",265], [20,"민아","궁수","패",175]
+    [1,"석리송","검사","승",320], [2,"하늘","궁수","패",180],
+    [3,"수정반","마법사","승",290], [4,"렌고쿠","힐러","승",240],
+    [5,"민아","검사","패",150], [6,"석리송","궁수","승",310],
+    [7,"하늘","마법사","승",275], [8,"수정반","검사","패",160],
+    [9,"렌고쿠","궁수","패",195], [10,"민아","마법사","승",330],
+    [11,"석리송","힐러","패",205], [12,"하늘","검사","승",300],
+    [13,"수정반","궁수","승",285], [14,"렌고쿠","마법사","패",170],
+    [15,"민아","힐러","패",145], [16,"석리송","검사","승",340],
+    [17,"하늘","힐러","패",165], [18,"수정반","마법사","승",295],
+    [19,"렌고쿠","검사","승",265], [20,"민아","궁수","패",175]
   ]);
   var COL = {"id":0,"플레이어":1,"캐릭터":2,"결과":3,"점수":4};
   var g = box.querySelector(".sqlb-g"), f = box.querySelector(".sqlb-f"), w = box.querySelector(".sqlb-w"),
@@ -1200,8 +1201,8 @@ LIMIT 3;</pre></div>
 </script>
 
   <h3>④ 화면 하나에 문장 하나 — 세 앱을 나란히 놓으면</h3>
-  <p>앞에서 세 가지 동작을 따로 배웠습니다. 이제 세 앱의 화면을 나란히 놓고 어떤 문장이 실행되는지 읽어 봅니다. <b>단추를 누르는 일과 문장 하나가 짝을 이룹니다.</b></p>
-  <p class="mini">아래 표는 원리를 설명하기 위해 단순하게 만든 <b>가상 예시</b>입니다. 실제 서비스에서 단추 한 번이 반드시 SQL 한 문장과 대응하지는 않으며, 각 회사의 실제 표 구조를 재현한 것도 아닙니다.</p>
+  <p>앞에서 세 가지 동작을 따로 배웠습니다. 이제 세 앱의 화면을 나란히 놓고 어떤 문장이 실행되는지 읽어 봅니다. <b>버튼을 누르는 일과 문장 하나가 짝을 이룹니다.</b></p>
+  <p class="mini">아래 표는 원리를 설명하기 위해 단순하게 만든 <b>가상 예시</b>입니다. 실제 서비스에서 버튼 한 번이 반드시 SQL 한 문장과 대응하지는 않으며, 각 회사의 실제 표 구조를 재현한 것도 아닙니다.</p>
   <div class="app-sql-wrap"><table class="daymap app-sql">
     <thead><tr><th>앱에서 하는 일</th><th>뒤에서 실행되는 SQL</th><th>읽는 법</th></tr></thead>
     <tbody>
@@ -1229,7 +1230,7 @@ LIMIT 3;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="read">
-          <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 단추를 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
+          <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 버튼을 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
           <div class="sim-row">
             <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 표 posts</option><option value="matches">게임 전적 표 matches</option></select></label>
             <span class="sim-cols"></span>
@@ -1244,7 +1245,7 @@ LIMIT 3;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="write" hidden>
-          <p class="sim-intro">cat_mong의 4번 게시물 '박스 새로 샀는데 포장지에 들어감 🐱'에 달린 댓글 표(comments)입니다. 월드컵 앱과 다른 댓글 연습 데이터입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
+          <p class="sim-intro">석리송의 4번 게시물 '박스 새로 샀는데 포장지에 들어감 🐱'에 달린 댓글 표(comments)입니다. 월드컵 앱과 다른 댓글 연습 데이터입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
           <div class="w-grid">
             <div class="w-card ins">
               <div class="w-h"><span class="w-ico">💬</span> 댓글 달기 — INSERT</div>
@@ -1289,18 +1290,18 @@ LIMIT 3;</pre></div>
   var DS = {
     posts: { name: "posts", label: "인스타그램 게시물 표", cols: ["id","작성자","내용","사진","해시태그","좋아요","올린시각"], num: { "id": 1, "좋아요": 1 },
       rows: [
-        [1,"cat_mong","창가에서 낮잠 3시간째","🐱","#고양이 #낮잠",128,"09-01 12:40"],
-        [2,"dog_bori","산책 가자고 목줄 물고 옴","🐶","#강아지 #산책",164,"09-01 18:05"],
+        [1,"석리송","창가에서 낮잠 3시간째","🐱","#고양이 #낮잠",128,"09-01 12:40"],
+        [2,"수정반","산책 가자고 목줄 물고 옴","🐶","#강아지 #산책",164,"09-01 18:05"],
         [3,"hamzzi_choco","볼주머니에 해바라기씨 12개","🐹","#햄스터 #먹방",95,"09-02 12:35"],
-        [4,"cat_mong","박스 새로 샀는데 포장지에 들어감","🐱","#고양이 #박스",241,"09-02 13:10"],
+        [4,"석리송","박스 새로 샀는데 포장지에 들어감","🐱","#고양이 #박스",241,"09-02 13:10"],
         [5,"rabbit_tori","당근보다 상추파","🐰","#토끼 #먹방",57,"09-02 21:30"],
-        [6,"dog_bori","급식실 앞에서 기다리는 중","🐶","#강아지 #학교",77,"09-03 00:12"],
+        [6,"수정반","급식실 앞에서 기다리는 중","🐶","#강아지 #학교",77,"09-03 00:12"],
         [7,"parrot_kiwi","'밥 줘'를 배웠다","🦜","#앵무새 #말하기",152,"09-03 12:38"],
-        [8,"cat_mong","키보드 위가 제일 따뜻함","🐱","#고양이 #공부방해",310,"09-03 16:20"],
+        [8,"석리송","키보드 위가 제일 따뜻함","🐱","#고양이 #공부방해",310,"09-03 16:20"],
         [9,"hamzzi_choco","쳇바퀴 신기록 갱신","🐹","#햄스터 #운동",33,"09-03 22:01"],
-        [10,"dog_bori","목욕 후 삐침","🐶","#강아지 #목욕",201,"09-04 08:15"],
+        [10,"수정반","목욕 후 삐침","🐶","#강아지 #목욕",201,"09-04 08:15"],
         [11,"rabbit_tori","귀 청소 중 포착","🐰","#토끼 #일상",89,"09-04 19:44"],
-        [12,"cat_mong","데이터 과학 과제 옆에서 감독 중","🐱","#고양이 #데이터과학",174,"09-05 12:41"]
+        [12,"석리송","데이터 과학 과제 옆에서 감독 중","🐱","#고양이 #데이터과학",174,"09-05 12:41"]
       ],
       examples: [
         ["피드 최신순 5개","SELECT 작성자, 사진, 내용, 좋아요 FROM posts ORDER BY 올린시각 DESC LIMIT 5;"],
@@ -1357,7 +1358,7 @@ LIMIT 3;</pre></div>
     });
     if (m[3]) m[3].split(/\s+AND\s+/i).forEach(function (c) {
       var w = c.trim().match(/^(\S+)\s*(=|>=|<=|>|<|LIKE)\s*('([^']*)'|(-?\d+(?:\.\d+)?))$/i);
-      if (!w) throw 'WHERE 조건 "' + c.trim() + '"을(를) 읽지 못했습니다. 예: 작성자 = \'dg_foodie\', 좋아요 > 100, 해시태그 LIKE \'%#급식%\'';
+      if (!w) throw 'WHERE 조건 "' + c.trim() + '"을(를) 읽지 못했습니다. 예: 작성자 = \'먹부림\', 좋아요 > 100, 해시태그 LIKE \'%#급식%\'';
       if (COLS.indexOf(w[1]) < 0) throw '"' + w[1] + '" 열은 없습니다.';
       p.where.push({ col: w[1], op: w[2].toUpperCase(), val: w[4] !== undefined ? w[4] : +w[5] });
     });
@@ -1445,7 +1446,7 @@ LIMIT 3;</pre></div>
   setDS("posts");
   // ---- 쓰기: 댓글 표 시뮬레이션
   var W = sim.querySelector('[data-pane="write"]');
-  var START = [[1, "dog_bori", "박스 안이 그렇게 좋아? 🐶", 12, "09-02 13:15"], [2, "hamzzi_choco", "포장지가 더 아늑하지", 8, "09-02 13:22"], [3, "rabbit_tori", "우리 집 상자도 빌려줄게", 5, "09-02 13:40"], [4, "parrot_kiwi", "박스! 박스!", 21, "09-02 14:05"], [5, "cat_mong", "다들 고마워요 😺", 3, "09-02 15:30"]];
+  var START = [[1, "수정반", "박스 안이 그렇게 좋아? 🐶", 12, "09-02 13:15"], [2, "hamzzi_choco", "포장지가 더 아늑하지", 8, "09-02 13:22"], [3, "rabbit_tori", "우리 집 상자도 빌려줄게", 5, "09-02 13:40"], [4, "parrot_kiwi", "박스! 박스!", 21, "09-02 14:05"], [5, "석리송", "다들 고마워요 😺", 3, "09-02 15:30"]];
   var gb = START.map(function (r) { return r.slice(); }), nextId = 6, wtb = W.querySelector(".w-table tbody"), wsql = W.querySelector(".w-sql"), wmsg = W.querySelector(".w-out");
   function now() { var d = new Date(); return ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2); }
   function drawW(hl, mode) {
@@ -1480,7 +1481,7 @@ LIMIT 3;</pre></div>
     var id = +W.querySelector(".w-lid").value; if (!id) { say("-- 실행하지 않음", "좋아요를 누를 댓글 번호(id)를 적어 주세요.", true); return; }
     var r = find(id), sql = "UPDATE comments SET 좋아요 = 좋아요 + 1 WHERE id = " + id + ";";
     if (!r) { drawW(); say(sql, "id가 " + id + "인 행이 없어 바뀐 행이 0개입니다.", true); return; }
-    r[3] += 1; drawW(id, "like"); say(sql, "좋아요 단추 한 번 = UPDATE 한 문장. id가 " + id + "인 행의 좋아요 값을 지금 값에 1을 더한 값으로 바꿉니다(" + (r[3] - 1) + " → " + r[3] + "). 게시물의 ❤ 숫자가 올라가는 원리입니다.");
+    r[3] += 1; drawW(id, "like"); say(sql, "좋아요 버튼 한 번 = UPDATE 한 문장. id가 " + id + "인 행의 좋아요 값을 지금 값에 1을 더한 값으로 바꿉니다(" + (r[3] - 1) + " → " + r[3] + "). 게시물의 ❤ 숫자가 올라가는 원리입니다.");
   });
   W.querySelector(".w-delete").addEventListener("click", function () {
     var id = +W.querySelector(".w-did").value; if (!id) { say("-- 실행하지 않음", "지울 댓글 번호(id)를 적어 주세요.", true); return; }
@@ -1493,7 +1494,7 @@ LIMIT 3;</pre></div>
     wtb.querySelectorAll("tr").forEach(function (tr, i) { tr.style.animationDelay = (i * 0.08) + "s"; tr.classList.add("row-out"); });
     setTimeout(function () { gb = []; drawW(); say("DELETE FROM comments;", "WHERE가 없어서 " + before + "행이 전부 지워졌습니다. 조건 없는 삭제·갱신은 표 전체에 적용됩니다. 실제 서비스에서는 권한이 허용하는 행이 삭제됩니다. 복구 가능 여부는 트랜잭션·백업 설정에 따라 다릅니다. 여기서는 \"처음으로\"를 누르면 됩니다.", true); }, 450 + before * 80);
   });
-  W.querySelector(".w-reset").addEventListener("click", function () { gb = START.map(function (r) { return r.slice(); }); nextId = 6; drawW(); say("-- 표를 처음 상태로 되돌렸습니다", "다섯 행이 다시 나타났습니다. 실제 데이터베이스에는 이런 단추가 없으므로 WHERE를 늘 확인합니다."); });
+  W.querySelector(".w-reset").addEventListener("click", function () { gb = START.map(function (r) { return r.slice(); }); nextId = 6; drawW(); say("-- 표를 처음 상태로 되돌렸습니다", "다섯 행이 다시 나타났습니다. 실제 데이터베이스에는 이런 버튼이 없으므로 WHERE를 늘 확인합니다."); });
   drawW();
 })();
 </script>
@@ -1750,12 +1751,12 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 8</span> cat_mong 프로필에 <b>"게시물 27"</b>이라고 떠 있습니다. 이 숫자를 만드는 문장은?</div>
+    <div class="qq"><span class="qn">문제 8</span> 석리송 프로필에 <b>"게시물 27"</b>이라고 떠 있습니다. 이 숫자를 만드는 문장은?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt"><code>SELECT 작성자 FROM posts WHERE 작성자 = 'cat_mong';</code></button>
-        <button class="opt"><code>SELECT MAX(id) FROM posts WHERE 작성자 = 'cat_mong';</code></button>
-        <button class="opt" data-ok="1"><code>SELECT COUNT(*) FROM posts WHERE 작성자 = 'cat_mong';</code></button>
+        <button class="opt"><code>SELECT 작성자 FROM posts WHERE 작성자 = '석리송';</code></button>
+        <button class="opt"><code>SELECT MAX(id) FROM posts WHERE 작성자 = '석리송';</code></button>
+        <button class="opt" data-ok="1"><code>SELECT COUNT(*) FROM posts WHERE 작성자 = '석리송';</code></button>
       </div>
       <div class="fb"><b>COUNT(*)는 조건에 맞는 행이 몇 개인지 셉니다.</b> 첫 번째는 계정 이름이 27줄 나올 뿐 숫자가 되지 않고, MAX(id)는 가장 큰 게시물 번호라서 27이 아닐 수 있습니다. 중간에 지운 게시물이 있으면 번호와 개수가 어긋납니다.</div>
     </div>
