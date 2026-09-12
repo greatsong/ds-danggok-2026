@@ -761,7 +761,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
       var rest = m[3] || "", g;
       if ((g = rest.match(/WHERE\s+(.+?)(?=\s+GROUP BY|\s+ORDER BY|\s+LIMIT|$)/i))) r.push(["WHERE " + g[1], cond(g[1])]);
       if ((g = rest.match(/GROUP BY\s+(.+?)(?=\s+ORDER BY|\s+LIMIT|$)/i)))
-        r.push(["GROUP BY " + g[1], "‘" + g[1] + "’가 같은 행끼리 <b>한 줄로 접습니다.</b> 종류가 네 가지면 결과도 네 줄이 됩니다."]);
+        r.push(["GROUP BY " + g[1], "‘" + g[1] + "’가 같은 행끼리 <b>한 줄로 묶습니다.</b> 종류가 네 가지면 결과도 네 줄이 됩니다."]);
       if ((g = rest.match(/ORDER BY\s+(.+?)(?=\s+LIMIT|$)/i))) {
         var desc = /DESC/i.test(g[1]), key = g[1].replace(/\s*(DESC|ASC)\s*/ig, "").trim();
         r.push(["ORDER BY " + g[1], "‘" + key + "’ 기준으로 " + (desc ? "<b>큰 것부터</b>" : "<b>작은 것부터</b>") + " 줄을 세웁니다."]);
@@ -1123,12 +1123,12 @@ LIMIT 3;</pre></div>
     <thead><tr><th>낱말</th><th>뜻</th><th>게임 화면에서는</th></tr></thead>
     <tbody>
       <tr><td><b>COUNT(*)</b></td><td>조건에 맞는 행의 개수를 센다</td><td>"이번 시즌 120판"</td></tr>
-      <tr><td><b>GROUP BY</b></td><td>같은 값끼리 한 묶음으로 접는다</td><td>"캐릭터별로"</td></tr>
+      <tr><td><b>GROUP BY</b></td><td>같은 값끼리 한 묶음으로 합친다</td><td>"캐릭터별로"</td></tr>
       <tr><td><b>COUNT · SUM · AVG · MAX · MIN</b></td><td>묶음마다 개수 · 합계 · 평균 · 최댓값 · 최솟값</td></tr>
       <tr><td><b>AS</b></td><td>결과 열에 붙일 이름</td><td>화면에 표시될 항목 이름</td></tr>
     </tbody>
   </table>
-  <p><b>GROUP BY의 핵심은 "접는다"입니다.</b> 20판의 기록이 캐릭터 네 종류로 묶이면 결과는 네 줄이 됩니다. 그래서 묶은 열이 아닌 열은 그대로 가져올 수 없습니다. 네 줄로 접힌 칸에 스무 개의 점수를 한꺼번에 넣을 수 없기 때문입니다. 그런 열은 <code>COUNT</code>·<code>AVG</code> 같은 집계 함수로 감싸 <b>하나의 값으로 줄여야</b> 합니다. 아래에서 직접 해 보면 금방 보입니다.</p>
+  <p><b>GROUP BY의 핵심은 "묶는다"입니다.</b> 20판의 기록이 캐릭터 네 종류로 묶이면 결과는 네 줄이 됩니다. 그래서 묶은 열이 아닌 열은 그대로 가져올 수 없습니다. 네 줄로 합쳐진 칸에 스무 개의 점수를 한꺼번에 넣을 수 없기 때문입니다. 그런 열은 <code>COUNT</code>·<code>AVG</code> 같은 집계 함수로 감싸 <b>하나의 값으로 줄여야</b> 합니다. 아래에서 직접 해 보면 금방 보입니다.</p>
 
   <figure class="interactive" data-fig="gmrank">
   <div class="appw" data-appw="gm">
@@ -1163,7 +1163,7 @@ LIMIT 3;</pre></div>
       </div>
     </div>
   </div>
-  <figcaption>탭을 바꿀 때마다 <b>GROUP BY</b> 뒤의 열이 바뀝니다. 20판이 몇 줄로 접히는지 세어 보세요 — 캐릭터별은 네 줄, 승·패별은 두 줄입니다.</figcaption>
+  <figcaption>탭을 바꿀 때마다 <b>GROUP BY</b> 뒤의 열이 바뀝니다. 20판이 몇 줄로 묶이는지 세어 보세요 — 캐릭터별은 네 줄, 승·패별은 두 줄입니다.</figcaption>
   </figure>
 <script>
 (function () {
@@ -1217,13 +1217,13 @@ LIMIT 3;</pre></div>
       list.appendChild(el);
     });
     paint("SELECT " + g + ", " + FN[f].sql + " AS " + FN[f].as + "\nFROM matches\nGROUP BY " + g + "\nORDER BY " + FN[f].as + " DESC;",
-      note || ("20판이 " + g + " " + res.length + "종류로 접혀 " + res.length + "줄이 되었습니다."));
+      note || ("20판이 " + g + " " + res.length + "종류로 묶여 " + res.length + "줄이 되었습니다."));
   }
   root.querySelectorAll(".gm-tab").forEach(function (b) {
     b.addEventListener("click", function () {
       root.querySelectorAll(".gm-tab").forEach(function (x) { x.classList.remove("on"); });
       b.classList.add("on"); g = b.dataset.g;
-      render("묶는 열을 " + g + "로 바꿨습니다. 같은 20판인데 결과가 " + agg().length + "줄로 접힙니다.");
+      render("묶는 열을 " + g + "로 바꿨습니다. 같은 20판인데 결과가 " + agg().length + "줄로 묶입니다.");
     });
   });
   root.querySelectorAll(".gm-f").forEach(function (b) {
@@ -1240,7 +1240,7 @@ LIMIT 3;</pre></div>
   root.querySelector(".gm-rec").textContent = mine.length + "전 " + win + "승 " + (mine.length - win) + "패";
   root.querySelector(".gm-wrv").textContent = mine.length ? Math.round(win / mine.length * 100) + "%" : "-";
   log.innerHTML = '<p class="appw-empty">탭을 눌러 보세요.<br>실행된 SQL이 여기에 쌓입니다.</p>';
-  render("이 화면을 열면 실행되는 문장입니다. 20판이 캐릭터 네 종류로 접혔습니다.");
+  render("이 화면을 열면 실행되는 문장입니다. 20판이 캐릭터 네 종류로 묶였습니다.");
 })();
 </script>
 
