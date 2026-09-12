@@ -794,7 +794,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 </script>
 
   <h3>① 인스타그램으로 읽기 — 피드를 여는 SELECT</h3>
-  <p>인스타그램을 열면 피드가 뜹니다. 그 순간 게시물 테이블에서 최근 글 몇 개를 가져오는 문장이 실행됩니다. 어느 테이블에서(FROM) 어느 열을(SELECT) 가져올지 말하고, 필요하면 조건(WHERE)과 정렬(ORDER BY)을 덧붙입니다. 대문자로 쓴 낱말이 명령어이고 나머지가 테이블 이름과 열 이름입니다.</p>
+  <p>인스타그램을 열면 피드가 표시됩니다. 그 순간 게시물 테이블에서 최근 글 몇 개를 가져오는 문장이 실행됩니다. 어느 테이블에서(FROM) 어느 열을(SELECT) 가져올지 말하고, 필요하면 조건(WHERE)과 정렬(ORDER BY)을 덧붙입니다. 대문자로 쓴 낱말이 명령어이고 나머지가 테이블 이름과 열 이름입니다.</p>
   <p class="mini">아래 <code>posts</code>는 게시물 한 건이 한 행인 테이블입니다. 이 수업에서 원리를 설명하려고 단순하게 만든 예시이며, 실제 인스타그램의 테이블 구조는 아닙니다.</p>
   <div class="codewrap code"><span class="label">SQL · 읽기</span><pre>-- 피드를 연다: 최근 게시물 20개의 작성자와 올린 시각을 가져온다
 SELECT 작성자, 해시태그, 올린시각
@@ -1348,7 +1348,7 @@ LIMIT 3;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="read">
-          <p class="sim-intro">테이블을 고르고 SQL 문장을 실행합니다. 게시물 테이블은 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 버튼을 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 테이블 이름을 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
+          <p class="sim-intro">테이블을 고르고 SQL 문장을 실행합니다. 게시물 테이블은 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 버튼을 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 테이블 이름을 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 데이터베이스가 내는 오류를 직접 만날 수 있습니다.</p>
           <div class="sim-row">
             <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 테이블 posts</option><option value="matches">게임 전적 테이블 matches</option></select></label>
             <span class="sim-cols"></span>
@@ -1482,7 +1482,7 @@ LIMIT 3;</pre></div>
     });
     if (p.group && COLS.indexOf(p.group) < 0) throw 'GROUP BY의 "' + p.group + '" 열은 없습니다.';
     var hasAgg = p.select.some(function (x) { return x.fn; });
-    if (p.group) p.select.forEach(function (x) { if (!x.fn && x.col !== p.group) throw '"' + x.col + '" 열은 GROUP BY에 없고 집계 함수로 감싸지도 않았습니다. ' + p.group + '(으)로 묶으면 한 묶음 안에 ' + x.col + ' 값이 여러 개라 한 칸에 넣을 수 없습니다. COUNT(*)나 AVG(…)처럼 집계 함수로 감싸거나 SELECT에서 빼세요. (민수가 만난 바로 그 오류)'; });
+    if (p.group) p.select.forEach(function (x) { if (!x.fn && x.col !== p.group) throw '"' + x.col + '" 열은 GROUP BY에 없고 집계 함수로 감싸지도 않았습니다. ' + p.group + '(으)로 묶으면 한 묶음 안에 ' + x.col + ' 값이 여러 개라 한 칸에 넣을 수 없습니다. COUNT(*)나 AVG(…)처럼 집계 함수로 감싸거나 SELECT에서 빼세요.'; });
     if (!p.group && hasAgg && p.select.some(function (x) { return !x.fn; })) throw "집계 함수와 보통 열을 함께 쓰려면 GROUP BY로 묶어야 합니다.";
     if (p.order) { var names = p.select.map(function (x) { return x.alias; }); if (names.indexOf(p.order) < 0 && COLS.indexOf(p.order) < 0) throw 'ORDER BY의 "' + p.order + '"은(는) 결과 열 이름이나 표의 열 이름이어야 합니다.'; }
     return p;
@@ -1786,7 +1786,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   </details>
 
   <h2>3. 개념 정리 — 화면 뒤의 문장</h2>
-  <p>오늘 배운 SQL 낱말은 아홉 개입니다. 가져오는 <b>SELECT</b>, 어디서 가져올지 정하는 <b>FROM</b>, 행을 좁히는 <b>WHERE</b>, 줄을 세우는 <b>ORDER BY</b>, 몇 개만 자르는 <b>LIMIT</b>, 넣고 바꾸고 지우는 <b>INSERT·UPDATE·DELETE</b>, 그리고 세고 묶는 <b>COUNT·GROUP BY</b>입니다.</p>
+  <p>오늘 배운 SQL 낱말은 열 개입니다. 가져오는 <b>SELECT</b>, 어디서 가져올지 정하는 <b>FROM</b>, 행을 좁히는 <b>WHERE</b>, 줄을 세우는 <b>ORDER BY</b>, 몇 개만 자르는 <b>LIMIT</b>, 넣고 바꾸고 지우는 <b>INSERT·UPDATE·DELETE</b>, 그리고 세고 묶는 <b>COUNT·GROUP BY</b>입니다.</p>
   <p>인스타그램의 피드, 카카오톡의 읽음 표시, 게임의 랭킹은 모두 이 낱말들의 조합입니다. 화면에서 벌어지는 일이 표의 행에 무슨 일을 하는지 — 가져오는지, 넣는지, 바꾸는지, 지우는지, 세는지 — 를 구분할 수 있으면 됩니다. <b>그래야 AI가 써 준 코드가 무엇을 하는 코드인지 알아볼 수 있습니다.</b> 특히 WHERE 없는 UPDATE·DELETE처럼 되돌릴 수 없는 문장을 알아보는 것이 중요합니다.</p>
   <p>다음 시간에는 이런 데이터를 다룰 때의 기준을 세웁니다. 그리고 15차시에는 오늘 설계한 표를 실제로 만들어, 학급이 함께 쓰는 데이터베이스에 우리 손으로 행을 쌓아 봅니다.</p>
 
