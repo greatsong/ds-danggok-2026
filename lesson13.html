@@ -462,7 +462,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
   <div class="tbquote">
     <div class="h">📖 교과서의 설명 <span class="src">『데이터 과학』 27쪽</span></div>
     <p class="q">"데이터베이스의 각 테이블에 저장된 데이터들은 공통적인 속성을 기반으로 서로 연결될 수 있다." <span class="src">(27쪽)</span></p>
-    <p class="t">→ 교과서는 도서관의 책 목록·대출 기록 테이블로 설명합니다. 인스타그램의 게시물 테이블와 댓글 테이블도 같은 구조이며, 게시물 번호로 서로 이어집니다.</p>
+    <p class="t">→ 교과서는 도서관의 책 목록·대출 기록 테이블로 설명합니다. 인스타그램의 게시물 테이블과 댓글 테이블도 같은 구조이며, 게시물 번호로 서로 이어집니다.</p>
   </div>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 25~27쪽</span></div>
@@ -536,7 +536,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <div class="h">🧩 데이터셋 · 데이터베이스 · 테이블 — 우리 실습에 대응하면</div>
     <p>세 낱말은 크기가 아니라 <b>담는 자격</b>이 다릅니다. <b>데이터셋</b>은 한 주제로 모인 데이터의 집합입니다. 12차시에 사용한 급식 CSV 파일 하나가 데이터셋을 담은 한 가지 형태입니다.</p>
     <p><b>데이터베이스</b>는 여러 사람이 함께 쓰도록 통합 관리되는 데이터의 집합입니다. 오늘 준비하는 Supabase 프로젝트 안의 저장소가 여기에 해당하며, 그 안에는 여러 개의 표가 들어갈 수 있습니다.</p>
-    <p><b>테이블</b>은 그 안에 표 형태로 저장된 데이터셋 하나입니다. 인스타그램의 게시물 테이블, 카카오톡의 메시지 테이블, 게임의 전적 테이블가 모두 테이블입니다. 파일이냐 데이터베이스냐가 데이터셋의 자격을 정하지는 않습니다. 같은 대결 기록을 CSV로 내려받아도 그것은 여전히 같은 데이터셋입니다.</p>
+    <p><b>테이블</b>은 그 안에 표 형태로 저장된 데이터셋 하나입니다. 인스타그램의 게시물 테이블, 카카오톡의 메시지 테이블, 게임의 전적 테이블이 모두 테이블입니다. 파일이냐 데이터베이스냐가 데이터셋의 자격을 정하지는 않습니다. 같은 대결 기록을 CSV로 내려받아도 그것은 여전히 같은 데이터셋입니다.</p>
   </div>
   <p class="mini">위 그림의 두 표는 일부 열만 보여 줍니다. 실제 서비스는 사진·해시태그·좋아요 수처럼 훨씬 많은 열을 함께 저장합니다.</p>
   <p>여러 사람이 파일 사본을 주고받거나 파일 전체를 덮어쓰는 방식은 아래와 같은 문제가 생길 수 있습니다. 데이터베이스는 동시 처리, 조건 검색, 제약과 접근 권한을 관리하는 기능을 제공합니다. 이 기능들도 앱과 데이터베이스에 올바르게 설정해야 합니다.</p>
@@ -793,7 +793,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 })();
 </script>
 
-  <h3>① 인스타그램으로 읽기 — SELECT 한 문장의 네 낱말</h3>
+  <h3>① 인스타그램으로 읽기 — 피드를 여는 SELECT</h3>
   <p>인스타그램을 열면 피드가 뜹니다. 그 순간 게시물 테이블에서 최근 글 몇 개를 가져오는 문장이 실행됩니다. 어느 테이블에서(FROM) 어느 열을(SELECT) 가져올지 말하고, 필요하면 조건(WHERE)과 정렬(ORDER BY)을 덧붙입니다. 대문자로 쓴 낱말이 명령어이고 나머지가 테이블 이름과 열 이름입니다.</p>
   <p class="mini">아래 <code>posts</code>는 게시물 한 건이 한 행인 테이블입니다. 이 수업에서 원리를 설명하려고 단순하게 만든 예시이며, 실제 인스타그램의 테이블 구조는 아닙니다.</p>
   <div class="codewrap code"><span class="label">SQL · 읽기</span><pre>-- 피드를 연다: 최근 게시물 20개의 작성자와 올린 시각을 가져온다
@@ -1348,7 +1348,7 @@ LIMIT 3;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="read">
-          <p class="sim-intro">테이블을 고르고 SQL 문장을 실행합니다. 게시물 테이블는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 버튼을 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 테이블 이름을 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
+          <p class="sim-intro">테이블을 고르고 SQL 문장을 실행합니다. 게시물 테이블은 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 버튼을 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 테이블 이름을 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
           <div class="sim-row">
             <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 테이블 posts</option><option value="matches">게임 전적 테이블 matches</option></select></label>
             <span class="sim-cols"></span>
@@ -1776,8 +1776,8 @@ LIMIT 3;</pre></div>
   <details class="glossary">
     <summary>🔎 심화 — 테이블과 테이블을 잇는 열(외래 키)과 JOIN</summary>
     <div class="gin">
-      <p>교과서 31쪽 쇼핑몰 설계에서 장바구니 테이블는 사용자 테이블의 id와 제품 테이블의 id를 열로 가집니다. 다른 표의 기본 키를 가리키는 이 열을 <b>외래 키</b>라 하고, 두 테이블을 이 열로 이어 붙이는 문장이 JOIN입니다. 같은 정보를 두 테이블에 중복해서 적지 않아도 되는 것이 데이터베이스가 표를 여러 개로 나누는 까닭입니다.</p>
-      <div class="codewrap code"><span class="label">SQL · JOIN</span><pre>-- 장바구니에 담긴 제품의 이름과 수량을, 장바구니 테이블와 제품 테이블를 제품 id로 이어서 가져온다
+      <p>교과서 31쪽 쇼핑몰 설계에서 장바구니 테이블은 사용자 테이블의 id와 제품 테이블의 id를 열로 가집니다. 다른 표의 기본 키를 가리키는 이 열을 <b>외래 키</b>라 하고, 두 테이블을 이 열로 이어 붙이는 문장이 JOIN입니다. 같은 정보를 두 테이블에 중복해서 적지 않아도 되는 것이 데이터베이스가 표를 여러 개로 나누는 까닭입니다.</p>
+      <div class="codewrap code"><span class="label">SQL · JOIN</span><pre>-- 장바구니에 담긴 제품의 이름과 수량을, 장바구니 테이블과 제품 테이블을 제품 id로 이어서 가져온다
 SELECT 장바구니.사용자id, 제품.제품명, 장바구니.수량
 FROM 장바구니
 JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
