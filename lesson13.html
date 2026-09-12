@@ -198,6 +198,194 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
   .sim .sim-card,.sim .w-card,.sim .feed .fc,.sim .w-table tbody tr{break-inside:avoid;box-shadow:none}
   .sim .sim-tabs{background:none;border:1px solid #bbb}
 }
+
+/* ===== 앱 UI × SQL 위젯 (.appw) — 왼쪽 앱 화면, 오른쪽 실행된 문장 ===== */
+.appw{--a-line:#e7dfcc;--a-ink:#2b2418;--a-soft:#6b5836;--a-dark:#161b26;
+  border:1px solid var(--a-line);border-radius:18px;background:#fffdf7;overflow:hidden;
+  box-shadow:0 2px 12px rgba(120,90,20,.09),0 1px 2px rgba(120,90,20,.06);font-size:.93rem}
+.appw *{box-sizing:border-box}
+.appw-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+@media (max-width:760px){.appw-grid{grid-template-columns:1fr}}
+.appw-pane{padding:14px 15px;min-width:0}
+.appw-pane+.appw-pane{border-left:1px solid var(--a-line)}
+@media (max-width:760px){.appw-pane+.appw-pane{border-left:none;border-top:1px solid var(--a-line)}}
+.appw-cap{display:flex;align-items:center;gap:7px;font-size:.74rem;font-weight:800;letter-spacing:.08em;
+  color:var(--a-soft);margin:0 0 10px}
+.appw-cap .dot{width:8px;height:8px;border-radius:50%;background:#d97706;flex:none}
+.appw-cap.sqlcap .dot{background:#2f6bd6}
+.appw-screen{border:1px solid #e3ddcf;border-radius:14px;background:#fff;overflow:hidden}
+.appw-bar{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid #f1ebdd;
+  background:linear-gradient(180deg,#fff,#fcf8ef);font-weight:800;font-size:.9rem;color:var(--a-ink)}
+.appw-bar .sp{margin-left:auto;font-weight:600;font-size:.78rem;color:#98907f}
+.appw-body{max-height:330px;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:10px;background:#fffdfa}
+.appw-body::-webkit-scrollbar{width:8px}.appw-body::-webkit-scrollbar-thumb{background:#e6dcc6;border-radius:8px}
+.appw-ctl{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:10px 0 0}
+.appw-btn{border:1px solid #dfd4bb;background:#fff;color:var(--a-ink);border-radius:999px;
+  padding:6px 13px;font-size:.85rem;font-weight:700;cursor:pointer;transition:.15s;font-family:var(--font)}
+.appw-btn:hover{background:#fff6e3;border-color:#d0bd94;transform:translateY(-1px)}
+.appw-btn:active{transform:none}
+.appw-btn.pri{background:linear-gradient(120deg,#b45309,#c2417a);color:#fff;border-color:transparent}
+.appw-btn.pri:hover{filter:brightness(1.08)}
+.appw-btn:disabled{opacity:.4;cursor:default;transform:none}
+.appw-in{border:1px solid #dfd4bb;border-radius:999px;padding:6px 13px;font-size:.85rem;
+  font-family:var(--font);min-width:0;flex:1 1 130px;background:#fff}
+.appw-in:focus{outline:none;border-color:#4c8df6;box-shadow:0 0 0 3px rgba(76,141,246,.28)}
+.appw-log{background:var(--a-dark);border-radius:12px;padding:11px;min-height:180px;max-height:470px;
+  overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.appw-log::-webkit-scrollbar{width:8px}.appw-log::-webkit-scrollbar-thumb{background:#39404f;border-radius:8px}
+.appw-line{border-left:3px solid #3a4354;padding:8px 11px;border-radius:0 9px 9px 0;background:#1d2431;
+  font-family:var(--mono,ui-monospace,SFMono-Regular,Menlo,monospace);font-size:.78rem;line-height:1.6;
+  color:#dbe4f0;white-space:pre-wrap;word-break:break-word;opacity:.62;transition:.3s}
+.appw-line .kw{color:#ffb454;font-weight:700}
+.appw-line .st{color:#8ee6a8}
+.appw-line .nm{display:block;font-family:var(--font);font-size:.72rem;color:#8f9bb0;margin-top:5px}
+.appw-line.on{opacity:1;border-left-color:#ffb454;background:#232c3c;animation:appwIn .32s ease}
+@keyframes appwIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.appw-empty{color:#6d7688;font-size:.8rem;text-align:center;padding:24px 8px;font-family:var(--font)}
+
+/* ── ① 인스타그램 재현 ───────────────────────────────── */
+.ig{max-width:352px;margin:0 auto;--ig-b:#dbdbdb;--ig-ink:#262626;--ig-gray:#8e8e8e;--ig-red:#ed4956;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  border:1px solid var(--ig-b);border-radius:22px;background:#fff;overflow:hidden;
+  box-shadow:0 10px 28px rgba(30,20,10,.13),0 2px 6px rgba(30,20,10,.07)}
+.ig-top{display:flex;align-items:center;padding:11px 14px 9px;border-bottom:1px solid #efefef}
+.ig-logo{font-family:"Snell Roundhand","Segoe Script","Brush Script MT",cursive;font-size:1.42rem;
+  font-weight:600;letter-spacing:.3px;color:var(--ig-ink);line-height:1}
+.ig-top .r{margin-left:auto;display:flex;gap:15px;align-items:center}
+.ig-ic{width:22px;height:22px;stroke:var(--ig-ink);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ig-stories{display:flex;gap:11px;padding:10px 12px;border-bottom:1px solid #efefef;overflow-x:auto;scrollbar-width:none}
+.ig-stories::-webkit-scrollbar{display:none}
+.ig-st{flex:none;width:53px;text-align:center}
+.ig-ring{width:50px;height:50px;border-radius:50%;padding:2.5px;margin:0 auto 5px;
+  background:linear-gradient(45deg,#f09433,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888)}
+.ig-ring.seen{background:#dbdbdb}
+.ig-ring i{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;
+  background:#fff;border:2px solid #fff;font-size:1.4rem;font-style:normal}
+.ig-st span{display:block;font-size:.66rem;color:var(--ig-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ig-feed{max-height:370px;overflow-y:auto;scrollbar-width:thin}
+.ig-feed::-webkit-scrollbar{width:6px}.ig-feed::-webkit-scrollbar-thumb{background:#e3e3e3;border-radius:6px}
+.ig-post{border-bottom:1px solid #efefef;animation:appwIn .32s ease}
+.ig-ph{display:flex;align-items:center;gap:9px;padding:9px 13px}
+.ig-av{width:32px;height:32px;border-radius:50%;padding:2px;flex:none;
+  background:linear-gradient(45deg,#f09433,#dc2743 50%,#bc1888)}
+.ig-av i{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;
+  background:#fff;border:1.5px solid #fff;font-size:.92rem;font-style:normal}
+.ig-u{font-size:.8rem;font-weight:600;color:var(--ig-ink)}
+.ig-dot{color:var(--ig-gray);font-size:.78rem}
+.ig-time{color:var(--ig-gray);font-size:.78rem}
+.ig-more3{margin-left:auto;letter-spacing:1.5px;color:var(--ig-ink);font-size:.9rem;line-height:1}
+.ig-img{height:186px;display:grid;place-items:center;font-size:4rem;user-select:none;position:relative}
+.ig-pop{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0}
+.ig-pop svg{width:88px;height:88px;fill:#fff;filter:drop-shadow(0 2px 8px rgba(0,0,0,.35))}
+.ig-pop.go{animation:igPop .95s ease}
+@keyframes igPop{0%{opacity:0;transform:scale(.2)}18%{opacity:.95;transform:scale(1.15)}32%{transform:scale(.95)}45%{opacity:.95;transform:scale(1)}100%{opacity:0;transform:scale(1)}}
+.ig-acts{display:flex;align-items:center;gap:14px;padding:8px 13px 3px}
+.ig-act{background:none;border:none;padding:0;cursor:pointer;display:grid;place-items:center;line-height:0}
+.ig-act svg{width:23px;height:23px;stroke:var(--ig-ink);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.ig-act:hover svg{transform:scale(1.08);opacity:.75}
+.ig-act.liked svg{stroke:var(--ig-red);fill:var(--ig-red);animation:igBeat .42s ease}
+@keyframes igBeat{0%{transform:scale(1)}28%{transform:scale(1.32)}55%{transform:scale(.92)}100%{transform:scale(1)}}
+.ig-act.save{margin-left:auto}
+.ig-likes{padding:3px 13px 1px;font-size:.81rem;font-weight:600;color:var(--ig-ink)}
+.ig-cap{padding:2px 13px 3px;font-size:.81rem;line-height:1.45;color:var(--ig-ink)}
+.ig-cap b{font-weight:600;margin-right:5px}
+.ig-tag{color:#00376b}
+.ig-cmt{padding:1px 13px 3px;font-size:.79rem;color:var(--ig-gray);cursor:default}
+.ig-ago{padding:0 13px 11px;font-size:.66rem;color:var(--ig-gray);letter-spacing:.2px;text-transform:uppercase}
+.ig-tabbar{display:flex;justify-content:space-around;align-items:center;padding:9px 6px;
+  border-top:1px solid #efefef;background:#fff}
+.ig-tabbar svg{width:22px;height:22px;stroke:var(--ig-ink);stroke-width:1.7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ig-tabbar .me{width:21px;height:21px;border-radius:50%;border:1.7px solid var(--ig-ink);display:grid;place-items:center;font-size:.7rem}
+.ig-none{padding:34px 16px;text-align:center;color:var(--ig-gray);font-size:.82rem}
+/* ── ② 카카오톡 재현 ───────────────────────────────── */
+.kt{max-width:352px;margin:0 auto;border-radius:22px;overflow:hidden;background:#b2c7d9;
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  box-shadow:0 10px 28px rgba(30,20,10,.13),0 2px 6px rgba(30,20,10,.07);border:1px solid #9db3c6}
+.kt-top{display:flex;align-items:center;gap:9px;padding:11px 13px;background:#9bb3c9;color:#1a2733}
+.kt-top .bk{font-size:1.05rem;line-height:1;opacity:.85}
+.kt-top .ttl{font-weight:700;font-size:.92rem}
+.kt-top .n{font-size:.8rem;color:#41546a}
+.kt-top .r{margin-left:auto;display:flex;gap:13px;opacity:.8}
+.kt-top .r svg{width:18px;height:18px;stroke:#1a2733;stroke-width:2;fill:none;stroke-linecap:round}
+.kt-scroll{height:318px;overflow-y:auto;padding:12px 11px;display:flex;flex-direction:column;gap:9px;scrollbar-width:thin}
+.kt-scroll::-webkit-scrollbar{width:6px}.kt-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.45);border-radius:6px}
+.kt-day{align-self:center;background:rgba(0,0,0,.16);color:#fff;font-size:.68rem;
+  padding:3px 13px;border-radius:999px;letter-spacing:.2px}
+.kt-row{display:flex;gap:7px;align-items:flex-start;animation:appwIn .26s ease}
+.kt-row.me{flex-direction:row-reverse}
+.kt-row.me .kt-av{display:none}
+.kt-row.me .kt-col{max-width:76%}
+.kt-av{width:34px;height:34px;border-radius:13px;background:#fff;display:grid;place-items:center;
+  font-size:1.05rem;flex:none;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.kt-col{max-width:70%;min-width:0}
+.kt-nm{font-size:.72rem;color:#2f3f4f;margin:1px 0 4px 3px;font-weight:500}
+.kt-b{display:flex;align-items:flex-end;gap:5px}
+.kt-row.me .kt-b{flex-direction:row-reverse}
+.kt-msg{position:relative;background:#fff;border-radius:14px;padding:8px 11px;font-size:.84rem;
+  line-height:1.48;color:#1c2230;cursor:pointer;border:2px solid transparent;transition:.14s;
+  word-break:break-word;box-shadow:0 1px 1px rgba(0,0,0,.05)}
+.kt-row.me .kt-msg{background:#fee500;border-radius:14px}
+.kt-msg::before{content:"";position:absolute;top:8px;left:-5px;width:0;height:0;
+  border:5px solid transparent;border-right-color:#fff;border-left:0}
+.kt-row.me .kt-msg::before{left:auto;right:-5px;border-right-color:transparent;border-left-color:#fee500;border-right:0;border-left-width:5px}
+.kt-msg:hover{border-color:#e2574c;box-shadow:0 0 0 3px rgba(226,87,76,.16)}
+.kt-msg.del{animation:ktDel .34s ease forwards}
+@keyframes ktDel{to{opacity:0;transform:scale(.82) translateX(14px)}}
+.kt-meta{font-size:.63rem;color:#3f4f5e;line-height:1.35;flex:none;padding-bottom:1px;text-align:right}
+.kt-un{display:block;color:#e9a500;font-weight:900;font-size:.82rem;line-height:1.1;letter-spacing:-.02em}
+.kt-in{display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border-top:1px solid #e3e7ea}
+.kt-in .plus{font-size:1.25rem;color:#7b8a99;line-height:1;flex:none}
+.kt-in input{flex:1;min-width:0;border:none;outline:none;font-size:.85rem;padding:6px 2px;
+  font-family:inherit;color:#1c2230;background:none}
+.kt-in .emo{font-size:1rem;flex:none;opacity:.65}
+.kt-send{flex:none;width:30px;height:30px;border-radius:50%;border:none;background:#fee500;cursor:pointer;
+  display:grid;place-items:center;transition:.15s}
+.kt-send:hover{filter:brightness(.95)}
+.kt-send svg{width:15px;height:15px;stroke:#3c1e1e;stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.kt-hint{font-size:.74rem;color:#6b5836;margin:7px 2px 0;line-height:1.5}
+/* ── ③ 게임 전적/랭킹 재현 ───────────────────────────── */
+.gm{max-width:352px;margin:0 auto;border-radius:20px;overflow:hidden;
+  background:linear-gradient(168deg,#141a28 0%,#1c2437 55%,#222b42 100%);
+  border:1px solid #2e3a55;color:#e7edf8;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  box-shadow:0 12px 30px rgba(10,15,30,.34),0 2px 6px rgba(10,15,30,.2)}
+.gm-hd{padding:13px 15px 11px;background:linear-gradient(120deg,#2b2352,#3a2a5e 55%,#20304f);
+  border-bottom:1px solid #38456180}
+.gm-season{display:flex;align-items:center;gap:7px;font-size:.68rem;letter-spacing:.14em;
+  color:#b9a6ff;font-weight:800;text-transform:uppercase}
+.gm-season .live{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 7px #4ade80;animation:gmBlink 1.6s infinite}
+@keyframes gmBlink{0%,100%{opacity:1}50%{opacity:.35}}
+.gm-me{display:flex;align-items:center;gap:11px;margin-top:9px}
+.gm-face{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:1.3rem;flex:none;
+  background:linear-gradient(140deg,#f6c453,#e4713c);box-shadow:0 2px 8px rgba(228,113,60,.4)}
+.gm-mine{min-width:0;flex:1}
+.gm-mine b{display:block;font-size:.93rem;font-weight:800;letter-spacing:-.01em}
+.gm-mine span{font-size:.72rem;color:#93a3c0}
+.gm-wr{text-align:right;flex:none}
+.gm-wr b{display:block;font-size:1.16rem;font-weight:900;color:#7fd0ff;line-height:1.1}
+.gm-wr span{font-size:.64rem;color:#8797b5;letter-spacing:.08em}
+.gm-tabs{display:flex;gap:5px;padding:10px 12px 0}
+.gm-tab{flex:1;border:1px solid #333f5c;background:#1b2233;color:#94a5c3;border-radius:9px 9px 0 0;
+  padding:8px 3px;font-size:.79rem;font-weight:700;cursor:pointer;transition:.16s;font-family:inherit;border-bottom:none}
+.gm-tab:hover{background:#242e45;color:#cfdcee}
+.gm-tab.on{background:linear-gradient(120deg,#3563d6,#7a44c9);color:#fff;border-color:transparent;box-shadow:0 -2px 10px rgba(80,80,220,.3)}
+.gm-list{padding:10px 12px 13px;display:flex;flex-direction:column;gap:6px;min-height:236px}
+.gm-row{display:flex;align-items:center;gap:10px;background:#1a2131;border:1px solid #2b3550;
+  border-radius:11px;padding:9px 11px;animation:appwIn .3s ease}
+.gm-row.top{background:linear-gradient(100deg,#3d3218,#1e2636 62%);border-color:#7a601d}
+.gm-rk{width:20px;flex:none;text-align:center;font-weight:900;font-size:.86rem;color:#7f8ca6}
+.gm-row.top .gm-rk{color:#ffc94d;text-shadow:0 0 8px rgba(255,201,77,.45)}
+.gm-ico{width:30px;height:30px;border-radius:9px;flex:none;display:grid;place-items:center;font-size:.98rem;background:#26314a}
+.gm-row.top .gm-ico{background:linear-gradient(140deg,#f6c453,#e4713c)}
+.gm-nm{flex:1;min-width:0}
+.gm-nm b{display:block;font-size:.85rem;font-weight:700;letter-spacing:-.01em}
+.gm-bar{height:4px;border-radius:4px;background:#2c3750;margin-top:5px;overflow:hidden}
+.gm-bar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#3563d6,#7fd0ff);
+  transition:width .5s cubic-bezier(.4,0,.2,1)}
+.gm-num{flex:none;text-align:right}
+.gm-num b{display:block;font-size:.98rem;font-weight:900;color:#7fd0ff;line-height:1.15}
+.gm-num span{font-size:.63rem;color:#8797b5}
+
 </style>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <script src="assets/release.js"></script>
@@ -480,6 +668,167 @@ SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
   </table>
   <p>피드를 아래로 내릴 때마다 앱은 같은 문장을 <code>LIMIT</code>만 바꿔 다시 실행합니다. 한 번에 전부 가져오지 않는 이유는 게시물이 수십억 건이기 때문입니다. <b>필요한 만큼만 골라 오는 것</b>이 데이터베이스를 쓰는 첫째 이유입니다.</p>
 
+  <figure class="interactive" data-fig="igfeed">
+  <div class="appw" data-appw="ig">
+    <div class="appw-grid">
+      <div class="appw-pane">
+        <p class="appw-cap"><span class="dot"></span>앱 화면 — 눌러 보세요</p>
+        <div class="ig">
+          <div class="ig-top">
+            <span class="ig-logo">Banstagram</span>
+            <span class="r">
+              <svg class="ig-ic" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <svg class="ig-ic" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </span>
+          </div>
+          <div class="ig-stories">
+            <div class="ig-st"><div class="ig-ring"><i>🧑</i></div><span>내 스토리</span></div>
+            <div class="ig-st"><div class="ig-ring"><i>🐱</i></div><span>cat_mong</span></div>
+            <div class="ig-st"><div class="ig-ring"><i>🐶</i></div><span>dog_bori</span></div>
+            <div class="ig-st"><div class="ig-ring seen"><i>🍜</i></div><span>dg_foodie</span></div>
+            <div class="ig-st"><div class="ig-ring seen"><i>🐦</i></div><span>bird_kkuk</span></div>
+          </div>
+          <div class="ig-feed"></div>
+          <div class="ig-tabbar">
+            <svg viewBox="0 0 24 24"><path d="M3 9.5 12 2l9 7.5V21a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <span class="me">🧑</span>
+          </div>
+        </div>
+        <div class="appw-ctl">
+          <button type="button" class="appw-btn pri ig-more">↓ 더 보기</button>
+          <input class="appw-in ig-q" type="text" placeholder="해시태그 검색 후 Enter (예: 고양이)" aria-label="해시태그 검색">
+          <button type="button" class="appw-btn ig-reset">처음으로</button>
+        </div>
+      </div>
+      <div class="appw-pane">
+        <p class="appw-cap sqlcap"><span class="dot"></span>지금 실행된 문장</p>
+        <div class="appw-log ig-log"></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>왼쪽에서 누르는 일 하나가 오른쪽 문장 하나가 됩니다. 더 보기는 <b>LIMIT·OFFSET</b>, 해시태그 검색은 <b>WHERE … LIKE</b>, 하트는 <b>UPDATE</b>입니다. 사진을 두 번 빠르게 누르면 어떻게 되는지도 확인해 보세요.</figcaption>
+  </figure>
+<script>
+(function () {
+  var root = document.querySelector('[data-appw="ig"]'); if (!root) return;
+  var HEART = '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  var CMT = '<svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.4 8.4 0 0 1-3.8-.9L3 21l2-4.9a8.4 8.4 0 0 1-1-4 8.4 8.4 0 0 1 8.5-8.4h.5a8.5 8.5 0 0 1 8 8z"/></svg>';
+  var SEND = '<svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>';
+  var SAVE = '<svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+  var FILL = '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+  var POSTS = [
+    { id: 8, u: "dg_foodie", e: "🍜", bg: "linear-gradient(135deg,#fde4c4,#f7c59f)", t: "야자 끝나고 라면", h: "#야식 #라면", k: 142, c: 12, d: "1시간 전" },
+    { id: 7, u: "cat_mong", e: "🐱", bg: "linear-gradient(135deg,#ffe9b0,#ffd0dd)", t: "박스 새로 샀는데 포장지에 들어감", h: "#고양이 #박스", k: 268, c: 34, d: "5시간 전" },
+    { id: 6, u: "dog_bori", e: "🐶", bg: "linear-gradient(135deg,#d9f0e3,#bfe3f5)", t: "급식실 앞에서 기다리는 중", h: "#강아지 #학교", k: 77, c: 8, d: "11시간 전" },
+    { id: 5, u: "cat_mong", e: "😻", bg: "linear-gradient(135deg,#ffeccf,#e7d9ff)", t: "창가 자리 사수", h: "#고양이 #낮잠", k: 193, c: 21, d: "어제" },
+    { id: 4, u: "dg_foodie", e: "🍚", bg: "linear-gradient(135deg,#fff0c9,#ffe0e0)", t: "오늘 급식 제육볶음", h: "#급식 #제육볶음", k: 121, c: 15, d: "어제" },
+    { id: 3, u: "bird_kkuk", e: "🐦", bg: "linear-gradient(135deg,#d6ecff,#eae0ff)", t: "창문 두드린 손님", h: "#새 #아침", k: 54, c: 3, d: "2일 전" },
+    { id: 2, u: "cat_mong", e: "🐈", bg: "linear-gradient(135deg,#ffe3ef,#ffe9c9)", t: "동생 고양이 데려옴", h: "#고양이 #새식구", k: 310, c: 47, d: "3일 전" },
+    { id: 1, u: "dog_bori", e: "🦴", bg: "linear-gradient(135deg,#e8f0d9,#cfe8e6)", t: "간식은 언제 나오나요", h: "#강아지 #간식", k: 88, c: 9, d: "4일 전" }
+  ];
+  var liked = {};
+  var feed = root.querySelector(".ig-feed"), log = root.querySelector(".ig-log"),
+      more = root.querySelector(".ig-more"), q = root.querySelector(".ig-q"), reset = root.querySelector(".ig-reset");
+  var shown = 2, mode = "feed", key = "";
+  function esc(x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+  function paint(sql, note) {
+    var lines = log.querySelectorAll(".appw-line");
+    if (lines.length > 3) lines[lines.length - 1].remove();
+    Array.prototype.forEach.call(log.querySelectorAll(".appw-line"), function (e) { e.classList.remove("on"); });
+    var em = log.querySelector(".appw-empty"); if (em) em.remove();
+    var d = document.createElement("div");
+    d.className = "appw-line on";
+    d.innerHTML = esc(sql).replace(/\b(SELECT|FROM|WHERE|ORDER BY|DESC|LIMIT|OFFSET|UPDATE|SET|LIKE|AND)\b/g, '<span class="kw">$1</span>')
+      .replace(/'([^']*)'/g, "<span class=\"st\">'$1'</span>") + '<span class="nm">' + esc(note) + '</span>';
+    log.insertBefore(d, log.firstChild);
+  }
+  function rows() {
+    if (mode === "search") return POSTS.filter(function (p) { return p.h.indexOf("#" + key) >= 0; });
+    return POSTS.slice(0, shown);
+  }
+  function render() {
+    var list = rows();
+    if (!list.length) { feed.innerHTML = '<p class="ig-none">#' + esc(key) + ' 게시물이 없습니다.</p>'; return; }
+    feed.innerHTML = "";
+    list.forEach(function (p) {
+      var on = !!liked[p.id], k = p.k + (on ? 1 : 0);
+      var el = document.createElement("article");
+      el.className = "ig-post";
+      el.innerHTML =
+        '<div class="ig-ph"><span class="ig-av"><i>' + p.e + '</i></span>' +
+        '<span class="ig-u">' + esc(p.u) + '</span><span class="ig-dot">·</span><span class="ig-time">' + p.d + '</span>' +
+        '<span class="ig-more3">···</span></div>' +
+        '<div class="ig-img" style="background:' + p.bg + '" data-id="' + p.id + '">' + p.e +
+        '<span class="ig-pop">' + FILL + '</span></div>' +
+        '<div class="ig-acts">' +
+        '<button type="button" class="ig-act like' + (on ? " liked" : "") + '" data-id="' + p.id + '" aria-label="좋아요">' + (on ? FILL : HEART) + '</button>' +
+        '<button type="button" class="ig-act" aria-label="댓글">' + CMT + '</button>' +
+        '<button type="button" class="ig-act" aria-label="공유">' + SEND + '</button>' +
+        '<button type="button" class="ig-act save" aria-label="저장">' + SAVE + '</button></div>' +
+        '<div class="ig-likes">좋아요 ' + k.toLocaleString() + '개</div>' +
+        '<div class="ig-cap"><b>' + esc(p.u) + '</b>' + esc(p.t) + ' <span class="ig-tag">' + esc(p.h) + '</span></div>' +
+        '<div class="ig-cmt">댓글 ' + p.c + '개 모두 보기</div>' +
+        '<div class="ig-ago">' + p.d + '</div>';
+      feed.appendChild(el);
+    });
+    more.disabled = mode === "search" || shown >= POSTS.length;
+    more.textContent = more.disabled && mode !== "search" ? "마지막 게시물입니다" : "↓ 더 보기";
+  }
+  function like(id, dbl) {
+    var p = POSTS.filter(function (x) { return x.id === id; })[0];
+    if (liked[id]) {
+      if (dbl) return;
+      delete liked[id];
+      paint("UPDATE posts SET 좋아요 = 좋아요 - 1 WHERE id = " + id + ";", "하트를 취소하면 같은 행의 값을 되돌립니다. 지우는 문장이 아니라 바꾸는 문장입니다.");
+    } else {
+      liked[id] = 1;
+      paint("UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = " + id + ";", id + "번 게시물 한 행의 좋아요가 " + (p.k + 1).toLocaleString() + "이 되었습니다. WHERE가 없으면 모든 게시물의 좋아요가 함께 올라갑니다.");
+    }
+    render();
+  }
+  feed.addEventListener("click", function (ev) {
+    var b = ev.target.closest(".ig-act.like");
+    if (b) { like(+b.dataset.id, false); return; }
+  });
+  feed.addEventListener("dblclick", function (ev) {
+    var img = ev.target.closest(".ig-img"); if (!img) return;
+    var id = +img.dataset.id;
+    var pop = img.querySelector(".ig-pop");
+    if (pop) { pop.classList.remove("go"); void pop.offsetWidth; pop.classList.add("go"); }
+    if (!liked[id]) setTimeout(function () { like(id, true); }, 120);
+  });
+  more.addEventListener("click", function () {
+    var off = shown; shown = Math.min(shown + 2, POSTS.length);
+    paint("SELECT * FROM posts\nORDER BY 올린시각 DESC\nLIMIT 2 OFFSET " + off + ";",
+      "앞의 " + off + "개는 건너뛰고(OFFSET) 다음 2개를 더 가져옵니다. 한 번에 전부 가져오지 않는 이유입니다.");
+    render();
+  });
+  q.addEventListener("keyup", function (ev) {
+    var v = q.value.trim().replace(/^#/, "");
+    if (v === "") { if (mode === "search") { mode = "feed"; render(); } return; }
+    if (ev.key !== "Enter") return;
+    mode = "search"; key = v;
+    paint("SELECT * FROM posts\nWHERE 해시태그 LIKE '%#" + v + "%';",
+      "해시태그 열에 '#" + v + "'가 들어 있는 행만 남깁니다. %는 '앞뒤로 무엇이 오든'이라는 뜻입니다.");
+    render();
+  });
+  reset.addEventListener("click", function () {
+    mode = "feed"; shown = 2; q.value = "";
+    paint("SELECT * FROM posts\nORDER BY 올린시각 DESC\nLIMIT 2;", "앱을 열면 가장 먼저 실행되는 문장입니다. 올린 시각이 늦은 것부터 2개만 가져옵니다.");
+    render();
+  });
+  log.innerHTML = '<p class="appw-empty">왼쪽 화면을 눌러 보세요.<br>실행된 SQL이 여기에 쌓입니다.</p>';
+  paint("SELECT * FROM posts\nORDER BY 올린시각 DESC\nLIMIT 2;", "앱을 열면 가장 먼저 실행되는 문장입니다.");
+  render();
+})();
+</script>
+
+
+
+
   <h3>② 카카오톡으로 쓰기 — 추가·갱신·삭제</h3>
   <p>읽기만으로는 앱이 되지 않습니다. 메시지를 보내면 표에 행이 하나 <b>추가</b>되고, 상대가 읽으면 그 행의 값이 <b>갱신</b>되며, 메시지를 지우면 행이 <b>삭제</b>됩니다. 세 동작이 각각 한 문장입니다.</p>
   <p class="mini">아래 <code>messages</code>도 원리를 보이기 위한 예시 표입니다. 실제 메신저는 암호화·전송 확인 등 훨씬 많은 처리를 함께 합니다.</p>
@@ -501,6 +850,130 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</pre></div>
       <tr><td><b>WHERE</b></td><td>어느 행이 대상인지 좁힌다</td><td>"305번 메시지, 그중에서도 내가 보낸 것만"</td></tr>
     </tbody>
   </table>
+
+  <figure class="interactive" data-fig="ktalk">
+  <div class="appw" data-appw="kt">
+    <div class="appw-grid">
+      <div class="appw-pane">
+        <p class="appw-cap"><span class="dot"></span>앱 화면 — 보내고, 읽히고, 지워 보세요</p>
+        <div class="kt">
+          <div class="kt-top">
+            <span class="bk">‹</span><span class="ttl">2학년 3반 단톡방</span><span class="n">27</span>
+            <span class="r">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </span>
+          </div>
+          <div class="kt-scroll"></div>
+          <div class="kt-in">
+            <span class="plus">＋</span>
+            <input class="kt-q" type="text" placeholder="메시지를 입력하세요" aria-label="메시지 입력">
+            <span class="emo">☺</span>
+            <button type="button" class="kt-send" aria-label="전송"><svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+          </div>
+        </div>
+        <p class="kt-hint">말풍선을 <b>누르면 삭제</b>됩니다. 내가 보낸 메시지(노란색)만 지워지는 이유도 확인해 보세요.</p>
+        <div class="appw-ctl">
+          <button type="button" class="appw-btn kt-read">👀 상대가 읽었다</button>
+          <button type="button" class="appw-btn kt-reset">처음으로</button>
+        </div>
+      </div>
+      <div class="appw-pane">
+        <p class="appw-cap sqlcap"><span class="dot"></span>지금 실행된 문장</p>
+        <div class="appw-log kt-log"></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>전송은 <b>INSERT</b>, 읽음 표시는 <b>UPDATE</b>, 삭제는 <b>DELETE</b>입니다. 노란 숫자 1이 사라지는 장면이 곧 한 행의 값이 바뀌는 장면입니다.</figcaption>
+  </figure>
+<script>
+(function () {
+  var root = document.querySelector('[data-appw="kt"]'); if (!root) return;
+  var scroll = root.querySelector(".kt-scroll"), log = root.querySelector(".kt-log"),
+      q = root.querySelector(".kt-q"), send = root.querySelector(".kt-send"),
+      readBtn = root.querySelector(".kt-read"), reset = root.querySelector(".kt-reset");
+  var SEED = [
+    { id: 301, u: "지우", av: "🐱", me: false, t: "다들 오늘 야자 하냐", time: "오후 4:12", un: 0 },
+    { id: 302, u: "서준", av: "🐶", me: false, t: "난 학원 감 ㅠ", time: "오후 4:13", un: 0 },
+    { id: 303, u: "나", av: "🙂", me: true, t: "오늘 급식 뭐야?", time: "오후 4:15", un: 0 },
+    { id: 304, u: "지우", av: "🐱", me: false, t: "제육볶음! 줄 개길듯", time: "오후 4:16", un: 0 }
+  ];
+  var msgs, nextId;
+  function esc(x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+  function paint(sql, note) {
+    var lines = log.querySelectorAll(".appw-line");
+    if (lines.length > 3) lines[lines.length - 1].remove();
+    Array.prototype.forEach.call(log.querySelectorAll(".appw-line"), function (e) { e.classList.remove("on"); });
+    var em = log.querySelector(".appw-empty"); if (em) em.remove();
+    var d = document.createElement("div");
+    d.className = "appw-line on";
+    d.innerHTML = esc(sql).replace(/\b(INSERT INTO|VALUES|UPDATE|SET|DELETE FROM|WHERE|AND|SELECT|FROM|ORDER BY)\b/g, '<span class="kw">$1</span>')
+      .replace(/'([^']*)'/g, "<span class=\"st\">'$1'</span>")
+      .replace(/\b(true|false)\b/g, '<span class="st">$1</span>') + '<span class="nm">' + esc(note) + '</span>';
+    log.insertBefore(d, log.firstChild);
+  }
+  function render() {
+    scroll.innerHTML = '<div class="kt-day">2026년 9월 12일 금요일</div>';
+    msgs.forEach(function (m) {
+      var row = document.createElement("div");
+      row.className = "kt-row" + (m.me ? " me" : "");
+      row.innerHTML = '<span class="kt-av">' + m.av + '</span>' +
+        '<div class="kt-col">' + (m.me ? "" : '<p class="kt-nm">' + esc(m.u) + '</p>') +
+        '<div class="kt-b"><div class="kt-msg" data-id="' + m.id + '" title="누르면 삭제됩니다">' + esc(m.t) + '</div>' +
+        '<span class="kt-meta">' + (m.un ? '<span class="kt-un">' + m.un + '</span>' : "") + m.time + '</span></div></div>';
+      scroll.appendChild(row);
+    });
+    scroll.scrollTop = scroll.scrollHeight;
+    readBtn.disabled = !msgs.some(function (m) { return m.un > 0; });
+  }
+  function start() {
+    msgs = SEED.map(function (m) { return Object.assign({}, m); });
+    nextId = 305;
+    render();
+  }
+  send.addEventListener("click", function () {
+    var v = q.value.trim(); if (!v) { q.focus(); return; }
+    var now = new Date(), h = now.getHours(), mi = ("0" + now.getMinutes()).slice(-2);
+    var ap = h < 12 ? "오전" : "오후"; h = h % 12 || 12;
+    msgs.push({ id: nextId, u: "나", av: "🙂", me: true, t: v, time: ap + " " + h + ":" + mi, un: 1 });
+    paint("INSERT INTO messages (방id, 보낸사람, 내용, 읽음)\nVALUES (3, '나', '" + v.replace(/'/g, "''") + "', false);",
+      "표에 새 행이 하나 생깁니다. 읽음이 false라서 말풍선 옆에 노란 1이 붙습니다.");
+    nextId += 1; q.value = ""; render();
+  });
+  q.addEventListener("keyup", function (ev) { if (ev.key === "Enter") send.click(); });
+  readBtn.addEventListener("click", function () {
+    var target = msgs.filter(function (m) { return m.un > 0; });
+    if (!target.length) return;
+    var ids = target.map(function (m) { return m.id; });
+    target.forEach(function (m) { m.un = 0; });
+    paint("UPDATE messages SET 읽음 = true\nWHERE id IN (" + ids.join(", ") + ");",
+      "행을 지우는 것이 아니라 읽음 열의 값만 바꿉니다. 그래서 노란 1만 사라지고 메시지는 그대로입니다.");
+    render();
+  });
+  scroll.addEventListener("click", function (ev) {
+    var b = ev.target.closest(".kt-msg"); if (!b) return;
+    var id = +b.dataset.id, m = msgs.filter(function (x) { return x.id === id; })[0];
+    if (!m.me) {
+      paint("DELETE FROM messages\nWHERE id = " + id + " AND 보낸사람 = '나';",
+        "조건 두 개를 모두 만족하는 행이 없어 지워지지 않았습니다. " + m.u + "이(가) 보낸 메시지이기 때문입니다. 이것이 WHERE로 대상을 좁히는 이유입니다.");
+      b.animate([{ transform: "translateX(0)" }, { transform: "translateX(-5px)" }, { transform: "translateX(5px)" }, { transform: "translateX(0)" }], { duration: 260 });
+      return;
+    }
+    b.classList.add("del");
+    paint("DELETE FROM messages\nWHERE id = " + id + " AND 보낸사람 = '나';",
+      "조건에 맞는 한 행만 사라집니다. WHERE를 빠뜨리면 단톡방의 모든 메시지가 지워집니다.");
+    setTimeout(function () { msgs = msgs.filter(function (x) { return x.id !== id; }); render(); }, 300);
+  });
+  reset.addEventListener("click", function () {
+    start();
+    paint("SELECT * FROM messages\nWHERE 방id = 3\nORDER BY 보낸시각;", "대화방을 열면 그 방의 메시지를 시간 순으로 가져옵니다.");
+  });
+  log.innerHTML = '<p class="appw-empty">메시지를 보내 보세요.<br>실행된 SQL이 여기에 쌓입니다.</p>';
+  start();
+  paint("SELECT * FROM messages\nWHERE 방id = 3\nORDER BY 보낸시각;", "대화방을 열면 그 방의 메시지를 시간 순으로 가져옵니다.");
+})();
+</script>
+
   <div class="callout warn">
     <div class="h">⚠️ WHERE가 없는 UPDATE·DELETE</div>
     <p>세 문장 가운데 <b>UPDATE와 DELETE에는 WHERE가 반드시 필요합니다.</b> WHERE를 빠뜨리면 그 권한으로 건드릴 수 있는 <b>모든 행</b>이 대상이 됩니다. <code>DELETE FROM messages;</code> 한 줄이면 표의 메시지가 전부 사라집니다. 실제 서비스가 이런 사고를 막는 방법은 두 가지입니다. 하나는 문장에 WHERE를 꼭 넣는 것이고, 다른 하나는 <b>애초에 지울 권한을 주지 않는 것</b>입니다. 여러분의 앱이 남의 메시지를 지울 수 없는 것은 착해서가 아니라 권한이 없기 때문입니다.</p>
@@ -528,6 +1001,131 @@ LIMIT 3;</pre></div>
   </table>
   <p><b>GROUP BY의 핵심은 "접는다"입니다.</b> 20판의 기록이 캐릭터 네 종류로 묶이면 결과는 네 줄이 됩니다. 그래서 묶은 열이 아닌 열은 그대로 가져올 수 없습니다. 네 줄로 접힌 칸에 스무 개의 점수를 한꺼번에 넣을 수 없기 때문입니다. 그런 열은 <code>COUNT</code>·<code>AVG</code> 같은 집계 함수로 감싸 <b>하나의 값으로 줄여야</b> 합니다. 아래에서 직접 해 보면 금방 보입니다.</p>
 
+  <figure class="interactive" data-fig="gmrank">
+  <div class="appw" data-appw="gm">
+    <div class="appw-grid">
+      <div class="appw-pane">
+        <p class="appw-cap"><span class="dot"></span>앱 화면 — 탭을 눌러 보세요</p>
+        <div class="gm">
+          <div class="gm-hd">
+            <div class="gm-season"><span class="live"></span>SEASON 3 · 랭킹</div>
+            <div class="gm-me">
+              <span class="gm-face">🗡️</span>
+              <span class="gm-mine"><b>보리</b><span class="gm-rec"></span></span>
+              <span class="gm-wr"><b class="gm-wrv"></b><span>승률</span></span>
+            </div>
+          </div>
+          <div class="gm-tabs">
+            <button type="button" class="gm-tab on" data-g="캐릭터">캐릭터별</button>
+            <button type="button" class="gm-tab" data-g="플레이어">플레이어별</button>
+            <button type="button" class="gm-tab" data-g="결과">승·패별</button>
+          </div>
+          <div class="gm-list"></div>
+        </div>
+        <div class="appw-ctl">
+          <button type="button" class="appw-btn gm-f" data-f="COUNT">판수 순</button>
+          <button type="button" class="appw-btn gm-f" data-f="AVG">평균 점수 순</button>
+          <button type="button" class="appw-btn gm-f" data-f="MAX">최고 점수 순</button>
+        </div>
+      </div>
+      <div class="appw-pane">
+        <p class="appw-cap sqlcap"><span class="dot"></span>지금 실행된 문장</p>
+        <div class="appw-log gm-log"></div>
+      </div>
+    </div>
+  </div>
+  <figcaption>탭을 바꿀 때마다 <b>GROUP BY</b> 뒤의 열이 바뀝니다. 20판이 몇 줄로 접히는지 세어 보세요 — 캐릭터별은 네 줄, 승·패별은 두 줄입니다.</figcaption>
+  </figure>
+<script>
+(function () {
+  var root = document.querySelector('[data-appw="gm"]'); if (!root) return;
+  var ROWS = window.GAME20 || (window.GAME20 = [
+    [1,"보리","검사","승",320], [2,"하늘","궁수","패",180],
+    [3,"지우","마법사","승",290], [4,"서준","힐러","승",240],
+    [5,"민아","검사","패",150], [6,"보리","궁수","승",310],
+    [7,"하늘","마법사","승",275], [8,"지우","검사","패",160],
+    [9,"서준","궁수","패",195], [10,"민아","마법사","승",330],
+    [11,"보리","힐러","패",205], [12,"하늘","검사","승",300],
+    [13,"지우","궁수","승",285], [14,"서준","마법사","패",170],
+    [15,"민아","힐러","패",145], [16,"보리","검사","승",340],
+    [17,"하늘","힐러","패",165], [18,"지우","마법사","승",295],
+    [19,"서준","검사","승",265], [20,"민아","궁수","패",175]
+  ]);
+  var list = root.querySelector(".gm-list"), log = root.querySelector(".gm-log");
+  var ICON = { "검사": "🗡️", "궁수": "🏹", "마법사": "🔮", "힐러": "✨",
+               "보리": "🐶", "하늘": "☁️", "지우": "🐱", "서준": "⚡", "민아": "🌙", "승": "🏆", "패": "💧" };
+  var g = "캐릭터", f = "COUNT";
+  var FN = { COUNT: { sql: "COUNT(*)", as: "판수", unit: "판" },
+             AVG: { sql: "AVG(점수)", as: "평균점수", unit: "점" },
+             MAX: { sql: "MAX(점수)", as: "최고점수", unit: "점" } };
+  var COL = { "플레이어": 1, "캐릭터": 2, "결과": 3, "점수": 4 };
+  function esc(x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+  function paint(sql, note) {
+    var lines = log.querySelectorAll(".appw-line");
+    if (lines.length > 3) lines[lines.length - 1].remove();
+    Array.prototype.forEach.call(log.querySelectorAll(".appw-line"), function (e) { e.classList.remove("on"); });
+    var em = log.querySelector(".appw-empty"); if (em) em.remove();
+    var d = document.createElement("div");
+    d.className = "appw-line on";
+    d.innerHTML = esc(sql).replace(/\b(SELECT|FROM|WHERE|GROUP BY|ORDER BY|DESC|AS|COUNT|AVG|MAX|AND)\b/g, '<span class="kw">$1</span>')
+      .replace(/'([^']*)'/g, "<span class=\"st\">'$1'</span>") + '<span class="nm">' + esc(note) + '</span>';
+    log.insertBefore(d, log.firstChild);
+  }
+  function agg() {
+    var m = {};
+    ROWS.forEach(function (r) {
+      var k = r[COL[g]];
+      (m[k] = m[k] || []).push(r[COL["점수"]]);
+    });
+    return Object.keys(m).map(function (k) {
+      var v = m[k], val;
+      if (f === "COUNT") val = v.length;
+      else if (f === "AVG") val = Math.round(v.reduce(function (a, b) { return a + b; }, 0) / v.length);
+      else val = Math.max.apply(null, v);
+      return { k: k, val: val, n: v.length };
+    }).sort(function (a, b) { return b.val - a.val; });
+  }
+  function render(note) {
+    var res = agg(), max = res.length ? res[0].val : 1;
+    list.innerHTML = "";
+    res.forEach(function (r, i) {
+      var el = document.createElement("div");
+      el.className = "gm-row" + (i === 0 ? " top" : "");
+      el.innerHTML = '<span class="gm-rk">' + (i + 1) + '</span>' +
+        '<span class="gm-ico">' + (ICON[r.k] || "🎮") + '</span>' +
+        '<span class="gm-nm"><b>' + esc(r.k) + '</b><span class="gm-bar"><i style="width:' + Math.round(r.val / max * 100) + '%"></i></span></span>' +
+        '<span class="gm-num"><b>' + r.val.toLocaleString() + '</b><span>' + FN[f].unit + (f === "COUNT" ? "" : " · " + r.n + "판") + '</span></span>';
+      list.appendChild(el);
+    });
+    paint("SELECT " + g + ", " + FN[f].sql + " AS " + FN[f].as + "\nFROM matches\nGROUP BY " + g + "\nORDER BY " + FN[f].as + " DESC;",
+      note || ("20판이 " + g + " " + res.length + "종류로 접혀 " + res.length + "줄이 되었습니다."));
+  }
+  root.querySelectorAll(".gm-tab").forEach(function (b) {
+    b.addEventListener("click", function () {
+      root.querySelectorAll(".gm-tab").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on"); g = b.dataset.g;
+      render("묶는 열을 " + g + "로 바꿨습니다. 같은 20판인데 결과가 " + agg().length + "줄로 접힙니다.");
+    });
+  });
+  root.querySelectorAll(".gm-f").forEach(function (b) {
+    b.addEventListener("click", function () {
+      f = b.dataset.f;
+      render(f === "COUNT" ? "COUNT(*)는 묶음마다 행이 몇 개인지 셉니다."
+        : f === "AVG" ? "AVG(점수)는 묶음 안 점수의 평균입니다. 묶지 않았다면 스무 개 값을 한 칸에 넣을 수 없습니다."
+        : "MAX(점수)는 묶음 안에서 가장 큰 값 하나만 남깁니다.");
+    });
+  });
+  // 내 전적 요약
+  var mine = ROWS.filter(function (r) { return r[1] === "보리"; });
+  var win = mine.filter(function (r) { return r[3] === "승"; }).length;
+  root.querySelector(".gm-rec").textContent = mine.length + "전 " + win + "승 " + (mine.length - win) + "패";
+  root.querySelector(".gm-wrv").textContent = mine.length ? Math.round(win / mine.length * 100) + "%" : "-";
+  log.innerHTML = '<p class="appw-empty">탭을 눌러 보세요.<br>실행된 SQL이 여기에 쌓입니다.</p>';
+  render("이 화면을 열면 실행되는 문장입니다. 20판이 캐릭터 네 종류로 접혔습니다.");
+})();
+</script>
+
+
   <details class="glossary" open>
     <summary>🔬 움직여 보기 — SQL 문장 조립기 (게임 전적 20판 연습 데이터)</summary>
     <div class="gin">
@@ -548,18 +1146,18 @@ LIMIT 3;</pre></div>
 (function () {
   var box = document.querySelector(".sqlb"); if (!box) return;
   // 연습용 게임 전적 20판 (열: id, 플레이어, 캐릭터, 결과, 점수) — 예시 값. 아래 SQL 시뮬레이터도 같은 표를 쓴다
-  var rows = window.GAME20 = [
+  var rows = window.GAME20 || (window.GAME20 = [
     [1,"보리","검사","승",320], [2,"하늘","궁수","패",180],
     [3,"지우","마법사","승",290], [4,"서준","힐러","승",240],
     [5,"민아","검사","패",150], [6,"보리","궁수","승",310],
     [7,"하늘","마법사","승",275], [8,"지우","검사","패",160],
     [9,"서준","궁수","패",195], [10,"민아","마법사","승",330],
-    [11,"보리","힐러","승",255], [12,"하늘","검사","승",300],
+    [11,"보리","힐러","패",205], [12,"하늘","검사","승",300],
     [13,"지우","궁수","승",285], [14,"서준","마법사","패",170],
     [15,"민아","힐러","패",145], [16,"보리","검사","승",340],
     [17,"하늘","힐러","패",165], [18,"지우","마법사","승",295],
     [19,"서준","검사","승",265], [20,"민아","궁수","패",175]
-  ];
+  ]);
   var COL = {"id":0,"플레이어":1,"캐릭터":2,"결과":3,"점수":4};
   var g = box.querySelector(".sqlb-g"), f = box.querySelector(".sqlb-f"), w = box.querySelector(".sqlb-w"),
       o = box.querySelector(".sqlb-o"), l = box.querySelector(".sqlb-l");
@@ -1095,15 +1693,71 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
       <p>데이터셋은 분석할 데이터의 집합이며 급식 CSV는 이를 담는 한 가지 형태입니다. 데이터베이스는 여러 테이블을 담는 저장소이고, 그 안의 matches는 전적을 저장하는 테이블입니다. 테이블은 관계형 데이터베이스에서 데이터를 행과 열로 관리하는 구조입니다.</p>
     </details>
   </div>
+  <p class="mini" style="margin:18px 0 6px"><b>SQL 문장 고르기</b> — 상황을 읽고 알맞은 문장을 고릅니다. 답을 누르면 해설이 나옵니다.</p>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 어느 팀이 "우리 학교 학생들의 등하교 위치 기록을 모아 시간대별 이동 패턴을 분석하겠다"는 주제를 제안했습니다. 주제 판단의 세 물음 중 이 주제가 걸리는 곳은?</div>
+    <div class="qq"><span class="qn">문제 3</span> 인스타그램 검색창에 <b>#고양이</b>를 넣었습니다. 게시물의 해시태그 열에는 <code>#고양이 #박스</code>처럼 여러 태그가 한 칸에 들어 있습니다. 어느 문장이 맞습니까?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">첫째 물음 — 등하교 위치 데이터는 모을 방법이 없기 때문</button>
-        <button class="opt">둘째 물음 — 이동 패턴은 우리가 배운 분석 틀에 맞지 않기 때문</button>
-        <button class="opt" data-ok="1">셋째 물음 — 위치 기록은 이어 붙이면 특정 학생의 동선이 드러나는 민감한 개인정보라, 동의 없는 수집·분석이 사생활을 침해하기 때문</button>
+        <button class="opt"><code>SELECT * FROM posts WHERE 해시태그 = '#고양이';</code></button>
+        <button class="opt" data-ok="1"><code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></button>
+        <button class="opt"><code>SELECT * FROM posts GROUP BY 해시태그;</code></button>
       </div>
-      <div class="fb">데이터가 있다는 것과 써도 된다는 것은 다릅니다. 개인을 추적할 수 없는 형태로 바꾸어 다시 설계해야 합니다.</div>
+      <div class="fb">한 칸에 태그가 여러 개 들어 있으므로 <b>=</b>로는 찾지 못합니다. 정확히 '#고양이' 한 글자만 들어 있는 행만 걸리기 때문입니다. <b>LIKE '%#고양이%'</b>는 앞뒤로 무엇이 오든 그 말이 들어 있으면 찾습니다. GROUP BY는 묶어서 세는 낱말이라 검색에 쓰지 않습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 4</span> 내가 보낸 메시지(id 305)를 상대가 읽어서 <b>노란 숫자 1이 사라졌습니다.</b> 이때 실행된 문장은?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt"><code>DELETE FROM messages WHERE id = 305;</code></button>
+        <button class="opt" data-ok="1"><code>UPDATE messages SET 읽음 = true WHERE id = 305;</code></button>
+        <button class="opt"><code>INSERT INTO messages (읽음) VALUES (true);</code></button>
+      </div>
+      <div class="fb">메시지는 그대로 있고 <b>읽음 값만 바뀌었으므로 UPDATE</b>입니다. DELETE였다면 말풍선이 사라졌을 것이고, INSERT였다면 새 메시지가 하나 더 생겼을 것입니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 5</span> 게임 랭킹 화면에 <b>캐릭터별 평균 점수</b>를 높은 순으로 띄우려고 합니다.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt"><code>SELECT 캐릭터, 점수 FROM matches ORDER BY 점수 DESC;</code></button>
+        <button class="opt"><code>SELECT AVG(점수) FROM matches WHERE 캐릭터;</code></button>
+        <button class="opt" data-ok="1"><code>SELECT 캐릭터, AVG(점수) FROM matches GROUP BY 캐릭터 ORDER BY AVG(점수) DESC;</code></button>
+      </div>
+      <div class="fb">"캐릭터별"이라는 말이 곧 <b>GROUP BY 캐릭터</b>입니다. 첫 번째 문장은 묶지 않아 스무 판이 스무 줄로 그대로 나옵니다. 두 번째 문장의 <code>WHERE 캐릭터</code>는 조건이 아니라 열 이름만 적어 둔 것이라 문장이 되지 않습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 6</span> 피드를 열 때 <b>가장 최근 게시물 다섯 개만</b> 가져오려고 합니다.</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt" data-ok="1"><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 5;</code></button>
+        <button class="opt"><code>SELECT * FROM posts LIMIT 5 ORDER BY 올린시각 DESC;</code></button>
+        <button class="opt"><code>SELECT * FROM posts WHERE 올린시각 = 5;</code></button>
+      </div>
+      <div class="fb">먼저 <b>줄을 세우고(ORDER BY) 그다음 앞에서 자릅니다(LIMIT)</b>. 순서를 바꿔 쓰면 문장이 되지 않습니다. 세 번째는 올린 시각이 5인 게시물을 찾는 조건이라 뜻이 전혀 다릅니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 7</span> AI에게 "내가 보낸 메시지를 지워 줘"라고 했더니 아래 세 문장을 주었습니다. <b>실행하면 안 되는 문장</b>은?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt"><code>DELETE FROM messages WHERE id = 305 AND 보낸사람 = '나';</code></button>
+        <button class="opt" data-ok="1"><code>DELETE FROM messages;</code></button>
+        <button class="opt"><code>SELECT * FROM messages WHERE 보낸사람 = '나';</code></button>
+      </div>
+      <div class="fb"><b>WHERE가 없는 DELETE는 표의 모든 행을 지웁니다.</b> 단톡방의 메시지가 전부 사라집니다. 첫 번째 문장은 조건 두 개를 모두 만족하는 한 행만 지우고, 세 번째는 가져오기만 하므로 아무것도 바뀌지 않습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 8</span> cat_mong 프로필에 <b>"게시물 27"</b>이라고 떠 있습니다. 이 숫자를 만드는 문장은?</div>
+    <div class="qitem">
+      <div class="qopts qopts-col">
+        <button class="opt"><code>SELECT 작성자 FROM posts WHERE 작성자 = 'cat_mong';</code></button>
+        <button class="opt"><code>SELECT MAX(id) FROM posts WHERE 작성자 = 'cat_mong';</code></button>
+        <button class="opt" data-ok="1"><code>SELECT COUNT(*) FROM posts WHERE 작성자 = 'cat_mong';</code></button>
+      </div>
+      <div class="fb"><b>COUNT(*)는 조건에 맞는 행이 몇 개인지 셉니다.</b> 첫 번째는 계정 이름이 27줄 나올 뿐 숫자가 되지 않고, MAX(id)는 가장 큰 게시물 번호라서 27이 아닐 수 있습니다. 중간에 지운 게시물이 있으면 번호와 개수가 어긋납니다.</div>
     </div>
   </div>
 
