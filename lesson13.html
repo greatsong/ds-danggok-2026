@@ -148,7 +148,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 .sim .w-card button:active{transform:scale(.96)}
 .sim .w-card button.ghost{background:#fff;color:var(--c)}
 .sim .w-card .w-reset{border-color:var(--w-line);background:#fff;color:var(--w-soft)}
-/* 댓글 표: 구조는 table, 보이기는 말풍선 목록 */
+/* 댓글 테이블: 구조는 table, 보이기는 말풍선 목록 */
 .sim .w-table{display:block;width:100%;margin:0;border:none;background:transparent}
 .sim .w-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .sim .w-table tbody{display:flex;flex-direction:column;gap:8px}
@@ -437,7 +437,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <span class="by">오늘은 그 문장을 읽습니다 — 인스타그램·카카오톡·게임이 데이터를 다루는 방식</span>
   </div>
 
-  <p class="lead">인스타그램에서 피드를 내리고, 카카오톡에서 메시지를 보내고, 게임에서 랭킹을 확인할 때마다 어딘가의 <b>표</b>에서 행을 가져오거나 새 행을 넣는 일이 일어납니다. 그 일을 시키는 말이 <b>SQL</b>입니다. 오늘은 여러분이 매일 쓰는 앱의 화면을 SQL 문장으로 바꿔 읽어 봅니다.</p>
+  <p class="lead">인스타그램에서 피드를 내리고, 카카오톡에서 메시지를 보내고, 게임에서 랭킹을 확인할 때마다 어딘가의 <b>테이블</b>에서 행을 가져오거나 새 행을 넣는 일이 일어납니다. 그 일을 시키는 말이 <b>SQL</b>입니다. 오늘은 여러분이 매일 쓰는 앱의 화면을 SQL 문장으로 바꿔 읽어 봅니다.</p>
 
   <p class="mini">SQL 문장을 직접 외워 쓰는 것이 목표가 아닙니다. 화면에서 벌어지는 일과 문장이 어떻게 대응하는지 읽을 수 있으면 됩니다. 그래야 AI가 써 준 코드가 무엇을 하는 코드인지 알아볼 수 있습니다.</p>
 
@@ -454,7 +454,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
   <p>여러 사람이 함께 쓰는 서비스는 데이터를 파일 하나가 아니라 <b>데이터베이스</b>에 담습니다. 동시에 들어오는 입력을 각각 저장하고, 쌓인 기록에서 원하는 것만 골라 읽어야 하기 때문입니다. 그 저장소에 말을 거는 언어가 SQL이고, 오늘은 그 문장을 읽는 법을 익힙니다.</p>
   <ul class="steps">
     <li><b>데이터셋·데이터베이스·테이블</b>을 실제 예에 각각 대응해 구분할 수 있다.</li>
-    <li>SQL 문장을 읽고 <b>조회·추가·갱신·삭제</b> 중 어느 동작인지, 어느 표의 어느 행이 대상인지 말할 수 있다.</li>
+    <li>SQL 문장을 읽고 <b>조회·추가·갱신·삭제</b> 중 어느 동작인지, 어느 테이블의 어느 행이 대상인지 말할 수 있다.</li>
     <li><b>WHERE·COUNT·GROUP BY</b>가 각각 무엇을 하는지 설명하고, 앱 화면의 기능과 짝지을 수 있다.</li>
   </ul>
 
@@ -462,7 +462,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
   <div class="tbquote">
     <div class="h">📖 교과서의 설명 <span class="src">『데이터 과학』 27쪽</span></div>
     <p class="q">"데이터베이스의 각 테이블에 저장된 데이터들은 공통적인 속성을 기반으로 서로 연결될 수 있다." <span class="src">(27쪽)</span></p>
-    <p class="t">→ 교과서는 도서관의 책 목록·대출 기록 테이블로 설명합니다. 인스타그램의 게시물 표와 댓글 표도 같은 구조이며, 게시물 번호로 서로 이어집니다.</p>
+    <p class="t">→ 교과서는 도서관의 책 목록·대출 기록 테이블로 설명합니다. 인스타그램의 게시물 테이블와 댓글 테이블도 같은 구조이며, 게시물 번호로 서로 이어집니다.</p>
   </div>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 25~27쪽</span></div>
@@ -536,7 +536,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <div class="h">🧩 데이터셋 · 데이터베이스 · 테이블 — 우리 실습에 대응하면</div>
     <p>세 낱말은 크기가 아니라 <b>담는 자격</b>이 다릅니다. <b>데이터셋</b>은 한 주제로 모인 데이터의 집합입니다. 12차시에 사용한 급식 CSV 파일 하나가 데이터셋을 담은 한 가지 형태입니다.</p>
     <p><b>데이터베이스</b>는 여러 사람이 함께 쓰도록 통합 관리되는 데이터의 집합입니다. 오늘 준비하는 Supabase 프로젝트 안의 저장소가 여기에 해당하며, 그 안에는 여러 개의 표가 들어갈 수 있습니다.</p>
-    <p><b>테이블</b>은 그 안에 표 형태로 저장된 데이터셋 하나입니다. 인스타그램의 게시물 표, 카카오톡의 메시지 표, 게임의 전적 표가 모두 테이블입니다. 파일이냐 데이터베이스냐가 데이터셋의 자격을 정하지는 않습니다. 같은 대결 기록을 CSV로 내려받아도 그것은 여전히 같은 데이터셋입니다.</p>
+    <p><b>테이블</b>은 그 안에 표 형태로 저장된 데이터셋 하나입니다. 인스타그램의 게시물 테이블, 카카오톡의 메시지 테이블, 게임의 전적 테이블가 모두 테이블입니다. 파일이냐 데이터베이스냐가 데이터셋의 자격을 정하지는 않습니다. 같은 대결 기록을 CSV로 내려받아도 그것은 여전히 같은 데이터셋입니다.</p>
   </div>
   <p class="mini">위 그림의 두 표는 일부 열만 보여 줍니다. 실제 서비스는 사진·해시태그·좋아요 수처럼 훨씬 많은 열을 함께 저장합니다.</p>
   <p>여러 사람이 파일 사본을 주고받거나 파일 전체를 덮어쓰는 방식은 아래와 같은 문제가 생길 수 있습니다. 데이터베이스는 동시 처리, 조건 검색, 제약과 접근 권한을 관리하는 기능을 제공합니다. 이 기능들도 앱과 데이터베이스에 올바르게 설정해야 합니다.</p>
@@ -678,8 +678,8 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span> <span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok t">올린시각</span> <span class="sqlx-tok k">DESC</span> <span class="sqlx-tok k">LIMIT</span> <span class="sqlx-tok v">5</span>;</div>
     <div class="sqlx-steps">
       <div class="sqlx-step"><span class="n">SELECT</span><span class="d"><b>무엇을</b> 가져올까 — 작성자와 해시태그, 이 두 열만. <code>*</code>를 쓰면 모든 열입니다.</span></div>
-      <div class="sqlx-step"><span class="n">FROM</span><span class="d"><b>어디서</b> 가져올까 — 게시물 표(posts)에서.</span></div>
-      <div class="sqlx-step"><span class="n">WHERE</span><span class="d"><b>어떤 행만</b> 남길까 — 작성자가 '석리송'인 행만. 이 줄이 없으면 표의 모든 행이 대상입니다.</span></div>
+      <div class="sqlx-step"><span class="n">FROM</span><span class="d"><b>어디서</b> 가져올까 — 게시물 테이블(posts)에서.</span></div>
+      <div class="sqlx-step"><span class="n">WHERE</span><span class="d"><b>어떤 행만</b> 남길까 — 작성자가 '석리송'인 행만. 이 줄이 없으면 테이블의 모든 행이 대상입니다.</span></div>
       <div class="sqlx-step"><span class="n">ORDER BY</span><span class="d"><b>어떤 순서로</b> 늘어놓을까 — 올린 시각 기준. <code>DESC</code>는 큰 것부터(최근부터), <code>ASC</code>는 작은 것부터입니다.</span></div>
       <div class="sqlx-step"><span class="n">LIMIT</span><span class="d"><b>몇 개만</b> 가져올까 — 앞에서 다섯 줄만.</span></div>
     </div>
@@ -691,18 +691,18 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
   <p>가져오는 문장이 SELECT라면, <b>넣고·바꾸고·지우는 문장</b>은 첫 낱말이 각각 INSERT·UPDATE·DELETE입니다. 이 셋도 자리가 정해져 있습니다.</p>
   <div class="sqlx">
     <div class="sqlx-steps">
-      <div class="sqlx-step"><span class="n">INSERT INTO</span><span class="d">어느 표의 어느 열에 <b>새 행을 넣을까</b> — <code>INSERT INTO 표 (열, 열) VALUES (값, 값);</code></span></div>
-      <div class="sqlx-step"><span class="n">UPDATE</span><span class="d">어느 행의 어느 값을 <b>바꿀까</b> — <code>UPDATE 표 SET 열 = 값 WHERE 조건;</code></span></div>
-      <div class="sqlx-step"><span class="n">DELETE FROM</span><span class="d">어느 행을 <b>지울까</b> — <code>DELETE FROM 표 WHERE 조건;</code></span></div>
+      <div class="sqlx-step"><span class="n">INSERT INTO</span><span class="d">어느 테이블의 어느 열에 <b>새 행을 넣을까</b> — <code>INSERT INTO 테이블 (열, 열) VALUES (값, 값);</code></span></div>
+      <div class="sqlx-step"><span class="n">UPDATE</span><span class="d">어느 행의 어느 값을 <b>바꿀까</b> — <code>UPDATE 테이블 SET 열 = 값 WHERE 조건;</code></span></div>
+      <div class="sqlx-step"><span class="n">DELETE FROM</span><span class="d">어느 행을 <b>지울까</b> — <code>DELETE FROM 테이블 WHERE 조건;</code></span></div>
     </div>
-    <p class="sqlx-order" style="margin-top:10px"><b>기억할 것</b> — UPDATE와 DELETE에 WHERE를 빠뜨리면 <b>표의 모든 행</b>이 대상이 됩니다.</p>
+    <p class="sqlx-order" style="margin-top:10px"><b>기억할 것</b> — UPDATE와 DELETE에 WHERE를 빠뜨리면 <b>테이블의 모든 행</b>이 대상이 됩니다.</p>
   </div>
   <p class="mini">아래 세 위젯에서는 앱을 만질 때마다 실행된 문장이 오른쪽에 나타나고, <b>낱말마다 무슨 뜻인지</b> 함께 표시됩니다. 문장을 외우지 말고, 자리마다 무엇이 들어갔는지 읽어 보십시오.</p>
 
 <script>
 /* 위젯 공통 — 실행된 SQL을 낱말별로 풀어 설명한다 */
 (function () {
-  var TBL = { posts: "게시물 표", messages: "메시지 표", matches: "전적 표" };
+  var TBL = { posts: "게시물 테이블", messages: "메시지 테이블", matches: "전적 테이블" };
   function tbl(n) { return (TBL[n] || n) + "(" + n + ")"; }
   function esc(x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
   function cond(c) {
@@ -746,13 +746,13 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
       r.push(["UPDATE " + m[1], tbl(m[1]) + "의 <b>이미 있는 행을 고칩니다.</b> 행이 늘거나 줄지 않습니다."]);
       r.push(["SET " + m[2], "바꿀 값입니다. " + m[2].split(/\s*,\s*/).map(function (x) { return "‘" + x + "’"; }).join(", ") + "로 바꿉니다."]);
       r.push(m[3] ? ["WHERE " + m[3], cond(m[3])]
-                  : ["WHERE 없음", "<b>조건이 없어 표의 모든 행이 바뀝니다.</b> UPDATE에서 가장 위험한 실수입니다."]);
+                  : ["WHERE 없음", "<b>조건이 없어 테이블의 모든 행이 바뀝니다.</b> UPDATE에서 가장 위험한 실수입니다."]);
       return r;
     }
     if ((m = q.match(/^DELETE FROM\s+(\S+)(?:\s+WHERE\s+(.+))?$/i))) {
       r.push(["DELETE FROM " + m[1], tbl(m[1]) + "에서 <b>행을 지웁니다.</b> 되돌릴 수 없습니다."]);
       r.push(m[2] ? ["WHERE " + m[2], cond(m[2])]
-                  : ["WHERE 없음", "<b>조건이 없어 표의 모든 행이 지워집니다.</b> 절대 이렇게 쓰지 않습니다."]);
+                  : ["WHERE 없음", "<b>조건이 없어 테이블의 모든 행이 지워집니다.</b> 절대 이렇게 쓰지 않습니다."]);
       return r;
     }
     if ((m = q.match(/^SELECT\s+(.+?)\s+FROM\s+(\S+)(.*)$/i))) {
@@ -794,8 +794,8 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 </script>
 
   <h3>① 인스타그램으로 읽기 — SELECT 한 문장의 네 낱말</h3>
-  <p>인스타그램을 열면 피드가 뜹니다. 그 순간 게시물 표에서 최근 글 몇 개를 가져오는 문장이 실행됩니다. 어느 표에서(FROM) 어느 열을(SELECT) 가져올지 말하고, 필요하면 조건(WHERE)과 정렬(ORDER BY)을 덧붙입니다. 대문자로 쓴 낱말이 명령어이고 나머지가 표 이름과 열 이름입니다.</p>
-  <p class="mini">아래 <code>posts</code>는 게시물 한 건이 한 행인 표입니다. 이 수업에서 원리를 설명하려고 단순하게 만든 예시이며, 실제 인스타그램의 표 구조는 아닙니다.</p>
+  <p>인스타그램을 열면 피드가 뜹니다. 그 순간 게시물 테이블에서 최근 글 몇 개를 가져오는 문장이 실행됩니다. 어느 테이블에서(FROM) 어느 열을(SELECT) 가져올지 말하고, 필요하면 조건(WHERE)과 정렬(ORDER BY)을 덧붙입니다. 대문자로 쓴 낱말이 명령어이고 나머지가 테이블 이름과 열 이름입니다.</p>
+  <p class="mini">아래 <code>posts</code>는 게시물 한 건이 한 행인 테이블입니다. 이 수업에서 원리를 설명하려고 단순하게 만든 예시이며, 실제 인스타그램의 테이블 구조는 아닙니다.</p>
   <div class="codewrap code"><span class="label">SQL · 읽기</span><pre>-- 피드를 연다: 최근 게시물 20개의 작성자와 올린 시각을 가져온다
 SELECT 작성자, 해시태그, 올린시각
 FROM posts
@@ -808,7 +808,7 @@ SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
     <thead><tr><th>낱말</th><th>뜻</th><th>인스타그램에서는</th></tr></thead>
     <tbody>
       <tr><td><b>SELECT</b></td><td>가져올 열을 고른다. *는 모든 열</td><td>"작성자와 올린 시각을"</td></tr>
-      <tr><td><b>FROM</b></td><td>어느 표에서 가져올지</td><td>"게시물 표에서"</td></tr>
+      <tr><td><b>FROM</b></td><td>어느 테이블에서 가져올지</td><td>"게시물 테이블에서"</td></tr>
       <tr><td><b>WHERE</b></td><td>조건에 맞는 행만 남긴다</td><td>"해시태그가 #고양이인 것만"</td></tr>
       <tr><td><b>ORDER BY</b></td><td>정렬 기준. DESC는 내림차순, ASC는 오름차순</td><td>"최근 것부터"</td></tr>
       <tr><td><b>LIMIT</b></td><td>앞에서 몇 행만 가져온다</td><td>"우선 20개만" — 나머지는 더 내리면 가져온다</td></tr>
@@ -969,9 +969,9 @@ SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
 
 
   <h3>② 카카오톡으로 쓰기 — 추가·갱신·삭제</h3>
-  <p>읽기만으로는 앱이 되지 않습니다. 메시지를 보내면 표에 행이 하나 <b>추가</b>되고, 상대가 읽으면 그 행의 값이 <b>갱신</b>되며, 메시지를 지우면 행이 <b>삭제</b>됩니다. 세 동작이 각각 한 문장입니다.</p>
-  <p class="mini">아래 <code>messages</code>도 원리를 보이기 위한 예시 표입니다. 실제 메신저는 암호화·전송 확인 등 훨씬 많은 처리를 함께 합니다.</p>
-  <div class="codewrap code"><span class="label">SQL · 추가 · 갱신 · 삭제</span><pre>-- 추가(INSERT): 메시지를 보내면 표에 새 행이 하나 생긴다
+  <p>읽기만으로는 앱이 되지 않습니다. 메시지를 보내면 테이블에 행이 하나 <b>추가</b>되고, 상대가 읽으면 그 행의 값이 <b>갱신</b>되며, 메시지를 지우면 행이 <b>삭제</b>됩니다. 세 동작이 각각 한 문장입니다.</p>
+  <p class="mini">아래 <code>messages</code>도 원리를 보이기 위한 예시 테이블입니다. 실제 메신저는 암호화·전송 확인 등 훨씬 많은 처리를 함께 합니다.</p>
+  <div class="codewrap code"><span class="label">SQL · 추가 · 갱신 · 삭제</span><pre>-- 추가(INSERT): 메시지를 보내면 테이블에 새 행이 하나 생긴다
 INSERT INTO messages (방id, 보낸사람, 내용, 읽음)
 VALUES (12, '보리', '오늘 급식 뭐야?', false);
 
@@ -983,7 +983,7 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</pre></div>
   <table class="daymap">
     <thead><tr><th>낱말</th><th>뜻</th><th>카카오톡에서는</th></tr></thead>
     <tbody>
-      <tr><td><b>INSERT INTO … VALUES</b></td><td>표에 새 행을 하나 넣는다</td><td>메시지 전송</td></tr>
+      <tr><td><b>INSERT INTO … VALUES</b></td><td>테이블에 새 행을 하나 넣는다</td><td>메시지 전송</td></tr>
       <tr><td><b>UPDATE … SET</b></td><td>이미 있는 행의 값을 바꾼다</td><td>읽음 표시 · 프로필 상태메시지 수정</td></tr>
       <tr><td><b>DELETE FROM</b></td><td>행을 지운다</td><td>메시지 삭제</td></tr>
       <tr><td><b>WHERE</b></td><td>어느 행이 대상인지 좁힌다</td><td>"305번 메시지, 그중에서도 내가 보낸 것만"</td></tr>
@@ -1105,11 +1105,11 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</pre></div>
 
   <div class="callout warn">
     <div class="h">⚠️ WHERE가 없는 UPDATE·DELETE</div>
-    <p>세 문장 가운데 <b>UPDATE와 DELETE에는 WHERE가 반드시 필요합니다.</b> WHERE를 빠뜨리면 그 권한으로 건드릴 수 있는 <b>모든 행</b>이 대상이 됩니다. <code>DELETE FROM messages;</code> 한 줄이면 표의 메시지가 전부 사라집니다. 실제 서비스가 이런 사고를 막는 방법은 두 가지입니다. 하나는 문장에 WHERE를 꼭 넣는 것이고, 다른 하나는 <b>애초에 지울 권한을 주지 않는 것</b>입니다. 여러분의 앱이 남의 메시지를 지울 수 없는 것은 착해서가 아니라 권한이 없기 때문입니다.</p>
+    <p>세 문장 가운데 <b>UPDATE와 DELETE에는 WHERE가 반드시 필요합니다.</b> WHERE를 빠뜨리면 그 권한으로 건드릴 수 있는 <b>모든 행</b>이 대상이 됩니다. <code>DELETE FROM messages;</code> 한 줄이면 테이블의 메시지가 전부 사라집니다. 실제 서비스가 이런 사고를 막는 방법은 두 가지입니다. 하나는 문장에 WHERE를 꼭 넣는 것이고, 다른 하나는 <b>애초에 지울 권한을 주지 않는 것</b>입니다. 여러분의 앱이 남의 메시지를 지울 수 없는 것은 착해서가 아니라 권한이 없기 때문입니다.</p>
   </div>
 
   <h3>③ 게임으로 묶어 세기 — COUNT와 GROUP BY</h3>
-  <p>게임을 끝내면 전적 화면이 뜹니다. "이번 시즌 120판, 승률 58%", "캐릭터별 평균 점수" 같은 숫자입니다. 이 숫자는 어딘가에 저장되어 있던 값이 아니라, <b>표에 쌓인 행을 그 자리에서 세어 만든 값</b>입니다. 대전 기록 한 판이 <code>matches</code> 표의 한 행이라고 해 봅시다.</p>
+  <p>게임을 끝내면 전적 화면이 뜹니다. "이번 시즌 120판, 승률 58%", "캐릭터별 평균 점수" 같은 숫자입니다. 이 숫자는 어딘가에 저장되어 있던 값이 아니라, <b>테이블에 쌓인 행을 그 자리에서 세어 만든 값</b>입니다. 대전 기록 한 판이 <code>matches</code> 표의 한 행이라고 해 봅시다.</p>
   <div class="codewrap code"><span class="label">SQL · 세기와 묶기</span><pre>-- 내가 이번 시즌에 몇 판 이겼나
 SELECT COUNT(*) FROM matches WHERE 플레이어 = '보리' AND 결과 = '승';
 
@@ -1248,7 +1248,7 @@ LIMIT 3;</pre></div>
   <details class="glossary" open>
     <summary>🔬 움직여 보기 — SQL 문장 조립기 (게임 전적 20판 연습 데이터)</summary>
     <div class="gin">
-      <p style="margin:10px 0 8px">아래에서 낱말을 고르면 SQL 문장이 만들어지고, 그 문장을 연습용 전적 20판 표에 실행한 결과가 바로 아래에 나타납니다. 점수는 연습용 예시 값입니다. 묶는 열을 바꿔 가며 결과가 몇 줄로 접히는지 확인합니다.</p>
+      <p style="margin:10px 0 8px">아래에서 낱말을 고르면 SQL 문장이 만들어지고, 그 문장을 연습용 전적 20판 테이블에 실행한 결과가 바로 아래에 나타납니다. 점수는 연습용 예시 값입니다. 묶는 열을 바꿔 가며 결과가 몇 줄로 접히는지 확인합니다.</p>
       <div class="sqlb" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:0.92rem">
         <label>묶는 열(GROUP BY) <select class="sqlb-g"><option value="캐릭터">캐릭터</option><option value="플레이어">플레이어</option><option value="결과">결과</option></select></label>
         <label>집계 <select class="sqlb-f"><option value="COUNT(*)">COUNT(*) 판수</option><option value="AVG(점수)">AVG(점수) 평균 점수</option><option value="MAX(점수)">MAX(점수) 최고 점수</option></select></label>
@@ -1324,10 +1324,10 @@ LIMIT 3;</pre></div>
   <div class="app-sql-wrap"><table class="daymap app-sql">
     <thead><tr><th>앱에서 하는 일</th><th>뒤에서 실행되는 SQL</th><th>읽는 법</th></tr></thead>
     <tbody>
-      <tr><td><b>📷 피드를 연다</b></td><td><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</code></td><td>게시물 표에서, 올린 시각이 늦은 것부터 20개만 가져온다.</td></tr>
+      <tr><td><b>📷 피드를 연다</b></td><td><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</code></td><td>게시물 테이블에서, 올린 시각이 늦은 것부터 20개만 가져온다.</td></tr>
       <tr><td><b>📷 #고양이를 검색한다</b></td><td><code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></td><td>해시태그 열에 '#고양이'가 들어 있는 행만 찾는다.</td></tr>
       <tr><td><b>📷 ❤ 좋아요를 누른다</b></td><td><code>UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = 4;</code></td><td>4번 게시물 한 행의 좋아요 값을 1 늘린다.</td></tr>
-      <tr><td><b>💬 메시지를 보낸다</b></td><td><code>INSERT INTO messages (방id, 보낸사람, 내용, 읽음) VALUES (12, '보리', '오늘 급식 뭐야?', false);</code></td><td>메시지 표에 새 행 하나를 넣는다.</td></tr>
+      <tr><td><b>💬 메시지를 보낸다</b></td><td><code>INSERT INTO messages (방id, 보낸사람, 내용, 읽음) VALUES (12, '보리', '오늘 급식 뭐야?', false);</code></td><td>메시지 테이블에 새 행 하나를 넣는다.</td></tr>
       <tr><td><b>💬 상대가 읽어 숫자 1이 사라진다</b></td><td><code>UPDATE messages SET 읽음 = true WHERE id = 305;</code></td><td>305번 메시지 한 행의 읽음 값을 바꾼다.</td></tr>
       <tr><td><b>💬 보낸 메시지를 삭제한다</b></td><td><code>DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</code></td><td>305번이면서 내가 보낸 행만 지운다. 두 조건을 모두 만족해야 한다.</td></tr>
       <tr><td><b>🎮 이번 시즌 전적을 본다</b></td><td><code>SELECT COUNT(*) FROM matches WHERE 플레이어 = '보리' AND 결과 = '승';</code></td><td>내가 이긴 판의 행 개수를 센다.</td></tr>
@@ -1348,9 +1348,9 @@ LIMIT 3;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="read">
-          <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 버튼을 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
+          <p class="sim-intro">테이블을 고르고 SQL 문장을 실행합니다. 게시물 테이블는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 버튼을 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 테이블 이름을 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
           <div class="sim-row">
-            <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 표 posts</option><option value="matches">게임 전적 표 matches</option></select></label>
+            <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 테이블 posts</option><option value="matches">게임 전적 테이블 matches</option></select></label>
             <span class="sim-cols"></span>
           </div>
           <div class="sim-exs"></div>
@@ -1363,7 +1363,7 @@ LIMIT 3;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="write" hidden>
-          <p class="sim-intro">석리송의 4번 게시물 '박스 새로 샀는데 포장지에 들어감 🐱'에 달린 댓글 표(comments)입니다. 월드컵 앱과 다른 댓글 연습 데이터입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
+          <p class="sim-intro">석리송의 4번 게시물 '박스 새로 샀는데 포장지에 들어감 🐱'에 달린 댓글 테이블(comments)입니다. 월드컵 앱과 다른 댓글 연습 데이터입니다. 댓글을 달고, 고치고, 좋아요를 누르고, 지울 때 뒤에서 어떤 문장이 실행되는지 봅니다. 표는 이 화면 안에서만 바뀝니다.</p>
           <div class="w-grid">
             <div class="w-card ins">
               <div class="w-h"><span class="w-ico">💬</span> 댓글 달기 — INSERT</div>
@@ -1406,7 +1406,7 @@ LIMIT 3;</pre></div>
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
   // ---- 데이터셋 (전부 가상의 예)
   var DS = {
-    posts: { name: "posts", label: "인스타그램 게시물 표", cols: ["id","작성자","내용","사진","해시태그","좋아요","올린시각"], num: { "id": 1, "좋아요": 1 },
+    posts: { name: "posts", label: "인스타그램 게시물 테이블", cols: ["id","작성자","내용","사진","해시태그","좋아요","올린시각"], num: { "id": 1, "좋아요": 1 },
       rows: [
         [1,"석리송","창가에서 낮잠 3시간째","🐱","#고양이 #낮잠",128,"09-01 12:40"],
         [2,"수정반","산책 가자고 목줄 물고 옴","🐶","#강아지 #산책",164,"09-01 18:05"],
@@ -1429,7 +1429,7 @@ LIMIT 3;</pre></div>
         ["계정별 좋아요 합계","SELECT 작성자, SUM(좋아요) AS 좋아요합 FROM posts GROUP BY 작성자 ORDER BY 좋아요합 DESC LIMIT 3;"],
         ["오류 재현 · 묶지 않은 열","SELECT 작성자, 내용 FROM posts GROUP BY 작성자;"]
       ] },
-    matches: { name: "matches", label: "게임 전적 표", cols: ["id","플레이어","캐릭터","결과","점수"], num: { "id": 1, "점수": 1 },
+    matches: { name: "matches", label: "게임 전적 테이블", cols: ["id","플레이어","캐릭터","결과","점수"], num: { "id": 1, "점수": 1 },
       rows: window.GAME20 || [],
       examples: [
         ["점수 높은 판 3개","SELECT 플레이어, 캐릭터, 점수 FROM matches ORDER BY 점수 DESC LIMIT 3;"],
@@ -1562,7 +1562,7 @@ LIMIT 3;</pre></div>
     steps.innerHTML = html;
   }
   setDS("posts");
-  // ---- 쓰기: 댓글 표 시뮬레이션
+  // ---- 쓰기: 댓글 테이블 시뮬레이션
   var W = sim.querySelector('[data-pane="write"]');
   var START = [[1, "수정반", "박스 안이 그렇게 좋아? 🐶", 12, "09-02 13:15"], [2, "hamzzi_choco", "포장지가 더 아늑하지", 8, "09-02 13:22"], [3, "rabbit_tori", "우리 집 상자도 빌려줄게", 5, "09-02 13:40"], [4, "parrot_kiwi", "박스! 박스!", 21, "09-02 14:05"], [5, "석리송", "다들 고마워요 😺", 3, "09-02 15:30"]];
   var gb = START.map(function (r) { return r.slice(); }), nextId = 6, wtb = W.querySelector(".w-table tbody"), wsql = W.querySelector(".w-sql"), wmsg = W.querySelector(".w-out");
@@ -1585,7 +1585,7 @@ LIMIT 3;</pre></div>
     var n = W.querySelector(".w-name").value.trim(), m = W.querySelector(".w-msg").value.trim();
     if (!n || !m) { say("-- 실행하지 않음", "계정 이름과 댓글 내용이 모두 있어야 저장합니다(빈 값 저장 금지 = 데이터 무결성).", true); return; }
     var id = nextId++; gb.push([id, n, m, 0, now()]); drawW(id, "ins");
-    say("INSERT INTO comments (작성자, 댓글)\nVALUES ('" + n + "', '" + m + "');", "댓글 표에 새 행 하나를 넣습니다. id(" + id + ")·좋아요(0)·작성시각은 직접 넣지 않아도 자동으로 채워집니다. 행이 " + gb.length + "개가 되었습니다. 화면에서는 댓글 하나가 새로 뜹니다.");
+    say("INSERT INTO comments (작성자, 댓글)\nVALUES ('" + n + "', '" + m + "');", "댓글 테이블에 새 행 하나를 넣습니다. id(" + id + ")·좋아요(0)·작성시각은 직접 넣지 않아도 자동으로 채워집니다. 행이 " + gb.length + "개가 되었습니다. 화면에서는 댓글 하나가 새로 뜹니다.");
     W.querySelector(".w-name").value = ""; W.querySelector(".w-msg").value = "";
   });
   W.querySelector(".w-update").addEventListener("click", function () {
@@ -1618,7 +1618,7 @@ LIMIT 3;</pre></div>
 </script>
 
   <h3 id="vote-db-setup">⑤ 표는 어떻게 만드나 — 교과서 31쪽 설계표가 그대로 문장이 된다</h3>
-  <p>표를 읽는 법을 익혔으니 이번에는 <b>표를 만드는 쪽</b>을 봅니다. 교과서 31쪽의 속성명·설명·데이터형·조건 양식으로 설계하면, 그 표가 그대로 SQL 문장이 됩니다. 아래 설계표는 <b>15차시에 실제로 만들 대결 기록 표</b>입니다. 어떤 열을 어떤 자료형으로 둘지 정하는 일은 AI가 대신해 주지 않습니다. 무엇을 기록할지 아는 사람이 정해서 말해 주어야 합니다.</p>
+  <p>표를 읽는 법을 익혔으니 이번에는 <b>표를 만드는 쪽</b>을 봅니다. 교과서 31쪽의 속성명·설명·데이터형·조건 양식으로 설계하면, 그 표가 그대로 SQL 문장이 됩니다. 아래 설계표는 <b>15차시에 실제로 만들 대결 기록 테이블</b>입니다. 어떤 열을 어떤 자료형으로 둘지 정하는 일은 AI가 대신해 주지 않습니다. 무엇을 기록할지 아는 사람이 정해서 말해 주어야 합니다.</p>
   <table class="daymap">
     <thead><tr><th>속성명</th><th>설명</th><th>데이터형</th><th>조건</th></tr></thead>
     <tbody>
@@ -1643,11 +1643,11 @@ LIMIT 3;</pre></div>
   <details class="glossary" open>
     <summary>🔬 움직여 보기 — 설계표를 채우면 CREATE TABLE 문장이 만들어진다 (교과서 31쪽 탐구활동)</summary>
     <div class="gin">
-      <p style="margin:10px 0 8px">교과서 31쪽의 쇼핑몰 테이블(사용자·제품·장바구니)을 예시로 불러오거나, 표 이름부터 직접 정해 나만의 표를 설계합니다. 속성명을 적고 데이터형과 조건을 고르면 오른쪽 아래에 SQL 문장이 바로 만들어지고, 그 문장을 우리말로 읽은 해석이 함께 나타납니다. 데이터베이스를 실제로 만드는 것이 아니라, 설계표의 한 칸이 SQL의 어느 낱말이 되는지 읽는 연습입니다.</p>
+      <p style="margin:10px 0 8px">교과서 31쪽의 쇼핑몰 테이블(사용자·제품·장바구니)을 예시로 불러오거나, 테이블 이름부터 직접 정해 나만의 테이블을 설계합니다. 속성명을 적고 데이터형과 조건을 고르면 오른쪽 아래에 SQL 문장이 바로 만들어지고, 그 문장을 우리말로 읽은 해석이 함께 나타납니다. 데이터베이스를 실제로 만드는 것이 아니라, 설계표의 한 칸이 SQL의 어느 낱말이 되는지 읽는 연습입니다.</p>
       <div class="sch">
         <div class="sch-bar">
-          <label>예시 불러오기 <select class="sch-preset"><option value="">직접 설계</option><option value="user">사용자 표</option><option value="product">제품 표</option><option value="cart">장바구니 표</option><option value="menu_duels">대결 기록 표</option></select></label>
-          <label>표 이름 <input class="sch-name" type="text" value="내표"></label>
+          <label>예시 불러오기 <select class="sch-preset"><option value="">직접 설계</option><option value="user">사용자 테이블</option><option value="product">제품 테이블</option><option value="cart">장바구니 테이블</option><option value="menu_duels">대결 기록 테이블</option></select></label>
+          <label>테이블 이름 <input class="sch-name" type="text" value="내표"></label>
           <button type="button" class="sch-add">+ 속성 추가</button>
         </div>
         <div class="sch-scroll">
@@ -1712,7 +1712,7 @@ LIMIT 3;</pre></div>
           '<label><input type="checkbox" data-k="uq" data-i="' + i + '"' + (r.uq ? " checked" : "") + (r.pk ? " disabled" : "") + '> 중복 불가</label> · ' +
           '<label' + (canAI ? "" : ' class="off"') + '><input type="checkbox" data-k="ai" data-i="' + i + '"' + (r.ai && canAI ? " checked" : "") + (canAI ? "" : " disabled") + '> 자동 증가</label> · ' +
           '<label' + (canDF ? "" : ' class="off"') + '><input type="checkbox" data-k="df" data-i="' + i + '"' + (r.df && canDF ? " checked" : "") + (canDF ? "" : " disabled") + '> 지금 시각을 기본값으로</label> · ' +
-          '<label>다른 표 참조 <input data-k="ref" data-i="' + i + '" type="text" value="' + esc(r.ref) + '" placeholder="표 이름"></label>' +
+          '<label>다른 표 참조 <input data-k="ref" data-i="' + i + '" type="text" value="' + esc(r.ref) + '" placeholder="테이블 이름"></label>' +
         '</td>' +
         '<td><button type="button" data-del="' + i + '" title="이 속성 지우기">✕</button></td>';
       tbody.appendChild(tr);
@@ -1774,14 +1774,14 @@ LIMIT 3;</pre></div>
 
 
   <details class="glossary">
-    <summary>🔎 심화 — 표와 표를 잇는 열(외래 키)과 JOIN</summary>
+    <summary>🔎 심화 — 테이블과 테이블을 잇는 열(외래 키)과 JOIN</summary>
     <div class="gin">
-      <p>교과서 31쪽 쇼핑몰 설계에서 장바구니 표는 사용자 표의 id와 제품 표의 id를 열로 가집니다. 다른 표의 기본 키를 가리키는 이 열을 <b>외래 키</b>라 하고, 두 표를 이 열로 이어 붙이는 문장이 JOIN입니다. 같은 정보를 두 표에 중복해서 적지 않아도 되는 것이 데이터베이스가 표를 여러 개로 나누는 까닭입니다.</p>
-      <div class="codewrap code"><span class="label">SQL · JOIN</span><pre>-- 장바구니에 담긴 제품의 이름과 수량을, 장바구니 표와 제품 표를 제품 id로 이어서 가져온다
+      <p>교과서 31쪽 쇼핑몰 설계에서 장바구니 테이블는 사용자 테이블의 id와 제품 테이블의 id를 열로 가집니다. 다른 표의 기본 키를 가리키는 이 열을 <b>외래 키</b>라 하고, 두 테이블을 이 열로 이어 붙이는 문장이 JOIN입니다. 같은 정보를 두 테이블에 중복해서 적지 않아도 되는 것이 데이터베이스가 표를 여러 개로 나누는 까닭입니다.</p>
+      <div class="codewrap code"><span class="label">SQL · JOIN</span><pre>-- 장바구니에 담긴 제품의 이름과 수량을, 장바구니 테이블와 제품 테이블를 제품 id로 이어서 가져온다
 SELECT 장바구니.사용자id, 제품.제품명, 장바구니.수량
 FROM 장바구니
 JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
-      <p>여기서는 외래 키가 "표와 표를 잇는 열"이라는 뜻까지만 알면 됩니다. JOIN 문장을 쓰는 연습은 팀 프로젝트에서 표가 둘 이상 필요해질 때 합니다.</p>
+      <p>여기서는 외래 키가 "테이블과 테이블을 잇는 열"이라는 뜻까지만 알면 됩니다. JOIN 문장을 쓰는 연습은 팀 프로젝트에서 테이블이 둘 이상 필요해질 때 합니다.</p>
     </div>
   </details>
 
@@ -1865,7 +1865,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
         <button class="opt" data-ok="1"><code>DELETE FROM messages;</code></button>
         <button class="opt"><code>SELECT * FROM messages WHERE 보낸사람 = '나';</code></button>
       </div>
-      <div class="fb"><b>WHERE가 없는 DELETE는 표의 모든 행을 지웁니다.</b> 단톡방의 메시지가 전부 사라집니다. 첫 번째 문장은 조건 두 개를 모두 만족하는 한 행만 지우고, 세 번째는 가져오기만 하므로 아무것도 바뀌지 않습니다.</div>
+      <div class="fb"><b>WHERE가 없는 DELETE는 테이블의 모든 행을 지웁니다.</b> 단톡방의 메시지가 전부 사라집니다. 첫 번째 문장은 조건 두 개를 모두 만족하는 한 행만 지우고, 세 번째는 가져오기만 하므로 아무것도 바뀌지 않습니다.</div>
     </div>
   </div>
   <div class="quiz">
@@ -1884,7 +1884,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   <ul class="checklist">
     <li>CSV 파일로 부족해지는 세 순간(동시에 쓰기·계속 쌓기·골라 읽기)을 말할 수 있다.</li>
     <li>데이터셋·데이터베이스·테이블을 실제 앱의 예에 대응해 구분할 수 있다.</li>
-    <li>SQL 문장 하나를 읽고 네 동작(조회·추가·갱신·삭제) 중 어느 것인지, 어느 표의 어느 행이 대상인지 말할 수 있다.</li>
+    <li>SQL 문장 하나를 읽고 네 동작(조회·추가·갱신·삭제) 중 어느 것인지, 어느 테이블의 어느 행이 대상인지 말할 수 있다.</li>
     <li>WHERE·COUNT·GROUP BY가 각각 무엇을 하는지 설명하고, 앱 화면의 기능과 짝지을 수 있다.</li>
     <li>WHERE 없는 UPDATE·DELETE가 왜 위험한지 한 문장으로 말할 수 있다.</li>
   </ul>
