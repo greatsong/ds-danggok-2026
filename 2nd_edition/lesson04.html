@@ -203,7 +203,7 @@ st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세
   <h3>그래프 5 · 박스플롯 (확장) — 장르별 관객 분포는 어떻게 다른가</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 다섯 번째 그래프를 추가해.
 - 영화가 10편 이상인 장르만 골라, 장르별 total_audi(총 관객)의 상자 그림(박스플롯)을 그려 줘.
-- 상자 밖으로 튀는 점에 마우스를 올리면 영화명이 보이게.</pre></div>
+- 수염 밖에 따로 표시한 점에 마우스를 올리면 영화명이 보이게.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 5. 장르별 총 관객 (박스플롯) ──
 st.header("5. 장르별 총 관객 (박스플롯)")
 big = df["장르"].value_counts()
@@ -212,7 +212,7 @@ fig5 = px.box(df[df["장르"].isin(big)], x="장르", y="total_audi", points="ou
               hover_name="movieNm")
 st.plotly_chart(fig5, width="stretch")
 st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
-  <p><b>읽는 법</b> — 상자의 가운데 선이 그 장르의 중앙값, 상자 밖으로 튀어 나간 점이 이상치입니다. 장르마다 상자의 위치와 높이가 다르고, 상자 위로 멀리 떨어진 점들이 곧 그 장르의 대작입니다. 히스토그램에서 본 쏠림을 장르별로 쪼개어 보는 그래프인 셈입니다.</p>
+  <p><b>읽는 법</b> — 상자 안의 선이 그 장르의 중앙값, 수염 밖에 따로 표시한 점이 이상치입니다. 장르마다 상자의 위치와 높이가 다르고, 위쪽 수염보다 멀리 떨어진 점은 그 장르에서 관객 수가 유난히 큰 영화입니다. 히스토그램에서 본 쏠림을 장르별로 쪼개어 보는 그래프인 셈입니다.</p>
 
   <h3>그래프 6 · 버블 (확장) — 첫 주 관객까지 넣으면 무엇이 더 보이나</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 여섯 번째 그래프를 추가해.
