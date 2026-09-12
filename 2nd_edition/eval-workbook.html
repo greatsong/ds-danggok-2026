@@ -67,7 +67,12 @@
   .wb .ladder { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 10px 0; }
   .wb .ladder .s { border: 1.5px solid var(--accent); background: #fff; border-radius: 8px; padding: 6px 12px; font-weight: 700; font-size: 0.88rem; }
   .wb .ladder .a { color: var(--muted); font-weight: 800; }
+  .print-student, .print-teacher { display: none; }
   @media print {
+    .screen-only { display: none !important; }
+    .print-student { display: inline; }
+    body.answers .print-student { display: none; }
+    body.answers .print-teacher { display: inline; }
     @page { size: A4; margin: 15mm 14mm 16mm; }
     body { background: #fff; font-size: 11pt; }
     .topbar, .pager, footer.foot { display: none !important; }
@@ -95,6 +100,7 @@
 
 <div class="wrap">
 <main class="wb">
+  <p class="version-note">활동지 개정: 2026-09-12 · 급식 예제: 중식 184일 기록 기준</p>
   <span class="eyebrow">중간고사 대비 · 손으로 푸는 활동지</span>
   <h1>모델 평가 <span class="a">손계산 활동지</span></h1>
   <div class="under"></div>
@@ -102,7 +108,7 @@
 
   <div class="rule">
     <div class="h">✍️ 활동지 규칙</div>
-    <p>계산 과정을 지우지 않습니다. 과정이 곧 점수입니다. 답만 적힌 활동지는 검산할 수 없습니다. 막히면 표의 빈칸부터 채웁니다. 정답은 접힌 상자 안에 있으니, 먼저 끝까지 푼 뒤에 펼칩니다. 4부(군집)는 수업 활동지에 없던 보충으로, 개념 이해용입니다.</p>
+    <p>계산 과정을 지우지 않습니다. 과정이 곧 점수입니다. 답만 적힌 활동지는 검산할 수 없습니다. 막히면 표의 빈칸부터 채웁니다. <span class="screen-only">정답은 접힌 상자 안에 있으니, 먼저 끝까지 푼 뒤에 펼칩니다.</span><span class="print-student">문제를 푼 뒤 선생님과 답을 확인합니다.</span><span class="print-teacher">학생이 문제를 푼 뒤 인쇄된 정답과 대조합니다.</span> 4부(군집)는 수업 활동지에 없던 보충으로, 개념 이해용입니다.</p>
   </div>
 
   <div class="ladder">
@@ -166,19 +172,19 @@
 
   <h3><span class="step b">예제 2</span>R² — 평균값 기준과 비교하기</h3>
   <div class="ex">
-    <div class="h">어느 도시의 5년치 연평균 기온과 회귀 직선의 예측값입니다. R²를 구합니다.</div>
+    <div class="h">어느 도시의 5년치 연평균 기온과 모델의 예측값입니다. R²를 구합니다.</div>
     <table class="tb">
       <tr><th class="k"></th><th>1년차</th><th>2년차</th><th>3년차</th><th>4년차</th><th>5년차</th></tr>
       <tr><td class="k">실제(℃)</td><td>4</td><td>6</td><td>8</td><td>10</td><td>12</td></tr>
-      <tr><td class="k">직선의 예측(℃)</td><td>5</td><td>6</td><td>7</td><td>10</td><td>12</td></tr>
+      <tr><td class="k">모델의 예측(℃)</td><td>5</td><td>6</td><td>7</td><td>10</td><td>12</td></tr>
       <tr><td class="k">오차²</td><td class="ans">1</td><td class="ans">0</td><td class="ans">1</td><td class="ans">0</td><td class="ans">0</td></tr>
       <tr><td class="k">(실제 − 평균)²</td><td class="ans">16</td><td class="ans">4</td><td class="ans">0</td><td class="ans">4</td><td class="ans">16</td></tr>
     </table>
     <ol class="sol">
       <li>실제 값의 평균 = (4 + 6 + 8 + 10 + 12) ÷ 5 = <span class="res">8</span>. 평균값 기준 모델은 5년 내내 8만 예측합니다.</li>
       <li>평균값 기준의 제곱오차 합 SST = 16 + 4 + 0 + 4 + 16 = <span class="res">40</span>.</li>
-      <li>내 직선의 제곱오차 합 SSE = 1 + 0 + 1 + 0 + 0 = <span class="res">2</span>.</li>
-      <li>R² = 1 − (2 ÷ 40) = 1 − 0.05 = <span class="res">0.95</span>. "내 직선은 평균만 찍는 모델이 내는 오차의 95%를 없앴다."</li>
+      <li>내 모델의 제곱오차 합 SSE = 1 + 0 + 1 + 0 + 0 = <span class="res">2</span>.</li>
+      <li>R² = 1 − (2 ÷ 40) = 1 − 0.05 = <span class="res">0.95</span>. "내 모델은 평균만 찍는 모델이 내는 오차의 95%를 없앴다."</li>
     </ol>
   </div>
 
@@ -230,7 +236,7 @@
       <tr><td class="k">(실제 − 평균)²</td><td class="blank"></td><td class="blank"></td><td class="blank"></td><td class="blank"></td><td class="blank">SST =</td></tr>
     </table>
     <p>(1) 평균 <span class="fill"></span> (2) SST <span class="fill"></span> (3) SSE <span class="fill"></span> (4) R² = 1 − (SSE ÷ SST) = <span class="fill"></span></p>
-    <p>(5) 말로 옮기기: "내 직선은 평균만 찍는 모델이 내는 오차의 <span class="fill"></span>%를 없앴다."</p>
+    <p>(5) 말로 옮기기: "내 모델은 평균만 찍는 모델이 내는 오차의 <span class="fill"></span>%를 없앴다."</p>
     <details class="key"><summary>정답 확인</summary><div class="in">
       <p>오차² 4, 4, 4, 4 → SSE 16 · (실제−평균)² 225, 25, 25, 225 → SST 500.</p>
       <p>(1) 25 (2) 500 (3) 16 (4) 1 − 16/500 = <b>0.968</b> (5) 96.8%</p>
@@ -244,9 +250,9 @@
     <details class="key"><summary>정답 확인</summary><div class="in"><p>평균 9 · SST = 16 + 4 + 0 + 4 + 16 = 40 · 오차 −1, −1, +1, +1, 0 → SSE = 4 · R² = 1 − 4/40 = <b>0.90</b></p></div></details>
   </div>
   <div class="pr self">
-    <div class="h">문제 2. 영화 3편의 실제 관객(만 명) 20, 40, 90과 예측 30, 40, 80. R²를 구하고, 같은 모델을 "관객 수가 서로 비슷한 3편"에 썼다면 SST와 R²가 어떻게 되는지 쓰세요.</div>
+    <div class="h">문제 2. 영화 3편의 실제 관객(만 명) 20, 40, 90과 예측 30, 40, 80. R²를 구하세요. 다른 세 영화에서도 SSE는 200으로 같고, SST는 2600보다 작지만 0보다 크다고 가정할 때 R²는 어떻게 달라집니까?</div>
     <span class="line"></span><span class="line"></span>
-    <details class="key"><summary>정답 확인</summary><div class="in"><p>평균 50 · SST = 900 + 100 + 1600 = 2600 · SSE = 100 + 0 + 100 = 200 · R² = 1 − 200/2600 ≈ <b>0.923</b>. 관객 수가 비슷하면 SST(분모)가 작아져 같은 SSE라도 R²가 크게 떨어진다. R²는 데이터의 퍼짐에도 달려 있다.</p></div></details>
+    <details class="key"><summary>정답 확인</summary><div class="in"><p>평균 50 · SST = 900 + 100 + 1600 = 2600 · SSE = 100 + 0 + 100 = 200 · R² = 1 − 200/2600 ≈ <b>0.923</b>. SSE가 200으로 같을 때 SST(분모)가 작아지면 200/SST가 커지므로 R²는 낮아진다. R²는 데이터의 퍼짐에도 달려 있다.</p></div></details>
   </div>
   <div class="pr self">
     <div class="h">문제 3. 실제 값 10, 12, 14에 대해 세 번 모두 16으로 예측하는 엉터리 모델이 있습니다. SST·SSE·R²를 구하고, R²가 음수라는 것이 무슨 뜻인지 한 문장으로 쓰세요.</div>
@@ -304,7 +310,7 @@
         <text x="320" y="125" font-weight="800" fill="#4c8df6">② 정밀도 = TP ÷ (TP + FP)</text><text x="320" y="143" font-size="11" fill="#6b5836">"성공"이라 말한 것(왼쪽 세로 열) 중에서</text>
         <text x="320" y="180" font-weight="800" fill="#b279a2">③ 재현율 = TP ÷ (TP + FN)</text><text x="320" y="198" font-size="11" fill="#6b5836">실제 성공작(위쪽 가로 행) 중에서</text>
       </g>
-      <text x="330" y="235" font-size="11" fill="#9a8b6a">분자는 셋 다 TP에서 출발한다. 셋을 가르는 것은 분모다.</text>
+      <text x="330" y="235" font-size="11" fill="#9a8b6a">정확도는 TP+TN, 정밀도와 재현율은 TP를 분자로 쓴다.</text>
     </svg>
   </div>
   <div class="cards">
@@ -390,11 +396,11 @@
     <details class="key"><summary>정답 확인</summary><div class="in">
       <p>(1) 문턱 0.5 → 성공 예측 3편(0.9·0.7·0.6): TP 2, FP 1, FN 1, TN 2 → 정밀도 <b>2/3</b>, 재현율 <b>2/3</b>.</p>
       <p>(2) 문턱 0.35 → 성공 예측 5편: TP 3, FP 2, FN 0, TN 1 → 정밀도 <b>3/5 = 0.6</b>, 재현율 <b>1.0</b>.</p>
-      <p>(3) 재현율은 올랐고 정밀도는 내렸다. 두 지표는 맞바꿈 관계다. 발굴팀은 문턱을 내리고, 투자자는 올린다.</p>
+      <p>(3) 재현율은 올랐고 정밀도는 내렸다. 이 예에서는 두 지표가 반대 방향으로 변했다. 발굴팀은 문턱을 내리고, 투자자는 올린다.</p>
     </div></details>
   </div>
   <div class="pr self">
-    <div class="h">문제 4. 반칙 판정. "개봉 전에 흥행 성공을 예측하는 모델"의 입력 변수 후보입니다. 누수(반칙)에 해당하는 것을 모두 고르고 까닭을 쓰세요. (가) 장르 (나) 개봉 시기(성수기 여부) (다) 개봉 첫 주 관객 수 (라) 감독의 전작 흥행 성적 (마) 최종 누적 관객 수 (바) 개봉일 스크린 수</div>
+    <div class="h">문제 4. 반칙 판정. "개봉 전에 흥행 성공을 예측하는 모델"의 입력 변수 후보입니다. 누수(반칙)에 해당하는 것을 모두 고르고 까닭을 쓰세요. (가) 장르 (나) 개봉 시기(성수기 여부) (다) 개봉 첫 주 관객 수 (라) 감독의 전작 흥행 성적 (마) 최종 누적 관객 수 (바) 개봉 전에 확정된 계획 스크린 수</div>
     <span class="line"></span><span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in"><p><b>(다), (마)</b>. (마)는 정답(라벨의 재료) 그 자체이고, (다)는 개봉 전에는 알 수 없는 미래 정보다. 나머지는 개봉 전에 알 수 있다. 판단 기준은 점수의 크기가 아니라 변수의 시점이다.</p></div></details>
   </div>
@@ -418,8 +424,8 @@
   <div class="cards">
     <div class="card"><div class="t1">지지도</div><div class="f">함께 나온 횟수 ÷ 전체</div><div class="d">이 조합, 다룰 만큼 자주 나오는가.</div></div>
     <div class="card b"><div class="t1">신뢰도</div><div class="f">함께 나온 횟수 ÷ A가 나온 횟수</div><div class="d">A가 나오면 B도 나오는가. 방향이 있다.</div></div>
-    <div class="card v"><div class="t1">향상도</div><div class="f">신뢰도 ÷ (B가 나온 횟수 ÷ 전체)</div><div class="d">우연히 겹칠 확률보다 나은가. <b>1이면 우연과 같음</b>.</div></div>
-    <div class="card r"><div class="t1">최소 지지도</div><div class="f">예: 동시 5회 이상</div><div class="d">한 번의 우연을 먼저 거르는 문턱.</div></div>
+    <div class="card v"><div class="t1">향상도</div><div class="f">신뢰도 ÷ (B가 나온 횟수 ÷ 전체)</div><div class="d">기본 등장률과 비교한다. <b>1이면 이 기록에서 신뢰도와 뒤 항목의 기본 등장률이 같음</b>.</div></div>
+    <div class="card r"><div class="t1">최소 지지도</div><div class="f">예: 동시 5회 이상</div><div class="d">등장 횟수가 적은 조합을 먼저 거르는 문턱.</div></div>
   </div>
   <div class="fig">
     <svg viewBox="0 0 640 170" width="640" height="170" role="img" aria-label="집합 그림으로 보는 세 지표">
@@ -447,7 +453,7 @@
       <li>지지도 = 4 ÷ 20 = <span class="res">0.20</span>. 전체의 20%에서 이 조합이 나왔습니다.</li>
       <li>신뢰도 = 4 ÷ 5 = <span class="res">0.80</span>. 카레가 나온 날의 80%에 단무지가 따라왔습니다.</li>
       <li>단무지의 기본 등장률 = 8 ÷ 20 = 0.40.</li>
-      <li>향상도 = 0.80 ÷ 0.40 = <span class="res">2.0</span>. 카레가 나온 날 단무지가 나올 확률은 아무 날의 2배입니다. 우연 이상의 짝입니다.</li>
+      <li>향상도 = 0.80 ÷ 0.40 = <span class="res">2.0</span>. 카레가 나온 날 단무지가 나올 확률은 아무 날의 2배입니다. 이 기록에서 조건부 등장률이 기본 등장률보다 높습니다.</li>
     </ol>
   </div>
 
@@ -455,9 +461,9 @@
   <div class="pr">
     <div class="h">매점 50일 기록에서 컵라면 20일, 삼각김밥 25일, 둘 다 산 날 10일. "컵라면 → 삼각김밥"을 평가하세요.</div>
     <p>(1) 지지도 <span class="fill"></span> (2) 신뢰도 <span class="fill"></span> (3) 삼각김밥의 기본 등장률 <span class="fill"></span> (4) 향상도 <span class="fill"></span></p>
-    <p>(5) "컵라면을 산 날의 절반은 삼각김밥도 산다"는 말은 사실입니다. 그런데 이 규칙으로 묶음 할인을 하면 안 되는 까닭은?</p>
+    <p>(5) "컵라면을 산 날의 절반은 삼각김밥도 산다"는 말은 사실입니다. 컵라면 구매 여부가 삼각김밥의 구매 비율을 바꾸는지 계산값으로 설명하세요.</p>
     <span class="line"></span>
-    <details class="key"><summary>정답 확인</summary><div class="in"><p>(1) 10/50 = <b>0.20</b> (2) 10/20 = <b>0.50</b> (3) 25/50 = 0.50 (4) 0.50 ÷ 0.50 = <b>1.0</b> (5) 삼각김밥은 원래 절반의 날에 팔린다. 컵라면을 샀다는 사실이 삼각김밥 구매를 내다보는 데 아무 정보도 주지 않는다(우연과 같음). 어차피 살 사람에게 할인만 주게 된다.</p></div></details>
+    <details class="key"><summary>정답 확인</summary><div class="in"><p>(1) 10/50 = <b>0.20</b> (2) 10/20 = <b>0.50</b> (3) 25/50 = 0.50 (4) 0.50 ÷ 0.50 = <b>1.0</b> (5) 삼각김밥은 원래 절반의 날에 팔린다. 이 기록에서는 컵라면을 산 날에도 삼각김밥 구매 비율이 기본 등장률과 같은 0.50이다.</p></div></details>
   </div>
 
   <h3><span class="step g">연습 2</span>방향을 바꾸면</h3>
@@ -485,18 +491,18 @@
   <div class="pr self">
     <div class="h">문제 3. 100일 중 딱 하루, 두 메뉴가 함께 나왔고 각자 그날 한 번씩만 등장했습니다. 이 규칙의 신뢰도와 향상도를 구하고, 향상도가 문제 1(약 3.3)보다 30배 큰데도 믿으면 안 되는 까닭과 그래서 무엇을 먼저 정하는지 쓰세요.</div>
     <span class="line"></span><span class="line"></span>
-    <details class="key"><summary>정답 확인</summary><div class="in"><p>신뢰도 1/1 = <b>1.0</b> · 향상도 1.0 ÷ (1/100) = <b>100</b>. 한 번의 동시 등장은 우연일 뿐 반복의 근거가 없고, 등장 횟수가 적을수록 향상도는 과장된다. 그래서 최소 지지도 문턱(예: 동시 5회 이상)을 먼저 정해 한 번의 우연을 거른다.</p></div></details>
+    <details class="key"><summary>정답 확인</summary><div class="in"><p>신뢰도 1/1 = <b>1.0</b> · 향상도 1.0 ÷ (1/100) = <b>100</b>. 한 번의 동시 등장만으로는 반복되는 패턴인지 판단하기 어렵다. 등장 횟수가 적으면 한 번만 함께 나와도 향상도가 크게 나올 수 있다. 그래서 최소 지지도 문턱(예: 동시 5회 이상)을 먼저 정한다.</p></div></details>
   </div>
   <div class="pr self">
-    <div class="h">문제 4. 판단 문제. 매점 사장님이 묶음 할인을 하나만 할 수 있습니다.</div>
+    <div class="h">문제 4. 판단 문제. 매점 사장님이 함께 구매되는 상품을 안내하려고 합니다.</div>
     <table class="tb">
       <tr><th class="k">규칙</th><th>지지도</th><th>신뢰도</th><th>향상도</th></tr>
       <tr><td class="k">R1: 삼각김밥 → 컵라면</td><td>0.30</td><td>0.60</td><td>1.05</td></tr>
       <tr><td class="k">R2: 떡볶이 → 모차렐라스틱</td><td>0.04</td><td>0.80</td><td>6.0</td></tr>
     </table>
-    <p>(1) 각 규칙에 할인을 걸었을 때 기대되는 것과 걱정되는 것을 한 가지씩. (2) 목표가 "떡볶이 손님의 객단가 올리기"라면? "전체 매출 규모 키우기"라면? 정답보다 근거가 점수입니다.</p>
+    <p>(1) 각 조합이 함께 구매된 거래의 비율은 얼마입니까? (2) 목표가 "함께 구매된 거래가 많은 조합 안내하기"라면 어느 규칙을 고르겠습니까? "떡볶이와 자주 함께 구매된 상품 안내하기"라면 어느 규칙을 고르겠습니까? 지표를 근거로 쓰세요.</p>
     <span class="line"></span><span class="line"></span>
-    <details class="key"><summary>예시 답</summary><div class="in"><p>(1) R1: 대상 손님이 많아 노출과 매출 규모가 크다 / 향상도 1.05면 어차피 같이 살 사람들이라 할인이 공돈이다. R2: 진짜 끌림이라 새 구매를 유발할 수 있다 / 지지도 0.04면 효과의 총량이 작다. (2) 객단가 → R2, 매출 규모 → R1. 지표와 목적을 연결한 근거면 정답으로 인정.</p></div></details>
+    <details class="key"><summary>예시 답</summary><div class="in"><p>(1) R1은 전체 거래의 30%, R2는 4%에서 함께 구매됐다. (2) 함께 구매된 거래가 많은 조합은 지지도가 0.30인 R1이다. 떡볶이와 함께 구매된 상품을 안내하려면 R2를 고른다. 이 기록에서 떡볶이를 산 거래의 80%에 모차렐라스틱이 함께 담겼다. 목적에 맞는 지표와 계산값을 함께 쓴 답을 인정한다.</p></div></details>
   </div>
 
   <h3><span class="step t">수업 실측</span>신뢰도가 높아도 향상도는 1 언저리일 수 있다</h3>
@@ -509,14 +515,14 @@
     <p>(4) 향상도 9.2는 "순대국이 석박지를 나오게 만든다"는 인과의 증명입니까?</p>
     <span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in">
-      <p>(1) 0.60 · 0.55 · <b>1.08</b>(0.600 ÷ 0.554. 두 자리로 반올림한 값끼리 나누면 1.09가 되며, 어느 쪽이든 우연과 같음. 배추김치는 원래 55%의 날에 나온다) (2) 1.00 · <b>9.2</b> · 0.25(규칙에는 방향이 있다) (3) 약 17.7일. "김치류는 거의 매일 나오지만 주력 김치는 하루 한 종류"라는 운영 원칙이 데이터에서 거꾸로 드러난다. (4) 아니다. 두 메뉴를 함께 정하는 식단표 작성자의 판단이 뒤에 있을 뿐이다. 함께 움직임은 원인을 증명하지 못한다(6차시의 상관과 인과).</p>
+      <p>(1) 0.60 · 0.55 · <b>1.08</b>(0.600 ÷ 0.554. 두 자리로 반올림한 값끼리 나누면 1.09가 된다. 이 기록에서 제육볶음이 나온 날의 배추김치 등장률은 기본 등장률의 약 1.08배다) (2) 1.00 · <b>9.2</b> · 0.25(규칙에는 방향이 있다) (3) 약 17.7일. "김치류는 거의 매일 나오지만 주력 김치는 하루 한 종류"라는 운영 원칙이 데이터에서 거꾸로 드러난다. (4) 아니다. 두 메뉴를 함께 정하는 식단표 작성자의 판단이 뒤에 있을 뿐이다. 함께 움직임은 원인을 증명하지 못한다(6차시의 상관과 인과).</p>
     </div></details>
   </div>
 
   <!-- ============================================================ 4부 -->
   <h2 id="p4"><span class="unit">4부 · 11차시</span>군집 평가 — 거리 · 표준화 · 실루엣</h2>
   <h3><span class="step">개념</span>군집에는 정답표가 없다</h3>
-  <p>회귀·분류·연관에는 비교할 정답이나 기준(평균값 기준, 기준 모델, 우연)이 있었습니다. 군집에는 정답표(레이블)가 없으므로, 평가도 "얼마나 맞혔나"가 아니라 "묶음이 얼마나 조밀하고 서로 떨어져 있나"(실루엣)와 "묶음이 말이 되나"(해석)의 두 축으로 합니다. 그리고 그 전에 거리 계산 자체가 공정한지(정규화)부터 확인합니다.</p>
+  <p>회귀·분류·연관에는 비교할 정답이나 기준(평균값 기준, 기준 모델, 기본 등장률)이 있었습니다. 군집에는 정답표(레이블)가 없으므로, 평가도 "얼마나 맞혔나"가 아니라 "묶음이 얼마나 조밀하고 서로 떨어져 있나"(실루엣)와 "묶음이 말이 되나"(해석)의 두 축으로 합니다. 그리고 그 전에 거리 계산 자체가 공정한지(정규화)부터 확인합니다.</p>
   <div class="cards">
     <div class="card"><div class="t1">거리</div><div class="f">√(가로 차² + 세로 차²)</div><div class="d">두 데이터가 얼마나 비슷한가를 속성 값의 차이로 잰다. k-평균은 이 거리로 묶는다.</div></div>
     <div class="card b"><div class="t1">표준화</div><div class="f">평균을 빼고 표준편차로 나눈다</div><div class="d">단위가 큰 항목이 거리를 혼자 정하지 않도록 기준을 맞춘다.</div></div>
@@ -549,10 +555,10 @@
       <tr><td class="k">B</td><td>12</td><td>0.340</td><td class="blank"></td><td class="blank"></td></tr>
       <tr><td class="k">C</td><td>27</td><td>0.335</td><td class="blank"></td><td class="blank"></td></tr>
     </table>
-    <p>(1) 기준을 맞추기 전: A–B 거리와 A–C 거리 중 어느 쪽이 가깝습니까? (홈런 차이만 봐도 답이 나옵니다.) (2) 기준을 맞춘 뒤: A–C 거리 <span class="fill"></span> B–C 거리 <span class="fill"></span> 이제 C는 누구와 더 가깝습니까? (3) 두 답이 다른 까닭을 한 문장으로.</p>
+    <p>(1) 기준을 맞추기 전: C–A 거리와 C–B 거리 중 어느 쪽이 가깝습니까? (홈런 차이만 봐도 답이 나옵니다.) (2) 기준을 맞춘 뒤: A–C 거리 <span class="fill"></span> B–C 거리 <span class="fill"></span> 이제 C는 누구와 더 가깝습니까? (3) 가장 가까운 선수는 바뀌었습니까? 타율 차이가 거리에 반영되는 정도는 어떻게 달라졌습니까?</p>
     <span class="line"></span>
     <details class="key"><summary>정답 확인</summary><div class="in">
-      <p>맞춘 값: A(1.00, 0.76) · B(0.40, 1.00) · C(0.90, 0.99). (1) 기준을 맞추기 전에는 홈런 차이가 거리를 지배해 C는 A(차 3)와 가깝다. (2) A–C = √(0.10² + 0.23²) ≈ <b>0.25</b>(표의 반올림 값으로 계산. 반올림 전 값으로 계산하면 0.24), B–C = √(0.50² + 0.01²) ≈ <b>0.50</b>. 여전히 C는 A와 가깝지만, 타율의 차이(A는 낮고 C는 높다)가 거리에 반영되기 시작했다. (3) 정규화 전에는 타율 차이가 제곱하면 0에 가까워 거리에 아무 영향을 주지 못했고, 정규화 후에는 두 속성이 같은 눈금으로 거리에 들어간다.</p>
+      <p>맞춘 값: A(1.00, 0.76) · B(0.40, 1.00) · C(0.90, 0.99). (1) 기준을 맞추기 전에는 홈런 차이가 거리를 지배해 C는 A(차 3)와 가깝다. (2) A–C = √(0.10² + 0.23²) ≈ <b>0.25</b>(표의 반올림 값으로 계산. 반올림 전 값으로 계산하면 0.24), B–C = √(0.50² + 0.01²) ≈ <b>0.50</b>. 여전히 C는 A와 가깝지만, 타율의 차이(A는 낮고 C는 높다)가 거리에 더 크게 반영됐다. (3) 가장 가까운 선수는 A로 같다. 정규화 전에는 타율 차이가 제곱하면 0에 가까워 거리에 상대적으로 매우 작게 반영됐고, 정규화 후에는 두 속성이 같은 눈금으로 거리에 들어간다.</p>
     </div></details>
   </div>
 
@@ -586,7 +592,7 @@
 
   <div class="rule" style="border-left-color: var(--green); background: var(--green-soft);">
     <div class="h" style="color:#3d7a37">✅ 활동지를 마치며 — 네 부를 관통하는 한 가지 습관</div>
-    <p>회귀의 R²는 평균 모델과, 분류의 정확도는 다수결 기준선과, 연관의 향상도는 우연과, 군집의 실루엣은 해석과 나란히 놓고 읽었습니다. 큰 숫자를 만나면 비교할 상대부터 세우는 것, 이것이 네 부에서 이름만 바꿔 반복된 습관입니다. AI가 보여 주는 점수를 손으로 다시 만들 수 있는 사람만이 그 점수를 의심할 수 있습니다.</p>
+    <p>회귀의 R²는 평균 모델과, 분류의 정확도는 다수결 기준선과, 연관의 향상도는 기본 등장률과, 군집의 실루엣은 해석과 나란히 놓고 읽었습니다. 큰 숫자를 만나면 비교할 상대부터 세우는 것, 이것이 네 부에서 이름만 바꿔 반복된 습관입니다. AI가 보여 주는 점수를 손으로 다시 만들 수 있는 사람만이 그 점수를 의심할 수 있습니다.</p>
   </div>
 
   <div class="pager">
