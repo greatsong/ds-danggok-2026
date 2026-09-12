@@ -524,12 +524,12 @@ function initW_labelline(root, D) {
     draw(Number(slider.value));
     revealC();
     go.textContent = '다시 학습';
-    wout.textContent = '내 기준 ' + LBL[Number(slider.value)] + (saved ? ' · ' + saved : '');
+    wout.textContent = '가정한 기준 ' + LBL[Number(slider.value)] + (saved ? ' · ' + saved : '');
     refreshBtn();
   });
 
   // ── 초기 상태(기준 100만 명, 성능 봉인)
-  sealC('기준 제출 후 공개', '사유 선택 또는 8자 이상 입력');
+  sealC('까닭을 적어야 공개', '사유 선택 또는 8자 이상 입력');
   draw(Number(slider.value));
   refreshBtn();
 }
