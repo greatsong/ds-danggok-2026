@@ -55,7 +55,7 @@
   <ul class="steps">
     <li>정답(레이블)의 유무로 지도학습과 <b>비지도학습</b>을 구분할 수 있다.</li>
     <li><b>k-평균</b>이 <b>거리</b>를 계산해 묶는 절차를 설명하고, 군집 수 k를 정한 근거를 말할 수 있다.</li>
-    <li><b>표준화</b>가 거리에 미치는 영향을 확인하고, <b>실루엣</b> 점수를 해석의 근거와 함께 판단할 수 있다.</li>
+    <li><b>표준화</b>가 거리에 미치는 영향을 확인하고, 묶음마다 이름을 붙여 그 근거를 기록 항목으로 말할 수 있다.</li>
   </ul>
 
   <h2>1. 개념 이해 — 정답 없이 묶는다는 것</h2>
@@ -283,15 +283,15 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
   </ol>
 
   <div class="callout warn">
-    <div class="h">⚠️ 발견 사건 — 점수는 k=2, 해석은 k=3</div>
+    <div class="h">📐 잘 나뉜 정도를 나타내는 점수 — 실루엣</div>
     <div class="tbquote" style="margin:10px 0">
       <div class="h">📖 교과서의 설명 <span class="src">『데이터 과학』 153쪽</span></div>
       <p class="q">"군집 내 데이터들끼리는 가까이 모여 있고, 다른 군집에 속한 데이터들과는 멀리 떨어져 있을 때 좋은 군집화라고 할 수 있다." <span class="src">(153쪽)</span></p>
       <p class="q">"실루엣 계수는 -1에서 1 사이의 값을 가지며, 1에 가까울수록 근처의 다른 군집과 멀리 떨어져 있다는 것을 나타낸다." <span class="src">(153쪽)</span></p>
-      <p class="t">→ 실루엣은 <b>거리</b>로 계산한 값입니다. 묶음의 이름이 읽히는지는 이 점수가 답하지 않습니다.</p>
+      <p class="t">→ 자기 묶음 안에서는 가깝고 다른 묶음과는 멀수록 점수가 높습니다. 앱 화면에 나오는 실루엣이 이 값입니다.</p>
     </div>
-    <p>잘 나뉜 정도 점수(실루엣)는 k=2(0.268)가 k=3(0.262)보다 근소하게 높습니다. 두 묶음과 세 묶음의 평균 기록·명단을 비교해 어느 구분이 분석 목적에 도움이 되는지 판단합니다. 실루엣 점수는 같은 속성과 거리 기준에서 비교해야 하며, 가장 높은 점수가 유일한 정답은 아닙니다.</p>
-    <p class="mini">위 두 수치는 고정된 스냅샷 파일을 예시 코드와 같은 설정으로 계산한 값입니다.</p>
+    <p>실루엣은 <b>거리</b>로 계산한 값입니다. 묶음에 붙일 이름이 야구에서 뜻이 있는지는 이 점수가 답하지 않습니다. 다음 절에서 k를 바꿔 가며 점수가 어떻게 달라지는지 보고, 묶음마다 이름을 붙여 봅니다.</p>
+    <p class="mini">이 점수는 고정된 스냅샷 파일을 예시 코드와 같은 설정으로 계산한 값입니다.</p>
   </div>
 
   
@@ -444,7 +444,7 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
     <span class="wout">평균 0.268 · 음수 1명 · 가장 작은 묶음 10명</span>
   </div>
 </div>
-    <figcaption>점수는 k=2가 가장 높습니다. 묶음 셋의 명단이 더 읽히는지는 사람이 판단합니다.</figcaption>
+    <figcaption>k를 바꾸면 점수가 달라집니다. 막대를 눌러 k별 점수를 비교해 보고, 아래 표의 세 묶음에 이름을 붙입니다.</figcaption>
   </figure>
 
   <div class="callout ask">
@@ -453,12 +453,6 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
       <li>세 묶음을 각각 무엇이라 부르겠습니까. 위 표의 마지막 칸에 적은 이름을 그대로 옮깁니다.</li>
       <li>그렇게 부른 근거가 되는 기록 항목은 무엇입니까. 어느 숫자를 보고 정했는지 적습니다.</li>
       <li>여섯 항목 대신 다른 항목을 골랐다면 이름이 달라졌겠습니까.</li>
-      <li>점수가 가장 높은 k는 둘이었습니다. 그래도 세 묶음으로 나눈 이름이 더 읽힌다면, 무엇을 근거로 k=3을 고르겠습니까.
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt" data-ok="1">묶음마다 이름을 붙일 수 있고 그 근거를 기록으로 설명할 수 있다는 점</button><button class="opt">점수가 두 번째로 높다는 점</button><button class="opt">묶음의 크기가 고르게 나뉜다는 점</button></div>
-          <div class="fb">실루엣은 거리로 계산한 값이라 묶음의 의미까지 평가하지 않습니다. 군집 수는 점수와 해석 근거를 함께 놓고 정합니다.</div>
-        </div></div>
-      </li>
     </ul>
   </div>
 
@@ -492,7 +486,7 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
     <div class="gin">
       <p style="margin:10px 0 12px">시간이 남는 사람을 위한 확장 데이터가 세 가지 준비되어 있습니다.</p>
       <ul>
-    <li><b>투수 가운데 30이닝 이상 던진 138명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_pitchers_2025.csv" target="_blank" rel="noopener"><code>kbo_pitchers_2025.csv</code></a>) —이닝·경기 수·세이브·홀드·K/9·ERA·WHIP으로 묶으면 네 유형이 나타납니다. 이닝 열은 <code>197 1/3</code>처럼 분수로 적혀 있으므로, 숫자로 바꿔 달라는 내용을 프롬프트에 함께 넣어야 합니다. 실측으로는 <b>선발형</b>(이닝 132), <b>마무리형</b>(세이브 27.4 — 박영현·김택연), <b>필승조</b>(홀드 13.9), <b>추격조</b>로 갈렸고, 이번에는 점수(실루엣)도 k=4를 가리켰습니다. 타자와 달리 점수와 해석이 일치하는 경우도 있습니다 — 실제 역할 구분과 얼마나 닮았는지는 선수별 기록과 보직을 추가로 확인해야 합니다.</li>
+    <li><b>투수 가운데 30이닝 이상 던진 138명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_pitchers_2025.csv" target="_blank" rel="noopener"><code>kbo_pitchers_2025.csv</code></a>) —이닝·경기 수·세이브·홀드·K/9·ERA·WHIP으로 묶으면 네 유형이 나타납니다. 이닝 열은 <code>197 1/3</code>처럼 분수로 적혀 있으므로, 숫자로 바꿔 달라는 내용을 프롬프트에 함께 넣어야 합니다. 실측으로는 <b>선발형</b>(이닝 132), <b>마무리형</b>(세이브 27.4 — 박영현·김택연), <b>필승조</b>(홀드 13.9), <b>추격조</b>로 갈렸고, 이번에는 점수(실루엣)도 k=4를 가리켰습니다 — 실제 역할 구분과 얼마나 닮았는지는 선수별 기록과 보직을 추가로 확인해야 합니다.</li>
     <li><b>타자 전체 396명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025_full.csv" target="_blank" rel="noopener"><code>kbo_hitters_2025_full.csv</code></a>) —부분 출전 선수까지 전부 들어 있습니다. 그대로 군집하면 1타석 타율 1.000 같은 값이 결과를 흔듭니다. 몇 타석부터 믿을 수 있는 기록인지 <b>문턱을 스스로 정해 보는 것</b>이 이 데이터의 진짜 과제입니다 — 6차시의 관측일 필터와 같은 판단입니다.</li>
     <li><b>선수 프로필 980명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_player_profiles_2026.csv" target="_blank" rel="noopener"><code>kbo_player_profiles_2026.csv</code></a> — 포지션·생년월일·키·몸무게) —기록 표에는 없는 정보입니다. 7차시에서 영화 코드로 두 표를 이었듯, 이번에는 <b>선수명과 팀을 공통 속성으로</b> 기록 표에 옆으로 이어 봅니다. 병합이 되면 "몸무게와 홈런은 관계가 있을까", "유형별 평균 키는 다를까" 같은 질문이 새로 열립니다. 병합 전 선수명·팀 조합이 중복되지 않는지 확인합니다. 표의 시점 차이, 이적, 이름 표기 차이 때문에 짝이 없는 행이 생길 수 있습니다. 원인을 확인한 뒤 제외·유지 여부를 정하고, 병합 전후 행 수도 비교합니다.</li>
       </ul>
@@ -500,76 +494,9 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
   </details>
 
   <h2>4. 개념 정리 — 정답이 없다는 것의 뜻</h2>
-  <p>회귀·분류는 예측과 정답을 비교하지만, 이 군집 실습에는 정답 범주가 없습니다. 점수만으로 선수 유형의 의미를 확정할 수는 없으므로, 속성 선택·표준화·k·초기화 조건을 함께 기록하고 해석의 근거를 설명합니다.</p>
-  <div class="callout theory">
-    <div class="h">📐 실루엣 — 무엇과 무엇을 비교한 값인가</div>
-    <p>데이터 하나의 실루엣은 두 거리를 비교해 구합니다. <b>a</b>는 자기 묶음 안의 다른 데이터까지의 평균 거리이고, <b>b</b>는 가장 가까운 다른 묶음까지의 평균 거리입니다. 실루엣은 (b − a)를 둘 중 큰 값으로 나눈 값이며 −1부터 1 사이에 놓입니다.</p>
-    <p>1에 가까우면 자기 묶음과는 가깝고 옆 묶음과는 멀다는 뜻이고, 0 근처면 두 묶음의 경계에 걸쳐 있다는 뜻이며, 음수면 옆 묶음이 오히려 더 가깝다는 뜻입니다. 앞에서 본 k별 점수는 43명의 값을 평균한 것입니다.</p>
-    <p><b>오해하기 쉬운 지점:</b> 실루엣이 나타내는 것은 거리뿐입니다. 묶음의 이름이 야구에서 뜻이 있는지는 반영하지 않습니다. 속성과 거리 기준이 같을 때만 점수를 비교할 수 있습니다.</p>
-  </div>
-  <figure class="interactive" data-fig="sildist">
-    <div class="widget" data-w="sildist">
-  <svg viewBox="0 0 720 350" style="min-width:640px" role="img" aria-label="선수 한 명의 실루엣을 내 묶음 평균 거리 a와 가장 가까운 다른 묶음 평균 거리 b로 뜯어본 그림. 시작 중심점 세 벌을 바꾸면 묶음 소속과 점수가 바뀜">
-    <text x="20" y="32" font-size="15" font-weight="700" fill="#1c2230">실루엣 = (b − a) ÷ 둘 중 큰 값</text>
-    <text class="hd-name" x="700" y="32" text-anchor="end" font-size="15" font-weight="700" fill="#1c2230">문현빈</text>
-    <g class="lanes"></g>
-    <g class="ticks"></g>
-    <g class="means"></g>
-    <g class="self"></g>
-    <line x1="150" y1="210" x2="660" y2="210" stroke="#6b7385" stroke-width="1.2"/>
-    <g stroke="#6b7385" stroke-width="1">
-      <line x1="150" y1="210" x2="150" y2="216"/>
-      <line x1="284.2" y1="210" x2="284.2" y2="216"/>
-      <line x1="418.4" y1="210" x2="418.4" y2="216"/>
-      <line x1="552.6" y1="210" x2="552.6" y2="216"/>
-    </g>
-    <g font-size="12" fill="#6b7385" text-anchor="middle">
-      <text x="150" y="228">0</text>
-      <text x="284.2" y="228">2</text>
-      <text x="418.4" y="228">4</text>
-      <text x="552.6" y="228">6</text>
-    </g>
-    <text x="700" y="228" text-anchor="end" font-size="13" fill="#6b7385">표준화 6항목 거리</text>
-    <text class="calc" x="150" y="246" font-size="15" fill="#1c2230"></text>
-    <text x="20" y="262" font-size="13" fill="#6b7385">같은 데이터 · 같은 k=3 · 시작 중심점만 다름</text>
-    <g class="runtable"></g>
-    <text x="20" y="344" font-size="12" fill="#6b7385">빈도는 무작위 시작 400회 기준 제작 시점 실측 · 예시 코드는 여러 번 시작해 가장 나은 결과 선택</text>
-  </svg>
-  <div class="wctl">
-    <button class="wbtn" type="button" data-nav="-1" aria-label="앞 선수">◀</button>
-    <button class="wbtn" type="button" data-nav="1" aria-label="뒤 선수">▶</button>
-    <button class="wbtn" type="button" data-jump="min">가장 애매</button>
-    <button class="wbtn" type="button" data-jump="max">가장 뚜렷</button>
-    <button class="wbtn on" type="button" data-run="0" aria-label="시작 중심점 1">①</button>
-    <button class="wbtn" type="button" data-run="1" aria-label="시작 중심점 2">②</button>
-    <button class="wbtn" type="button" data-run="2" aria-label="시작 중심점 3">③</button>
-    <span class="wout">a 2.437 · b 2.502 · s +0.026</span>
-  </div>
-</div>
-    <figcaption>같은 데이터, 같은 k=3이라도 시작 중심점에 따라 점수와 명단이 달라집니다. 가장 자주 나오는 결과가 가장 점수 높은 결과는 아닙니다.</figcaption>
-  </figure>
-
-  <div class="callout ask">
-    <div class="h">❓ 점수를 읽고 답할 질문</div>
-    <ul>
-      <li>가장 애매한 선수와 가장 뚜렷한 선수를 눌러 봅니다. 두 선수의 a와 b는 어떻게 달랐습니까.</li>
-      <li>시작 중심점을 ①②③으로 바꾸면 같은 선수의 소속과 점수가 달라집니다. 그렇다면 한 번 실행해 얻은 점수를 그 데이터의 성질이라고 말할 수 있습니까.
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">말할 수 있다 — 데이터에서 계산한 값이므로</button><button class="opt" data-ok="1">말할 수 없다 — 시작점에 따라 달라지는 값이므로 실행 조건과 함께 적어야 한다</button></div>
-          <div class="fb">k-평균은 시작 중심점에 따라 결과가 달라집니다. 한 번 실행해 얻은 점수는 그 실행의 결과입니다.</div>
-        </div></div>
-      </li>
-      <li>오늘 만든 묶음을 "이 선수는 원래 이런 유형"이라고 말하지 않으려면, 결과를 어떻게 적어 두어야 합니까.
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt" data-ok="1">사용한 기록 항목, k, 시작 중심점, 표준화 여부를 함께 적는다</button><button class="opt">점수가 가장 높은 실행 결과만 골라 적는다</button><button class="opt">선수 이름과 소속 묶음만 간단히 적는다</button></div>
-          <div class="fb">같은 데이터라도 조건이 달라지면 묶음이 달라집니다. 조건을 함께 적어야 다른 사람이 결과를 다시 확인할 수 있습니다.</div>
-        </div></div>
-      </li>
-          <li>구단이 훈련 프로그램을 셋만 운영할 수 있다면 k를 몇으로 하겠습니까. 실루엣 점수가 그 답을 정해 줍니까.</li>
-    </ul>
-  </div>
-
-
+  <p>회귀·분류는 예측과 정답을 비교하지만, 이 군집 실습에는 정답 범주가 없습니다. 점수만으로 선수 유형의 의미를 확정할 수는 없으므로, 어떤 기록 항목을 썼는지·표준화했는지·k를 몇으로 두었는지를 함께 적고 해석의 근거를 설명합니다.</p>
+  <p>오늘 한 일을 순서대로 되짚으면 이렇습니다. 먼저 "비슷하다"를 <b>거리</b>로 바꾸었고, 항목마다 단위가 달라 <b>표준화</b>로 자의 폭을 맞추었습니다. 그다음 <b>k</b>를 정해 묶고, 묶음의 평균 기록을 근거로 <b>이름</b>을 붙였습니다. 알고리즘이 만든 것은 번호까지이고, 이름과 의미는 야구를 아는 사람이 붙였습니다.</p>
+  <p>다음 시간에는 급식 메뉴를 다룹니다. 어떤 반찬이 함께 나오는지를 세어, 데이터 안에서 함께 일어나는 일을 찾는 방법을 살펴봅니다.</p>
   <h2>5. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 기온 예측(6차시), 흥행 분류(9차시), 선수 유형 묶기(오늘) 중 비지도학습은 무엇일까요? 답을 눌러 확인합니다.</div>
@@ -585,9 +512,9 @@ st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 실루엣 점수는 k=2가 더 높은데 해석은 k=3이 자연스러웠습니다. 이 상황이 군집 분석에 대해 말해 주는 바를 서술해 본 뒤 펼쳐 보세요.</div>
+    <div class="qq"><span class="qn">문제 3</span> 축구 선수 800명을 능력치로 묶었더니 공격형과 수비형 두 묶음이 나왔지만, 실제 포지션과 정확히 일치하지는 않았습니다. 왜 그런지 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>실루엣 점수는 군집 안에서의 거리와 다른 군집까지의 거리를 비교하며, 선수 유형의 의미 자체를 평가하지는 않습니다. 같은 데이터와 거리 기준에서 점수를 비교하되, 군집 수의 선택은 분석 목적과 해석 근거를 함께 고려해야 합니다.</p>
+      <p>군집은 능력치 기록이 비슷한 선수끼리 묶고, 포지션은 축구에서 정해 둔 체계로 나눕니다. 기준이 다르므로 결과도 다를 수 있습니다. 공격수처럼 뛰는 미드필더는 기록이 공격수와 비슷해 같은 묶음에 들어갑니다.</p>
     </details>
   </div>
 
