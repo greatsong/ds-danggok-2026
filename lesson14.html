@@ -887,7 +887,7 @@ main.eth .quiz details.reveal{border-radius:12px}
   </div>
   <p class="l14-cap">같은 사진 1,270장을 대상으로 MIT 미디어랩의 조이 부올람위니와 팀닛 게브루가 평가를 진행했습니다(<a href="https://news.mit.edu/2018/study-finds-gender-skin-type-bias-artificial-intelligence-systems-0212" target="_blank" rel="noopener">연구 소개 보기</a>).</p>
   <p>9차시에 만든 분류 모델과 10차시에 손으로 계산한 정확도 개념을 떠올리면, 이 사례는 전체 정확도를 하나의 숫자로 보지 않고 집단별로 나누어 계산한 경우입니다. 교과서 38쪽에서 다룬 데이터 편향성과 연결되며, 치우친 데이터로 만든 모델이 특정 대상에게 불리하게 작동할 수 있음을 보여 줍니다. 회사별 최대 격차는 20.8%p, 33.8%p, 34.4%p까지 벌어졌습니다.</p>
-  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson14_case2.png" alt="위쪽에 평가 대상 네 집단을 나타내는 흐릿한 합성 얼굴 네 장, 아래쪽에 마이크로소프트·페이스++·아이비엠의 집단별 정확도와 최대 격차를 막대와 함께 정리한 표." loading="lazy" width="1172" height="747" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>같은 모델 안에서도 집단을 나누면 정확도가 최대 34.4%p까지 갈립니다. 이미지: 젠더 셰이드 프로젝트(gendershades.org, MIT 미디어랩 2018) 공개 데이터이고, 수치 출처는 Buolamwini &amp; Gebru(2018), PMLR 81입니다.</figcaption></figure>
+  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson14_case2.png" alt="위쪽에 평가 대상 네 집단을 나타내는 흐릿한 합성 얼굴 네 장, 아래쪽에 마이크로소프트·페이스++·아이비엠의 집단별 정확도와 최대 격차를 막대와 함께 정리한 표." loading="lazy" width="1172" height="747" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>같은 모델 안에서도 집단을 나누면 정확도가 최대 34.4%p까지 벌어집니다. 이미지: 젠더 셰이드 프로젝트(gendershades.org, MIT 미디어랩 2018) 공개 데이터이고, 수치 출처는 Buolamwini &amp; Gebru(2018), PMLR 81입니다.</figcaption></figure>
   <p>전체 정확도를 하나의 숫자로만 보면 모델 내부의 문제를 확인하기 어렵습니다. 어떤 집단으로 나누어 볼지는 사람이 정하며, 그 선택에 따라 모델의 평가가 달라집니다.</p>
   </div></details>
 
@@ -1035,7 +1035,7 @@ main.eth .quiz details.reveal{border-radius:12px}
     <tr><th>용어</th><th>뜻</th></tr>
     <tr><td class="term">데이터 편향성</td><td>데이터의 분포가 특정 지역·연령·성별 등으로 치우쳐 있는 것입니다. 모델 결과의 치우침으로 이어질 수 있습니다.</td></tr>
     <tr><td class="term">데이터 소유권</td><td>생성된 데이터를 누구의 것으로 볼 것인가의 문제입니다(학생·학교·기업?).</td></tr>
-    <tr><td class="term">개인정보</td><td>특정 개인을 알아보거나 추적할 수 있는 정보입니다. 결합하면 드러나는 정보도 포함합니다.</td></tr>
+    <tr><td class="term">개인정보</td><td>특정 개인을 알아볼 수 있거나, 다른 정보와 결합해 알아볼 가능성이 있는 정보입니다.</td></tr>
     <tr><td class="term">인증키(API 키)</td><td>앱·프로젝트 등의 API 접근에 사용하는 값입니다. 공개 가능 여부와 허용 권한은 종류·서비스마다 다릅니다.</td></tr>
     <tr><td class="term">SDGs</td><td>UN의 17개 지속 가능 발전 목표입니다. 데이터 과학이 진단과 해결에 쓰이는 무대입니다.</td></tr>
   </table>

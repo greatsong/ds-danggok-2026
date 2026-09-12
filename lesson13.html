@@ -539,7 +539,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <p><b>테이블</b>은 그 안에 표 형태로 저장된 데이터셋 하나입니다. 인스타그램의 게시물 테이블, 카카오톡의 메시지 테이블, 게임의 전적 테이블이 모두 테이블입니다. 파일이냐 데이터베이스냐가 데이터셋의 자격을 정하지는 않습니다. 같은 대결 기록을 CSV로 내려받아도 그것은 여전히 같은 데이터셋입니다.</p>
   </div>
   <p class="mini">위 그림의 두 표는 일부 열만 보여 줍니다. 실제 서비스는 사진·해시태그·좋아요 수처럼 훨씬 많은 열을 함께 저장합니다.</p>
-  <p>여러 사람이 파일 사본을 주고받거나 파일 전체를 덮어쓰는 방식은 아래와 같은 문제가 생길 수 있습니다. 데이터베이스는 동시 처리, 조건 검색, 제약과 접근 권한을 관리하는 기능을 제공합니다. 이 기능들도 앱과 데이터베이스에 올바르게 설정해야 합니다.</p>
+  <p>여러 사람이 파일 사본을 주고받거나 파일 전체를 덮어쓰는 방식은 아래와 같은 문제가 생길 수 있습니다. 데이터베이스는 동시 처리와 조건 검색, 제약과 접근 권한 관리를 기능으로 갖추고 있습니다. 이 기능들도 앱과 데이터베이스에 올바르게 설정해야 합니다.</p>
   <table class="daymap">
     <thead><tr><th>부족해지는 순간</th><th>CSV 파일이라면</th><th>데이터베이스라면</th></tr></thead>
     <tbody>
@@ -673,7 +673,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 
 
   <h3>먼저 — SQL 문장을 읽는 법</h3>
-  <p>SQL은 영어 문장처럼 생겼지만 외울 것이 많지 않습니다. <b>낱말이 앉는 자리가 정해져 있기 때문입니다.</b> 아래 한 문장만 제대로 읽으면 오늘 나오는 모든 문장을 읽을 수 있습니다.</p>
+  <p>SQL은 영어 문장처럼 생겼지만 외울 것이 많지 않습니다. <b>명령어와 대상이 놓이는 순서가 정해져 있기 때문입니다.</b> 아래 한 문장만 제대로 읽으면 오늘 나오는 모든 문장을 읽을 수 있습니다.</p>
   <div class="sqlx">
     <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span> <span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok t">올린시각</span> <span class="sqlx-tok k">DESC</span> <span class="sqlx-tok k">LIMIT</span> <span class="sqlx-tok v">5</span>;</div>
     <div class="sqlx-steps">
@@ -683,21 +683,21 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
       <div class="sqlx-step"><span class="n">ORDER BY</span><span class="d"><b>어떤 순서로</b> 늘어놓을까 — 올린 시각 기준. <code>DESC</code>는 큰 것부터(최근부터), <code>ASC</code>는 작은 것부터입니다.</span></div>
       <div class="sqlx-step"><span class="n">LIMIT</span><span class="d"><b>몇 개만</b> 가져올까 — 앞에서 다섯 줄만.</span></div>
     </div>
-    <p class="sqlx-order"><b>자리 순서는 바뀌지 않습니다</b>
+    <p class="sqlx-order"><b>이 순서는 바뀌지 않습니다</b>
       <span class="ch">SELECT</span><span class="ar">→</span><span class="ch">FROM</span><span class="ar">→</span><span class="ch">WHERE</span><span class="ar">→</span><span class="ch">GROUP BY</span><span class="ar">→</span><span class="ch">ORDER BY</span><span class="ar">→</span><span class="ch">LIMIT</span>
     </p>
   </div>
-  <p>필요 없는 자리는 통째로 비웁니다. 조건이 없으면 WHERE를 쓰지 않고, 정렬이 필요 없으면 ORDER BY를 쓰지 않습니다. 그래서 짧은 문장은 <code>SELECT * FROM posts;</code>처럼 두 자리만 채워집니다.</p>
-  <p>가져오는 문장이 SELECT라면, <b>넣고·바꾸고·지우는 문장</b>은 첫 낱말이 각각 INSERT·UPDATE·DELETE입니다. 이 셋도 자리가 정해져 있습니다.</p>
+  <p>필요 없는 낱말은 통째로 생략합니다. 조건이 없으면 WHERE를 쓰지 않고, 정렬이 필요 없으면 ORDER BY를 쓰지 않습니다. 그래서 짧은 문장은 <code>SELECT * FROM posts;</code>처럼 SELECT와 FROM만 남습니다.</p>
+  <p>가져오는 문장이 SELECT라면, <b>넣고·바꾸고·지우는 문장</b>은 첫 낱말이 각각 INSERT·UPDATE·DELETE입니다. 이 셋도 낱말의 순서가 정해져 있습니다.</p>
   <div class="sqlx">
     <div class="sqlx-steps">
       <div class="sqlx-step"><span class="n">INSERT INTO</span><span class="d">어느 테이블의 어느 열에 <b>새 행을 넣을까</b> — <code>INSERT INTO 테이블 (열, 열) VALUES (값, 값);</code></span></div>
       <div class="sqlx-step"><span class="n">UPDATE</span><span class="d">어느 행의 어느 값을 <b>바꿀까</b> — <code>UPDATE 테이블 SET 열 = 값 WHERE 조건;</code></span></div>
       <div class="sqlx-step"><span class="n">DELETE FROM</span><span class="d">어느 행을 <b>지울까</b> — <code>DELETE FROM 테이블 WHERE 조건;</code></span></div>
     </div>
-    <p class="sqlx-order" style="margin-top:10px"><b>기억할 것</b> — UPDATE와 DELETE에 WHERE를 빠뜨리면 <b>테이블의 모든 행</b>이 대상이 됩니다.</p>
+    <p class="sqlx-order" style="margin-top:10px"><b>핵심</b> — UPDATE와 DELETE에 WHERE를 빠뜨리면 <b>테이블의 모든 행</b>이 대상이 됩니다.</p>
   </div>
-  <p class="mini">아래 세 위젯에서는 앱을 만질 때마다 실행된 문장이 오른쪽에 나타나고, <b>낱말마다 무슨 뜻인지</b> 함께 표시됩니다. 문장을 외우지 말고, 자리마다 무엇이 들어갔는지 읽어 보십시오.</p>
+  <p class="mini">아래 세 위젯에서는 앱을 만질 때마다 실행된 문장이 오른쪽에 나타나고, <b>낱말마다 무슨 뜻인지</b> 함께 표시됩니다. 문장을 외우지 말고 각 낱말에 무엇이 들어갔는지 읽습니다.</p>
 
 <script>
 /* 위젯 공통 — 실행된 SQL을 낱말별로 풀어 설명한다 */
@@ -750,7 +750,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
       return r;
     }
     if ((m = q.match(/^DELETE FROM\s+(\S+)(?:\s+WHERE\s+(.+))?$/i))) {
-      r.push(["DELETE FROM " + m[1], tbl(m[1]) + "에서 <b>행을 지웁니다.</b> 되돌릴 수 없습니다."]);
+      r.push(["DELETE FROM " + m[1], tbl(m[1]) + "에서 <b>행을 지웁니다.</b> 지운 행은 되돌리기 어렵습니다."]);
       r.push(m[2] ? ["WHERE " + m[2], cond(m[2])]
                   : ["WHERE 없음", "<b>조건이 없어 테이블의 모든 행이 지워집니다.</b> 절대 이렇게 쓰지 않습니다."]);
       return r;
@@ -1109,7 +1109,7 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</pre></div>
   </div>
 
   <h3>③ 게임으로 묶어 세기 — COUNT와 GROUP BY</h3>
-  <p>게임을 끝내면 전적 화면이 뜹니다. "이번 시즌 120판, 승률 58%", "캐릭터별 평균 점수" 같은 숫자입니다. 이 숫자는 어딘가에 저장되어 있던 값이 아니라, <b>테이블에 쌓인 행을 그 자리에서 세어 만든 값</b>입니다. 대전 기록 한 판이 <code>matches</code> 표의 한 행이라고 해 봅시다.</p>
+  <p>게임을 끝내면 전적 화면이 표시됩니다. "이번 시즌 120판, 승률 58%", "캐릭터별 평균 점수" 같은 숫자입니다. 여기서 120판은 이번 시즌이라는 조건에 맞는 행의 개수이고, 승률 58%는 그 가운데 이긴 행의 수를 120으로 나눈 값입니다. 어느 기간과 어떤 경기를 분모에 넣었는지에 따라 같은 이름의 숫자도 달라집니다. 이 숫자는 어딘가에 저장되어 있던 값이 아니라, <b>테이블에 쌓인 행을 그때 집계해 만든 값</b>입니다. 대전 기록 한 판이 <code>matches</code> 테이블의 한 행이라고 해 봅시다.</p>
   <div class="codewrap code"><span class="label">SQL · 세기와 묶기</span><pre>-- 내가 이번 시즌에 몇 판 이겼나
 SELECT COUNT(*) FROM matches WHERE 플레이어 = '보리' AND 결과 = '승';
 
@@ -1794,7 +1794,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 모둠 과제 데이터를 CSV 파일로 만들어 메신저로 주고받는 방식과 비교해, 데이터베이스를 쓸 때의 이점을 두 가지 서술한 뒤 펼쳐 봅니다.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>동시 입력을 처리하는 기능으로 여러 사람이 보낸 기록을 각각 저장할 수 있습니다. 한곳에 모인 데이터를 조건에 따라 조회·집계할 수 있습니다. 제약과 접근 권한도 관리할 수 있지만 올바른 설정이 필요합니다. 파일에서도 프로그램을 만들면 이런 작업이 가능하며, 데이터베이스는 이를 관리하는 기능을 제공합니다.</p>
+      <p>동시 입력을 처리하는 기능으로 여러 사람이 보낸 기록을 각각 저장할 수 있습니다. 한곳에 모인 데이터를 조건에 따라 조회·집계할 수 있습니다. 제약과 접근 권한도 관리할 수 있지만 올바른 설정이 필요합니다. 파일에서도 프로그램을 만들면 이런 작업이 가능하며, 데이터베이스는 이를 관리하는 기능을 갖추고 있습니다.</p>
     </details>
   </div>
   <div class="quiz">
@@ -1895,7 +1895,7 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     <tr><td class="term">데이터셋</td><td>하나의 주제에 대한 여러 데이터가 모인 집합 (예: CSV 파일 하나)</td></tr>
     <tr><td class="term">데이터베이스</td><td>여러 사람이 공유하여 사용하도록 통합 관리되는 데이터의 집합</td></tr>
     <tr><td class="term">테이블</td><td>데이터베이스 안에 표 형태로 저장된 데이터셋 하나</td></tr>
-    <tr><td class="term">수파베이스</td><td>PostgreSQL 데이터베이스와 API·인증 등을 제공하는 서비스. 15차시에 직접 사용한다</td></tr>
+    <tr><td class="term">수파베이스</td><td>PostgreSQL 데이터베이스에 API·인증 기능을 더한 서비스. 15차시에 직접 사용한다</td></tr>
     <tr><td class="term">데이터 무결성</td><td>잘못된 값이 들어오지 않도록 제약을 걸어 데이터의 올바름을 지키는 것</td></tr>
     <tr><td class="term">SQL</td><td>테이블에 데이터를 넣고(INSERT) 꺼내고(SELECT) 고치고(UPDATE) 지우는(DELETE) 언어이다. WHERE는 조건, ORDER BY는 정렬이다.</td></tr>
     <tr><td class="term">기본 키</td><td>행을 유일하게 구분하는 열 또는 열의 조합. 대개 자동으로 번호가 붙는 id를 사용</td></tr>
