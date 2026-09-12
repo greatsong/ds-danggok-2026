@@ -349,19 +349,8 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
   <div class="callout ask">
     <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
     <ul>
-      <li>신뢰도 순으로 정렬했을 때의 1위와 향상도 순으로 정렬했을 때의 1위는 같은 규칙입니까? 다르다면 어느 쪽 숫자를 근거로 삼겠습니까?</li>
-      <li>향상도가 가장 큰 규칙의 동시 등장 일수는 며칠입니까? 그 일수만으로 규칙을 믿어도 됩니까?
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">믿어도 된다 — 향상도가 가장 큰 규칙이므로</button><button class="opt" data-ok="1">믿을 수 없다 — 동시 등장 일수가 적으면 향상도가 크게 나오기 쉽다</button></div>
-          <div class="fb">분모가 작을수록 비율은 크게 흔들립니다. 향상도를 볼 때는 그 규칙이 며칠에서 나온 값인지 함께 확인합니다.</div>
-        </div></div>
-      </li>
-      <li>내가 예상한 쌍은 결과 표에 있었습니까? 없었다면 실제로 함께 나오지 않은 것입니까, 최소 횟수 기준에 걸린 것입니까?
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">결과 표에 없으면 실제로 함께 나오지 않은 것이다</button><button class="opt" data-ok="1">최소 횟수 기준에 걸려 표에서 빠졌을 수도 있으므로 기준을 낮춰 확인해야 한다</button></div>
-          <div class="fb">결과 표는 최소 횟수 기준을 넘긴 규칙만 보여 줍니다. 표에 없다는 사실과 함께 나오지 않았다는 사실은 다릅니다.</div>
-        </div></div>
-      </li>
+      <li>신뢰도 순으로 정렬했을 때의 1위와 향상도 순으로 정렬했을 때의 1위는 같은 규칙입니까? 두 순위를 나란히 적어 봅니다.</li>
+      <li>향상도가 가장 큰 규칙의 동시 등장 일수는 며칠입니까? 그 규칙이 며칠에서 나온 값인지 표에 함께 적습니다.</li>
     </ul>
   </div>
 
@@ -446,103 +435,13 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
     <figcaption>정렬을 바꾸면 신뢰도가 가장 높은 규칙과 향상도가 가장 높은 규칙이 서로 다르게 표시됩니다. 신뢰도가 1.00인 규칙 여섯 개의 향상도는 1.80부터 9.20까지 나타납니다. 표 밖 조합의 앞 두 규칙에서는 기본 등장률 막대가 거의 0에 가까워지고 향상도만 커집니다.</figcaption>
   </figure>
 
-  <div class="callout warn">
-    <div class="h">⚠️ 세 장면이 말하는 것</div>
-    <ul>
-      <li><b>신뢰도는 혼자 읽지 않습니다.</b> 결과 메뉴가 원래 얼마나 자주 나오는지를 함께 보고, 그 차이를 향상도로 확인합니다.</li>
-      <li><b>정렬 기준을 바꾸면 순위가 갈립니다.</b> 신뢰도가 가장 높은 규칙과 향상도가 가장 높은 규칙이 다를 수 있습니다. 어느 숫자를 근거로 삼을지는 무엇을 묻고 있는지에 따라 정합니다.</li>
-      <li><b>동시 0회도 관찰 결과입니다.</b> 두 메뉴가 이 기간에 함께 나오지 않았다는 뜻이며, 급식실의 실제 운영 원칙인지는 별도로 확인해야 합니다.</li>
-    </ul>
-  </div>
   <p>분석 전에 적은 메뉴 쌍과 결과를 대조합니다. 동시 등장 횟수, 신뢰도, 기본 등장률, 향상도를 함께 적고 해석합니다. 결과 표에 없다고 반드시 관련이 없는 것은 아닙니다. 최소 횟수 기준 때문에 제외되었는지도 확인합니다. 이 기록을 Ⅲ-04d 과제에 활용합니다.</p>
   <div class="callout theory">
     <div class="h">🧩 최소 지지도 — 규칙 후보를 걸러 내는 기준</div>
     <p class="q">교과서 162쪽은 규칙 후보를 추리기 전에 최소 지지도를 먼저 정하는 절차를 다룹니다.</p>
     <p><b>최소 지지도</b>는 규칙 후보로 남길 최소 등장 비율입니다. 이 실습은 동시 등장 5회 이상을 기준으로 삼습니다. 기준이 필요한 까닭은 향상도의 성질에 있습니다. 드물게 등장하는 메뉴는 분모가 작아 향상도가 쉽게 커지므로, 단 하루 겹친 조합이 표의 맨 위를 차지할 수 있습니다.</p>
-    <p>기준을 낮추면 규칙이 늘어나는 대신 우연한 조합이 섞여 들어오고, 높이면 규칙이 줄어드는 대신 드물지만 의미 있는 조합까지 사라집니다. <b>결과 표에 없다는 것과 관련이 없다는 것은 다릅니다.</b> 이 기준은 실습을 위한 선택이며 통계적 유의성을 보장하지 않습니다.</p>
+    <p>그래서 앱의 결과 표에는 동시 등장 5회를 넘긴 규칙만 나옵니다. <b>표에 없다는 것과 관련이 없다는 것은 다릅니다.</b> 이 기준은 실습을 위한 선택이며 통계적 유의성을 보장하지 않습니다.</p>
   </div>
-  <figure class="interactive" data-fig="minco">
-    <div class="widget" data-w="minco">
-  <div class="wctl"><label>최소 동시 등장 <input class="thr" type="range" min="1" max="10" step="1" value="5"></label> <span class="wout">5일</span></div>
-  <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="메뉴 쌍 3,146개를 동시 등장 일수별로 나눈 가로 띠와, 최소 동시 등장 기준에 따라 달라지는 규칙 수·상위 규칙 표.">
-    <text class="sum" x="24" y="20" font-size="17" font-weight="800" fill="#1c2230"></text>
-    <text class="sum2" x="480" y="20" font-size="14" fill="#6b7385"></text>
-
-    <text x="24" y="46" font-size="14" fill="#6b7385">쌍 3,146개 전부</text>
-    <g class="b1">
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-    </g>
-    <text class="b1in" x="34" y="70" font-size="14" fill="#ffffff">동시 1일 2,845쌍 · 전체의 90%</text>
-
-    <line class="lk1" y1="94" y2="112" x2="24" stroke="#e3ddcf" stroke-width="1"/>
-    <line class="lk2" x1="700" y1="94" x2="700" y2="112" stroke="#e3ddcf" stroke-width="1"/>
-
-    <text x="24" y="104" font-size="14" fill="#6b7385">동시 2일 이상 301쌍 확대</text>
-    <g class="b2">
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-    </g>
-    <g class="tks" font-size="14" fill="#6b7385" text-anchor="middle">
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-    </g>
-    <text x="24" y="150" font-size="14" fill="#6b7385">오른쪽 끝 9·16·17일 각 1쌍</text>
-
-    <g class="cg1"><line class="cut1" x1="0" x2="0" y1="48" y2="86" stroke="#b07a00" stroke-width="2"/></g>
-    <g class="cg2"><line class="cut2" x1="0" x2="0" y1="108" y2="140" stroke="#b07a00" stroke-width="2"/></g>
-    <text class="cutlab" y="90" font-size="14" fill="#b07a00"></text>
-
-    <rect x="24" y="164" width="676" height="108" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
-    <text x="34" y="186" font-size="14" fill="#6b7385">조건 → 결과</text>
-    <text x="430" y="186" font-size="14" fill="#6b7385">동시</text>
-    <text x="510" y="186" font-size="14" fill="#6b7385">신뢰도</text>
-    <text x="610" y="186" font-size="14" fill="#6b7385">향상도</text>
-    <g class="r1">
-      <text class="c0" x="34" y="210" font-size="15" fill="#1c2230"></text>
-      <text class="c1" x="430" y="210" font-size="15" fill="#1c2230"></text>
-      <text class="c2" x="510" y="210" font-size="15" fill="#1c2230"></text>
-      <text class="c3" x="610" y="210" font-size="15" font-weight="800" fill="#1c2230"></text>
-    </g>
-    <g class="r2">
-      <text class="c0" x="34" y="234" font-size="15" fill="#1c2230"></text>
-      <text class="c1" x="430" y="234" font-size="15" fill="#1c2230"></text>
-      <text class="c2" x="510" y="234" font-size="15" fill="#1c2230"></text>
-      <text class="c3" x="610" y="234" font-size="15" font-weight="800" fill="#1c2230"></text>
-    </g>
-    <g class="r3">
-      <text class="c0" x="34" y="258" font-size="15" fill="#1c2230"></text>
-      <text class="c1" x="430" y="258" font-size="15" fill="#1c2230"></text>
-      <text class="c2" x="510" y="258" font-size="15" fill="#1c2230"></text>
-      <text class="c3" x="610" y="258" font-size="15" font-weight="800" fill="#1c2230"></text>
-    </g>
-    <g class="bdg" display="none">
-      <rect class="bdgbox" x="196" y="244" width="146" height="21" rx="999" fill="#ffffff" stroke="#e3ddcf"/>
-      <text class="bdgtxt" x="208" y="259" font-size="14" fill="#6b7385">기준에 걸려 표 밖</text>
-    </g>
-  </svg>
-</div>
-    <figcaption>기준을 1일로 내리면 규칙이 6,292개로 늘고, 그중 328개가 동시 등장 한 번에 향상도 184.0으로 표 위쪽을 채웁니다. 기준을 8일로 올리면 규칙이 6개만 남습니다. 흐려진 구간은 표에서 빠진 조합이며, 관련이 없다고 확인된 조합이 아닙니다.</figcaption>
-  </figure>
 
 
   <h2>5. 연습 문제와 대조 — 손으로 구한 값과 화면의 값</h2>
@@ -555,12 +454,6 @@ st.dataframe(보기, hide_index=True)</pre></div></details>
     <div class="h">❓ 손으로 구한 값과 화면의 값을 맞춰 본 뒤 답할 질문</div>
     <ul>
       <li>손으로 구한 향상도와 4절 표에 적은 향상도가 같습니까? 다르다면 어느 단계에서 갈렸습니까?</li>
-      <li>같은 규칙인데도 저장본과 내 화면의 등장 일수가 다를 수 있습니다. 그 까닭을 무엇으로 설명하겠습니까?
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">계산식이 사람마다 다르기 때문</button><button class="opt" data-ok="1">두 데이터의 대상 기간이 달라 세는 날수 자체가 다르기 때문</button><button class="opt">연관 분석은 실행할 때마다 결과가 달라지기 때문</button></div>
-          <div class="fb">같은 계산이라도 어느 기간을 세었는지에 따라 값이 달라집니다. 숫자를 적을 때 대상 기간을 함께 적습니다.</div>
-        </div></div>
-      </li>
       <li>신뢰도가 높은데도 향상도가 1 언저리인 규칙을 급식실에 어떻게 설명하겠습니까? 한 문장으로 적습니다.</li>
     </ul>
   </div>
