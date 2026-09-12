@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>13차시 · 데이터베이스와 수파베이스 · 데이터 과학 당곡고</title>
+<title>13차시 · 데이터베이스와 SQL — 앱 뒤에서 벌어지는 일 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <style>/* 긴 열 이름과 설계표를 좁은 화면에서도 읽을 수 있도록 */
 main{overflow-wrap:anywhere}
@@ -214,35 +214,35 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 13차시</span>
-  <h1>데이터베이스와 <span class="a">수파베이스</span></h1>
+  <h1>데이터베이스와 SQL · <span class="a">앱 뒤에서 벌어지는 일</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"빨리 가려면 혼자 가고, 멀리 가려면 함께 가라."</div>
-    <span class="by">속담 — 오늘 데이터가 '내 파일'에서 '우리의 저장소'가 됩니다</span>
+    <div class="q">"단추 하나를 누르면, 어딘가에서 한 줄의 문장이 실행된다."</div>
+    <span class="by">오늘은 그 문장을 읽습니다 — 인스타그램·카카오톡·게임이 데이터를 다루는 방식</span>
   </div>
 
-  <p class="lead">“친구들이 가장 좋아하는 반찬은 무엇일까?” 오늘은 <b>반찬 월드컵 앱</b>을 만듭니다. 두 반찬 가운데 하나를 고르는 대결을 일곱 번 치러 우승 반찬을 가리고, 학급의 대결 기록을 모아 분석합니다. 12차시에서 읽고 분석했던 급식 데이터에 이어, 이번에는 앱에서 새 데이터를 모으는 과정을 배웁니다.</p>
+  <p class="lead">인스타그램에서 피드를 내리고, 카카오톡에서 메시지를 보내고, 게임에서 랭킹을 확인할 때마다 어딘가의 <b>표</b>에서 행을 가져오거나 새 행을 넣는 일이 일어납니다. 그 일을 시키는 말이 <b>SQL</b>입니다. 오늘은 여러분이 매일 쓰는 앱의 화면을 SQL 문장으로 바꿔 읽어 봅니다.</p>
 
-  <p class="mini">오늘 모으는 대결 기록은 <b>어제까지 쌓인 데이터</b>입니다. 친구들이 판을 치를 때마다 표에 행이 늘어나므로, 화면에 나오는 대결 수와 승률은 사람마다, 시간마다 다릅니다. 숫자가 다른 것은 잘못이 아니며, 그 숫자를 어떻게 읽을지가 오늘의 과제입니다.</p>
+  <p class="mini">SQL 문장을 직접 외워 쓰는 것이 목표가 아닙니다. 화면에서 벌어지는 일과 문장이 어떻게 대응하는지 읽을 수 있으면 됩니다. 그래야 AI가 써 준 코드가 무엇을 하는 코드인지 알아볼 수 있습니다.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
       <li><b>개념</b> — 데이터셋 · 데이터베이스 · 테이블, 그리고 CSV로 부족해지는 세 순간</li>
-      <li><b>바이브 코딩</b> — 반찬 월드컵의 대결 기록을 저장하고 반찬별 승률을 집계한다</li>
-      <li><b>SQL(읽기 데이터)</b> — AI 코드 속 문장의 정체: 읽기 · 쓰기 · 묶어서 세기</li>
-      <li><b>팀 프로젝트 예고</b> — 팀 구성 · 데이터로 답할 수 있는 문제 고르기</li>
+      <li><b>SQL 읽기</b> — 조회 · 추가 · 갱신 · 삭제 · 묶어서 세기, 다섯 가지 동작</li>
+      <li><b>실생활 앱</b> — 인스타그램 · 카카오톡 · 게임의 화면을 문장으로 바꿔 읽는다</li>
     </ul>
   </div>
 
   <h2>0. 오늘의 목표</h2>
-  <p>여러 사람이 함께 쓰는 서비스는 데이터베이스로 기록을 관리할 수 있습니다. 반찬 월드컵에서도 서로 다른 기기에서 보낸 대결 기록을 한곳에 모아 읽어야 합니다. 파일로도 저장 기능을 만들 수 있지만, 동시 입력과 검색·접근 권한을 관리하는 일이 복잡해집니다. 오늘은 Supabase의 PostgreSQL 데이터베이스를 이용해 이 과정을 익힙니다.</p>
+  <p>여러 사람이 함께 쓰는 서비스는 데이터를 파일 하나가 아니라 <b>데이터베이스</b>에 담습니다. 동시에 들어오는 입력을 각각 저장하고, 쌓인 기록에서 원하는 것만 골라 읽어야 하기 때문입니다. 그 저장소에 말을 거는 언어가 SQL이고, 오늘은 그 문장을 읽는 법을 익힙니다.</p>
   <ul class="steps">
-    <li><b>데이터셋·데이터베이스·테이블</b>을 오늘 실습의 예에 각각 대응해 구분할 수 있다.</li>
-    <li>대결 한 번이 표의 <b>한 행</b>으로 저장되는 구조를 설명하고, 그 행을 구분하는 <b>기본 키</b>가 무엇인지 말할 수 있다.</li>
-    <li><b>승리 수와 승률</b>의 분모가 다르다는 것을 알고, 두 숫자를 함께 보고 순위를 판단할 수 있다.</li>
+    <li><b>데이터셋·데이터베이스·테이블</b>을 실제 예에 각각 대응해 구분할 수 있다.</li>
+    <li>SQL 문장을 읽고 <b>조회·추가·갱신·삭제</b> 중 어느 동작인지, 어느 표의 어느 행이 대상인지 말할 수 있다.</li>
+    <li><b>WHERE·COUNT·GROUP BY</b>가 각각 무엇을 하는지 설명하고, 앱 화면의 기능과 짝지을 수 있다.</li>
   </ul>
+
   <h2>1. 개념 이해 — 데이터셋, 데이터베이스, 테이블</h2>
   <div class="tbquote">
     <div class="h">📖 교과서의 설명 <span class="src">『데이터 과학』 27쪽</span></div>
@@ -321,7 +321,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <div class="h">🧩 데이터셋 · 데이터베이스 · 테이블 — 우리 실습에 대응하면</div>
     <p>세 낱말은 크기가 아니라 <b>담는 자격</b>이 다릅니다. <b>데이터셋</b>은 한 주제로 모인 데이터의 집합입니다. 12차시에 사용한 급식 CSV 파일 하나가 데이터셋을 담은 한 가지 형태입니다.</p>
     <p><b>데이터베이스</b>는 여러 사람이 함께 쓰도록 통합 관리되는 데이터의 집합입니다. 오늘 준비하는 Supabase 프로젝트 안의 저장소가 여기에 해당하며, 그 안에는 여러 개의 표가 들어갈 수 있습니다.</p>
-    <p><b>테이블</b>은 그 안에 표 형태로 저장된 데이터셋 하나입니다. 오늘 만드는 <code>menu_duels</code>가 테이블입니다. 파일이냐 데이터베이스냐가 데이터셋의 자격을 정하지는 않습니다. 같은 대결 기록을 CSV로 내려받아도 그것은 여전히 같은 데이터셋입니다.</p>
+    <p><b>테이블</b>은 그 안에 표 형태로 저장된 데이터셋 하나입니다. 인스타그램의 게시물 표, 카카오톡의 메시지 표, 게임의 전적 표가 모두 테이블입니다. 파일이냐 데이터베이스냐가 데이터셋의 자격을 정하지는 않습니다. 같은 대결 기록을 CSV로 내려받아도 그것은 여전히 같은 데이터셋입니다.</p>
   </div>
   <p class="mini">위 그림의 대결 기록 표는 일부 열만 보여 줍니다. 실제로는 판 번호·라운드·겨룬 두 반찬도 함께 저장합니다.</p>
   <p>여러 사람이 파일 사본을 주고받거나 파일 전체를 덮어쓰는 방식은 아래와 같은 문제가 생길 수 있습니다. 데이터베이스는 동시 처리, 조건 검색, 제약과 접근 권한을 관리하는 기능을 제공합니다. 이 기능들도 앱과 데이터베이스에 올바르게 설정해야 합니다.</p>
@@ -457,758 +457,89 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <p>파일은 형식이 정한 크기 한도를 넘으면 기록이 조용히 사라집니다. 데이터베이스는 행을 계속 추가하고 제약을 어기면 오류로 알립니다. 반찬 월드컵 앱에서 저장 결과를 확인하지 못했을 때 재선택을 잠그도록 만든 처리도 같은 이유에서 필요합니다.</p>
   </div></details>
 
-  <h2>2. 실습 — 반찬 월드컵과 대결 기록 분석 (바이브 코딩)</h2>
-  <div class="callout theory">
-    <div class="h">🧩 행과 기본 키 — 대결 한 번이 한 행입니다</div>
-    <p>표의 가로 한 줄을 <b>행</b>이라고 합니다. 오늘 설계에서는 대결 한 번이 행 하나가 됩니다. 한 판은 8강 네 번, 4강 두 번, 결승 한 번으로 일곱 번을 고르므로 <b>한 판이 끝나면 표에 일곱 행이 쌓입니다</b>. 판이 아니라 대결을 한 행으로 잡았기 때문에, 나중에 어떤 반찬이 몇 번 겨루고 몇 번 이겼는지를 따로 세지 않고도 셀 수 있습니다.</p>
-    <p>행을 유일하게 구분하는 열을 <b>기본 키</b>라고 합니다. 이 표에서는 저장할 때 자동으로 하나씩 늘어나는 <code>id</code>가 기본 키입니다. 같은 반찬이 여러 번 이겨도 각 행의 id는 서로 다릅니다. 행을 골라 읽거나 고칠 때 기준이 되는 값이 이 id입니다.</p>
-    <p>열은 일곱 개뿐입니다. <code>id</code>(기록 번호) · <code>game_id</code>(한 판을 묶는 번호) · <code>round</code>(라운드) · <code>left_menu</code> · <code>right_menu</code> · <code>winner</code> · <code>created_at</code>만 저장하며, 이름·학번·비밀번호는 받지 않습니다. 분석에 필요하지 않은 개인정보는 처음부터 모으지 않는 것이 설계의 출발점입니다.</p>
-  </div>
-  <p>오늘 실습에서는 좋아하는 반찬을 1대1로 겨루는 8강 토너먼트를 만듭니다. 한 판은 8강 네 번, 4강 두 번, 결승 한 번으로 모두 일곱 번 선택합니다. 각 대결의 결과는 표의 한 행으로 저장되며, 이 행들은 학급이 함께 쓰는 데이터베이스에 쌓입니다. 판이 쌓이면 학급 전체의 대결 기록이 되고, 이 기록을 뒤에서 분석합니다.</p>
-  <p>5차시에서 배운 급식 API 집계 방법을 적용하여 후보를 선정합니다. 조회 기간은 2025년 9월부터 2026년 9월까지이며, 중식 184일 동안의 데이터를 대상으로 합니다. 밥과 김치, 국, 곁반찬, 후식을 걸러 낸 뒤 남은 주요리 가운데 자주 나온 여덟 가지를 후보로 정합니다. 아래 후보는 수업에 사용할 목록으로 고정합니다. 같은 기간을 다시 조회해도 원데이터가 수정되거나 반찬 이름 정리·제외 기준이 다르면 결과가 달라질 수 있으므로, 비교할 때는 같은 저장본과 처리 기준을 사용합니다.</p>
-  <table class="daymap">
-    <thead><tr><th>#</th><th>반찬</th><th>등장</th><th>#</th><th>반찬</th><th>등장</th></tr></thead>
-    <tbody>
-      <tr><td>1</td><td>제육볶음</td><td>10일</td><td>2</td><td>간장찜닭</td><td>7일</td></tr>
-      <tr><td>3</td><td>가자미순살튀김</td><td>6일</td><td>4</td><td>돈육불백</td><td>6일</td></tr>
-      <tr><td>5</td><td>미트볼데리야끼볶음</td><td>5일</td><td>6</td><td>수육</td><td>5일</td></tr>
-      <tr><td>7</td><td>진미채고추장볶음</td><td>5일</td><td>8</td><td>치즈떡닭갈비</td><td>5일</td></tr>
-    </tbody>
-  </table>
-  <p class="mini">5일로 같은 항목이 다섯이라 등장 일수만으로는 여덟 번째를 정할 수 없습니다. 재료나 조리법이 겹치는 항목과 분식이나 곁반찬에 가까운 항목을 더 빼서 여덟을 고정했습니다. 동점을 어떻게 가를지는 데이터가 정해 주지 않습니다.</p>
-  <figure class="interactive" data-fig="menu8pick">
-    <div class="widget" data-w="menu8pick">
-<svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="중식 184일 등장 일수 상위 목록: 제외 기준 다섯 종을 켜고 끄면 회색 처리와 순위가 바뀌고, 수업 후보 여덟에는 파란 점이 붙음">
-<text x="8" y="18" font-size="14" font-weight="800" fill="#1c2230">중식 184일 · 등장 일수 상위</text>
-<text class="hright" x="712" y="18" text-anchor="end" font-size="12" fill="#6b7385"></text>
-<g class="legend" display="none">
-<circle cx="630" cy="34.6" r="3" fill="#2b7fd6"/>
-<text x="712" y="38" text-anchor="end" font-size="10" fill="#2b7fd6">수업 후보 여덟</text>
-</g>
-<!-- 목록 · 최대 14행 · y = 46 + i*19 -->
-<g class="rows"></g>
-<!-- 회색이 아닌 항목의 여덟 번째 아래 -->
-<g class="cut" display="none">
-<line x1="8" y1="185" x2="712" y2="185" stroke="#b07a00" stroke-width="1" stroke-dasharray="4 4"/>
-<text x="712" y="181" text-anchor="end" font-size="10" fill="#b07a00">등장 일수만으로 자른 여덟</text>
-</g>
-</svg>
-<div class="wctl">
-<button class="wbtn on" type="button" data-cat="밥" aria-pressed="true">밥류</button>
-<button class="wbtn on" type="button" data-cat="김치" aria-pressed="true">김치류</button>
-<button class="wbtn on" type="button" data-cat="국" aria-pressed="true">국·찌개류</button>
-<button class="wbtn on" type="button" data-cat="곁" aria-pressed="true">곁반찬(나물·무침·샐러드·김)</button>
-<button class="wbtn on" type="button" data-cat="후식" aria-pressed="true">후식·음료</button>
-<button class="wbtn" type="button" data-pick="1" aria-pressed="false">수업 후보 여덟 표시</button>
-<span class="wout"></span>
-</div>
-</div>
-    <figcaption>급식 중식 184일 기록에서 5일 이상 등장한 마흔일곱 종을 등장 일수 순으로 보여 줍니다. 밥류·김치류·국과 찌개류·곁반찬·후식과 음료의 제외 기준을 켜고 끄면 해당 분류의 항목이 회색으로 표시되고 남은 항목의 순위가 다시 매겨집니다. 다섯 분류를 모두 걸러 내면 열한 종이 남으며, 그 가운데 일곱 번째부터 열한 번째까지 다섯 항목이 5일로 같아 등장 일수만으로는 여덟 번째를 정할 수 없습니다. 수업 후보 여덟 가지는 여기에서 재료나 조리법이 겹치는 항목, 소스 이름만 적힌 항목, 분식이나 곁반찬에 가까운 항목을 더 빼고 고정한 목록이며, [수업 후보 여덟 표시] 단추를 켜면 수업 후보 여덟 가지에 파란 점이 붙습니다. 등장 일수는 후보를 정한 기준일 뿐 학생의 선호도가 아닙니다.</figcaption>
-  </figure>
+  <h2>2. SQL — 테이블을 다루는 언어</h2>
+  <p>데이터베이스에 "무엇을 가져와라", "이걸 넣어라"라고 말하는 언어가 <b>SQL</b>입니다. 여러분이 쓰는 앱은 화면 뒤에서 하루에도 수없이 이 문장을 실행합니다. 오늘은 세 앱을 하나씩 맡아, 각각 다른 동작을 읽어 봅니다 — <b>인스타그램으로 읽기</b>, <b>카카오톡으로 쓰기</b>, <b>게임으로 묶어 세기</b>입니다.</p>
 
-
-
-  <div class="callout mini">
-    <div class="h">🔧 준비 — 표와 접속 정보</div>
-    <p>실습에 앞서 대결 기록을 담을 표와 접속 정보가 준비되어 있어야 합니다. 이 준비는 교사 또는 모둠의 준비 담당자가 한 번만 하며, 절차는 <a href="lesson13-setup.html">13차시 준비 안내</a>에 따로 정리해 두었습니다. 나머지 학생은 준비된 접속 정보와 배포된 앱 주소를 받아 아래 ① 프롬프트부터 시작합니다.</p>
-  </div>
-
-  <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>반찬 월드컵 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로.
-후보는 제육볶음·간장찜닭·가자미순살튀김·돈육불백·미트볼데리야끼볶음·수육·진미채고추장볶음·치즈떡닭갈비 여덟 가지야.
-8강 토너먼트로 진행해 줘. 판을 시작할 때 후보 순서를 섞고, 두 반찬을 나란히 보여 준 뒤 하나를 고르게 해.
-이긴 반찬만 다음 라운드로 올려서 8강 네 번, 4강 두 번, 결승 한 번으로 모두 일곱 번 고르게 해 줘.
-이름·학번·비밀번호는 받지 마.
-반찬 이름은 한글이니까 저장하고 읽을 때 UTF-8로 다뤄서 글자가 깨지지 않게 해 줘.
-서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘.
-표 이름은 menu_duels이고 public 스키마에 있어. 표 이름에 스키마 이름을 붙여 쓰지는 마.
-이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야.
-id는 자동으로 늘어나는 정수이고 created_at은 저장 시각이 기본값이라 앱이 넣지 않아.
-앱이 채우는 열은 game_id(한 판을 묶는 문자열), round('8강'·'4강'·'결승' 가운데 하나), left_menu, right_menu, winner 다섯이고 모두 문자열이야.
-새 표를 만들지 말고 이 표에 그대로 연결해 줘. 수정·삭제 기능은 넣지 마.
-접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘.
-판이 끝나면 우승 반찬을 보여 주고, 다시 시작하는 단추를 넣어 줘.
-저장 결과를 확인하지 못하면 대결을 진행하지 말고 재선택을 잠근 뒤 확인이 필요하다고 안내해 줘.
-필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>준비 확인 — 만든 표의 열과 행 수 읽기</summary><p class="mini">표 생성은 <a href="#vote-db-setup">3절의 SQL</a>로 한 번만 합니다. 아래는 생성 뒤 확인하는 조회 코드입니다.</p><div class="codewrap code"><span class="label">SQL · 준비 확인</span><pre>SELECT column_name, data_type, is_nullable
-FROM information_schema.columns
-WHERE table_schema = 'public' AND table_name = 'menu_duels'
-ORDER BY ordinal_position;
-SELECT COUNT(*) AS 대결기록수 FROM public.menu_duels;</pre></div></details>
-    </li>
-    <li><span class="st">② AI가 준 코드 — 한 판을 끝까지 해 본다</span><br>
-      배포한 뒤 한 판을 끝까지 진행합니다. 8강 네 번, 4강 두 번, 결승 한 번으로 <b>일곱 번</b>을 고르면 우승 반찬이 나옵니다. 표에는 일곱 행이 쌓입니다. 두 번째 판을 시작하면 대진표가 다시 섞여 다른 상대를 만납니다.
-      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 실제 공유 저장은 <a href="lesson13-setup.html">준비 안내</a> 4절의 두 기기 확인 절차로 점검합니다.</p><div class="codewrap code"><span class="label">main.py</span><button class="copy-btn">복사</button><pre># main.py — 반찬 월드컵 8강. 대결 한 번이 표의 한 행이 된다.
-import random
-import uuid
-
-import streamlit as st
-from supabase import create_client
-
-MENUS = ["제육볶음", "간장찜닭", "가자미순살튀김", "돈육불백",
-         "미트볼데리야끼볶음", "수육", "진미채고추장볶음", "치즈떡닭갈비"]
-ROUND = {8: "8강", 4: "4강", 2: "결승"}
-
-st.header("🏆 반찬 월드컵")
-st.caption("이름 없이 참여하는 연습 게임입니다. 대결 기록 수는 참여 인원과 다릅니다.")
-
-
-@st.cache_resource
-def connect():
-    return create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
-
-
-try:
-    db = connect()
-except Exception:
-    st.error("연결 정보를 확인하세요. 선생님이 표와 권한을 준비한 뒤 연결합니다.")
-    st.stop()
-
-
-def new_game():
-    order = MENUS[:]
-    random.shuffle(order)                      # 대진표를 판마다 섞는다
-    st.session_state.game_id = uuid.uuid4().hex
-    st.session_state.queue = order             # 이번 라운드에서 겨룰 차례
-    st.session_state.winners = []              # 이번 라운드에서 이긴 반찬
-    st.session_state.size = len(order)         # 이번 라운드의 크기 (8·4·2)
-    st.session_state.save_pending = False
-
-
-if "queue" not in st.session_state:
-    new_game()
-
-# 이번 라운드가 끝났으면 다음 라운드를 준비한다
-if not st.session_state.queue and len(st.session_state.winners) &gt; 1:
-    st.session_state.queue = st.session_state.winners
-    st.session_state.winners = []
-    st.session_state.size = len(st.session_state.queue)
-
-def choose(winner, left, right, round_name):
-    st.session_state.save_pending = True
-    try:
-        db.table("menu_duels").insert({
-            "game_id": st.session_state.game_id,
-            "round": round_name,
-            "left_menu": left,
-            "right_menu": right,
-            "winner": winner,
-        }).execute()
-    except Exception:
-        # 통신 오류여도 DB에는 저장되었을 수 있어 재제출을 잠근다
-        st.rerun()
-    st.session_state.save_pending = False
-    st.session_state.winners.append(winner)
-    st.session_state.queue = st.session_state.queue[2:]
-    st.rerun()
-
-
-if not st.session_state.queue:                 # 결승까지 끝났다
-    st.success("우승: " + st.session_state.winners[0])
-    if st.button("다시 하기"):
-        new_game()
-        st.rerun()
-else:
-    left, right = st.session_state.queue[0], st.session_state.queue[1]
-    round_name = ROUND[st.session_state.size]
-    st.subheader(round_name)
-    if st.session_state.save_pending:
-        st.warning("저장 결과를 확인하지 못했습니다. 재선택을 잠갔습니다. 선생님에게 확인하세요.")
-    col_l, col_r = st.columns(2)
-    if col_l.button(left, use_container_width=True, disabled=st.session_state.save_pending):
-        choose(left, left, right, round_name)
-    if col_r.button(right, use_container_width=True, disabled=st.session_state.save_pending):
-        choose(right, left, right, round_name)
-
-st.caption("판 번호: " + st.session_state.game_id)
-st.caption("반복 참여를 막지는 않습니다. 저장 결과 확인이 필요하면 이 판 번호를 준비 담당자에게 알려 주세요.")</pre></div>
-      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
-supabase
-pandas
-plotly</pre></div></details>
-    </li>
-    <li><span class="st">③ 개선 프롬프트 — 학급의 대결 기록을 분석한다</span>
-      <p>한 판이 끝나면 우승 반찬 하나가 남습니다. 우승만으로는 그 반찬이 정말 인기 있는지 알 수 없습니다. 토너먼트에서는 이긴 반찬만 다음 라운드로 올라갑니다. 그 결과 다음 라운드에 진출한 반찬은 겨룬 횟수가 많아집니다. 승리 수와 함께 이긴 횟수를 겨룬 횟수로 나눈 비율인 승률을 살펴봅니다. 승률도 상대와 대진표의 영향을 받으므로 학급 전체의 선호 비율로 해석하지 않습니다.</p>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>이 앱에 학급 전체의 대결 기록을 분석하는 화면을 추가해 줘.
-menu_duels에 저장된 전체 기록을 대상으로 해. id, game_id, round, left_menu, right_menu, winner 여섯 열을 읽어서 반찬별 대결 수·승리 수·승률·우승 횟수를 비교하게 해 줘.
-대결 수는 left_menu와 right_menu 양쪽을 모두 세고, 우승 횟수는 round가 '결승'인 행의 winner를 세어 줘.
-모든 후보를 표시하고 대결 기록이 없는 후보의 승률은 아직 알 수 없다고 안내해 줘.
-승률은 백분율로 보여 주고 높은 순서의 표와 가로 막대그래프로 비교해 줘.
-그래프는 plotly로 그려 줘.
-집계에 사용한 대결 기록 수와 판 수를 화면에 적어 줘. 기록 수와 참여 인원은 다르며, 진행 중에 남긴 대결도 집계에 들어간다고 표시해 줘.
-한 판이 끝난 화면에서도 분석을 볼 수 있게 하고 결과를 다시 불러오는 단추를 넣어 줘.
-기록이 아직 없을 때와 조회에 실패했을 때를 구분해 안내해 줘.
-필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
-      <details class="sample"><summary>실습용 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다. 실제 데이터베이스의 저장·조회 결과는 배포 후 확인합니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># main.py에 이어 붙일 부분 — 학급의 대결 기록을 분석한다
-import pandas as pd
-import plotly.express as px
-
-st.divider()
-st.subheader("학급 대결 기록")
-
-st.button("결과 새로 불러오기")
-try:
-    # 조회 시작 때의 마지막 id까지만, 빠짐없이 나누어 읽는다
-    latest = db.table("menu_duels").select("id").order("id", desc=True).limit(1).execute().data
-    upper = latest[0]["id"] if latest else 0
-    records = []
-    after = 0
-    while after &lt; upper:
-        page = (db.table("menu_duels")
-                .select("id,game_id,round,left_menu,right_menu,winner")
-                .gt("id", after).lte("id", upper).order("id").limit(500).execute().data)
-        if not page:
-            raise RuntimeError("마지막 기록까지 조회하지 못했습니다.")
-        records.extend(page)
-        after = page[-1]["id"]
-except Exception:
-    st.error("기록을 불러오지 못했습니다.")
-    st.stop()
-
-if not records:
-    st.info("아직 대결 기록이 없습니다.")
-    st.stop()
-
-duels = pd.DataFrame(records)
-# 겨룬 횟수는 왼쪽과 오른쪽을 모두 센다
-fought = pd.concat([duels["left_menu"], duels["right_menu"]]).value_counts()
-won = duels["winner"].value_counts()
-champion = duels[duels["round"] == "결승"]["winner"].value_counts()
-
-board = pd.DataFrame({"겨룬 횟수": fought, "이긴 횟수": won, "우승": champion}).reindex(MENUS).fillna(0).astype(int)
-board["승률(%)"] = (board["이긴 횟수"] / board["겨룬 횟수"].where(board["겨룬 횟수"] &gt; 0) * 100).round(1)
-board = board.sort_values("승률(%)", ascending=False).reset_index(names="반찬")
-
-st.caption("대결 " + str(len(duels)) + "번 · 기록이 있는 판 " + str(duels["game_id"].nunique()) + "개")
-st.caption("결승 기록이 있는 판 " + str(duels.loc[duels["round"] == "결승", "game_id"].nunique()) + "개 · 진행 중 기록도 포함합니다.")
-st.caption("대결이 없는 후보의 승률은 비어 있습니다. 대결 수와 판 수는 참여 인원이 아닙니다.")
-st.dataframe(board, hide_index=True, width="stretch")
-
-fig = px.bar(board.dropna(subset=["승률(%)"]).sort_values("승률(%)"), x="승률(%)", y="반찬", orientation="h",
-             text="승률(%)", color="승률(%)", color_continuous_scale="Oranges",
-             title="반찬별 승률")
-fig.update_layout(coloraxis_showscale=False, yaxis_title="")
-st.plotly_chart(fig, width="stretch")
-st.caption("조회 도중 들어온 새 기록은 다시 불러오면 반영됩니다. 승률은 대진표와 반복 참여의 영향을 받습니다.")</pre></div></details>
-    </li>
-  </ol>
-
-  <p class="mini">앱 배포와 두 기기 완료 확인 절차는 <a href="lesson13-setup.html">13차시 준비 안내</a> 3·4절에 있습니다. 배포한 앱에서 한 판을 마친 뒤, 학급의 대결 기록이 실제로 합쳐졌는지 그 절차로 확인합니다.</p>
-  <h3>화면의 숫자를 옮겨 적습니다</h3>
-  <p>분석 화면의 표를 보고 아래에 옮겨 적습니다. 기록은 계속 쌓이므로 적은 시각도 함께 남깁니다. 다 적었으면 승률이 높은 순서와 이긴 횟수가 많은 순서에 각각 1부터 8까지 번호를 매깁니다. 두 순서가 같은지가 다음에 확인할 것입니다.</p>
-  <div style="overflow-x:auto">
-  <table class="daymap" style="min-width:680px">
-    <thead><tr><th>반찬</th><th>겨룬 횟수</th><th>이긴 횟수</th><th>승률(%)</th><th>우승</th><th>승률 순위</th><th>승리 수 순위</th></tr></thead>
-    <tbody>
-      <tr><td><b>제육볶음</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td><b>간장찜닭</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td><b>가자미순살튀김</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td><b>돈육불백</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td><b>미트볼데리야끼볶음</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td><b>수육</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td><b>진미채고추장볶음</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td><b>치즈떡닭갈비</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="mini">적은 시각과 그때의 대결 기록 수도 표 옆에 적어 둡니다. 같은 표를 나중에 다시 보면 숫자가 달라져 있습니다.</p>
-  <figure class="interactive" data-fig="duel28">
-    <div class="widget" data-w="duel28">
-<svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="반찬 여덟 가지의 쌍 28칸 격자와 반찬별 승률 표. 한 판에서 채워지는 칸이 일곱 칸이라는 점과 대진표에 따라 우승 반찬이 달라지는 모습을 나타낸 그림">
-  <rect class="champbg" x="508" y="3" width="204" height="22" rx="5" fill="#fff3cf" opacity="0" style="transition:opacity 150ms ease"/>
-  <text class="obs" x="8" y="21" font-size="15" font-weight="800" fill="#b07a00">관측 0 / 28</text>
-  <text class="champ" x="712" y="20" text-anchor="end" font-size="12" font-weight="700" fill="#1c2230">이번 판 우승 · —</text>
-  <line x1="360" y1="36" x2="360" y2="322" stroke="#e3ddcf" stroke-width="1"/>
-  <line x1="368" y1="58" x2="712" y2="58" stroke="#e3ddcf" stroke-width="1"/>
-  <text x="368" y="52" font-size="10" font-weight="700" fill="#6b7385">반찬</text>
-  <text x="566" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">대결 수</text>
-  <text x="618" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승리 수</text>
-  <text x="676" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승률</text>
-  <text x="712" y="40" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">리그</text>
-  <text x="712" y="52" text-anchor="end" font-size="10" font-weight="700" fill="#6b7385">승률</text>
-  <g class="collab"></g>
-  <g class="rowlab"></g>
-  <g class="cells"></g>
-  <rect class="foc" x="0" y="0" width="30" height="30" rx="3" fill="none" stroke="#b07a00" stroke-width="2" opacity="0" pointer-events="none"/>
-  <g class="tbl"></g>
-  <text x="8" y="300" font-size="10" fill="#6b7385">칸 = 두 반찬의 대결 · 가운데 숫자 = 승자 번호</text>
-  <text x="8" y="316" font-size="10" fill="#6b7385">진하기 · 오른쪽 아래 숫자 = 같은 쌍의 대결 횟수</text>
-  <text x="368" y="300" font-size="10" fill="#6b7385">리그 승률 = 이긴 쌍 수 / 답한 쌍 수</text>
-  <text x="368" y="316" font-size="10" fill="#6b7385">28칸 완성 → 분모 7 고정</text>
-</svg>
-<div class="wctl pick"><span class="pmsg">한 판 진행 · 일곱 번 선택</span></div>
-<div class="wctl">
-<button class="wbtn" type="button" data-act="play">한 판 진행</button>
-<button class="wbtn" type="button" data-act="redraw">대진표 다시 뽑기</button>
-<button class="wbtn" type="button" data-act="fill">남은 칸 채우기</button>
-<button class="wbtn" type="button" data-act="reset">처음으로</button>
-<span class="wout">관측 0 / 28 · 미관측 28칸</span>
-</div>
-</div>
-    <figcaption>격자 28칸 가운데 한 판에서 채워지는 칸은 일곱 칸입니다. 대진표를 다시 뽑으면 같은 답에서도 우승 반찬이 바뀝니다. 답은 학생이 직접 고른 값이며, 급식 등장 일수는 후보를 정한 기준일 뿐 선호도가 아닙니다.</figcaption>
-  </figure>
-
-
-  <div class="callout theory">
-    <div class="h">🧩 승률의 분모 — 승리 수와 승률은 다른 숫자입니다</div>
-    <p><b>승리 수</b>는 이긴 횟수를 그대로 센 값이고, <b>승률</b>은 그 승리 수를 <b>겨룬 횟수</b>로 나눈 값입니다. 토너먼트에서는 이긴 반찬만 다음 라운드로 올라가므로 반찬마다 겨룬 횟수가 다릅니다. 8강에서 한 번 지고 끝난 반찬의 분모는 1이고, 결승까지 올라간 반찬의 분모는 3입니다. 분모가 다른 값을 나란히 놓고 비교하면 순위가 뒤집힐 수 있습니다.</p>
-    <p>분모를 정하는 방식이 지표의 성격을 바꾸는 것은 앞 차시에서도 확인한 것입니다. 8차시 R²는 평균값으로 예측했을 때와 비교한 값이고, 12차시 향상도는 결과 메뉴의 기본 등장률과 비교한 값입니다. 어떤 지표든 <b>무엇으로 나누었는지</b>를 먼저 확인합니다.</p>
-    <p>승률을 구했다고 공정한 순위가 되는 것도 아닙니다. 누구와 만났는지, 몇 라운드까지 올라갔는지, 같은 사람이 몇 판을 반복했는지가 모두 이 숫자에 섞여 있습니다. 이 승률은 학급 전체의 선호 비율이 아니라 <b>치러진 대결의 결과</b>입니다.</p>
-  </div>
-  <div class="callout ask">
-    <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
-    <ul>
-      <li>승률 1위와 승리 수 1위는 같은 반찬입니까? 다르다면 어느 쪽 숫자로 "가장 좋아하는 반찬"을 정하겠습니까?</li>
-      <li>겨룬 횟수가 유독 많은 반찬은 무엇입니까? 왜 그 반찬의 분모가 커졌습니까?</li>
-      <li>대결 기록 수와 참여한 사람 수는 같습니까? 이 승률을 우리 반의 선호도라고 말해도 됩니까?
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">말해도 된다 — 우리 반 학생들이 직접 기록한 값이므로</button><button class="opt" data-ok="1">말할 수 없다 — 한 사람이 여러 번 기록할 수 있어 사람 수와 기록 수가 다르다</button></div>
-          <div class="fb">기록이 많은 사람의 취향이 더 크게 반영됩니다. 승률을 반 전체의 선호도로 읽으려면 누가 몇 번 참여했는지 함께 확인해야 합니다.</div>
-        </div></div>
-      </li>
-      <li>겨룬 횟수가 한두 번뿐인 반찬의 승률은 얼마나 믿을 수 있습니까? 12차시에서 동시 등장 한 번짜리 규칙을 어떻게 다루었는지 떠올려 봅니다.
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">승률이 100퍼센트라면 가장 좋아하는 반찬으로 볼 수 있다</button><button class="opt" data-ok="1">분모가 작아 크게 흔들리므로, 최소 대결 횟수를 정해 놓고 읽어야 한다</button></div>
-          <div class="fb">12차시에서 동시 등장이 한 번뿐인 규칙을 다룬 방식과 같습니다. 비율은 분모가 작을수록 믿기 어렵습니다.</div>
-        </div></div>
-      </li>
-    </ul>
-  </div>
-  <figure class="interactive" data-fig="rankcross13">
-    <div class="widget" data-w="rankcross13">
-<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="리그 승률 순위와 한 판 지표 순위를 교차선으로 이은 비교 표">
-  <text class="ttlL" x="8" y="24" font-size="12" font-weight="800" fill="#1c2230">리그 승률 · 분모 7</text>
-  <text class="ttlR" x="470" y="24" font-size="12" font-weight="800" fill="#1c2230">한 판 승리 수</text>
-  <line x1="8" y1="32" x2="250" y2="32" stroke="#e3ddcf" stroke-width="1"/>
-  <line x1="470" y1="32" x2="712" y2="32" stroke="#e3ddcf" stroke-width="1"/>
-  <g fill="none">
-    <path class="lnk" d="M254,44 C330,44 390,74 466,74" stroke="#b9b3a5" stroke-width="1.2"/>
-    <path class="lnk" d="M254,134 C330,134 390,164 466,164" stroke="#b9b3a5" stroke-width="1.2"/>
-    <path class="lnk" d="M254,164 C330,164 390,194 466,194" stroke="#b9b3a5" stroke-width="1.2"/>
-    <path class="lnk" d="M254,194 C330,194 390,104 466,104" stroke="#d64545" stroke-width="2.2"/>
-    <path class="lnk" d="M254,74 C330,74 390,44 466,44" stroke="#b9b3a5" stroke-width="1.2"/>
-    <path class="lnk" d="M254,224 C330,224 390,224 466,224" stroke="#b9b3a5" stroke-width="1.2"/>
-    <path class="lnk" d="M254,254 C330,254 390,254 466,254" stroke="#b9b3a5" stroke-width="1.2"/>
-    <path class="lnk" d="M254,104 C330,104 390,134 466,134" stroke="#b9b3a5" stroke-width="1.2"/>
-  </g>
-  <g class="rowL" transform="translate(0,48)">
-    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">1</text>
-    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">제육볶음</text>
-    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.71</text>
-    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">10</text>
-  </g>
-  <g class="rowL" transform="translate(0,138)">
-    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">4</text>
-    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">간장찜닭</text>
-    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
-    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">7</text>
-  </g>
-  <g class="rowL" transform="translate(0,168)">
-    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">5</text>
-    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">가자미순살튀김</text>
-    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
-    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
-  </g>
-  <g class="rowL" transform="translate(0,198)">
-    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">6</text>
-    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">돈육불백</text>
-    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
-    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
-  </g>
-  <g class="rowL" transform="translate(0,78)">
-    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">2</text>
-    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">미트볼데리야끼볶음</text>
-    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.57</text>
-    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
-  </g>
-  <g class="rowL" transform="translate(0,228)">
-    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">7</text>
-    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">수육</text>
-    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
-    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
-  </g>
-  <g class="rowL" transform="translate(0,258)">
-    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">8</text>
-    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">진미채고추장볶음</text>
-    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.43</text>
-    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
-  </g>
-  <g class="rowL" transform="translate(0,108)">
-    <text class="rk" x="8" y="0" font-size="11" font-weight="700" fill="#6b7385">3</text>
-    <text class="nmL" x="26" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">치즈떡닭갈비</text>
-    <text class="vL" x="214" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0.57</text>
-    <circle cx="232" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyL" x="232" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
-  </g>
-  <g class="rowR" transform="translate(0,78)">
-    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">10</text>
-    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">제육볶음</text>
-    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">2 / 3</text>
-  </g>
-  <g class="rowR" transform="translate(0,168)">
-    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">7</text>
-    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">간장찜닭</text>
-    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
-  </g>
-  <g class="rowR" transform="translate(0,198)">
-    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
-    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">가자미순살튀김</text>
-    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
-  </g>
-  <g class="rowR" transform="translate(0,108)">
-    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">6</text>
-    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">돈육불백</text>
-    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">1 / 2</text>
-  </g>
-  <g class="rowR" transform="translate(0,48)">
-    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
-    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">미트볼데리야끼볶음</text>
-    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">3 / 3</text>
-  </g>
-  <g class="rowR" transform="translate(0,228)">
-    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
-    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">수육</text>
-    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
-  </g>
-  <g class="rowR" transform="translate(0,258)">
-    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
-    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">진미채고추장볶음</text>
-    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">0 / 1</text>
-  </g>
-  <g class="rowR" transform="translate(0,138)">
-    <circle cx="478" cy="-4" r="8" fill="#efece4"/>
-    <text class="dyR" x="478" y="-1" font-size="8" text-anchor="middle" fill="#6b7385">5</text>
-    <text class="nmR" x="490" y="0" font-size="10" letter-spacing="-0.2" fill="#1c2230">치즈떡닭갈비</text>
-    <text class="vR" x="712" y="0" font-size="11" font-weight="700" text-anchor="end" fill="#1c2230">1 / 2</text>
-  </g>
-  <text x="360" y="286" font-size="10" text-anchor="middle" fill="#6b7385">굵은 붉은 선 = 순위차 2 이상 · 원 안 숫자 = 중식 등장 일수</text>
-</svg>
-<div class="wctl">
-  <label>대진 번호 <input class="wslider" type="range" min="1" max="315" step="1" value="1"></label>
-  <button class="wbtn wmetric on" type="button" data-m="wins">한 판 승리 수</button>
-  <button class="wbtn wmetric" type="button" data-m="rate">한 판 승률</button>
-  <button class="wbtn wmetric" type="button" data-m="champ">우승 횟수 · 315판 합계</button>
-  <button class="wbtn wans on" type="button" data-a="A">예시 답 A · 엇갈린 반</button>
-  <button class="wbtn wans" type="button" data-a="B">예시 답 B · 일관된 반</button>
-  <button class="wbtn wans wmine" type="button" data-a="M" disabled>내 격자 답 (28칸 완성 후)</button>
-  <span class="wout">대진 1 · 순위가 바뀐 반찬 6종 · 최대 순위차 3 · 이번 판 우승 미트볼데리야끼볶음</span>
-</div>
-</div>
-    <figcaption>예시 학급 답 한 묶음으로 315가지 대진을 모두 계산한 결과입니다. 대진 번호를 바꾸면 한 판 승리 수와 승률 순위가 달라지지만, 분모가 7로 같은 리그 승률 순위는 그대로입니다. 수업 뒤에는 menu_duels에 쌓인 실제 기록으로 같은 표를 만들어 비교합니다.</figcaption>
-  </figure>
-
-  <div class="callout tip">
-    <div class="h">💡 판단 — 대결 기록 수는 참여 인원이 아니다</div>
-    <p>이 앱은 사람을 구별하지 않으며, 이름과 학번을 받지 않습니다. 한 사람이 여러 판을 할 수도 있습니다. 저장 결과가 불확실할 때의 잠금도 현재 접속에서만 유지되므로 새로 접속하거나 다른 기기를 사용한 재제출까지 막지는 못합니다. 그래서 대결 기록의 수는 참여 인원이 아닙니다. 여러 판을 한 사람의 취향이 결과를 더 크게 움직입니다. 이 한계를 알고 결과를 읽는 것이 오늘의 태도입니다.</p>
-  </div>
-
-  <details class="glossary"><summary>더 알아보기 — 실제 사례: 챗봇 아레나의 대결 기록과 승률표</summary><div class="gin">
-    <h3>AI 모델 월드컵 — 챗봇 아레나의 대결 기록과 승률표</h3>
-    <p>챗봇 아레나는 2023년 4월에 시작되었습니다. 같은 질문에 두 AI가 답한 내용을 나란히 보여 주고 사람이 더 나은 쪽을 고르는 방식입니다. 캘리포니아대 버클리 연구진이 2024년 3월 공개한 논문 기준으로 9만여 명이 약 24만 건을 투표했고 대상 모델은 50개가 넘습니다.</p>
-    <table class="daymap">
-      <thead><tr><th>구분</th><th>내용</th></tr></thead>
-      <tbody>
-        <tr><td><b>무엇</b></td><td>같은 질문에 두 AI가 답한 내용을 나란히 보여 주고 사람이 더 나은 쪽을 고르는 방식입니다.</td></tr>
-        <tr><td><b>규모</b></td><td>9만여 명이 약 24만 건을 투표했고 대상 모델은 50개가 넘습니다.</td></tr>
-        <tr><td><b>구조</b></td><td>대결 한 건이 한 행으로 저장되고 그 행들을 모델 쌍별로 묶어 세면 승률표가 됩니다.</td></tr>
-      </tbody>
-    </table>
-    <p class="mini">출처: Chiang 외, <a href="https://arxiv.org/abs/2403.04132" target="_blank" rel="noopener">「Chatbot Arena: An Open Platform for Evaluating LLMs by Human Preference」, arXiv:2403.04132</a> (2024)</p>
-    <figure class="case" style="margin:12px 0"><img src="img/lesson13_case2.png" alt="가로축과 세로축에 모델 이름을 놓은 승률 행렬. 각 칸은 비기지 않은 대결에서 세로축 모델이 가로축 모델을 이긴 비율이며, 파란색일수록 높고 붉은색일수록 낮다." width="750" height="750" loading="lazy" style="width:100%;height:auto;border-radius:10px"><figcaption class="mini">그림: 비긴 경기를 제외한 모델 간 승률 행렬 · Chiang 외, 챗봇 아레나 논문(arXiv:2403.04132) 2024, 그림 2</figcaption></figure>
-    <p>오늘 만드는 반찬 월드컵과 구조가 같습니다. 대결 한 번이 표의 한 행으로 저장됩니다(INSERT). 그 행들을 이긴 쪽 기준으로 묶어 세면(GROUP BY·COUNT) 승률이 나옵니다. 여러 사람이 서로 다른 기기에서 남긴 기록을 한곳에 모아야 하므로 개인 파일이 아니라 공유 데이터베이스가 필요합니다.</p>
-  </div></details>
-
-  <details class="glossary">
-    <summary>📕 더 알아보기 — 프롬프트와 준비 안내에 나오는 낱말들</summary>
-    <p>아래는 이 차시의 프롬프트와 <a href="lesson13-setup.html">준비 안내</a>에 그대로 나오는 말입니다. 뜻을 몰라도 실습은 되지만, 붙여 넣는 문장에 들어 있는 말이므로 한 번 읽어 둡니다.</p>
-    <table class="daymap">
-      <thead><tr><th>낱말</th><th>뜻</th></tr></thead>
-      <tbody>
-        <tr><td><b>스키마</b></td><td>표들을 묶어 두는 이름 공간입니다. 수파베이스는 우리가 만드는 표를 <code>public</code>에 넣습니다. 이름 공간이 여럿이면 같은 이름의 표가 각각 따로 있을 수 있습니다.</td></tr>
-        <tr><td><b>RLS</b></td><td>Row Level Security를 줄인 말입니다. 표 전체가 아니라 <b>행 하나하나</b>에 대해 누가 무엇을 할 수 있는지 정하는 장치입니다. 켜 두면 정책으로 허용한 동작만 통과합니다.</td></tr>
-        <tr><td><b>publishable 키</b></td><td>앱 코드에 넣어도 되는 공개용 접속 키입니다. 이 키로는 RLS 정책이 허용한 것만 할 수 있습니다. <code>anon</code> 키는 같은 것을 가리키던 옛 이름입니다.</td></tr>
-        <tr><td><b>secret · service_role 키</b></td><td>RLS를 통과해 모든 행을 다룰 수 있는 관리용 키입니다. <b>앱 코드나 화면에 넣지 않습니다.</b> 이 수업에서는 사용하지 않습니다.</td></tr>
-      </tbody>
-    </table>
-    <p class="mini">키 이름은 수파베이스가 바꿔 온 이력이 있습니다. 화면에 anon으로 보이면 publishable과 같은 것으로 읽습니다.</p>
-  </details>
-
-  <h2>3. SQL — 테이블을 다루는 언어</h2>
-  <p>예시 코드의 <code>db.table("menu_duels").select(...)</code>는 파이썬에서 API를 통해 데이터 조회를 요청하는 표현입니다. 같은 조회 목적을 데이터베이스에서 표현하는 언어가 <b>SQL</b>입니다. 오늘은 명령어를 모두 외우기보다 어떤 표의 어떤 행을 읽거나 바꾸는 문장인지 이해합니다. 수정·삭제 예시는 별도의 연습 데이터에서만 다룹니다.</p>
-
-  <h3>읽기 — SELECT 한 문장의 네 낱말</h3>
-  <p>가장 자주 쓰는 문장입니다. 어느 테이블에서(FROM) 어느 열을(SELECT) 가져올지 말하고, 필요하면 조건(WHERE)과 정렬(ORDER BY)을 덧붙입니다. 대문자로 쓴 낱말이 명령어이고 나머지가 테이블 이름과 열 이름입니다.</p>
-  <div class="codewrap code"><span class="label">SQL · 읽기</span><pre>-- 최근 대결 20건의 이긴 반찬과 저장 시각을 읽는다
-SELECT id, winner, created_at
-FROM menu_duels
-ORDER BY created_at DESC, id DESC
+  <h3>① 인스타그램으로 읽기 — SELECT 한 문장의 네 낱말</h3>
+  <p>인스타그램을 열면 피드가 뜹니다. 그 순간 게시물 표에서 최근 글 몇 개를 가져오는 문장이 실행됩니다. 어느 표에서(FROM) 어느 열을(SELECT) 가져올지 말하고, 필요하면 조건(WHERE)과 정렬(ORDER BY)을 덧붙입니다. 대문자로 쓴 낱말이 명령어이고 나머지가 표 이름과 열 이름입니다.</p>
+  <p class="mini">아래 <code>posts</code>는 게시물 한 건이 한 행인 표입니다. 이 수업에서 원리를 설명하려고 단순하게 만든 예시이며, 실제 인스타그램의 표 구조는 아닙니다.</p>
+  <div class="codewrap code"><span class="label">SQL · 읽기</span><pre>-- 피드를 연다: 최근 게시물 20개의 작성자와 올린 시각을 가져온다
+SELECT 작성자, 해시태그, 올린시각
+FROM posts
+ORDER BY 올린시각 DESC
 LIMIT 20;
 
--- 제육볶음이 이긴 대결만 읽는다
-SELECT * FROM menu_duels WHERE winner = '제육볶음';</pre></div>
+-- #고양이를 검색한다: 해시태그에 '#고양이'가 들어 있는 게시물만 가져온다
+SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
   <table class="daymap">
-    <thead><tr><th>낱말</th><th>뜻</th><th>우리말로 읽으면</th></tr></thead>
+    <thead><tr><th>낱말</th><th>뜻</th><th>인스타그램에서는</th></tr></thead>
     <tbody>
-      <tr><td><b>SELECT</b></td><td>가져올 열을 고른다. *는 모든 열</td><td>"이긴 반찬과 저장 시각을"</td></tr>
-      <tr><td><b>FROM</b></td><td>어느 테이블에서 가져올지</td><td>"대결 기록 표에서"</td></tr>
-      <tr><td><b>WHERE</b></td><td>조건에 맞는 행만 남긴다</td><td>"제육볶음이 이긴 대결만"</td></tr>
-      <tr><td><b>ORDER BY</b></td><td>정렬 기준입니다. DESC는 내림차순, ASC는 오름차순입니다.</td><td>"최근 대결부터"</td></tr>
+      <tr><td><b>SELECT</b></td><td>가져올 열을 고른다. *는 모든 열</td><td>"작성자와 올린 시각을"</td></tr>
+      <tr><td><b>FROM</b></td><td>어느 표에서 가져올지</td><td>"게시물 표에서"</td></tr>
+      <tr><td><b>WHERE</b></td><td>조건에 맞는 행만 남긴다</td><td>"해시태그가 #고양이인 것만"</td></tr>
+      <tr><td><b>ORDER BY</b></td><td>정렬 기준. DESC는 내림차순, ASC는 오름차순</td><td>"최근 것부터"</td></tr>
+      <tr><td><b>LIMIT</b></td><td>앞에서 몇 행만 가져온다</td><td>"우선 20개만" — 나머지는 더 내리면 가져온다</td></tr>
+      <tr><td><b>LIKE '%#고양이%'</b></td><td>문자열 안에 그 말이 들어 있는 행을 찾는다. %는 '무엇이든'</td><td>"#고양이가 섞여 있으면"</td></tr>
     </tbody>
   </table>
-  <p>WHERE는 조건에 맞는 행을 고르는 절입니다. 파일도 프로그램으로 필터링할 수 있습니다. 데이터베이스에서는 검색 조건을 서버에 보내 필요한 결과를 가져옵니다.</p>
+  <p>피드를 아래로 내릴 때마다 앱은 같은 문장을 <code>LIMIT</code>만 바꿔 다시 실행합니다. 한 번에 전부 가져오지 않는 이유는 게시물이 수십억 건이기 때문입니다. <b>필요한 만큼만 골라 오는 것</b>이 데이터베이스를 쓰는 첫째 이유입니다.</p>
 
-  <h3>생성·갱신·삭제 — 네 동작이 네 문장으로</h3>
-  <div class="codewrap code"><span class="label">SQL · 생성 · 갱신 · 삭제</span><pre>-- 아래는 별도 연습용 표(votes_practice)를 가정한 생성·갱신·삭제 예시이다.
--- 공용 대결 기록 표에서는 실행하지 않는다.
--- 생성(C): 표에 새 행을 하나 추가한다.
-INSERT INTO votes_practice (menu) VALUES ('제육볶음');
+  <h3>② 카카오톡으로 쓰기 — 추가·갱신·삭제</h3>
+  <p>읽기만으로는 앱이 되지 않습니다. 메시지를 보내면 표에 행이 하나 <b>추가</b>되고, 상대가 읽으면 그 행의 값이 <b>갱신</b>되며, 메시지를 지우면 행이 <b>삭제</b>됩니다. 세 동작이 각각 한 문장입니다.</p>
+  <p class="mini">아래 <code>messages</code>도 원리를 보이기 위한 예시 표입니다. 실제 메신저는 암호화·전송 확인 등 훨씬 많은 처리를 함께 합니다.</p>
+  <div class="codewrap code"><span class="label">SQL · 추가 · 갱신 · 삭제</span><pre>-- 추가(INSERT): 메시지를 보내면 표에 새 행이 하나 생긴다
+INSERT INTO messages (방id, 보낸사람, 내용, 읽음)
+VALUES (12, '보리', '오늘 급식 뭐야?', false);
 
--- 갱신(U): id가 7인 행의 선택을 바꾼다.
-UPDATE votes_practice SET menu = '비빔밥' WHERE id = 7;
+-- 갱신(UPDATE): 상대가 읽으면 그 행의 '읽음'이 true가 된다 — 숫자 1이 사라지는 순간
+UPDATE messages SET 읽음 = true WHERE id = 305;
 
--- 삭제(D): id가 7인 행을 지운다.
-DELETE FROM votes_practice WHERE id = 7;</pre></div>
+-- 삭제(DELETE): 내가 보낸 메시지를 지운다
+DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</pre></div>
+  <table class="daymap">
+    <thead><tr><th>낱말</th><th>뜻</th><th>카카오톡에서는</th></tr></thead>
+    <tbody>
+      <tr><td><b>INSERT INTO … VALUES</b></td><td>표에 새 행을 하나 넣는다</td><td>메시지 전송</td></tr>
+      <tr><td><b>UPDATE … SET</b></td><td>이미 있는 행의 값을 바꾼다</td><td>읽음 표시 · 프로필 상태메시지 수정</td></tr>
+      <tr><td><b>DELETE FROM</b></td><td>행을 지운다</td><td>메시지 삭제</td></tr>
+      <tr><td><b>WHERE</b></td><td>어느 행이 대상인지 좁힌다</td><td>"305번 메시지, 그중에서도 내가 보낸 것만"</td></tr>
+    </tbody>
+  </table>
   <div class="callout warn">
     <div class="h">⚠️ WHERE가 없는 UPDATE·DELETE</div>
-    <p>UPDATE·DELETE에서 WHERE를 생략하면 해당 권한으로 처리할 수 있는 모든 행이 대상이 됩니다. 행 번호 조건은 범위를 좁히지만, 누가 바꿀 수 있는지를 보장하는 인증·권한 검사는 아닙니다. 실제 공용 대결 기록 표에는 학생용 수정·삭제 권한을 부여하지 않습니다.</p>
+    <p>세 문장 가운데 <b>UPDATE와 DELETE에는 WHERE가 반드시 필요합니다.</b> WHERE를 빠뜨리면 그 권한으로 건드릴 수 있는 <b>모든 행</b>이 대상이 됩니다. <code>DELETE FROM messages;</code> 한 줄이면 표의 메시지가 전부 사라집니다. 실제 서비스가 이런 사고를 막는 방법은 두 가지입니다. 하나는 문장에 WHERE를 꼭 넣는 것이고, 다른 하나는 <b>애초에 지울 권한을 주지 않는 것</b>입니다. 여러분의 앱이 남의 메시지를 지울 수 없는 것은 착해서가 아니라 권한이 없기 때문입니다.</p>
   </div>
 
-  <h3 id="vote-db-setup">표 만들기 — 교과서 31쪽 설계표가 그대로 문장이 된다</h3>
-  <p>교과서 31쪽의 속성명·설명·데이터형·조건 양식으로 대결 기록 표를 설계합니다. 아래 SQL은 <b>교사 또는 모둠 대표가 연습용 프로젝트에 표와 권한을 준비할 때 사용할 코드</b>입니다. 아직 설정을 실행했다는 뜻은 아닙니다. 학생은 표와 열 이름을 읽고 앱의 입력이 어느 열에 저장되는지 확인합니다.</p>
-  <table class="daymap">
-    <thead><tr><th>속성명</th><th>설명</th><th>데이터형</th><th>조건</th></tr></thead>
-    <tbody>
-      <tr><td><b>id</b></td><td>기록 번호</td><td>정수</td><td>자동 증가 · 기본 키</td></tr>
-      <tr><td><b>game_id</b></td><td>한 판을 묶는 번호</td><td>문자열</td><td>NULL·빈 값 불가</td></tr>
-      <tr><td><b>round</b></td><td>대결 라운드</td><td>문자열</td><td>8강·4강·결승 중 하나</td></tr>
-      <tr><td><b>left_menu · right_menu</b></td><td>겨룬 두 반찬</td><td>문자열</td><td>여덟 후보 중 서로 다른 반찬. NULL 불가</td></tr>
-      <tr><td><b>winner</b></td><td>이긴 반찬</td><td>문자열</td><td>겨룬 두 반찬 중 하나. NULL 불가</td></tr>
-      <tr><td><b>created_at</b></td><td>저장 시각</td><td>날짜·시각</td><td>현재 시각을 기본값으로 사용합니다.</td></tr>
-    </tbody>
-  </table>
-  <div class="codewrap code"><span class="label">SQL · 표 만들기</span><pre>-- 준비 담당자가 별도 연습용 프로젝트의 SQL Editor에서 한 번 실행합니다.
-CREATE TABLE public.menu_duels (
-  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  game_id text NOT NULL CHECK (length(btrim(game_id)) &gt; 0),
-  round text NOT NULL CHECK (round IN ('8강', '4강', '결승')),
-  left_menu text NOT NULL CHECK (left_menu IN ('제육볶음', '간장찜닭', '가자미순살튀김', '돈육불백', '미트볼데리야끼볶음', '수육', '진미채고추장볶음', '치즈떡닭갈비')),
-  right_menu text NOT NULL CHECK (right_menu IN ('제육볶음', '간장찜닭', '가자미순살튀김', '돈육불백', '미트볼데리야끼볶음', '수육', '진미채고추장볶음', '치즈떡닭갈비')),
-  winner text NOT NULL,
-  CHECK (left_menu &lt;&gt; right_menu),
-  CHECK (winner IN (left_menu, right_menu)),
-  created_at timestamptz NOT NULL DEFAULT now()
-);
-ALTER TABLE public.menu_duels ENABLE ROW LEVEL SECURITY;
-REVOKE ALL ON public.menu_duels FROM anon, authenticated;
-GRANT USAGE ON SCHEMA public TO anon;
-GRANT SELECT ON public.menu_duels TO anon;
-GRANT INSERT (game_id, round, left_menu, right_menu, winner) ON public.menu_duels TO anon;
-GRANT USAGE ON SEQUENCE public.menu_duels_id_seq TO anon;
-CREATE POLICY "read_practice_votes" ON public.menu_duels
-  FOR SELECT TO anon USING (true);
-CREATE POLICY "insert_practice_votes" ON public.menu_duels
-  FOR INSERT TO anon WITH CHECK (true);
--- 로그인 없는 연습용: 조회·대결 기록 추가만 허용한다.
--- 1인 1표, 응답자 확인, 악의적 반복 제출 방지는 별도 설계가 필요하다.</pre></div>
-  <table class="daymap">
-    <thead><tr><th>설계표의 항목</th><th>SQL에서</th><th>예</th></tr></thead>
-    <tbody>
-      <tr><td><b>속성명</b></td><td>열 이름</td><td>id, game_id, round, left_menu, right_menu, winner, created_at</td></tr>
-      <tr><td><b>데이터형</b></td><td>text(문자열), integer/bigint(정수), numeric(소수), boolean(참/거짓), timestamptz(날짜·시각)</td><td>관객 수는 bigint, 타율은 numeric입니다.</td></tr>
-      <tr><td><b>조건</b></td><td>NOT NULL(NULL 불가), PRIMARY KEY(기본 키), UNIQUE(중복 불가), DEFAULT(기본값)</td><td>이메일은 UNIQUE</td></tr>
-    </tbody>
-  </table>
-  <p><b>기본 키</b>는 행을 유일하게 구분하는 열 또는 열의 조합입니다. 이 표에서는 자동으로 부여되는 id가 기본 키입니다. 같은 반찬이 여러 번 이겨도 각 행의 id는 다릅니다. NOT NULL은 NULL을 막지만 빈 문자열까지 막지는 않습니다. 그래서 판 번호는 빈 값을 막고, 두 반찬은 서로 다른 후보이며 승자는 그 둘 중 하나인지 CHECK 제약으로 검사합니다. 이 제약만으로 대진표 전체의 올바름이나 실제 참여자를 확인할 수는 없습니다.</p>
-  <details class="glossary" open>
-    <summary>🔬 움직여 보기 — 설계표를 채우면 CREATE TABLE 문장이 만들어진다 (교과서 31쪽 탐구활동)</summary>
-    <div class="gin">
-      <p style="margin:10px 0 8px">교과서 31쪽의 쇼핑몰 테이블(사용자·제품·장바구니)을 예시로 불러오거나, 표 이름부터 직접 정해 나만의 표를 설계합니다. 속성명을 적고 데이터형과 조건을 고르면 오른쪽 아래에 SQL 문장이 바로 만들어지고, 그 문장을 우리말로 읽은 해석이 함께 나타납니다. 데이터베이스를 실제로 만드는 것이 아니라, 설계표의 한 칸이 SQL의 어느 낱말이 되는지 읽는 연습입니다.</p>
-      <div class="sch">
-        <div class="sch-bar">
-          <label>예시 불러오기 <select class="sch-preset"><option value="">직접 설계</option><option value="user">사용자 표</option><option value="product">제품 표</option><option value="cart">장바구니 표</option><option value="menu_duels">대결 기록 표</option></select></label>
-          <label>표 이름 <input class="sch-name" type="text" value="내표"></label>
-          <button type="button" class="sch-add">+ 속성 추가</button>
-        </div>
-        <div class="sch-scroll">
-          <table class="glossary-table sch-table">
-            <thead><tr><th>속성명</th><th>데이터형</th><th>조건</th><th></th></tr></thead>
-            <tbody class="sch-rows"></tbody>
-          </table>
-        </div>
-        <div class="codewrap code sch-out"><span class="label">만들어진 SQL</span><pre class="sch-sql"></pre></div>
-        <div class="callout tip sch-tip"><div class="h">💬 이 문장을 우리말로 읽으면</div><ul class="sch-read"></ul></div>
-      </div>
-      <p style="font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">이 조립기는 기본 키를 열 하나로 지정하는 단순한 연습 도구입니다. 여러 열을 함께 검사하는 CHECK 조건과 접근 권한 정책까지 만들지는 않으므로 실제 준비에는 위 설계 SQL을 함께 봅니다. 자동 증가·참조 등의 선택을 바꾸며 SQL 표현을 읽어 봅니다.</p>
-    </div>
-  </details>
-<script>
-(function () {
-  var root = document.querySelector(".sch"); if (!root) return;
-  var TYPES = [["text","문자열"],["integer","정수"],["numeric","소수"],["boolean","참·거짓"],["date","날짜"],["timestamptz","날짜·시각"]];
-  var PRESETS = {
-    user: { name: "사용자", rows: [
-      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
-      { n: "이름", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "이메일", t: "text", pk: 0, nn: 1, uq: 1, ai: 0, df: 0, ref: "" },
-      { n: "가입일시", t: "timestamptz", pk: 0, nn: 0, uq: 0, ai: 0, df: 1, ref: "" } ] },
-    product: { name: "제품", rows: [
-      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
-      { n: "제품명", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "가격", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "재고", t: "integer", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" } ] },
-    cart: { name: "장바구니", rows: [
-      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
-      { n: "사용자id", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "사용자" },
-      { n: "제품id", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "제품" },
-      { n: "수량", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "담은시각", t: "timestamptz", pk: 0, nn: 0, uq: 0, ai: 0, df: 1, ref: "" } ] },
-    menu_duels: { name: "menu_duels", rows: [
-      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
-      { n: "game_id", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "left_menu", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "right_menu", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "round", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "winner", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
-      { n: "created_at", t: "timestamptz", pk: 0, nn: 1, uq: 0, ai: 0, df: 1, ref: "" } ] }
-  };
-  var nameEl = root.querySelector(".sch-name"), presetEl = root.querySelector(".sch-preset"), addBtn = root.querySelector(".sch-add");
-  var tbody = document.querySelector(".sch-rows"), sqlEl = document.querySelector(".sch-sql"), readEl = document.querySelector(".sch-read");
-  var rows = [];
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  function typeName(t) { for (var i = 0; i < TYPES.length; i++) if (TYPES[i][0] === t) return TYPES[i][1]; return t; }
-  function render() {
-    tbody.innerHTML = "";
-    rows.forEach(function (r, i) {
-      var tr = document.createElement("tr");
-      var opts = TYPES.map(function (t) { return '<option value="' + t[0] + '"' + (r.t === t[0] ? " selected" : "") + '>' + t[1] + '</option>'; }).join("");
-      var canAI = r.t === "integer" && r.pk, canDF = r.t === "timestamptz";
-      tr.innerHTML =
-        '<td><input data-k="n" data-i="' + i + '" type="text" value="' + esc(r.n) + '" placeholder="속성명"></td>' +
-        '<td><select data-k="t" data-i="' + i + '">' + opts + '</select></td>' +
-        '<td class="sch-cond">' +
-          '<label><input type="checkbox" data-k="pk" data-i="' + i + '"' + (r.pk ? " checked" : "") + '> 기본 키</label> · ' +
-          '<label><input type="checkbox" data-k="nn" data-i="' + i + '"' + (r.nn ? " checked" : "") + (r.pk ? " disabled" : "") + '> NULL 불가</label> · ' +
-          '<label><input type="checkbox" data-k="uq" data-i="' + i + '"' + (r.uq ? " checked" : "") + (r.pk ? " disabled" : "") + '> 중복 불가</label> · ' +
-          '<label' + (canAI ? "" : ' class="off"') + '><input type="checkbox" data-k="ai" data-i="' + i + '"' + (r.ai && canAI ? " checked" : "") + (canAI ? "" : " disabled") + '> 자동 증가</label> · ' +
-          '<label' + (canDF ? "" : ' class="off"') + '><input type="checkbox" data-k="df" data-i="' + i + '"' + (r.df && canDF ? " checked" : "") + (canDF ? "" : " disabled") + '> 지금 시각을 기본값으로</label> · ' +
-          '<label>다른 표 참조 <input data-k="ref" data-i="' + i + '" type="text" value="' + esc(r.ref) + '" placeholder="표 이름"></label>' +
-        '</td>' +
-        '<td><button type="button" data-del="' + i + '" title="이 속성 지우기">✕</button></td>';
-      tbody.appendChild(tr);
-    });
-    build();
-  }
-  function build() {
-    var tn = (nameEl.value || "내표").trim();
-    var lines = [], reads = [], fkLines = [];
-    var pkCount = rows.filter(function (r) { return r.pk; }).length;
-    rows.forEach(function (r) {
-      var n = (r.n || "").trim(); if (!n) return;
-      var parts = [n, r.t];
-      var why = [];
-      if (r.pk) { parts.push("PRIMARY KEY"); why.push("이 표에서 행 하나를 유일하게 가리키는 기본 키"); }
-      if (r.pk && r.t === "integer" && r.ai) { parts.push("GENERATED ALWAYS AS IDENTITY"); why.push("값을 직접 넣지 않아도 1, 2, 3… 자동으로 증가"); }
-      if (!r.pk && r.nn) { parts.push("NOT NULL"); why.push("NULL을 허용하지 않음 (빈 문자열 검사는 별도)"); }
-      if (!r.pk && r.uq) { parts.push("UNIQUE"); why.push("같은 값이 두 번 들어올 수 없음"); }
-      if (r.t === "timestamptz" && r.df) { parts.push("DEFAULT now()"); why.push("값을 넣지 않으면 저장 시각이 자동으로 들어감"); }
-      if (r.ref && r.ref.trim()) { parts.push("REFERENCES " + r.ref.trim() + "(id)"); why.push(r.ref.trim() + " 표의 id를 가리키는 외래 키. 두 표를 잇는 열"); }
-      lines.push("  " + parts.join(" "));
-      reads.push("<b>" + esc(n) + "</b> 열: " + typeName(r.t) + (why.length ? ". " + why.join(". ") + "." : "."));
-    });
-    var sql = lines.length ? "CREATE TABLE " + tn + " (\n" + lines.join(",\n") + "\n);" : "-- 속성을 하나 이상 적어 주세요";
-    sqlEl.textContent = sql;
-    var head = '<li>"' + esc(tn) + '"라는 이름의 표를 새로 만듭니다. 열은 ' + lines.length + '개입니다.</li>';
-    if (pkCount === 0 && lines.length) head += '<li style="color:#c23b3a">기본 키가 없습니다. 행 하나를 가리킬 열을 하나 정해 주세요.</li>';
-    if (pkCount > 1) head += '<li style="color:#c23b3a">기본 키가 ' + pkCount + '개입니다. 이 연습에서는 하나만 둡니다.</li>';
-    readEl.innerHTML = head + reads.map(function (t) { return "<li>" + t + "</li>"; }).join("");
-  }
-  function load(key) {
-    if (!key) { rows = [{ n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" }, { n: "", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" }]; nameEl.value = "내표"; }
-    else { var p = PRESETS[key]; nameEl.value = p.name; rows = p.rows.map(function (r) { return Object.assign({}, r); }); }
-    render();
-  }
-  tbody.addEventListener("input", function (e) {
-    var k = e.target.getAttribute("data-k"), i = +e.target.getAttribute("data-i"); if (!k) return;
-    if (k === "n" || k === "ref") { rows[i][k] = e.target.value; build(); }
-  });
-  tbody.addEventListener("change", function (e) {
-    var k = e.target.getAttribute("data-k"), i = +e.target.getAttribute("data-i"); if (!k) return;
-    if (k === "t") rows[i].t = e.target.value;
-    else if (e.target.type === "checkbox") {
-      rows[i][k] = e.target.checked ? 1 : 0;
-      if (k === "pk" && e.target.checked) { rows.forEach(function (r, j) { if (j !== i) r.pk = 0; }); rows[i].nn = 1; }
-    }
-    if (k === "n" || k === "ref") return;
-    render();
-  });
-  tbody.addEventListener("click", function (e) {
-    var d = e.target.getAttribute("data-del"); if (d === null) return; rows.splice(+d, 1); render();
-  });
-  addBtn.addEventListener("click", function () { if (rows.length < 8) { rows.push({ n: "", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" }); render(); } });
-  nameEl.addEventListener("input", build);
-  presetEl.addEventListener("change", function () { load(presetEl.value); });
-  load("");
-})();
-</script>
+  <h3>③ 게임으로 묶어 세기 — COUNT와 GROUP BY</h3>
+  <p>게임을 끝내면 전적 화면이 뜹니다. "이번 시즌 120판, 승률 58%", "캐릭터별 평균 점수" 같은 숫자입니다. 이 숫자는 어딘가에 저장되어 있던 값이 아니라, <b>표에 쌓인 행을 그 자리에서 세어 만든 값</b>입니다. 대전 기록 한 판이 <code>matches</code> 표의 한 행이라고 해 봅시다.</p>
+  <div class="codewrap code"><span class="label">SQL · 세기와 묶기</span><pre>-- 내가 이번 시즌에 몇 판 이겼나
+SELECT COUNT(*) FROM matches WHERE 플레이어 = '보리' AND 결과 = '승';
 
-  <h3>SQL과 내 코드의 대응</h3>
-  <p>파이썬 API 호출과 SQL은 같은 데이터 작업을 서로 다른 방식으로 표현할 수 있습니다. 아래 대응은 개념을 읽기 위한 예시입니다. SQL의 갱신·삭제는 별도 연습용 표를 가정하며 실제 월드컵 앱에 붙여 넣지 않습니다.</p>
-  <div style="overflow-x:auto"><table class="daymap" style="min-width:560px">
-    <thead><tr><th>동작</th><th>SQL</th><th>월드컵 앱 코드(파이썬)</th></tr></thead>
-    <tbody>
-      <tr><td><b>읽기</b></td><td>SELECT winner FROM menu_duels</td><td><code>db.table("menu_duels").select("winner")</code></td></tr>
-      <tr><td><b>생성</b></td><td>INSERT INTO menu_duels (game_id, round, left_menu, right_menu, winner) VALUES (…)</td><td><code>db.table("menu_duels").insert({"game_id": game_id, "round": round_name, "left_menu": left, "right_menu": right, "winner": winner})</code></td></tr>
-      <tr><td><b>갱신 (읽기 예시)</b></td><td>UPDATE votes_practice SET menu = … WHERE id = 7</td><td><code>db.table("votes_practice").update({…}).eq("id", 7)</code></td></tr>
-      <tr><td><b>삭제 (읽기 예시)</b></td><td>DELETE FROM votes_practice WHERE id = 7</td><td><code>db.table("votes_practice").delete().eq("id", 7)</code></td></tr>
-    </tbody>
-  </table></div>
-
-  <h3>묶어서 세기 — GROUP BY와 집계</h3>
-  <p>대결 기록의 반찬별 승리 수는 <code>SELECT winner, COUNT(*) FROM menu_duels GROUP BY winner;</code>로 집계할 수 있습니다. 아래에서는 12차시의 급식 데이터가 meals 표에 들어 있다고 가정해 요일별로 묶어 봅니다. 칼로리는 원래 저장본에 없는 열이므로 연습용 예시 값을 사용합니다.</p>
-  <div class="codewrap code"><span class="label">SQL · 세기와 묶기</span><pre>-- 배추김치가 나온 중식은 며칠인가 (12차시 184일 저장본에서는 102일)
-SELECT COUNT(*) FROM meals WHERE 식사 = '중식' AND 메뉴 LIKE '%배추김치%';
-
--- 요일별로 묶어 일수와 평균 열량을 구하고, 평균이 높은 요일부터 다섯 줄만
-SELECT 요일, COUNT(*) AS 일수, AVG(칼로리) AS 평균칼로리
-FROM meals
-WHERE 식사 = '중식'
-GROUP BY 요일
-ORDER BY 평균칼로리 DESC
-LIMIT 5;</pre></div>
+-- 캐릭터별로 묶어 판수와 평균 점수를 구하고, 평균이 높은 캐릭터부터 세 줄만
+SELECT 캐릭터, COUNT(*) AS 판수, AVG(점수) AS 평균점수
+FROM matches
+GROUP BY 캐릭터
+ORDER BY 평균점수 DESC
+LIMIT 3;</pre></div>
   <table class="daymap">
-    <thead><tr><th>낱말</th><th>뜻</th></tr></thead>
+    <thead><tr><th>낱말</th><th>뜻</th><th>게임 화면에서는</th></tr></thead>
     <tbody>
-      <tr><td><b>COUNT(*)</b></td><td>조건에 맞는 행의 개수를 센다</td></tr>
-      <tr><td><b>LIKE '%배추김치%'</b></td><td>문자열 안에 '배추김치'가 들어 있는 행을 찾는다. %는 '무엇이든'을 뜻한다.</td></tr>
-      <tr><td><b>GROUP BY</b></td><td>같은 값끼리 묶는다. '요일별로' 묶는다.</td></tr>
+      <tr><td><b>COUNT(*)</b></td><td>조건에 맞는 행의 개수를 센다</td><td>"이번 시즌 120판"</td></tr>
+      <tr><td><b>GROUP BY</b></td><td>같은 값끼리 한 묶음으로 접는다</td><td>"캐릭터별로"</td></tr>
       <tr><td><b>COUNT · SUM · AVG · MAX · MIN</b></td><td>묶음마다 개수 · 합계 · 평균 · 최댓값 · 최솟값</td></tr>
-      <tr><td><b>AS</b></td><td>결과 열에 붙일 이름</td></tr>
-      <tr><td><b>LIMIT</b></td><td>앞에서 몇 행만 가져온다. "상위 5개"</td></tr>
+      <tr><td><b>AS</b></td><td>결과 열에 붙일 이름</td><td>화면에 표시될 항목 이름</td></tr>
     </tbody>
   </table>
+  <p><b>GROUP BY의 핵심은 "접는다"입니다.</b> 20판의 기록이 캐릭터 네 종류로 묶이면 결과는 네 줄이 됩니다. 그래서 묶은 열이 아닌 열은 그대로 가져올 수 없습니다. 네 줄로 접힌 칸에 스무 개의 점수를 한꺼번에 넣을 수 없기 때문입니다. 그런 열은 <code>COUNT</code>·<code>AVG</code> 같은 집계 함수로 감싸 <b>하나의 값으로 줄여야</b> 합니다. 아래에서 직접 해 보면 금방 보입니다.</p>
+
   <details class="glossary" open>
-    <summary>🔬 움직여 보기 — SQL 문장 조립기 (급식 20끼 연습 데이터)</summary>
+    <summary>🔬 움직여 보기 — SQL 문장 조립기 (게임 전적 20판 연습 데이터)</summary>
     <div class="gin">
-      <p style="margin:10px 0 8px">아래에서 낱말을 고르면 SQL 문장이 만들어지고, 그 문장을 연습용 급식 20끼(15일의 중식 15끼와 석식 5끼) 표에 실행한 결과가 바로 아래에 나타납니다. 칼로리는 연습용 예시 값입니다. 조건 없이 요일로 묶으면 같은 날의 중식과 석식이 따로 세어지므로, '일수'를 보려면 조건에서 식사를 고릅니다.</p>
+      <p style="margin:10px 0 8px">아래에서 낱말을 고르면 SQL 문장이 만들어지고, 그 문장을 연습용 전적 20판 표에 실행한 결과가 바로 아래에 나타납니다. 점수는 연습용 예시 값입니다. 묶는 열을 바꿔 가며 결과가 몇 줄로 접히는지 확인합니다.</p>
       <div class="sqlb" style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:0.92rem">
-        <label>묶는 열(GROUP BY) <select class="sqlb-g"><option value="요일">요일</option><option value="식사">식사</option><option value="월">월</option></select></label>
-        <label>집계 <select class="sqlb-f"><option value="COUNT(*)">COUNT(*) 끼니수</option><option value="AVG(칼로리)">AVG(칼로리) 평균 열량</option><option value="MAX(칼로리)">MAX(칼로리) 최고 열량</option><option value="SUM(칼로리)">SUM(칼로리) 열량 합</option></select></label>
-        <label>조건(WHERE) <select class="sqlb-w"><option value="">없음</option><option value="식사 = '중식'">식사 = '중식'</option><option value="식사 = '석식'">식사 = '석식'</option><option value="메뉴 LIKE '%배추김치%'">메뉴 LIKE '%배추김치%'</option></select></label>
+        <label>묶는 열(GROUP BY) <select class="sqlb-g"><option value="캐릭터">캐릭터</option><option value="플레이어">플레이어</option><option value="결과">결과</option></select></label>
+        <label>집계 <select class="sqlb-f"><option value="COUNT(*)">COUNT(*) 판수</option><option value="AVG(점수)">AVG(점수) 평균 점수</option><option value="MAX(점수)">MAX(점수) 최고 점수</option></select></label>
+        <label>조건(WHERE) <select class="sqlb-w"><option value="">없음</option><option value="결과 = '승'">결과 = '승'</option><option value="결과 = '패'">결과 = '패'</option></select></label>
         <label>정렬 <select class="sqlb-o"><option value="DESC">집계값 큰 순(DESC)</option><option value="ASC">작은 순(ASC)</option></select></label>
         <label>LIMIT <select class="sqlb-l"><option value="">없음</option><option value="1">1</option><option value="3">3</option></select></label>
       </div>
@@ -1220,56 +551,45 @@ LIMIT 5;</pre></div>
 <script>
 (function () {
   var box = document.querySelector(".sqlb"); if (!box) return;
-  // 연습용 급식 20끼 (열: 날짜, 월, 요일, 식사, 메뉴, 칼로리) — 예시 값. 아래 SQL 시뮬레이터도 같은 표를 쓴다
-  var rows = window.MEALS20 = [
-    ["2025-09-01",9,"월","중식","현미밥|근대된장국|제육볶음|배추김치",887],
-    ["2025-09-02",9,"화","중식","쌀밥|순대국|석박지|계란말이",842],
-    ["2025-09-03",9,"수","중식","카레라이스|단무지|배추김치|요구르트",905],
-    ["2025-09-04",9,"목","중식","잡곡밥|미역국|닭갈비|배추김치",868],
-    ["2025-09-05",9,"금","중식","짜장밥|단무지|군만두|깍두기",931],
-    ["2025-09-08",9,"월","중식","쌀밥|김치찌개|불고기|배추김치",879],
-    ["2025-09-09",9,"화","중식","비빔밥|계란국|배추김치",801],
-    ["2025-09-10",9,"수","중식","현미밥|육개장|생선까스|깍두기",896],
-    ["2025-09-11",9,"목","중식","쌀밥|된장국|제육볶음|배추김치",874],
-    ["2025-09-12",9,"금","중식","돈까스|우동|단무지|배추김치",958],
-    ["2025-10-06",10,"월","중식","잡곡밥|순대국|석박지|김말이",851],
-    ["2025-10-07",10,"화","중식","쌀밥|어묵국|닭볶음탕|배추김치",862],
-    ["2025-10-08",10,"수","중식","김치볶음밥|계란후라이|단무지",884],
-    ["2025-10-09",10,"목","중식","현미밥|부대찌개|배추김치",871],
-    ["2025-10-10",10,"금","중식","치킨마요덮밥|미소국|깍두기",940],
-    ["2025-09-01",9,"월","석식","쌀밥|콩나물국|고등어구이|배추김치",712],
-    ["2025-09-02",9,"화","석식","라볶이|김밥|단무지",768],
-    ["2025-09-03",9,"수","석식","잡곡밥|감자국|오징어볶음|배추김치",733],
-    ["2025-10-06",10,"월","석식","쌀밥|순두부찌개|배추김치",705],
-    ["2025-10-07",10,"화","석식","김치볶음밥|계란국|단무지",741]
+  // 연습용 게임 전적 20판 (열: id, 플레이어, 캐릭터, 결과, 점수) — 예시 값. 아래 SQL 시뮬레이터도 같은 표를 쓴다
+  var rows = window.GAME20 = [
+    [1,"보리","검사","승",320], [2,"하늘","궁수","패",180],
+    [3,"지우","마법사","승",290], [4,"서준","힐러","승",240],
+    [5,"민아","검사","패",150], [6,"보리","궁수","승",310],
+    [7,"하늘","마법사","승",275], [8,"지우","검사","패",160],
+    [9,"서준","궁수","패",195], [10,"민아","마법사","승",330],
+    [11,"보리","힐러","승",255], [12,"하늘","검사","승",300],
+    [13,"지우","궁수","승",285], [14,"서준","마법사","패",170],
+    [15,"민아","힐러","패",145], [16,"보리","검사","승",340],
+    [17,"하늘","힐러","패",165], [18,"지우","마법사","승",295],
+    [19,"서준","검사","승",265], [20,"민아","궁수","패",175]
   ];
-  var COL = {"날짜":0,"월":1,"요일":2,"식사":3,"메뉴":4,"칼로리":5};
+  var COL = {"id":0,"플레이어":1,"캐릭터":2,"결과":3,"점수":4};
   var g = box.querySelector(".sqlb-g"), f = box.querySelector(".sqlb-f"), w = box.querySelector(".sqlb-w"),
       o = box.querySelector(".sqlb-o"), l = box.querySelector(".sqlb-l");
   var sqlEl = document.querySelector(".sqlb-sql"), out = document.querySelector(".sqlb-out");
-  var NAME = {"COUNT(*)":"끼니수","AVG(칼로리)":"평균칼로리","MAX(칼로리)":"최고칼로리","SUM(칼로리)":"칼로리합"};
+  var NAME = {"COUNT(*)":"판수","AVG(점수)":"평균점수","MAX(점수)":"최고점수","SUM(점수)":"점수합"};
   function passes(r) {
     var c = w.value;
     if (!c) return true;
-    if (c.indexOf("LIKE") >= 0) return r[COL["메뉴"]].indexOf("배추김치") >= 0;
-    return r[COL["식사"]] === c.split("'")[1];
+    return r[COL["결과"]] === c.split("'")[1];
   }
   function render() {
     var gcol = g.value, fn = f.value, alias = NAME[fn];
-    var sql = "SELECT " + gcol + ", " + fn + " AS " + alias + "\nFROM meals" +
+    var sql = "SELECT " + gcol + ", " + fn + " AS " + alias + "\nFROM matches" +
               (w.value ? "\nWHERE " + w.value : "") +
               "\nGROUP BY " + gcol + "\nORDER BY " + alias + " " + o.value +
               (l.value ? "\nLIMIT " + l.value : "") + ";";
     sqlEl.textContent = sql;
     var groups = {};
     rows.filter(passes).forEach(function (r) {
-      var k = r[COL[gcol]]; (groups[k] = groups[k] || []).push(r[COL["칼로리"]]);
+      var k = r[COL[gcol]]; (groups[k] = groups[k] || []).push(r[COL["점수"]]);
     });
     var res = Object.keys(groups).map(function (k) {
       var v = groups[k], val;
       if (fn === "COUNT(*)") val = v.length;
-      else if (fn === "AVG(칼로리)") val = Math.round(v.reduce(function (a, b) { return a + b; }, 0) / v.length * 10) / 10;
-      else if (fn === "MAX(칼로리)") val = Math.max.apply(null, v);
+      else if (fn === "AVG(점수)") val = Math.round(v.reduce(function (a, b) { return a + b; }, 0) / v.length * 10) / 10;
+      else if (fn === "MAX(점수)") val = Math.max.apply(null, v);
       else val = v.reduce(function (a, b) { return a + b; }, 0);
       return [k, val];
     });
@@ -1285,21 +605,25 @@ LIMIT 5;</pre></div>
 })();
 </script>
 
-  <h3>실생활 앱에서 SQL이 하는 일 — 인스타그램으로 읽기</h3>
-  <p>게시물 앱을 단순화한 <b>가상 예시</b>로 SQL을 읽어 봅니다. 실제 서비스에서 단추 한 번이 반드시 SQL 한 문장과 대응하는 것은 아닙니다. 아래 표는 기능의 원리를 설명하기 위한 것이며 실제 인스타그램의 데이터베이스 구조를 재현한 것이 아닙니다.</p>
+  <h3>④ 화면 하나에 문장 하나 — 세 앱을 나란히 놓으면</h3>
+  <p>앞에서 세 가지 동작을 따로 배웠습니다. 이제 세 앱의 화면을 나란히 놓고 어떤 문장이 실행되는지 읽어 봅니다. <b>단추를 누르는 일과 문장 하나가 짝을 이룹니다.</b></p>
+  <p class="mini">아래 표는 원리를 설명하기 위해 단순하게 만든 <b>가상 예시</b>입니다. 실제 서비스에서 단추 한 번이 반드시 SQL 한 문장과 대응하지는 않으며, 각 회사의 실제 표 구조를 재현한 것도 아닙니다.</p>
   <div class="app-sql-wrap"><table class="daymap app-sql">
     <thead><tr><th>앱에서 하는 일</th><th>뒤에서 실행되는 SQL</th><th>읽는 법</th></tr></thead>
     <tbody>
-      <tr><td><b>피드를 연다</b></td><td><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</code></td><td>게시물 표에서, 올린 시각이 늦은 것부터 20개만 가져온다.</td></tr>
-      <tr><td><b>해시태그 #고양이를 검색한다</b></td><td><code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></td><td>해시태그 열에 '#고양이'가 들어 있는 행만 찾는다.</td></tr>
-      <tr><td><b>cat_mong 프로필의 "게시물 4"</b></td><td><code>SELECT COUNT(*) FROM posts WHERE 작성자 = 'cat_mong';</code></td><td>cat_mong이 쓴 행의 개수를 센다.</td></tr>
-      <tr><td><b>인기 해시태그 순위</b></td><td><code>SELECT 해시태그, COUNT(*) AS 개수 FROM posts GROUP BY 해시태그 ORDER BY 개수 DESC LIMIT 10;</code></td><td>해시태그별로 묶어 개수를 세고, 많은 순으로 10개를 가져온다.</td></tr>
-      <tr><td><b>❤ 좋아요를 누른다</b></td><td><code>UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = 4;</code></td><td>4번 게시물 한 행의 좋아요 값을 1 늘린다.</td></tr>
-      <tr><td><b>댓글을 단다</b></td><td><code>INSERT INTO comments (게시물id, 작성자, 댓글) VALUES (4, 'dog_bori', '박스 안이 그렇게 좋아?');</code></td><td>댓글 표에 새 행 하나를 넣는다.</td></tr>
-      <tr><td><b>내 게시물을 지운다</b></td><td><code>DELETE FROM posts WHERE id = 4 AND 작성자 = 'cat_mong';</code></td><td>4번이면서 cat_mong이 쓴 행만 지운다. 삭제 대상의 조건이다. 작성자 확인과 접근 권한 검사는 별도로 필요하다.</td></tr>
+      <tr><td><b>📷 피드를 연다</b></td><td><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</code></td><td>게시물 표에서, 올린 시각이 늦은 것부터 20개만 가져온다.</td></tr>
+      <tr><td><b>📷 #고양이를 검색한다</b></td><td><code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></td><td>해시태그 열에 '#고양이'가 들어 있는 행만 찾는다.</td></tr>
+      <tr><td><b>📷 ❤ 좋아요를 누른다</b></td><td><code>UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = 4;</code></td><td>4번 게시물 한 행의 좋아요 값을 1 늘린다.</td></tr>
+      <tr><td><b>💬 메시지를 보낸다</b></td><td><code>INSERT INTO messages (방id, 보낸사람, 내용, 읽음) VALUES (12, '보리', '오늘 급식 뭐야?', false);</code></td><td>메시지 표에 새 행 하나를 넣는다.</td></tr>
+      <tr><td><b>💬 상대가 읽어 숫자 1이 사라진다</b></td><td><code>UPDATE messages SET 읽음 = true WHERE id = 305;</code></td><td>305번 메시지 한 행의 읽음 값을 바꾼다.</td></tr>
+      <tr><td><b>💬 보낸 메시지를 삭제한다</b></td><td><code>DELETE FROM messages WHERE id = 305 AND 보낸사람 = '보리';</code></td><td>305번이면서 내가 보낸 행만 지운다. 두 조건을 모두 만족해야 한다.</td></tr>
+      <tr><td><b>🎮 이번 시즌 전적을 본다</b></td><td><code>SELECT COUNT(*) FROM matches WHERE 플레이어 = '보리' AND 결과 = '승';</code></td><td>내가 이긴 판의 행 개수를 센다.</td></tr>
+      <tr><td><b>🎮 캐릭터별 평균 점수</b></td><td><code>SELECT 캐릭터, AVG(점수) AS 평균점수 FROM matches GROUP BY 캐릭터 ORDER BY 평균점수 DESC;</code></td><td>캐릭터별로 묶어 평균을 구하고, 높은 순으로 늘어놓는다.</td></tr>
+      <tr><td><b>🎮 랭킹 상위 10명</b></td><td><code>SELECT 플레이어, MAX(점수) AS 최고점수 FROM matches GROUP BY 플레이어 ORDER BY 최고점수 DESC LIMIT 10;</code></td><td>플레이어별 최고 점수를 구해 열 명만 보여 준다.</td></tr>
     </tbody>
   </table></div>
-  <p>실제 서비스는 여러 테이블·캐시·접근 권한 등을 함께 사용합니다. 여기서는 조회·추가·갱신·삭제라는 기본 동작을 구분하는 데 집중합니다. 아래 시뮬레이터는 페이지 안의 연습 데이터만 바꿉니다.</p>
+  <p>표를 세로로 훑어보면 낱말 몇 개가 반복됩니다. <b>SELECT·WHERE·ORDER BY·LIMIT·INSERT·UPDATE·DELETE·COUNT·GROUP BY</b> — 오늘 배운 것이 전부입니다. 여러분이 쓰는 앱 대부분은 이 낱말들의 조합으로 돌아갑니다. 실제 서비스는 여기에 여러 테이블·캐시·접근 권한을 더해 쓰지만, 뼈대는 같습니다.</p>
+  <p class="mini">아래 시뮬레이터에서는 문장을 직접 써서 실행해 볼 수 있습니다. 페이지 안의 연습 데이터만 바뀌므로 무엇을 지워도 안전합니다.</p>
 
   <details class="glossary" open>
     <summary>🔬 움직여 보기 — SQL 시뮬레이터: 문장을 직접 쓰고, 단계별로 무슨 일이 벌어지는지 본다</summary>
@@ -1313,7 +637,7 @@ LIMIT 5;</pre></div>
         <div class="sim-pane" data-pane="read">
           <p class="sim-intro">표를 고르고 SQL 문장을 실행합니다. 게시물 표는 반려동물 계정 다섯 개(가상)의 글 12개입니다. 예시 단추를 누르거나 직접 고쳐 써 보십시오. 쓸 수 있는 낱말은 SELECT · FROM · WHERE · AND · LIKE · GROUP BY · ORDER BY · DESC · ASC · LIMIT · AS 와 COUNT · SUM · AVG · MAX · MIN 입니다. 표를 잘못 쓰거나 열 이름을 틀리면 오류 문장이 나오고, 'GROUP BY에 없는 열'을 그대로 쓰면 민수가 만난 오류가 그대로 재현됩니다.</p>
           <div class="sim-row">
-            <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 표 posts</option><option value="meals">급식 표 meals</option></select></label>
+            <label>표 <select class="sim-ds"><option value="posts">반려동물 인스타그램 게시물 표 posts</option><option value="matches">게임 전적 표 matches</option></select></label>
             <span class="sim-cols"></span>
           </div>
           <div class="sim-exs"></div>
@@ -1392,13 +716,13 @@ LIMIT 5;</pre></div>
         ["계정별 좋아요 합계","SELECT 작성자, SUM(좋아요) AS 좋아요합 FROM posts GROUP BY 작성자 ORDER BY 좋아요합 DESC LIMIT 3;"],
         ["오류 재현 · 묶지 않은 열","SELECT 작성자, 내용 FROM posts GROUP BY 작성자;"]
       ] },
-    meals: { name: "meals", label: "급식 표", cols: ["날짜","월","요일","식사","메뉴","칼로리"], num: { "월": 1, "칼로리": 1 },
-      rows: window.MEALS20 || [],
+    matches: { name: "matches", label: "게임 전적 표", cols: ["id","플레이어","캐릭터","결과","점수"], num: { "id": 1, "점수": 1 },
+      rows: window.GAME20 || [],
       examples: [
-        ["열량 높은 중식 3끼","SELECT 날짜, 메뉴, 칼로리 FROM meals WHERE 식사 = '중식' ORDER BY 칼로리 DESC LIMIT 3;"],
-        ["지우의 문장","SELECT 요일, AVG(칼로리) AS 평균칼로리 FROM meals WHERE 식사 = '중식' GROUP BY 요일 ORDER BY 평균칼로리 DESC;"],
-        ["민수의 오류","SELECT 요일, 날짜 FROM meals WHERE 식사 = '중식' GROUP BY 요일;"],
-        ["배추김치 나온 날 세기","SELECT COUNT(*) AS 일수 FROM meals WHERE 식사 = '중식' AND 메뉴 LIKE '%배추김치%';"]
+        ["점수 높은 판 3개","SELECT 플레이어, 캐릭터, 점수 FROM matches ORDER BY 점수 DESC LIMIT 3;"],
+        ["캐릭터별 평균 점수","SELECT 캐릭터, AVG(점수) AS 평균점수 FROM matches GROUP BY 캐릭터 ORDER BY 평균점수 DESC;"],
+        ["보리의 승리만","SELECT * FROM matches WHERE 플레이어 = '보리' AND 결과 = '승';"],
+        ["오류 재현 · 묶지 않은 열","SELECT 캐릭터, 점수 FROM matches GROUP BY 캐릭터;"]
       ] }
   };
   var cur = DS.posts;
@@ -1580,52 +904,161 @@ LIMIT 5;</pre></div>
 })();
 </script>
 
-  <h3>이야기 — 영양사 선생님의 부탁</h3>
-  <div class="callout data">
-    <div class="h">🍱 급식부의 두 사람과 SQL 편집기</div>
-    <p>다음은 SQL을 읽기 위한 가상 상황입니다. 급식부의 지우와 민수는 요일별 평균 열량을 비교하려고 합니다. 12차시의 184일 식단에 연습용 열량 값을 붙여 meals 표를 만들었다고 가정합니다. 실제 급식 영양을 평가하는 데이터는 아니며, 아래 조립기의 20끼 데이터와도 구분합니다.</p>
-  </div>
-  <div class="quiz">
-    <div class="qq"><span class="qn">장면 1</span> 지우가 먼저 나섭니다. "요일별로(GROUP BY) 평균 열량을 내서(AVG), 높은 요일부터(ORDER BY) 보면 되겠다." 지우가 써야 할 SQL 문장을 종이에 완성한 뒤 펼쳐 봅니다. 중식만 대상으로 하고, 결과 열의 이름은 요일과 평균칼로리로 합니다.</div>
-    <details class="reveal"><summary>정답 펼쳐 보기</summary>
-      <p><code>SELECT 요일, AVG(칼로리) AS 평균칼로리 FROM meals WHERE 식사 = '중식' GROUP BY 요일 ORDER BY 평균칼로리 DESC;</code>위 조립기에서 묶는 열 '요일', 집계 'AVG(칼로리)', 조건 '식사 = '중식''을 고르면 같은 문장이 만들어집니다.</p>
-    </details>
-  </div>
-  <div class="quiz">
-    <div class="qq"><span class="qn">장면 2</span> 옆에서 민수가 "요일마다 급식이 며칠씩 있었는지도 같이 보여 드리자"며 문장을 하나 더 씁니다. <code>SELECT 요일, 날짜 FROM meals WHERE 식사 = '중식' GROUP BY 요일;</code> 실행 단추를 누르자 빨간 오류 문장이 뜹니다. 지우가 화면을 보더니 말합니다. "요일로 묶었는데 날짜를 그대로 달라고 하면, 한 칸에 서른 개 넘게 어떻게 넣어?" 오류의 까닭은 무엇일까요?</div>
-    <div class="qitem">
-      <div class="qopts qopts-col">
-        <button class="opt">날짜 열은 SQL에서 가져올 수 없는 데이터형이기 때문</button>
-        <button class="opt" data-ok="1">GROUP BY 요일은 요일이 같은 행들을 한 묶음으로 접는데, 날짜는 한 묶음 안에 값이 여러 개(요일마다 여러 개)라 한 칸에 표시할 수 없기 때문. 묶은 열이 아닌 열은 COUNT 같은 집계 함수로 감싸야 한다</button>
-        <button class="opt">WHERE 조건이 GROUP BY보다 앞에 왔기 때문</button>
-      </div>
-      <div class="fb">뜻에 맞게 고치면 <code>SELECT 요일, COUNT(*) AS 일수 FROM meals WHERE 식사 = '중식' GROUP BY 요일;</code>입니다. WHERE가 GROUP BY 앞에 오는 것은 올바른 순서입니다.</div>
-    </div>
-  </div>
-  <div class="callout tip">
-    <div class="h">💡 이야기의 끝 — 숫자가 나온 뒤에 남는 판단</div>
-    <p>이 이야기에서는 금요일 34일의 평균이 912kcal, 화요일 39일의 평균이 852kcal라고 가정합니다. 일수는 184일 저장본, 열량은 연습용 수치입니다. 이 차이만으로 실제 금요일 급식의 적절성을 평가할 수는 없습니다. SQL은 집계를 수행하며, 결과의 의미를 판단하려면 데이터의 출처와 조건을 확인해야 합니다.</p>
-  </div>
-
-  <h3>권한 정책 — 허용할 동작을 명시하는 이유</h3>
-  <p>RLS는 <b>활성화된 테이블에서 어떤 행에 접근할 수 있는지</b> 정하는 정책입니다. 일반 앱 역할에는 테이블 권한과 해당 정책이 모두 필요합니다. RLS가 꺼져 있거나 관리자 권한을 사용하면 정책의 보호 범위가 달라집니다. 이번 설계는 로그인 없는 연습용으로 읽기·추가만 허용하며, 누구나 그 권한으로 여러 판을 반복할 수 있다는 한계가 있습니다. 앱의 단추 숨기기는 DB 권한 검사를 대신하지 못합니다. <a href="https://supabase.com/docs/guides/database/postgres/row-level-security" target="_blank" rel="noopener">Supabase RLS 문서</a>에서 원리를 확인할 수 있습니다.</p>
-  <div class="callout warn">
-    <div class="h">⚠️ 바이브 코딩에서 가장 자주 만나는 DB 오류</div>
-    <p>연결·저장·조회 오류의 원인은 다를 수 있습니다. 표 이름과 열 이름, 접속 대상, 허용된 동작, RLS 정책을 순서대로 확인합니다. 오류를 없애려고 관리자 키를 넣거나 모든 권한을 열지 말고, 필요한 동작만 교사와 확인합니다.</p>
-  </div>
-
-  <h3>AI에게 DB를 주문할 때 알려 줄 네 가지</h3>
-  <p>SQL 문장을 직접 쓰지 않더라도, AI가 데이터베이스 코드를 맞게 짜려면 AI가 볼 수 없는 사실을 프롬프트에 적어 주어야 합니다. 2절의 ① 샘플 프롬프트에 이미 네 가지가 다 들어 있었습니다.</p>
+  <h3 id="vote-db-setup">⑤ 표는 어떻게 만드나 — 교과서 31쪽 설계표가 그대로 문장이 된다</h3>
+  <p>교과서 31쪽의 속성명·설명·데이터형·조건 양식으로 대결 기록 표를 설계합니다. 아래 SQL은 <b>교사 또는 모둠 대표가 연습용 프로젝트에 표와 권한을 준비할 때 사용할 코드</b>입니다. 아직 설정을 실행했다는 뜻은 아닙니다. 학생은 표와 열 이름을 읽고 앱의 입력이 어느 열에 저장되는지 확인합니다.</p>
   <table class="daymap">
-    <thead><tr><th>알려 줄 것</th><th>왜</th><th>①의 문장</th></tr></thead>
+    <thead><tr><th>속성명</th><th>설명</th><th>데이터형</th><th>조건</th></tr></thead>
     <tbody>
-      <tr><td><b>표 이름과 열 이름</b>(필요하면 데이터형)</td><td>AI는 표를 볼 수 없다. 이름이 한 글자만 달라도 저장되지 않는다.</td><td>"표 이름은 menu_duels이고 public 스키마에 있어. 이 표의 열 이름은 id, game_id, round, left_menu, right_menu, winner, created_at 일곱 가지야"</td></tr>
-      <tr><td><b>새 표를 만들지 말 것</b></td><td>학급 공용 프로젝트에서는 학생이 표를 만들 권한이 없다</td><td>"새 표를 만들지 말고 이 표에 그대로 연결해 줘"</td></tr>
-      <tr><td><b>접속 정보는 비밀 금고에</b></td><td>주소와 키가 코드에 박히면 공개 저장소로 새어 나간다</td><td>"접속 정보는 비밀 금고(secrets)의 SUPABASE_URL과 SUPABASE_KEY에서 읽어 줘"</td></tr>
-      <tr><td><b>무결성 조건</b></td><td>빈 값이나 잘못된 값이 들어가지 않게</td><td>"서로 다른 두 후보 중 하나를 골랐을 때만, 교사가 준비한 표에 대결을 한 행씩 저장해 줘"</td></tr>
+      <tr><td><b>id</b></td><td>기록 번호</td><td>정수</td><td>자동 증가 · 기본 키</td></tr>
+      <tr><td><b>game_id</b></td><td>한 판을 묶는 번호</td><td>문자열</td><td>NULL·빈 값 불가</td></tr>
+      <tr><td><b>round</b></td><td>대결 라운드</td><td>문자열</td><td>8강·4강·결승 중 하나</td></tr>
+      <tr><td><b>left_menu · right_menu</b></td><td>겨룬 두 반찬</td><td>문자열</td><td>여덟 후보 중 서로 다른 반찬. NULL 불가</td></tr>
+      <tr><td><b>winner</b></td><td>이긴 반찬</td><td>문자열</td><td>겨룬 두 반찬 중 하나. NULL 불가</td></tr>
+      <tr><td><b>created_at</b></td><td>저장 시각</td><td>날짜·시각</td><td>현재 시각을 기본값으로 사용합니다.</td></tr>
     </tbody>
   </table>
-  <p>팀 프로젝트에서도 앱의 목적, 실제 표의 구조, 접속 정보의 이름, 허용된 입력과 동작을 알려 줍니다. 코드를 받은 뒤에는 저장한 값과 조회·집계 결과가 맞는지 작은 예로 확인합니다.</p>
+  <p class="mini">이 설계표를 실제 SQL 문장으로 옮겨 표를 만드는 일은 <b>15차시</b>에 합니다. 만드는 문장(<code>CREATE TABLE</code>)은 한 학기에 한 번, 준비 담당자가 실행하므로 <a href="lesson13-setup.html">준비 안내</a>에 따로 정리해 두었습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>설계표의 항목</th><th>SQL에서</th><th>예</th></tr></thead>
+    <tbody>
+      <tr><td><b>속성명</b></td><td>열 이름</td><td>id, game_id, round, left_menu, right_menu, winner, created_at</td></tr>
+      <tr><td><b>데이터형</b></td><td>text(문자열), integer/bigint(정수), numeric(소수), boolean(참/거짓), timestamptz(날짜·시각)</td><td>관객 수는 bigint, 타율은 numeric입니다.</td></tr>
+      <tr><td><b>조건</b></td><td>NOT NULL(NULL 불가), PRIMARY KEY(기본 키), UNIQUE(중복 불가), DEFAULT(기본값)</td><td>이메일은 UNIQUE</td></tr>
+    </tbody>
+  </table>
+  <p><b>기본 키</b>는 행을 유일하게 구분하는 열 또는 열의 조합입니다. 이 표에서는 자동으로 부여되는 id가 기본 키입니다. 같은 반찬이 여러 번 이겨도 각 행의 id는 다릅니다. NOT NULL은 NULL을 막지만 빈 문자열까지 막지는 않습니다. 그래서 판 번호는 빈 값을 막고, 두 반찬은 서로 다른 후보이며 승자는 그 둘 중 하나인지 CHECK 제약으로 검사합니다. 이 제약만으로 대진표 전체의 올바름이나 실제 참여자를 확인할 수는 없습니다.</p>
+  <details class="glossary" open>
+    <summary>🔬 움직여 보기 — 설계표를 채우면 CREATE TABLE 문장이 만들어진다 (교과서 31쪽 탐구활동)</summary>
+    <div class="gin">
+      <p style="margin:10px 0 8px">교과서 31쪽의 쇼핑몰 테이블(사용자·제품·장바구니)을 예시로 불러오거나, 표 이름부터 직접 정해 나만의 표를 설계합니다. 속성명을 적고 데이터형과 조건을 고르면 오른쪽 아래에 SQL 문장이 바로 만들어지고, 그 문장을 우리말로 읽은 해석이 함께 나타납니다. 데이터베이스를 실제로 만드는 것이 아니라, 설계표의 한 칸이 SQL의 어느 낱말이 되는지 읽는 연습입니다.</p>
+      <div class="sch">
+        <div class="sch-bar">
+          <label>예시 불러오기 <select class="sch-preset"><option value="">직접 설계</option><option value="user">사용자 표</option><option value="product">제품 표</option><option value="cart">장바구니 표</option><option value="menu_duels">대결 기록 표</option></select></label>
+          <label>표 이름 <input class="sch-name" type="text" value="내표"></label>
+          <button type="button" class="sch-add">+ 속성 추가</button>
+        </div>
+        <div class="sch-scroll">
+          <table class="glossary-table sch-table">
+            <thead><tr><th>속성명</th><th>데이터형</th><th>조건</th><th></th></tr></thead>
+            <tbody class="sch-rows"></tbody>
+          </table>
+        </div>
+        <div class="codewrap code sch-out"><span class="label">만들어진 SQL</span><pre class="sch-sql"></pre></div>
+        <div class="callout tip sch-tip"><div class="h">💬 이 문장을 우리말로 읽으면</div><ul class="sch-read"></ul></div>
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">이 조립기는 기본 키를 열 하나로 지정하는 단순한 연습 도구입니다. 여러 열을 함께 검사하는 CHECK 조건과 접근 권한 정책까지 만들지는 않으므로 실제 준비에는 위 설계 SQL을 함께 봅니다. 자동 증가·참조 등의 선택을 바꾸며 SQL 표현을 읽어 봅니다.</p>
+    </div>
+  </details>
+<script>
+(function () {
+  var root = document.querySelector(".sch"); if (!root) return;
+  var TYPES = [["text","문자열"],["integer","정수"],["numeric","소수"],["boolean","참·거짓"],["date","날짜"],["timestamptz","날짜·시각"]];
+  var PRESETS = {
+    user: { name: "사용자", rows: [
+      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "이름", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "이메일", t: "text", pk: 0, nn: 1, uq: 1, ai: 0, df: 0, ref: "" },
+      { n: "가입일시", t: "timestamptz", pk: 0, nn: 0, uq: 0, ai: 0, df: 1, ref: "" } ] },
+    product: { name: "제품", rows: [
+      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "제품명", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "가격", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "재고", t: "integer", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" } ] },
+    cart: { name: "장바구니", rows: [
+      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "사용자id", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "사용자" },
+      { n: "제품id", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "제품" },
+      { n: "수량", t: "integer", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "담은시각", t: "timestamptz", pk: 0, nn: 0, uq: 0, ai: 0, df: 1, ref: "" } ] },
+    menu_duels: { name: "menu_duels", rows: [
+      { n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" },
+      { n: "game_id", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "left_menu", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "right_menu", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "round", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "winner", t: "text", pk: 0, nn: 1, uq: 0, ai: 0, df: 0, ref: "" },
+      { n: "created_at", t: "timestamptz", pk: 0, nn: 1, uq: 0, ai: 0, df: 1, ref: "" } ] }
+  };
+  var nameEl = root.querySelector(".sch-name"), presetEl = root.querySelector(".sch-preset"), addBtn = root.querySelector(".sch-add");
+  var tbody = document.querySelector(".sch-rows"), sqlEl = document.querySelector(".sch-sql"), readEl = document.querySelector(".sch-read");
+  var rows = [];
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function typeName(t) { for (var i = 0; i < TYPES.length; i++) if (TYPES[i][0] === t) return TYPES[i][1]; return t; }
+  function render() {
+    tbody.innerHTML = "";
+    rows.forEach(function (r, i) {
+      var tr = document.createElement("tr");
+      var opts = TYPES.map(function (t) { return '<option value="' + t[0] + '"' + (r.t === t[0] ? " selected" : "") + '>' + t[1] + '</option>'; }).join("");
+      var canAI = r.t === "integer" && r.pk, canDF = r.t === "timestamptz";
+      tr.innerHTML =
+        '<td><input data-k="n" data-i="' + i + '" type="text" value="' + esc(r.n) + '" placeholder="속성명"></td>' +
+        '<td><select data-k="t" data-i="' + i + '">' + opts + '</select></td>' +
+        '<td class="sch-cond">' +
+          '<label><input type="checkbox" data-k="pk" data-i="' + i + '"' + (r.pk ? " checked" : "") + '> 기본 키</label> · ' +
+          '<label><input type="checkbox" data-k="nn" data-i="' + i + '"' + (r.nn ? " checked" : "") + (r.pk ? " disabled" : "") + '> NULL 불가</label> · ' +
+          '<label><input type="checkbox" data-k="uq" data-i="' + i + '"' + (r.uq ? " checked" : "") + (r.pk ? " disabled" : "") + '> 중복 불가</label> · ' +
+          '<label' + (canAI ? "" : ' class="off"') + '><input type="checkbox" data-k="ai" data-i="' + i + '"' + (r.ai && canAI ? " checked" : "") + (canAI ? "" : " disabled") + '> 자동 증가</label> · ' +
+          '<label' + (canDF ? "" : ' class="off"') + '><input type="checkbox" data-k="df" data-i="' + i + '"' + (r.df && canDF ? " checked" : "") + (canDF ? "" : " disabled") + '> 지금 시각을 기본값으로</label> · ' +
+          '<label>다른 표 참조 <input data-k="ref" data-i="' + i + '" type="text" value="' + esc(r.ref) + '" placeholder="표 이름"></label>' +
+        '</td>' +
+        '<td><button type="button" data-del="' + i + '" title="이 속성 지우기">✕</button></td>';
+      tbody.appendChild(tr);
+    });
+    build();
+  }
+  function build() {
+    var tn = (nameEl.value || "내표").trim();
+    var lines = [], reads = [], fkLines = [];
+    var pkCount = rows.filter(function (r) { return r.pk; }).length;
+    rows.forEach(function (r) {
+      var n = (r.n || "").trim(); if (!n) return;
+      var parts = [n, r.t];
+      var why = [];
+      if (r.pk) { parts.push("PRIMARY KEY"); why.push("이 표에서 행 하나를 유일하게 가리키는 기본 키"); }
+      if (r.pk && r.t === "integer" && r.ai) { parts.push("GENERATED ALWAYS AS IDENTITY"); why.push("값을 직접 넣지 않아도 1, 2, 3… 자동으로 증가"); }
+      if (!r.pk && r.nn) { parts.push("NOT NULL"); why.push("NULL을 허용하지 않음 (빈 문자열 검사는 별도)"); }
+      if (!r.pk && r.uq) { parts.push("UNIQUE"); why.push("같은 값이 두 번 들어올 수 없음"); }
+      if (r.t === "timestamptz" && r.df) { parts.push("DEFAULT now()"); why.push("값을 넣지 않으면 저장 시각이 자동으로 들어감"); }
+      if (r.ref && r.ref.trim()) { parts.push("REFERENCES " + r.ref.trim() + "(id)"); why.push(r.ref.trim() + " 표의 id를 가리키는 외래 키. 두 표를 잇는 열"); }
+      lines.push("  " + parts.join(" "));
+      reads.push("<b>" + esc(n) + "</b> 열: " + typeName(r.t) + (why.length ? ". " + why.join(". ") + "." : "."));
+    });
+    var sql = lines.length ? "CREATE TABLE " + tn + " (\n" + lines.join(",\n") + "\n);" : "-- 속성을 하나 이상 적어 주세요";
+    sqlEl.textContent = sql;
+    var head = '<li>"' + esc(tn) + '"라는 이름의 표를 새로 만듭니다. 열은 ' + lines.length + '개입니다.</li>';
+    if (pkCount === 0 && lines.length) head += '<li style="color:#c23b3a">기본 키가 없습니다. 행 하나를 가리킬 열을 하나 정해 주세요.</li>';
+    if (pkCount > 1) head += '<li style="color:#c23b3a">기본 키가 ' + pkCount + '개입니다. 이 연습에서는 하나만 둡니다.</li>';
+    readEl.innerHTML = head + reads.map(function (t) { return "<li>" + t + "</li>"; }).join("");
+  }
+  function load(key) {
+    if (!key) { rows = [{ n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" }, { n: "", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" }]; nameEl.value = "내표"; }
+    else { var p = PRESETS[key]; nameEl.value = p.name; rows = p.rows.map(function (r) { return Object.assign({}, r); }); }
+    render();
+  }
+  tbody.addEventListener("input", function (e) {
+    var k = e.target.getAttribute("data-k"), i = +e.target.getAttribute("data-i"); if (!k) return;
+    if (k === "n" || k === "ref") { rows[i][k] = e.target.value; build(); }
+  });
+  tbody.addEventListener("change", function (e) {
+    var k = e.target.getAttribute("data-k"), i = +e.target.getAttribute("data-i"); if (!k) return;
+    if (k === "t") rows[i].t = e.target.value;
+    else if (e.target.type === "checkbox") {
+      rows[i][k] = e.target.checked ? 1 : 0;
+      if (k === "pk" && e.target.checked) { rows.forEach(function (r, j) { if (j !== i) r.pk = 0; }); rows[i].nn = 1; }
+    }
+    if (k === "n" || k === "ref") return;
+    render();
+  });
+  tbody.addEventListener("click", function (e) {
+    var d = e.target.getAttribute("data-del"); if (d === null) return; rows.splice(+d, 1); render();
+  });
+  addBtn.addEventListener("click", function () { if (rows.length < 8) { rows.push({ n: "", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" }); render(); } });
+  nameEl.addEventListener("input", build);
+  presetEl.addEventListener("change", function () { load(presetEl.value); });
+  load("");
+})();
+</script>
+
 
   <details class="glossary">
     <summary>🔎 심화 — 표와 표를 잇는 열(외래 키)과 JOIN</summary>
@@ -1639,50 +1072,12 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     </div>
   </details>
 
-  <h2>4. 팀 프로젝트 예고 — 데이터로 답할 수 있는 문제인가</h2>
-  <p>공통 수업은 다음 시간 데이터 윤리 한 차시만 남았습니다. 그 뒤에는 2~3인 팀으로 공통 수업에서 익힌 도구를 활용해 <b>팀만의 질문</b>에 도전합니다. 오늘은 그 준비로 팀을 구성하고 주제 후보를 고릅니다.</p>
-  <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 174쪽</span></div>
-    <p class="q">"데이터 과학은 다양한 분야의 문제를 해결하고 의사 결정을 지원하는 데 큰 도움이 되지만, 모든 문제를 해결할 수 있는 것은 아니다." <span class="src">(174쪽)</span></p>
-    <p class="t">→ 주제를 고를 때는 데이터가 <b>충분히 있는지</b>, 그 데이터가 문제 해결에 <b>적합한지</b>, 법적·윤리적으로 <b>올바르게 사용할 수 있는지</b>를 차례로 확인합니다.</p>
-  </div>
-  <p>세 번째 물음의 기준은 다음 시간 데이터 윤리에서 세웁니다. 오늘 고른 후보는 다음 시간에 그 기준으로 다시 점검합니다. 데이터가 아무리 많아도 윤리 관문을 통과하지 못하면 프로젝트 주제가 될 수 없습니다. 프로젝트의 5주 흐름, 팀 저장소, 개인의 몫은 <a href="project.html">팀 프로젝트 안내</a>에 정리되어 있습니다. 팀에서는 다음 순서로 주제 카드를 만듭니다.</p>
-  <ul>
-    <li><b>팀 구성(2~3인)</b> — 관심 질문이 비슷한 사람끼리</li>
-    <li><b>틀 고르기</b> — 회귀·분류·군집·연관 중 팀의 질문에 맞는 분석 틀은 무엇인가</li>
-    <li><b>데이터 후보 3개</b> — 각 후보를 앞의 두 물음으로 먼저 판단해 보기 (교과서 176쪽 탐구활동). 세 번째 물음은 다음 시간에</li>
-  </ul>
-  <h3>주제 카드 초안</h3>
-  <p>팀에서 정한 내용을 아래에 적습니다. 데이터 후보마다 <b>충분히 있는가</b>와 <b>문제 해결에 적합한가</b> 두 물음에 있음·없음·확인 필요 가운데 하나로 답하고, 그렇게 판단한 근거를 한 줄로 적습니다. 세 번째 물음인 윤리 판단은 다음 시간에 이 표에 이어서 채웁니다.</p>
-  <div style="overflow-x:auto">
-  <table class="daymap">
-    <thead><tr><th>항목</th><th>적을 것</th></tr></thead>
-    <tbody>
-      <tr><td><b>팀 구성원</b></td><td></td></tr>
-      <tr><td><b>팀의 질문</b></td><td></td></tr>
-      <tr><td><b>분석 틀</b><br><span class="mini">회귀 · 분류 · 군집 · 연관</span></td><td></td></tr>
-      <tr><td><b>데이터 후보 ①</b><br><span class="mini">이름 · 출처</span></td><td></td></tr>
-      <tr><td><span class="mini">① 두 물음 판정과 근거</span></td><td></td></tr>
-      <tr><td><b>데이터 후보 ②</b><br><span class="mini">이름 · 출처</span></td><td></td></tr>
-      <tr><td><span class="mini">② 두 물음 판정과 근거</span></td><td></td></tr>
-      <tr><td><b>데이터 후보 ③</b><br><span class="mini">이름 · 출처</span></td><td></td></tr>
-      <tr><td><span class="mini">③ 두 물음 판정과 근거</span></td><td></td></tr>
-    </tbody>
-  </table>
-  </div>
-  <div class="callout ask">
-    <div class="h">❓ 주제 카드를 내기 전에 답할 질문</div>
-    <ul>
-      <li>팀의 질문에 답하려면 어떤 표가 필요합니까? 그 표의 한 행은 무엇 하나를 나타냅니까?</li>
-      <li>세 후보 가운데 가장 손에 잡히는 것은 무엇입니까? 그렇게 판단한 근거는 데이터의 양입니까, 질문과의 맞음입니까?</li>
-      <li>오늘 반찬 월드컵처럼 팀이 직접 데이터를 모아야 하는 주제입니까, 이미 공개된 데이터를 쓰는 주제입니까?</li>
-    </ul>
-  </div>
-  <h2>5. 개념 정리 — 파일에서 공동 저장소로</h2>
-  <p>데이터베이스는 여러 사람이 데이터를 저장하고 조회하며 함께 관리할 수 있게 합니다. 오늘은 한 대결을 저장하는 작업과 반찬별 집계를 구분하고, 앱의 검사와 데이터베이스 제약·권한이 각각 어떤 역할을 하는지 확인했습니다. 데이터의 목적에 맞는 표를 설계하는 일이 앱 개발의 출발점입니다.</p>
-  <p>1차시에 질문 던지기로 시작한 공통 수업이 이제 한 시간 남았습니다. 질문을 세우고 첫 앱을 배포하고(1차시), API로 데이터를 구해 오고(2·5차시), 그래프로 데이터를 읽고(3·4차시), 회귀·분류·군집·연관의 네 가지 틀로 모델을 만들고 평가했으며(6~12차시), 오늘 여럿이 함께 쓰는 저장소까지 갖췄습니다. 다음 시간에는 이 전 과정을 윤리의 기준으로 점검하고 공통 수업을 마무리합니다.</p>
+  <h2>3. 개념 정리 — 화면 뒤의 문장</h2>
+  <p>오늘 배운 SQL 낱말은 아홉 개입니다. 가져오는 <b>SELECT</b>, 어디서 가져올지 정하는 <b>FROM</b>, 행을 좁히는 <b>WHERE</b>, 줄을 세우는 <b>ORDER BY</b>, 몇 개만 자르는 <b>LIMIT</b>, 넣고 바꾸고 지우는 <b>INSERT·UPDATE·DELETE</b>, 그리고 세고 묶는 <b>COUNT·GROUP BY</b>입니다.</p>
+  <p>인스타그램의 피드, 카카오톡의 읽음 표시, 게임의 랭킹은 모두 이 낱말들의 조합입니다. 화면에서 벌어지는 일이 표의 행에 무슨 일을 하는지 — 가져오는지, 넣는지, 바꾸는지, 지우는지, 세는지 — 를 구분할 수 있으면 됩니다. <b>그래야 AI가 써 준 코드가 무엇을 하는 코드인지 알아볼 수 있습니다.</b> 특히 WHERE 없는 UPDATE·DELETE처럼 되돌릴 수 없는 문장을 알아보는 것이 중요합니다.</p>
+  <p>다음 시간에는 이런 데이터를 다룰 때의 기준을 세웁니다. 그리고 15차시에는 오늘 설계한 표를 실제로 만들어, 학급이 함께 쓰는 데이터베이스에 우리 손으로 행을 쌓아 봅니다.</p>
 
-  <h2>6. 확인 문제</h2>
+  <h2>4. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 모둠 과제 데이터를 CSV 파일로 만들어 메신저로 주고받는 방식과 비교해, 데이터베이스를 쓸 때의 이점을 두 가지 서술한 뒤 펼쳐 봅니다.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
@@ -1695,13 +1090,13 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
       <div class="qs">우리 실습에서 테이블에 해당하는 것은?</div>
       <div class="qopts qopts-col">
         <button class="opt">급식 CSV 파일</button>
-        <button class="opt">우리 학급의 수파베이스 프로젝트</button>
-        <button class="opt" data-ok="1">오늘 만든 대결 기록 표</button>
+        <button class="opt">게임 회사의 데이터베이스 서버</button>
+        <button class="opt" data-ok="1">전적 기록 표 matches</button>
       </div>
-      <div class="fb">이번 실습에서 menu_duels는 대결 기록을 행과 열로 저장하는 테이블입니다. Supabase 프로젝트는 이 테이블을 담은 데이터베이스 등을 제공하고, 급식 CSV는 데이터셋을 담은 파일입니다.</div>
+      <div class="fb">matches는 전적 한 판을 한 행으로 저장하는 테이블입니다. 게임 회사의 데이터베이스는 이런 테이블을 여러 개 담고 있고, 급식 CSV는 데이터셋을 담은 파일 형태입니다.</div>
     </div>
     <details class="reveal"><summary>세 용어의 관계 펼쳐 보기</summary>
-      <p>데이터셋은 분석할 데이터의 집합이며 급식 CSV는 이를 담는 한 가지 형태입니다. Supabase 프로젝트는 데이터베이스 등을 제공하고, 그 안의 menu_duels는 대결 기록을 저장하는 테이블입니다. 테이블은 관계형 데이터베이스에서 데이터를 행과 열로 관리하는 구조입니다.</p>
+      <p>데이터셋은 분석할 데이터의 집합이며 급식 CSV는 이를 담는 한 가지 형태입니다. 데이터베이스는 여러 테이블을 담는 저장소이고, 그 안의 matches는 전적을 저장하는 테이블입니다. 테이블은 관계형 데이터베이스에서 데이터를 행과 열로 관리하는 구조입니다.</p>
     </details>
   </div>
   <div class="quiz">
@@ -1719,10 +1114,10 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
     <li>CSV 파일로 부족해지는 세 순간(동시에 쓰기·계속 쌓기·골라 읽기)을 말할 수 있다.</li>
-    <li>반찬 월드컵 앱에서 저장 성공과 반찬별 승률 집계를 확인했다.</li>
-    <li>친구와 같은 대결 기록 표에 연결하여 서로의 대결 기록이 집계에 반영되는지 확인했다.</li>
-    <li>(읽기 데이터) SQL 문장 하나를 읽고 네 동작(생성·읽기·갱신·삭제) 중 어느 것인지 말할 수 있다.</li>
-    <li>팀을 구성하고, 데이터 후보를 앞의 두 물음으로 먼저 판단해 주제 카드 초안을 냈다.</li>
+    <li>데이터셋·데이터베이스·테이블을 실제 앱의 예에 대응해 구분할 수 있다.</li>
+    <li>SQL 문장 하나를 읽고 네 동작(조회·추가·갱신·삭제) 중 어느 것인지, 어느 표의 어느 행이 대상인지 말할 수 있다.</li>
+    <li>WHERE·COUNT·GROUP BY가 각각 무엇을 하는지 설명하고, 앱 화면의 기능과 짝지을 수 있다.</li>
+    <li>WHERE 없는 UPDATE·DELETE가 왜 위험한지 한 문장으로 말할 수 있다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
@@ -1731,14 +1126,14 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     <tr><td class="term">데이터셋</td><td>하나의 주제에 대한 여러 데이터가 모인 집합 (예: CSV 파일 하나)</td></tr>
     <tr><td class="term">데이터베이스</td><td>여러 사람이 공유하여 사용하도록 통합 관리되는 데이터의 집합</td></tr>
     <tr><td class="term">테이블</td><td>데이터베이스 안에 표 형태로 저장된 데이터셋 하나</td></tr>
-    <tr><td class="term">수파베이스</td><td>PostgreSQL 데이터베이스와 API·인증 등을 제공하는 서비스</td></tr>
+    <tr><td class="term">수파베이스</td><td>PostgreSQL 데이터베이스와 API·인증 등을 제공하는 서비스. 15차시에 직접 사용한다</td></tr>
     <tr><td class="term">데이터 무결성</td><td>잘못된 값이 들어오지 않도록 제약을 걸어 데이터의 올바름을 지키는 것</td></tr>
-    <tr><td class="term">데이터 적합성</td><td>어떤 문제가 데이터로 답할 수 있는 문제인지 — 존재·적합·윤리로 판단</td></tr>
     <tr><td class="term">SQL</td><td>테이블에 데이터를 넣고(INSERT) 꺼내고(SELECT) 고치고(UPDATE) 지우는(DELETE) 언어이다. WHERE는 조건, ORDER BY는 정렬이다.</td></tr>
-    <tr><td class="term">기본 키</td><td>행을 유일하게 구분하는 열 또는 열의 조합. 이 대결 기록 표에서는 id를 사용</td></tr>
+    <tr><td class="term">기본 키</td><td>행을 유일하게 구분하는 열 또는 열의 조합. 대개 자동으로 번호가 붙는 id를 사용</td></tr>
+    <tr><td class="term">WHERE</td><td>조건에 맞는 행만 남기는 SQL 낱말. UPDATE·DELETE에서 빠뜨리면 모든 행이 대상이 된다</td></tr>
+    <tr><td class="term">ORDER BY · LIMIT</td><td>정렬 기준(DESC 내림차순·ASC 오름차순)과 가져올 행 수. 피드를 20개씩 가져오는 것이 이것이다</td></tr>
     <tr><td class="term">GROUP BY</td><td>같은 값끼리 묶어 묶음마다 COUNT·AVG 같은 집계를 구하는 SQL 낱말이다. 묶은 열이 아닌 열은 집계 함수로 감싼다.</td></tr>
-    <tr><td class="term">권한 정책(RLS)</td><td>활성화된 테이블에서 앱 역할이 접근할 수 있는 행을 정하는 정책. 테이블 권한과 함께 적용</td></tr>
-  </table>
+      </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">

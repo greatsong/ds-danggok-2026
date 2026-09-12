@@ -44,7 +44,32 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <li><span class="st">1. Supabase 프로젝트를 만듭니다</span><br>
       <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">Supabase 대시보드</a>에 로그인합니다. 사용할 조직을 선택하고 <b>New project</b>로 연습용 프로젝트를 만듭니다. 프로젝트 이름·DB 비밀번호·지역 등 화면에서 요구하는 항목을 입력하고 준비가 끝날 때까지 기다립니다. 이 DB 비밀번호는 아래 앱에 넣을 API 키와 다른 값입니다.</li>
     <li><span class="st">2. 대결 기록 표와 권한을 준비합니다</span><br>
-      만든 프로젝트의 <b>SQL Editor</b>에서 새 쿼리를 엽니다. <a href="lesson13.html#vote-db-setup">13차시 교재 3절의 ‘SQL · 표 만들기’ 코드 전체</a>를 복사해 붙여 넣고 <b>Run</b>을 누릅니다. 표 생성부터 권한 정책까지 한 번만 실행합니다. 이미 표가 있다는 오류가 나오면 반복 실행하거나 기존 표를 지우지 말고, 올바른 연습용 프로젝트를 열었는지 먼저 확인합니다.</li>
+      만든 프로젝트의 <b>SQL Editor</b>에서 새 쿼리를 엽니다. 아래 코드를 <b>전체 복사</b>해 붙여 넣고 <b>Run</b>을 누릅니다. 13차시 교재의 설계표(속성명·설명·데이터형·조건)를 그대로 SQL로 옮긴 것이며, 표 생성부터 권한 정책까지 <b>한 번만</b> 실행합니다.
+      <div class="codewrap code"><span class="label">SQL · 표 만들기</span><pre>-- 준비 담당자가 별도 연습용 프로젝트의 SQL Editor에서 한 번 실행합니다.
+CREATE TABLE public.menu_duels (
+  id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  game_id text NOT NULL CHECK (length(btrim(game_id)) &gt; 0),
+  round text NOT NULL CHECK (round IN ('8강', '4강', '결승')),
+  left_menu text NOT NULL CHECK (left_menu IN ('제육볶음', '간장찜닭', '가자미순살튀김', '돈육불백', '미트볼데리야끼볶음', '수육', '진미채고추장볶음', '치즈떡닭갈비')),
+  right_menu text NOT NULL CHECK (right_menu IN ('제육볶음', '간장찜닭', '가자미순살튀김', '돈육불백', '미트볼데리야끼볶음', '수육', '진미채고추장볶음', '치즈떡닭갈비')),
+  winner text NOT NULL,
+  CHECK (left_menu &lt;&gt; right_menu),
+  CHECK (winner IN (left_menu, right_menu)),
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE public.menu_duels ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.menu_duels FROM anon, authenticated;
+GRANT USAGE ON SCHEMA public TO anon;
+GRANT SELECT ON public.menu_duels TO anon;
+GRANT INSERT (game_id, round, left_menu, right_menu, winner) ON public.menu_duels TO anon;
+GRANT USAGE ON SEQUENCE public.menu_duels_id_seq TO anon;
+CREATE POLICY "read_practice_votes" ON public.menu_duels
+  FOR SELECT TO anon USING (true);
+CREATE POLICY "insert_practice_votes" ON public.menu_duels
+  FOR INSERT TO anon WITH CHECK (true);
+-- 로그인 없는 연습용: 조회·대결 기록 추가만 허용한다.
+-- 1인 1표, 응답자 확인, 악의적 반복 제출 방지는 별도 설계가 필요하다.</pre></div>
+      <p style="margin:10px 0 0"><b>⚠️ 이미 표가 있다는 오류(<code>relation "menu_duels" already exists</code>)가 나오면 그대로 멈춥니다.</b> 표가 이미 준비되었다는 뜻이므로 다시 실행할 필요가 없습니다. 이때 AI에게 물으면 흔히 <code>DROP TABLE</code>로 표를 지우고 다시 만들라고 답하는데, <b>그 문장을 실행하면 학급이 쌓은 대결 기록이 전부 사라집니다.</b> 표를 지우지 말고, 올바른 연습용 프로젝트를 열었는지부터 확인합니다.</p></li>
     <li><span class="st">3. 준비 결과를 확인합니다</span><br>
       <b>Table Editor</b>에서 public 스키마의 <b>menu_duels</b>를 엽니다. id·game_id·round·left_menu·right_menu·winner·created_at 일곱 열과 RLS 활성화 상태를 확인합니다. 새로 만든 표는 0행입니다. SQL 실행 중 오류가 있었다면 그대로 앱 연결로 넘어가지 않습니다.</li>
     <li><span class="st">4. 같은 프로젝트의 주소와 키를 복사합니다</span><br>
