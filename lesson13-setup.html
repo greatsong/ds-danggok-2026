@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>13차시 준비 안내 · 수파베이스 표와 접속 정보 · 데이터 과학 당곡고</title>
+<title>15차시 준비 안내 · 수파베이스 표와 접속 정보 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
-<style>/* 긴 열 이름과 코드 문자열을 좁은 화면에서도 읽을 수 있도록 (13차시 교재와 같은 규칙) */
+<style>/* 긴 열 이름과 코드 문자열을 좁은 화면에서도 읽을 수 있도록 (15차시 교재와 같은 규칙) */
 main{overflow-wrap:anywhere}
 main code:not(pre code){white-space:normal;word-break:break-all}
 main .daymap{display:block;max-width:100%;overflow-x:auto}
@@ -24,12 +24,12 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 
 <div class="wrap">
 <main>
-  <span class="eyebrow">Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 13차시 준비 안내</span>
-  <h1>13차시 준비 안내 · <span class="a">표와 접속 정보</span></h1>
+  <span class="eyebrow">Ⅰ·Ⅳ. 데이터 과학의 이해 × 프로젝트 · 15차시 준비 안내</span>
+  <h1>15차시 준비 안내 · <span class="a">테이블과 접속 정보</span></h1>
   <div class="under"></div>
 
-  <p class="lead">반찬 월드컵 앱이 학급의 대결 기록을 한곳에 모으려면 먼저 대결 기록 표와 접속 정보가 준비되어 있어야 합니다. 이 문서는 그 준비 절차만 모은 안내입니다. 준비는 교사 또는 모둠의 준비 담당자가 한 번만 합니다. 나머지 학생은 준비된 접속 정보와 배포된 앱 주소를 받아 <a href="lesson13.html">13차시 교재</a> 2절의 실습으로 바로 들어갑니다.</p>
-  <p class="mini"><a href="lesson13.html">← 13차시 교재로</a></p>
+  <p class="lead">반찬 월드컵 앱이 학급의 대결 기록을 한곳에 모으려면 먼저 대결 기록 테이블과 접속 정보가 준비되어 있어야 합니다. 이 문서는 그 준비 절차만 모은 안내입니다. 준비는 교사 또는 모둠의 준비 담당자가 한 번만 합니다. 나머지 학생은 준비된 접속 정보와 배포된 앱 주소를 받아 <a href="lesson15.html">15차시 교재</a> 2절의 실습으로 바로 들어갑니다.</p>
+  <p class="mini"><a href="lesson15.html">← 15차시 교재로</a></p>
 
   <div class="callout warn">
     <div class="h">⚠️ 이 문서에서 지키는 두 가지</div>
@@ -44,7 +44,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <li><span class="st">1. Supabase 프로젝트를 만듭니다</span><br>
       <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">Supabase 대시보드</a>에 로그인합니다. 사용할 조직을 선택하고 <b>New project</b>로 연습용 프로젝트를 만듭니다. 프로젝트 이름·DB 비밀번호·지역 등 화면에서 요구하는 항목을 입력하고 준비가 끝날 때까지 기다립니다. 이 DB 비밀번호는 아래 앱에 넣을 API 키와 다른 값입니다.</li>
     <li><span class="st">2. 대결 기록 표와 권한을 준비합니다</span><br>
-      만든 프로젝트의 <b>SQL Editor</b>에서 새 쿼리를 엽니다. 아래 코드를 <b>전체 복사</b>해 붙여 넣고 <b>Run</b>을 누릅니다. 13차시 교재의 설계표(속성명·설명·데이터형·조건)를 그대로 SQL로 옮긴 것이며, 표 생성부터 권한 정책까지 <b>한 번만</b> 실행합니다.
+      만든 프로젝트의 <b>SQL Editor</b>에서 새 쿼리를 엽니다. 아래 코드를 <b>전체 복사</b>해 붙여 넣고 <b>Run</b>을 누릅니다. 15차시에서 사용할 설계표(속성명·설명·데이터형·조건)를 그대로 SQL로 옮긴 것이며, 표 생성부터 권한 정책까지 <b>한 번만</b> 실행합니다.
       <div class="codewrap code"><span class="label">SQL · 표 만들기</span><pre>-- 준비 담당자가 별도 연습용 프로젝트의 SQL Editor에서 한 번 실행합니다.
 CREATE TABLE public.menu_duels (
   id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -132,7 +132,7 @@ SUPABASE_KEY = "…"</div>
   <h2>3. 앱 배포 — 같은 대결 기록을 함께 모읍니다</h2>
   <p>기본 실습은 모둠별 앱 하나로 진행합니다. 교사 또는 준비 담당자는 Supabase·GitHub·Streamlit Community Cloud 계정으로 준비하고, 친구들은 배포된 앱 주소를 엽니다. 각자 앱을 만들더라도 같은 프로젝트의 menu_duels 표에 연결해야 기록이 합쳐집니다.</p>
   <ol class="steps">
-    <li><span class="st">1. 파일을 저장합니다</span><br>이번 앱용 GitHub 저장소에 main.py와 requirements.txt를 같은 폴더에 올립니다. main.py에는 <a href="lesson13.html">13차시 교재</a> 2절의 ② 예시 코드와 ③ 분석 코드를 순서대로 넣습니다. requirements.txt에는 <code>streamlit</code>, <code>supabase</code>, <code>pandas</code>, <code>plotly</code>를 각각 한 줄씩 적습니다. SQL과 접속 정보는 이 파일에 넣지 않습니다.</li>
+    <li><span class="st">1. 파일을 저장합니다</span><br>이번 앱용 GitHub 저장소에 main.py와 requirements.txt를 같은 폴더에 올립니다. main.py에는 <a href="lesson15.html">15차시 교재</a> 2절의 ② 예시 코드와 ③ 분석 코드를 순서대로 넣습니다. requirements.txt에는 <code>streamlit</code>, <code>supabase</code>, <code>pandas</code>, <code>plotly</code>를 각각 한 줄씩 적습니다. SQL과 접속 정보는 이 파일에 넣지 않습니다.</li>
     <li><span class="st">2. 앱을 배포합니다</span><br><a href="https://share.streamlit.io" target="_blank" rel="noopener">Streamlit Community Cloud</a>에 GitHub 계정으로 로그인하고 Create app에서 저장소·브랜치·실행 파일 main.py를 선택합니다. Advanced settings의 Secrets에 준비한 접속 정보 두 줄을 저장한 뒤 Deploy를 누릅니다.</li>
     <li><span class="st">3. 주소를 공유합니다</span><br>두 반찬과 선택 버튼이 나타나는지 확인합니다. 공유 설정에서 친구가 접근할 수 있게 하고 배포된 앱 주소를 전달합니다. Supabase 관리 화면이나 GitHub 코드 주소는 참여 주소가 아닙니다.</li>
   </ol>
@@ -147,10 +147,10 @@ SUPABASE_KEY = "…"</div>
   <p>이 절차로 배포·공유 저장·조회 연결을 점검합니다. 같은 사람이 여러 판을 할 수 있으므로 참여 인원을 검증한 것은 아닙니다. 결과는 자동 갱신되지 않으며 다시 불러와 확인합니다.</p>
   <div class="callout tip"><div class="h">막혔을 때 확인합니다</div><p>연결 오류는 같은 프로젝트의 주소·publishable 키와 Secrets 이름을 확인합니다. 표·권한 오류는 준비 SQL의 실행 결과를 확인하며, RLS를 끄거나 관리자 키를 넣어 해결하지 않습니다. 저장 결과가 불확실하면 반복 제출하지 말고 판 번호로 최근 기록을 확인합니다. 조회만 실패했다면 결과를 다시 불러옵니다. 라이브러리 오류는 requirements.txt의 네 줄을 확인합니다.</p></div>
 
-  <p class="mini">준비가 끝나면 <a href="lesson13.html">13차시 교재</a> 2절로 돌아갑니다.</p>
+  <p class="mini">준비가 끝나면 <a href="lesson15.html">15차시 교재</a> 1절로 돌아갑니다.</p>
 
   <div class="pager">
-    <a class="prev" href="lesson13.html"><div class="dir">← 돌아가기</div><div class="tt">13차시 · 데이터베이스와 수파베이스</div></a>
+    <a class="prev" href="lesson15.html"><div class="dir">← 돌아가기</div><div class="tt">15차시 · 수파베이스 — 반찬 월드컵과 팀 구성</div></a>
   </div>
 </main>
 </div>
