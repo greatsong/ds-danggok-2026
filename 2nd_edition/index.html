@@ -3,50 +3,75 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>개정 검토본 · 데이터 과학 당곡고</title>
+<meta name="description" content="당곡고등학교 데이터 과학 웹교재. 15개 차시와 손계산 활동지, 개념 정리, 심화 실습을 한곳에서 찾아보세요.">
+<title>데이터 과학 · 당곡고등학교</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧭%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css?v=tb16">
-<link rel="stylesheet" href="assets/review.css">
 <style>
-  .review-head{padding:34px 0 12px}.review-head p{max-width:760px;color:#5f6678}
-  .review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin:22px 0 42px}
-  .review-card{border:1px solid #e3ddcf;border-radius:16px;background:#fff;padding:20px;box-shadow:0 4px 18px rgba(43,45,58,.05)}
-  .review-card h2{margin:0 0 8px;font-size:1.18rem}.review-card p{min-height:48px;color:#656b7a;font-size:.94rem}
-  .review-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.review-actions a{display:inline-block;padding:9px 12px;border-radius:9px;text-decoration:none;font-weight:700;border:1px solid #d8d2c5;background:#fff;color:#2b2d3a}
-  .review-actions a.primary{background:#0e9488;border-color:#0e9488;color:#fff}
-  .same{display:inline-block;margin-left:7px;padding:3px 7px;border-radius:999px;background:#f0eee8;color:#68645a;font-size:.72rem;vertical-align:2px}
-  @media(max-width:620px){.review-head{padding-top:20px}.review-card p{min-height:0}}
+.home{--maxw:1120px}.home .inner,.home main{max-width:1120px;margin:0 auto}.home main{padding:0 28px 72px}.home .inner{padding:15px 28px}
+.home a:focus-visible{outline:3px solid #237d78;outline-offset:5px;border-radius:6px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip{position:fixed;top:-80px;left:20px;z-index:100;background:#fff;padding:10px 18px}.skip:focus{top:12px}
+.home-nav{display:flex;gap:22px}.home-nav a{font-size:.86rem;text-decoration:none;color:var(--text-soft);font-weight:650}
+.home .hero{padding:68px 0 44px;border-bottom:1px solid var(--border)}.home .kicker{font-size:.8rem;letter-spacing:.09em;color:var(--text-soft);font-weight:700;margin:0 0 16px}.home h1{font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.22;letter-spacing:-.045em;margin:0 0 20px}.home .intro{max-width:590px;color:var(--text-soft);margin:0;font-size:1.02rem}.hero-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.hero-links a{padding:10px 18px;border:1px solid var(--border);border-radius:8px;text-decoration:none;font-size:.9rem;font-weight:700;color:var(--text);background:#fff}.hero-links .start{background:#3a2e1a;color:#fff;border-color:#3a2e1a}
+.home section[id]{scroll-margin-top:95px}.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin:42px 0 20px}.home .section-title h2{margin:0;padding:0;border:0;font-size:1.45rem;letter-spacing:-.03em}.section-title p{margin:0;color:var(--text-soft);font-size:.82rem}
+.lesson-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.lesson-group{border:1px solid var(--border);border-radius:12px;background:#fff;overflow:hidden}.group-head{padding:20px;background:#fff6e0;border-bottom:1px solid var(--border)}.group-head span{font-size:.73rem;color:var(--text-soft)}.home .group-head h3{margin:3px 0 0;font-size:1.05rem}.lesson-group ol{list-style:none;padding:0;margin:0}.lesson-group li+li{border-top:1px solid #f0ede5}.lesson-link{display:flex;gap:13px;align-items:flex-start;padding:19px 17px;text-decoration:none;color:var(--text);min-height:100px}.lesson-link:hover{background:#fffbef}.lesson-number{font-size:.8rem;font-weight:750;color:#846b39;min-width:22px;padding-top:3px}.lesson-link strong{display:block;font-size:.96rem;line-height:1.5}.lesson-link small{display:block;color:var(--text-soft);font-size:.8rem;line-height:1.6;margin-top:4px}
+.resource-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.resource{display:block;padding:21px 19px;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);background:#fff}.resource:hover{border-color:#c6a354;background:#fffbef}.resource strong{font-size:.95rem}.resource p{font-size:.8rem;line-height:1.65;color:var(--text-soft);margin:7px 0 0}.extra-links{display:flex;flex-wrap:wrap;gap:10px 26px;padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.extra-links a{color:var(--text);text-decoration:none;font-size:.9rem}.extra-links a:hover{text-decoration:underline}.home .foot{font-size:.78rem}.home .brand{white-space:nowrap}
+@media(max-width:900px){.lesson-groups{gap:12px}.resource-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lesson-link{padding:16px 12px;gap:8px}}
+@media(max-width:680px){.home main{padding:0 20px 48px}.home .inner{padding:12px 20px}.home-nav{gap:14px}.home-nav a{font-size:.78rem}.home .brand{font-size:.9rem}.home .brand .a{display:none}.home .hero{padding:40px 0 32px}.lesson-groups{grid-template-columns:1fr;gap:20px}.lesson-link{min-height:0;padding:16px 20px;gap:16px}.section-title{margin-top:34px}.section-title p{font-size:.75rem}.resource{padding:17px 14px}.home .intro{font-size:.94rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
-<body>
-<div class="topbar"><div class="inner">
-  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
-  <span class="spacer"></span><span class="badge review-edition">개정 검토본</span>
-</div></div>
-<div class="wrap"><main>
-  <section class="review-head">
-    <span class="eyebrow">학생용 교재 · 1~15차시</span>
-    <h1>현재본과 개정 검토본 비교</h1><div class="under"></div>
-    <p>각 차시의 현재본 스냅샷과 개정 검토본을 따로 열거나 한 화면에서 나란히 비교할 수 있습니다. ‘변경 없음’ 표시는 현재 반영본을 수정본에도 그대로 유지한 차시입니다.</p>
-    <p><a href="teacher-notes.html">교사용 보충 설명 및 검토 기준 →</a></p>
-  </section>
-  <div class="review-grid">
-    <article class="review-card"><h2>1차시 · 질문 던지기</h2><p>학기 구성, 학습 목표, 기온 데이터 기간과 개념 정리를 다듬었습니다.</p><div class="review-actions"><a href="original/lesson01.html">현재본</a><a class="primary" href="lesson01.html">수정본</a><a href="compare.html?lesson=01">나란히 비교</a></div></article>
-    <article class="review-card"><h2>2차시 · API와 JSON</h2><p>HTTP 응답, 인증키 전송, API 응답과 차시별 앱 배포 절차를 바로잡았습니다.</p><div class="review-actions"><a href="original/lesson02.html">현재본</a><a class="primary" href="lesson02.html">수정본</a><a href="compare.html?lesson=02">나란히 비교</a></div></article>
-    <article class="review-card"><h2>3차시 · 그래프 도감 Ⅰ</h2><p>차시별 앱을 보존하도록 새 저장소와 새 배포 주소 절차를 적었습니다.</p><div class="review-actions"><a href="original/lesson03.html">현재본</a><a class="primary" href="lesson03.html">수정본</a><a href="compare.html?lesson=03">나란히 비교</a></div></article>
-    <article class="review-card"><h2>4차시 · 그래프 도감 Ⅱ</h2><p>새 앱 배포 절차와 첫 관측일 스크린 수·상영 횟수의 뜻을 통일했습니다.</p><div class="review-actions"><a href="original/lesson04.html">현재본</a><a class="primary" href="lesson04.html">수정본</a><a href="compare.html?lesson=04">나란히 비교</a></div></article>
-    <article class="review-card"><h2>5차시 · 급식 API <span class="same">변경 없음</span></h2><p>주변 설명과 실제 기능을 대조한 결과 현재 본문을 유지했습니다.</p><div class="review-actions"><a href="original/lesson05.html">현재본</a><a class="primary" href="lesson05.html">수정본</a><a href="compare.html?lesson=05">나란히 비교</a></div></article>
-    <article class="review-card"><h2>6차시 · 회귀</h2><p>1908년을 0으로 둔 입력과 편향의 뜻을 본문·코드·위젯에서 맞췄습니다.</p><div class="review-actions"><a href="original/lesson06.html">현재본</a><a class="primary" href="lesson06.html">수정본</a><a href="compare.html?lesson=06">나란히 비교</a></div></article>
-    <article class="review-card"><h2>7차시 · 다중 선형회귀 <span class="same">변경 없음</span></h2><p>예측 시점과 속성의 뜻이 이미 일관되어 현재 본문을 유지했습니다.</p><div class="review-actions"><a href="original/lesson07.html">현재본</a><a class="primary" href="lesson07.html">수정본</a><a href="compare.html?lesson=07">나란히 비교</a></div></article>
-    <article class="review-card"><h2>8차시 · 회귀 평가 손계산</h2><p>MAE·MSE의 갈래와 R²의 기준 비교를 본문과 도식에서 명확히 했습니다.</p><div class="review-actions"><a href="original/lesson08.html">현재본</a><a class="primary" href="lesson08.html">수정본</a><a href="compare.html?lesson=08">나란히 비교</a></div></article>
-    <article class="review-card"><h2>9차시 · 분류</h2><p>정확도 비교 활동에 맞춰 질문 제목을 다듬었습니다.</p><div class="review-actions"><a href="original/lesson09.html">현재본</a><a class="primary" href="lesson09.html">수정본</a><a href="compare.html?lesson=09">나란히 비교</a></div></article>
-    <article class="review-card"><h2>10차시 · 분류 평가 <span class="same">변경 없음</span></h2><p>교사 피드백이 반영된 현재 본문을 수정본에도 유지했습니다.</p><div class="review-actions"><a href="original/lesson10.html">현재본</a><a class="primary" href="lesson10.html">수정본</a><a href="compare.html?lesson=10">나란히 비교</a></div></article>
-    <article class="review-card"><h2>11차시 · 군집</h2><p>표준화의 뜻과 k=2·k=3 비교 뒤 k=3 해석 활동의 기준을 명확히 했습니다.</p><div class="review-actions"><a href="original/lesson11.html">현재본</a><a class="primary" href="lesson11.html">수정본</a><a href="compare.html?lesson=11">나란히 비교</a></div></article>
-    <article class="review-card"><h2>12차시 · 연관 규칙</h2><p>중복된 주의를 줄이고, 용어 정의와 문제 피드백에 집중했습니다.</p><div class="review-actions"><a href="original/lesson12.html">현재본</a><a class="primary" href="lesson12.html">수정본</a><a href="compare.html?lesson=12">나란히 비교</a></div></article>
-    <article class="review-card"><h2>13차시 · 데이터베이스 <span class="same">변경 없음</span></h2><p>교사 피드백이 반영된 현재 본문을 수정본에도 유지했습니다.</p><div class="review-actions"><a href="original/lesson13.html">현재본</a><a class="primary" href="lesson13.html">수정본</a><a href="compare.html?lesson=13">나란히 비교</a></div></article>
-    <article class="review-card"><h2>14차시 · 데이터 윤리 <span class="same">변경 없음</span></h2><p>교사 피드백이 반영된 현재 본문을 수정본에도 유지했습니다.</p><div class="review-actions"><a href="original/lesson14.html">현재본</a><a class="primary" href="lesson14.html">수정본</a><a href="compare.html?lesson=14">나란히 비교</a></div></article>
-    <article class="review-card"><h2>15차시 · 급식 월드컵 <span class="same">변경 없음</span></h2><p>교사 피드백이 반영된 현재 본문을 수정본에도 유지했습니다.</p><div class="review-actions"><a href="original/lesson15.html">현재본</a><a class="primary" href="lesson15.html">수정본</a><a href="compare.html?lesson=15">나란히 비교</a></div></article>
-  </div>
-</main></div>
-<footer class="foot">당곡고등학교 · 데이터 과학 · 개정 검토본</footer>
+<body class="home">
+<a class="skip" href="#content">본문 바로가기</a>
+<header class="topbar"><div class="inner">
+<a class="brand" href="index.html"><span class="chick" aria-hidden="true">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+<span class="spacer"></span><nav class="home-nav" aria-label="주요 메뉴"><a href="#lessons">차시별 교재</a><a href="#resources">학습 자료</a></nav>
+</div></header>
+<main id="content">
+<section class="hero" aria-labelledby="home-title">
+<p class="kicker">당곡고등학교 · 데이터 과학</p>
+<h1 id="home-title">데이터로 질문하고,<br>근거를 찾아 답하기.</h1>
+<p class="intro">기온, 영화, 급식, 스포츠 데이터로 분석을 시작합니다.<br>데이터를 모으고, 모델을 만들고, 결과를 설명해 봅시다.</p>
+<div class="hero-links"><a class="start" href="lesson01.html">1차시부터 시작하기 <span aria-hidden="true">↗</span></a><a href="eval-workbook.html">손계산 활동지</a></div>
+</section>
+<section id="lessons" aria-labelledby="lessons-title">
+<div class="section-title"><h2 id="lessons-title">차시별 교재</h2><p>공통 수업 · 1~15차시</p></div>
+<div class="lesson-groups">
+<section class="lesson-group" aria-labelledby="group-0"><div class="group-head"><span>1–5차시</span><h3 id="group-0">데이터 수집과 탐색</h3></div><ol start="1">
+<li><a class="lesson-link" href="lesson01.html"><span class="lesson-number">01<span class="sr-only">차시</span></span><span><strong>질문 던지기</strong><small>데이터 분석의 6단계와 좋은 질문</small></span></a></li>
+<li><a class="lesson-link" href="lesson02.html"><span class="lesson-number">02<span class="sr-only">차시</span></span><span><strong>API와 JSON</strong><small>박스오피스 데이터를 받아 표로 읽기</small></span></a></li>
+<li><a class="lesson-link" href="lesson03.html"><span class="lesson-number">03<span class="sr-only">차시</span></span><span><strong>그래프 도감 Ⅰ</strong><small>시간에 따른 변화와 흐름</small></span></a></li>
+<li><a class="lesson-link" href="lesson04.html"><span class="lesson-number">04<span class="sr-only">차시</span></span><span><strong>그래프 도감 Ⅱ</strong><small>분포·구성·관계에 맞는 그래프</small></span></a></li>
+<li><a class="lesson-link" href="lesson05.html"><span class="lesson-number">05<span class="sr-only">차시</span></span><span><strong>우리 학교 급식 API</strong><small>급식 데이터를 모아 질문에 답하기</small></span></a></li>
+</ol></section>
+<section class="lesson-group" aria-labelledby="group-1"><div class="group-head"><span>6–10차시</span><h3 id="group-1">예측과 모델 평가</h3></div><ol start="6">
+<li><a class="lesson-link" href="lesson06.html"><span class="lesson-number">06<span class="sr-only">차시</span></span><span><strong>선형 회귀</strong><small>기온 데이터에 직선을 맞춰 예측하기</small></span></a></li>
+<li><a class="lesson-link" href="lesson07.html"><span class="lesson-number">07<span class="sr-only">차시</span></span><span><strong>다중 선형회귀</strong><small>여러 속성으로 영화 흥행 예측하기</small></span></a></li>
+<li><a class="lesson-link" href="lesson08.html"><span class="lesson-number">08<span class="sr-only">차시</span></span><span><strong>회귀 평가 손계산</strong><small>오차·MAE·MSE·결정계수</small></span></a></li>
+<li><a class="lesson-link" href="lesson09.html"><span class="lesson-number">09<span class="sr-only">차시</span></span><span><strong>분류</strong><small>로지스틱 회귀와 의사결정트리</small></span></a></li>
+<li><a class="lesson-link" href="lesson10.html"><span class="lesson-number">10<span class="sr-only">차시</span></span><span><strong>분류 평가 손계산</strong><small>혼동행렬·정확도·정밀도·재현율</small></span></a></li>
+</ol></section>
+<section class="lesson-group" aria-labelledby="group-2"><div class="group-head"><span>11–15차시</span><h3 id="group-2">규칙 발견과 활용</h3></div><ol start="11">
+<li><a class="lesson-link" href="lesson11.html"><span class="lesson-number">11<span class="sr-only">차시</span></span><span><strong>군집</strong><small>스포츠 선수의 유형과 특징</small></span></a></li>
+<li><a class="lesson-link" href="lesson12.html"><span class="lesson-number">12<span class="sr-only">차시</span></span><span><strong>연관 분석</strong><small>급식 메뉴가 함께 나오는 규칙</small></span></a></li>
+<li><a class="lesson-link" href="lesson13.html"><span class="lesson-number">13<span class="sr-only">차시</span></span><span><strong>데이터베이스와 SQL</strong><small>기록을 저장하고 묶어서 집계하기</small></span></a></li>
+<li><a class="lesson-link" href="lesson14.html"><span class="lesson-number">14<span class="sr-only">차시</span></span><span><strong>데이터 윤리</strong><small>내 실습에서 윤리 쟁점 찾기</small></span></a></li>
+<li><a class="lesson-link" href="lesson15.html"><span class="lesson-number">15<span class="sr-only">차시</span></span><span><strong>급식 월드컵</strong><small>만들고, 모으고, 집계하기</small></span></a></li>
+</ol></section>
+</div></section>
+<section id="resources" aria-labelledby="resources-title">
+<div class="section-title"><h2 id="resources-title">학습 자료</h2><p>개념을 찾고, 직접 계산하기</p></div>
+<div class="resource-grid">
+<a class="resource" href="eval-workbook.html"><strong>손계산 활동지 <span aria-hidden="true">↗</span></strong><p>회귀·분류·연관 분석의 지표를 직접 계산합니다.</p></a>
+<a class="resource" href="study-guide.html"><strong>이론 정리 <span aria-hidden="true">↗</span></strong><p>수업에서 배운 주요 개념을 다시 살펴봅니다.</p></a>
+<a class="resource" href="concepts.html"><strong>교과서 개념 <span aria-hidden="true">↗</span></strong><p>교과서의 설명과 수업 내용을 연결합니다.</p></a>
+<a class="resource" href="glossary.html"><strong>용어사전 <span aria-hidden="true">↗</span></strong><p>낯선 용어의 뜻을 찾아봅니다.</p></a>
+</div></section>
+<section id="explore" aria-labelledby="explore-title">
+<div class="section-title"><h2 id="explore-title">더 탐구하기</h2><p>심화 실습과 팀 프로젝트</p></div>
+<nav class="extra-links" aria-label="심화 및 프로젝트">
+<a href="extra-models.html">모델 도감 ↗</a><a href="extra-movie.html">영화 데이터 심화 ↗</a><a href="extra-api.html">영화 API 프로젝트 ↗</a><a href="data.html">데이터 목록 ↗</a><a href="project.html">팀 프로젝트 안내 ↗</a>
+</nav></section>
+</main>
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 웹교재</footer>
 </body>
 </html>
