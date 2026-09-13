@@ -158,6 +158,25 @@ q1, q3 = errors["절대오차"].quantile([0.25, 0.75])
 threshold = q3 + 1.5 * (q3 - q1)
 candidates = errors[errors["절대오차"] > threshold].sort_values("절대오차", ascending=False)
 st.caption("훈련 영화 중 절대오차가 Q3 + 1.5 × IQR보다 큰 영화를 후보로 표시합니다. IQR은 가운데 50% 범위의 폭(Q3 − Q1)입니다. 후보라고 데이터 오류인 것은 아닙니다. 실제 흥행작도 있을 수 있습니다.")
+st.subheader("산점도에서 먼저 확인하기")
+errors["구분"] = errors["절대오차"].gt(threshold).map({True: "이상치 후보", False: "나머지 훈련 영화"})
+fig = px.scatter(errors, x="total_audi", y="예측", color="구분", symbol="구분",
+                 hover_name="movieNm", hover_data={"movieCd": True, "절대오차": ":,.0f", "total_audi": ":,.0f", "예측": ":,.0f"},
+                 labels={"total_audi": "실제 관측 누적관객(명)", "예측": "모델 예측 관객(명)", "movieCd": "영화 코드"},
+                 color_discrete_map={"이상치 후보": "#d95f02", "나머지 훈련 영화": "#2878b5"},
+                 symbol_map={"이상치 후보": "diamond", "나머지 훈련 영화": "circle"})
+low = min(0, errors["total_audi"].min(), errors["예측"].min())
+high = max(errors["total_audi"].max(), errors["예측"].max())
+padding = max((high - low) * 0.05, 1)
+fig.add_shape(type="line", x0=low, y0=low, x1=high, y1=high,
+              line={"color": "#666666", "dash": "dash"})
+fig.update_traces(marker={"size": 10, "opacity": 0.8})
+fig.update_xaxes(range=[low-padding, high+padding], tickformat=",")
+fig.update_yaxes(range=[low-padding, high+padding], tickformat=",")
+fig.update_layout(height=540, legend_title_text="훈련 영화", legend={"orientation": "h", "y": 1.12})
+st.plotly_chart(fig, key="outlier-review")
+st.caption("점선은 실젯값과 예측값이 같은 위치입니다. 점선 위는 크게, 아래는 작게 예측한 영화이며, 같은 실젯값에서 점선과의 세로 차이가 오차입니다. 주황색 마름모는 이상치 후보입니다.")
+st.info("점에 마우스를 올려 영화 이름·실젯값·예측값·절대오차를 확인하세요. 필요하면 드래그로 확대합니다. 다른 영화와 얼마나 떨어져 있는지와 실제 흥행작인지 살핀 뒤, 아래에서 제외 여부를 결정하세요.")
 st.dataframe(candidates.rename(columns={"movieNm": "영화", "total_audi": "관측 누적관객"}), hide_index=True)
 candidate_names = candidates.set_index("movieCd")["movieNm"].to_dict()
 excluded = st.multiselect("제외할 훈련 영화 · 선택하면 바로 재평가", candidates["movieCd"].tolist(),

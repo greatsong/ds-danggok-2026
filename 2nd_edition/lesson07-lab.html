@@ -311,11 +311,15 @@ with st.expander(&quot;가중치와 테스트 예측 살펴보기&quot;):
     st.plotly_chart(fig, key=&quot;predictions&quot;)
     st.caption(&quot;대각선 위에서는 더 크게, 아래에서는 더 작게 예측했습니다. 음수 예측도 보이도록 선형 축을 사용합니다.&quot;)</pre></div></details>
   <h2>6. 이상치 검토 — 일부 훈련 영화를 제외하고 다시 평가한다</h2>
-  <p>첫 평가 뒤에는 모델이 크게 빗나간 영화를 살펴봅니다. 샘플은 <b>훈련 데이터의 절대오차가 Q3 + 1.5 × IQR보다 큰 영화</b>를 후보로 표시합니다. IQR은 가운데 50% 범위의 폭(Q3 − Q1)입니다. 크게 흥행한 실제 영화일 수도 있으므로 후보를 자동으로 삭제하지 않습니다.</p>
+  <p>첫 평가 뒤에는 <b>산점도에서 모델이 크게 빗나간 영화를 먼저 살펴봅니다.</b> 가로축은 실제 관측 누적관객, 세로축은 예측 관객이며, 점선은 두 값이 같은 위치입니다. 점에 마우스를 올려 영화 이름과 오차를 확인하고, 주변 영화와 얼마나 떨어져 있는지 살핍니다. 샘플은 <b>훈련 데이터의 절대오차가 Q3 + 1.5 × IQR보다 큰 영화</b>를 후보로 표시합니다. IQR은 가운데 50% 범위의 폭(Q3 − Q1)입니다. 크게 흥행한 실제 영화일 수도 있으므로 후보를 자동으로 삭제하지 않습니다.</p>
   <p>제외할 영화를 선택하면 남은 훈련 영화로 다시 학습합니다. <b>테스트 영화는 한 편도 바꾸지 않고</b> 제외 전후 R²·MAE를 비교합니다. 훈련 데이터는 줄었으므로 편수도 함께 확인합니다. 제외했는데 테스트 성능이 나빠졌다면 그 결과도 남깁니다.</p>
 <div class="codewrap prompt"><span class="label">6단계 프롬프트</span><button class="copy-btn">복사</button><pre>첫 평가 다음에 이상치 후보를 검토하는 단계를 추가해 줘.
 훈련 영화별 실젯값·예측값·절대오차를 계산하고, 절대오차의 3사분위수에 사분위 범위의 1.5배를 더한 기준보다 큰 영화를 후보로 보여 줘.
 사분위 범위는 가운데 50% 범위의 폭이라고 짧게 설명해 줘. 후보라고 오류인 것은 아니니 자동 삭제하지 마.
+후보 표와 제외 선택보다 먼저 모든 훈련 영화의 산점도를 접지 않고 보여 줘. 가로축은 실제 관측 누적관객, 세로축은 예측 관객으로 해 줘.
+실젯값과 예측값이 같은 점선을 넣고, 음수 예측도 보이는 선형 축과 같은 숫자 범위를 써 줘.
+후보는 주황색 마름모, 나머지는 파란 원으로 구분하고, 점에 마우스를 올리면 영화 이름·영화 코드·실젯값·예측값·절대오차가 나오게 해 줘.
+점선과의 세로 차이가 오차임을 설명하고, 확대해서 분포와 영화 정보를 먼저 확인한 후 제외 여부를 판단하도록 안내해 줘.
 제외할 영화는 학생이 직접 선택하게 하고, 선택하면 남은 훈련 데이터로 다시 학습·평가해 줘.
 테스트 영화는 제외하거나 교체하지 마. 배급사 기준과 선택 속성도 바꾸지 마.
 제외 전후의 훈련·테스트 R²와 MAE, 영화 수를 같은 표에 보여 줘. 테스트 MAE가 줄면 개선으로 표시해 줘.
@@ -330,6 +334,25 @@ q1, q3 = errors[&quot;절대오차&quot;].quantile([0.25, 0.75])
 threshold = q3 + 1.5 * (q3 - q1)
 candidates = errors[errors[&quot;절대오차&quot;] &gt; threshold].sort_values(&quot;절대오차&quot;, ascending=False)
 st.caption(&quot;훈련 영화 중 절대오차가 Q3 + 1.5 × IQR보다 큰 영화를 후보로 표시합니다. IQR은 가운데 50% 범위의 폭(Q3 − Q1)입니다. 후보라고 데이터 오류인 것은 아닙니다. 실제 흥행작도 있을 수 있습니다.&quot;)
+st.subheader(&quot;산점도에서 먼저 확인하기&quot;)
+errors[&quot;구분&quot;] = errors[&quot;절대오차&quot;].gt(threshold).map({True: &quot;이상치 후보&quot;, False: &quot;나머지 훈련 영화&quot;})
+fig = px.scatter(errors, x=&quot;total_audi&quot;, y=&quot;예측&quot;, color=&quot;구분&quot;, symbol=&quot;구분&quot;,
+                 hover_name=&quot;movieNm&quot;, hover_data={&quot;movieCd&quot;: True, &quot;절대오차&quot;: &quot;:,.0f&quot;, &quot;total_audi&quot;: &quot;:,.0f&quot;, &quot;예측&quot;: &quot;:,.0f&quot;},
+                 labels={&quot;total_audi&quot;: &quot;실제 관측 누적관객(명)&quot;, &quot;예측&quot;: &quot;모델 예측 관객(명)&quot;, &quot;movieCd&quot;: &quot;영화 코드&quot;},
+                 color_discrete_map={&quot;이상치 후보&quot;: &quot;#d95f02&quot;, &quot;나머지 훈련 영화&quot;: &quot;#2878b5&quot;},
+                 symbol_map={&quot;이상치 후보&quot;: &quot;diamond&quot;, &quot;나머지 훈련 영화&quot;: &quot;circle&quot;})
+low = min(0, errors[&quot;total_audi&quot;].min(), errors[&quot;예측&quot;].min())
+high = max(errors[&quot;total_audi&quot;].max(), errors[&quot;예측&quot;].max())
+padding = max((high - low) * 0.05, 1)
+fig.add_shape(type=&quot;line&quot;, x0=low, y0=low, x1=high, y1=high,
+              line={&quot;color&quot;: &quot;#666666&quot;, &quot;dash&quot;: &quot;dash&quot;})
+fig.update_traces(marker={&quot;size&quot;: 10, &quot;opacity&quot;: 0.8})
+fig.update_xaxes(range=[low-padding, high+padding], tickformat=&quot;,&quot;)
+fig.update_yaxes(range=[low-padding, high+padding], tickformat=&quot;,&quot;)
+fig.update_layout(height=540, legend_title_text=&quot;훈련 영화&quot;, legend={&quot;orientation&quot;: &quot;h&quot;, &quot;y&quot;: 1.12})
+st.plotly_chart(fig, key=&quot;outlier-review&quot;)
+st.caption(&quot;점선은 실젯값과 예측값이 같은 위치입니다. 점선 위는 크게, 아래는 작게 예측한 영화이며, 같은 실젯값에서 점선과의 세로 차이가 오차입니다. 주황색 마름모는 이상치 후보입니다.&quot;)
+st.info(&quot;점에 마우스를 올려 영화 이름·실젯값·예측값·절대오차를 확인하세요. 필요하면 드래그로 확대합니다. 다른 영화와 얼마나 떨어져 있는지와 실제 흥행작인지 살핀 뒤, 아래에서 제외 여부를 결정하세요.&quot;)
 st.dataframe(candidates.rename(columns={&quot;movieNm&quot;: &quot;영화&quot;, &quot;total_audi&quot;: &quot;관측 누적관객&quot;}), hide_index=True)
 candidate_names = candidates.set_index(&quot;movieCd&quot;)[&quot;movieNm&quot;].to_dict()
 excluded = st.multiselect(&quot;제외할 훈련 영화 · 선택하면 바로 재평가&quot;, candidates[&quot;movieCd&quot;].tolist(),
@@ -645,6 +668,25 @@ q1, q3 = errors[&quot;절대오차&quot;].quantile([0.25, 0.75])
 threshold = q3 + 1.5 * (q3 - q1)
 candidates = errors[errors[&quot;절대오차&quot;] &gt; threshold].sort_values(&quot;절대오차&quot;, ascending=False)
 st.caption(&quot;훈련 영화 중 절대오차가 Q3 + 1.5 × IQR보다 큰 영화를 후보로 표시합니다. IQR은 가운데 50% 범위의 폭(Q3 − Q1)입니다. 후보라고 데이터 오류인 것은 아닙니다. 실제 흥행작도 있을 수 있습니다.&quot;)
+st.subheader(&quot;산점도에서 먼저 확인하기&quot;)
+errors[&quot;구분&quot;] = errors[&quot;절대오차&quot;].gt(threshold).map({True: &quot;이상치 후보&quot;, False: &quot;나머지 훈련 영화&quot;})
+fig = px.scatter(errors, x=&quot;total_audi&quot;, y=&quot;예측&quot;, color=&quot;구분&quot;, symbol=&quot;구분&quot;,
+                 hover_name=&quot;movieNm&quot;, hover_data={&quot;movieCd&quot;: True, &quot;절대오차&quot;: &quot;:,.0f&quot;, &quot;total_audi&quot;: &quot;:,.0f&quot;, &quot;예측&quot;: &quot;:,.0f&quot;},
+                 labels={&quot;total_audi&quot;: &quot;실제 관측 누적관객(명)&quot;, &quot;예측&quot;: &quot;모델 예측 관객(명)&quot;, &quot;movieCd&quot;: &quot;영화 코드&quot;},
+                 color_discrete_map={&quot;이상치 후보&quot;: &quot;#d95f02&quot;, &quot;나머지 훈련 영화&quot;: &quot;#2878b5&quot;},
+                 symbol_map={&quot;이상치 후보&quot;: &quot;diamond&quot;, &quot;나머지 훈련 영화&quot;: &quot;circle&quot;})
+low = min(0, errors[&quot;total_audi&quot;].min(), errors[&quot;예측&quot;].min())
+high = max(errors[&quot;total_audi&quot;].max(), errors[&quot;예측&quot;].max())
+padding = max((high - low) * 0.05, 1)
+fig.add_shape(type=&quot;line&quot;, x0=low, y0=low, x1=high, y1=high,
+              line={&quot;color&quot;: &quot;#666666&quot;, &quot;dash&quot;: &quot;dash&quot;})
+fig.update_traces(marker={&quot;size&quot;: 10, &quot;opacity&quot;: 0.8})
+fig.update_xaxes(range=[low-padding, high+padding], tickformat=&quot;,&quot;)
+fig.update_yaxes(range=[low-padding, high+padding], tickformat=&quot;,&quot;)
+fig.update_layout(height=540, legend_title_text=&quot;훈련 영화&quot;, legend={&quot;orientation&quot;: &quot;h&quot;, &quot;y&quot;: 1.12})
+st.plotly_chart(fig, key=&quot;outlier-review&quot;)
+st.caption(&quot;점선은 실젯값과 예측값이 같은 위치입니다. 점선 위는 크게, 아래는 작게 예측한 영화이며, 같은 실젯값에서 점선과의 세로 차이가 오차입니다. 주황색 마름모는 이상치 후보입니다.&quot;)
+st.info(&quot;점에 마우스를 올려 영화 이름·실젯값·예측값·절대오차를 확인하세요. 필요하면 드래그로 확대합니다. 다른 영화와 얼마나 떨어져 있는지와 실제 흥행작인지 살핀 뒤, 아래에서 제외 여부를 결정하세요.&quot;)
 st.dataframe(candidates.rename(columns={&quot;movieNm&quot;: &quot;영화&quot;, &quot;total_audi&quot;: &quot;관측 누적관객&quot;}), hide_index=True)
 candidate_names = candidates.set_index(&quot;movieCd&quot;)[&quot;movieNm&quot;].to_dict()
 excluded = st.multiselect(&quot;제외할 훈련 영화 · 선택하면 바로 재평가&quot;, candidates[&quot;movieCd&quot;].tolist(),
