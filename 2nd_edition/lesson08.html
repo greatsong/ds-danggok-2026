@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <link rel="stylesheet" href="assets/review.css">
+
+<link rel="stylesheet" href="assets/lesson08-board.css">
 </head>
 <body>
 <div class="topbar"><div class="inner">
@@ -50,6 +52,34 @@
   </ul>
 
   <h2>1. 개념 이해 — 오차에서 R²까지</h2>
+
+  <div class="calc-intro">활동지를 풀 때 아래 계산식을 펼쳐 두세요. 기본 문제는 함께 풀고, 연습 문제는 같은 순서로 계산합니다.</div>
+  <details class="calc-fold" id="calculation-formulas">
+    <summary>① 계산식 펼치기 · MAE · MSE · R²</summary>
+    <section class="calc-board" aria-label="회귀 평가 계산식">
+      <div class="calc-toolbar"><b>계산식 한눈에 보기</b><button type="button" class="calc-fullscreen">화면 가득 보기</button></div>
+      <p class="calc-error">오차 = 실젯값 − 예측값</p>
+      <div class="calc-equation"><div><strong>MAE</strong><small>평균절대오차</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>|실젯값 − 예측값|의 합</span><span>데이터 개수</span></span></div></div>
+      <div class="calc-equation"><div><strong>MSE</strong><small>평균제곱오차</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>(실젯값 − 예측값)²의 합</span><span>데이터 개수</span></span></div></div>
+      <div class="calc-equation"><div><strong>R²</strong><small>결정계수</small></div><div class="calc-math"><span>= 1 −</span><span class="calc-fraction"><span>(실젯값 − 예측값)²의 합</span><span>(실젯값 − 실젯값 평균)²의 합</span></span></div></div>
+      <p class="calc-note">R²의 분모: <b>실젯값의 평균만 예측했을 때</b>의 제곱오차 합<br>실젯값이 모두 같아 분모가 0이면 이 식으로 계산할 수 없습니다.</p>
+    </section>
+  </details>
+  <details class="calc-fold" id="calculation-basic"><summary>② 활동지 기본 문제 · 함께 풀기</summary>
+    <section class="calc-board calc-problem" aria-label="② 활동지 기본 문제 · 함께 풀기">
+      <div class="calc-toolbar"><b>② 활동지 기본 문제 · 함께 풀기</b><button type="button" class="calc-fullscreen">화면 가득 보기</button></div>
+      <p>상영관 배정에서는 한 편에서 크게 빗나가는 손해에 더 큰 비중을 둡니다. 어느 지표와 모델을 고를까요?</p><p class="calc-unit">활동지와 같은 순서 · 단위: 만 명 · 계산 연습용 수치</p>
+      <div class="calc-table-scroll"><table><thead><tr><th scope="col">영화</th><th scope="col">실젯값</th><th scope="col">모델 A</th><th scope="col">모델 B</th></tr></thead><tbody><tr><th scope="row">1편</th><td>14</td><td>12</td><td>14</td></tr><tr><th scope="row">2편</th><td>12</td><td>14</td><td>12</td></tr><tr><th scope="row">3편</th><td>20</td><td>19</td><td>20</td></tr><tr><th scope="row">4편</th><td>16</td><td>17</td><td>16</td></tr><tr><th scope="row">5편</th><td>18</td><td>18</td><td>14</td></tr></tbody></table></div><p class="calc-task"><b>계산할 것</b> 각 모델의 오차 → 절댓값·제곱 → 합 → MAE·MSE<br>실젯값의 평균과 평균값 기준의 제곱오차 합을 구하고, 고른 모델의 R²를 계산하세요.</p>
+      <details class="calc-solution"><summary>다 푼 뒤 풀이 확인</summary><p><b>A의 오차:</b> 2, −2, 1, −1, 0 → 절댓값 합 6, 제곱 합 10<br><b>B의 오차:</b> 0, 0, 0, 0, 4 → 절댓값 합 4, 제곱 합 16</p><p><b>A:</b> MAE = 6 ÷ 5 = 1.2, MSE = 10 ÷ 5 = 2<br><b>B:</b> MAE = 4 ÷ 5 = 0.8, MSE = 16 ÷ 5 = 3.2</p><p>큰 오차에 더 큰 비중을 주는 <b>MSE를 기준으로 A</b>를 고릅니다.<br>실젯값의 평균 = 16, 평균값 기준의 제곱오차 합 = 4 + 16 + 16 + 0 + 4 = 40<br><b>A의 R² = 1 − 10 ÷ 40 = 0.75</b></p></details>
+    </section></details>
+  <details class="calc-fold" id="calculation-practice"><summary>③ 활동지 연습 문제 · 혼자 풀기</summary>
+    <section class="calc-board calc-problem" aria-label="③ 활동지 연습 문제 · 혼자 풀기">
+      <div class="calc-toolbar"><b>③ 활동지 연습 문제 · 혼자 풀기</b><button type="button" class="calc-fullscreen">화면 가득 보기</button></div>
+      <p>매점 재료를 준비할 때 평균적으로 얼마나 빗나가는지를 원래 단위로 비교하려고 합니다. 어느 지표와 모델을 고를까요?</p><p class="calc-unit">활동지와 같은 순서 · 단위: 만 원 · 계산 연습용 수치</p>
+      <div class="calc-table-scroll"><table><thead><tr><th scope="col">날</th><th scope="col">실젯값</th><th scope="col">모델 C</th><th scope="col">모델 D</th></tr></thead><tbody><tr><th scope="row">1일</th><td>20</td><td>23</td><td>22</td></tr><tr><th scope="row">2일</th><td>22</td><td>20</td><td>24</td></tr><tr><th scope="row">3일</th><td>26</td><td>25</td><td>24</td></tr><tr><th scope="row">4일</th><td>28</td><td>29</td><td>26</td></tr><tr><th scope="row">5일</th><td>29</td><td>29</td><td>29</td></tr></tbody></table></div><p class="calc-task"><b>계산할 것</b> 각 모델의 오차 → 절댓값·제곱 → 합 → MAE·MSE<br>실젯값의 평균과 평균값 기준의 제곱오차 합을 구하고, 고른 모델의 R²를 계산하세요.</p>
+      <details class="calc-solution"><summary>다 푼 뒤 풀이 확인</summary><p><b>C의 오차:</b> −3, 2, 1, −1, 0 → 절댓값 합 7, 제곱 합 15<br><b>D의 오차:</b> −2, −2, 2, 2, 0 → 절댓값 합 8, 제곱 합 16</p><p><b>C:</b> MAE = 7 ÷ 5 = 1.4, MSE = 15 ÷ 5 = 3<br><b>D:</b> MAE = 8 ÷ 5 = 1.6, MSE = 16 ÷ 5 = 3.2</p><p>원래 단위로 평균적인 빗나감을 보는 <b>MAE를 기준으로 C</b>를 고릅니다. 이번에는 MSE도 C가 작습니다.<br>실젯값의 평균 = 25, 평균값 기준의 제곱오차 합 = 25 + 9 + 1 + 9 + 16 = 60<br><b>C의 R² = 1 − 15 ÷ 60 = 0.75</b><br>평균만 예측하면 분자와 분모가 같으므로 R² = 1 − 60 ÷ 60 = 0입니다.</p></details>
+    </section></details>
+
   <p>R²와 MAE가 각각 무엇을 나타내는 값인지는 7차시 5절에서 읽었습니다. 오늘은 두 지표에 MSE를 더해, 세 값이 어떤 계산을 거쳐 나오는지를 봅니다. 계산은 실젯값과 예측값의 차이 한 칸에서 시작해 일곱 단계로 이어집니다.</p>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 120쪽</span></div>
@@ -301,5 +331,6 @@
 <script src="assets/quiz.js"></script>
 <script src="assets/widgets08.js?v=2"></script>
 <script src="assets/answer.js?v=3"></script>
+<script src="assets/lesson08-board.js"></script>
 </body>
 </html>

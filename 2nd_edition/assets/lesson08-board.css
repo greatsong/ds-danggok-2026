@@ -1,0 +1,20 @@
+/* Projected formulas and worksheet prompts, scoped to lesson 8. */
+.calc-intro{margin:16px 0;color:var(--text-soft)}
+.calc-fold{margin:12px 0;border:2px solid #c5b384;border-radius:12px;background:#fff;overflow:hidden}
+.calc-fold>summary{padding:16px 20px;cursor:pointer;background:#fff6e0;font-size:1.08rem;font-weight:800;color:#3a2e1a}
+.calc-fold>summary:focus-visible,.calc-board button:focus-visible,.calc-solution>summary:focus-visible{outline:3px solid #17665f;outline-offset:-3px}
+.calc-board{padding:20px 24px;background:#fff;color:#221d14}
+.calc-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;font-size:1rem}
+.calc-fullscreen{border:1px solid #8c784e;border-radius:7px;padding:8px 12px;background:#fff;cursor:pointer;font:inherit;font-size:.85rem;color:#3a2e1a}
+.calc-error{font-size:clamp(20px,2.2vw,30px);font-weight:800;text-align:center;background:#f5f2e9;padding:12px;margin:12px 0}
+.calc-equation{display:grid;grid-template-columns:145px 1fr;gap:12px;align-items:center;padding:22px 0;border-bottom:1px solid #dfd8c7}
+.calc-equation strong{font-size:32px;line-height:1.2}.calc-equation small{display:block;font-size:15px;margin-top:6px}
+.calc-math{display:flex;align-items:center;justify-content:center;gap:12px;font-weight:750;font-size:clamp(19px,2.2vw,29px);line-height:1.5}
+.calc-fraction{display:inline-flex;flex-direction:column;text-align:center}.calc-fraction>span{padding:3px 8px}.calc-fraction>span:first-child{border-bottom:2px solid currentColor}
+.calc-note{font-size:16px;line-height:1.65;margin:16px 0 0}.calc-problem>p{font-size:20px;line-height:1.6}.calc-problem .calc-unit{font-size:14px;color:#665936;margin:8px 0}
+.calc-table-scroll{overflow-x:auto}.calc-board table{width:100%;border-collapse:collapse;margin:12px 0;font-size:23px;font-variant-numeric:tabular-nums}
+.calc-board th,.calc-board td{text-align:center;padding:7px 12px;border-bottom:1px solid #d9d1be}.calc-board thead th{background:#f5f2e9;color:#221d14}.calc-board tbody th{font-weight:500}.calc-problem .calc-task{font-size:18px}
+.calc-solution{border-top:1px solid #d9d1be;margin-top:20px;padding-top:14px}.calc-solution>summary{cursor:pointer;font-weight:700}.calc-solution p{font-size:18px}
+.calc-board:fullscreen{box-sizing:border-box;width:100%;height:100%;overflow:auto;padding:24px max(24px,calc((100vw - 1120px)/2));font-size:22px}
+.calc-board:fullscreen .calc-equation{grid-template-columns:190px 1fr;padding:22px 0}.calc-board:fullscreen .calc-math{font-size:clamp(24px,3.2vw,40px)}.calc-board:fullscreen .calc-equation strong{font-size:44px}.calc-board:fullscreen .calc-error{font-size:32px}.calc-board:fullscreen .calc-note{font-size:20px}
+@media(max-width:600px){.calc-board{padding:15px 12px}.calc-fold>summary{padding:14px 12px;font-size:.97rem}.calc-equation{grid-template-columns:1fr;padding:18px 0;gap:10px}.calc-equation>div:first-child{display:flex;align-items:baseline;gap:10px}.calc-equation strong{font-size:25px}.calc-equation small{font-size:13px}.calc-math{font-size:17px;gap:5px}.calc-fraction>span{padding:4px 2px}.calc-board table{font-size:19px}.calc-board th,.calc-board td{padding:7px}.calc-toolbar{font-size:.86rem}.calc-fullscreen{font-size:.75rem}.calc-problem>p{font-size:18px}}
