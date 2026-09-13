@@ -266,7 +266,7 @@ Pillow</pre></div></details>
 <div class="codewrap prompt"><span class="label">4단계 프롬프트</span><button class="copy-btn">복사</button><pre>같은 훈련·테스트 분할을 유지하면서 기본 세 가지 입력과, 추가 속성을 하나씩 더한 모델을 비교해 줘.
 각 모델마다 훈련용 R²·테스트용 R²·훈련용 MAE·테스트용 MAE를 같은 표에 보여 줘.
 MAE 단위는 명으로 표시해 줘. 기본 모델 대비 테스트 R² 차이도 적고, plotly 가로 막대그래프로 보여 줘.
-훈련에 쓰지 않은 테스트 영화로 계산한 점수인지 분명히 표시해 줘.</pre></div><details class="sample"><summary>실행·검증한 샘플 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># STEP 4 — 속성을 하나씩 넣어 비교
+훈련에 쓰지 않은 테스트 영화로 계산한 점수인지 분명히 표시해 줘.</pre></div><details class="sample"><summary>실행·검증한 샘플 코드</summary><p class="mini">처음 구성할 때는 앞 단계 뒤에 한 번만 이어 붙입니다. 같은 단계가 이미 있으면 해당 단계 전체를 교체합니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># STEP 4 — 속성을 하나씩 넣어 비교
 st.header(&quot;1. 속성을 하나씩 넣어 본다&quot;)
 _, base_train, base_test = score(train, test, BASE)
 rows = []
@@ -286,7 +286,7 @@ st.plotly_chart(px.bar(pd.DataFrame(rows), x=&quot;기본 대비 테스트 R² �
 각 데이터의 영화 수도 함께 표시해 줘. 앞 단계의 분할과 대형 배급사 기준은 그대로 유지해 줘.
 가중치 막대그래프와 테스트용 실젯값·예측값 산점도는 펼쳐 볼 수 있게 해 줘.
 산점도에 실젯값과 예측값이 같은 대각선을 그려 줘. 음수 예측도 보이도록 선형 축을 써 줘.
-가중치는 속성의 단위가 다르면 크기를 그대로 비교할 수 없다고 안내해 줘.</pre></div><details class="sample"><summary>실행·검증한 샘플 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># STEP 5 — 훈련과 테스트를 같은 크기로 비교
+가중치는 속성의 단위가 다르면 크기를 그대로 비교할 수 없다고 안내해 줘.</pre></div><details class="sample"><summary>실행·검증한 샘플 코드</summary><p class="mini">처음 구성할 때는 앞 단계 뒤에 한 번만 이어 붙입니다. 같은 단계가 이미 있으면 해당 단계 전체를 교체합니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># STEP 5 — 훈련과 테스트를 같은 크기로 비교
 st.header(&quot;2. 고른 속성으로 다시 학습한다&quot;)
 picked_names = st.multiselect(&quot;기본 세 가지에 더할 속성&quot;, list(EXTRA), default=[])
 cols = BASE + [EXTRA[name] for name in picked_names]
@@ -311,6 +311,7 @@ with st.expander(&quot;가중치와 테스트 예측 살펴보기&quot;):
     st.plotly_chart(fig, key=&quot;predictions&quot;)
     st.caption(&quot;대각선 위에서는 더 크게, 아래에서는 더 작게 예측했습니다. 음수 예측도 보이도록 선형 축을 사용합니다.&quot;)</pre></div></details>
   <h2>6. 이상치 검토 — 일부 훈련 영화를 제외하고 다시 평가한다</h2>
+  <p class="mini"><b>수정본 적용:</b> 기존 STEP 6 전체를 교체합니다. 같은 선택 위젯을 두 번 넣으면 중복 키 오류가 납니다. <a href="examples/lesson07-release/step6-replacement.txt" download>STEP 6 교체용 코드 다운로드</a> · 앞 단계에서 만든 변수와 함수를 사용하는 부분 코드입니다.</p>
   <p>첫 평가 뒤에는 <b>산점도에서 모델이 크게 빗나간 영화를 먼저 살펴봅니다.</b> 가로축은 실제 관측 누적관객, 세로축은 예측 관객이며, 점선은 두 값이 같은 위치입니다. 점에 마우스를 올려 영화 이름과 오차를 확인하고, 주변 영화와 얼마나 떨어져 있는지 살핍니다. 샘플은 <b>훈련 데이터의 절대오차가 Q3 + 1.5 × IQR보다 큰 영화</b>를 후보로 표시합니다. IQR은 가운데 50% 범위의 폭(Q3 − Q1)입니다. 크게 흥행한 실제 영화일 수도 있으므로 후보를 자동으로 삭제하지 않습니다.</p>
   <p>제외할 영화를 선택하면 남은 훈련 영화로 다시 학습합니다. <b>테스트 영화는 한 편도 바꾸지 않고</b> 제외 전후 R²·MAE를 비교합니다. 훈련 데이터는 줄었으므로 편수도 함께 확인합니다. 제외했는데 테스트 성능이 나빠졌다면 그 결과도 남깁니다.</p>
 <div class="codewrap prompt"><span class="label">6단계 프롬프트</span><button class="copy-btn">복사</button><pre>첫 평가 다음에 이상치 후보를 검토하는 단계를 추가해 줘.
@@ -325,7 +326,7 @@ with st.expander(&quot;가중치와 테스트 예측 살펴보기&quot;):
 제외 전후의 훈련·테스트 R²와 MAE, 영화 수를 같은 표에 보여 줘. 테스트 MAE가 줄면 개선으로 표시해 줘.
 아무 영화도 선택하지 않으면 원래 모델을 유지하고, 제외 후 훈련 영화가 20편 미만이면 다시 선택하도록 안내해 줘.
 테스트 점수를 반복해서 보고 제외 대상을 고른 결과는 탐색 결과라는 안내를 짧게 적어 줘.
-다음 예측과 공유 카드는 여기서 재평가한 모델을 사용해 줘.</pre></div><details class="sample"><summary>실행·검증한 샘플 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># STEP 6 — 훈련 데이터의 이상치 후보를 검토하고 다시 평가
+다음 예측과 공유 카드는 여기서 재평가한 모델을 사용해 줘.</pre></div><details class="sample"><summary>실행·검증한 샘플 코드</summary><p class="mini">처음 추가할 때는 STEP 5 뒤에 한 번만 넣습니다. 이미 STEP 6이 있다면 기존 STEP 6 시작부터 STEP 7 직전까지 전체를 아래 코드로 교체합니다. 기존 코드 아래에 다시 붙이지 않습니다.</p><div class="codewrap code"><span class="label">main.py · STEP 6 전체 교체</span><button class="copy-btn">복사</button><pre># STEP 6 — 훈련 데이터의 이상치 후보를 검토하고 다시 평가
 st.header(&quot;3. 이상치 후보를 검토하고 다시 평가한다&quot;)
 errors = train[[&quot;movieCd&quot;, &quot;movieNm&quot;, &quot;total_audi&quot;]].copy()
 errors[&quot;예측&quot;] = model.predict(train[cols])
@@ -395,7 +396,7 @@ st.caption(&quot;테스트 결과를 반복해서 보고 제외 대상을 고른
 실제 집계나 개봉 전 전망이 아닌 학습용 예측임을 표시해 줘. 최종 관객 수나 흥행 성공을 확정한다고 쓰지 마.
 예측이 음수이거나 이미 관측된 관객보다 작으면 값을 올려 맞추지 말고 안내해 줘. 학습 범위 밖의 입력도 확인하고, 이 경우 공유 카드 생성을 보류해 줘.
 한글 글꼴은 Google Fonts의 Nanum Gothic Bold를 불러와 Pillow로 그려 줘. 글꼴을 못 받으면 예측값은 유지하고 카드 저장만 다시 시도하도록 안내해 줘.
-필요한 라이브러리 목록(requirements.txt)도 함께 줘. 버전 숫자 없이 이름만.</pre></div><details class="sample"><summary>실행·검증한 샘플 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># STEP 7 — 최근 개봉작 선택과 PNG 리포트
+필요한 라이브러리 목록(requirements.txt)도 함께 줘. 버전 숫자 없이 이름만.</pre></div><details class="sample"><summary>실행·검증한 샘플 코드</summary><p class="mini">처음 구성할 때는 앞 단계 뒤에 한 번만 이어 붙입니다. 같은 단계가 이미 있으면 해당 단계 전체를 교체합니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><button class="copy-btn">복사</button><pre># STEP 7 — 최근 개봉작 선택과 PNG 리포트
 from PIL import Image, ImageDraw, ImageFont
 
 
