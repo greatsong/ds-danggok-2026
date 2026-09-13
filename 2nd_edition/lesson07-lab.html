@@ -448,7 +448,7 @@ def report_png(movie, prediction, baseline, evaluation, asof, cols, excluded_cou
     write(f&quot;첫 관측 {movie[&#x27;첫 관측일&#x27;]:%Y.%m.%d}  ·  카드 작성 {datetime.now(ZoneInfo(&#x27;Asia/Seoul&#x27;)):%Y.%m.%d}&quot;, (77, 1041), 24)
     notes = [&quot;선택 영화는 학습·평가에서 제외한 학습용 예측입니다.&quot;,
              &quot;과거 작품의 마지막 관측 누적관객을 학습했으며,&quot;, &quot;최종 관객 수를 보장하지 않습니다.&quot;,
-             &quot;데이터: 영화진흥위원회 KOBIS · 정리: 모두의 데이터분석&quot;]
+             &quot;데이터: 영화진흥위원회 KOBIS · 정리: 당곡고등학교 데이터과학 수업&quot;]
     for i, line in enumerate(notes):
         write(line, (77, 1097 + i * 37), 23, muted)
     output = BytesIO()
@@ -501,7 +501,7 @@ with st.expander(&quot;함께 올릴 설명&quot;):
                f&quot;사용한 속성: {&#x27;, &#x27;.join(LABELS[c] for c in cols)}\n&quot;
                f&quot;훈련 영화 {len(excluded)}편 제외 후 재평가 | 테스트 R² {test_score[&#x27;R²&#x27;]:.3f}\n&quot;
                &quot;실제 집계나 개봉 전 전망이 아닌, 개봉 후 관측 속성으로 만든 학습용 추정입니다.\n&quot;
-               &quot;출처: 영화진흥위원회 KOBIS / 모두의 데이터분석\n#NEXTSCENE #데이터과학 #영화예측&quot;)
+               &quot;출처: 영화진흥위원회 KOBIS / 당곡고등학교 데이터과학 수업\n#NEXTSCENE #데이터과학 #영화예측&quot;)
     st.code(caption, language=None)
     st.download_button(&quot;설명 TXT 저장&quot;, caption, file_name=f&quot;next-scene-{selected}.txt&quot;, mime=&quot;text/plain&quot;)</pre></div></details>
   <p>재평가 점수가 좋아졌는지, 고른 영화의 예측도 달라졌는지 확인합니다. 결과를 공유할 때는 <b>예측 날짜와 사용한 속성</b>을 함께 남겨 나중에 관측값과 비교할 수 있게 합니다.</p>
@@ -766,7 +766,7 @@ def report_png(movie, prediction, baseline, evaluation, asof, cols, excluded_cou
     write(f&quot;첫 관측 {movie[&#x27;첫 관측일&#x27;]:%Y.%m.%d}  ·  카드 작성 {datetime.now(ZoneInfo(&#x27;Asia/Seoul&#x27;)):%Y.%m.%d}&quot;, (77, 1041), 24)
     notes = [&quot;선택 영화는 학습·평가에서 제외한 학습용 예측입니다.&quot;,
              &quot;과거 작품의 마지막 관측 누적관객을 학습했으며,&quot;, &quot;최종 관객 수를 보장하지 않습니다.&quot;,
-             &quot;데이터: 영화진흥위원회 KOBIS · 정리: 모두의 데이터분석&quot;]
+             &quot;데이터: 영화진흥위원회 KOBIS · 정리: 당곡고등학교 데이터과학 수업&quot;]
     for i, line in enumerate(notes):
         write(line, (77, 1097 + i * 37), 23, muted)
     output = BytesIO()
@@ -819,7 +819,7 @@ with st.expander(&quot;함께 올릴 설명&quot;):
                f&quot;사용한 속성: {&#x27;, &#x27;.join(LABELS[c] for c in cols)}\n&quot;
                f&quot;훈련 영화 {len(excluded)}편 제외 후 재평가 | 테스트 R² {test_score[&#x27;R²&#x27;]:.3f}\n&quot;
                &quot;실제 집계나 개봉 전 전망이 아닌, 개봉 후 관측 속성으로 만든 학습용 추정입니다.\n&quot;
-               &quot;출처: 영화진흥위원회 KOBIS / 모두의 데이터분석\n#NEXTSCENE #데이터과학 #영화예측&quot;)
+               &quot;출처: 영화진흥위원회 KOBIS / 당곡고등학교 데이터과학 수업\n#NEXTSCENE #데이터과학 #영화예측&quot;)
     st.code(caption, language=None)
     st.download_button(&quot;설명 TXT 저장&quot;, caption, file_name=f&quot;next-scene-{selected}.txt&quot;, mime=&quot;text/plain&quot;)</pre></div></details><div class="codewrap code"><span class="label"><button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
 pandas

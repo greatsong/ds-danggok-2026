@@ -256,7 +256,7 @@ def report_png(movie, prediction, baseline, evaluation, asof, cols, excluded_cou
     write(f"첫 관측 {movie['첫 관측일']:%Y.%m.%d}  ·  카드 작성 {datetime.now(ZoneInfo('Asia/Seoul')):%Y.%m.%d}", (77, 1041), 24)
     notes = ["선택 영화는 학습·평가에서 제외한 학습용 예측입니다.",
              "과거 작품의 마지막 관측 누적관객을 학습했으며,", "최종 관객 수를 보장하지 않습니다.",
-             "데이터: 영화진흥위원회 KOBIS · 정리: 모두의 데이터분석"]
+             "데이터: 영화진흥위원회 KOBIS · 정리: 당곡고등학교 데이터과학 수업"]
     for i, line in enumerate(notes):
         write(line, (77, 1097 + i * 37), 23, muted)
     output = BytesIO()
@@ -309,6 +309,6 @@ with st.expander("함께 올릴 설명"):
                f"사용한 속성: {', '.join(LABELS[c] for c in cols)}\n"
                f"훈련 영화 {len(excluded)}편 제외 후 재평가 | 테스트 R² {test_score['R²']:.3f}\n"
                "실제 집계나 개봉 전 전망이 아닌, 개봉 후 관측 속성으로 만든 학습용 추정입니다.\n"
-               "출처: 영화진흥위원회 KOBIS / 모두의 데이터분석\n#NEXTSCENE #데이터과학 #영화예측")
+               "출처: 영화진흥위원회 KOBIS / 당곡고등학교 데이터과학 수업\n#NEXTSCENE #데이터과학 #영화예측")
     st.code(caption, language=None)
     st.download_button("설명 TXT 저장", caption, file_name=f"next-scene-{selected}.txt", mime="text/plain")
