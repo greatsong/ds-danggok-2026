@@ -49,7 +49,8 @@
 - KOBIS 일별 박스오피스 API를 부르는데, 날짜를 내가 정할 수 있게 해 줘.
   월과 일을 숫자로 입력받아서 그 날짜의 10위권을 표로 보여 줘.
 - 인증키는 2차시처럼 비밀 금고에 둔 KOBIS_KEY를 써 줘.
-- 받아 온 관객수는 글자가 아니라 숫자로 바꿔서 써 줘.</pre></div>
+- 받아 온 관객수는 글자가 아니라 숫자로 바꿔서 써 줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
     </li>
     <li><span class="st">2단계 — 여러 해를 모으기</span><br>
       연도를 바꿔 가며 같은 요청을 반복해 표로 쌓습니다. 2004년부터 2025년까지 스물두 해, 하루 열 편씩 모읍니다. 선생님이 365일 표를 만든 방식과 같습니다.
@@ -174,6 +175,10 @@ if picked:
 
 with st.expander("모은 데이터 보기"):
     st.dataframe(df, hide_index=True)</pre></div>
+        <div class="codewrap code"><span class="label"><button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+requests
+plotly</pre></div>
       </details>
     </li>
   </ol>

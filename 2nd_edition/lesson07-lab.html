@@ -147,7 +147,7 @@
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
 
   
-  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 영화 흥행 예측기 (심화 탐구 프로젝트)
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt 두 파일로 저장합니다</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 영화 흥행 예측기 (심화 탐구 프로젝트)
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -209,7 +209,11 @@ st.plotly_chart(px.scatter(df, x=&quot;showTm&quot;, y=&quot;total_audi&quot;, l
                            labels={&quot;showTm&quot;: &quot;상영시간(분)&quot;, &quot;total_audi&quot;: &quot;총 관객 수&quot;}))
 등급 = df.groupby(&quot;watchGrade&quot;)[&quot;total_audi&quot;].agg(중앙값=&quot;median&quot;, 편수=&quot;size&quot;).reset_index()
 st.plotly_chart(px.bar(등급, x=&quot;watchGrade&quot;, y=&quot;중앙값&quot;, text=&quot;편수&quot;,
-                       labels={&quot;watchGrade&quot;: &quot;관람등급&quot;, &quot;중앙값&quot;: &quot;총 관객 수 중앙값&quot;}))</pre></div></details>
+                       labels={&quot;watchGrade&quot;: &quot;관람등급&quot;, &quot;중앙값&quot;: &quot;총 관객 수 중앙값&quot;}))</pre></div>
+  <div class="codewrap code"><span class="label"><button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+scikit-learn
+plotly</pre></div></details>
 <p>합친 표가 원래 표보다 적어졌다면 한쪽에만 있는 영화가 있었다는 뜻입니다. 값이 비어 있는 것을 <b>결측</b>이라고 합니다. 결측인 영화가 몇 편인지도 함께 확인합니다. 결측을 그대로 두고 학습하면 오류가 나거나 그 영화가 통째로 빠지고, 그러면 앞의 결과와 같은 조건에서 비교할 수 없습니다. 그래서 이번에는 다섯 열 가운데 하나라도 결측인 영화를 빼고 시작합니다. 예시 코드의 load 함수는 여기에 더해 총 관객 수·첫 관측일 스크린수·상영시간이 0 이하인 영화도 걸러 냅니다. 뺀 편수를 적어 두면 나중에 편수가 달라진 까닭을 설명할 수 있습니다.</p>
   <p>두 표에는 이름이 같은 열이 몇 개 있습니다. 영화 이름과 개봉일이 양쪽에 모두 들어 있습니다. 합칠 때 이런 열은 하나만 남기거나 이름을 구분해 두어야 나중에 어느 쪽 값인지 알 수 있습니다. 합친 표가 제대로 만들어졌는지는 영화 한 편을 골라 두 원본 표의 값과 맞추어 보면 확인할 수 있습니다.</p>
 
@@ -347,7 +351,7 @@ st.dataframe(near[[&quot;movieNm&quot;, &quot;total_audi&quot;]])</pre></div></d
   <p>여섯 단계를 마쳤습니다. 이 실험실에서 확인한 것은 속성을 많이 모으면 예측이 좋아진다는 규칙이 아닙니다. 넣어 보기 전에는 그 속성이 도움이 되는지 알 수 없다는 것, 그래서 가설을 적고 데이터를 확인하고 하나씩 넣어 보는 순서가 필요하다는 것입니다. 점수가 오른 경우와 그대로인 경우를 모두 기록으로 남기면, 다음에 같은 데이터를 다룰 때 같은 실험을 되풀이하지 않아도 됩니다.</p>
 
   <h2>7. 전체 코드</h2>
-  <p>여섯 단계를 다 마치면 <b>main.py</b> 한 파일이 완성됩니다. 중간에 어디가 어긋났는지 찾기 어려울 때 아래와 맞춰 봅니다. 이 코드는 선생님이 직접 실행해 화면까지 확인한 것입니다. 화면에 나오는 편수와 점수는 그날 모인 데이터에 따라 달라집니다.</p>
+  <p>여섯 단계를 다 마치면 <b>main.py</b> 코드가 완성됩니다. 중간에 어디가 어긋났는지 찾기 어려울 때 아래와 맞춰 봅니다. 이 코드는 선생님이 직접 실행해 화면까지 확인한 것입니다. 화면에 나오는 편수와 점수는 그날 모인 데이터에 따라 달라집니다.</p>
   <div class="codewrap code"><span class="label">main.py · 전체</span><pre># main.py — 영화 흥행 예측기 (심화 탐구 프로젝트)
 import pandas as pd
 import plotly.express as px
@@ -450,7 +454,10 @@ st.metric(f&quot;{name}의 예측 총 관객 수&quot;, f&quot;{pred:,.0f}명&qu
 near = df.assign(차이=(df[&quot;total_audi&quot;] - pred).abs()).nsmallest(5, &quot;차이&quot;)
 st.dataframe(near[[&quot;movieNm&quot;, &quot;total_audi&quot;]])
 </pre></div>
-  <p class="mini">함께 저장할 requirements.txt는 <code>streamlit</code>, <code>pandas</code>, <code>scikit-learn</code>, <code>plotly</code> 네 줄입니다. 버전 숫자는 적지 않습니다.</p>
+  <div class="codewrap code"><span class="label"><button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+scikit-learn
+plotly</pre></div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">

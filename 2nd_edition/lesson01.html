@@ -226,7 +226,10 @@ df = load_data()
 st.header("연평균기온의 흐름")
 yearly = df.groupby("연도", as_index=False)["평균기온"].mean()
 fig = px.line(yearly, x="연도", y="평균기온", markers=True)
-st.plotly_chart(fig, width="stretch")</pre></div></details>
+st.plotly_chart(fig, width="stretch")</pre></div>
+      <div class="codewrap code"><span class="label"><button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+plotly</pre></div></details>
       프롬프트에 코드 문법이 한 줄도 없다는 점을 확인하세요. 파일 이름과 원하는 결과만 우리말로 적었습니다.</li>
     <li><span class="st">② AI가 준 코드 — 실행하고 결과를 읽는다</span><br>
       AI가 코드를 만들어 응답하고, 실행하면 100여 년의 기온 그래프가 나타납니다. 코드를 읽는 것이 아니라 <b>결과 그래프를 읽는 것</b>이 우리의 일입니다. 그래프를 어떻게 읽는지는 바로 아래 시연에서 함께 연습합니다.</li>
