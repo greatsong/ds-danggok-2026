@@ -619,6 +619,16 @@ openDt가 개봉일이고 20260902 같은 여덟 자리 숫자야.
 로지스틱 회귀의 판정도 같은 두 글자로 적어서 두 열의 형식을 맞춰 줘.
 이미 기준을 넘은 영화인지, 그리고 학습에 사용한 영화인지도 "예"와 "아니오"로 넣어 줘.
 성공 확률이 높은 순서로 정렬해 줘.
+
+팀장이 한눈에 읽도록 꾸며 줘.
+맨 앞에 신호 열을 두고 확률에 따라 이모지를 붙여 줘.
+0.8 이상은 "🔥 대박 조짐", 0.5 이상은 "✨ 기대작", 0.2 이상은 "🌱 지켜보기", 나머지는 "💤 조용"이야.
+이미 기준을 넘었으면 "✅ 이미 넘음", 아직이면 "⏳ 아직"으로 표시해 줘.
+성공 확률은 st.column_config.ProgressColumn으로 막대가 보이게 해 줘.
+관객 수와 스크린 수는 st.column_config.NumberColumn으로 천 단위 쉼표를 넣어 줘.
+표 위에 대박 조짐인 영화는 st.success로, 기대작은 st.info로 제목만 한 줄씩 띄워 줘.
+둘 다 없으면 st.warning으로 기간이나 기준을 바꿔 보라고 안내해 줘.
+
 두 모델의 판정이 갈린 영화가 몇 편인지 표 아래에 적어 줘.
 해당 기간에 개봉한 영화가 없으면 안내 문구를 보여 줘.
 그리고 그 표의 영화 중 하나를 고르면, 팀장이 "왜 그렇게 판단했냐"고 물었을 때 답할 화면을 보여 줘.
@@ -644,28 +654,52 @@ if not 최근.any():
     st.info("이 기간에 개봉한 영화가 없습니다. 기간을 늘려 보세요.")
 else:
     확률 = logi.predict_proba(scaler.transform(X[최근]))[:, 1]
+
+    def 신호(p):
+        if p &gt;= 0.8:
+            return "🔥 대박 조짐"
+        if p &gt;= 0.5:
+            return "✨ 기대작"
+        if p &gt;= 0.2:
+            return "🌱 지켜보기"
+        return "💤 조용"
+
     보고서 = pd.DataFrame({
+        "신호": [신호(p) for p in 확률],
         "영화": df.loc[최근, "movieNm"].values,
-        "개봉일": 개봉일[최근].dt.strftime("%Y-%m-%d").values,
+        "성공 확률": 확률.round(3),
+        "개봉일": 개봉일[최근].dt.strftime("%m월 %d일").values,
         "스크린 수": df.loc[최근, "first_scrn"].values,
         "지금까지 관객": df.loc[최근, "total_audi"].values,
-        "성공 확률": 확률.round(3),
         "로지스틱 회귀": ["성공" if p &gt;= 0.5 else "기준 미달" for p in 확률],
         "의사결정트리": ["성공" if v else "기준 미달" for v in tree.predict(X[최근])],
-        "실제": ["이미 넘음" if a &gt;= 기준 else "아직" for a in df.loc[최근, "total_audi"]],
-        "학습에 사용": ["아니오" if t else "예" for t in pd.Series(is_test, index=df.index)[최근]],
+        "실제": ["✅ 이미 넘음" if a &gt;= 기준 else "⏳ 아직" for a in df.loc[최근, "total_audi"]],
+        "학습에 사용": ["아니오" if t else "예" for t in is_test[최근]],
     }).sort_values("성공 확률", ascending=False)
-    st.dataframe(보고서, hide_index=True, width="stretch")
+
+    대박 = 보고서[보고서["신호"] == "🔥 대박 조짐"]["영화"].tolist()
+    기대 = 보고서[보고서["신호"] == "✨ 기대작"]["영화"].tolist()
+    if 대박:
+        st.success("🔥 대박 조짐: " + " · ".join(대박))
+    if 기대:
+        st.info("✨ 기대작: " + " · ".join(기대))
+    if not 대박 and not 기대:
+        st.warning("이번 기간에는 모델이 기준을 넘을 것으로 본 영화가 없습니다. 기간이나 기준을 바꿔 보세요.")
+
+    st.dataframe(보고서, hide_index=True, width="stretch", column_config={
+        "성공 확률": st.column_config.ProgressColumn("성공 확률", min_value=0.0, max_value=1.0, format="%.2f"),
+        "지금까지 관객": st.column_config.NumberColumn("지금까지 관객", format="%,d명"),
+        "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
+    })
     갈림 = int((보고서["로지스틱 회귀"] != 보고서["의사결정트리"]).sum())
     st.caption(f"최근 {일수}일 안에 개봉한 {len(보고서)}편입니다. "
-               f"두 모델의 판단이 갈린 영화는 {갈림}편입니다. "
-               "'아직'인 영화는 정답이 나오지 않았습니다. "
+               f"두 모델의 판정이 갈린 영화는 {갈림}편입니다. "
+               "⏳인 영화는 정답이 아직 나오지 않았습니다. "
                "학습에 사용한 영화를 잘 맞히는 것은 당연하므로 그 줄은 성능의 근거가 되지 않습니다.")
-
-import re
 
 # 아래는 앞 코드와 따로 돌아가도록 필요한 것을 여기에서 다시 만든다
 import math
+import re
 
 t = tree.tree_
 열이름 = list(X.columns)
@@ -723,7 +757,7 @@ st.caption("붉은 테두리가 이 영화가 지나간 마디입니다.")</pre>
   <div class="callout ask">
     <div class="h">❓ 보고서를 읽고 답할 질문</div>
     <ul>
-      <li>확률이 가장 높은 영화는 무엇입니까. 그 영화의 스크린 수는 몇 개입니까.</li>
+      <li>🔥 대박 조짐이 붙은 영화가 있습니까. 없다면 기간이나 기준을 바꿔 나타나게 해 봅니다.</li>
       <li>두 모델의 판정이 갈린 영화가 있습니까. 있다면 그 영화의 스크린 수를 트리의 첫 분기 값과 비교해 봅니다.</li>
       <li>실제 칸이 "아직"인 영화는 정답이 나오지 않았습니다. 몇 주 뒤에 다시 열어 확인할 영화를 한 편 골라 적습니다.</li>
     </ul>
