@@ -156,7 +156,6 @@ first_scrn·first_show는 개봉일이 아니라 10위권에 처음 관측된 �
 first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
 영화 코드 순으로 정렬해 열 편 중 앞 세 편을 테스트용으로 고정하고,
 훈련용으로만 학습과 표준화를 해 줘. 이 모델은 같은 테스트용 데이터로 평가해 줘.
-훈련용과 테스트용의 영화 편수를 화면에 적어 줘.
 테스트용 데이터로 계산한 정확도를 화면에 표시해 줘.
 테스트용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.
 확률이 0.5 이상이면 성공으로 분류하고 실제 레이블도 함께 보여 줘.
@@ -199,7 +198,6 @@ is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 �
 X = df[["first_scrn", "first_show", "peak"]].rename(
     columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
 y = df["성공"]
-st.caption(f"훈련용 {(~is_test).sum()}편 · 테스트용 {is_test.sum()}편 · 전체 {len(df)}편")
 
 scaler = StandardScaler().fit(X[~is_test])
 logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~is_test])
@@ -424,7 +422,6 @@ is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 �
 X = df[["first_scrn", "first_show", "peak"]].rename(
     columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
 y = df["성공"]
-st.caption(f"훈련용 {(~is_test).sum()}편 · 테스트용 {is_test.sum()}편 · 전체 {len(df)}편")
 
 scaler = StandardScaler().fit(X[~is_test])
 logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~is_test])
@@ -539,7 +536,7 @@ with st.expander("트리 그림으로 보기"):
     </tbody>
   </table>
 
-  <p class="mini">두 모델은 같은 훈련용 데이터와 테스트용 데이터를 사용합니다. 테스트용 데이터는 학습과 표준화의 기준 계산에서 제외합니다. 데이터가 날마다 쌓이고 분할과 설정에 따라 값이 달라지므로, 화면에 나온 숫자를 그대로 적습니다.</p>
+  <p class="mini">영화 열 편 중 세 편은 학습에서 빼 두었다가 채점에만 사용합니다. 왜 그렇게 하는지는 10차시에서 다룹니다. 데이터가 날마다 쌓이므로 화면에 표시된 숫자를 그대로 적습니다.</p>
 
   <h3>참고 · 의사결정트리란</h3>
 
@@ -737,7 +734,7 @@ if is_test.sum() &lt; 5 or (~is_test).sum() &lt; 20:
     st.warning("고른 속성으로 사용할 수 있는 영화가 너무 적습니다. 속성을 바꿔 보세요.")
     st.stop()
 st.caption(f"{len(고른속성)}가지 입력 · 값이 모두 있는 영화 {len(df):,}편으로 학습합니다"
-           f"(전체 {len(확장):,}편). 훈련용 {(~is_test).sum()}편 · 테스트용 {is_test.sum()}편. "
+           f"(전체 {len(확장):,}편). "
            "배우 수·주연 수·상영시간·관람등급·배급사는 7차시 실험실에서 사용한 인물 표에서 가져옵니다. "
            "속성을 바꾸면 아래 화면이 모두 다시 계산됩니다.")
 
@@ -907,7 +904,7 @@ openDt가 개봉일이고 20260902 같은 여덟 자리 숫자야.
 로지스틱 회귀의 판정, 의사결정트리의 판정을 넣어 줘.
 의사결정트리의 predict 결과는 0과 1이야. 1이면 "성공", 0이면 "기준 미달"로 바꿔 줘.
 로지스틱 회귀의 판정도 같은 두 글자로 적어서 두 열의 형식을 맞춰 줘.
-이미 기준을 넘은 영화인지, 그리고 학습에 사용한 영화인지도 "예"와 "아니오"로 넣어 줘.
+이미 기준을 넘은 영화인지도 "예"와 "아니오"로 넣어 줘.
 성공 확률이 높은 순서로 정렬해 줘.
 
 팀장이 한눈에 읽도록 꾸며 줘.
@@ -988,7 +985,7 @@ if is_test.sum() &lt; 5 or (~is_test).sum() &lt; 20:
     st.warning("고른 속성으로 사용할 수 있는 영화가 너무 적습니다. 속성을 바꿔 보세요.")
     st.stop()
 st.caption(f"{len(고른속성)}가지 입력 · 값이 모두 있는 영화 {len(df):,}편으로 학습합니다"
-           f"(전체 {len(확장):,}편). 훈련용 {(~is_test).sum()}편 · 테스트용 {is_test.sum()}편. "
+           f"(전체 {len(확장):,}편). "
            "배우 수·주연 수·상영시간·관람등급·배급사는 7차시 실험실에서 사용한 인물 표에서 가져옵니다. "
            "속성을 바꾸면 아래 화면이 모두 다시 계산됩니다.")
 
@@ -1157,7 +1154,6 @@ else:
         "로지스틱 회귀": ["성공" if p &gt;= 0.5 else "기준 미달" for p in 확률],
         "의사결정트리": ["성공" if v else "기준 미달" for v in tree.predict(X[최근])],
         "실제": ["✅ 이미 넘음" if a &gt;= 기준 else "⏳ 아직" for a in df.loc[최근, "total_audi"]],
-        "학습에 사용": ["아니오" if t else "예" for t in is_test[최근]],
     }).sort_values("성공 확률", ascending=False)
 
     대박 = 보고서[보고서["신호"] == "🔥 대박 조짐"]["영화"].tolist()
@@ -1178,8 +1174,7 @@ else:
     st.caption(f"최근 {일수}일 안에 개봉한 {len(보고서)}편입니다. "
                f"기준은 누적 관객 {기준 // 10_000}만 명({기준:,}명) 이상입니다. "
                f"두 모델의 판정이 나뉜 영화는 {갈림}편입니다. "
-               "⏳인 영화는 정답이 아직 나오지 않았습니다. "
-               "학습에 사용한 영화를 잘 맞히는 것은 당연하므로 그 줄은 성능의 근거가 되지 않습니다.")
+               "⏳인 영화는 정답이 아직 나오지 않았습니다.")
 
 import re
 
