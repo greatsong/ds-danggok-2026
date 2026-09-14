@@ -484,7 +484,9 @@ def 트리읽기(마디=0, 들여=""):
 st.subheader("트리는 어떤 질문을 던지나")
 st.code("\n".join(트리읽기()), language=None)
 st.caption("위에서부터 질문에 답하며 내려가면 마지막 줄의 판정에 닿습니다. "
-           "괄호 안은 그 자리에 있는 훈련용 영화의 편수입니다.")
+           "괄호 안은 그 자리에 있는 훈련용 영화의 편수입니다. "
+           "끝마디의 판정은 그 안에서 편수가 많은 쪽입니다. "
+           "성공과 기준 미달이 같은 수이면 기준 미달로 판정합니다.")
 
 with st.expander("트리 그림으로 보기"):
     st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=열이름,
@@ -619,15 +621,22 @@ with st.expander("트리 그림으로 보기"):
   <p>세 가지 가운데 <b>중요도가 0인 속성이 나올 수 있습니다.</b> 트리가 그 속성으로는 한 번도 나누지 않았다는 뜻입니다. 화면에 나온 것을 그대로 적고, 없으면 <b>해당 없음</b>이라고 적습니다.</p>
 
   <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>두 모델이 각각 어떤 입력을 보고 판단했는지 확인하고 싶어.
-바뀐 main.py 전체를 다시 줘. 바뀐 부분만 주지 말고.
 - 의사결정트리의 feature importance를 큰 순서로 표로 보여 줘. 0인 것은 빼 줘.
 - 모두 더하면 1이니 파이 차트로도 그려 줘.
 - 로지스틱 회귀의 가중치도 절댓값이 큰 순서로 표로 보여 줘. 부호는 그대로 두고, 절편도 따로 적어 줘.
 - feature importance는 의사결정트리에만 있는 값이고 로지스틱 회귀가 보는 것은 가중치야.
   두 가지를 섞지 말고 제목을 나눠서 각각 어느 모델의 것인지 드러나게 해 줘.
+- 의사결정트리의 중요도는 파이 차트로, 로지스틱 회귀의 가중치는 가로 막대그래프로 그려 줘.
+  가중치는 0을 기준으로 양수와 음수를 다른 색으로 하고 0 자리에 세로선을 그어 줘.
 - 입력으로 사용할 속성을 골라서 다시 학습할 수 있게 해 줘.
   고른 속성만으로 두 모델을 다시 학습하고 테스트용 정확도를 나란히 보여 줘.
-  아무것도 고르지 않으면 안내 문구를 보여 줘.</pre></div>
+- 고를 수 있는 속성에 7차시 실험실에서 쓰던 것도 넣어 줘.
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv 에
+  movieCd·actors_n(배우 수)·lead_n(주연 수)·showTm(상영시간)·watchGrade(관람등급)·company(배급사)가 있어. 인코딩은 utf-8-sig야.
+  movieCd로 left 조인하고, 관람등급에서 청소년관람불가 여부를, 배급사에서 대형 배급사 여부를 0과 1로 만들어 줘.
+  대형 배급사는 훈련용 데이터에서 많이 나온 상위 다섯 곳으로 정해 줘.
+  고른 속성의 값이 모두 있는 영화만 사용하고, 몇 편으로 학습했는지 적어 줘.
+  아무것도 고르지 않거나 쓸 수 있는 영화가 너무 적으면 안내 문구를 보여 줘.</pre></div>
 
   <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">여기까지 만든 main.py 전체입니다. 파일을 통째로 바꿔 저장합니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 수집된 누적 관객 수가 기준을 넘는지 분류한다
 import streamlit as st
@@ -750,7 +759,9 @@ def 트리읽기(마디=0, 들여=""):
 st.subheader("트리는 어떤 질문을 던지나")
 st.code("\n".join(트리읽기()), language=None)
 st.caption("위에서부터 질문에 답하며 내려가면 마지막 줄의 판정에 닿습니다. "
-           "괄호 안은 그 자리에 있는 훈련용 영화의 편수입니다.")
+           "괄호 안은 그 자리에 있는 훈련용 영화의 편수입니다. "
+           "끝마디의 판정은 그 안에서 편수가 많은 쪽입니다. "
+           "성공과 기준 미달이 같은 수이면 기준 미달로 판정합니다.")
 
 with st.expander("트리 그림으로 보기"):
     st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=열이름,
@@ -761,7 +772,6 @@ st.subheader("의사결정트리가 본 것 — 속성 중요도")
 중요도 = pd.Series(tree.feature_importances_, index=X.columns)
 중요도 = 중요도[중요도 &gt; 0].sort_values(ascending=False).round(3).reset_index()
 중요도.columns = ["속성", "중요도"]
-st.dataframe(중요도, hide_index=True)
 중요도그림 = px.pie(중요도, names="속성", values="중요도", hole=0.35)
 중요도그림.update_traces(textinfo="label+percent", sort=False)
 중요도그림.update_layout(height=300, showlegend=False)
@@ -771,30 +781,57 @@ st.caption("중요도는 트리가 그 속성으로 얼마나 많이, 얼마나 
            "이 값은 트리에만 있습니다.")
 
 st.subheader("로지스틱 회귀가 본 것 — 가중치")
-가중치 = pd.Series(logi.coef_[0], index=X.columns).round(3)
-가중치 = 가중치.reindex(가중치.abs().sort_values(ascending=False).index).reset_index()
+가중치 = pd.Series(logi.coef_[0], index=X.columns).round(3).reset_index()
 가중치.columns = ["속성", "가중치"]
-st.dataframe(가중치, hide_index=True)
+가중치["방향"] = ["성공 확률을 올림" if v &gt; 0 else "성공 확률을 내림" for v in 가중치["가중치"]]
+가중치그림 = px.bar(가중치.sort_values("가중치"), x="가중치", y="속성", orientation="h",
+                color="방향", color_discrete_map={"성공 확률을 올림": "#b07a00", "성공 확률을 내림": "#2b7fd6"})
+가중치그림.add_vline(x=0, line_width=1.5, line_color="#1c2230")
+가중치그림.update_layout(height=300, yaxis_title=None, legend_title_text="")
+st.plotly_chart(가중치그림, width="stretch")
 st.caption(f"절편 {logi.intercept_[0]:.3f} · 가중치는 표준화한 값에 곱하는 수입니다. "
-           "양수면 그 값이 클수록 성공 확률이 올라가고, 음수면 내려갑니다. "
+           "막대가 0보다 오른쪽이면 그 값이 클수록 성공 확률이 올라가고, 왼쪽이면 내려갑니다. "
            "중요도와 달리 부호가 있고, 모두 더해도 1이 되지 않습니다.")
 
 # 속성을 골라 다시 학습하면 정확도가 어떻게 달라지나
+PEOPLE = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv"
+
+
+@st.cache_data
+def load_people():
+    return pd.read_csv(PEOPLE, encoding="utf-8-sig", dtype={"movieCd": str})
+
+
 st.subheader("속성을 골라 다시 학습해 보기")
-고른속성 = st.multiselect("입력으로 사용할 속성", list(X.columns), default=list(X.columns))
+확장 = df.merge(load_people()[["movieCd", "actors_n", "lead_n", "showTm", "watchGrade", "company"]],
+              on="movieCd", how="left")
+확장["청소년관람불가"] = (확장["watchGrade"] == "청소년관람불가").astype(float)
+큰곳 = 확장.loc[~is_test, "company"].value_counts().head(5).index   # 대형 배급사는 훈련용에서만 정한다
+확장["대형 배급사"] = 확장["company"].isin(큰곳).astype(float)
+확장 = 확장.rename(columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기",
+                         "actors_n": "배우 수", "lead_n": "주연 수", "showTm": "상영시간"})
+후보 = ["스크린 수", "상영 횟수", "성수기", "배우 수", "주연 수", "상영시간", "청소년관람불가", "대형 배급사"]
+
+고른속성 = st.multiselect("입력으로 사용할 속성", 후보, default=["스크린 수", "상영 횟수", "성수기"])
 if not 고른속성:
     st.info("속성을 하나 이상 골라 주세요.")
 else:
-    A = X[고른속성]
-    sc2 = StandardScaler().fit(A[~is_test])
-    lg2 = LogisticRegression(max_iter=2000).fit(sc2.transform(A[~is_test]), y[~is_test])
-    tr2 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(A[~is_test], y[~is_test])
-    c1, c2 = st.columns(2)
-    c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], lg2.predict(sc2.transform(A[is_test]))):.3f}")
-    c2.metric("의사결정트리 정확도", f"{accuracy_score(y[is_test], tr2.predict(A[is_test])):.3f}")
-    st.caption(f"{len(고른속성)}가지 입력으로 다시 학습한 결과입니다. "
-               "속성을 뺐는데 점수가 그대로이거나 오히려 오르는 경우도 있습니다. "
-               "속성을 더한다고 늘 좋아지지는 않습니다.")</pre></div></details>
+    쓸수있음 = 확장[고른속성].notna().all(axis=1)
+    A, b = 확장.loc[쓸수있음, 고른속성], y[쓸수있음]
+    시험 = is_test[쓸수있음]
+    if 시험.sum() &lt; 5 or (~시험).sum() &lt; 20:
+        st.warning("고른 속성으로 쓸 수 있는 영화가 너무 적습니다. 속성을 바꿔 보세요.")
+    else:
+        sc2 = StandardScaler().fit(A[~시험])
+        lg2 = LogisticRegression(max_iter=2000).fit(sc2.transform(A[~시험]), b[~시험])
+        tr2 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(A[~시험], b[~시험])
+        c1, c2 = st.columns(2)
+        c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(b[시험], lg2.predict(sc2.transform(A[시험]))):.3f}")
+        c2.metric("의사결정트리 정확도", f"{accuracy_score(b[시험], tr2.predict(A[시험])):.3f}")
+        st.caption(f"{len(고른속성)}가지 입력 · 값이 모두 있는 영화 {쓸수있음.sum():,}편으로 학습했습니다"
+                   f"(전체 {len(df):,}편). "
+                   "배우 수·주연 수·상영시간·관람등급·배급사는 7차시 실험실에서 쓰던 인물 표에서 가져옵니다. "
+                   "속성을 더한다고 점수가 늘 오르지는 않습니다.")</pre></div></details>
 
   <table class="daymap">
     <thead><tr><th>순위</th><th>속성 이름</th><th>중요도 (트리, 깊이 3)</th></tr></thead>
@@ -810,7 +847,8 @@ else:
   <p>로지스틱 회귀의 가중치도 함께 확인합니다. 흐름도에서 입력마다 곱한다고 했던 그 값입니다. 트리의 중요도는 0 이상의 값이라 확률을 올리는 쪽인지 내리는 쪽인지 알 수 없지만, 가중치는 부호가 있어 <b>그 값이 클수록 성공 확률이 올라가는지 내려가는지</b>까지 알려 줍니다. 두 모델이 같은 속성을 보았는지 비교해 봅니다.</p>
 
   <p><b>속성 중요도는 의사결정트리에만 있는 값입니다.</b> 로지스틱 회귀가 내놓는 것은 가중치이고, 둘은 읽는 법이 다릅니다. 중요도는 크기만 말하고, 가중치는 그 값이 클수록 성공 확률이 올라가는지 내려가는지까지 말합니다.</p>
-  <p>마지막으로 <b>입력으로 사용할 속성을 골라</b> 다시 학습해 봅니다. 세 가지를 다 넣었을 때와 하나만 넣었을 때의 정확도를 비교합니다. <b>속성을 뺐는데 오히려 점수가 오르는 경우</b>가 나올 수 있습니다. 7차시 실험실의 물음을 분류에서 다시 확인하는 자리입니다.</p>
+  <p>마지막으로 <b>입력으로 사용할 속성을 골라</b> 다시 학습해 봅니다. 세 가지 말고도 <b>7차시 실험실에서 쓰던 배우 수·주연 수·상영시간·청소년관람불가·대형 배급사</b>를 넣어 볼 수 있습니다. 실험실이 회귀에서 던진 "속성을 더 모으면 예측이 달라질까"를 분류에서 다시 확인하는 자리입니다.</p>
+  <p>인물 표에 값이 없는 영화는 그 속성을 고른 순간 학습에서 빠집니다. 화면에 몇 편으로 학습했는지 나오므로 함께 봅니다. <b>속성을 더했는데 점수가 내려가는 경우</b>도, <b>뺐는데 오히려 오르는 경우</b>도 나옵니다.</p>
   <p>속성 중요도도 가중치도 이 모델이 무엇을 단서로 삼았는지 보여 줄 뿐 인과관계의 증거가 아닙니다.</p>
 
   <p>오늘 사용한 입력은 스크린 수, 상영 횟수, 성수기 세 가지뿐입니다. 속성을 더 모으면 분류 결과가 달라질지 궁금할 수 있습니다. 7차시 실험실인 "속성을 더 모으면 예측이 달라질까"에서 그 물음을 이미 다루었습니다. 그 실험실에서는 영화진흥위원회 오픈 API로 감독, 배우 수, 상영시간, 관람등급, 배급사를 따로 모아 회귀 모델에 하나씩 넣어 보며 훈련용 점수와 테스트용 점수를 비교했습니다. 속성을 더한다고 점수가 늘 오르지는 않습니다. 대형 배급사를 넣어 계산해 보면 정확도가 오르는 날도 있고 그대로인 날도 있습니다. 늘 좋아지지는 않습니다. 넣기 전과 넣은 뒤를 같은 데이터에서 비교해야 알 수 있습니다. 궁금하면 7차시 실험실로 돌아가 확인해 보시기 바랍니다.</p>
@@ -974,7 +1012,9 @@ def 트리읽기(마디=0, 들여=""):
 st.subheader("트리는 어떤 질문을 던지나")
 st.code("\n".join(트리읽기()), language=None)
 st.caption("위에서부터 질문에 답하며 내려가면 마지막 줄의 판정에 닿습니다. "
-           "괄호 안은 그 자리에 있는 훈련용 영화의 편수입니다.")
+           "괄호 안은 그 자리에 있는 훈련용 영화의 편수입니다. "
+           "끝마디의 판정은 그 안에서 편수가 많은 쪽입니다. "
+           "성공과 기준 미달이 같은 수이면 기준 미달로 판정합니다.")
 
 with st.expander("트리 그림으로 보기"):
     st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=열이름,
@@ -985,7 +1025,6 @@ st.subheader("의사결정트리가 본 것 — 속성 중요도")
 중요도 = pd.Series(tree.feature_importances_, index=X.columns)
 중요도 = 중요도[중요도 &gt; 0].sort_values(ascending=False).round(3).reset_index()
 중요도.columns = ["속성", "중요도"]
-st.dataframe(중요도, hide_index=True)
 중요도그림 = px.pie(중요도, names="속성", values="중요도", hole=0.35)
 중요도그림.update_traces(textinfo="label+percent", sort=False)
 중요도그림.update_layout(height=300, showlegend=False)
@@ -995,30 +1034,57 @@ st.caption("중요도는 트리가 그 속성으로 얼마나 많이, 얼마나 
            "이 값은 트리에만 있습니다.")
 
 st.subheader("로지스틱 회귀가 본 것 — 가중치")
-가중치 = pd.Series(logi.coef_[0], index=X.columns).round(3)
-가중치 = 가중치.reindex(가중치.abs().sort_values(ascending=False).index).reset_index()
+가중치 = pd.Series(logi.coef_[0], index=X.columns).round(3).reset_index()
 가중치.columns = ["속성", "가중치"]
-st.dataframe(가중치, hide_index=True)
+가중치["방향"] = ["성공 확률을 올림" if v &gt; 0 else "성공 확률을 내림" for v in 가중치["가중치"]]
+가중치그림 = px.bar(가중치.sort_values("가중치"), x="가중치", y="속성", orientation="h",
+                color="방향", color_discrete_map={"성공 확률을 올림": "#b07a00", "성공 확률을 내림": "#2b7fd6"})
+가중치그림.add_vline(x=0, line_width=1.5, line_color="#1c2230")
+가중치그림.update_layout(height=300, yaxis_title=None, legend_title_text="")
+st.plotly_chart(가중치그림, width="stretch")
 st.caption(f"절편 {logi.intercept_[0]:.3f} · 가중치는 표준화한 값에 곱하는 수입니다. "
-           "양수면 그 값이 클수록 성공 확률이 올라가고, 음수면 내려갑니다. "
+           "막대가 0보다 오른쪽이면 그 값이 클수록 성공 확률이 올라가고, 왼쪽이면 내려갑니다. "
            "중요도와 달리 부호가 있고, 모두 더해도 1이 되지 않습니다.")
 
 # 속성을 골라 다시 학습하면 정확도가 어떻게 달라지나
+PEOPLE = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv"
+
+
+@st.cache_data
+def load_people():
+    return pd.read_csv(PEOPLE, encoding="utf-8-sig", dtype={"movieCd": str})
+
+
 st.subheader("속성을 골라 다시 학습해 보기")
-고른속성 = st.multiselect("입력으로 사용할 속성", list(X.columns), default=list(X.columns))
+확장 = df.merge(load_people()[["movieCd", "actors_n", "lead_n", "showTm", "watchGrade", "company"]],
+              on="movieCd", how="left")
+확장["청소년관람불가"] = (확장["watchGrade"] == "청소년관람불가").astype(float)
+큰곳 = 확장.loc[~is_test, "company"].value_counts().head(5).index   # 대형 배급사는 훈련용에서만 정한다
+확장["대형 배급사"] = 확장["company"].isin(큰곳).astype(float)
+확장 = 확장.rename(columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기",
+                         "actors_n": "배우 수", "lead_n": "주연 수", "showTm": "상영시간"})
+후보 = ["스크린 수", "상영 횟수", "성수기", "배우 수", "주연 수", "상영시간", "청소년관람불가", "대형 배급사"]
+
+고른속성 = st.multiselect("입력으로 사용할 속성", 후보, default=["스크린 수", "상영 횟수", "성수기"])
 if not 고른속성:
     st.info("속성을 하나 이상 골라 주세요.")
 else:
-    A = X[고른속성]
-    sc2 = StandardScaler().fit(A[~is_test])
-    lg2 = LogisticRegression(max_iter=2000).fit(sc2.transform(A[~is_test]), y[~is_test])
-    tr2 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(A[~is_test], y[~is_test])
-    c1, c2 = st.columns(2)
-    c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], lg2.predict(sc2.transform(A[is_test]))):.3f}")
-    c2.metric("의사결정트리 정확도", f"{accuracy_score(y[is_test], tr2.predict(A[is_test])):.3f}")
-    st.caption(f"{len(고른속성)}가지 입력으로 다시 학습한 결과입니다. "
-               "속성을 뺐는데 점수가 그대로이거나 오히려 오르는 경우도 있습니다. "
-               "속성을 더한다고 늘 좋아지지는 않습니다.")
+    쓸수있음 = 확장[고른속성].notna().all(axis=1)
+    A, b = 확장.loc[쓸수있음, 고른속성], y[쓸수있음]
+    시험 = is_test[쓸수있음]
+    if 시험.sum() &lt; 5 or (~시험).sum() &lt; 20:
+        st.warning("고른 속성으로 쓸 수 있는 영화가 너무 적습니다. 속성을 바꿔 보세요.")
+    else:
+        sc2 = StandardScaler().fit(A[~시험])
+        lg2 = LogisticRegression(max_iter=2000).fit(sc2.transform(A[~시험]), b[~시험])
+        tr2 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(A[~시험], b[~시험])
+        c1, c2 = st.columns(2)
+        c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(b[시험], lg2.predict(sc2.transform(A[시험]))):.3f}")
+        c2.metric("의사결정트리 정확도", f"{accuracy_score(b[시험], tr2.predict(A[시험])):.3f}")
+        st.caption(f"{len(고른속성)}가지 입력 · 값이 모두 있는 영화 {쓸수있음.sum():,}편으로 학습했습니다"
+                   f"(전체 {len(df):,}편). "
+                   "배우 수·주연 수·상영시간·관람등급·배급사는 7차시 실험실에서 쓰던 인물 표에서 가져옵니다. "
+                   "속성을 더한다고 점수가 늘 오르지는 않습니다.")
 
 # ④ 팀장에게 보고하기 — 최근 개봉작은 어떻게 될까
 import datetime as dt
