@@ -809,7 +809,7 @@ function initW_rareacc(root) {
     btns.forEach(x => x.classList.toggle('on', x === b));
     if (점수칸) 점수칸.style.display = 점수보임 ? '' : 'none';
     if (점수버튼) {
-      점수버튼.textContent = 점수보임 ? '점수 숨기기' : '아무것도 찾지 않는 답의 점수 보기';
+      점수버튼.textContent = 점수보임 ? '점수 감추기' : '점수 확인';
       점수버튼.classList.toggle('on', 점수보임);
     }
     현재 = b;
