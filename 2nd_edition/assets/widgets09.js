@@ -311,8 +311,8 @@ function initW_splitpick(root, D) {
     head.textContent = '합친 섞임 ' + f3(G0) + ' → ' + f3(G0 - gain[j]) + ' · ' + f3(gain[j]) + ' 줄였습니다';
     // 두 갈래를 편수로 가중해 더하는 과정을 그대로 보여 준다
     var ln = nL[j], rn = N - ln;
-    calc.textContent = '합친 섞임 = (' + ln + '/' + N + ') × ' + f3(gini(ln, kL[j]))
-      + ' + (' + rn + '/' + N + ') × ' + f3(gini(rn, POS - kL[j]))
+    calc.textContent = '합친 섞임 = 왼쪽 ' + f3(gini(ln, kL[j])) + ' × ' + ln + '편/' + N + '편'
+      + ' + 오른쪽 ' + f3(gini(rn, POS - kL[j])) + ' × ' + rn + '편/' + N + '편'
       + ' = ' + f3(G0 - gain[j]);
     panel(lp, lbar, nL[j], kL[j], Math.round(t) + '개 이하', '왼쪽');
     panel(rp, rbar, N - nL[j], POS - kL[j], Math.round(t) + '개 초과', '오른쪽');
