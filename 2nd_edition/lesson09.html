@@ -350,10 +350,11 @@ scikit-learn</pre></div></details>
 
   <ol class="steps" start="3">
     <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
-      <p class="mini">가지를 뻗는 횟수를 정해 주지 않으면 트리는 훈련용 데이터를 모두 맞힐 때까지 갈라집니다. 훈련용 정확도는 1에 가까워지지만 그림이 커져서 질문의 순서를 읽을 수 없고, 처음 보는 데이터에서는 오히려 더 틀립니다. 교과서 220쪽에서 말하는 <b>과대적합</b>이 이것입니다. 그래서 세 번까지만 뻗도록 정해 줍니다.</p>
+      <p class="mini">가지를 뻗는 횟수를 정해 주지 않으면 트리는 훈련용 데이터를 모두 맞힐 때까지 갈라집니다. 훈련용 정확도는 1에 가까워지지만 그림이 커져서 질문의 순서를 읽을 수 없고, 처음 보는 데이터에서는 오히려 더 틀립니다. 교과서 220쪽에서 말하는 <b>과대적합</b>이 이것입니다. 그래서 세 번까지만 뻗도록 정하고, <b>끝마디에 영화가 다섯 편 미만이면 더 나누지 않도록</b> 합니다. 한두 편으로 만든 규칙은 근거가 너무 얇습니다.</p>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>앞 코드에 이어서 의사결정트리로도 만들어 줘.
 바뀐 main.py 전체를 다시 줘. 바뀐 부분만 주지 말고.
 가지는 세 번까지만 뻗게 하고, 다시 실행해도 같은 결과가 나오게 난수를 고정해 줘.
+마지막 마디에 영화가 다섯 편 미만이면 더 나누지 말아 줘. 한두 편으로 만든 규칙을 막으려는 거야.
 어떤 질문을 어떤 순서로 던지는지 보여 줘.
 입력 열 이름은 스크린 수·상영 횟수·성수기라는 한글로 바꿔 줘.
 트리는 상자 그림 대신, 질문 한 줄에 예와 아니오로 갈라지는 글로 읽을 수 있게 해 줘.
@@ -434,7 +435,8 @@ import math
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
 # 트리는 값의 크기에 영향받지 않으므로 표준화하지 않은 X를 그대로 사용한다
-tree = DecisionTreeClassifier(max_depth=3, random_state=0).fit(X[~is_test], y[~is_test])
+# 끝마디에 영화가 다섯 편 미만이면 더 나누지 않는다. 한두 편으로 만든 규칙을 막는다
+tree = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~is_test], y[~is_test])
 
 st.subheader("두 모델의 정확도")
 c1, c2 = st.columns(2)
@@ -699,7 +701,8 @@ import math
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
 # 트리는 값의 크기에 영향받지 않으므로 표준화하지 않은 X를 그대로 사용한다
-tree = DecisionTreeClassifier(max_depth=3, random_state=0).fit(X[~is_test], y[~is_test])
+# 끝마디에 영화가 다섯 편 미만이면 더 나누지 않는다. 한두 편으로 만든 규칙을 막는다
+tree = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~is_test], y[~is_test])
 
 st.subheader("두 모델의 정확도")
 c1, c2 = st.columns(2)
@@ -785,7 +788,7 @@ else:
     A = X[고른속성]
     sc2 = StandardScaler().fit(A[~is_test])
     lg2 = LogisticRegression(max_iter=2000).fit(sc2.transform(A[~is_test]), y[~is_test])
-    tr2 = DecisionTreeClassifier(max_depth=3, random_state=0).fit(A[~is_test], y[~is_test])
+    tr2 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(A[~is_test], y[~is_test])
     c1, c2 = st.columns(2)
     c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], lg2.predict(sc2.transform(A[is_test]))):.3f}")
     c2.metric("의사결정트리 정확도", f"{accuracy_score(y[is_test], tr2.predict(A[is_test])):.3f}")
@@ -922,7 +925,8 @@ import math
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
 # 트리는 값의 크기에 영향받지 않으므로 표준화하지 않은 X를 그대로 사용한다
-tree = DecisionTreeClassifier(max_depth=3, random_state=0).fit(X[~is_test], y[~is_test])
+# 끝마디에 영화가 다섯 편 미만이면 더 나누지 않는다. 한두 편으로 만든 규칙을 막는다
+tree = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~is_test], y[~is_test])
 
 st.subheader("두 모델의 정확도")
 c1, c2 = st.columns(2)
@@ -1008,7 +1012,7 @@ else:
     A = X[고른속성]
     sc2 = StandardScaler().fit(A[~is_test])
     lg2 = LogisticRegression(max_iter=2000).fit(sc2.transform(A[~is_test]), y[~is_test])
-    tr2 = DecisionTreeClassifier(max_depth=3, random_state=0).fit(A[~is_test], y[~is_test])
+    tr2 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(A[~is_test], y[~is_test])
     c1, c2 = st.columns(2)
     c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], lg2.predict(sc2.transform(A[is_test]))):.3f}")
     c2.metric("의사결정트리 정확도", f"{accuracy_score(y[is_test], tr2.predict(A[is_test])):.3f}")
