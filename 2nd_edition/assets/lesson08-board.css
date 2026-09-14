@@ -1,4 +1,4 @@
-/* Projected formulas and worksheet prompts, scoped to lesson 8. */
+/* 손계산 판 — 8차시와 10차시가 함께 사용한다. .calc-* 는 공용, .lesson08-* 는 8차시 전용. */
 .calc-intro{margin:16px 0;color:var(--text-soft)}
 .calc-fold{margin:12px 0;border:2px solid #c5b384;border-radius:12px;background:#fff;overflow:hidden}
 .calc-fold>summary{padding:16px 20px;cursor:pointer;background:#fff6e0;font-size:1.08rem;font-weight:800;color:#3a2e1a}

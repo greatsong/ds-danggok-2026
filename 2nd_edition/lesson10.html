@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <link rel="stylesheet" href="assets/review.css">
+<link rel="stylesheet" href="assets/lesson08-board.css?v=2">
 </head>
 <body>
 <div class="topbar"><div class="inner">
@@ -103,6 +104,28 @@
   </div></details>
 
   <h2>2. 개념 이해 — 네 칸과 세 지표</h2>
+  <div class="calc-intro">활동지를 풀 때 아래 계산식을 펼쳐 두세요. 기본 문제는 함께 풀고, 연습 문제는 같은 순서로 계산합니다.</div>
+  <details class="calc-fold" id="calculation-formulas">
+    <summary>계산식 펼치기 · 네 칸 · 정확도 · 정밀도 · 재현율</summary>
+    <section class="calc-board" aria-label="분류 평가 계산식">
+      <div class="calc-toolbar"><b>계산식 한눈에 보기</b><button type="button" class="calc-fullscreen">화면 가득 보기</button></div>
+      <p class="calc-error">성공을 양성이라고 부릅니다</p>
+      <div class="calc-table-scroll">
+        <table>
+          <thead><tr><th></th><th>예측 : 성공</th><th>예측 : 기준 미달</th></tr></thead>
+          <tbody>
+            <tr><th>실제 : 성공</th><td><b>TP</b></td><td><b>FN</b></td></tr>
+            <tr><th>실제 : 기준 미달</th><td><b>FP</b></td><td><b>TN</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="calc-equation"><div><strong>정확도</strong><small>전체 중 맞힌 비율</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP + TN</span><span>TP + FP + FN + TN</span></span></div></div>
+      <div class="calc-equation"><div><strong>정밀도</strong><small>예측이 분모</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP</span><span>TP + FP</span></span></div></div>
+      <div class="calc-equation"><div><strong>재현율</strong><small>실제가 분모</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP</span><span>TP + FN</span></span></div></div>
+      <p class="calc-note">정밀도와 재현율은 <b>분자가 TP로 같고 분모만 다릅니다.</b><br>정밀도의 분모는 성공이라고 <b>예측한</b> 건수이고, 재현율의 분모는 <b>실제로</b> 성공인 건수입니다.<br>성공이라고 예측한 건수가 0이면 정밀도는 계산할 수 없습니다.</p>
+    </section>
+  </details>
+
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 139·140쪽</span></div>
     <p class="q">"오분류표란 각각의 실제 클래스와 예측 결과를 행렬로 나타낸 것이다." <span class="src">(139쪽)</span></p>
@@ -229,7 +252,8 @@
   </div>
   <p>④까지 오면 세 지표가 서로 다른 모델을 가리키는 경우를 만납니다. 그때는 지표를 고르는 것이 아니라 <b>먼저 줄여야 할 오류가 무엇인지</b>를 정합니다. 실제 성공작을 기준 미달로 예측한 FN을 줄이는 일이 중요하면 재현율을 보고, 기준 미달 영화를 성공으로 예측한 FP를 줄이는 일이 중요하면 정밀도를 봅니다. 기본 문제를 손으로 다 푼 뒤, 아래 화면에서 같은 표를 사례 순서대로 확인합니다. 연습 문제는 같은 순서로 혼자 풉니다.</p>
   <figure class="interactive" data-fig="matrix">
-    <div class="widget" data-w="matrix">
+    <div class="widget calc-board" data-w="matrix">
+  <div class="calc-toolbar"><b>활동지와 함께 보는 풀이 화면</b><button type="button" class="calc-fullscreen">화면 가득 보기</button></div>
   <svg viewBox="0 0 720 300" role="img" aria-label="혼동행렬 네 칸과 정확도·정밀도·재현율. 지표를 고르면 분모 범위가 테두리로 켜지고, 사례를 바꾸면 네 칸의 수와 세 값이 함께 바뀜">
     <text class="mx-case" x="24" y="22" font-size="14" fill="#6b7385"></text>
     <text class="mx-h" data-k="0" x="222" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
@@ -406,5 +430,6 @@
 <script src="assets/quiz.js"></script>
 <script src="assets/widgets10.js?v=2"></script>
 <script src="assets/answer.js?v=3"></script>
+<script src="assets/lesson08-board.js"></script>
 </body>
 </html>
