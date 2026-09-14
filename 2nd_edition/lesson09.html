@@ -598,58 +598,7 @@ st.caption(f"절편 {logi.intercept_[0]:.3f} · 가중치는 표준화한 값에
 
   <p>속성 중요도도 가중치도 이 모델이 무엇을 단서로 삼았는지 보여 줄 뿐 인과관계의 증거가 아닙니다.</p>
 
-  <h3>도전 — 속성을 하나 더 넣으면 좋아질까</h3>
-  <p>7차시 실험실에서 배급사 정보를 따로 모아 회귀 모델에 넣어 보았습니다. 그 실험실의 물음이 속성을 더 모으면 예측이 달라질까였습니다. 같은 물음을 오늘의 분류 문제에 그대로 가져옵니다. 영화별 표에는 배급사 열이 없으므로 인물 표를 따로 합쳐야 합니다. 배급사가 적혀 있지 않은 영화는 이 비교에서 빠집니다. 대형 배급사인지 아닌지는 훈련용 데이터에서 많이 나온 상위 다섯 곳으로 정합니다. 7차시 실험실과 같은 방식입니다. 넣기 전과 넣은 뒤의 정확도를 나란히 놓고 읽습니다. 오르는 날도 있고 내리는 날도 있습니다.</p>
-  <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>7차시 실험실에서 만들었던 대형 배급사 속성을 이 분류 문제에도 넣어 보고 싶어.
-https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv 에
-movieCd와 company(배급사) 열이 있어. 인코딩은 utf-8-sig야.
-movieCd로 두 표를 inner 조인하고, company가 비어 있는 영화는 빼 줘.
-대형 배급사는 훈련용 데이터에서 많이 나온 상위 다섯 곳으로 정하고,
-그 다섯 곳에 속하면 1, 아니면 0인 열을 만들어 줘.
-합친 표에서 다시 영화 코드 순으로 정렬해 열 편 중 앞 세 편을 테스트용으로 나눠 줘.
-기본 세 가지 입력만 쓴 모델과, 거기에 대형 배급사를 더한 모델의
-로지스틱 회귀 정확도와 의사결정트리 정확도를 한 표에 나란히 보여 줘.
-비교에 사용한 영화가 몇 편인지, 대형 배급사 다섯 곳이 어디인지도 표 아래에 적어 줘.</pre></div>
-  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 속성을 하나 더 넣으면 좋아질까 (7차시 실험실에서 만든 대형 배급사)
-PEOPLE = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv"
-
-
-@st.cache_data
-def load_people():
-    return pd.read_csv(PEOPLE, encoding="utf-8-sig", dtype={"movieCd": str})
-
-
-st.subheader("도전 — 배급사를 넣으면 좋아질까")
-합침 = df.merge(load_people()[["movieCd", "company"]], on="movieCd", how="inner")
-합침 = 합침.dropna(subset=["company"]).sort_values("movieCd").reset_index(drop=True)
-시험 = pd.Series(합침.index % 10 &lt; 3, index=합침.index)
-큰곳 = 합침.loc[~시험, "company"].value_counts().head(5).index      # 대형 배급사는 훈련용에서만 정한다
-합침["대형 배급사"] = 합침["company"].isin(큰곳).astype(int)
-합침["성공"] = (합침["total_audi"] &gt;= 기준).astype(int)
-
-합침 = 합침.rename(columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
-기본 = ["스크린 수", "상영 횟수", "성수기"]
-결과 = []
-for 이름, 열 in [("기본 세 가지", 기본), ("기본 + 대형 배급사", 기본 + ["대형 배급사"])]:
-    A, b = 합침[열], 합침["성공"]
-    sc = StandardScaler().fit(A[~시험])
-    lg = LogisticRegression(max_iter=2000).fit(sc.transform(A[~시험]), b[~시험])
-    tr = DecisionTreeClassifier(max_depth=3, random_state=0).fit(A[~시험], b[~시험])
-    결과.append({"입력": 이름, "열 수": len(열),
-               "로지스틱 정확도": round(accuracy_score(b[시험], lg.predict(sc.transform(A[시험]))), 3),
-               "의사결정트리 정확도": round(accuracy_score(b[시험], tr.predict(A[시험])), 3)})
-st.dataframe(pd.DataFrame(결과), hide_index=True, width="stretch")
-st.caption(f"배급사 정보가 있는 {len(합침)}편으로만 비교했습니다(전체 {len(df)}편). "
-           f"대형 배급사는 훈련용에서 많이 나온 상위 다섯 곳입니다: {', '.join(큰곳)}. "
-           "속성을 더한다고 점수가 늘 오르지는 않습니다. 화면에 나온 숫자를 그대로 읽습니다.")</pre></div></details>
-  <table class="daymap">
-    <thead><tr><th>입력</th><th>로지스틱 회귀 정확도</th><th>의사결정트리 정확도</th></tr></thead>
-    <tbody>
-      <tr><td>기본 세 가지</td><td></td><td></td></tr>
-      <tr><td>기본 + 대형 배급사</td><td></td><td></td></tr>
-    </tbody>
-  </table>
-  <p class="mini">화면에 나온 숫자를 그대로 적습니다. 오른 날인지 내린 날인지, 두 모델이 같은 방향으로 움직였는지 함께 봅니다.</p>
+  <p>오늘 사용한 입력은 스크린 수, 상영 횟수, 성수기 세 가지뿐입니다. 속성을 더 모으면 분류 결과가 달라질지 궁금할 수 있습니다. 7차시 실험실인 "속성을 더 모으면 예측이 달라질까"에서 그 물음을 이미 다루었습니다. 그 실험실에서는 영화진흥위원회 오픈 API로 감독, 배우 수, 상영시간, 관람등급, 배급사를 따로 모아 회귀 모델에 하나씩 넣어 보며 훈련용 점수와 테스트용 점수를 비교했습니다. 속성을 더한다고 점수가 늘 오르지는 않습니다. 대형 배급사를 넣어 계산해 보면 정확도가 오르는 날도 있고 그대로인 날도 있습니다. 늘 좋아지지는 않습니다. 넣기 전과 넣은 뒤를 같은 데이터에서 비교해야 알 수 있습니다. 궁금하면 7차시 실험실로 돌아가 확인해 보시기 바랍니다.</p>
 
   <h2>5. 팀장에게 보고하기</h2>
   <p>여기까지는 이미 결과가 나온 영화로 연습했습니다. 정답을 알고 맞히는 일이었습니다. 이제 아직 결과가 나오지 않은 영화에 같은 모델을 적용합니다. 막 개봉한 영화에도 스크린 수와 상영 횟수는 이미 나와 있습니다. 아직 나오지 않은 것은 최종 관객 수뿐입니다. 그러니 이 예측은 연습이 아니라 진짜 예측입니다. 맞았는지는 몇 주 뒤에 알게 됩니다. 이 표가 팀장에게 낼 보고서입니다.</p>
@@ -668,6 +617,13 @@ openDt가 개봉일이고 20260902 같은 여덟 자리 숫자야.
 성공 확률이 높은 순서로 정렬해 줘.
 두 모델의 판정이 갈린 영화가 몇 편인지 표 아래에 적어 줘.
 해당 기간에 개봉한 영화가 없으면 안내 문구를 보여 줘.
+그리고 그 표의 영화 중 하나를 고르면, 팀장이 "왜 그렇게 판단했냐"고 물었을 때 답할 화면을 보여 줘.
+의사결정트리가 그 영화에 던진 질문, 그 영화의 값, 어느 쪽으로 갔는지를 단계별 표로 만들어 줘.
+각 단계마다 그 마디에 훈련용 영화가 몇 편이고 그중 성공이 몇 편인지도 함께 적어 줘.
+tree.decision_path와 tree.tree_의 feature, threshold, n_node_samples, value를 사용하면 돼.
+feature 값이 음수이면 더 나누지 않는 끝마디야.
+질문 문장은 앞에서 트리를 한글로 읽을 때 쓴 것과 같은 표현으로 해 줘.
+
 앞 코드에서 만든 df, X, is_test, scaler, logi, tree, 기준을 그대로 사용하고,
 새로 필요한 라이브러리가 있으면 import를 빠뜨리지 말아 줘.</pre></div>
   <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ④ 팀장에게 보고하기 — 최근 개봉작은 어떻게 될까 (앞 코드 끝에 이어 붙일 부분)
@@ -699,27 +655,8 @@ else:
     st.caption(f"최근 {일수}일 안에 개봉한 {len(보고서)}편입니다. "
                f"두 모델의 판단이 갈린 영화는 {갈림}편입니다. "
                "'아직'인 영화는 정답이 나오지 않았습니다. "
-               "학습에 사용한 영화를 잘 맞히는 것은 당연하므로 그 줄은 성능의 근거가 되지 않습니다.")</pre></div></details>
-  <div class="callout ask">
-    <div class="h">❓ 보고서를 읽고 답할 질문</div>
-    <ul>
-      <li>확률이 가장 높은 영화는 무엇입니까. 그 영화의 스크린 수는 몇 개입니까.</li>
-      <li>두 모델의 판정이 갈린 영화가 있습니까. 있다면 그 영화의 스크린 수를 트리의 첫 분기 값과 비교해 봅니다.</li>
-      <li>실제 칸이 "아직"인 영화는 정답이 나오지 않았습니다. 몇 주 뒤에 다시 열어 확인할 영화를 한 편 골라 적습니다.</li>
-    </ul>
-  </div>
+               "학습에 사용한 영화를 잘 맞히는 것은 당연하므로 그 줄은 성능의 근거가 되지 않습니다.")
 
-  <h3>왜 그렇게 판단했나</h3>
-  <p>팀장이 왜 그렇게 판단했느냐고 물으면 답할 수 있어야 합니다. 로지스틱 회귀는 확률 하나를 내놓을 뿐이지만, 의사결정트리는 지나온 질문을 그대로 보여 줄 수 있습니다. 보고서의 영화를 하나 고르면 트리가 위에서부터 어떤 질문을 던졌고 그 영화가 어느 쪽으로 갔는지 단계별로 나타납니다. 마지막 줄에 적힌 답이 보고서 표의 의사결정트리 판정입니다.</p>
-  <div class="codewrap improve"><span class="label">⑤ 판단 경로 프롬프트</span><button class="copy-btn">복사</button><pre>앞 코드에 이어서, 팀장이 "왜 그렇게 판단했냐"고 물었을 때 보여 줄 화면을 만들어 줘.
-보고서에 실린 영화 중 하나를 고르면 의사결정트리가 그 영화에 어떻게 답했는지 보여 줘.
-트리가 위에서부터 던진 질문, 그 영화의 값, 어느 쪽으로 갔는지를 단계별 표로 만들어 줘.
-각 단계마다 그 마디에 훈련용 영화가 몇 편 있고 그중 성공이 몇 편인지도 함께 적어 줘.
-tree.decision_path와 tree.tree_의 feature, threshold, n_node_samples, value를 사용하면 돼.
-feature 값이 음수이면 더 나누지 않는 끝마디야.
-앞 코드에서 만든 df, X, tree, 보고서, 중요도를 그대로 사용하고,
-새로 필요한 라이브러리가 있으면 import를 빠뜨리지 말아 줘.</pre></div>
-  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다. 트리 그림에 지나간 길을 붉은 테두리로 표시하는 부분까지 들어 있습니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ⑤ 트리는 어떤 질문을 거쳐 이 영화에 답했나 (앞 코드 끝에 이어 붙일 부분)
 import re
 
 st.subheader("이 영화를 트리는 어떻게 판단했나")
@@ -750,6 +687,14 @@ for 마디 in 경로:
     그림 = re.sub(rf'(?m)^({마디}) \[label=', r'\1 [penwidth=5, color="#d64545", label=', 그림)
 st.graphviz_chart(그림)
 st.caption("붉은 테두리가 이 영화가 지나간 마디입니다.")</pre></div></details>
+  <div class="callout ask">
+    <div class="h">❓ 보고서를 읽고 답할 질문</div>
+    <ul>
+      <li>확률이 가장 높은 영화는 무엇입니까. 그 영화의 스크린 수는 몇 개입니까.</li>
+      <li>두 모델의 판정이 갈린 영화가 있습니까. 있다면 그 영화의 스크린 수를 트리의 첫 분기 값과 비교해 봅니다.</li>
+      <li>실제 칸이 "아직"인 영화는 정답이 나오지 않았습니다. 몇 주 뒤에 다시 열어 확인할 영화를 한 편 골라 적습니다.</li>
+    </ul>
+  </div>
 
   <h2>6. 정리</h2>
 
@@ -820,9 +765,8 @@ st.caption("붉은 테두리가 이 영화가 지나간 마디입니다.")</pre>
 
   <ul class="checklist">
     <li>흥행 분류기를 만들어 실행하고, 테스트용 영화의 성공 확률과 정확도를 읽었다.</li>
-    <li>같은 앱에 의사결정트리를 더하고, 트리 그림에서 모델이 먼저 던진 질문을 찾았다.</li>
+    <li>같은 앱에 의사결정트리를 더하고, 트리가 먼저 던진 질문이 무엇인지 읽었다.</li>
     <li>속성 중요도와 가중치를 보고 모델이 무엇을 단서로 삼았는지 표에 적었다.</li>
-    <li>대형 배급사를 넣기 전과 넣은 뒤의 정확도를 비교해 표에 적었다.</li>
     <li>최근 개봉작 보고서를 만들고, 두 모델의 판정이 갈린 영화가 있는지 확인했다.</li>
     <li>영화 하나를 골라 트리가 지나온 질문을 처음부터 끝까지 따라 읽었다.</li>
   </ul>
