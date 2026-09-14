@@ -108,13 +108,13 @@
       <rect x="452" y="40" width="244" height="92" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
       <text class="b1" x="464" y="66" font-size="15" font-weight="800" fill="#1c2230"></text>
       <text class="b2" x="464" y="90" font-size="14" fill="#6b7385"></text>
-      <text class="b3" x="464" y="116" font-size="14" font-weight="800" fill="#b07a00"></text>
+      <text class="b3" x="464" y="116" font-size="14" font-weight="800" fill="#d64545"></text>
     </g>
 
 
     <line x1="56" y1="270" x2="696" y2="270" stroke="#e3ddcf" stroke-width="1"/>
     <text class="dhead" x="56" y="290" font-size="14" font-weight="800" fill="#6b7385"></text>
-    <circle cx="62" cy="308" r="5" fill="#b07a00"/>
+    <circle cx="62" cy="308" r="5" fill="#d64545"/>
     <text class="dhi" x="76" y="312" font-size="14" fill="#1c2230"></text>
     <circle cx="62" cy="330" r="5" fill="#b9b3a5"/>
     <text class="dlo" x="76" y="334" font-size="14" fill="#1c2230"></text>
@@ -213,7 +213,7 @@ st.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], (prob &
                                            errors="coerce").dt.strftime("%Y.%m.%d").values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
-                 log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
+                 log_x=True, color_discrete_map={"성공": "#d64545", "기준 미달": "#2b7fd6"})
 fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
 fig.update_traces(marker=dict(size=11, opacity=0.8))
 fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
@@ -276,7 +276,7 @@ scikit-learn</pre></div></details>
     <rect x="8" y="140" width="104" height="28" rx="6" fill="#f6f2e8" stroke="#e3ddcf" stroke-width="1.5"/>
     <text x="60" y="159" text-anchor="middle" fill="#6b7385">절편</text>
   </g>
-  <g font-size="13" fill="#b07a00" font-weight="800" text-anchor="middle">
+  <g font-size="13" fill="#d64545" font-weight="800" text-anchor="middle">
     <text x="150" y="30">×가중치</text><text x="150" y="68">×가중치</text><text x="150" y="106">×가중치</text>
     <text x="150" y="150" fill="#6b7385">그대로</text>
   </g>
@@ -307,7 +307,7 @@ scikit-learn</pre></div></details>
     <path d="M626,94 Q640,94 640,70 H662"/>
     <path d="M626,94 Q640,94 640,118 H662"/>
   </g>
-  <text x="668" y="75" font-size="14" font-weight="800" fill="#b07a00">성공</text>
+  <text x="668" y="75" font-size="14" font-weight="800" fill="#d64545">성공</text>
   <text x="668" y="123" font-size="14" font-weight="800" fill="#2b7fd6">기준 미달</text>
   <text x="8" y="196" font-size="12" fill="#6b7385">곱한다 → 더한다 → 곡선에 넣는다 → 선으로 가른다. 실제 숫자는 앱 화면에서 확인합니다.</text>
 </svg>
@@ -353,7 +353,7 @@ scikit-learn</pre></div></details>
 <svg viewBox="0 0 720 478" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="스크린 수를 가로축, 상영 횟수를 세로축에 놓고 영화를 찍은 그림. 트리의 분기가 세로선과 가로선으로 그어져 평면이 직사각형으로 나뉘고, 각 칸은 그 칸의 판정에 따라 색이 칠해진다. 질문 개수를 1개에서 5개까지 늘리면 칸이 늘어나고, 버튼을 누르면 채점용 영화가 세모로 나타난다">
   <text x="56" y="24" font-size="15" font-weight="800" fill="#1c2230">두 속성만으로 나눈 평면</text>
   <g font-size="12.5" fill="#6b7385">
-    <circle cx="304" cy="20" r="4.4" fill="#b07a00"/><text x="314" y="24">실제 성공</text>
+    <circle cx="304" cy="20" r="4.4" fill="#d64545"/><text x="314" y="24">실제 성공</text>
     <circle cx="392" cy="20" r="3.0" fill="#2b7fd6" fill-opacity="0.42"/><text x="402" y="24">기준 미달</text>
     <circle cx="490" cy="20" r="4.4" fill="#6b7385" fill-opacity="0.5"/><text x="500" y="24">학습용</text>
     <g class="tleg" style="display:none"><polygon points="578,15 572,25 584,25" fill="none" stroke="#6b7385" stroke-width="1.8"/><text x="592" y="24">채점용</text></g>
@@ -374,6 +374,8 @@ scikit-learn</pre></div></details>
   <button class="wbtn" type="button" data-depth="3">3개</button>
   <button class="wbtn" type="button" data-depth="4">4개</button>
   <button class="wbtn" type="button" data-depth="5">5개</button>
+  <button class="wbtn" type="button" data-depth="6">6개</button>
+  <button class="wbtn" type="button" data-depth="7">7개</button>
   <button class="wbtn" type="button" data-test>채점용 영화 보기</button>
 </div>
     </div>
@@ -441,7 +443,7 @@ prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
                                            errors="coerce").dt.strftime("%Y.%m.%d").values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
-                 log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
+                 log_x=True, color_discrete_map={"성공": "#d64545", "기준 미달": "#2b7fd6"})
 fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
 fig.update_traces(marker=dict(size=11, opacity=0.8))
 fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
@@ -569,7 +571,7 @@ with st.expander("트리 그림으로 보기"):
     <div class="widget" data-w="splitpick">
 <svg viewBox="0 0 720 486" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="훈련용 영화를 스크린 수 축에 늘어놓고 자를 지점을 옮기는 그림. 자른 지점마다 좌우 갈래의 성공 편수와 섞임 정도가 바뀌고, 두 갈래를 합치는 계산이 한 줄로 표시되고, 아래 띠에 후보 지점마다 섞임이 줄어드는 정도가 그려진다">
   <text x="56" y="24" font-size="15" font-weight="800" fill="#1c2230">훈련용 영화를 스크린 수 축에 늘어놓았습니다</text>
-  <text class="head" x="664" y="24" text-anchor="end" font-size="14" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+  <text class="head" x="664" y="24" text-anchor="end" font-size="14" font-weight="800" fill="#d64545" style="font-variant-numeric:tabular-nums"></text>
 
   <line class="cutline" x1="200" y1="58" x2="200" y2="190" stroke="#d64545" stroke-width="2"/>
   <rect class="cuthandle" x="195" y="44" width="10" height="14" rx="3" fill="#d64545"/>
@@ -585,7 +587,7 @@ with st.expander("트리 그림으로 보기"):
     <text class="l1" x="68" y="260" font-size="14" font-weight="800" fill="#1c2230"></text>
     <text class="l2" x="68" y="282" font-size="14" fill="#1c2230"></text>
     <rect x="68" y="292" width="272" height="10" rx="5" fill="#2b7fd6" fill-opacity="0.35"/>
-    <rect class="lbar" data-bw="272" x="68" y="292" width="0" height="10" rx="5" fill="#b07a00"/>
+    <rect class="lbar" data-bw="272" x="68" y="292" width="0" height="10" rx="5" fill="#d64545"/>
     <text class="l3" x="68" y="318" font-size="14" font-weight="800" fill="#6b7385" style="font-variant-numeric:tabular-nums"></text>
     <text class="l4" x="68" y="336" font-size="13" fill="#6b7385"></text>
   </g>
@@ -594,7 +596,7 @@ with st.expander("트리 그림으로 보기"):
     <text class="r1" x="380" y="260" font-size="14" font-weight="800" fill="#1c2230"></text>
     <text class="r2" x="380" y="282" font-size="14" fill="#1c2230"></text>
     <rect x="380" y="292" width="272" height="10" rx="5" fill="#2b7fd6" fill-opacity="0.35"/>
-    <rect class="rbar" data-bw="272" x="380" y="292" width="0" height="10" rx="5" fill="#b07a00"/>
+    <rect class="rbar" data-bw="272" x="380" y="292" width="0" height="10" rx="5" fill="#d64545"/>
     <text class="r3" x="380" y="318" font-size="14" font-weight="800" fill="#6b7385" style="font-variant-numeric:tabular-nums"></text>
     <text class="r4" x="380" y="336" font-size="13" fill="#6b7385"></text>
   </g>
@@ -602,7 +604,7 @@ with st.expander("트리 그림으로 보기"):
   <text class="calc" x="56" y="370" font-size="13.5" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
   <text x="56" y="406" font-size="14" font-weight="800" fill="#6b7385">후보 지점마다 섞임이 줄어드는 정도</text>
   <g font-size="13" fill="#6b7385">
-    <circle cx="468" cy="402" r="4.5" fill="#b07a00"/><text x="478" y="406">실제 성공</text>
+    <circle cx="468" cy="402" r="4.5" fill="#d64545"/><text x="478" y="406">실제 성공</text>
     <circle cx="560" cy="402" r="3.4" fill="#2b7fd6" fill-opacity="0.5"/><text x="570" y="406">기준 미달</text>
   </g>
   <line x1="56" y1="468" x2="664" y2="468" stroke="#e3ddcf" stroke-width="1.5"/>
@@ -756,7 +758,7 @@ prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
                                            errors="coerce").dt.strftime("%Y.%m.%d").values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
-                 log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
+                 log_x=True, color_discrete_map={"성공": "#d64545", "기준 미달": "#2b7fd6"})
 fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
 fig.update_traces(marker=dict(size=11, opacity=0.8))
 fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
@@ -867,7 +869,7 @@ st.subheader("로지스틱 회귀가 본 것 — 가중치")
 가중치.columns = ["속성", "가중치"]
 가중치["방향"] = ["성공 확률을 올림" if v &gt; 0 else "성공 확률을 내림" for v in 가중치["가중치"]]
 가중치그림 = px.bar(가중치.sort_values("가중치"), x="가중치", y="속성", orientation="h",
-                color="방향", color_discrete_map={"성공 확률을 올림": "#b07a00", "성공 확률을 내림": "#2b7fd6"})
+                color="방향", color_discrete_map={"성공 확률을 올림": "#d64545", "성공 확률을 내림": "#2b7fd6"})
 가중치그림.add_vline(x=0, line_width=1.5, line_color="#1c2230")
 가중치그림.update_layout(height=300, yaxis_title=None, legend_title_text="")
 st.plotly_chart(가중치그림, width="stretch")
@@ -1007,7 +1009,7 @@ prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
                                            errors="coerce").dt.strftime("%Y.%m.%d").values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
-                 log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
+                 log_x=True, color_discrete_map={"성공": "#d64545", "기준 미달": "#2b7fd6"})
 fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
 fig.update_traces(marker=dict(size=11, opacity=0.8))
 fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
@@ -1118,7 +1120,7 @@ st.subheader("로지스틱 회귀가 본 것 — 가중치")
 가중치.columns = ["속성", "가중치"]
 가중치["방향"] = ["성공 확률을 올림" if v &gt; 0 else "성공 확률을 내림" for v in 가중치["가중치"]]
 가중치그림 = px.bar(가중치.sort_values("가중치"), x="가중치", y="속성", orientation="h",
-                color="방향", color_discrete_map={"성공 확률을 올림": "#b07a00", "성공 확률을 내림": "#2b7fd6"})
+                color="방향", color_discrete_map={"성공 확률을 올림": "#d64545", "성공 확률을 내림": "#2b7fd6"})
 가중치그림.add_vline(x=0, line_width=1.5, line_color="#1c2230")
 가중치그림.update_layout(height=300, yaxis_title=None, legend_title_text="")
 st.plotly_chart(가중치그림, width="stretch")
