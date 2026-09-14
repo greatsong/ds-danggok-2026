@@ -359,8 +359,10 @@ scikit-learn</pre></div></details>
   <text x="369" y="418" font-size="13" font-weight="800" fill="#6b7385" text-anchor="middle">스크린 수(개) · 제곱근 눈금</text>
   <text x="18" y="214" font-size="13" font-weight="800" fill="#6b7385" text-anchor="middle" transform="rotate(-90 18 214)">상영 횟수(회) · 제곱근 눈금</text>
   <g font-size="13" fill="#6b7385">
-    <circle cx="468" cy="440" r="4.6" fill="#b07a00"/><text x="478" y="444">실제 성공</text>
-    <circle cx="560" cy="440" r="3.2" fill="#2b7fd6" fill-opacity="0.5"/><text x="570" y="444">기준 미달</text>
+    <circle cx="386" cy="440" r="4.4" fill="#b07a00"/><text x="396" y="444">실제 성공</text>
+    <circle cx="468" cy="440" r="3.0" fill="#2b7fd6" fill-opacity="0.42"/><text x="478" y="444">기준 미달</text>
+    <circle cx="544" cy="440" r="4.4" fill="#6b7385" fill-opacity="0.5"/><text x="554" y="444">학습에 사용</text>
+    <g class="tleg" style="display:none"><polygon points="632,435 626,445 638,445" fill="none" stroke="#6b7385" stroke-width="1.8"/><text x="644" y="444">채점용</text></g>
   </g>
   <text class="pinfo" x="56" y="444" font-size="13" font-weight="800" fill="#1c2230"></text>
   <text class="pmoved" x="56" y="424" font-size="13" font-weight="700" fill="#6b7385"></text>
@@ -370,9 +372,10 @@ scikit-learn</pre></div></details>
   <button class="wbtn" type="button" data-depth="1">1개</button>
   <button class="wbtn" type="button" data-depth="2">2개</button>
   <button class="wbtn" type="button" data-depth="3">3개</button>
+  <button class="wbtn" type="button" data-test>채점용 영화 보기</button>
 </div>
     </div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 질문을 하나씩 더하면 평면이 어떻게 나뉘는가. 첫 질문은 세로선 하나로 전체를 가릅니다. 두 번째 질문부터는 갈라진 칸 안에서만 선이 그어집니다. 조건 아래에 또 조건이 들어가는 것이 이 모습입니다. 칸의 색은 그 칸에 도착한 영화에게 트리가 내리는 판정이고, 점의 색은 실제 결과입니다. 색이 다른 점이 그 칸에서 틀리는 영화입니다. <b>질문을 더한다고 답이 좋아지지는 않습니다.</b> 버튼을 눌러 가며 정확도가 어떻게 되는지, 새로 그은 선이 판정을 바꾸기는 하는지 확인해 봅니다. 두 축은 큰 값 쪽 간격을 좁힌 제곱근 눈금입니다. 그대로 그리면 점이 왼쪽 아래에 뭉칩니다.</figcaption>
+    <figcaption><b>무엇을 묻는 그림인가:</b> 질문을 하나씩 더하면 평면이 어떻게 나뉘는가. 첫 질문은 세로선 하나로 전체를 가릅니다. 두 번째 질문부터는 갈라진 칸 안에서만 선이 그어집니다. 조건 아래에 또 조건이 들어가는 것이 이 모습입니다. 칸의 색은 그 칸에 도착한 영화에게 트리가 내리는 판정이고, 점의 색은 실제 결과입니다. 동그라미는 학습에 사용한 영화입니다. <b>채점용 영화 보기</b>를 누르면 학습에서 빼 둔 영화가 세모로 나타나고, 그 영화들로 잰 정확도가 함께 표시됩니다. 색이 다른 세모가 그 칸에서 틀리는 영화입니다. <b>질문을 더한다고 정확도가 좋아지지는 않습니다.</b> 버튼을 눌러 가며 확인해 봅니다. 두 축은 큰 값 쪽 간격을 좁힌 제곱근 눈금입니다. 그대로 그리면 점이 왼쪽 아래에 뭉칩니다.</figcaption>
   </figure>
 
   <ol class="steps" start="3">
