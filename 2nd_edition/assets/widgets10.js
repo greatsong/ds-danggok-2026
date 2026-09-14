@@ -777,6 +777,8 @@ function initW_rareacc(root) {
   const NS = 'http://www.w3.org/2000/svg';
   const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
   const btns = Array.from(root.querySelectorAll('.wbtn[data-case]'));
+  // 소수점은 필요한 만큼만. 99.15% · 89.4% · 99.9%
+  const 백분율 = v => (v * 100).toFixed(2).replace(/\.?0+$/, '') + '%';
   const 칸 = q('.rcells'), 이름 = q('.rname'), 비율 = q('.rrate');
   const 정확도 = q('.racc'), 재현율 = q('.rrec'), 한줄 = q('.rnote');
   const 점수칸 = q('.rscore'), 점수버튼 = root.querySelector('.wbtn[data-score]');
@@ -809,11 +811,16 @@ function initW_rareacc(root) {
     btns.forEach(x => x.classList.toggle('on', x === b));
     if (점수칸) 점수칸.style.display = 점수보임 ? '' : 'none';
     if (점수버튼) {
-      점수버튼.textContent = 점수보임 ? '점수 감추기' : '점수 확인';
+      점수버튼.textContent = 점수보임 ? '점수 감추기' : 백분율((1 - 양성 / 전체)) + '의 정확도 모델 보기';
       점수버튼.classList.toggle('on', 점수보임);
     }
     현재 = b;
   }
+
+  // 본문 물음의 숫자도 같은 데이터에서 채운다
+  const 물음 = root.ownerDocument.querySelector('.ten-acc');
+  const R0 = window.RARE10 || {};
+  if (물음 && R0.total) 물음.textContent = 백분율(1 - R0.ten / R0.total);
 
   btns.forEach(b => b.addEventListener('click', () => 그리기(b)));
   if (점수버튼) 점수버튼.addEventListener('click', () => { 점수보임 = !점수보임; 그리기(현재); });
