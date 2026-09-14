@@ -206,11 +206,11 @@ function initW_sigmoidPath(root, D) {
 
 function initW_splitpick(root, D) {
   // D.train = [name 인덱스, 스크린 수, 상영 횟수] 훈련용 영화 전부. 트리는 이 데이터에서 분기를 고른다.
-  // D.tree[0] = 실제로 학습된 트리의 첫 분기. 버튼 "트리가 고른 곳"이 여기로 옮긴다.
+  // D.tree[0] = 실제로 학습된 트리의 첫 분기. 버튼 "트리가 고른 지점"이 여기로 옮긴다.
   // 값은 scripts/lesson09_live_data.py가 어제까지 모인 데이터로 다시 계산한다.
   var LIM = 1000000;
   var X0 = 56, X1 = 664, YT = 64, YB = 178;      // 점 판
-  var GT = 382, GB = 430;                        // 아래 띠 — 후보 자리마다의 섞임 감소
+  var GT = 382, GB = 430;                        // 아래 띠 — 후보 지점마다의 섞임 감소
   var q = function (sel) { return root.querySelector(sel); };
   var f3 = function (v) { return v.toFixed(3); };
   var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
@@ -232,7 +232,7 @@ function initW_splitpick(root, D) {
   function gini(n, k) { if (!n) return 0; var p = k / n; return 2 * p * (1 - p); }
   var G0 = gini(N, POS);
 
-  // 후보 자리 — 이웃한 두 스크린 수의 가운데. 트리가 따져 보는 자리가 이것이다
+  // 후보 지점 — 이웃한 두 스크린 수의 가운데. 트리가 따져 보는 지점이 이것이다
   var cut = [], nL = [], kL = [], gain = [];
   var cn = 0, ck = 0;
   for (i = 0; i < N - 1; i++) {
@@ -246,14 +246,14 @@ function initW_splitpick(root, D) {
   var best = 0, gmax = gain[0];
   for (i = 1; i < C; i++) if (gain[i] > gmax) { gmax = gain[i]; best = i; }
 
-  // 트리가 실제로 고른 첫 분기와 가장 가까운 후보 자리
+  // 트리가 실제로 고른 첫 분기와 가장 가까운 후보 지점
   var rt = D.tree && D.tree[0], treeIdx = best, onScrn = !!rt && rt[0] === 'first_scrn';
   if (onScrn) {
     var d = Infinity;
     for (i = 0; i < C; i++) { var dd = Math.abs(cut[i] - rt[1]); if (dd < d) { d = dd; treeIdx = i; } }
   }
 
-  // 점 찍기 — 세로 자리는 겹침을 풀기 위한 흩뿌림이며 뜻이 없다
+  // 점 찍기 — 세로 위치는 겹침을 풀기 위한 흩뿌림이며 뜻이 없다
   var dots = '';
   for (i = 0; i < N; i++) {
     var fr = Math.sin((pts[i].i + 1) * 12.9898) * 43758.5453;
@@ -271,7 +271,7 @@ function initW_splitpick(root, D) {
   for (var v = 0; v <= TOP; v += 500) tk += '<text x="' + xs(v).toFixed(1) + '" y="208">' + v + '</text>';
   q('.xticks').innerHTML = tk;
 
-  // 아래 띠 — 후보 자리마다 섞임이 얼마나 줄어드는지
+  // 아래 띠 — 후보 지점마다 섞임이 얼마나 줄어드는지
   var band = '';
   for (i = 0; i < C; i++) {
     band += (i ? ' ' : '') + xs(cut[i]).toFixed(1) + ',' + (GB - gain[i] / gmax * (GB - GT)).toFixed(1);
@@ -312,8 +312,8 @@ function initW_splitpick(root, D) {
     panel(lp, lbar, nL[j], kL[j], Math.round(t) + '개 이하', '왼쪽');
     panel(rp, rbar, N - nL[j], POS - kL[j], Math.round(t) + '개 초과', '오른쪽');
     var s = '';
-    if (j === best) s = '가장 많이 줄이는 자리입니다.';
-    if (onScrn && j === treeIdx) s += (s ? ' ' : '') + '트리가 실제로 고른 자리입니다.';
+    if (j === best) s = '섞임을 가장 많이 줄이는 지점입니다.';
+    if (onScrn && j === treeIdx) s += (s ? ' ' : '') + '트리가 실제로 고른 지점입니다.';
     note.textContent = s;
   }
 
