@@ -779,6 +779,8 @@ function initW_rareacc(root) {
   const btns = Array.from(root.querySelectorAll('.wbtn[data-case]'));
   const 칸 = q('.rcells'), 이름 = q('.rname'), 비율 = q('.rrate');
   const 정확도 = q('.racc'), 재현율 = q('.rrec'), 한줄 = q('.rnote');
+  const 점수칸 = q('.rscore'), 점수버튼 = root.querySelector('.wbtn[data-score]');
+  let 점수보임 = false, 현재 = null;   // 물음을 먼저 던질 수 있도록 점수는 눌러야 나온다
   const X0 = 56, X1 = 664, YT = 96, YB = 250, 열 = 40, 행 = 25;   // 점 1000개 = 40 × 25
 
   function 그리기(b) {
@@ -805,9 +807,16 @@ function initW_rareacc(root) {
     재현율.textContent = '0.000';
     한줄.textContent = '한 건도 찾아내지 못했는데 정확도는 ' + ((1 - 양성 / 전체) * 100).toFixed(1) + '%입니다';
     btns.forEach(x => x.classList.toggle('on', x === b));
+    if (점수칸) 점수칸.style.display = 점수보임 ? '' : 'none';
+    if (점수버튼) {
+      점수버튼.textContent = 점수보임 ? '점수 숨기기' : '아무것도 찾지 않는 답의 점수 보기';
+      점수버튼.classList.toggle('on', 점수보임);
+    }
+    현재 = b;
   }
 
   btns.forEach(b => b.addEventListener('click', () => 그리기(b)));
+  if (점수버튼) 점수버튼.addEventListener('click', () => { 점수보임 = !점수보임; 그리기(현재); });
   if (btns.length) 그리기(btns[0]);
 }
   const WIDGET_INIT = {matrix: initW_matrix, threshold: initW_threshold, walk: initW_walk, dial: initW_dial, rareacc: initW_rareacc};
