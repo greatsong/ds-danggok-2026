@@ -88,8 +88,9 @@ function initW_matrix(root, D) {
     var c = D.HAND[cur];
     var total = c.tp + c.fp + c.fn + c.tn;
     caseLab.textContent = c.label;
-    heads[0].textContent = '예측: ' + c.pos;
-    heads[1].textContent = '예측: ' + c.neg;
+    // 뒤 글자 P·N은 예측을 가리킨다. 머리에 붙여 두면 네 칸 약자를 표에서 바로 읽는다
+    heads[0].textContent = '예측: ' + c.pos + ' (P)';
+    heads[1].textContent = '예측: ' + c.neg + ' (N)';
     rows[0].textContent = '실제: ' + c.pos;
     rows[1].textContent = '실제: ' + c.neg;
     rowSum[0].textContent = '합계 ' + 가림(c.tp + c.fn);

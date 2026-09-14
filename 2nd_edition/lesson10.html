@@ -107,13 +107,14 @@
       <p class="calc-error">양성 = 찾으려는 쪽</p>
       <div class="calc-table-scroll">
         <table>
-          <thead><tr><th></th><th>예측 : 성공</th><th>예측 : 기준 미달</th></tr></thead>
+          <thead><tr><th></th><th>예측 : 성공 (Positive)</th><th>예측 : 기준 미달 (Negative)</th></tr></thead>
           <tbody>
-            <tr><th>실제 : 성공</th><td><b>TP</b></td><td><b>FN</b></td></tr>
-            <tr><th>실제 : 기준 미달</th><td><b>FP</b></td><td><b>TN</b></td></tr>
+            <tr><th>실제 : 성공</th><td><b>TP</b><br><span class="src">True Positive</span></td><td><b>FN</b><br><span class="src">False Negative</span></td></tr>
+            <tr><th>실제 : 기준 미달</th><td><b>FP</b><br><span class="src">False Positive</span></td><td><b>TN</b><br><span class="src">True Negative</span></td></tr>
           </tbody>
         </table>
       </div>
+      <p class="calc-note">앞 글자 <b>T·F</b>는 그 예측이 맞았는지 틀렸는지를, 뒤 글자 <b>P·N</b>은 무엇이라고 예측했는지를 나타냅니다.</p>
       <div class="calc-equation"><div><strong>정확도</strong><small>전체 중 맞힌 비율</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP + TN</span><span>TP + FP + FN + TN</span></span></div></div>
       <div class="calc-equation"><div><strong>정밀도</strong><small>예측이 분모</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP</span><span>TP + FP</span></span></div></div>
       <div class="calc-equation"><div><strong>재현율</strong><small>실제가 분모</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP</span><span>TP + FN</span></span></div></div>
