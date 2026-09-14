@@ -693,22 +693,24 @@ function initW_planecut(root, D) {
   const q = s => root.querySelector(s);
   const NS = 'http://www.w3.org/2000/svg';
   const X0 = 74, X1 = 664, YT = 44, YB = 384;
-  const LX = Math.log10(Math.max(P.xmax, 10)), LY = Math.log10(Math.max(P.ymax, 10));
-  const px = v => X0 + Math.log10(Math.max(v, 1)) / LX * (X1 - X0);
-  const py = v => YB - Math.log10(Math.max(v, 1)) / LY * (YB - YT);
+  // 제곱근 눈금 — 선형은 점이 왼쪽 아래에 뭉치고, 로그는 칸이 구석으로 몰려 얇아진다
+  const SX = Math.sqrt(P.xmax), SY = Math.sqrt(P.ymax);
+  const px = v => X0 + Math.sqrt(Math.max(v, 0)) / SX * (X1 - X0);
+  const py = v => YB - Math.sqrt(Math.max(v, 0)) / SY * (YB - YT);
   const 색 = {1: '#b07a00', 0: '#2b7fd6'};
   const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
 
   // 눈금 — 로그 눈금이므로 1, 10, 100 … 자리에만 붙인다
   const xt = q('.xticks'), yt = q('.yticks');
-  for (let v = 1; v <= P.xmax; v *= 10) {
+  const 눈금값 = (최대, 후보) => [0].concat(후보.filter(v => v <= 최대)).concat([최대]);
+  눈금값(P.xmax, [100, 300, 600, 1000, 1500, 2000]).forEach(v => {
     xt.appendChild(el('line', {x1: px(v), y1: YB, x2: px(v), y2: YB + 5, stroke: '#c9c2b4'}));
     xt.appendChild(el('text', {x: px(v), y: YB + 19, 'font-size': 12, fill: '#6b7385', 'text-anchor': 'middle'})).textContent = v.toLocaleString();
-  }
-  for (let v = 1; v <= P.ymax; v *= 10) {
+  });
+  눈금값(P.ymax, [500, 1500, 3000, 5000, 7000]).forEach(v => {
     yt.appendChild(el('line', {x1: X0 - 5, y1: py(v), x2: X0, y2: py(v), stroke: '#c9c2b4'}));
     yt.appendChild(el('text', {x: X0 - 9, y: py(v) + 4, 'font-size': 12, fill: '#6b7385', 'text-anchor': 'end'})).textContent = v.toLocaleString();
-  }
+  });
 
   const cells = q('.cells'), dots = q('.dots'), info = q('.pinfo');
   const btns = Array.from(root.querySelectorAll('.wbtn[data-depth]'));
