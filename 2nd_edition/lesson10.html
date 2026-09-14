@@ -130,14 +130,21 @@
   </div>
   <p><b>양성은 좋은 쪽이라는 뜻이 아닙니다.</b> 찾아내려는 쪽을 양성이라고 부릅니다. 암 검사에서는 암이 있는 쪽이 양성이고, 스팸 필터에서는 스팸이 양성입니다. 오늘 문제에서 찾으려는 것은 흥행에 성공할 영화이므로 성공이 양성입니다.</p>
 
-  <p>약자를 외우기 전에 우리말로 무엇을 뜻하는지 정합니다. '성공'을 양성(Positive)이라 할 때, 예측은 네 가지 중 하나로 결정됩니다. 곧 만날 약자 TP·FP·FN·TN은 True/False(예측이 맞음/틀림)와 Positive/Negative(성공/기준 미달로 예측)의 조합입니다.</p>
+  <p>실제와 예측을 짝지으면 네 가지 경우가 나옵니다. 각각을 <b>TP·FP·FN·TN</b>이라는 영어 약자로 부릅니다. 약자는 글자 두 개가 각각 다른 것을 가리킵니다.</p>
+
+  <ul class="steps">
+    <li><b>앞 글자 T와 F</b>는 True와 False입니다. 그 예측이 <b>맞았는지 틀렸는지</b>를 나타냅니다.</li>
+    <li><b>뒤 글자 P와 N</b>은 Positive와 Negative, 곧 양성과 음성입니다. <b>무엇이라고 예측했는지</b>를 나타냅니다.</li>
+  </ul>
+
+  <p>그래서 FP는 False Positive, 성공(양성)이라고 예측했는데 틀린 경우입니다. FN은 False Negative, 기준 미달(음성)이라고 예측했는데 틀린 경우이며 실제로는 성공한 영화입니다. 뒤 글자는 언제나 <b>예측</b>을 가리킨다는 것만 기억하면 네 칸이 헷갈리지 않습니다.</p>
   <table class="daymap">
     <thead><tr><th>칸</th><th>우리말로</th><th>영화라면</th></tr></thead>
     <tbody>
-      <tr><td><b>TP</b></td><td>양성 예측 · 실제 양성</td><td>성공이라 예측했고 실제로 성공</td></tr>
-      <tr><td><b>FP</b></td><td>양성 예측 · 실제 음성</td><td>성공이라 예측했지만 실제는 기준 미달</td></tr>
-      <tr><td><b>FN</b></td><td>음성 예측 · 실제 양성</td><td>기준 미달로 예측했지만 실제는 성공 (놓친 성공작)</td></tr>
-      <tr><td><b>TN</b></td><td>음성 예측 · 실제 음성</td><td>기준 미달로 예측했고 실제로 기준 미달</td></tr>
+      <tr><td><b>TP</b><br><span class="src">True Positive</span></td><td>양성 예측 · 실제 양성</td><td>성공이라 예측했고 실제로 성공</td></tr>
+      <tr><td><b>FP</b><br><span class="src">False Positive</span></td><td>양성 예측 · 실제 음성</td><td>성공이라 예측했지만 실제는 기준 미달</td></tr>
+      <tr><td><b>FN</b><br><span class="src">False Negative</span></td><td>음성 예측 · 실제 양성</td><td>기준 미달로 예측했지만 실제는 성공 (놓친 성공작)</td></tr>
+      <tr><td><b>TN</b><br><span class="src">True Negative</span></td><td>음성 예측 · 실제 음성</td><td>기준 미달로 예측했고 실제로 기준 미달</td></tr>
     </tbody>
   </table>
   <div class="callout theory">
