@@ -247,9 +247,62 @@ scikit-learn</pre></div></details>
   </div>
 
   <div class="callout theory">
-    <div class="h">🧮 시그모이드와 문턱값 — 확률은 어디에서 나오나</div>
-    <p>스크린 수에 어떤 수를 곱하고, 상영 횟수와 성수기에도 각각 다른 수를 곱해 모두 더합니다. 마지막에 어느 영화에나 같은 수를 하나 더 더합니다. 이렇게 나온 수 하나를 <b>가중합</b>이라고 합니다. 곱하는 수를 <b>가중치</b>라고 하며, 사람이 정한 것이 아니라 훈련용 데이터로 학습한 값입니다. 아래 그림의 표가 바로 그 계산입니다.</p>
-    <p>가중합은 아주 큰 값도 아주 작은 값도 될 수 있어 그대로는 확률이 아닙니다. <b>시그모이드 함수</b>가 어떤 수든 0과 1 사이로 바꿔 줍니다. 가중합이 0이면 확률은 0.5입니다. 확률 0.5를 넘으면 성공으로 봅니다. 이 경계를 <b>문턱값</b>이라고 합니다.</p>
+    <div class="h">🧮 확률은 어디에서 나오나</div>
+    <div style="overflow-x:auto;margin:10px 0 4px">
+    <svg viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:560px;height:auto" role="img" aria-label="입력 세 가지와 절편에 각각 가중치를 곱해 모두 더하면 가중합이 되고, 가중합을 S자 곡선에 넣으면 확률이 되며, 확률을 문턱값 0.5로 가르면 성공과 기준 미달로 나뉘는 흐름도">
+  <defs>
+    <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#6b7385"/>
+    </marker>
+  </defs>
+  <g font-size="14" fill="#1c2230">
+    <rect x="8" y="20" width="104" height="28" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+    <text x="60" y="39" text-anchor="middle">스크린 수</text>
+    <rect x="8" y="58" width="104" height="28" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+    <text x="60" y="77" text-anchor="middle">상영 횟수</text>
+    <rect x="8" y="96" width="104" height="28" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
+    <text x="60" y="115" text-anchor="middle">성수기</text>
+    <rect x="8" y="140" width="104" height="28" rx="6" fill="#f6f2e8" stroke="#e3ddcf" stroke-width="1.5"/>
+    <text x="60" y="159" text-anchor="middle" fill="#6b7385">절편</text>
+  </g>
+  <g font-size="13" fill="#b07a00" font-weight="800" text-anchor="middle">
+    <text x="150" y="30">×가중치</text><text x="150" y="68">×가중치</text><text x="150" y="106">×가중치</text>
+    <text x="150" y="150" fill="#6b7385">그대로</text>
+  </g>
+  <g stroke="#6b7385" stroke-width="1.5" fill="none" marker-end="url(#ar)">
+    <path d="M112,34 H186 Q198,34 198,46 V82"/>
+    <path d="M112,72 H186 Q198,72 198,80 V82"/>
+    <path d="M112,110 H186 Q198,110 198,98 V88"/>
+    <path d="M112,154 H186 Q198,154 198,110 V88"/>
+  </g>
+  <circle cx="198" cy="94" r="15" fill="#fff" stroke="#1c2230" stroke-width="1.5"/>
+  <text x="198" y="100" text-anchor="middle" font-size="17" font-weight="800" fill="#1c2230">+</text>
+  <text x="198" y="132" text-anchor="middle" font-size="13" fill="#6b7385">모두 더하기</text>
+  <line x1="215" y1="94" x2="248" y2="94" stroke="#6b7385" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="252" y="78" width="92" height="32" rx="6" fill="#fff" stroke="#1c2230" stroke-width="1.5"/>
+  <text x="298" y="99" text-anchor="middle" font-size="15" font-weight="800" fill="#1c2230">가중합</text>
+  <line x1="346" y1="94" x2="380" y2="94" stroke="#6b7385" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="384" y="60" width="86" height="68" rx="6" fill="#fff" stroke="#2b7fd6" stroke-width="2"/>
+  <polyline points="394,120 404,119 414,113 424,94 434,75 444,69 460,68" fill="none" stroke="#2b7fd6" stroke-width="2.5"/>
+  <text x="427" y="146" text-anchor="middle" font-size="13" font-weight="800" fill="#2b7fd6">S자 곡선</text>
+  <line x1="472" y1="94" x2="506" y2="94" stroke="#6b7385" stroke-width="1.5" marker-end="url(#ar)"/>
+  <rect x="510" y="78" width="86" height="32" rx="6" fill="#fff" stroke="#1c2230" stroke-width="1.5"/>
+  <text x="553" y="99" text-anchor="middle" font-size="15" font-weight="800" fill="#1c2230">확률</text>
+  <text x="553" y="126" text-anchor="middle" font-size="12" fill="#6b7385">0과 1 사이</text>
+  <line x1="598" y1="94" x2="622" y2="94" stroke="#6b7385" stroke-width="1.5"/>
+  <line x1="626" y1="42" x2="626" y2="150" stroke="#d64545" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="626" y="34" text-anchor="middle" font-size="12" font-weight="800" fill="#d64545">문턱값 0.5</text>
+  <g stroke="#6b7385" stroke-width="1.5" fill="none" marker-end="url(#ar)">
+    <path d="M626,94 Q640,94 640,70 H662"/>
+    <path d="M626,94 Q640,94 640,118 H662"/>
+  </g>
+  <text x="668" y="75" font-size="14" font-weight="800" fill="#b07a00">성공</text>
+  <text x="668" y="123" font-size="14" font-weight="800" fill="#2b7fd6">기준 미달</text>
+  <text x="8" y="196" font-size="12" fill="#6b7385">곱한다 → 더한다 → 곡선에 넣는다 → 선으로 가른다. 실제 숫자는 아래 그림에서 확인합니다.</text>
+</svg>
+    </div>
+    <p>세 가지 입력에 각각 <b>가중치</b>를 곱해 모두 더하고, 어느 영화에나 같은 수 하나를 더합니다. 이렇게 나온 수가 <b>가중합</b>입니다. 가중치는 사람이 정한 것이 아니라 훈련용 데이터로 학습한 값입니다.</p>
+    <p>가중합은 아주 큰 값도 작은 값도 될 수 있어 그대로는 확률이 아닙니다. <b>시그모이드 함수</b>가 어떤 수든 0과 1 사이로 바꿔 줍니다. 그 확률을 가르는 경계가 <b>문턱값</b>이고, 이 실습에서는 0.5입니다.</p>
   </div>
 
   <figure class="interactive" data-fig="zparts">
