@@ -18,3 +18,13 @@
 .calc-board:fullscreen{box-sizing:border-box;width:100%;height:100%;overflow:auto;padding:24px max(24px,calc((100vw - 1120px)/2));font-size:22px}
 .calc-board:fullscreen .calc-equation{grid-template-columns:190px 1fr;padding:22px 0}.calc-board:fullscreen .calc-math{font-size:clamp(24px,3.2vw,40px)}.calc-board:fullscreen .calc-equation strong{font-size:44px}.calc-board:fullscreen .calc-error{font-size:32px}.calc-board:fullscreen .calc-note{font-size:20px}
 @media(max-width:600px){.calc-board{padding:15px 12px}.calc-fold>summary{padding:14px 12px;font-size:.97rem}.calc-equation{grid-template-columns:1fr;padding:18px 0;gap:10px}.calc-equation>div:first-child{display:flex;align-items:baseline;gap:10px}.calc-equation strong{font-size:25px}.calc-equation small{font-size:13px}.calc-math{font-size:17px;gap:5px}.calc-fraction>span{padding:4px 2px}.calc-board table{font-size:19px}.calc-board th,.calc-board td{padding:7px}.calc-toolbar{font-size:.86rem}.calc-fullscreen{font-size:.75rem}.calc-problem>p{font-size:18px}}
+
+/* One projected workspace: problem, controls and progressive solution. */
+.lesson08-workspace{border:1px solid #d9d1be;border-radius:12px}
+.lesson08-workspace .lesson08-controls{position:sticky;top:56px;z-index:5;background:#fff;padding:10px 0;border-bottom:1px solid #d9d1be;display:flex;flex-wrap:wrap;gap:8px}
+.lesson08-workspace .wout{flex-basis:100%;font-weight:700}
+.lesson08-situation h3{margin:16px 0 8px}.lesson08-situation p{margin:8px 0}
+.lesson08-action{padding:12px 14px;background:#fff6e0;border-left:4px solid #ac8433;font-weight:650}
+.lesson08-workspace:fullscreen .lesson08-controls{top:-24px}
+.lesson08-workspace:fullscreen svg{display:block;width:100%;max-width:1080px;margin:auto}
+@media(max-width:600px){.lesson08-workspace{padding:14px 10px}.lesson08-workspace .lesson08-controls{top:50px;flex-direction:row}.lesson08-workspace .lesson08-controls .wbtn{flex:1 1 calc(50% - 8px)}.lesson08-workspace .wbtn{font-size:12px;padding:7px}.lesson08-workspace .calc-toolbar{align-items:flex-start}.lesson08-workspace:fullscreen .lesson08-controls{top:-24px}}
