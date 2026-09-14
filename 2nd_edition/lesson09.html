@@ -149,7 +149,7 @@
 영화별 표에 있는 영화를 모두 사용해 줘.
 total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 분류해 줘.
 기준은 10만·30만·50만·100만·300만 명 중 고를 수 있게 하고 기본값은 100만 명으로 해 줘.
-입력은 first_scrn·first_show·peak 세 가지만 사용해 줘.
+입력은 first_scrn·first_show·peak 세 가지만 사용하고, 열 이름은 스크린 수·상영 횟수·성수기로 바꿔 줘.
 first_scrn·first_show는 개봉일이 아니라 10위권에 처음 관측된 날의 집계야.
 first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
 영화 코드 순으로 정렬해 열 편 중 앞 세 편을 테스트용으로 고정하고,
@@ -158,9 +158,9 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
 테스트용 데이터로 계산한 정확도를 화면에 표시해 줘.
 테스트용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.
 확률이 0.5 이상이면 성공으로 분류하고 실제 레이블도 함께 보여 줘.
-테스트용 영화의 추정 확률을 높은 순으로 막대그래프로 그리고,
-문턱값 0.5 선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘.
-영화 제목이 겹치지 않게 가로축 글자를 기울여 줘.
+테스트용 영화를 산점도로 그려 줘. 가로축은 스크린 수를 로그 눈금으로, 세로축은 추정 확률로.
+문턱값 0.5 가로선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘.
+점에 마우스를 올리면 영화 제목이 보이게 해 줘.
 그래프는 plotly로 그려 줘.
 테스트용 영화의 실제 레이블·예측 확률·스크린 수·개봉일을 표로 보여 줘.
 이 코드의 평가는 수집된 누적 관객 기록의 분류 연습이며, 개봉 전 예측 성능이 아님을 표시해 줘.
@@ -189,7 +189,8 @@ st.caption(f"성공 {df['성공'].sum()}편 / {len(df)}편")
 st.info("수집된 누적 관객 기록의 분류 연습입니다. 개봉 전 예측 성능을 뜻하지 않습니다.")
 
 is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
-X = df[["first_scrn", "first_show", "peak"]]
+X = df[["first_scrn", "first_show", "peak"]].rename(
+    columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
 y = df["성공"]
 st.caption(f"훈련용 {(~is_test).sum()}편 · 테스트용 {is_test.sum()}편 · 전체 {len(df)}편")
 
@@ -204,12 +205,14 @@ st.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], (prob &
                      "스크린 수": df.loc[is_test, "first_scrn"].values,
                      "개봉일": df.loc[is_test, "openDt"].values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
-fig = px.bar(확률표, x="영화", y="추정 확률", color="실제",
-             color_discrete_map={"성공": "#b07a00", "기준 미달": "#b9b3a5"})
+fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
+                 log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
 fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
-fig.update_layout(xaxis_tickangle=-60, height=460, xaxis_title=None)
+fig.update_traces(marker=dict(size=11, opacity=0.8))
+fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
 st.plotly_chart(fig, width="stretch")
-st.caption("막대는 테스트용 영화의 추정 확률입니다. 색은 실제 레이블입니다.")
+st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
+           "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 보입니다.")
 st.dataframe(확률표, width="stretch")
 
 choices = df.loc[is_test].copy()
@@ -362,11 +365,17 @@ scikit-learn</pre></div></details>
       <p class="mini">가지를 뻗는 횟수를 정해 주지 않으면 트리는 훈련용 데이터를 모두 맞힐 때까지 갈라집니다. 훈련용 정확도는 1에 가까워지지만 그림이 커져서 질문의 순서를 읽을 수 없고, 처음 보는 데이터에서는 오히려 더 틀립니다. 교과서 220쪽에서 말하는 <b>과대적합</b>이 이것입니다. 그래서 세 번까지만 뻗도록 정해 줍니다.</p>
       <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>앞 코드에 이어서 의사결정트리로도 만들어 줘.
 가지는 세 번까지만 뻗게 하고, 다시 실행해도 같은 결과가 나오게 난수를 고정해 줘.
-어떤 질문을 어떤 순서로 던지는지 그림으로 보여 줘.
+어떤 질문을 어떤 순서로 던지는지 보여 줘.
+입력 열 이름은 스크린 수·상영 횟수·성수기라는 한글로 바꿔 줘.
+트리는 상자 그림 대신, 질문 한 줄에 예와 아니오로 갈라지는 글로 읽을 수 있게 해 줘.
+"스크린 수가 911개 이하인가?" 다음 줄에 "예 →", 그 아래 "아니오 →"가 들여쓰기로 붙는 형태야.
+각 줄 끝에 그 자리의 훈련용 영화가 몇 편이고 그중 성공이 몇 편인지 괄호로 적어 줘.
+상자 그림도 보고 싶으면 펼쳐 볼 수 있게 접어 둬 줘.
 로지스틱 회귀와 의사결정트리의 정확도를 나란히 보여 줘.
 앞에서 따로 표시한 로지스틱 회귀 정확도 줄은 지우고, 두 모델을 나란히 놓은 자리 하나만 남겨 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 의사결정트리를 학습하고 두 모델의 정확도를 나란히 본다
-from sklearn.tree import DecisionTreeClassifier, export_text, export_graphviz
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 의사결정트리를 학습하고, 트리가 던지는 질문을 한글로 읽는다
+import math
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
 # 트리는 값의 크기에 영향받지 않으므로 표준화하지 않은 X를 그대로 사용한다
 tree = DecisionTreeClassifier(max_depth=3, random_state=0).fit(X[~is_test], y[~is_test])
@@ -376,10 +385,52 @@ c1, c2 = st.columns(2)
 c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], (prob &gt;= 0.5).astype(int)):.3f}")
 c2.metric("의사결정트리 정확도", f"{accuracy_score(y[is_test], tree.predict(X[is_test])):.3f}")
 
-st.subheader("트리는 어떤 질문을 먼저 던지나")
-st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=list(X.columns),
-                                  class_names=["기준 미달", "성공"], filled=True))
-st.code(export_text(tree, feature_names=list(X.columns), max_depth=3))</pre></div></details>
+단위 = {"스크린 수": "개", "상영 횟수": "회"}
+t = tree.tree_
+열이름 = list(X.columns)
+
+
+def 질문(마디):
+    """분기 조건을 한글 질문으로 바꾼다. '예'가 왼쪽 가지다."""
+    속성 = 열이름[t.feature[마디]]
+    경계 = float(t.threshold[마디])
+    if 속성 == "성수기":
+        return "성수기에 개봉하지 않았는가?"
+    return f"{속성}가 {math.floor(경계):,}{단위.get(속성, '')} 이하인가?"
+
+
+def 마디설명(마디):
+    편수 = int(t.n_node_samples[마디])
+    성공 = int(round(t.value[마디][0][1] * 편수))
+    return f"영화 {편수}편 중 성공 {성공}편"
+
+
+def 답(마디):
+    편수 = int(t.n_node_samples[마디])
+    성공 = int(round(t.value[마디][0][1] * 편수))
+    return "성공" if 성공 * 2 &gt; 편수 else "기준 미달"
+
+
+def 트리읽기(마디=0, 들여=""):
+    """트리를 질문과 예·아니오로 읽어 내려간다."""
+    if t.feature[마디] &lt; 0:
+        return [f"판정: {답(마디)}  ({마디설명(마디)})"]
+    줄 = [f"{질문(마디)}  ({마디설명(마디)})"]
+    for 답변, 자식 in (("예", t.children_left[마디]), ("아니오", t.children_right[마디])):
+        아래 = 트리읽기(자식, 들여)
+        줄.append(f"{들여}   {답변} → {아래[0]}")
+        줄.extend(f"{들여}        {x}" for x in 아래[1:])
+    return 줄
+
+
+st.subheader("트리는 어떤 질문을 던지나")
+st.code("\n".join(트리읽기()), language=None)
+st.caption("위에서부터 질문에 답하며 내려가면 마지막 줄의 판정에 닿습니다. "
+           "괄호 안은 그 자리에 있는 훈련용 영화의 편수입니다.")
+
+with st.expander("트리 그림으로 보기"):
+    st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=열이름,
+                                      class_names=["기준 미달", "성공"], filled=True, rounded=True))</pre></div></details>
     </li>
   </ol>
 
@@ -511,21 +562,24 @@ st.code(export_text(tree, feature_names=list(X.columns), max_depth=3))</pre></di
 
   <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>두 모델이 각각 어떤 입력을 보고 판단했는지 확인하고 싶어.
 - 의사결정트리의 feature importance를 큰 순서로 표로 보여 줘. 0인 것은 빼 줘.
+- 의사결정트리의 중요도는 모두 더하면 1이니 파이 차트로도 그려 줘.
 - 로지스틱 회귀의 가중치도 절댓값이 큰 순서로 표로 보여 줘. 부호는 그대로 두고, 절편도 따로 적어 줘.</pre></div>
 
-  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 모델은 무엇을 보고 맞혔나 (앞 코드 끝에 이어 붙일 부분)
-st.subheader("도전 — 모델은 무엇을 보고 맞혔나")
+  <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 도전 — 모델은 무엇을 보고 맞혔나
+st.subheader("모델은 무엇을 보고 맞혔나")
 중요도 = pd.Series(tree.feature_importances_, index=X.columns)
 중요도 = 중요도[중요도 &gt; 0].sort_values(ascending=False).round(3).reset_index()
 중요도.columns = ["속성", "중요도"]
 st.dataframe(중요도, hide_index=True)
-st.caption("중요도는 이 모델이 무엇을 단서로 삼았는지를 보여 줄 뿐, 그것이 원인이라는 뜻은 아닙니다.")
-
-# 로지스틱 회귀는 부호가 있는 가중치로 답한다
+중요도그림 = px.pie(중요도, names="속성", values="중요도", hole=0.35)
+중요도그림.update_traces(textinfo="label+percent", sort=False)
+중요도그림.update_layout(height=300, showlegend=False)
+st.plotly_chart(중요도그림, width="stretch")
+st.caption("모두 더하면 1이 되므로 조각의 크기가 그대로 기여한 비율입니다.")
 가중치 = pd.Series(logi.coef_[0], index=X.columns).round(3)
 가중치 = 가중치.reindex(가중치.abs().sort_values(ascending=False).index).reset_index()
 가중치.columns = ["속성", "가중치"]
-st.dataframe(가중치.head(10), hide_index=True)
+st.dataframe(가중치, hide_index=True)
 st.caption(f"절편 {logi.intercept_[0]:.3f} · 가중치는 표준화한 값에 곱하는 수입니다. "
            "양수면 성공 쪽으로, 음수면 기준 미달 쪽으로 밉니다.")</pre></div></details>
 
@@ -573,7 +627,8 @@ st.subheader("도전 — 배급사를 넣으면 좋아질까")
 합침["대형 배급사"] = 합침["company"].isin(큰곳).astype(int)
 합침["성공"] = (합침["total_audi"] &gt;= 기준).astype(int)
 
-기본 = ["first_scrn", "first_show", "peak"]
+합침 = 합침.rename(columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
+기본 = ["스크린 수", "상영 횟수", "성수기"]
 결과 = []
 for 이름, 열 in [("기본 세 가지", 기본), ("기본 + 대형 배급사", 기본 + ["대형 배급사"])]:
     A, b = 합침[열], 합침["성공"]
@@ -662,7 +717,6 @@ else:
 각 단계마다 그 마디에 훈련용 영화가 몇 편 있고 그중 성공이 몇 편인지도 함께 적어 줘.
 tree.decision_path와 tree.tree_의 feature, threshold, n_node_samples, value를 사용하면 돼.
 feature 값이 음수이면 더 나누지 않는 끝마디야.
-그리고 의사결정트리의 속성 중요도를 가로 막대그래프로 그려 줘. 큰 것부터 여덟 개만, plotly로 그려 줘.
 앞 코드에서 만든 df, X, tree, 보고서, 중요도를 그대로 사용하고,
 새로 필요한 라이브러리가 있으면 import를 빠뜨리지 말아 줘.</pre></div>
   <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다. 트리 그림에 지나간 길을 붉은 테두리로 표시하는 부분까지 들어 있습니다.</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ⑤ 트리는 어떤 질문을 거쳐 이 영화에 답했나 (앞 코드 끝에 이어 붙일 부분)
@@ -672,25 +726,20 @@ st.subheader("이 영화를 트리는 어떻게 판단했나")
 고른영화 = st.selectbox("보고서의 영화 중 하나", list(보고서["영화"]))
 행 = df.index[df["movieNm"] == 고른영화][0]
 경로 = tree.decision_path(X.loc[[행]]).indices
-t = tree.tree_
 
 단계 = []
 for 순서, 마디 in enumerate(경로, start=1):
-    편수 = int(t.n_node_samples[마디])
-    성공수 = int(round(t.value[마디][0][1] * 편수))
     if t.feature[마디] &lt; 0:
         단계.append({"단계": "끝", "트리가 던진 질문": "더 나누지 않는다",
-                     "이 영화의 값": "",
-                     "간 방향": "성공" if 성공수 * 2 &gt; 편수 else "기준 미달",
-                     "이 마디의 훈련용 영화": f"{편수}편 중 성공 {성공수}편"})
+                     "이 영화의 값": "", "답": f"판정: {답(마디)}",
+                     "이 마디의 훈련용 영화": 마디설명(마디)})
     else:
         속성 = X.columns[t.feature[마디]]
         값 = float(X.loc[행, 속성])
-        경계 = float(t.threshold[마디])
-        단계.append({"단계": f"{순서}번째", "트리가 던진 질문": f"{속성} 이(가) {경계:.1f} 이하인가",
-                     "이 영화의 값": f"{값:g}",
-                     "간 방향": "예 → 왼쪽" if 값 &lt;= 경계 else "아니오 → 오른쪽",
-                     "이 마디의 훈련용 영화": f"{편수}편 중 성공 {성공수}편"})
+        단계.append({"단계": f"{순서}번째", "트리가 던진 질문": 질문(마디),
+                     "이 영화의 값": f"{속성} {값:g}",
+                     "답": "예 → 왼쪽" if 값 &lt;= float(t.threshold[마디]) else "아니오 → 오른쪽",
+                     "이 마디의 훈련용 영화": 마디설명(마디)})
 st.dataframe(pd.DataFrame(단계), hide_index=True, width="stretch")
 st.caption(f"{고른영화}이(가) 트리를 내려간 길입니다. 마지막 줄의 답이 표에 적힌 의사결정트리 판정입니다.")
 
@@ -700,15 +749,7 @@ st.caption(f"{고른영화}이(가) 트리를 내려간 길입니다. 마지막 
 for 마디 in 경로:
     그림 = re.sub(rf'(?m)^({마디}) \[label=', r'\1 [penwidth=5, color="#d64545", label=', 그림)
 st.graphviz_chart(그림)
-st.caption("붉은 테두리가 이 영화가 지나간 마디입니다.")
-
-# 트리가 어떤 속성을 많이 보았는지 막대로 본다
-st.subheader("트리가 본 단서")
-중요도그림 = px.bar(중요도.head(8), x="중요도", y="속성", orientation="h")
-중요도그림.update_layout(yaxis={"categoryorder": "total ascending"}, height=320,
-                    xaxis_title="중요도(모두 더하면 1)", yaxis_title=None)
-st.plotly_chart(중요도그림, width="stretch")
-st.caption("막대가 길수록 트리가 그 속성으로 더 많이, 더 크게 나눴다는 뜻입니다. 원인이라는 뜻은 아닙니다.")</pre></div></details>
+st.caption("붉은 테두리가 이 영화가 지나간 마디입니다.")</pre></div></details>
 
   <h2>6. 정리</h2>
 
