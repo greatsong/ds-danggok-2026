@@ -39,6 +39,8 @@ function initW_matrix(root, D) {
   qa('.mx-m').forEach(function (g) { groups[g.getAttribute('data-m')] = g; });
 
   var cur = 'A', metric = 'prec', shown = false;
+  // 값 확인을 누르기 전에는 네 칸도 합계도 분모도 가린다. 손으로 먼저 푸는 것이 먼저다
+  var 가림 = function (v) { return shown ? v : '?'; };
   var denToken = 0, barToken = 0;
 
   var ease = function (t) { return 1 - Math.pow(1 - t, 3); };
@@ -91,13 +93,13 @@ function initW_matrix(root, D) {
     rows[0].textContent = '실제: ' + c.pos;
     rows[1].textContent = '실제: ' + c.neg;
     rowSum[0].textContent = '합계 ' + (c.tp + c.fn);
-    rowSum[1].textContent = '합계 ' + (c.fp + c.tn);
-    colSum[0].textContent = '합계 ' + (c.tp + c.fp);
-    colSum[1].textContent = '합계 ' + (c.fn + c.tn);
-    cells.tp.textContent = c.tp;
-    cells.fn.textContent = c.fn;
-    cells.fp.textContent = c.fp;
-    cells.tn.textContent = c.tn;
+    rowSum[1].textContent = '합계 ' + 가림(c.fp + c.tn);
+    colSum[0].textContent = '합계 ' + 가림(c.tp + c.fp);
+    colSum[1].textContent = '합계 ' + 가림(c.fn + c.tn);
+    cells.tp.textContent = 가림(c.tp);
+    cells.fn.textContent = 가림(c.fn);
+    cells.fp.textContent = 가림(c.fp);
+    cells.tn.textContent = 가림(c.tn);
 
     numTn.setAttribute('opacity', metric === 'acc' ? '1' : '0');
     if (animate) moveDen(DEN[metric]);
@@ -115,7 +117,7 @@ function initW_matrix(root, D) {
       var ok = f.den > 0;
       var v = ok ? f.num / f.den : 0;
       g.setAttribute('opacity', k === metric ? '1' : '0.45');
-      g.querySelector('.mx-sub').textContent = '= ' + (shown ? f.num : '?') + ' ÷ ' + f.den;
+      g.querySelector('.mx-sub').textContent = '= ' + 가림(f.num) + ' ÷ ' + 가림(f.den);
       var val = g.querySelector('.mx-val');
       if (!ok) { val.textContent = '계산 불가'; val.setAttribute('font-size', '14'); val.setAttribute('fill', '#9a8b6a'); }
       else { val.textContent = shown ? v.toFixed(3) : '?'; val.setAttribute('font-size', '20'); val.setAttribute('fill', '#b07a00'); }
