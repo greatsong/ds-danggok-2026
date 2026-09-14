@@ -688,9 +688,10 @@ function initW_handcheck(root, D) {
       m: [{ n: '모델 C', p: [23, 20, 25, 29, 29] }, { n: '모델 D', p: [22, 24, 24, 26, 29] }] }
   ];
   const STEP = ['실젯값과 두 모델의 예측값', '① 오차 · 실젯값 − 예측값, 부호 그대로',
-    '② 절댓값 · 부호 없이 크기만', '③ 제곱 · 큰 오차일수록 훨씬 큰 값', '④ 합 · 실젯값과 오차 열의 합계',
-    '⑤ MAE와 MSE · 두 모델 비교', '⑥ 평균값 기준 · 평균을 구하고 R² 계산식으로 직접 계산',
-    '⑦ 결정계수 R² · 평균값 기준과의 비교'];
+    '② 절댓값 · 부호 없이 크기만', '③ 제곱 · 큰 오차일수록 훨씬 큰 값', '④ 합 · 오차·절댓값·제곱의 합계',
+    '⑤ MAE와 MSE · 두 모델 비교', '⑥-1 실젯값의 합',
+    '⑥-2 실젯값의 평균 · 합 ÷ 개수', '⑥-3 (실젯값 − 평균)²와 그 합',
+    '⑦ 계산 · 선택한 모델의 R²를 직접 계산', '⑦ 정답 · 선택한 모델의 R² 확인'];
   const CX = [100, 240, 380, 520, 660], PT = 44, PB = 174, GL = 70, GR = 700;
   const TX = [32, 160, 237, 310, 385, 460, 548, 653];
   const HD = ['', '실젯값', '예측값', '① 오차', '② 절댓값', '③ 제곱', '실젯값 평균', '(실젯값 − 평균)²'];
@@ -736,10 +737,10 @@ function initW_handcheck(root, D) {
       o += L(GL, yv(t), GR, yv(t), '#e3ddcf', 1);
       o += T(62, yv(t) + 4, t, 11, GRAY, null, 'end');
     });
-    if (step >= 6) {
+    if (step >= 7) {
       o += L(GL, yv(c.mean), GR, yv(c.mean), '#9a9a9a', 2, '7 5');
       o += T(GL + 4, yv(c.mean) - 7, '평균 ' + whole(c.mean) + s.u, 11.5, '#6b7385', 700, 'start');
-      for (let i = 0; i < c.n; i++) o += L(CX[i] - 10, yv(s.y[i]), CX[i] - 10, yv(c.mean), DIM, 2.5);
+      if (step >= 8) for (let i = 0; i < c.n; i++) o += L(CX[i] - 10, yv(s.y[i]), CX[i] - 10, yv(c.mean), DIM, 2.5);
     }
     [1, 0].forEach(k => {
       const on = k === mi, col = k === 0 ? BLUE : GREEN;
@@ -766,9 +767,9 @@ function initW_handcheck(root, D) {
     item(p => L(p, 212, p + 22, 212, BLUE, 3), c.ms[0].n, 36);
     item(p => L(p, 212, p + 22, 212, GREEN, 3), c.ms[1].n, 36);
     if (step >= 1) item(p => L(p + 11, 204, p + 11, 220, RED, 3), '① 오차', 40);
-    if (step >= 6) {
+    if (step >= 7) {
       item(p => L(p, 212, p + 22, 212, '#9a9a9a', 2, '7 5'), '평균', 28);
-      item(p => L(p + 11, 204, p + 11, 220, DIM, 2.5), '실젯값 − 평균', 76);
+      if (step >= 8) item(p => L(p + 11, 204, p + 11, 220, DIM, 2.5), '실젯값 − 평균', 76);
     }
     return o + lg;
   }
@@ -785,18 +786,18 @@ function initW_handcheck(root, D) {
       o += step >= 1 ? T(TX[3], RY[i], sgn(m.e[i]), 13, RED, 700) : T(TX[3], RY[i], '?', 13, HOLD, 700);
       o += step >= 2 ? T(TX[4], RY[i], m.ab[i], 13, INK) : T(TX[4], RY[i], '?', 13, HOLD, 700);
       o += step >= 3 ? T(TX[5], RY[i], m.sq[i], 13, AMB, 700) : T(TX[5], RY[i], '?', 13, HOLD, 700);
-      o += T(TX[6], RY[i], step >= 6 ? whole(c.mean) : '?', 13, step >= 6 ? INK : HOLD, 700);
-      o += step >= 6 ? T(TX[7], RY[i], c.dev[i], 13, GRAY) : T(TX[7], RY[i], '?', 13, HOLD, 700);
+      o += T(TX[6], RY[i], step >= 7 ? whole(c.mean) : '?', 13, step >= 7 ? INK : HOLD, 700);
+      o += step >= 8 ? T(TX[7], RY[i], c.dev[i], 13, GRAY) : T(TX[7], RY[i], '?', 13, HOLD, 700);
     }
-    o += T(TX[0], SY, '④ 합', 11, GRAY, 700, 'start');
-    o += T(TX[1], SY, step >= 4 ? c.total : '?', 14, step >= 4 ? INK : HOLD, 700);
+    o += T(TX[0], SY, '합', 11, GRAY, 700, 'start');
+    o += T(TX[1], SY, step >= 6 ? c.total : '?', 14, step >= 6 ? INK : HOLD, 700);
     o += step >= 4 ? T(TX[3], SY, sgn(m.se), 13, RED, 700) : T(TX[3], SY, '?', 13, HOLD, 700);
     o += step >= 4 ? T(TX[4], SY, m.sab, 13, INK, 700) : T(TX[4], SY, '?', 13, HOLD, 700);
     o += step >= 4 ? T(TX[5], SY, m.sse, 13, AMB, 700) : T(TX[5], SY, '?', 13, HOLD, 700);
-    o += step >= 6 ? T(TX[7], SY, c.sst, 13, INK, 700) : T(TX[7], SY, '?', 13, HOLD, 700);
+    o += step >= 8 ? T(TX[7], SY, c.sst, 13, INK, 700) : T(TX[7], SY, '?', 13, HOLD, 700);
     o += T(TX[0], 424, '⑥ 평균', 12, GRAY, 700, 'start');
-    o += T(TX[1], 424, step >= 6 ? c.total + ' ÷ ' + c.n + ' = ' + whole(c.mean) : '합 ÷ 개수 = ?', 12, step >= 6 ? INK : HOLD, 700);
-    o += step >= 6 ? T(350, 424, '이 평균을 모든 행에 똑같이 적용합니다.', 12, GRAY, null, 'start') : '';
+    o += T(TX[1], 424, step >= 7 ? c.total + ' ÷ ' + c.n + ' = ' + whole(c.mean) : '합 ÷ 개수 = ?', 12, step >= 7 ? INK : HOLD, 700);
+    o += step >= 7 ? T(350, 424, '이 평균을 모든 행에 똑같이 적용합니다.', 12, GRAY, null, 'start') : '';
     o += L(30, 444, 700, 444, '#e3ddcf', 1);
     return o;
   }
@@ -812,7 +813,7 @@ function initW_handcheck(root, D) {
       });
     });
     o += T(370, 470, '⑥ 평균값 기준의 제곱오차 합', 13, GRAY, 700, 'start');
-    o += T(370, 502, step >= 6 ? c.dev.join(' + ') + ' = ' + c.sst : '?', 16, step >= 6 ? INK : HOLD, 700, 'start');
+    o += T(370, 502, step >= 8 ? c.dev.join(' + ') + ' = ' + c.sst : '?', 16, step >= 8 ? INK : HOLD, 700, 'start');
     o += L(30, 539, 700, 539, '#e3ddcf', 1);
     o += T(32, 562, '⑦ 결정계수 R² · ' + m.n, 14, INK, 700, 'start');
     o += T(32, 609, 'R² = 1 ' + MN, 21, INK, 700, 'start');
@@ -820,13 +821,13 @@ function initW_handcheck(root, D) {
     o += L(147, 602, 453, 602, INK, 1.5);
     o += T(300, 624, '평균값 기준의 제곱오차 합', 15, INK, 700);
     o += T(478, 609, '= 1 ' + MN, 21, INK, 700, 'start');
-    o += T(575, 589, step >= 6 ? m.sse : '?', 20, step >= 6 ? INK : HOLD, 700);
+    o += T(575, 589, step >= 9 ? m.sse : '?', 20, step >= 9 ? INK : HOLD, 700);
     o += L(551, 602, 599, 602, INK, 1.5);
-    o += T(575, 624, step >= 6 ? c.sst : '?', 20, step >= 6 ? INK : HOLD, 700);
-    o += T(619, 609, '= ' + (step >= 7 ? trim(m.r2) : '?'), 23, step >= 7 ? AMB : HOLD, 800, 'start');
-    o += T(32, 660, step >= 7 ? '평균값 기준보다 제곱오차 합이 ' + Math.round(m.r2 * 100) + '% 작습니다.' :
-      step >= 6 ? '분자와 분모를 확인하고 직접 계산하세요. 다음 단계에서 정답을 공개합니다.' :
-      '⑥단계에서 위 식에 숫자를 넣습니다. ⑦단계에서 정답을 확인합니다.', 13, GRAY, null, 'start');
+    o += T(575, 624, step >= 9 ? c.sst : '?', 20, step >= 9 ? INK : HOLD, 700);
+    o += T(619, 609, '= ' + (step >= 10 ? trim(m.r2) : '?'), 23, step >= 10 ? AMB : HOLD, 800, 'start');
+    o += T(32, 660, step >= 10 ? '평균값 기준보다 제곱오차 합이 ' + Math.round(m.r2 * 100) + '% 작습니다.' :
+      step >= 9 ? '분자와 분모를 확인하고 직접 계산하세요. 다음 단계에서 정답을 공개합니다.' :
+      '실젯값의 합 → 평균 → 평균과의 차이 제곱을 구한 뒤 R²를 계산합니다.', 13, GRAY, null, 'start');
     return o;
   }
 
@@ -845,7 +846,7 @@ function initW_handcheck(root, D) {
         b.textContent = c.ms[k].n;
         b.classList.toggle('on', k === mi);
       }
-      if (a === 'next') b.disabled = step >= 7;
+      if (a === 'next') b.disabled = step >= STEP.length - 1;
     });
   }
 
@@ -855,7 +856,7 @@ function initW_handcheck(root, D) {
     else if (a === 'p-1') { key = 1; mi = 0; step = 0; }
     else if (a === 'm-0') mi = 0;
     else if (a === 'm-1') mi = 1;
-    else if (a === 'next') { if (step < 7) step++; }
+    else if (a === 'next') { if (step < STEP.length - 1) step++; }
     else if (a === 'reset') { mi = 0; step = 0; }
     render();
   }));
