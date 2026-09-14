@@ -149,7 +149,9 @@
 영화별 표에 있는 영화를 모두 사용해 줘.
 total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 분류해 줘.
 기준은 10만·30만·50만·100만·300만 명 중 고를 수 있게 하고 기본값은 100만 명으로 해 줘.
-입력은 first_scrn·first_show·peak 세 가지만 사용하고, 열 이름은 스크린 수·상영 횟수·성수기로 바꿔 줘.
+선택 상자에는 "100만 명 이상 (1,000,000명)"처럼 만 단위와 쉼표를 함께 보여 줘.
+지금 고른 기준이 무엇인지 화면에 한 줄로 적어 줘.
+입력은 first_scrn·first_show·peak 세 가지만 사용해 줘.
 first_scrn·first_show는 개봉일이 아니라 10위권에 처음 관측된 날의 집계야.
 first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
 영화 코드 순으로 정렬해 열 편 중 앞 세 편을 테스트용으로 고정하고,
@@ -158,11 +160,13 @@ first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
 테스트용 데이터로 계산한 정확도를 화면에 표시해 줘.
 테스트용 영화 하나를 고르면 로지스틱 회귀의 추정 확률과 예측 범주를 보여 줘.
 확률이 0.5 이상이면 성공으로 분류하고 실제 레이블도 함께 보여 줘.
-테스트용 영화를 산점도로 그려 줘. 가로축은 스크린 수를 로그 눈금으로, 세로축은 추정 확률로.
-문턱값 0.5 가로선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘.
-점에 마우스를 올리면 영화 제목이 보이게 해 줘.
+테스트용 영화의 추정 확률을 높은 순으로 막대그래프로 그리고,
+문턱값 0.5 선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘.
+영화 제목이 겹치지 않게 가로축 글자를 기울여 줘.
 그래프는 plotly로 그려 줘.
-테스트용 영화의 실제 레이블·예측 확률·스크린 수·개봉일을 표로 보여 줘.
+테스트용 영화의 실제 레이블·예측 확률·스크린 수·누적 관객·개봉일을 표로 보여 줘.
+큰 숫자에는 쉼표를 넣고 개봉일은 2026.09.02처럼 보여 줘.
+예측 확률은 st.column_config.ProgressColumn으로 막대가 보이게 해 줘.
 이 코드의 평가는 수집된 누적 관객 기록의 분류 연습이며, 개봉 전 예측 성능이 아님을 표시해 줘.
 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 데이터가 날마다 쌓이므로 편수와 정확도는 실행하는 날에 따라 달라집니다. 라이브러리 버전이나 설정을 바꾸어도 결과가 달라질 수 있습니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 수집된 누적 관객 수가 기준을 넘는지 분류한다
@@ -183,9 +187,12 @@ def load_data():
 
 
 df = load_data()
-기준 = st.selectbox("성공 기준 (총 관객)", [100_000, 300_000, 500_000, 1_000_000, 3_000_000], index=3)
+기준 = st.selectbox("성공이라고 부를 기준 (누적 관객)",
+                  [100_000, 300_000, 500_000, 1_000_000, 3_000_000], index=3,
+                  format_func=lambda v: f"{v // 10_000}만 명 이상 ({v:,}명)")
 df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
-st.caption(f"성공 {df['성공'].sum()}편 / {len(df)}편")
+st.caption(f"누적 관객 {기준:,}명 이상을 성공으로 봅니다 · "
+           f"전체 {len(df):,}편 가운데 성공 {df['성공'].sum():,}편")
 st.info("수집된 누적 관객 기록의 분류 연습입니다. 개봉 전 예측 성능을 뜻하지 않습니다.")
 
 is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
@@ -200,10 +207,12 @@ logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~i
 prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
 st.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], (prob &gt;= 0.5).astype(int)):.3f}")
 확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
-                     "추정 확률": prob,
+                     "추정 확률": prob.round(3),
                      "실제": ["성공" if v else "기준 미달" for v in y[is_test]],
                      "스크린 수": df.loc[is_test, "first_scrn"].values,
-                     "개봉일": df.loc[is_test, "openDt"].values})
+                     "누적 관객": df.loc[is_test, "total_audi"].values,
+                     "개봉일": pd.to_datetime(df.loc[is_test, "openDt"], format="%Y%m%d",
+                                           errors="coerce").dt.strftime("%Y.%m.%d").values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
                  log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
@@ -213,7 +222,11 @@ fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금",
 st.plotly_chart(fig, width="stretch")
 st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
            "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 보입니다.")
-st.dataframe(확률표, width="stretch")
+st.dataframe(확률표, width="stretch", hide_index=True, column_config={
+    "추정 확률": st.column_config.ProgressColumn("추정 확률", min_value=0.0, max_value=1.0, format="%.2f"),
+    "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
+    "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명"),
+})
 
 choices = df.loc[is_test].copy()
 selected = st.selectbox("테스트용 영화", list(range(len(choices))),
@@ -367,9 +380,12 @@ def load_data():
 
 
 df = load_data()
-기준 = st.selectbox("성공 기준 (총 관객)", [100_000, 300_000, 500_000, 1_000_000, 3_000_000], index=3)
+기준 = st.selectbox("성공이라고 부를 기준 (누적 관객)",
+                  [100_000, 300_000, 500_000, 1_000_000, 3_000_000], index=3,
+                  format_func=lambda v: f"{v // 10_000}만 명 이상 ({v:,}명)")
 df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
-st.caption(f"성공 {df['성공'].sum()}편 / {len(df)}편")
+st.caption(f"누적 관객 {기준:,}명 이상을 성공으로 봅니다 · "
+           f"전체 {len(df):,}편 가운데 성공 {df['성공'].sum():,}편")
 st.info("수집된 누적 관객 기록의 분류 연습입니다. 개봉 전 예측 성능을 뜻하지 않습니다.")
 
 is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
@@ -384,10 +400,12 @@ logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~i
 prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
 st.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], (prob &gt;= 0.5).astype(int)):.3f}")
 확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
-                     "추정 확률": prob,
+                     "추정 확률": prob.round(3),
                      "실제": ["성공" if v else "기준 미달" for v in y[is_test]],
                      "스크린 수": df.loc[is_test, "first_scrn"].values,
-                     "개봉일": df.loc[is_test, "openDt"].values})
+                     "누적 관객": df.loc[is_test, "total_audi"].values,
+                     "개봉일": pd.to_datetime(df.loc[is_test, "openDt"], format="%Y%m%d",
+                                           errors="coerce").dt.strftime("%Y.%m.%d").values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
                  log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
@@ -397,7 +415,11 @@ fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금",
 st.plotly_chart(fig, width="stretch")
 st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
            "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 보입니다.")
-st.dataframe(확률표, width="stretch")
+st.dataframe(확률표, width="stretch", hide_index=True, column_config={
+    "추정 확률": st.column_config.ProgressColumn("추정 확률", min_value=0.0, max_value=1.0, format="%.2f"),
+    "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
+    "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명"),
+})
 
 choices = df.loc[is_test].copy()
 selected = st.selectbox("테스트용 영화", list(range(len(choices))),
@@ -623,9 +645,12 @@ def load_data():
 
 
 df = load_data()
-기준 = st.selectbox("성공 기준 (총 관객)", [100_000, 300_000, 500_000, 1_000_000, 3_000_000], index=3)
+기준 = st.selectbox("성공이라고 부를 기준 (누적 관객)",
+                  [100_000, 300_000, 500_000, 1_000_000, 3_000_000], index=3,
+                  format_func=lambda v: f"{v // 10_000}만 명 이상 ({v:,}명)")
 df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
-st.caption(f"성공 {df['성공'].sum()}편 / {len(df)}편")
+st.caption(f"누적 관객 {기준:,}명 이상을 성공으로 봅니다 · "
+           f"전체 {len(df):,}편 가운데 성공 {df['성공'].sum():,}편")
 st.info("수집된 누적 관객 기록의 분류 연습입니다. 개봉 전 예측 성능을 뜻하지 않습니다.")
 
 is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
@@ -640,10 +665,12 @@ logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~i
 prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
 st.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], (prob &gt;= 0.5).astype(int)):.3f}")
 확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
-                     "추정 확률": prob,
+                     "추정 확률": prob.round(3),
                      "실제": ["성공" if v else "기준 미달" for v in y[is_test]],
                      "스크린 수": df.loc[is_test, "first_scrn"].values,
-                     "개봉일": df.loc[is_test, "openDt"].values})
+                     "누적 관객": df.loc[is_test, "total_audi"].values,
+                     "개봉일": pd.to_datetime(df.loc[is_test, "openDt"], format="%Y%m%d",
+                                           errors="coerce").dt.strftime("%Y.%m.%d").values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
                  log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
@@ -653,7 +680,11 @@ fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금",
 st.plotly_chart(fig, width="stretch")
 st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
            "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 보입니다.")
-st.dataframe(확률표, width="stretch")
+st.dataframe(확률표, width="stretch", hide_index=True, column_config={
+    "추정 확률": st.column_config.ProgressColumn("추정 확률", min_value=0.0, max_value=1.0, format="%.2f"),
+    "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
+    "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명"),
+})
 
 choices = df.loc[is_test].copy()
 selected = st.selectbox("테스트용 영화", list(range(len(choices))),
@@ -837,9 +868,12 @@ def load_data():
 
 
 df = load_data()
-기준 = st.selectbox("성공 기준 (총 관객)", [100_000, 300_000, 500_000, 1_000_000, 3_000_000], index=3)
+기준 = st.selectbox("성공이라고 부를 기준 (누적 관객)",
+                  [100_000, 300_000, 500_000, 1_000_000, 3_000_000], index=3,
+                  format_func=lambda v: f"{v // 10_000}만 명 이상 ({v:,}명)")
 df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
-st.caption(f"성공 {df['성공'].sum()}편 / {len(df)}편")
+st.caption(f"누적 관객 {기준:,}명 이상을 성공으로 봅니다 · "
+           f"전체 {len(df):,}편 가운데 성공 {df['성공'].sum():,}편")
 st.info("수집된 누적 관객 기록의 분류 연습입니다. 개봉 전 예측 성능을 뜻하지 않습니다.")
 
 is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
@@ -854,10 +888,12 @@ logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~i
 prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
 st.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], (prob &gt;= 0.5).astype(int)):.3f}")
 확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
-                     "추정 확률": prob,
+                     "추정 확률": prob.round(3),
                      "실제": ["성공" if v else "기준 미달" for v in y[is_test]],
                      "스크린 수": df.loc[is_test, "first_scrn"].values,
-                     "개봉일": df.loc[is_test, "openDt"].values})
+                     "누적 관객": df.loc[is_test, "total_audi"].values,
+                     "개봉일": pd.to_datetime(df.loc[is_test, "openDt"], format="%Y%m%d",
+                                           errors="coerce").dt.strftime("%Y.%m.%d").values})
 확률표 = 확률표.sort_values("추정 확률", ascending=False)
 fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
                  log_x=True, color_discrete_map={"성공": "#b07a00", "기준 미달": "#2b7fd6"})
@@ -867,7 +903,11 @@ fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금",
 st.plotly_chart(fig, width="stretch")
 st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
            "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 보입니다.")
-st.dataframe(확률표, width="stretch")
+st.dataframe(확률표, width="stretch", hide_index=True, column_config={
+    "추정 확률": st.column_config.ProgressColumn("추정 확률", min_value=0.0, max_value=1.0, format="%.2f"),
+    "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
+    "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명"),
+})
 
 choices = df.loc[is_test].copy()
 selected = st.selectbox("테스트용 영화", list(range(len(choices))),
@@ -1028,6 +1068,7 @@ else:
     })
     갈림 = int((보고서["로지스틱 회귀"] != 보고서["의사결정트리"]).sum())
     st.caption(f"최근 {일수}일 안에 개봉한 {len(보고서)}편입니다. "
+               f"기준은 누적 관객 {기준 // 10_000}만 명({기준:,}명) 이상입니다. "
                f"두 모델의 판정이 갈린 영화는 {갈림}편입니다. "
                "⏳인 영화는 정답이 아직 나오지 않았습니다. "
                "학습에 사용한 영화를 잘 맞히는 것은 당연하므로 그 줄은 성능의 근거가 되지 않습니다.")
