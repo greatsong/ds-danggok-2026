@@ -768,7 +768,43 @@ function initW_dial(root) {
 
   draw(true);
 }
-  const WIDGET_INIT = {matrix: initW_matrix, threshold: initW_threshold, walk: initW_walk, dial: initW_dial};
+
+// 드문 일을 맞히는 척하기 — 전부 "아니다"라고만 답해도 정확도가 높게 나오는 것을 보여 준다.
+// 사례는 HTML의 data-case 버튼에 적어 둔다(전체 건수·양성 건수·이름). 데이터가 아니라 설명용 값이다.
+function initW_rareacc(root) {
+  const q = s => root.querySelector(s);
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const btns = Array.from(root.querySelectorAll('.wbtn[data-case]'));
+  const 칸 = q('.rcells'), 이름 = q('.rname'), 비율 = q('.rrate');
+  const 정확도 = q('.racc'), 재현율 = q('.rrec'), 한줄 = q('.rnote');
+  const X0 = 56, X1 = 664, YT = 96, YB = 250, 열 = 40, 행 = 25;   // 점 1000개 = 40 × 25
+
+  function 그리기(b) {
+    const 전체 = +b.dataset.total, 양성 = +b.dataset.pos, 단위 = b.dataset.unit;
+    const 점양성 = Math.max(1, Math.round(양성 / 전체 * 열 * 행));   // 1000개 중 몇 개를 붉게 칠할지
+    칸.innerHTML = '';
+    const dx = (X1 - X0) / 열, dy = (YB - YT) / 행;
+    for (let i = 0; i < 열 * 행; i++) {
+      const r = Math.floor(i / 열), c = i % 열;
+      const 양 = i < 점양성;
+      칸.appendChild(el('rect', {x: (X0 + c * dx + 1).toFixed(1), y: (YT + r * dy + 1).toFixed(1),
+        width: (dx - 2).toFixed(1), height: (dy - 2).toFixed(1), rx: 2,
+        fill: 양 ? '#d64545' : '#2b7fd6', 'fill-opacity': 양 ? 0.95 : 0.16}));
+    }
+    이름.textContent = b.dataset.name;
+    비율.textContent = 전체.toLocaleString() + 단위 + ' 가운데 ' + 양성.toLocaleString() + 단위
+      + ' (' + (양성 / 전체 * 100).toFixed(양성 / 전체 < 0.01 ? 2 : 1) + '%)';
+    정확도.textContent = (1 - 양성 / 전체).toFixed(3);
+    재현율.textContent = '0.000';
+    한줄.textContent = '한 건도 찾아내지 못했는데 정확도는 ' + ((1 - 양성 / 전체) * 100).toFixed(1) + '%입니다';
+    btns.forEach(x => x.classList.toggle('on', x === b));
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => 그리기(b)));
+  if (btns.length) 그리기(btns[0]);
+}
+  const WIDGET_INIT = {matrix: initW_matrix, threshold: initW_threshold, walk: initW_walk, dial: initW_dial, rareacc: initW_rareacc};
   function initWidgets(scope) { (scope || document).querySelectorAll('.widget[data-w]').forEach(el => { if (el.dataset.ready) return; const f = WIDGET_INIT[el.dataset.w]; if (f) { f(el, window.LESSON_DATA); el.dataset.ready = '1'; } }); }
   window.initWidgets = initWidgets;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => initWidgets()); else initWidgets();
