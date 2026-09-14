@@ -715,7 +715,7 @@ function initW_planecut(root, D) {
     yt.appendChild(el('text', {x: X0 - 9, y: py(v) + 4, 'font-size': 12, fill: '#6b7385', 'text-anchor': 'end'})).textContent = v.toLocaleString();
   });
 
-  const cells = q('.cells'), dots = q('.dots'), info = q('.pinfo'), 바뀜 = q('.pmoved');
+  const cells = q('.cells'), dots = q('.dots'), info = q('.pinfo'), 점수 = q('.pscore');
   const btns = Array.from(root.querySelectorAll('.wbtn[data-depth]'));
   const tbtn = root.querySelector('.wbtn[data-test]'), tleg = root.querySelector('.tleg');
   let 채점보임 = false, 현재 = 1;   // 먼저 학습만 본다. 버튼을 눌러야 채점용 영화가 나타난다
@@ -727,8 +727,9 @@ function initW_planecut(root, D) {
       const x = px(c[0]), w = px(c[1]) - x, y = py(c[3]), h = py(c[2]) - y;
       cells.appendChild(el('rect', {x: x, y: y, width: Math.max(w, 0), height: Math.max(h, 0),
         fill: 색[c[4]], 'fill-opacity': 0.13, stroke: '#1c2230', 'stroke-width': 2}));
-      const 글 = w > 64 && h > 30 ? c[5] + '편 중 성공 ' + c[6] + '편'
-               : (w > 34 && h > 16 ? c[5] + '편' : '');   // 아주 얇은 칸은 비워 둔다
+      // 글자가 칸보다 넓으면 옆 칸을 침범한다. 폭에 맞는 것만 넣는다
+      const 글 = (w > 120 && h > 30) ? c[5] + '편 중 성공 ' + c[6] + '편'
+               : (w > 42 && h > 18) ? c[5] + '편' : '';
       if (글) {
         const t = el('text', {x: x + w / 2, y: y + h / 2 + 4, 'font-size': 12, 'font-weight': 700,
           fill: '#1c2230', 'text-anchor': 'middle'});
@@ -744,18 +745,14 @@ function initW_planecut(root, D) {
       (P.tpts || []).forEach(p => dots.appendChild(세모(px(p[0]), py(p[1]), p[2] ? 6 : 4.4, 색[p[2]])));
     }
     const acc = (P.acc || {})[깊이], tracc = (P.tracc || {})[깊이], moved = (P.moved || {})[깊이];
-    // 먼저 학습용 점수만 보여 주고, 버튼을 눌러야 채점용 점수가 드러난다
-    info.textContent = '질문 ' + 깊이 + '개까지 · 칸 ' + 칸.length + '개'
-      + (깊이 === 3 ? ' (교재의 앱이 정해 둔 값)' : '')
-      + (tracc == null ? '' : ' · 학습용 ' + P.pts.length + '편으로 잰 정확도 ' + tracc.toFixed(3))
-      + (채점보임 && acc != null ? ' · 채점용 ' + (P.tpts || []).length + '편으로 잰 정확도 ' + acc.toFixed(3) : '');
-    info.setAttribute('fill', 채점보임 ? '#1c2230' : '#6b7385');
     const 작은칸 = Math.min.apply(null, 칸.map(z => z[5]));
-    바뀜.textContent = (moved == null ? '' :
-      (moved === 0 ? '선이 하나 늘었지만 판정이 바뀐 영화는 없습니다'
-                   : '앞 단계와 비교하면 판정이 ' + moved + '편 바뀌었습니다'))
-      + (moved == null ? '' : ' · ') + '가장 작은 칸에 든 영화는 ' + 작은칸 + '편입니다';
-    바뀜.setAttribute('fill', (moved === 0 || 작은칸 < 5) ? '#d64545' : '#6b7385');
+    info.textContent = '질문 ' + 깊이 + '개까지 · 칸 ' + 칸.length + '개 · 가장 작은 칸 ' + 작은칸 + '편'
+      + (moved == null ? '' : moved === 0 ? ' · 판정 바뀐 영화 없음' : ' · 판정 ' + moved + '편 바뀜');
+    info.setAttribute('fill', 작은칸 < 5 ? '#d64545' : '#1c2230');
+    // 점수는 학습용을 먼저 보여 주고, 버튼을 눌러야 채점용이 드러난다
+    점수.textContent = (tracc == null ? '' : '학습용 ' + P.pts.length + '편으로 잰 정확도 ' + tracc.toFixed(3))
+      + (채점보임 && acc != null ? '  ·  채점용 ' + (P.tpts || []).length + '편으로 잰 정확도 ' + acc.toFixed(3) : '');
+    점수.setAttribute('fill', 채점보임 ? '#1c2230' : '#6b7385');
     if (tleg) tleg.style.display = 채점보임 ? '' : 'none';
     if (tbtn) {
       tbtn.textContent = 채점보임 ? '채점용 영화 숨기기' : '채점용 영화 보기';
