@@ -367,6 +367,8 @@ function initW_zparts(root, D) {
   var sumv = q('.sumv'), sumbar = q('.sumbar');
   var dot = q('.dot'), gz = q('.gz'), gp = q('.gp'), zmk = q('.zmk');
   var res = q('.res'), res2 = q('.res2');
+  var hitCurve = q('.hitcurve'), hitBest = q('.hitbest'), hitDot = q('.hitdot');
+  var hitNow = q('.hitnow'), hitNote = q('.hitnote');
   slider.max = String(M - 1);
 
   function bar(el, val) {
@@ -416,8 +418,51 @@ function initW_zparts(root, D) {
       (act ? '성공' : '기준 미달') + '</tspan>' + (pred === act ? '' : ' · 틀렸습니다');
   }
 
+  // ── 맞힘 띠 — 스크린 수의 가중치를 슬라이더 범위 전체로 훑어 맞힌 편수를 센다
+  // 시그모이드는 단조증가이므로 확률 0.5 이상은 가중합 0 이상과 같다. 지수 계산을 생략한다
+  var HX0 = 56, HX1 = 688, HT = 420, HB = 480;
+  var WA = wScrn0 - 3, WB = wScrn0 + 3, STEPS = 120;
+  function hitsAt(wS) {
+    var c = 0, j, r;
+    for (j = 0; j < M; j++) {
+      r = P[j];
+      var z = wS * r[4] + C.show * r[5] + C.peak * r[6] + C.b;
+      if ((z >= 0) === (D.audi[r[0]] >= LIM)) c++;
+    }
+    return c;
+  }
+  var hits = [], hmax = 0, hmin = M, k;
+  for (k = 0; k <= STEPS; k++) {
+    var h = hitsAt(WA + (WB - WA) * k / STEPS);
+    hits.push(h);
+    if (h > hmax) hmax = h;
+    if (h < hmin) hmin = h;
+  }
+  var span = Math.max(1, hmax - hmin);
+  var hx = function (wS) { return HX0 + (wS - WA) / (WB - WA) * (HX1 - HX0); };
+  var hy = function (h) { return HB - (h - hmin) / span * (HB - HT); };
+  var pts = [];
+  for (k = 0; k <= STEPS; k++) pts.push(hx(WA + (WB - WA) * k / STEPS).toFixed(1) + ',' + hy(hits[k]).toFixed(1));
+  hitCurve.setAttribute('points', pts.join(' '));
+  // 가장 많이 맞히는 가중치는 한 점이 아니라 구간이다. 그 구간을 선으로 표시한다
+  var lo = -1, hi = -1;
+  for (k = 0; k <= STEPS; k++) if (hits[k] === hmax) { if (lo < 0) lo = k; hi = k; }
+  var kw = function (i) { return WA + (WB - WA) * i / STEPS; };
+  hitBest.setAttribute('x1', hx(kw(lo)).toFixed(1));
+  hitBest.setAttribute('x2', hx(kw(hi)).toFixed(1));
+  hitBest.setAttribute('y1', hy(hmax).toFixed(1));
+  hitBest.setAttribute('y2', hy(hmax).toFixed(1));
+
+  function drawHit() {
+    var wS = +wslider.value, h = hitsAt(wS);
+    hitDot.setAttribute('cx', hx(wS).toFixed(1));
+    hitDot.setAttribute('cy', hy(h).toFixed(1));
+    hitNow.textContent = M + '편 중 ' + h + '편';
+    hitNote.textContent = (h === hmax ? '가장 많이 맞히는 자리입니다' : '');
+  }
+
   slider.addEventListener('input', draw);
-  wslider.addEventListener('input', draw);
+  wslider.addEventListener('input', function () { draw(); drawHit(); });
   root.querySelectorAll('.wbtn[data-k]').forEach(function (b) {
     b.addEventListener('click', function () {
       var k = b.dataset.k;
@@ -425,7 +470,7 @@ function initW_zparts(root, D) {
       else if (k === 'top') { slider.value = '0'; }
       else if (k === 'low') { slider.value = String(M - 1); }
       else if (k === 'miss' && missIdx >= 0) { slider.value = String(missIdx); }
-      draw();
+      draw(); drawHit();
     });
   });
   // 슬라이더 눈금을 학습한 가중치에 맞춰 둔다. 그래야 되돌렸을 때 정확히 그 값이 된다
@@ -434,7 +479,7 @@ function initW_zparts(root, D) {
   wslider.step = '0.05';
   wslider.value = String(wScrn0);
   slider.value = String(Math.floor(M / 2));
-  draw();
+  draw(); drawHit();
 }
 
 function initW_twoDials(root, D) {
