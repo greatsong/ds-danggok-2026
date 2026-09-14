@@ -111,20 +111,6 @@
       <text class="b3" x="464" y="116" font-size="14" font-weight="800" fill="#b07a00"></text>
     </g>
 
-    <g class="cpanel">
-      <rect x="452" y="144" width="244" height="112" rx="6" fill="#fff" stroke="#2b7fd6" stroke-width="2"/>
-      <text x="464" y="168" font-size="14" font-weight="800" fill="#6b7385">테스트용 데이터의 정확도</text>
-      <text x="464" y="196" font-size="14" fill="#1c2230">로지스틱 회귀</text>
-      <text class="clog" x="684" y="196" text-anchor="end" font-size="17" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
-      <text x="464" y="222" font-size="14" fill="#1c2230">의사결정트리</text>
-      <text class="ctree" x="684" y="222" text-anchor="end" font-size="17" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
-      <text x="464" y="246" font-size="14" fill="#6b7385">훈련용 데이터로 학습 · 문턱값 0.5</text>
-    </g>
-    <g class="cover">
-      <rect x="452" y="144" width="244" height="112" rx="6" fill="#fff" opacity="0.92"/>
-      <text class="cv1" x="574" y="188" text-anchor="middle" font-size="14" font-weight="800" fill="#d64545"></text>
-      <text class="cv2" x="574" y="212" text-anchor="middle" font-size="14" fill="#6b7385"></text>
-    </g>
 
     <line x1="56" y1="270" x2="696" y2="270" stroke="#e3ddcf" stroke-width="1"/>
     <text class="dhead" x="56" y="290" font-size="14" font-weight="800" fill="#6b7385"></text>
@@ -134,17 +120,10 @@
     <text class="dlo" x="76" y="334" font-size="14" fill="#1c2230"></text>
   </svg>
   <div class="wctl">
-    <label>가정할 기준 <input type="range" class="thr" min="0" max="9" step="1" value="5"> <span class="wv">100만 명</span></label>
-    <button class="wbtn" type="button" data-r="언론이 쓰는 흥행 기준">언론이 쓰는 흥행 기준</button>
-    <button class="wbtn" type="button" data-r="분석 대상의 10% 안팎">분석 대상의 10% 안팎</button>
-    <button class="wbtn" type="button" data-r="우리 반의 체감 대흥행">우리 반의 체감 대흥행</button>
-    <button class="wbtn" type="button" data-r="성공 레이블 수 확보">성공 레이블 수 확보</button>
-    <input type="text" class="wtxt" maxlength="40" placeholder="직접 입력 · 8자 이상">
-    <button class="wbtn wgo" type="button" disabled>가정한 까닭 제출</button>
-    <span class="wout"></span>
+    <label>기준선 옮기기 <input type="range" class="thr" min="0" max="9" step="1" value="5"> <span class="wv">100만 명</span></label>
   </div>
 </div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 이 레이블 기준을 왜 여기에 두었는가. 이 수업의 공통 기준은 100만 명입니다. 다른 기준을 가정해 보려면 <b>그 까닭을 먼저 적어야</b> 정확도가 열립니다. 숫자를 보고 기준을 고르는 것이 아니라, 기준을 정한 뒤 결과를 확인하는 순서를 연습하는 그림입니다. 분포는 수집한 데이터를 그대로 집계해 그립니다. 정확도는 같은 데이터로 갱신할 때 미리 계산해 둔 값이라 내 앱 화면과 다를 수 있습니다.</figcaption>
+    <figcaption><b>무엇을 묻는 그림인가:</b> 성공이라고 부를 영화는 몇 편인가. 막대는 관객 수 구간별 편수이고 가로축은 로그 눈금입니다. 붉은 선을 옮기면 그 위에 남는 편수가 바뀝니다. 이 수업의 기준은 100만 명이며, 선을 옮겨 보는 것은 분포를 살펴보기 위한 것입니다. 수집한 데이터를 그대로 집계해 그립니다.</figcaption>
   </figure>
   </div></details>
 

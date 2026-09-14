@@ -624,11 +624,8 @@ function initW_labelline(root, D) {
   function q(s) { return root.querySelector(s); }
   var bars = q('.bars'), thrLine = q('.thrline'), thrHandle = q('.thrhandle');
   var bPanel = q('.bpanel'), b1 = q('.b1'), b2 = q('.b2'), b3 = q('.b3');
-  var cLog = q('.clog'), cTree = q('.ctree');
-  var cover = q('.cover'), cv1 = q('.cv1'), cv2 = q('.cv2');
   var dHead = q('.dhead'), dHi = q('.dhi'), dLo = q('.dlo');
-  var slider = q('.thr'), wv = q('.wv'), wtxt = q('.wtxt'), wout = q('.wout'), go = q('.wgo');
-  var chips = Array.prototype.slice.call(root.querySelectorAll('.wbtn[data-r]'));
+  var slider = q('.thr'), wv = q('.wv');
 
   // ── 문자열 도구
   function comma(v) { return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
@@ -673,9 +670,6 @@ function initW_labelline(root, D) {
     b3.textContent = '테스트용 ' + NT + '편 중 성공 레이블 ' + r.k + '편' + (r.k <= 3 ? ' · 표본 극소' : '');
     b3.setAttribute('fill', r.k <= 3 ? '#d64545' : '#b07a00');
 
-    cLog.textContent = STOPS[idx][1].toFixed(3);
-    cTree.textContent = STOPS[idx][2].toFixed(3);
-
     var gap = r.hi - r.lo;
     dHead.textContent = '기준선 양옆 두 편 · 관객 수 차이 ' + comma(gap) + '명';
     dHead.setAttribute('fill', gap < 10000 ? '#d64545' : '#6b7385');
@@ -686,7 +680,8 @@ function initW_labelline(root, D) {
   }
 
   // ── 애니메이션(rAF, 재실행 안전)
-  var bSeq = 0, cSeq = 0;
+  var bSeq = 0;
+
   function fadeB() {
     var id = ++bSeq, t0 = 0;
     function step(ts) {
@@ -699,72 +694,15 @@ function initW_labelline(root, D) {
     bPanel.setAttribute('opacity', '0.35');
     requestAnimationFrame(step);
   }
-  function revealC() {
-    var id = ++cSeq, t0 = 0;
-    function step(ts) {
-      if (id !== cSeq) return;
-      if (!t0) t0 = ts;
-      var p = Math.min(1, (ts - t0) / 220);
-      cover.setAttribute('opacity', (1 - p).toFixed(3));
-      if (p < 1) requestAnimationFrame(step);
-      else cover.setAttribute('visibility', 'hidden');
-    }
-    cover.setAttribute('visibility', 'visible');
-    requestAnimationFrame(step);
-  }
-  function sealC(l1, l2) {
-    cSeq++;
-    cv1.textContent = l1;
-    cv2.textContent = l2;
-    cover.setAttribute('opacity', '1');
-    cover.setAttribute('visibility', 'visible');
-  }
 
-  // ── 상태 기계: 0 미제출 / 1 공개 / 2 재학습 대기
-  var state = 0, saved = '';
-  function reason() {
-    var v = wtxt.value.trim(), j;
-    if (v.length >= 8) return v;
-    for (j = 0; j < chips.length; j++) if (chips[j].classList.contains('on')) return chips[j].getAttribute('data-r');
-    return '';
-  }
-  function refreshBtn() {
-    go.disabled = state === 1 ? true : (state === 0 ? !reason() : false);
-  }
 
-  slider.addEventListener('input', function () {
-    draw(Number(slider.value));
-    if (state === 1) { state = 2; sealC('레이블 변경 · 재학습 필요', "'다시 학습' 버튼"); }
-    refreshBtn();
-  });
+  slider.addEventListener('input', function () { draw(Number(slider.value)); });
   slider.addEventListener('change', function () { fadeB(); });
 
-  chips.forEach(function (c) {
-    c.addEventListener('click', function () {
-      var on = c.classList.contains('on');
-      chips.forEach(function (o) { o.classList.remove('on'); });
-      if (!on) c.classList.add('on');
-      refreshBtn();
-    });
-  });
-  wtxt.addEventListener('input', refreshBtn);
 
-  go.addEventListener('click', function () {
-    if (go.disabled) return;
-    var r = reason();
-    if (r) saved = r;
-    state = 1;
-    draw(Number(slider.value));
-    revealC();
-    go.textContent = '다시 학습';
-    wout.textContent = '가정한 기준 ' + LBL[Number(slider.value)] + (saved ? ' · ' + saved : '');
-    refreshBtn();
-  });
 
-  // ── 초기 상태(기준 100만 명, 성능 봉인)
-  sealC('까닭을 적어야 공개', '사유 선택 또는 8자 이상 입력');
+  // ── 초기 상태(기준 100만 명)
   draw(Number(slider.value));
-  refreshBtn();
 }
 
 function initW_labelcurve(root, D) {
