@@ -290,7 +290,7 @@ function initW_splitpick(root, D) {
     var miss = n - k, ans = k * 2 > n ? '성공' : '기준 미달', wrong = ans === '성공' ? miss : k;
     box[0].textContent = side + ' · 스크린 수 ' + label;
     box[1].textContent = n + '편 · 성공 ' + k + '편 · 기준 미달 ' + miss + '편';
-    box[2].textContent = '섞임 ' + f3(gini(n, k));
+    box[2].textContent = '이 갈래의 섞임 ' + f3(gini(n, k));
     box[3].textContent = '이 갈래의 답 ' + ans + ' · 틀리는 영화 ' + wrong + '편';
     var w = n ? (k / n) * bar.dataset.bw : 0;
     bar.setAttribute('width', w.toFixed(1));
@@ -308,7 +308,7 @@ function initW_splitpick(root, D) {
     mark.setAttribute('cx', x.toFixed(1));
     mark.setAttribute('cy', (GB - gain[j] / gmax * (GB - GT)).toFixed(1));
     wv.textContent = '스크린 수 ' + Math.round(t) + '개';
-    head.textContent = '섞임 ' + f3(G0) + ' → ' + f3(G0 - gain[j]) + ' · ' + f3(gain[j]) + ' 줄였습니다';
+    head.textContent = '합친 섞임 ' + f3(G0) + ' → ' + f3(G0 - gain[j]) + ' · ' + f3(gain[j]) + ' 줄였습니다';
     panel(lp, lbar, nL[j], kL[j], Math.round(t) + '개 이하', '왼쪽');
     panel(rp, rbar, N - nL[j], POS - kL[j], Math.round(t) + '개 초과', '오른쪽');
     var s = '';
