@@ -688,14 +688,14 @@ function initW_handcheck(root, D) {
       m: [{ n: '모델 C', p: [23, 20, 25, 29, 29] }, { n: '모델 D', p: [22, 24, 24, 26, 29] }] }
   ];
   const STEP = ['실젯값과 두 모델의 예측값', '① 오차 · 실젯값 − 예측값, 부호 그대로',
-    '② 절댓값 · 부호 없이 크기만', '③ 제곱 · 큰 오차일수록 훨씬 큰 값', '④ 합 · 세 열의 합계',
-    '⑤ MAE와 MSE · 두 모델 비교', '⑥ 평균값 기준 · 실젯값의 평균과 제곱오차 합',
+    '② 절댓값 · 부호 없이 크기만', '③ 제곱 · 큰 오차일수록 훨씬 큰 값', '④ 합 · 실젯값과 오차 열의 합계',
+    '⑤ MAE와 MSE · 두 모델 비교', '⑥ 평균값 기준 · 평균을 구하고 R² 계산식으로 직접 계산',
     '⑦ 결정계수 R² · 평균값 기준과의 비교'];
   const CX = [100, 240, 380, 520, 660], PT = 44, PB = 174, GL = 70, GR = 700;
-  const TX = [32, 168, 222, 276, 334, 388, 448];
-  const HD = ['', '실젯값', '예측값', '① 오차', '② 절댓값', '③ 제곱', '(실젯값 − 평균)²'];
+  const TX = [32, 160, 237, 310, 385, 460, 548, 653];
+  const HD = ['', '실젯값', '예측값', '① 오차', '② 절댓값', '③ 제곱', '실젯값 평균', '(실젯값 − 평균)²'];
   const RY = [268, 292, 316, 340, 364], SY = 392;
-  const MC = [620, 688];
+  const MC = [220, 300];
 
   let key = 0, mi = 0, step = 0;
   const q = s => root.querySelector(s);
@@ -724,7 +724,7 @@ function initW_handcheck(root, D) {
       return { n: m.n, p: m.p, e: e, ab: ab, sq: sq, se: sum(e), sab: sum(ab), sse: sum(sq),
                mae: sum(ab) / n, mse: sum(sq) / n, r2: 1 - sum(sq) / sst };
     });
-    return { s: s, n: n, mean: mean, dev: dev, sst: sst, ms: ms };
+    return { s: s, n: n, total: sum(s.y), mean: mean, dev: dev, sst: sst, ms: ms };
   }
 
   function chart(c) {
@@ -776,8 +776,8 @@ function initW_handcheck(root, D) {
   function table(c) {
     const s = c.s, m = c.ms[mi];
     let o = T(TX[0], 240, s.rh, 11, GRAY, 700, 'start');
-    for (let i = 1; i < HD.length; i++) o += T(TX[i], 240, HD[i], i === 6 ? 9 : 11, GRAY, 700);
-    o += L(30, 248, 488, 248, '#b9b3a5', 1.2) + L(30, 376, 488, 376, '#e3ddcf', 1);
+    for (let i = 1; i < HD.length; i++) o += T(TX[i], 240, HD[i], i === 7 ? 11 : 12, GRAY, 700);
+    o += L(30, 248, 700, 248, '#b9b3a5', 1.2) + L(30, 376, 700, 376, '#e3ddcf', 1);
     for (let i = 0; i < c.n; i++) {
       o += T(TX[0], RY[i], s.lab[i], 11, GRAY, null, 'start');
       o += T(TX[1], RY[i], s.y[i], 13, INK, 700);
@@ -785,40 +785,48 @@ function initW_handcheck(root, D) {
       o += step >= 1 ? T(TX[3], RY[i], sgn(m.e[i]), 13, RED, 700) : T(TX[3], RY[i], '?', 13, HOLD, 700);
       o += step >= 2 ? T(TX[4], RY[i], m.ab[i], 13, INK) : T(TX[4], RY[i], '?', 13, HOLD, 700);
       o += step >= 3 ? T(TX[5], RY[i], m.sq[i], 13, AMB, 700) : T(TX[5], RY[i], '?', 13, HOLD, 700);
-      o += step >= 6 ? T(TX[6], RY[i], c.dev[i], 13, GRAY) : T(TX[6], RY[i], '?', 13, HOLD, 700);
+      o += T(TX[6], RY[i], step >= 6 ? whole(c.mean) : '?', 13, step >= 6 ? INK : HOLD, 700);
+      o += step >= 6 ? T(TX[7], RY[i], c.dev[i], 13, GRAY) : T(TX[7], RY[i], '?', 13, HOLD, 700);
     }
     o += T(TX[0], SY, '④ 합', 11, GRAY, 700, 'start');
+    o += T(TX[1], SY, step >= 4 ? c.total : '?', 14, step >= 4 ? INK : HOLD, 700);
     o += step >= 4 ? T(TX[3], SY, sgn(m.se), 13, RED, 700) : T(TX[3], SY, '?', 13, HOLD, 700);
     o += step >= 4 ? T(TX[4], SY, m.sab, 13, INK, 700) : T(TX[4], SY, '?', 13, HOLD, 700);
     o += step >= 4 ? T(TX[5], SY, m.sse, 13, AMB, 700) : T(TX[5], SY, '?', 13, HOLD, 700);
-    o += step >= 6 ? T(TX[6], SY, c.sst, 13, INK, 700) : T(TX[6], SY, '?', 13, HOLD, 700);
+    o += step >= 6 ? T(TX[7], SY, c.sst, 13, INK, 700) : T(TX[7], SY, '?', 13, HOLD, 700);
+    o += T(TX[0], 424, '⑥ 평균', 12, GRAY, 700, 'start');
+    o += T(TX[1], 424, step >= 6 ? c.total + ' ÷ ' + c.n + ' = ' + whole(c.mean) : '합 ÷ 개수 = ?', 12, step >= 6 ? INK : HOLD, 700);
+    o += step >= 6 ? T(350, 424, '이 평균을 모든 행에 똑같이 적용합니다.', 12, GRAY, null, 'start') : '';
+    o += L(30, 444, 700, 444, '#e3ddcf', 1);
     return o;
   }
 
   function panel(c) {
-    const s = c.s;
-    let o = T(MC[0], 246, c.ms[0].n, 11, mi === 0 ? BLUE : GRAY, 700)
-          + T(MC[1], 246, c.ms[1].n, 11, mi === 1 ? GREEN : GRAY, 700);
-    [['⑤ MAE · ' + s.u, 268, m => d1(m.mae)], ['⑤ MSE', 292, m => d1(m.mse)]].forEach(r => {
-      o += T(504, r[1], r[0], 11, GRAY, null, 'start');
-      c.ms.forEach((m, k) => {
-        o += step >= 5 ? T(MC[k], r[1], r[2](m), 14, INK, k === mi ? 800 : 400)
-                       : T(MC[k], r[1], '?', 14, HOLD, 700);
+    const s = c.s, m = c.ms[mi];
+    let o = T(MC[0], 470, c.ms[0].n, 13, mi === 0 ? BLUE : GRAY, 700)
+          + T(MC[1], 470, c.ms[1].n, 13, mi === 1 ? GREEN : GRAY, 700);
+    [['⑤ MAE · ' + s.u, 495, v => d1(v.mae)], ['⑤ MSE', 520, v => d1(v.mse)]].forEach(r => {
+      o += T(32, r[1], r[0], 13, GRAY, null, 'start');
+      c.ms.forEach((v, k) => {
+        o += T(MC[k], r[1], step >= 5 ? r[2](v) : '?', 16, step >= 5 ? INK : HOLD, k === mi ? 800 : 400);
       });
     });
-    o += T(504, 320, '⑥ 실젯값의 평균', 11, GRAY, null, 'start');
-    o += step >= 6 ? T(700, 320, whole(c.mean) + s.u, 14, INK, 700, 'end') : T(700, 320, '?', 14, HOLD, 700, 'end');
-    o += T(504, 344, '⑥ 평균값 기준의 제곱오차 합', 10.5, GRAY, null, 'start');
-    o += step >= 6 ? T(700, 344, c.sst, 14, INK, 700, 'end') : T(700, 344, '?', 14, HOLD, 700, 'end');
-    const m = c.ms[mi];
-    o += T(504, 374, '⑦ R² · ' + m.n, 11, GRAY, null, 'start');
-    if (step >= 7) {
-      o += T(504, 416, '제곱오차 합 ' + Math.round(m.r2 * 100) + ' % 감소', 10, GRAY, null, 'start');
-      o += T(504, 400, '1 ' + MN + ' (' + m.sse + ' ÷ ' + c.sst + ')', 11.5, GRAY, null, 'start');
-      o += T(700, 402, trim(m.r2), 26, AMB, 800, 'end');
-    } else {
-      o += T(700, 402, '?', 26, HOLD, 800, 'end');
-    }
+    o += T(370, 470, '⑥ 평균값 기준의 제곱오차 합', 13, GRAY, 700, 'start');
+    o += T(370, 502, step >= 6 ? c.dev.join(' + ') + ' = ' + c.sst : '?', 16, step >= 6 ? INK : HOLD, 700, 'start');
+    o += L(30, 539, 700, 539, '#e3ddcf', 1);
+    o += T(32, 562, '⑦ 결정계수 R² · ' + m.n, 14, INK, 700, 'start');
+    o += T(32, 609, 'R² = 1 ' + MN, 21, INK, 700, 'start');
+    o += T(300, 589, '모델의 제곱오차 합', 15, INK, 700);
+    o += L(147, 602, 453, 602, INK, 1.5);
+    o += T(300, 624, '평균값 기준의 제곱오차 합', 15, INK, 700);
+    o += T(478, 609, '= 1 ' + MN, 21, INK, 700, 'start');
+    o += T(575, 589, step >= 6 ? m.sse : '?', 20, step >= 6 ? INK : HOLD, 700);
+    o += L(551, 602, 599, 602, INK, 1.5);
+    o += T(575, 624, step >= 6 ? c.sst : '?', 20, step >= 6 ? INK : HOLD, 700);
+    o += T(619, 609, '= ' + (step >= 7 ? trim(m.r2) : '?'), 23, step >= 7 ? AMB : HOLD, 800, 'start');
+    o += T(32, 660, step >= 7 ? '평균값 기준보다 제곱오차 합이 ' + Math.round(m.r2 * 100) + '% 작습니다.' :
+      step >= 6 ? '분자와 분모를 확인하고 직접 계산하세요. 다음 단계에서 정답을 공개합니다.' :
+      '⑥단계에서 위 식에 숫자를 넣습니다. ⑦단계에서 정답을 확인합니다.', 13, GRAY, null, 'start');
     return o;
   }
 
