@@ -537,7 +537,7 @@ with st.expander("트리 그림으로 보기"):
 
   <figure class="interactive" data-fig="splitpick">
     <div class="widget" data-w="splitpick">
-<svg viewBox="0 0 720 448" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="훈련용 영화를 스크린 수 축에 늘어놓고 자를 지점을 옮기는 그림. 자른 지점마다 좌우 갈래의 성공 편수와 섞임 정도가 바뀌고, 아래 띠에 후보 지점마다 섞임이 줄어드는 정도가 그려진다">
+<svg viewBox="0 0 720 486" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="훈련용 영화를 스크린 수 축에 늘어놓고 자를 지점을 옮기는 그림. 자른 지점마다 좌우 갈래의 성공 편수와 섞임 정도가 바뀌고, 두 갈래를 합치는 계산이 한 줄로 표시되고, 아래 띠에 후보 지점마다 섞임이 줄어드는 정도가 그려진다">
   <text x="56" y="24" font-size="15" font-weight="800" fill="#1c2230">훈련용 영화를 스크린 수 축에 늘어놓았습니다</text>
   <text class="head" x="664" y="24" text-anchor="end" font-size="14" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
 
@@ -569,16 +569,17 @@ with st.expander("트리 그림으로 보기"):
     <text class="r4" x="380" y="336" font-size="13" fill="#6b7385"></text>
   </g>
 
-  <text x="56" y="368" font-size="14" font-weight="800" fill="#6b7385">후보 지점마다 섞임이 줄어드는 정도</text>
+  <text class="calc" x="56" y="370" font-size="13.5" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+  <text x="56" y="406" font-size="14" font-weight="800" fill="#6b7385">후보 지점마다 섞임이 줄어드는 정도</text>
   <g font-size="13" fill="#6b7385">
-    <circle cx="468" cy="364" r="4.5" fill="#b07a00"/><text x="478" y="368">실제 성공</text>
-    <circle cx="560" cy="364" r="3.4" fill="#2b7fd6" fill-opacity="0.5"/><text x="570" y="368">기준 미달</text>
+    <circle cx="468" cy="402" r="4.5" fill="#b07a00"/><text x="478" y="406">실제 성공</text>
+    <circle cx="560" cy="402" r="3.4" fill="#2b7fd6" fill-opacity="0.5"/><text x="570" y="406">기준 미달</text>
   </g>
-  <line x1="56" y1="430" x2="664" y2="430" stroke="#e3ddcf" stroke-width="1.5"/>
+  <line x1="56" y1="468" x2="664" y2="468" stroke="#e3ddcf" stroke-width="1.5"/>
   <polyline class="gcurve" points="" fill="none" stroke="#2b7fd6" stroke-width="2"/>
   <circle class="gbest" cx="0" cy="0" r="5" fill="none" stroke="#2f9e5f" stroke-width="2"/>
   <circle class="gnow" cx="0" cy="0" r="4.5" fill="#d64545"/>
-  <text class="note" x="56" y="446" font-size="13" font-weight="800" fill="#2f9e5f"></text>
+  <text class="note" x="56" y="484" font-size="13" font-weight="800" fill="#2f9e5f"></text>
 </svg>
 <div class="wctl">
   <label>자를 지점 <input type="range" class="cut" min="0" max="1" step="1" value="0"> <span class="wv"></span></label>
@@ -586,7 +587,7 @@ with st.expander("트리 그림으로 보기"):
   <button class="wbtn" type="button" data-go="tree">트리가 고른 지점</button>
 </div>
 </div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 트리는 자를 지점을 어떻게 고르는가. 점 하나가 훈련용 영화 한 편이고 세로 위치에는 뜻이 없습니다. 아래 띠는 후보 지점을 모두 따져 본 결과입니다.</figcaption>
+    <figcaption><b>무엇을 묻는 그림인가:</b> 트리는 자를 지점을 어떻게 고르는가. 점 하나가 훈련용 영화 한 편이고 세로 위치에는 뜻이 없습니다. 두 갈래의 섞임을 편수로 가중해 합치는 계산이 상자 아래에 그대로 표시됩니다. 아래 띠는 후보 지점을 모두 따져 본 결과입니다.</figcaption>
   </figure>
 
   <p><b>슬라이더를 양 끝으로 보내 봅니다.</b> 한쪽 갈래의 섞임은 0이 되지만 그 갈래에 영화가 한 편뿐이라 합친 섞임은 거의 줄지 않습니다. 섞임이 0인 갈래를 만드는 것이 목적이 아니라, 두 갈래를 합친 섞임을 줄이는 것이 목적입니다.</p>

@@ -210,7 +210,7 @@ function initW_splitpick(root, D) {
   // 값은 scripts/lesson09_live_data.py가 어제까지 모인 데이터로 다시 계산한다.
   var LIM = 1000000;
   var X0 = 56, X1 = 664, YT = 64, YB = 178;      // 점 판
-  var GT = 382, GB = 430;                        // 아래 띠 — 후보 지점마다의 섞임 감소
+  var GT = 420, GB = 468;                        // 아래 띠 — 후보 지점마다의 섞임 감소
   var q = function (sel) { return root.querySelector(sel); };
   var f3 = function (v) { return v.toFixed(3); };
   var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
@@ -282,7 +282,7 @@ function initW_splitpick(root, D) {
 
   var line = q('.cutline'), handle = q('.cuthandle'), mark = q('.gnow');
   var slider = q('.cut'), wv = q('.wv');
-  var head = q('.head'), lp = [q('.l1'), q('.l2'), q('.l3'), q('.l4')], rp = [q('.r1'), q('.r2'), q('.r3'), q('.r4')];
+  var head = q('.head'), calc = q('.calc'), lp = [q('.l1'), q('.l2'), q('.l3'), q('.l4')], rp = [q('.r1'), q('.r2'), q('.r3'), q('.r4')];
   var lbar = q('.lbar'), rbar = q('.rbar'), note = q('.note');
   slider.max = String(C - 1);
 
@@ -309,6 +309,11 @@ function initW_splitpick(root, D) {
     mark.setAttribute('cy', (GB - gain[j] / gmax * (GB - GT)).toFixed(1));
     wv.textContent = '스크린 수 ' + Math.round(t) + '개';
     head.textContent = '합친 섞임 ' + f3(G0) + ' → ' + f3(G0 - gain[j]) + ' · ' + f3(gain[j]) + ' 줄였습니다';
+    // 두 갈래를 편수로 가중해 더하는 과정을 그대로 보여 준다
+    var ln = nL[j], rn = N - ln;
+    calc.textContent = '합친 섞임 = (' + ln + '/' + N + ') × ' + f3(gini(ln, kL[j]))
+      + ' + (' + rn + '/' + N + ') × ' + f3(gini(rn, POS - kL[j]))
+      + ' = ' + f3(G0 - gain[j]);
     panel(lp, lbar, nL[j], kL[j], Math.round(t) + '개 이하', '왼쪽');
     panel(rp, rbar, N - nL[j], POS - kL[j], Math.round(t) + '개 초과', '오른쪽');
     var s = '';
