@@ -348,6 +348,35 @@ scikit-learn</pre></div></details>
 
   <p>같은 문제를 다른 방식으로 푸는 모델을 하나 더 붙입니다. 확률 대신 질문을 차례로 던져서 답을 내는 모델입니다. 앞에서 만든 앱을 이어서 고치므로 처음부터 다시 만들지 않습니다. 나온 그림에서 모델이 어떤 질문을 어떤 순서로 던지는지 읽습니다.</p>
 
+  <p>만들기 전에 트리가 하는 일을 한 번 봅니다. 트리는 속성 하나에 기준을 두고 데이터를 둘로 나누는 일을 되풀이합니다. 속성이 둘이면 그 나누기가 평면 위의 선으로 보입니다. 아래에서 질문 개수를 늘려 가며 확인합니다.</p>
+
+  <figure class="interactive" data-fig="planecut">
+    <div class="widget" data-w="planecut">
+<svg viewBox="0 0 720 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="스크린 수를 가로축, 상영 횟수를 세로축에 놓고 훈련용 영화를 찍은 그림. 트리의 분기가 세로선과 가로선으로 그어져 평면이 직사각형으로 나뉘고, 각 칸은 그 칸의 판정에 따라 색이 칠해진다. 질문 개수를 1개에서 3개까지 늘리면 칸이 늘어난다">
+  <text x="56" y="24" font-size="15" font-weight="800" fill="#1c2230">두 속성만으로 나눈 평면 · 훈련용 영화</text>
+  <g class="cells"></g>
+  <g class="dots"></g>
+  <g class="xticks" stroke-width="1"></g>
+  <g class="yticks" stroke-width="1"></g>
+  <text x="369" y="418" font-size="13" font-weight="800" fill="#6b7385" text-anchor="middle">스크린 수(개) · 제곱근 눈금</text>
+  <text x="18" y="214" font-size="13" font-weight="800" fill="#6b7385" text-anchor="middle" transform="rotate(-90 18 214)">상영 횟수(회) · 제곱근 눈금</text>
+  <g font-size="13" fill="#6b7385">
+    <circle cx="468" cy="440" r="4.6" fill="#b07a00"/><text x="478" y="444">실제 성공</text>
+    <circle cx="560" cy="440" r="3.2" fill="#2b7fd6" fill-opacity="0.5"/><text x="570" y="444">기준 미달</text>
+  </g>
+  <text class="pinfo" x="56" y="444" font-size="13" font-weight="800" fill="#1c2230"></text>
+  <text class="pmoved" x="56" y="424" font-size="13" font-weight="700" fill="#6b7385"></text>
+</svg>
+<div class="wctl">
+  <span>트리에게 허락한 질문 개수</span>
+  <button class="wbtn" type="button" data-depth="1">1개</button>
+  <button class="wbtn" type="button" data-depth="2">2개</button>
+  <button class="wbtn" type="button" data-depth="3">3개</button>
+</div>
+    </div>
+    <figcaption><b>무엇을 묻는 그림인가:</b> 질문을 하나씩 더하면 평면이 어떻게 나뉘는가. 첫 질문은 세로선 하나로 전체를 가릅니다. 두 번째 질문부터는 갈라진 칸 안에서만 선이 그어집니다. 조건 아래에 또 조건이 들어가는 것이 이 모습입니다. 칸의 색은 그 칸에 도착한 영화에게 트리가 내리는 판정이고, 점의 색은 실제 결과입니다. 색이 다른 점이 그 칸에서 틀리는 영화입니다. <b>질문을 더한다고 답이 좋아지지는 않습니다.</b> 버튼을 눌러 가며 정확도가 어떻게 되는지, 새로 그은 선이 판정을 바꾸기는 하는지 확인해 봅니다. 두 축은 큰 값 쪽 간격을 좁힌 제곱근 눈금입니다. 그대로 그리면 점이 왼쪽 아래에 뭉칩니다.</figcaption>
+  </figure>
+
   <ol class="steps" start="3">
     <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
       <p class="mini">가지를 뻗는 횟수를 정해 주지 않으면 트리는 훈련용 데이터를 모두 맞힐 때까지 갈라집니다. 훈련용 정확도는 1에 가까워지지만 그림이 커져서 질문의 순서를 읽을 수 없고, 처음 보는 데이터에서는 오히려 더 틀립니다. 교과서 220쪽에서 말하는 <b>과대적합</b>이 이것입니다. 그래서 세 번까지만 뻗도록 정하고, <b>끝마디에 영화가 다섯 편 미만이면 더 나누지 않도록</b> 합니다. 한두 편으로 만든 규칙은 근거가 너무 얇습니다.</p>
@@ -524,7 +553,7 @@ with st.expander("트리 그림으로 보기"):
       <p class="q">"의사결정트리는 결과를 직관적으로 이해하기 쉽고 규칙이 명확하게 도출된다는 장점을 갖는다. 하지만 과대적합에 빠지기 쉽다는 단점이 있다." <span class="src">(220쪽)</span></p>
       <p class="t">→ 아래에서 말하는 "덜 섞이게 자른다"가 교과서의 <b>불순도를 낮춘다</b>와 같은 뜻입니다.</p>
     </div>
-    <p>의사결정트리는 한 마디에서 데이터를 두 갈래로 나눌 지점을 고릅니다. 후보는 속성마다, 그 속성이 가지는 값마다 생깁니다. 트리는 후보를 모두 따져 본 뒤 가장 좋은 하나를 남깁니다. 어느 속성을 먼저 볼지 사람이 정하지 않습니다. 데이터가 정합니다.</p>
+    <p>3절 앞에서 본 평면 그림의 선 하나하나를 트리가 어떻게 고르는지가 여기에 있습니다. 의사결정트리는 한 마디에서 데이터를 두 갈래로 나눌 지점을 고릅니다. 후보는 속성마다, 그 속성이 가지는 값마다 생깁니다. 트리는 후보를 모두 따져 본 뒤 가장 좋은 하나를 남깁니다. 어느 속성을 먼저 볼지 사람이 정하지 않습니다. 데이터가 정합니다.</p>
     <p>무엇이 좋은 지점인지는 섞임으로 판단합니다. 한 갈래에 성공만 있거나 기준 미달만 있으면 <b>섞임은 0</b>이고, 두 범주가 반씩 있으면 섞임이 가장 큽니다. 이때 편수가 많은 갈래의 섞임을 더 크게 반영합니다. 트리는 섞임을 가장 많이 줄이는 지점을 고르고, 나뉜 각 갈래에서 같은 일을 되풀이합니다.</p>
     <details class="glossary"><summary>더 알아보기 — 정확도가 높게 나오는 까닭</summary><div class="gin">
       <p>성공 레이블이 붙는 영화는 아주 적고 대부분은 기준 미달입니다. 그래서 첫 분기에서 나뉜 두 갈래의 크기가 크게 차이 납니다. 큰 갈래에 도착한 영화에게 트리는 모두 기준 미달이라고 답하고, 그 안에 섞여 있는 성공작은 틀리게 됩니다. 정확도가 높게 나오는 까닭의 상당 부분이 여기에 있습니다.</p>
@@ -590,35 +619,6 @@ with st.expander("트리 그림으로 보기"):
   </figure>
 
   <p><b>슬라이더를 양 끝으로 보내 봅니다.</b> 한쪽 갈래의 섞임은 0이 되지만 그 갈래에 영화가 한 편뿐이라 합친 섞임은 거의 줄지 않습니다. 섞임이 0인 갈래를 만드는 것이 목적이 아니라, 두 갈래를 합친 섞임을 줄이는 것이 목적입니다.</p>
-
-  <p>앞 그림은 속성 하나를 자르는 장면이었습니다. 속성이 둘이면 평면이 됩니다. 아래에서 질문 개수를 늘려 가며 평면이 어떻게 나뉘는지 봅니다.</p>
-
-  <figure class="interactive" data-fig="planecut">
-    <div class="widget" data-w="planecut">
-<svg viewBox="0 0 720 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="스크린 수를 가로축, 상영 횟수를 세로축에 놓고 훈련용 영화를 찍은 그림. 트리의 분기가 세로선과 가로선으로 그어져 평면이 직사각형으로 나뉘고, 각 칸은 그 칸의 판정에 따라 색이 칠해진다. 질문 개수를 1개에서 3개까지 늘리면 칸이 늘어난다">
-  <text x="56" y="24" font-size="15" font-weight="800" fill="#1c2230">두 속성만으로 나눈 평면 · 훈련용 영화</text>
-  <g class="cells"></g>
-  <g class="dots"></g>
-  <g class="xticks" stroke-width="1"></g>
-  <g class="yticks" stroke-width="1"></g>
-  <text x="369" y="418" font-size="13" font-weight="800" fill="#6b7385" text-anchor="middle">스크린 수(개) · 제곱근 눈금</text>
-  <text x="18" y="214" font-size="13" font-weight="800" fill="#6b7385" text-anchor="middle" transform="rotate(-90 18 214)">상영 횟수(회) · 제곱근 눈금</text>
-  <g font-size="13" fill="#6b7385">
-    <circle cx="468" cy="440" r="4.6" fill="#b07a00"/><text x="478" y="444">실제 성공</text>
-    <circle cx="560" cy="440" r="3.2" fill="#2b7fd6" fill-opacity="0.5"/><text x="570" y="444">기준 미달</text>
-  </g>
-  <text class="pinfo" x="56" y="444" font-size="13" font-weight="800" fill="#1c2230"></text>
-  <text class="pmoved" x="56" y="424" font-size="13" font-weight="700" fill="#6b7385"></text>
-</svg>
-<div class="wctl">
-  <span>트리에게 허락한 질문 개수</span>
-  <button class="wbtn" type="button" data-depth="1">1개</button>
-  <button class="wbtn" type="button" data-depth="2">2개</button>
-  <button class="wbtn" type="button" data-depth="3">3개</button>
-</div>
-    </div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 질문을 하나씩 더하면 평면이 어떻게 나뉘는가. 첫 질문은 세로선 하나로 전체를 가릅니다. 두 번째 질문부터는 갈라진 칸 안에서만 선이 그어집니다. 조건 아래에 또 조건이 들어가는 것이 이 모습입니다. 칸의 색은 그 칸에 도착한 영화에게 트리가 내리는 판정이고, 점의 색은 실제 결과입니다. 색이 다른 점이 그 칸에서 틀리는 영화입니다. <b>질문을 더한다고 답이 좋아지지는 않습니다.</b> 버튼을 눌러 가며 정확도가 어떻게 되는지, 새로 그은 선이 판정을 바꾸기는 하는지 확인해 봅니다. 두 축은 큰 값 쪽 간격을 좁힌 제곱근 눈금입니다. 그대로 그리면 점이 왼쪽 아래에 뭉칩니다.</figcaption>
-  </figure>
 
   <p>첫 번째 분기만으로 어떤 속성이 중요한지 다 판단할 수는 없습니다. 트리 전체가 무엇을 보았는지는 4절에서 확인합니다.</p>
 
