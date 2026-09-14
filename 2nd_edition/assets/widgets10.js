@@ -92,7 +92,7 @@ function initW_matrix(root, D) {
     heads[1].textContent = '예측: ' + c.neg;
     rows[0].textContent = '실제: ' + c.pos;
     rows[1].textContent = '실제: ' + c.neg;
-    rowSum[0].textContent = '합계 ' + (c.tp + c.fn);
+    rowSum[0].textContent = '합계 ' + 가림(c.tp + c.fn);
     rowSum[1].textContent = '합계 ' + 가림(c.fp + c.tn);
     colSum[0].textContent = '합계 ' + 가림(c.tp + c.fp);
     colSum[1].textContent = '합계 ' + 가림(c.fn + c.tn);
