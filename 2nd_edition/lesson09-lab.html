@@ -24,13 +24,13 @@
   <h1>9차시 실험실 · <span class="a">축구 선수로도 해 보기와 표준화 스위치</span></h1>
   <div class="under"></div>
 
-  <p class="lead">9차시 본문에서는 영화를 네 속성으로 묶고 묶음마다 이름을 붙였습니다. 이 실험실에서는 세 가지를 더 합니다. 같은 방법을 축구 선수 800명에게 적용해 보고, 표준화를 켜고 끄면서 묶음이 어떻게 달라지는지 화면에서 확인하며, 마지막으로 열을 바꿔 가며 넓혀 봅니다.</p>
+  <p class="lead">9차시 본문에서는 영화를 네 속성으로 묶고 묶음마다 이름을 붙였습니다. 이 실험실에서는 세 가지를 더 합니다. 같은 방법을 축구 선수 100명에게 적용해 보고, 표준화를 켜고 끄면서 묶음이 어떻게 달라지는지 화면에서 확인하며, 마지막으로 열을 바꿔 가며 넓혀 봅니다.</p>
   <p class="mini"><a href="lesson09.html">← 9차시 교재로</a></p>
 
   <div class="make-banner">
     <div class="t">🎯 세 가지</div>
     <ul>
-      <li><b>1 축구 선수로도 해 보기</b> — 선수 800명을 여섯 능력치로 묶고 2차원·3차원으로 돌려 본다</li>
+      <li><b>1 축구 선수로도 해 보기</b> — 선수 100명을 여섯 능력치로 묶고 2차원·3차원으로 돌려 본다</li>
       <li><b>2 표준화 스위치</b> — 같은 선수들을 원래 값과 표준화 두 가지로 묶어 비교한다</li>
       <li><b>3 열을 바꿔 넓히기</b> — 시장 가치·포지션·소속 팀으로 묶는 대상을 바꿔 본다</li>
     </ul>
@@ -38,21 +38,21 @@
 
   <p class="mini">본문을 마친 뒤 시간이 남으면 이어서 합니다. 여기에서 만드는 앱은 본문의 영화 앱과 별개이며, <b>main.py</b>를 새로 만듭니다.</p>
 
-  <h2>1. 축구 선수로도 해 보기 — 800명을 여섯 능력치로</h2>
+  <h2>1. 축구 선수로도 해 보기 — 100명을 여섯 능력치로</h2>
   <p>본문에서는 영화를 네 속성으로 묶었습니다. 같은 방법을 대상만 바꾸어 축구 선수에게 적용합니다. 본문 1절의 개념 위젯에서 본 그 데이터입니다.</p>
-  <p>데이터는 축구 게임 EA SPORTS FC 25(2024년 시즌)에 실린 <b>선수 800명의 능력치</b>(<a href="https://github.com/greatsong/modudata/blob/main/data/eafc25_players.csv" target="_blank" rel="noopener"><code>eafc25_players.csv</code></a>)입니다. 행 하나가 선수 한 명이고, 열은 이름·포지션·소속 팀·종합 능력치와 속도·슈팅·패스·드리블·수비·몸싸움 여섯 능력치, 시장 가치, 나이, 키입니다. 능력치는 0에서 100 사이의 값이며, 게임이 선수의 플레이를 숫자로 나타낸 것입니다. 게임사가 공식으로 배포한 파일이 아니라 공개된 능력치를 정리한 스냅샷이고, 손흥민이 토트넘 소속으로 적혀 있는 것이 그 시점의 근거입니다. 골키퍼는 여섯 능력치의 뜻이 달라 처음부터 빠져 있습니다.</p>
+  <p>데이터는 축구 게임 EA SPORTS FC 25(2024년 시즌)에 실린 <b>선수 100명의 능력치</b>(<a href="https://github.com/greatsong/modudata/blob/main/data/eafc25_top100.csv" target="_blank" rel="noopener"><code>eafc25_top100.csv</code></a>)입니다. 골키퍼를 뺀 800명 가운데 종합 능력치가 가장 높은 100명이고, 본문 1절의 개념 위젯이 사용한 그 100명입니다. 행 하나가 선수 한 명이고, 열은 한글 이름·영문 이름·포지션·소속 팀·종합 능력치와 속도·슈팅·패스·드리블·수비·몸싸움 여섯 능력치, 시장 가치, 나이, 키입니다. 소속 팀은 영문 표기 그대로입니다. 능력치는 0에서 100 사이의 값이며, 게임이 선수의 플레이를 숫자로 나타낸 것입니다. 게임사가 공식으로 배포한 파일이 아니라 공개된 능력치를 정리한 스냅샷이고, 손흥민이 토트넘 소속으로 적혀 있는 것이 그 시점의 근거입니다. 골키퍼는 여섯 능력치의 뜻이 달라 처음부터 빠져 있습니다.</p>
   <p class="mini">📌 <b>스냅샷 표기:</b> 게임사가 공식으로 배포한 파일이 아니라 공개 미러에 정리된 스냅샷입니다. 본문의 영화 표와 달리 날마다 갱신되지 않습니다. 그래서 이 절에 적힌 수치는 언제 실행해도 같은 값이 나옵니다. 다만 고른 능력치·표준화 여부·k를 바꾸면 결과는 달라집니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"선수 유형 나누기" 스트림릿 앱을 파일 하나(main.py)로 만들어 줘.
 화면 맨 위에 앱 제목과 어울리는 아이콘을 넣고, 브라우저 탭에도 그 제목이 표시되게 해 줘.
-데이터: https://raw.githubusercontent.com/greatsong/modudata/main/data/eafc25_players.csv
-이 파일의 열 이름은 name, long_name, positions, club, overall, pace, shooting, passing, dribbling, defending, physic, value_eur, age, height_cm이고, 인코딩은 UTF-8이야. 축구 게임에 실린 선수 800명의 능력치야.
+데이터: https://raw.githubusercontent.com/greatsong/modudata/main/data/eafc25_top100.csv
+이 파일의 열 이름은 name_ko, name, positions, club, overall, pace, shooting, passing, dribbling, defending, physic, value_eur, age, height_cm이고, 인코딩은 UTF-8이야. 축구 게임에 실린 선수 100명의 능력치이고, name_ko가 한글 이름이야.
 pace·shooting·passing·dribbling·defending·physic 여섯 능력치는 속도·슈팅·패스·드리블·수비·몸싸움으로 이름을 바꿔서 표시해 줘.
 묶는 데 사용할 능력치를 화면 위에서 고르게 해 줘. 둘 이상 고르게 하고 기본은 여섯 개 다야. 고른 능력치를 표준화한 뒤 k-평균으로 묶어 줘. 묶음 수는 2에서 6까지 슬라이더로 고르고 기본은 3으로 해 줘. 다시 실행해도 같은 결과가 나오게 난수를 고정해 줘.
-2차원 산점도는 가로축과 세로축에 사용할 능력치를 고르게 해 줘. 그 아래에 3차원 산점도를 하나 더 그려 줘. 3차원은 x·y·z 세 축의 능력치를 고르게 하고, 마우스로 돌릴 수 있고, 묶음마다 색이 다르고, 점은 작게 찍고, 점에 마우스를 올리면 선수 이름이 보이게 해 줘. 고른 능력치가 셋보다 적으면 3차원 대신 안내 문구를 표시해 줘.
+2차원 산점도는 가로축과 세로축에 사용할 능력치를 고르게 해 줘. 그 아래에 3차원 산점도를 하나 더 그려 줘. 3차원은 x·y·z 세 축의 능력치를 고르게 하고, 마우스로 돌릴 수 있고, 묶음마다 색이 다르고, 점은 작게 찍고, 점에 마우스를 올리면 한글 이름(name_ko)이 보이게 해 줘. 고른 능력치가 셋보다 적으면 3차원 대신 안내 문구를 표시해 줘.
 묶음 번호는 0·1·2가 아니라 ㉮·㉯·㉰로 표시하고, 슈팅 평균이 큰 묶음부터 ㉮를 붙여 줘.
-묶음마다 인원과 여섯 능력치의 평균을 표로 보여 주고, 종합 능력치(overall)가 높은 선수를 묶음마다 다섯 명씩 보여 줘.
+묶음마다 인원과 여섯 능력치의 평균을 표로 보여 주고, 종합 능력치(overall)가 높은 선수를 묶음마다 다섯 명씩 한글 이름으로 보여 줘.
 positions 열의 맨 앞 포지션으로 공격수·미드필더·수비수를 나눠서, 묶음과 포지션이 얼마나 겹치는지 교차표로 보여 줘. 포지션은 묶는 데 사용하지 마.
 그림은 plotly로만 그려 줘. requirements.txt도 꼭 같이 만들어 줘. streamlit, pandas, plotly, scikit-learn을 버전 숫자 없이 이름만 적어 줘.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 선수 유형 나누기: 능력치가 비슷한 축구 선수끼리 묶는다
@@ -67,7 +67,7 @@ st.title("⚽ 선수 유형 나누기")
 st.caption("포지션을 사용하지 않고, 고른 능력치가 비슷한 선수끼리 묶습니다.")
 
 DATA = ("https://raw.githubusercontent.com/greatsong/modudata/"
-        "main/data/eafc25_players.csv")
+        "main/data/eafc25_top100.csv")
 능력치 = {"pace": "속도", "shooting": "슈팅", "passing": "패스",
          "dribbling": "드리블", "defending": "수비", "physic": "몸싸움"}
 기호 = ["㉮", "㉯", "㉰", "㉱", "㉲", "㉳"]
@@ -87,7 +87,7 @@ def 포지션그룹(칸):
 @st.cache_data
 def load_data():
     df = pd.read_csv(DATA, encoding="utf-8")
-    df = df.dropna(subset=list(능력치) + ["name", "positions"]).reset_index(drop=True)
+    df = df.dropna(subset=list(능력치) + ["name_ko", "positions"]).reset_index(drop=True)
     df = df.rename(columns=능력치)
     df["포지션"] = df["positions"].map(포지션그룹)
     return df
@@ -114,7 +114,7 @@ st.subheader("묶음 지도 · 2차원")
 c1, c2 = st.columns(2)
 x축 = c1.selectbox("가로축", 고른항목, index=0)
 y축 = c2.selectbox("세로축", 고른항목, index=min(1, len(고른항목) - 1))
-fig = px.scatter(df, x=x축, y=y축, color="묶음", hover_name="name",
+fig = px.scatter(df, x=x축, y=y축, color="묶음", hover_name="name_ko",
                  category_orders={"묶음": 기호[:k]})
 fig.update_traces(marker=dict(size=7, opacity=0.75))
 fig.update_layout(height=460)
@@ -129,7 +129,7 @@ else:
     x3 = d1.selectbox("x축", 고른항목, index=0, key="x3")
     y3 = d2.selectbox("y축", 고른항목, index=1, key="y3")
     z3 = d3.selectbox("z축", 고른항목, index=2, key="z3")
-    fig3 = px.scatter_3d(df, x=x3, y=y3, z=z3, color="묶음", hover_name="name",
+    fig3 = px.scatter_3d(df, x=x3, y=y3, z=z3, color="묶음", hover_name="name_ko",
                          category_orders={"묶음": 기호[:k]})
     fig3.update_traces(marker=dict(size=2.5, opacity=0.8))
     fig3.update_layout(height=560, legend=dict(orientation="h"))
@@ -146,7 +146,7 @@ st.subheader("묶음마다 종합 능력치가 높은 다섯 명")
 for i, 이름 in enumerate(기호[:k]):
     묶음 = df[df["묶음"] == 이름].sort_values("overall", ascending=False).head(5)
     열[i].markdown(f"**{이름} 묶음 ({int((df['묶음'] == 이름).sum()):,}명)**")
-    열[i].dataframe(pd.DataFrame({"선수": 묶음["name"].to_numpy(),
+    열[i].dataframe(pd.DataFrame({"선수": 묶음["name_ko"].to_numpy(),
                                 "종합": 묶음["overall"].to_numpy()}),
                    width="stretch", hide_index=True)
 
@@ -181,7 +181,7 @@ st.title("⚽ 선수 유형 나누기")
 st.caption("포지션을 사용하지 않고, 고른 능력치가 비슷한 선수끼리 묶습니다.")
 
 DATA = ("https://raw.githubusercontent.com/greatsong/modudata/"
-        "main/data/eafc25_players.csv")
+        "main/data/eafc25_top100.csv")
 능력치 = {"pace": "속도", "shooting": "슈팅", "passing": "패스",
          "dribbling": "드리블", "defending": "수비", "physic": "몸싸움"}
 기호 = ["㉮", "㉯", "㉰", "㉱", "㉲", "㉳"]
@@ -201,7 +201,7 @@ def 포지션그룹(칸):
 @st.cache_data
 def load_data():
     df = pd.read_csv(DATA, encoding="utf-8")
-    df = df.dropna(subset=list(능력치) + ["name", "positions"]).reset_index(drop=True)
+    df = df.dropna(subset=list(능력치) + ["name_ko", "positions"]).reset_index(drop=True)
     df = df.rename(columns=능력치)
     df["포지션"] = df["positions"].map(포지션그룹)
     return df
@@ -236,7 +236,7 @@ st.subheader("묶음 지도 · 2차원")
 c1, c2 = st.columns(2)
 x축 = c1.selectbox("가로축", 고른항목, index=0)
 y축 = c2.selectbox("세로축", 고른항목, index=min(1, len(고른항목) - 1))
-fig = px.scatter(df, x=x축, y=y축, color="묶음", hover_name="name",
+fig = px.scatter(df, x=x축, y=y축, color="묶음", hover_name="name_ko",
                  category_orders={"묶음": 기호[:k]})
 fig.update_traces(marker=dict(size=7, opacity=0.75))
 fig.update_layout(height=460)
@@ -251,7 +251,7 @@ else:
     x3 = d1.selectbox("x축", 고른항목, index=0, key="x3")
     y3 = d2.selectbox("y축", 고른항목, index=1, key="y3")
     z3 = d3.selectbox("z축", 고른항목, index=2, key="z3")
-    fig3 = px.scatter_3d(df, x=x3, y=y3, z=z3, color="묶음", hover_name="name",
+    fig3 = px.scatter_3d(df, x=x3, y=y3, z=z3, color="묶음", hover_name="name_ko",
                          category_orders={"묶음": 기호[:k]})
     fig3.update_traces(marker=dict(size=2.5, opacity=0.8))
     fig3.update_layout(height=560, legend=dict(orientation="h"))
@@ -268,7 +268,7 @@ st.subheader("묶음마다 종합 능력치가 높은 다섯 명")
 for i, 이름 in enumerate(기호[:k]):
     묶음 = df[df["묶음"] == 이름].sort_values("overall", ascending=False).head(5)
     열[i].markdown(f"**{이름} 묶음 ({int((df['묶음'] == 이름).sum()):,}명)**")
-    열[i].dataframe(pd.DataFrame({"선수": 묶음["name"].to_numpy(),
+    열[i].dataframe(pd.DataFrame({"선수": 묶음["name_ko"].to_numpy(),
                                 "종합": 묶음["overall"].to_numpy()}),
                    width="stretch", hide_index=True)
 
@@ -302,10 +302,10 @@ st.caption("실루엣 점수가 가장 높은 묶음 수와 사람이 이해하�
   </ol>
 
   <h3>화면 읽기 — 어디에서 덜 줄기 시작하는가</h3>
-  <p>아래 위젯은 여섯 능력치를 모두 사용해 선수 800명을 묶었을 때의 값입니다. 왼쪽은 묶음 수를 늘릴 때 군집 내 제곱합이 줄어드는 모습이고, 오른쪽은 묶음 수별 실루엣 점수입니다. k=2의 실루엣이 0.329로 가장 높고 k=4가 0.303, k=3이 0.290입니다. 점수가 가장 높은 묶음 수와 사람이 이해하기 좋은 묶음 수가 늘 같지는 않습니다. 유형 해석 연습은 모든 모둠이 같은 표를 사용하도록 k=3 결과로 진행합니다. k=3이 점수상 최적이라는 뜻은 아닙니다.</p>
+  <p>아래 위젯은 여섯 능력치를 모두 사용해 선수 100명을 묶었을 때의 값입니다. 왼쪽은 묶음 수를 늘릴 때 군집 내 제곱합이 줄어드는 모습이고, 오른쪽은 묶음 수별 실루엣 점수입니다. k=2의 실루엣이 0.389로 가장 높고 k=3이 0.322, k=4가 0.304입니다. 점수가 가장 높은 묶음 수와 사람이 이해하기 좋은 묶음 수가 늘 같지는 않습니다. 유형 해석 연습은 모든 모둠이 같은 표를 사용하도록 k=3 결과로 진행합니다. k=3이 점수상 최적이라는 뜻은 아닙니다.</p>
   <figure class="interactive" data-fig="kpick">
     <div class="widget" data-w="kpick" style="overflow-x:auto">
-<svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="선수 800명을 여섯 능력치로 묶었을 때의 군집 내 제곱합 꺾은선과 묶음 수별 실루엣 점수 막대" style="min-width:640px">
+<svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="선수 100명을 여섯 능력치로 묶었을 때의 군집 내 제곱합 꺾은선과 묶음 수별 실루엣 점수 막대" style="min-width:640px">
   <text x="66" y="26" font-size="14" font-weight="700" fill="#1c2230">군집 내 제곱합 · 묶음 수를 늘리면</text>
   <text x="420" y="26" font-size="14" font-weight="700" fill="#1c2230">묶음 수별 실루엣 점수</text>
   <g class="gr"></g>
@@ -356,7 +356,7 @@ st.caption("실루엣 점수가 가장 높은 묶음 수와 사람이 이해하�
   <p>세 줄이 한 칸씩에 몰려 있지 않습니다. 미드필더는 ㉮와 ㉯로 나뉘었고, 수비수도 ㉯와 ㉰로 나뉘었습니다. k-평균은 포지션을 본 적이 없고 능력치만 사용했기 때문입니다. <b>군집은 분류가 아닙니다.</b> 묶음이 포지션과 얼마나 겹치는지는 결과를 읽은 뒤에 사람이 확인하는 것이지, 알고리즘이 맞히려고 한 목표가 아닙니다.</p>
 
   <h3>축을 하나 더 — 세 능력치로 보는 3차원 묶음</h3>
-<p>본문 1절의 그림은 두 능력치만 축으로 사용했습니다. 아래는 슈팅·수비·패스 세 능력치를 축으로 삼아 선수 800명 전체를 놓고 k=3으로 묶은 결과입니다. 가로로 뻗은 축이 슈팅, 안쪽으로 들어가는 축이 수비, 위로 선 축이 패스입니다. 마우스로 끌어 돌려 보고, 점에 마우스를 올리면 선수 이름과 세 값이 함께 표시됩니다. 그림 아래 범례가 ㉮㉯㉰ 세 묶음의 색과 인원을 알려 줍니다. 이름은 국내 언론의 한글 표기가 있는 선수만 한글로 표시되고, 나머지는 원문 표기로 표시됩니다.</p>
+<p>본문 1절의 그림은 두 능력치만 축으로 사용했습니다. 아래는 슈팅·수비·패스 세 능력치를 축으로 삼아 선수 100명을 놓고 k=3으로 묶은 결과입니다. 가로로 뻗은 축이 슈팅, 안쪽으로 들어가는 축이 수비, 위로 선 축이 패스입니다. 마우스로 끌어 돌려 보고, 점에 마우스를 올리면 선수 이름과 세 값이 함께 표시됩니다. 그림 아래 범례가 ㉮㉯㉰ 세 묶음의 색과 인원을 알려 줍니다. 이름은 국내 언론에서 사용하는 한글 표기로 적었습니다.</p>
 <figure class="interactive" data-fig="km3d">
 <div class="widget" data-w="km3d">
 <div class="plot" style="width:100%;min-height:420px"></div>
@@ -430,7 +430,7 @@ st.caption("실루엣 점수가 가장 높은 묶음 수와 사람이 이해하�
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>선수 800명을 여섯 능력치로 묶고, 세 묶음에 이름과 근거를 적었다.</li>
+    <li>선수 100명을 여섯 능력치로 묶고, 세 묶음에 이름과 근거를 적었다.</li>
     <li>2차원 축을 바꿔 보고, 묶음이 나뉘는 축과 섞이는 축을 구분했다.</li>
     <li>3차원 그림을 돌려 보고, 두 축만 볼 때와 무엇이 달라지는지 말했다.</li>
     <li>묶음과 포지션 교차표를 읽고, 군집이 분류와 다른 점을 설명했다.</li>
