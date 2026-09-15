@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11차시 실험실 · 표준화 스위치와 확장 데이터 · 데이터 과학 당곡고 · 개정 검토본</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<style>main { overflow-wrap: anywhere; } .daymap { display: block; max-width: 100%; overflow-x: auto; }</style>
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+  <span class="badge review-edition">개정 검토본</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 11차시</span>
+  <h1>11차시 실험실 · <span class="a">표준화 스위치와 확장 데이터</span></h1>
+  <div class="under"></div>
+
+  <p class="lead">11차시 본문에서는 타자 43명을 여섯 항목으로 묶고 묶음마다 이름을 붙였습니다. 이 실험실에서는 두 가지를 더 합니다. 하나는 표준화를 켜고 끄면서 묶음이 어떻게 달라지는지 화면에서 직접 확인하는 일이고, 다른 하나는 같은 방법을 더 큰 데이터에 적용해 보는 일입니다.</p>
+  <p class="mini"><a href="lesson11.html">← 11차시 교재로</a></p>
+
+  <div class="make-banner">
+    <div class="t">🎯 두 가지</div>
+    <ul>
+      <li><b>1 표준화 스위치</b> — 같은 43명을 원래 단위와 표준화 두 가지로 묶어 비교한다</li>
+      <li><b>2 확장 데이터</b> — 투수·타자 전체·선수 프로필로 군집을 넓혀 본다</li>
+    </ul>
+  </div>
+
+  <p class="mini">본문 5절까지 마친 뒤 시간이 남으면 이어서 합니다. 2절에서 만든 <b>main.py</b>를 그대로 사용합니다.</p>
+
+  <h2>1. 표준화 스위치 — 단위를 맞추면 누가 옮겨 가는가</h2>
+  <p>본문에서는 표준화를 켜고 끄면 43명 가운데 13명이 다른 묶음으로 옮겨 간다는 결과만 확인했습니다. 아래 그림에서는 그 13명이 누구인지, 그리고 여섯 항목이 거리에 각각 얼마씩 실리는지를 버튼으로 바꿔 가며 볼 수 있습니다. 점 하나를 누르면 그 선수의 원래값과 표준화값이 오른쪽에 함께 표시됩니다.</p>
+  <figure class="interactive" data-fig="stdswitch">
+    <div class="widget" data-w="stdswitch" style="overflow-x:auto">
+<svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="표준화 스위치: 같은 여섯 항목 k=3 군집을 원래 단위와 표준화 두 가지 자로 나눈 결과 비교" style="min-width:640px">
+<text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">표준화 스위치 · 여섯 항목</text>
+<g stroke="#e3ddcf" stroke-width="1">
+<line x1="68" y1="56.6" x2="438" y2="56.6"/>
+<line x1="68" y1="99.7" x2="438" y2="99.7"/>
+<line x1="68" y1="142.8" x2="438" y2="142.8"/>
+<line x1="68" y1="185.8" x2="438" y2="185.8"/>
+<line x1="68" y1="228.9" x2="438" y2="228.9"/>
+<line x1="150.2" y1="48" x2="150.2" y2="272"/>
+<line x1="232.4" y1="48" x2="232.4" y2="272"/>
+<line x1="314.7" y1="48" x2="314.7" y2="272"/>
+<line x1="396.9" y1="48" x2="396.9" y2="272"/>
+</g>
+<path d="M68,48 V272 H438" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+<g font-size="12" fill="#6b7385">
+<text x="60" y="61.1" text-anchor="end">50</text>
+<text x="60" y="104.2" text-anchor="end">40</text>
+<text x="60" y="147.3" text-anchor="end">30</text>
+<text x="60" y="190.3" text-anchor="end">20</text>
+<text x="60" y="233.4" text-anchor="end">10</text>
+<text x="60" y="276.5" text-anchor="end">0</text>
+<text x="68" y="290" text-anchor="middle">30</text>
+<text x="150.2" y="290" text-anchor="middle">60</text>
+<text x="232.4" y="290" text-anchor="middle">90</text>
+<text x="314.7" y="290" text-anchor="middle">120</text>
+<text x="396.9" y="290" text-anchor="middle">150</text>
+</g>
+<text x="30" y="160" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 30 160)">홈런(개)</text>
+<text x="434" y="264" font-size="13" fill="#6b7385" text-anchor="end">삼진(개)</text>
+<g class="pts"></g>
+<g class="rings" fill="none" stroke="#1c2230" stroke-width="2.5" opacity="0"></g>
+<circle class="selring" cx="-20" cy="-20" r="9" fill="none" stroke="#1c2230" stroke-width="1.5"/>
+<text class="lgRaw" x="68" y="306" font-size="13" fill="#1c2230"></text>
+<text class="lgStd" x="68" y="306" font-size="13" fill="#1c2230" opacity="0"></text>
+<rect x="454" y="48" width="250" height="258" rx="8" fill="#ffffff" stroke="#e3ddcf" stroke-width="1"/>
+<text class="pname" x="470" y="74" font-size="15" font-weight="700" fill="#1c2230">양의지</text>
+<g font-size="12" fill="#6b7385">
+<text x="624" y="96" text-anchor="end">원래값</text>
+<text x="692" y="96" text-anchor="end">표준화값</text>
+</g>
+<g class="prow"><text x="470" y="120" font-size="13" fill="#6b7385">홈런</text><text class="pv" x="624" y="120" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">20</text><text class="pz" x="692" y="120" font-size="14" fill="#2b7fd6" text-anchor="end">0.52</text></g>
+<g class="prow"><text x="470" y="144" font-size="13" fill="#6b7385">도루</text><text class="pv" x="624" y="144" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">4</text><text class="pz" x="692" y="144" font-size="14" fill="#2b7fd6" text-anchor="end">−0.55</text></g>
+<g class="prow"><text x="470" y="168" font-size="13" fill="#6b7385">볼넷</text><text class="pv" x="624" y="168" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">50</text><text class="pz" x="692" y="168" font-size="14" fill="#2b7fd6" text-anchor="end">−0.20</text></g>
+<g class="prow"><text x="470" y="192" font-size="13" fill="#6b7385">삼진</text><text class="pv" x="624" y="192" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">63</text><text class="pz" x="692" y="192" font-size="14" fill="#2b7fd6" text-anchor="end">−1.00</text></g>
+<g class="prow"><text x="470" y="216" font-size="13" fill="#6b7385">출루율</text><text class="pv" x="624" y="216" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">0.406</text><text class="pz" x="692" y="216" font-size="14" fill="#2b7fd6" text-anchor="end">1.37</text></g>
+<g class="prow"><text x="470" y="240" font-size="13" fill="#6b7385">장타율</text><text class="pv" x="624" y="240" font-size="14" font-weight="700" fill="#1c2230" text-anchor="end">0.533</text><text class="pz" x="692" y="240" font-size="14" fill="#2b7fd6" text-anchor="end">1.31</text></g>
+<text class="passign" x="470" y="272" font-size="13" font-weight="700" fill="#b07a00">원래 단위 ③ → 표준화 ㉮ · 바뀜</text>
+<text x="470" y="294" font-size="12" fill="#6b7385">같은 값 · 눈금만 다름</text>
+<text x="68" y="330" font-size="13" font-weight="700" fill="#1c2230">거리에 실린 몫 · 전체 쌍의 거리 제곱 합계 기준</text>
+<g class="barA"></g>
+<text class="ovA" x="68" y="378" font-size="12" fill="#6b7385"></text>
+<text x="68" y="392" font-size="13" font-weight="700" fill="#1c2230">묶음을 나눈 몫 · 묶음 평균이 전체 평균에서 떨어진 정도</text>
+<text class="ovB" x="704" y="392" font-size="12" fill="#6b7385" text-anchor="end"></text>
+<g class="barB"></g>
+<text x="68" y="434" font-size="12" fill="#6b7385">위 막대는 단위를 맞춘 결과 · 아래 막대는 표준화 뒤에도 고르지 않음</text>
+</svg>
+<div class="wctl">
+<button class="wbtn on" type="button" data-m="raw">원래 단위</button>
+<button class="wbtn" type="button" data-m="std">표준화</button>
+<button class="wbtn" type="button" data-t="moved">바뀐 13명만 보기</button>
+<span class="wout">묶음 바뀐 선수 13 / 43</span>
+</div>
+</div>
+    <figcaption>단위를 맞추면 13명이 다른 묶음으로 이동합니다. 두 결과 가운데 하나가 틀린 것이 아닙니다. 위 막대는 항목 하나하나가 거리에 실린 몫이고, 아래 막대는 묶음의 평균이 전체 평균에서 얼마나 떨어져 있는지를 항목별로 나눈 몫입니다. 표준화를 하면 위 막대는 여섯 항목이 고르게 되지만, 아래 막대는 고르게 되지 않습니다.</figcaption>
+  </figure>
+  <div class="callout warn">
+    <div class="h">⚠️ 표준화는 항목의 중요도를 정하지 않습니다</div>
+    <p>표준화는 항목마다 다른 단위를 맞추는 처리입니다. 단위를 맞춘 뒤에도 어느 항목이 묶음을 실제로 나누었는지는 고르지 않습니다. 아래 막대가 그 점을 보여 줍니다. 어느 항목이 결과를 갈랐는지는 묶음별 평균 기록을 읽어야 알 수 있습니다.</p>
+  </div>
+
+  <h2>2. 확장 데이터 세 가지</h2>
+  <p>본문과 같은 방법을 더 큰 데이터에 적용합니다. 프롬프트의 파일 주소와 항목 이름만 바꾸면 같은 앱이 그대로 동작합니다.</p>
+  <ul>
+    <li><b>투수 가운데 30이닝 이상 던진 138명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_pitchers_2025.csv" target="_blank" rel="noopener"><code>kbo_pitchers_2025.csv</code></a>)입니다. 이닝·경기 수·세이브·홀드·K/9·ERA·WHIP으로 묶으면 네 유형이 나타납니다. 이닝 열은 <code>197 1/3</code>처럼 분수로 적혀 있으므로, 숫자로 바꿔 달라는 내용을 프롬프트에 함께 넣어야 합니다. 실측으로는 <b>선발형</b>(이닝 132), <b>마무리형</b>(세이브 27.4, 박영현·김택연), <b>필승조</b>(홀드 13.9), <b>추격조</b> 네 유형으로 나뉘었고, 이번에는 점수(실루엣)도 k=4를 가리켰습니다. 이 네 유형이 실제 보직 구분과 얼마나 닮았는지는 선수별 기록과 보직을 따로 확인해야 알 수 있습니다.</li>
+    <li><b>타자 전체 396명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025_full.csv" target="_blank" rel="noopener"><code>kbo_hitters_2025_full.csv</code></a>)입니다. 부분 출전 선수까지 전부 들어 있습니다. 그대로 군집하면 1타석 타율 1.000 같은 값이 결과를 흔듭니다. 몇 타석부터 믿을 수 있는 기록인지 <b>최소 타석 기준을 스스로 정하는 것</b>이 이 데이터의 과제입니다. 6차시의 관측일 필터와 같은 판단입니다.</li>
+    <li><b>선수 프로필 980명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_player_profiles_2026.csv" target="_blank" rel="noopener"><code>kbo_player_profiles_2026.csv</code></a>, 포지션·생년월일·키·몸무게)입니다. 기록 표에는 없는 정보입니다. 7차시에서 영화 코드로 두 표를 이었듯, 이번에는 <b>선수명과 팀을 공통 속성으로</b> 기록 표에 옆으로 이어 봅니다. 병합이 되면 "몸무게와 홈런은 관계가 있을까", "유형별 평균 키는 다를까" 같은 질문이 새로 열립니다. 병합 전 선수명·팀 조합이 중복되지 않는지 확인합니다. 표의 시점 차이, 이적, 이름 표기 차이 때문에 짝이 없는 행이 생길 수 있습니다. 원인을 확인한 뒤 제외·유지 여부를 정하고, 병합 전후 행 수도 비교합니다.</li>
+  </ul>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>표준화 전과 후에 묶음이 달라진 선수가 누구인지 화면에서 확인했다.</li>
+    <li>단위를 맞춘 뒤에도 항목이 묶음을 나눈 정도는 고르지 않다는 것을 막대로 확인했다.</li>
+    <li>확장 데이터 가운데 하나를 골라 묶고, 묶음마다 이름과 근거를 적었다.</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson11.html"><div class="dir">← 이전</div><div class="tt">11차시 · 군집</div></a>
+    <a class="next" href="lesson12.html"><div class="dir">다음 →</div><div class="tt">12차시 · 연관 분석</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/widgets11.js"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>
