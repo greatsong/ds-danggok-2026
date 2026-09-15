@@ -256,7 +256,7 @@ else:
     z3 = d3.selectbox("z축", 고른속성, index=2, key="z3")
     fig3 = px.scatter_3d(df, x=x3, y=y3, z=z3, color="묶음", hover_name="movieNm",
                          category_orders={"묶음": 기호[:k]})
-    fig3.update_traces(marker=dict(size=3, opacity=0.8))
+    fig3.update_traces(marker=dict(size=2, opacity=0.7))
     fig3.update_layout(height=560, legend=dict(orientation="h"))
     st.plotly_chart(fig3, width="stretch")
     st.caption("마우스로 끌면 돌아갑니다. 점에 마우스를 올리면 제목이 보입니다.")
@@ -405,7 +405,7 @@ else:
     z3 = d3.selectbox("z축", 고른속성, index=2, key="z3")
     fig3 = px.scatter_3d(df, x=x3, y=y3, z=z3, color="묶음", hover_name="movieNm",
                          category_orders={"묶음": 기호[:k]})
-    fig3.update_traces(marker=dict(size=3, opacity=0.8))
+    fig3.update_traces(marker=dict(size=2, opacity=0.7))
     fig3.update_layout(height=560, legend=dict(orientation="h"))
     st.plotly_chart(fig3, width="stretch")
     st.caption("마우스로 끌면 돌아갑니다. 점에 마우스를 올리면 제목이 보입니다.")
