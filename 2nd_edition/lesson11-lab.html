@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>11차시 실험실 · 표준화 스위치와 확장 데이터 · 데이터 과학 당곡고 · 개정 검토본</title>
+<title>11차시 실험실 · 야구로도 해 보기와 표준화 스위치 · 데이터 과학 당곡고 · 개정 검토본</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
 <style>main { overflow-wrap: anywhere; } .daymap { display: block; max-width: 100%; overflow-x: auto; }</style>
@@ -21,24 +21,151 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 11차시</span>
-  <h1>11차시 실험실 · <span class="a">표준화 스위치와 확장 데이터</span></h1>
+  <h1>11차시 실험실 · <span class="a">야구로도 해 보기와 표준화 스위치</span></h1>
   <div class="under"></div>
 
-  <p class="lead">11차시 본문에서는 타자 43명을 여섯 항목으로 묶고 묶음마다 이름을 붙였습니다. 이 실험실에서는 두 가지를 더 합니다. 하나는 표준화를 켜고 끄면서 묶음이 어떻게 달라지는지 화면에서 직접 확인하는 일이고, 다른 하나는 같은 방법을 더 큰 데이터에 적용해 보는 일입니다.</p>
+  <p class="lead">11차시 본문에서는 영화를 네 속성으로 묶고 묶음마다 이름을 붙였습니다. 이 실험실에서는 세 가지를 더 합니다. 같은 방법을 야구 기록에 적용해 타자 43명을 묶어 보고, 표준화를 켜고 끄면서 묶음이 어떻게 달라지는지 화면에서 확인하며, 마지막으로 더 큰 데이터로 넓혀 봅니다.</p>
   <p class="mini"><a href="lesson11.html">← 11차시 교재로</a></p>
 
   <div class="make-banner">
-    <div class="t">🎯 두 가지</div>
+    <div class="t">🎯 세 가지</div>
     <ul>
-      <li><b>1 표준화 스위치</b> — 같은 43명을 원래 단위와 표준화 두 가지로 묶어 비교한다</li>
-      <li><b>2 확장 데이터</b> — 투수·타자 전체·선수 프로필로 군집을 넓혀 본다</li>
+      <li><b>1 야구로도 해 보기</b> — 2025 시즌 KBO 타자 43명을 여섯 항목으로 묶고 이름을 붙인다</li>
+      <li><b>2 표준화 스위치</b> — 같은 43명을 원래 단위와 표준화 두 가지로 묶어 비교한다</li>
+      <li><b>3 확장 데이터</b> — 투수·타자 전체·선수 프로필로 군집을 넓혀 본다</li>
     </ul>
   </div>
 
-  <p class="mini">본문 5절까지 마친 뒤 시간이 남으면 이어서 합니다. 2절에서 만든 <b>main.py</b>를 그대로 사용합니다.</p>
+  <p class="mini">본문을 마친 뒤 시간이 남으면 이어서 합니다. 여기에서 만드는 앱은 본문의 영화 앱과 별개이며, <b>main.py</b>를 새로 만듭니다.</p>
 
-  <h2>1. 표준화 스위치 — 단위를 맞추면 누가 옮겨 가는가</h2>
-  <p>본문에서는 표준화를 켜고 끄면 43명 가운데 13명이 다른 묶음으로 옮겨 간다는 결과만 확인했습니다. 아래 그림에서는 그 13명이 누구인지, 그리고 여섯 항목이 거리에 각각 얼마씩 실리는지를 버튼으로 바꿔 가며 볼 수 있습니다. 점 하나를 누르면 그 선수의 원래값과 표준화값이 오른쪽에 함께 표시됩니다.</p>
+  <h2>1. 야구로도 해 보기 — 타자 43명을 여섯 항목으로</h2>
+  <p>본문에서는 영화를 네 속성으로 묶었습니다. 같은 방법을 종목만 바꾸어 야구 기록에 적용합니다. 본문 1절의 개념 위젯에서 본 그 43명입니다.</p>
+  <p>데이터는 <b>2025 정규시즌 규정타석을 채운 타자 43명</b>의 공식 기록(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025.csv" target="_blank" rel="noopener"><code>kbo_hitters_2025.csv</code></a> — 원출처: <a href="https://www.koreabaseball.com" target="_blank" rel="noopener">KBO 공식 기록실</a>)입니다. 행 하나가 선수 한 명, 열은 홈런·도루·볼넷·삼진·출루율·장타율·타율 등 20개 항목입니다. 홈런 1위 디아즈(50개), 도루 1위 박해민(49개), 타율 1위 양의지(0.337)가 모두 이 표 안에 있습니다.</p>
+  <p>묶는 데 사용하는 여섯 항목의 뜻은 이렇습니다. 홈런은 타자가 한 번에 홈까지 도는 안타, 도루는 주자가 다음 베이스를 빼앗은 횟수, 볼넷은 투수가 스트라이크가 아닌 공 네 개를 던져 타자가 1루로 걸어 나간 횟수, 삼진은 타자가 스트라이크 세 개로 물러난 횟수입니다. <b>출루율</b>은 타석에서 살아 나간 비율이고, <b>장타율</b>은 한 타수에 몇 베이스를 벌었는지를 나타내는 비율입니다. 앞의 넷은 개수이고 뒤의 둘은 비율이라는 점을 기억해 둡니다.</p>
+  <p class="mini">📌 <b>스냅샷 표기:</b> 본문의 영화 표와 달리 이 데이터는 날마다 갱신되지 않습니다. 2025 정규시즌이 끝난 뒤 확정된 기록을 파일 하나로 고정해 두었고, 링크도 그 고정본을 가리킵니다. 그래서 이 절에 적힌 수치는 언제 실행해도 같은 값이 나옵니다. 다만 표준화 여부·k·시작 중심점을 바꾸면 결과는 달라집니다.</p>
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"타자 유형 군집" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py 하나로.
+데이터: https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025.csv
+이 파일의 열 이름은 선수명, 팀, 경기, 타석, 타수, 득점, 안타, 2루타, 3루타, 홈런, 타점, 도루, 볼넷, 사구, 삼진, 병살, 타율, 출루율, 장타율, OPS이고, 인코딩은 UTF-8이야.
+2025 정규시즌 규정타석을 채운 타자 43명의 기록이야.
+홈런, 도루, 볼넷, 삼진, 출루율, 장타율 여섯 항목으로 비슷한 선수끼리 묶어 줘.
+항목마다 단위와 변화 폭이 다르니 표준화를 적용해 줘.
+묶음의 개수는 2에서 6까지 슬라이더로 고르게 하고, 같은 설정에서 결과가 같도록 초기화 조건을 고정해 줘.
+묶음마다 평균 기록과 소속 선수 명단을 보여 주고, 묶음별 인원과 묶은 선수 수 43명을 화면에 적어 줘.
+가로축과 세로축에 사용할 기록 항목을 고르면 선수 43명을 점으로 찍고 묶음마다 색을 다르게 해 줘. 그래프는 plotly로 그려 줘.
+필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다.</p><div class="codewrap code"><span class="label">main.py</span><pre># main.py — 비슷한 선수끼리 묶는다
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+DATA_URL = "https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025.csv"
+FEATS = ["홈런", "도루", "볼넷", "삼진", "출루율", "장타율"]
+
+
+@st.cache_data
+def load_data():
+    return pd.read_csv(DATA_URL)
+
+
+df = load_data()
+k = st.slider("몇 묶음으로 나눌까요", 2, 6, 3)
+
+X = df[FEATS]
+Xs = StandardScaler().fit_transform(X)
+df["묶음(표준화 후)"] = KMeans(n_clusters=k, n_init=10, random_state=42).fit_predict(Xs)
+
+st.subheader("묶음별 평균 기록 (표준화 후)")
+st.dataframe(df.groupby("묶음(표준화 후)")[FEATS].mean().round(2))
+
+st.subheader("묶음별 선수 명단")
+for g, part in df.groupby("묶음(표준화 후)"):
+    st.write(f"{g}번 묶음 ({len(part)}명): " + ", ".join(part["선수명"]))
+
+st.subheader("두 항목으로 보는 산점도")
+c1, c2 = st.columns(2)
+xcol = c1.selectbox("가로축", FEATS, index=3)
+ycol = c2.selectbox("세로축", FEATS, index=0)
+fig = px.scatter(df, x=xcol, y=ycol, color=df["묶음(표준화 후)"].astype(str),
+                 hover_name="선수명", labels={"color": "묶음"})
+st.plotly_chart(fig, width="stretch")
+st.caption("묶은 선수 43명 · 2025 정규시즌 규정타석")</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
+pandas
+scikit-learn
+plotly</pre></div></details>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 실행하고 명단을 읽는다</span><br>
+      받은 코드를 <b>main.py</b>와 <b>requirements.txt</b> 두 파일로 저장해 실행합니다. 오늘 앱은 화면이 하나입니다. k를 2에서 6까지 바꿔 봅니다. 묶음이 갈라지고 합쳐질 때마다 명단을 읽습니다. 43명이라 전체를 눈으로 읽을 수 있습니다. 내가 아는 선수가 어느 묶음에 들어갔는지가 첫 번째 관찰 거리입니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 표준화 실험</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>같은 여섯 항목을 표준화하지 않고 원래 기록 그대로 묶은 결과도 만들어서,
+표준화 전과 후의 묶음이 어떻게 달라졌는지 나란히 비교해 줘.
+묶음이 달라진 선수의 이름을 목록으로 보여 주고, 몇 명인지도 적어 줘.
+잘 나뉜 정도를 나타내는 점수도 묶음 개수 2부터 6까지 표로 보여 주고, 점수 변화는 plotly 선 그래프로 그려 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 표준화 전후 비교와 k별 점수
+df["묶음(표준화 전)"] = KMeans(n_clusters=k, n_init=10, random_state=42).fit_predict(X)
+
+st.subheader("표준화 전과 후, 그리고 k별 점수")
+st.dataframe(pd.crosstab(df["묶음(표준화 전)"], df["묶음(표준화 후)"]))
+
+pair = df.groupby("묶음(표준화 전)")["묶음(표준화 후)"].agg(lambda s: s.mode()[0])
+moved = df[df["묶음(표준화 후)"] != df["묶음(표준화 전)"].map(pair)]
+st.write(f"묶음이 달라진 선수 {len(moved)}명: " + ", ".join(moved["선수명"]))
+
+scores = pd.DataFrame([{"k": kk,
+                        "점수(실루엣)": round(silhouette_score(Xs, KMeans(n_clusters=kk, n_init=10, random_state=42).fit_predict(Xs)), 3)}
+                       for kk in range(2, 7)])
+st.dataframe(scores, hide_index=True)
+st.plotly_chart(px.line(scores, x="k", y="점수(실루엣)", markers=True), width="stretch")
+st.caption("점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 같지는 않습니다.")</pre></div></details>
+    </li>
+  </ol>
+
+  <p>아래 표는 예시 코드와 같은 조건으로 만든 k=3 군집의 평균 기록입니다. 코드의 묶음 번호 1·2·0을 이 표에서는 각각 ㉮·㉯·㉰로 표시했습니다. 번호에는 순위의 뜻이 없습니다. 각 묶음에 유형 이름을 붙이고 평균 기록과 선수 명단을 근거로 설명합니다. 본문 4절에서 영화 묶음에 이름을 붙일 때와 같은 방식입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>묶음</th><th>인원</th><th>홈런</th><th>도루</th><th>볼넷</th><th>삼진</th><th>출루율</th><th>장타율</th><th>대표 선수</th><th>유형 이름은?</th></tr></thead>
+    <tbody>
+      <tr><td>㉮</td><td>9</td><td><b>27.6</b></td><td>6.9</td><td><b>67.0</b></td><td>90.6</td><td><b>0.393</b></td><td><b>0.542</b></td><td>양의지 · 구자욱 · 디아즈</td><td></td></tr>
+      <tr><td>㉯</td><td>18</td><td>6.4</td><td><b>17.1</b></td><td>56.1</td><td>72.7</td><td>0.374</td><td>0.393</td><td>박해민 · 정수빈 · 신민재</td><td></td></tr>
+      <tr><td>㉰</td><td>16</td><td>16.8</td><td>5.4</td><td>41.9</td><td><b>108.6</b></td><td>0.332</td><td>0.429</td><td>오지환 · 박동원</td><td></td></tr>
+    </tbody>
+  </table>
+  <p>아래 위젯에서는 k를 2부터 6까지 바꿔 가며 잘 나뉜 정도를 나타내는 점수(실루엣)와 선수의 소속을 비교할 수 있습니다. 위젯에서 k=2의 평균 실루엣은 0.268, k=3은 0.262입니다. 점수가 가장 높은 k와 사람이 이해하기 좋은 k가 늘 같지는 않습니다. 유형 해석 연습은 모든 모둠이 같은 표를 사용하도록 k=3 결과로 진행합니다. k=3이 점수상 최적이라는 뜻은 아닙니다.</p>
+  <figure class="interactive" data-fig="kpick">
+    <div class="widget" data-w="kpick" style="overflow-x:auto">
+  <svg viewBox="0 0 720 450" style="min-width:640px">
+    <text x="150" y="26" font-size="14" fill="#6b7385">43명 실루엣</text>
+    <text x="450" y="36" font-size="13" fill="#6b7385">k 선택은 사람 몫 · 자동 추천 없음</text>
+    <text x="210" y="42" font-size="12" text-anchor="middle" fill="#6b7385">0</text>
+    <text class="meantext" x="317.2" y="42" font-size="13" text-anchor="middle" fill="#b07a00">평균 0.268</text>
+    <text x="170" y="414" font-size="12" text-anchor="middle" fill="#6b7385">−0.1</text>
+    <text x="410" y="414" font-size="12" text-anchor="middle" fill="#6b7385">0.5</text>
+    <g class="cards"></g>
+    <g class="bars"></g>
+    <g class="glab"></g>
+    <line x1="210" y1="46" x2="210" y2="402" stroke="#6b7385"/>
+    <line class="meanline" x1="317.2" y1="46" x2="317.2" y2="402" stroke="#b07a00" stroke-width="1" stroke-dasharray="3 3"/>
+    <text class="pinname" x="0" y="0" font-size="13" fill="#1c2230" display="none"></text>
+    <text class="readout" x="150" y="430" font-size="13" fill="#1c2230">막대 클릭 → 선수 한 명 고정 · k 변경 시 소속 이동 확인</text>
+  </svg>
+  <div class="wctl">
+    <button class="wbtn on" type="button" data-k="2">★ k=2 · 0.268</button>
+    <button class="wbtn" type="button" data-k="3">k=3 · 0.262</button>
+    <button class="wbtn" type="button" data-k="4">k=4 · 0.222</button>
+    <button class="wbtn" type="button" data-k="5">k=5 · 0.230</button>
+    <button class="wbtn" type="button" data-k="6">k=6 · 0.188</button>
+    <span class="wout">평균 0.268 · 음수 1명 · 가장 작은 묶음 10명</span>
+  </div>
+</div>
+    <figcaption>k=2와 k=3의 점수와 선수 소속을 비교합니다. ★는 점수가 가장 높은 k라는 표시일 뿐, 가장 좋은 답이라는 뜻이 아닙니다. 막대가 0보다 왼쪽으로 뻗은 선수는 점수가 음수인 선수이며, 자기 묶음보다 옆 묶음에 더 가깝다는 뜻입니다. 아래 유형 해석은 공통으로 k=3 결과를 사용합니다.</figcaption>
+  </figure>
+
+  <h2>2. 표준화 스위치 — 단위를 맞추면 누가 옮겨 가는가</h2>
+  <p>앞 절에서 묶은 43명을 두고, 표준화를 켜고 끄면 43명 가운데 13명이 다른 묶음으로 옮겨 갑니다. 아래 그림에서는 그 13명이 누구인지, 그리고 여섯 항목이 거리에 각각 얼마씩 실리는지를 버튼으로 바꿔 가며 볼 수 있습니다. 점 하나를 누르면 그 선수의 원래값과 표준화값이 오른쪽에 함께 표시됩니다.</p>
   <figure class="interactive" data-fig="stdswitch">
     <div class="widget" data-w="stdswitch" style="overflow-x:auto">
 <svg viewBox="0 0 720 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="표준화 스위치: 같은 여섯 항목 k=3 군집을 원래 단위와 표준화 두 가지 자로 나눈 결과 비교" style="min-width:640px">
@@ -111,8 +238,8 @@
     <p>표준화는 항목마다 다른 단위를 맞추는 처리입니다. 단위를 맞춘 뒤에도 어느 항목이 묶음을 실제로 나누었는지는 고르지 않습니다. 아래 막대가 그 점을 보여 줍니다. 어느 항목이 결과를 갈랐는지는 묶음별 평균 기록을 읽어야 알 수 있습니다.</p>
   </div>
 
-  <h2>2. 확장 데이터 세 가지</h2>
-  <p>본문과 같은 방법을 더 큰 데이터에 적용합니다. 프롬프트의 파일 주소와 항목 이름만 바꾸면 같은 앱이 그대로 동작합니다.</p>
+  <h2>3. 확장 데이터 세 가지</h2>
+  <p>앞 절과 같은 방법을 더 큰 데이터에 적용합니다. 프롬프트의 파일 주소와 항목 이름만 바꾸면 같은 앱이 그대로 동작합니다.</p>
   <ul>
     <li><b>투수 가운데 30이닝 이상 던진 138명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_pitchers_2025.csv" target="_blank" rel="noopener"><code>kbo_pitchers_2025.csv</code></a>)입니다. 이닝·경기 수·세이브·홀드·K/9·ERA·WHIP으로 묶으면 네 유형이 나타납니다. 이닝 열은 <code>197 1/3</code>처럼 분수로 적혀 있으므로, 숫자로 바꿔 달라는 내용을 프롬프트에 함께 넣어야 합니다. 실측으로는 <b>선발형</b>(이닝 132), <b>마무리형</b>(세이브 27.4, 박영현·김택연), <b>필승조</b>(홀드 13.9), <b>추격조</b> 네 유형으로 나뉘었고, 이번에는 점수(실루엣)도 k=4를 가리켰습니다. 이 네 유형이 실제 보직 구분과 얼마나 닮았는지는 선수별 기록과 보직을 따로 확인해야 알 수 있습니다.</li>
     <li><b>타자 전체 396명</b>(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/kbo_hitters_2025_full.csv" target="_blank" rel="noopener"><code>kbo_hitters_2025_full.csv</code></a>)입니다. 부분 출전 선수까지 전부 들어 있습니다. 그대로 군집하면 1타석 타율 1.000 같은 값이 결과를 흔듭니다. 몇 타석부터 믿을 수 있는 기록인지 <b>최소 타석 기준을 스스로 정하는 것</b>이 이 데이터의 과제입니다. 6차시의 관측일 필터와 같은 판단입니다.</li>
@@ -121,6 +248,7 @@
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
+    <li>타자 43명을 여섯 항목으로 묶고, 세 묶음에 이름과 근거를 적었다.</li>
     <li>표준화 전과 후에 묶음이 달라진 선수가 누구인지 화면에서 확인했다.</li>
     <li>단위를 맞춘 뒤에도 항목이 묶음을 나눈 정도는 고르지 않다는 것을 막대로 확인했다.</li>
     <li>확장 데이터 가운데 하나를 골라 묶고, 묶음마다 이름과 근거를 적었다.</li>
