@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>9차시 실험실 · 팀장 보고서와 속성 바꿔 실험하기 · 데이터 과학 당곡고 · 개정 검토본</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<style>main { overflow-wrap: anywhere; } .daymap { display: block; max-width: 100%; overflow-x: auto; }</style>
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+  <span class="badge review-edition">개정 검토본</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 9차시</span>
+  <h1>9차시 실험실 · <span class="a">팀장 보고서와 속성 바꿔 실험하기</span></h1>
+  <div class="under"></div>
+
+  <p class="lead">9차시 본문에서는 이미 결과가 나온 영화로 두 가지 분류기를 만들고 정확도를 적었습니다. 이 실험실에서는 두 가지를 더 합니다. 아직 결과가 나오지 않은 최근 개봉작에 같은 모델을 적용해 팀장에게 낼 보고서를 만들고, 입력으로 사용할 속성을 바꿔 가며 점수가 어떻게 달라지는지 확인합니다.</p>
+  <p class="mini"><a href="lesson09.html">← 9차시 교재로</a></p>
+
+  <div class="make-banner">
+    <div class="t">🎯 두 가지</div>
+    <ul>
+      <li><b>1 팀장에게 보고하기</b> — 최근 개봉작의 흥행 여부를 예측해 배급팀에 낼 표를 만든다</li>
+      <li><b>2 속성 바꿔 실험하기</b> — 입력으로 사용할 속성을 바꿔 가며 점수와 트리의 질문이 어떻게 달라지는지 본다</li>
+    </ul>
+  </div>
+
+  <p class="mini">본문 3절의 ③까지 마친 뒤 시간이 남으면 이어서 합니다. 새 앱을 만들지 않고 본문에서 만든 <b>main.py</b>를 그대로 고쳐 갑니다. 두 도전 모두 ③까지 완성한 코드에서 출발합니다.</p>
+
+  <h2>1. 속성 바꿔 실험하기</h2>
+
+  <p>이 도전에서는 <b>입력으로 사용할 속성을 화면 맨 위에서 고릅니다.</b> 본문에서 사용한 세 가지 말고도 <b>7차시 실험실에서 사용한 배우 수·주연 수·상영시간·청소년관람불가·대형 배급사</b>를 넣어 볼 수 있습니다. 7차시 실험실이 회귀에서 던진 "속성을 더 모으면 예측이 달라질까"를 분류에서 다시 확인하는 대목입니다. 고른 속성은 정확도만 바꾸지 않습니다. 트리가 던지는 질문, 속성 중요도, 가중치, 그리고 1절의 보고서까지 모두 다시 계산됩니다. 배급사를 넣으면 트리가 첫 질문부터 달라지는지 확인해 봅니다.</p>
+
+    <ol class="steps">
+<li><span class="st">도전 프롬프트 — 입력을 바꿔 가며 실험하기</span>
+      <p class="mini">이 도전은 9차시 본문에서 만든 앱에 이어서 합니다. 앞에서 만든 main.py를 열어 둔 채로 아래 프롬프트를 붙여 넣습니다. 화면 위쪽의 정확도 카드 셋은 스크린 수·상영 횟수·성수기 세 가지로 학습한 값 그대로이며, 여기에서 속성을 바꾸어도 달라지지 않습니다. 본문의 정확도 표에는 그 고정된 카드의 숫자를 적습니다.</p>
+      <div class="codewrap improve"><span class="label">도전 프롬프트</span><button class="copy-btn">복사</button><pre>앞 코드에 이어서 입력으로 사용할 속성을 바꿔 가며 실험하고 싶어.
+바뀐 main.py 전체를 다시 줘. 바뀐 부분만 주지 말고.
+이 실험은 새 탭에 넣어 줘. 탭 이름은 "속성 바꿔 실험하기"야.
+그 탭 안에서 입력으로 사용할 속성을 고를 수 있게 해 줘. 기본값은 스크린 수·상영 횟수·성수기 세 가지야.
+화면 위쪽의 정확도 카드 셋은 스크린 수·상영 횟수·성수기로 학습한 값 그대로 두고, 여기에서 속성을 바꿔도 다시 계산되지 않게 해 줘.
+고른 속성으로 두 모델을 다시 학습해서, 그 결과는 이 탭 안에 실험 결과 카드로 따로 보여 주고 고정 카드와의 차이도 함께 표시해 줘.
+실험한 트리가 던지는 질문, 속성 중요도, 가중치도 이 탭 안에서 다시 보여 줘.
+중요도는 파이 차트로, 가중치는 가로 막대그래프로 그려 줘. 가중치는 0을 기준으로 양수와 음수를 다른 색으로 하고 0 위치에 세로선을 그어 줘.
+고를 수 있는 속성에 7차시 실험실에서 사용한 것도 넣어 줘.
+https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv 에
+movieCd·actors_n(배우 수)·lead_n(주연 수)·showTm(상영시간)·watchGrade(관람등급)·company(배급사)가 있어. 인코딩은 utf-8-sig야.
+인물 표에도 movieNm과 openDt가 있어서 통째로 합치면 열 이름이 겹쳐. movieCd와 필요한 열만 골라서 합쳐 줘.
+movieCd로 left 조인하고, 관람등급에서 청소년관람불가 여부를, 배급사에서 대형 배급사 여부를 0과 1로 만들어 줘.
+대형 배급사는 훈련용 데이터에서 많이 나온 상위 다섯 곳으로 정해 줘.
+고른 속성의 값이 모두 있는 영화만 사용하고, 몇 편으로 학습했는지 적어 줘.
+속성을 바꿔도 훈련용과 테스트용 구분은 달라지지 않게, 영화를 빼기 전에 먼저 정해 줘.
+아무것도 고르지 않거나 사용할 수 있는 영화가 너무 적으면 안내 문구를 보여 주고 거기서 멈춰 줘. 이때도 앞 탭의 화면은 그대로 남아 있어야 해.
+트리의 질문에는 속성마다 단위를 붙여 줘. 스크린 수는 개, 상영 횟수는 회, 배우 수와 주연 수는 명, 상영시간은 분이야.
+성수기·청소년관람불가·대형 배급사처럼 값이 0과 1뿐인 속성은 "성수기에 개봉하지 않았는가?"처럼 예와 아니오로 답하는 질문으로 써 줘.
+"상영시간이", "배우 수가"처럼 받침에 맞는 조사를 붙여 줘.
+앞에서 정한 네 가지 라이브러리만 사용해 줘. 그림은 plotly로 그려 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">여기까지 만든 main.py 전체입니다. 파일을 통째로 바꾸어 저장합니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 수집된 누적 관객 수가 기준을 넘는지 분류한다
+import math
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
+
+st.set_page_config(page_title="흥행 분류기", page_icon="🎬", layout="wide")
+st.title("🎬 흥행 분류기")
+st.caption("영화가 기준을 넘을지 두 가지 모델로 판정합니다.")
+
+MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+기준 = 1_000_000                                          # 누적 관객 100만 명 이상이면 성공
+
+
+@st.cache_data
+def load_data():
+    return pd.read_csv(MOVIES, dtype={"movieCd": str}).sort_values("movieCd").reset_index(drop=True)
+
+
+df = load_data()
+df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
+st.caption(f"누적 관객 {기준:,}명 이상을 성공으로 봅니다 · "
+           f"전체 {len(df):,}편 가운데 성공 {df['성공'].sum():,}편")
+
+is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
+X = df[["first_scrn", "first_show", "peak"]].rename(
+    columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
+y = df["성공"]
+
+scaler = StandardScaler().fit(X[~is_test])
+logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~is_test])
+prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
+예측 = (prob &gt;= 0.5).astype(int)
+
+# 트리는 값의 크기에 영향받지 않으므로 표준화하지 않은 X를 그대로 사용한다
+# 끝마디에 영화가 다섯 편 미만이면 더 나누지 않는다. 한두 편으로 만든 규칙을 막는다
+tree = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~is_test], y[~is_test])
+
+st.subheader("두 모델의 정확도")
+많은쪽 = 1 if y[~is_test].mean() &gt; 0.5 else 0             # 훈련용에서 편수가 많은 범주
+기준선 = float((y[is_test] == 많은쪽).mean())              # 그쪽으로만 답했을 때의 정확도
+c1, c2, c3 = st.columns(3)
+c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], 예측):.3f}")
+c2.metric("의사결정트리 정확도", f"{accuracy_score(y[is_test], tree.predict(X[is_test])):.3f}")
+c3.metric("한쪽으로만 답했을 때", f"{기준선:.3f}",
+          help="입력을 보지 않고 훈련용에서 편수가 많은 쪽으로만 답한 경우입니다.")
+맞힌편수 = int((예측 == y[is_test].to_numpy()).sum())
+st.caption(f"테스트용 영화 {int(is_test.sum()):,}편 가운데 로지스틱 회귀가 {맞힌편수:,}편을 맞혔습니다 "
+           f"({맞힌편수:,} ÷ {int(is_test.sum()):,}).")
+
+단위 = {"스크린 수": "개", "상영 횟수": "회", "배우 수": "명", "주연 수": "명", "상영시간": "분"}
+예아니오 = {"성수기": "성수기에 개봉하지 않았는가?",
+          "청소년관람불가": "청소년관람불가 등급이 아닌가?",
+          "대형 배급사": "대형 배급사가 아닌가?"}
+
+
+def 조사(말):
+    """받침이 있으면 '이', 없으면 '가'를 붙인다."""
+    끝 = ord(말[-1])
+    받침 = (끝 - 0xAC00) % 28 if 0xAC00 &lt;= 끝 &lt;= 0xD7A3 else 0
+    return 말 + ("이" if 받침 else "가")
+
+
+def 질문(t, 열이름, 마디):
+    """분기 조건을 한글 질문으로 바꾼다. '예'가 왼쪽 가지다."""
+    속성 = 열이름[t.feature[마디]]
+    경계 = float(t.threshold[마디])
+    if 속성 in 예아니오:                       # 0과 1뿐인 속성은 경계가 0.5다
+        return 예아니오[속성]
+    return f"{조사(속성)} {math.floor(경계):,}{단위.get(속성, '')} 이하인가?"
+
+
+def 마디설명(t, 마디):
+    편수 = int(t.n_node_samples[마디])
+    성공 = int(round(t.value[마디][0][1] * 편수))
+    return f"영화 {편수}편 중 성공 {성공}편"
+
+
+def 답(t, 마디):
+    편수 = int(t.n_node_samples[마디])
+    성공 = int(round(t.value[마디][0][1] * 편수))
+    return "성공" if 성공 * 2 &gt; 편수 else "기준 미달"
+
+
+def 트리읽기(t, 열이름, 마디=0, 들여=""):
+    """트리를 질문과 예·아니오로 읽어 내려간다."""
+    if t.feature[마디] &lt; 0:
+        return [f"판정: {답(t, 마디)}  ({마디설명(t, 마디)})"]
+    줄 = [f"{질문(t, 열이름, 마디)}  ({마디설명(t, 마디)})"]
+    for 답변, 자식 in (("예", t.children_left[마디]), ("아니오", t.children_right[마디])):
+        아래 = 트리읽기(t, 열이름, 자식, 들여)
+        줄.append(f"{들여}   {답변} → {아래[0]}")
+        줄.extend(f"{들여}        {x}" for x in 아래[1:])
+    return 줄
+
+
+열이름 = list(X.columns)
+
+
+탭1, 탭2, 탭3, 탭4 = st.tabs(["확률로 보기", "질문으로 보기", "무엇을 보고 맞혔나", "속성 바꿔 실험하기"])
+
+with 탭1:
+    확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
+                         "추정 확률": prob.round(3),
+                         "실제": ["성공" if v else "기준 미달" for v in y[is_test]],
+                         "스크린 수": df.loc[is_test, "first_scrn"].values,
+                         "누적 관객": df.loc[is_test, "total_audi"].values,
+                         "개봉일": pd.to_datetime(df.loc[is_test, "openDt"], format="%Y%m%d",
+                                               errors="coerce").dt.strftime("%Y.%m.%d").values})
+    확률표 = 확률표.sort_values("추정 확률", ascending=False)
+    fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
+                     log_x=True, color_discrete_map={"성공": "#d64545", "기준 미달": "#2b7fd6"})
+    fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
+    fig.update_traces(marker=dict(size=11, opacity=0.8))
+    fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
+    st.plotly_chart(fig, width="stretch")
+    st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
+               "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 표시됩니다.")
+    st.dataframe(확률표, width="stretch", hide_index=True, column_config={
+        "추정 확률": st.column_config.ProgressColumn("추정 확률", min_value=0.0, max_value=1.0, format="%.2f"),
+        "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
+        "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명"),
+    })
+
+with 탭2:
+    st.subheader("트리는 어떤 질문을 던지나")
+    st.markdown("&lt;div style='font-size:1.02rem; line-height:1.95; white-space:pre-wrap'&gt;"
+                + "\n".join(트리읽기(tree.tree_, 열이름)) + "&lt;/div&gt;", unsafe_allow_html=True)
+    st.caption("위에서부터 질문에 답하며 내려가면 마지막 줄의 판정에 닿습니다. "
+               "괄호 안은 그 마디에 있는 훈련용 영화의 편수입니다. "
+               "끝마디의 판정은 그 안에서 편수가 많은 쪽입니다. "
+               "성공과 기준 미달이 같은 수이면 기준 미달로 판정합니다.")
+
+    with st.expander("트리 그림으로 보기"):
+        st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=열이름,
+                                          class_names=["기준 미달", "성공"], filled=True, rounded=True))
+
+with 탭3:
+    st.subheader("의사결정트리가 본 것 — 속성 중요도")
+    중요도 = pd.Series(tree.feature_importances_, index=X.columns).sort_values(ascending=False)
+    중요도표 = 중요도.round(3).reset_index()
+    중요도표.columns = ["속성", "중요도"]
+    st.dataframe(중요도표, width="stretch", hide_index=True)
+    st.caption("중요도는 트리가 그 속성으로 얼마나 많이, 얼마나 크게 나눴는지를 나타냅니다. "
+               "모두 더하면 1입니다. 0이면 그 속성으로는 한 번도 나누지 않았다는 뜻입니다.")
+
+    st.subheader("로지스틱 회귀가 본 것 — 가중치")
+    가중치 = pd.Series(logi.coef_[0], index=X.columns)
+    가중치표 = 가중치.reindex(가중치.abs().sort_values(ascending=False).index).round(3).reset_index()
+    가중치표.columns = ["속성", "가중치"]
+    st.dataframe(가중치표, width="stretch", hide_index=True)
+    st.caption(f"절편은 {logi.intercept_[0]:.3f}입니다. 가중치는 표준화한 값에 곱하는 수입니다. "
+               "0보다 크면 그 값이 클수록 성공 확률이 올라가고, 작으면 내려갑니다. "
+               "중요도와 달리 부호가 있고, 모두 더해도 1이 되지 않습니다.")
+
+
+with 탭4:
+    # 도전 — 입력을 바꿔 가며 실험한다. 위쪽 정확도 카드는 이 선택을 따르지 않는다
+    PEOPLE = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv"
+
+    @st.cache_data
+    def load_people():
+        return pd.read_csv(PEOPLE, encoding="utf-8-sig", dtype={"movieCd": str})
+
+    확장 = df.merge(load_people()[["movieCd", "actors_n", "lead_n", "showTm", "watchGrade", "company"]],
+                  on="movieCd", how="left").reset_index(drop=True)
+    확장["테스트용"] = 확장.index % 10 &lt; 3        # 속성을 바꿔도 훈련용·테스트용 구분은 그대로 둔다
+    확장["청소년관람불가"] = (확장["watchGrade"] == "청소년관람불가").astype(float)
+    큰곳 = 확장.loc[~확장["테스트용"], "company"].value_counts().head(5).index   # 훈련용에서만 정한다
+    확장["대형 배급사"] = 확장["company"].isin(큰곳).astype(float)
+    확장 = 확장.rename(columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기",
+                             "actors_n": "배우 수", "lead_n": "주연 수", "showTm": "상영시간"})
+    후보 = ["스크린 수", "상영 횟수", "성수기", "배우 수", "주연 수", "상영시간", "청소년관람불가", "대형 배급사"]
+
+    st.subheader("입력을 바꿔 가며 실험하기")
+    st.info("위쪽의 정확도 카드 셋은 스크린 수·상영 횟수·성수기 세 가지로 학습한 값이며, "
+            "여기에서 속성을 바꿔도 달라지지 않습니다. 정확도 표에는 그 카드의 숫자를 적습니다. "
+            "이 탭의 결과는 실험 결과로만 따로 표시됩니다.")
+    고른속성 = st.multiselect("입력으로 사용할 속성", 후보,
+                          default=["스크린 수", "상영 횟수", "성수기"])
+
+    쓸수있음 = 확장[고른속성].notna().all(axis=1) if 고른속성 else pd.Series(False, index=확장.index)
+    실험df = 확장.loc[쓸수있음].reset_index(drop=True)
+    실험테스트 = 실험df.pop("테스트용") if len(실험df) else pd.Series(dtype=bool)
+
+    if not 고른속성:
+        st.warning("속성을 하나 이상 골라 주세요.")
+    elif 실험테스트.sum() &lt; 5 or (~실험테스트).sum() &lt; 20:
+        st.warning("고른 속성으로 사용할 수 있는 영화가 너무 적습니다. 속성을 바꿔 보세요.")
+    else:
+        X2, y2 = 실험df[고른속성], 실험df["성공"]
+        스케일러2 = StandardScaler().fit(X2[~실험테스트])
+        회귀2 = LogisticRegression(max_iter=2000).fit(스케일러2.transform(X2[~실험테스트]), y2[~실험테스트])
+        확률2 = 회귀2.predict_proba(스케일러2.transform(X2[실험테스트]))[:, 1]
+        트리2 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5,
+                                     random_state=0).fit(X2[~실험테스트], y2[~실험테스트])
+        많은쪽2 = 1 if y2[~실험테스트].mean() &gt; 0.5 else 0
+        회귀점수 = accuracy_score(y2[실험테스트], (확률2 &gt;= 0.5).astype(int))
+        트리점수 = accuracy_score(y2[실험테스트], 트리2.predict(X2[실험테스트]))
+        기준선2 = float((y2[실험테스트] == 많은쪽2).mean())
+
+        st.markdown("**실험 결과 — 고른 속성으로 다시 학습한 점수**")
+        d1, d2, d3 = st.columns(3)
+        d1.metric("로지스틱 회귀 (실험)", f"{회귀점수:.3f}",
+                  delta=f"{회귀점수 - accuracy_score(y[is_test], 예측):+.3f}")
+        d2.metric("의사결정트리 (실험)", f"{트리점수:.3f}",
+                  delta=f"{트리점수 - accuracy_score(y[is_test], tree.predict(X[is_test])):+.3f}")
+        d3.metric("한쪽으로만 답했을 때 (실험)", f"{기준선2:.3f}")
+        st.caption(f"{len(고른속성)}가지 입력 · 값이 모두 있는 영화 {len(실험df):,}편으로 학습했습니다"
+                   f"(전체 {len(확장):,}편). 테스트용은 {int(실험테스트.sum()):,}편입니다. "
+                   "화살표는 위쪽 고정 카드와 비교한 차이입니다. 값이 없는 영화가 빠지면 "
+                   "테스트용 편수까지 달라지므로 두 점수를 같은 조건의 비교로 볼 수는 없습니다.")
+
+        st.markdown("**실험 트리는 어떤 질문을 던지나**")
+        st.markdown("&lt;div style='font-size:1.02rem; line-height:1.95; white-space:pre-wrap'&gt;"
+                    + "\n".join(트리읽기(트리2.tree_, list(X2.columns))) + "&lt;/div&gt;",
+                    unsafe_allow_html=True)
+
+        st.markdown("**실험 트리의 속성 중요도**")
+        중요도2 = pd.Series(트리2.feature_importances_, index=X2.columns)
+        중요도2 = 중요도2[중요도2 &gt; 0].sort_values(ascending=False).round(3).reset_index()
+        중요도2.columns = ["속성", "중요도"]
+        중요도그림 = px.pie(중요도2, names="속성", values="중요도", hole=0.35)
+        중요도그림.update_traces(textinfo="label+percent", sort=False)
+        중요도그림.update_layout(height=300, showlegend=False)
+        st.plotly_chart(중요도그림, width="stretch")
+
+        st.markdown("**실험 로지스틱 회귀의 가중치**")
+        가중치2 = pd.Series(회귀2.coef_[0], index=X2.columns).round(3).reset_index()
+        가중치2.columns = ["속성", "가중치"]
+        가중치2["방향"] = ["성공 확률을 올림" if v &gt; 0 else "성공 확률을 내림" for v in 가중치2["가중치"]]
+        가중치그림 = px.bar(가중치2.sort_values("가중치"), x="가중치", y="속성", orientation="h",
+                        color="방향",
+                        color_discrete_map={"성공 확률을 올림": "#d64545", "성공 확률을 내림": "#2b7fd6"})
+        가중치그림.add_vline(x=0, line_width=1.5, line_color="#1c2230")
+        가중치그림.update_layout(height=300, yaxis_title=None, legend_title_text="")
+        st.plotly_chart(가중치그림, width="stretch")
+        st.caption(f"절편은 {회귀2.intercept_[0]:.3f}입니다. "
+                   "속성 중요도도 가중치도 이 모델이 무엇을 단서로 삼았는지 보여 줄 뿐 "
+                   "인과관계의 증거가 아닙니다.")</pre></div></details>
+    </li>
+  </ol>
+
+  <p>인물 표에 값이 없는 영화는 그 속성을 고른 순간 학습에서 빠집니다. 화면에 몇 편으로 학습했는지 표시되므로 함께 봅니다. <b>속성을 더했는데 점수가 내려가는 경우</b>도, <b>뺐는데 오히려 오르는 경우</b>도 나옵니다. 속성을 더한다고 점수가 늘 오르지는 않습니다. 넣기 전과 넣은 뒤를 같은 데이터에서 비교해야 알 수 있습니다.</p>
+
+  <p class="mini">여기에서 얻은 숫자는 본문 3절의 정확도 표에 적지 않습니다. 그 표에는 스크린 수·상영 횟수·성수기 세 가지로 학습했을 때의 숫자를 적습니다.</p>
+
+  <h2>2. 팀장에게 보고하기</h2>
+
+  <p>여기까지는 이미 결과가 나온 영화로 연습했습니다. 정답을 알고 맞히는 일이었습니다. 이제 아직 결과가 나오지 않은 영화에 같은 모델을 적용합니다. 막 개봉한 영화에도 스크린 수와 상영 횟수는 이미 나와 있습니다. 아직 나오지 않은 것은 최종 관객 수뿐입니다. 그러니 이 예측은 연습이 아니라 진짜 예측입니다. 맞았는지는 몇 주 뒤에 알게 됩니다. 이 표가 팀장에게 낼 보고서입니다.</p>
+
+    <ol class="steps" start="2">
+<li><span class="st">④ 보고서 프롬프트 — 팀장에게 보고하기</span>
+      <p class="mini">여기까지는 이미 결과가 나온 영화로 연습했습니다. 정답을 알고 맞히는 일이었습니다. 이제 아직 결과가 나오지 않은 영화에 같은 모델을 적용합니다. 막 개봉한 영화에도 스크린 수와 상영 횟수는 이미 나와 있습니다. 아직 나오지 않은 것은 최종 관객 수뿐입니다. 그러니 이 예측은 연습이 아니라 진짜 예측입니다. 맞았는지는 몇 주 뒤에 알게 됩니다.</p>
+      <p class="mini"><b>이 도전은 바로 앞 도전에 이어서 합니다.</b> 앞 도전의 프롬프트를 아직 붙여 넣지 않았다면 먼저 그 코드를 만들어 실행한 뒤에 아래 프롬프트를 이어서 붙여 넣습니다.</p>
+      <div class="codewrap improve"><span class="label">④ 보고서</span><button class="copy-btn">복사</button><pre>앞 도전에서 만든 코드에 이어서 팀장에게 낼 보고서를 만들어 줘.
+바뀐 main.py 전체를 다시 줘. 바뀐 부분만 주지 말고.
+이 보고서는 새 탭에 넣어 줘. 탭 이름은 "팀장 보고서"야.
+최근에 개봉한 영화만 모아서 두 모델의 예측을 한 표로 보여 줘.
+최근 며칠 안에 개봉한 영화를 볼지 7일에서 90일 사이에서 고를 수 있게 하고 기본값은 60일로 해 줘.
+openDt가 개봉일이고 20260902 같은 여덟 자리 숫자야. 날짜로 바꾼 뒤 오늘과 비교해 줘. 아직 개봉하지 않은 영화도 표에 함께 넣어 줘.
+입력과 모델은 앞 탭에서 고른 속성으로 학습한 것을 그대로 사용해 줘.
+표에는 영화 제목, 개봉일, 스크린 수, 지금까지 관객 수, 성공 확률, 로지스틱 회귀의 판정, 의사결정트리의 판정을 넣어 줘.
+두 모델의 판정은 0과 1이 아니라 "성공"과 "기준 미달"로 적어 줘.
+이미 기준을 넘은 영화인지도 "✅ 이미 넘음"과 "⏳ 아직"으로 넣어 줘.
+성공 확률이 높은 순서로 정렬하고, 확률은 길이가 보이는 막대로 보여 줘. 관객 수와 스크린 수에는 세 자리마다 쉼표를 넣어 줘.
+맨 앞에 신호 열을 두고 성공 확률이 0.5 이상이면 "🔥 기대작", 아니면 "💤 조용"으로 적어 줘.
+표 위에 기대작인 영화의 제목을 초록 상자로 한 줄 보여 주고, 없으면 노란 상자로 기간이나 속성을 바꿔 보라고 안내해 줘.
+두 모델의 판정이 나뉜 영화가 몇 편인지 표 아래에 적어 줘. 해당 기간에 개봉한 영화가 없으면 안내 문구를 보여 줘.
+그 표의 영화 중 하나를 고르면 트리가 어느 질문을 지나 어느 끝에 닿았는지 단계별 표로 보여 줘.
+단계마다 던진 질문, 그 영화의 값, 예와 아니오 중 어느 쪽으로 갔는지, 그 마디의 훈련용 영화 편수를 적어 줘.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">여기까지 만든 main.py 전체입니다. 파일을 통째로 바꾸어 저장합니다.</p><div class="codewrap code"><span class="label">main.py — 완성본</span><button class="copy-btn">복사</button><pre># main.py — 수집된 누적 관객 수가 기준을 넘는지 분류한다
+import math
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
+
+st.set_page_config(page_title="흥행 분류기", page_icon="🎬", layout="wide")
+st.title("🎬 흥행 분류기")
+st.caption("영화가 기준을 넘을지 두 가지 모델로 판정합니다.")
+
+MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
+기준 = 1_000_000                                          # 누적 관객 100만 명 이상이면 성공
+
+
+@st.cache_data
+def load_data():
+    return pd.read_csv(MOVIES, dtype={"movieCd": str}).sort_values("movieCd").reset_index(drop=True)
+
+
+df = load_data()
+df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
+st.caption(f"누적 관객 {기준:,}명 이상을 성공으로 봅니다 · "
+           f"전체 {len(df):,}편 가운데 성공 {df['성공'].sum():,}편")
+
+is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
+X = df[["first_scrn", "first_show", "peak"]].rename(
+    columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
+y = df["성공"]
+
+scaler = StandardScaler().fit(X[~is_test])
+logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~is_test])
+prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
+예측 = (prob &gt;= 0.5).astype(int)
+
+# 트리는 값의 크기에 영향받지 않으므로 표준화하지 않은 X를 그대로 사용한다
+# 끝마디에 영화가 다섯 편 미만이면 더 나누지 않는다. 한두 편으로 만든 규칙을 막는다
+tree = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~is_test], y[~is_test])
+
+st.subheader("두 모델의 정확도")
+많은쪽 = 1 if y[~is_test].mean() &gt; 0.5 else 0             # 훈련용에서 편수가 많은 범주
+기준선 = float((y[is_test] == 많은쪽).mean())              # 그쪽으로만 답했을 때의 정확도
+c1, c2, c3 = st.columns(3)
+c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], 예측):.3f}")
+c2.metric("의사결정트리 정확도", f"{accuracy_score(y[is_test], tree.predict(X[is_test])):.3f}")
+c3.metric("한쪽으로만 답했을 때", f"{기준선:.3f}",
+          help="입력을 보지 않고 훈련용에서 편수가 많은 쪽으로만 답한 경우입니다.")
+맞힌편수 = int((예측 == y[is_test].to_numpy()).sum())
+st.caption(f"테스트용 영화 {int(is_test.sum()):,}편 가운데 로지스틱 회귀가 {맞힌편수:,}편을 맞혔습니다 "
+           f"({맞힌편수:,} ÷ {int(is_test.sum()):,}).")
+
+단위 = {"스크린 수": "개", "상영 횟수": "회", "배우 수": "명", "주연 수": "명", "상영시간": "분"}
+예아니오 = {"성수기": "성수기에 개봉하지 않았는가?",
+          "청소년관람불가": "청소년관람불가 등급이 아닌가?",
+          "대형 배급사": "대형 배급사가 아닌가?"}
+
+
+def 조사(말):
+    """받침이 있으면 '이', 없으면 '가'를 붙인다."""
+    끝 = ord(말[-1])
+    받침 = (끝 - 0xAC00) % 28 if 0xAC00 &lt;= 끝 &lt;= 0xD7A3 else 0
+    return 말 + ("이" if 받침 else "가")
+
+
+def 질문(t, 열이름, 마디):
+    """분기 조건을 한글 질문으로 바꾼다. '예'가 왼쪽 가지다."""
+    속성 = 열이름[t.feature[마디]]
+    경계 = float(t.threshold[마디])
+    if 속성 in 예아니오:                       # 0과 1뿐인 속성은 경계가 0.5다
+        return 예아니오[속성]
+    return f"{조사(속성)} {math.floor(경계):,}{단위.get(속성, '')} 이하인가?"
+
+
+def 마디설명(t, 마디):
+    편수 = int(t.n_node_samples[마디])
+    성공 = int(round(t.value[마디][0][1] * 편수))
+    return f"영화 {편수}편 중 성공 {성공}편"
+
+
+def 답(t, 마디):
+    편수 = int(t.n_node_samples[마디])
+    성공 = int(round(t.value[마디][0][1] * 편수))
+    return "성공" if 성공 * 2 &gt; 편수 else "기준 미달"
+
+
+def 트리읽기(t, 열이름, 마디=0, 들여=""):
+    """트리를 질문과 예·아니오로 읽어 내려간다."""
+    if t.feature[마디] &lt; 0:
+        return [f"판정: {답(t, 마디)}  ({마디설명(t, 마디)})"]
+    줄 = [f"{질문(t, 열이름, 마디)}  ({마디설명(t, 마디)})"]
+    for 답변, 자식 in (("예", t.children_left[마디]), ("아니오", t.children_right[마디])):
+        아래 = 트리읽기(t, 열이름, 자식, 들여)
+        줄.append(f"{들여}   {답변} → {아래[0]}")
+        줄.extend(f"{들여}        {x}" for x in 아래[1:])
+    return 줄
+
+
+열이름 = list(X.columns)
+
+
+실험 = None        # 도전 탭에서 고른 속성으로 학습한 결과. 팀장 보고서가 이것을 사용한다
+탭1, 탭2, 탭3, 탭4, 탭5 = st.tabs(["확률로 보기", "질문으로 보기", "무엇을 보고 맞혔나",
+                              "속성 바꿔 실험하기", "팀장 보고서"])
+
+with 탭1:
+    확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
+                         "추정 확률": prob.round(3),
+                         "실제": ["성공" if v else "기준 미달" for v in y[is_test]],
+                         "스크린 수": df.loc[is_test, "first_scrn"].values,
+                         "누적 관객": df.loc[is_test, "total_audi"].values,
+                         "개봉일": pd.to_datetime(df.loc[is_test, "openDt"], format="%Y%m%d",
+                                               errors="coerce").dt.strftime("%Y.%m.%d").values})
+    확률표 = 확률표.sort_values("추정 확률", ascending=False)
+    fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
+                     log_x=True, color_discrete_map={"성공": "#d64545", "기준 미달": "#2b7fd6"})
+    fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
+    fig.update_traces(marker=dict(size=11, opacity=0.8))
+    fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
+    st.plotly_chart(fig, width="stretch")
+    st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
+               "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 표시됩니다.")
+    st.dataframe(확률표, width="stretch", hide_index=True, column_config={
+        "추정 확률": st.column_config.ProgressColumn("추정 확률", min_value=0.0, max_value=1.0, format="%.2f"),
+        "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
+        "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명"),
+    })
+
+with 탭2:
+    st.subheader("트리는 어떤 질문을 던지나")
+    st.markdown("&lt;div style='font-size:1.02rem; line-height:1.95; white-space:pre-wrap'&gt;"
+                + "\n".join(트리읽기(tree.tree_, 열이름)) + "&lt;/div&gt;", unsafe_allow_html=True)
+    st.caption("위에서부터 질문에 답하며 내려가면 마지막 줄의 판정에 닿습니다. "
+               "괄호 안은 그 마디에 있는 훈련용 영화의 편수입니다. "
+               "끝마디의 판정은 그 안에서 편수가 많은 쪽입니다. "
+               "성공과 기준 미달이 같은 수이면 기준 미달로 판정합니다.")
+
+    with st.expander("트리 그림으로 보기"):
+        st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=열이름,
+                                          class_names=["기준 미달", "성공"], filled=True, rounded=True))
+
+with 탭3:
+    st.subheader("의사결정트리가 본 것 — 속성 중요도")
+    중요도 = pd.Series(tree.feature_importances_, index=X.columns).sort_values(ascending=False)
+    중요도표 = 중요도.round(3).reset_index()
+    중요도표.columns = ["속성", "중요도"]
+    st.dataframe(중요도표, width="stretch", hide_index=True)
+    st.caption("중요도는 트리가 그 속성으로 얼마나 많이, 얼마나 크게 나눴는지를 나타냅니다. "
+               "모두 더하면 1입니다. 0이면 그 속성으로는 한 번도 나누지 않았다는 뜻입니다.")
+
+    st.subheader("로지스틱 회귀가 본 것 — 가중치")
+    가중치 = pd.Series(logi.coef_[0], index=X.columns)
+    가중치표 = 가중치.reindex(가중치.abs().sort_values(ascending=False).index).round(3).reset_index()
+    가중치표.columns = ["속성", "가중치"]
+    st.dataframe(가중치표, width="stretch", hide_index=True)
+    st.caption(f"절편은 {logi.intercept_[0]:.3f}입니다. 가중치는 표준화한 값에 곱하는 수입니다. "
+               "0보다 크면 그 값이 클수록 성공 확률이 올라가고, 작으면 내려갑니다. "
+               "중요도와 달리 부호가 있고, 모두 더해도 1이 되지 않습니다.")
+
+
+with 탭4:
+    # 도전 — 입력을 바꿔 가며 실험한다. 위쪽 정확도 카드는 이 선택을 따르지 않는다
+    PEOPLE = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_people.csv"
+
+    @st.cache_data
+    def load_people():
+        return pd.read_csv(PEOPLE, encoding="utf-8-sig", dtype={"movieCd": str})
+
+    확장 = df.merge(load_people()[["movieCd", "actors_n", "lead_n", "showTm", "watchGrade", "company"]],
+                  on="movieCd", how="left").reset_index(drop=True)
+    확장["테스트용"] = 확장.index % 10 &lt; 3        # 속성을 바꿔도 훈련용·테스트용 구분은 그대로 둔다
+    확장["청소년관람불가"] = (확장["watchGrade"] == "청소년관람불가").astype(float)
+    큰곳 = 확장.loc[~확장["테스트용"], "company"].value_counts().head(5).index   # 훈련용에서만 정한다
+    확장["대형 배급사"] = 확장["company"].isin(큰곳).astype(float)
+    확장 = 확장.rename(columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기",
+                             "actors_n": "배우 수", "lead_n": "주연 수", "showTm": "상영시간"})
+    후보 = ["스크린 수", "상영 횟수", "성수기", "배우 수", "주연 수", "상영시간", "청소년관람불가", "대형 배급사"]
+
+    st.subheader("입력을 바꿔 가며 실험하기")
+    st.info("위쪽의 정확도 카드 셋은 스크린 수·상영 횟수·성수기 세 가지로 학습한 값이며, "
+            "여기에서 속성을 바꿔도 달라지지 않습니다. 정확도 표에는 그 카드의 숫자를 적습니다. "
+            "이 탭의 결과는 실험 결과로만 따로 표시됩니다.")
+    고른속성 = st.multiselect("입력으로 사용할 속성", 후보,
+                          default=["스크린 수", "상영 횟수", "성수기"])
+
+    쓸수있음 = 확장[고른속성].notna().all(axis=1) if 고른속성 else pd.Series(False, index=확장.index)
+    실험df = 확장.loc[쓸수있음].reset_index(drop=True)
+    실험테스트 = 실험df.pop("테스트용") if len(실험df) else pd.Series(dtype=bool)
+
+    if not 고른속성:
+        st.warning("속성을 하나 이상 골라 주세요.")
+    elif 실험테스트.sum() &lt; 5 or (~실험테스트).sum() &lt; 20:
+        st.warning("고른 속성으로 사용할 수 있는 영화가 너무 적습니다. 속성을 바꿔 보세요.")
+    else:
+        X2, y2 = 실험df[고른속성], 실험df["성공"]
+        스케일러2 = StandardScaler().fit(X2[~실험테스트])
+        회귀2 = LogisticRegression(max_iter=2000).fit(스케일러2.transform(X2[~실험테스트]), y2[~실험테스트])
+        확률2 = 회귀2.predict_proba(스케일러2.transform(X2[실험테스트]))[:, 1]
+        트리2 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5,
+                                     random_state=0).fit(X2[~실험테스트], y2[~실험테스트])
+        많은쪽2 = 1 if y2[~실험테스트].mean() &gt; 0.5 else 0
+        회귀점수 = accuracy_score(y2[실험테스트], (확률2 &gt;= 0.5).astype(int))
+        트리점수 = accuracy_score(y2[실험테스트], 트리2.predict(X2[실험테스트]))
+        기준선2 = float((y2[실험테스트] == 많은쪽2).mean())
+
+        st.markdown("**실험 결과 — 고른 속성으로 다시 학습한 점수**")
+        d1, d2, d3 = st.columns(3)
+        d1.metric("로지스틱 회귀 (실험)", f"{회귀점수:.3f}",
+                  delta=f"{회귀점수 - accuracy_score(y[is_test], 예측):+.3f}")
+        d2.metric("의사결정트리 (실험)", f"{트리점수:.3f}",
+                  delta=f"{트리점수 - accuracy_score(y[is_test], tree.predict(X[is_test])):+.3f}")
+        d3.metric("한쪽으로만 답했을 때 (실험)", f"{기준선2:.3f}")
+        st.caption(f"{len(고른속성)}가지 입력 · 값이 모두 있는 영화 {len(실험df):,}편으로 학습했습니다"
+                   f"(전체 {len(확장):,}편). 테스트용은 {int(실험테스트.sum()):,}편입니다. "
+                   "화살표는 위쪽 고정 카드와 비교한 차이입니다. 값이 없는 영화가 빠지면 "
+                   "테스트용 편수까지 달라지므로 두 점수를 같은 조건의 비교로 볼 수는 없습니다.")
+
+        st.markdown("**실험 트리는 어떤 질문을 던지나**")
+        st.markdown("&lt;div style='font-size:1.02rem; line-height:1.95; white-space:pre-wrap'&gt;"
+                    + "\n".join(트리읽기(트리2.tree_, list(X2.columns))) + "&lt;/div&gt;",
+                    unsafe_allow_html=True)
+
+        st.markdown("**실험 트리의 속성 중요도**")
+        중요도2 = pd.Series(트리2.feature_importances_, index=X2.columns)
+        중요도2 = 중요도2[중요도2 &gt; 0].sort_values(ascending=False).round(3).reset_index()
+        중요도2.columns = ["속성", "중요도"]
+        중요도그림 = px.pie(중요도2, names="속성", values="중요도", hole=0.35)
+        중요도그림.update_traces(textinfo="label+percent", sort=False)
+        중요도그림.update_layout(height=300, showlegend=False)
+        st.plotly_chart(중요도그림, width="stretch")
+
+        st.markdown("**실험 로지스틱 회귀의 가중치**")
+        가중치2 = pd.Series(회귀2.coef_[0], index=X2.columns).round(3).reset_index()
+        가중치2.columns = ["속성", "가중치"]
+        가중치2["방향"] = ["성공 확률을 올림" if v &gt; 0 else "성공 확률을 내림" for v in 가중치2["가중치"]]
+        가중치그림 = px.bar(가중치2.sort_values("가중치"), x="가중치", y="속성", orientation="h",
+                        color="방향",
+                        color_discrete_map={"성공 확률을 올림": "#d64545", "성공 확률을 내림": "#2b7fd6"})
+        가중치그림.add_vline(x=0, line_width=1.5, line_color="#1c2230")
+        가중치그림.update_layout(height=300, yaxis_title=None, legend_title_text="")
+        st.plotly_chart(가중치그림, width="stretch")
+        st.caption(f"절편은 {회귀2.intercept_[0]:.3f}입니다. "
+                   "속성 중요도도 가중치도 이 모델이 무엇을 단서로 삼았는지 보여 줄 뿐 "
+                   "인과관계의 증거가 아닙니다.")
+
+        실험 = {"표": 실험df, "입력": X2, "스케일러": 스케일러2, "회귀": 회귀2, "트리": 트리2}
+
+with 탭5:
+    # ④ 팀장에게 보고하기 — 아직 결과가 나오지 않은 최근 개봉작을 예측한다
+    import datetime as dt
+
+    st.subheader("팀장에게 보고하기 — 최근 개봉작 예측")
+    if 실험 is None:
+        st.info("먼저 '속성 바꿔 실험하기' 탭에서 입력 속성을 고릅니다.")
+    else:
+        보고표, 보고입력 = 실험["표"], 실험["입력"]
+        일수 = st.slider("최근 며칠 안에 개봉한 영화를 볼까요", 7, 90, 60)
+        개봉일 = pd.to_datetime(보고표["openDt"], format="%Y%m%d", errors="coerce")
+        최근 = (개봉일 &gt;= pd.Timestamp(dt.date.today()) - pd.Timedelta(days=일수)).fillna(False)
+
+        if not 최근.any():
+            st.info("이 기간에 개봉한 영화가 없습니다. 기간을 늘려 보세요.")
+        else:
+            확률 = 실험["회귀"].predict_proba(실험["스케일러"].transform(보고입력[최근]))[:, 1]
+            보고서 = pd.DataFrame({
+                "신호": ["🔥 기대작" if p &gt;= 0.5 else "💤 조용" for p in 확률],
+                "영화": 보고표.loc[최근, "movieNm"].values,
+                "성공 확률": 확률.round(3),
+                "개봉일": 개봉일[최근].dt.strftime("%m월 %d일").values,
+                "스크린 수": 보고표.loc[최근, "스크린 수"].values,
+                "지금까지 관객": 보고표.loc[최근, "total_audi"].values,
+                "로지스틱 회귀": ["성공" if p &gt;= 0.5 else "기준 미달" for p in 확률],
+                "의사결정트리": ["성공" if v else "기준 미달" for v in 실험["트리"].predict(보고입력[최근])],
+                "실제": ["✅ 이미 넘음" if a &gt;= 기준 else "⏳ 아직" for a in 보고표.loc[최근, "total_audi"]],
+            }).sort_values("성공 확률", ascending=False)
+
+            기대 = 보고서[보고서["신호"] == "🔥 기대작"]["영화"].tolist()
+            if 기대:
+                st.success("🔥 기대작: " + " · ".join(기대))
+            else:
+                st.warning("이번 기간에는 모델이 기준을 넘을 것으로 본 영화가 없습니다. "
+                           "기간이나 입력 속성을 바꿔 보세요.")
+
+            st.dataframe(보고서, hide_index=True, width="stretch", column_config={
+                "성공 확률": st.column_config.ProgressColumn("성공 확률", min_value=0.0,
+                                                        max_value=1.0, format="%.2f"),
+                "지금까지 관객": st.column_config.NumberColumn("지금까지 관객", format="%,d명"),
+                "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
+            })
+            갈림 = int((보고서["로지스틱 회귀"] != 보고서["의사결정트리"]).sum())
+            st.caption(f"최근 {일수}일 안에 개봉한 {len(보고서)}편입니다. "
+                       f"기준은 누적 관객 {기준 // 10_000}만 명({기준:,}명) 이상입니다. "
+                       f"두 모델의 판정이 나뉜 영화는 {갈림}편입니다. "
+                       "⏳인 영화는 정답이 아직 나오지 않았습니다.")
+
+            st.subheader("이 영화를 트리는 어떻게 판단했나")
+            고른영화 = st.selectbox("보고서의 영화 중 하나", list(보고서["영화"]))
+            행 = 보고표.index[보고표["movieNm"] == 고른영화][0]
+            t2 = 실험["트리"].tree_
+            경로 = 실험["트리"].decision_path(보고입력.loc[[행]]).indices
+
+            단계 = []
+            for 순서, 마디 in enumerate(경로, start=1):
+                if t2.feature[마디] &lt; 0:
+                    단계.append({"단계": "끝", "트리가 던진 질문": "더 나누지 않는다",
+                                "이 영화의 값": "", "답": f"판정: {답(t2, 마디)}",
+                                "이 마디의 훈련용 영화": 마디설명(t2, 마디)})
+                else:
+                    속성 = 보고입력.columns[t2.feature[마디]]
+                    값 = float(보고입력.loc[행, 속성])
+                    단계.append({"단계": f"{순서}번째",
+                                "트리가 던진 질문": 질문(t2, list(보고입력.columns), 마디),
+                                "이 영화의 값": f"{속성} {값:g}",
+                                "답": "예 → 왼쪽" if 값 &lt;= float(t2.threshold[마디]) else "아니오 → 오른쪽",
+                                "이 마디의 훈련용 영화": 마디설명(t2, 마디)})
+            st.dataframe(pd.DataFrame(단계), hide_index=True, width="stretch")
+            st.caption(f"{조사(고른영화)} 트리를 내려간 길입니다. "
+                       "마지막 줄의 답이 표에 적힌 의사결정트리 판정입니다.")</pre></div></details>
+      <div class="callout ask">
+        <div class="h">❓ 보고서를 읽고 답할 질문</div>
+        <ul>
+          <li>🔥 기대작이 붙은 영화가 있습니까. 없다면 기간을 바꿔 나타나게 해 봅니다.</li>
+          <li>실제 칸이 "⏳ 아직"인 영화는 정답이 나오지 않았습니다. 몇 주 뒤에 다시 열어 확인할 영화를 한 편 골라 적습니다.</li>
+        </ul>
+      </div>
+    </li>
+  </ol>
+
+  <div class="callout ask">
+    <div class="h">❓ 보고서를 읽고 답할 질문</div>
+    <ul>
+      <li>🔥 대박 조짐이 붙은 영화가 있습니까. 없다면 기간을 바꿔 나타나게 해 봅니다.</li>
+      <li>실제 칸이 "아직"인 영화는 정답이 나오지 않았습니다. 몇 주 뒤에 다시 열어 확인할 영화를 한 편 골라 적습니다.</li>
+    </ul>
+  </div>
+
+  <h2>🎒 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>최근 개봉작 보고서를 만들고, 두 모델의 판정이 나뉜 영화가 있는지 확인했다.</li>
+    <li>영화 하나를 골라 트리가 지나온 질문을 처음부터 끝까지 따라 읽었다.</li>
+    <li>입력으로 사용할 속성을 바꿔 학습하고, 점수가 오른 경우와 내려간 경우를 확인했다.</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson09.html"><div class="dir">← 이전</div><div class="tt">9차시 · 분류</div></a>
+    <a class="next" href="lesson10.html"><div class="dir">다음 →</div><div class="tt">10차시 · 분류 평가 손계산</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/quiz.js"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>
