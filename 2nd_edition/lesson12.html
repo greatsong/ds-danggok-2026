@@ -1063,7 +1063,7 @@ for 이름, 색 in (("뇌졸중 없음", "#94a3b8"), ("뇌졸중 있음", "#7f1d
     그림2D.add_trace(go.Scatter(x=한무리["가로"], y=한무리["세로"], mode="markers", name=이름,
                                 marker=dict(size=6, color=색, opacity=0.5,
                                             line=dict(width=0.5, color="white"))))
-그림2D.update_layout(title=f"{우리말(가로)}와 {우리말(세로)}로 본 전후 경계선",
+그림2D.update_layout(title=f"가로축 {우리말(가로)} · 세로축 {우리말(세로)} · 전후 경계선",
                      xaxis_title=우리말(가로), yaxis_title=우리말(세로), height=560)
 st.plotly_chart(그림2D, width="stretch")
 for 상태, 가장높은확률 in 밖으로나간것:
