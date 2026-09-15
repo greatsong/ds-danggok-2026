@@ -192,23 +192,15 @@ main.eth .quiz details.reveal{border-radius:12px}
 
   <div class="quote">
     <div class="q">"윤리란, 할 권리가 있는 것과 하는 것이 옳은 것의 차이를 아는 것이다."</div>
-    <span class="by">포터 스튜어트(미국 대법관)에게 통용되는 말 — 할 수 있는 분석과 해도 되는 분석은 다릅니다</span>
+    <span class="by">포터 스튜어트(미국 대법관)의 말로 전해집니다. 할 수 있는 분석과 해도 되는 분석은 다릅니다</span>
     <span class="who"><img src="img/people/stewart.jpg" alt="포터 스튜어트" loading="lazy" width="54" height="54"><span><b>포터 스튜어트</b>(1915~1985)는 미국 연방대법원 대법관입니다. 도청 사건 판결에서 헌법이 보호하는 것은 장소가 아니라 사람이라며 사생활 보호의 기준을 넓힌 것으로 유명합니다.<span class="cred">사진: Robert S. Oakes · 퍼블릭 도메인(위키미디어 공용)</span></span></span>
   </div>
 
-  <p class="lead">지금까지의 공통 수업에서 우리는 다른 사람이 모은 데이터를 불러와, AI가 작성한 코드로 분석하고, 결과를 인터넷에 공개했습니다. 이 과정 어디에 윤리 문제가 있을까요? 오늘은 교과서의 세 가지 윤리 문제를 익힌 뒤, 그 기준으로 <b>이번 학기의 실습</b>을 다시 점검합니다.</p>
-
-  <div class="make-banner">
-    <div class="t">🎯 오늘 하는 것</div>
-    <ul>
-      <li><b>교과서의 세 문제</b> — 편향성 · 혐오 표현 · 소유권</li>
-      <li><b>내 실습 돌아보기</b> — 인증키 · 데이터 민감도 · 모델이 배우는 편향 · AI 코드의 책임</li>
-      <li><b>모둠 토론</b> — 내가 겪은 윤리 사례 · SDGs와 데이터</li>
-    </ul>
-  </div>
+  <p class="lead">지난 시간에는 AI가 써 준 SQL 문장이 무엇을 하는 코드인지 읽어 냈습니다. 오늘은 그 앞의 질문을 다룹니다. 그 코드를 실행해도 되는가, 그 결과를 공개해도 되는가입니다.</p>
+  <p>아마존은 2014년부터 지원자의 이력서를 인공지능으로 평가하는 도구를 만들었습니다. 지난 10년간 받은 이력서로 학습시켰더니 지원자 대부분이 남성이었고, 도구는 여성과 관련된 표현이 들어간 이력서에 낮은 점수를 주었습니다. 아마존은 이 도구를 폐기했습니다(<a href="https://www.technologyreview.com/2018/10/10/139858/amazon-ditched-ai-recruitment-software-because-it-was-biased-against-women/" target="_blank" rel="noopener">보도 보기</a>). 데이터를 잘못 다루면 사람이 불이익을 받습니다. 오늘은 교과서의 세 가지 윤리 문제를 익힌 뒤, 그 기준으로 <b>이번 학기의 실습</b>을 다시 점검합니다.</p>
 
   <h2>0. 오늘의 목표</h2>
-  <p>데이터 윤리라고 하면 흔히 기업의 개인정보 유출 뉴스처럼 먼 이야기를 떠올립니다. 그런데 이번 학기 실습을 돌아보면 인증키를 어디에 두었는지, 데이터 출처를 표기했는지, 그 데이터에 누군가의 정보가 들어 있는지가 모두 이미 우리가 내린 윤리적 판단이었습니다. 팀 프로젝트에서 데이터를 직접 고르기 전에 그 판단 기준을 세웁니다.</p>
+  <p>이번 학기 실습을 돌아보면 인증키를 어디에 두었는지, 데이터 출처를 표기했는지, 그 데이터에 누군가의 정보가 들어 있는지가 모두 이미 우리가 내린 윤리적 판단이었습니다.</p>
   <ul class="steps">
     <li><b>데이터 편향성·혐오 표현·데이터 소유권</b> 세 가지 문제를 구분하고, 각각이 무엇을 묻는 문제인지 설명할 수 있다.</li>
     <li>이번 학기 내 실습에서 그 세 문제가 어디에 있었는지 찾아내고, 그때 내린 판단의 근거를 말할 수 있다.</li>
@@ -232,7 +224,7 @@ main.eth .quiz details.reveal{border-radius:12px}
       <tr><td><b>데이터 소유권</b></td><td>내가 만든 데이터를 누가 소유하고 팔 수 있는지가 불분명하다</td><td>수업 중 폼으로 제출한 우리 응답은 누구의 것인가</td></tr>
     </tbody>
   </table>
-  <p>세 문제의 자세한 사례는 교과서 38~39쪽에서 함께 읽습니다.</p>
+  <p>혐오 표현의 자세한 사례는 교과서 38~39쪽에서 함께 읽습니다. 나머지 둘은 오늘 우리 실습으로 다룹니다. 편향성은 아래 <b>장면 3</b>에서, 소유권은 <b>4절 모둠 판단</b>에서 확인합니다.</p>
 
   <h2>2. 내 실습 속 쟁점 — 네 장면 돌아보기</h2>
   <p>지금까지의 실습에서 윤리적 판단이 필요했던 네 장면입니다. 각 장면마다 '나는 어떻게 했더라?'를 떠올리며 읽습니다.</p>
@@ -240,7 +232,13 @@ main.eth .quiz details.reveal{border-radius:12px}
   <div class="l14-scenes">
   <section class="l14-scene">
   <h3>장면 1 — 인증키를 코드에 적어 공개하면</h3>
-  <p>2·5차시에서는 API 인증키를 코드와 분리해 비밀 금고에 보관했습니다. 비공개용 키가 공개되면 다른 사람이 그 키로 요청해 호출 한도를 소진하거나 허용된 기능을 사용할 수 있습니다. 서비스마다 키의 역할과 권한이 다르므로 제공 기관의 안내를 확인합니다. 같은 서비스 안에서도 공개를 전제로 한 키와 그렇지 않은 키가 따로 있습니다. 공개 가능한 키도 데이터 접근 권한을 대신 설정해 주지는 않습니다. 비공개용 키가 유출되었다면 코드에서 지우는 데 그치지 않고 해당 서비스에서 폐기·재발급합니다.</p>
+  <p>2·5차시에서는 API 인증키를 코드와 분리해 비밀 금고에 보관했습니다. 인증키가 코드에 적힌 채 공개되면 다른 사람이 그 키로 요청해 호출 한도를 소진하거나 허용된 기능을 사용할 수 있습니다. 이미 공개되었다면 코드에서 지우는 데 그치지 않고 해당 서비스에서 폐기하고 다시 발급받습니다.</p>
+  <details class="glossary">
+    <summary>더 알아보기 — 공개를 전제로 한 키는 무엇이 다른가</summary>
+    <div class="gin">
+      <p>서비스마다 키의 역할과 권한이 다르므로 제공 기관의 안내를 확인합니다. 같은 서비스 안에서도 공개를 전제로 한 키와 그렇지 않은 키가 따로 있습니다. 공개 가능한 키도 데이터 접근 권한을 대신 설정해 주지는 않습니다.</p>
+    </div>
+  </details>
 
   </section>
   <section class="l14-scene">
@@ -550,30 +548,16 @@ main.eth .quiz details.reveal{border-radius:12px}
     <span class="wout">국가 → 13편(6.0%) 한 편으로 좁혀짐 · 가장 큰 묶음 84편</span>
   </div>
 </div>
-    <figcaption>버튼을 눌러 특징을 하나씩 켜면 그 조합이 한 편뿐인 영화가 빨간 점으로 바뀝니다. 국가만 켜면 13편이 한 편으로 좁혀지고, 국가와 장르, 개봉월을 모두 켜면 160편으로 늘어납니다. 이 데이터가 사람에 관한 데이터였다면 같은 방식이 재식별에 해당합니다. 장르는 원문 그대로 72종으로 세었습니다.</figcaption>
+    <figcaption>버튼을 눌러 항목을 하나씩 켜면 그 조합이 한 편뿐인 영화가 빨간 점으로 바뀝니다. <b>켜기 전에 먼저 예상해 적습니다.</b> 국가·장르·개봉월 세 항목을 모두 켜면 216편 가운데 몇 편이 한 편으로 좁혀질까요? 숫자를 적은 뒤 버튼을 하나씩 켜서 화면의 값과 비교합니다. 이 데이터가 사람에 관한 데이터였다면 같은 방식이 재식별에 해당합니다.</figcaption>
   </figure>
 
 
-  <details class="glossary"><summary>더 알아보기 — 실제 사례 · 달리기 앱 히트맵이 드러낸 군사기지(2018)</summary><div class="gin">
-  <h3>달리기 기록이 드러낸 군사기지</h3>
-  <p>스트라바 히트맵은 여러 이용자의 활동을 합친 지도입니다. 이 사례에서 확인된 것은 군사기지의 윤곽과 내부 이동 경로입니다. 스트라바 히트맵에서 군사기지와 이동 경로가 드러났다는 사실만으로 그 지도를 개인정보라고 단정할 수는 없습니다. 특정 개인을 알아볼 수 있는지가 판단 기준입니다.</p>
-  <div class="l14-scroll">
-  <table class="daymap">
-    <thead><tr><th>무엇이 있었나</th><th>확인된 수치</th><th>이 차시 개념과의 연결</th></tr></thead>
-    <tbody>
-      <tr><td><b>세계 히트맵 공개</b><br>2017년 11월에 스트라바가 이용자 활동을 합쳐 만든 세계 히트맵을 공개했다</td><td>활동 약 10억 건과 위치 지점 약 3조 개를 합쳐 지도를 만들었다</td><td>이름을 지우고 합쳐서 만든 집계 데이터라는 점에서 장면 2의 논의와 연결된다</td></tr>
-      <tr><td><b>군사기지 윤곽 확인</b><br>2018년 1월에 호주국립대 학생 네이선 루저가 이 지도에서 군사기지의 내부 도로와 순찰·조깅 경로가 드러난다는 사실을 확인했고, 미국 국방부는 관련 지침을 검토한다고 밝혔다 (<a href="https://www.abc.net.au/news/science/2018-01-29/strava-heat-map-shows-military-bases-and-supply-routes/9369490" target="_blank" rel="noopener">보도 원문 보기</a>)</td><td>이라크 알아사드 공군기지를 비롯한 해외 군사기지의 내부 도로와 순찰 경로가 드러났다</td><td>점검 3항목 가운데 사람 항목과 연결되며, 데이터가 특정 시설의 윤곽과 이동 경로를 드러낼 수 있다는 점을 보여 준다</td></tr>
-    </tbody>
-  </table>
-  </div>
-  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson14_case1.jpg" alt="어두운 지도 위에 주황색과 흰색 선으로 알아사드 공군기지의 외곽 도로와 내부 경로가 드러난 화면. 왼쪽 아래에 Al Asad Airbase 표기가 있습니다." loading="lazy" width="908" height="657" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>이름을 지운 집계 위치 데이터라도 이어 붙이면 시설의 윤곽과 이동 경로가 나타납니다. 이미지: ABC News(2018년 1월 29일) 보도 수록, 지도 원본은 스트라바 글로벌 히트맵입니다.</figcaption></figure>
-  <p>공개되어 있다는 사실만으로 데이터의 재사용이 적절하다고 판단할 수는 없습니다. 집계와 이름 지우기를 거쳤더라도 기록을 이어 붙이는 방식에 따라 예상치 못한 정보가 드러날 수 있습니다.</p>
-  </div></details>
+  <p>2018년에는 달리기 기록 앱이 이용자 활동을 합쳐 공개한 세계 지도에서 해외 군사기지의 내부 도로와 순찰 경로가 드러난 일이 있었습니다(<a href="https://www.abc.net.au/news/science/2018-01-29/strava-heat-map-shows-military-bases-and-supply-routes/9369490" target="_blank" rel="noopener">보도 보기</a>). 이름을 지우고 합친 데이터라도 기록을 이어 붙이면 예상하지 못한 정보가 드러납니다.</p>
 
   </section>
   <section class="l14-scene">
   <h3>장면 3 — 모델이 사회의 편향을 학습한다</h3>
-  <p>7차시 모델의 변수에는 첫 관측일 스크린 수가 들어 있었습니다. 이 데이터에서 스크린 배정의 공정성이나 특정 배급사에 대한 차별을 직접 입증한 것은 아닙니다. 다만 <b>배정 기회가 일부 영화에 치우쳐 있다고 가정</b>하면, 관객 수를 예측한 결과가 다시 배정에 사용될 때 기존 차이가 커질 수 있습니다. 이것은 모델 활용 시 검토할 가능성입니다. 관객 수 예측을 영화의 예술적 가치나 완성도 평가로 소개해서도 안 됩니다.</p>
+  <p>7차시 모델의 변수에는 첫 관측일 스크린 수가 들어 있었습니다. 스크린을 많이 받은 영화일수록 관객 수가 크게 기록되므로, 모델은 <b>스크린 수가 많은 영화를 성공하는 영화로 학습</b>합니다. 그 예측을 다음 배정의 근거로 사용하면 처음의 치우침이 되풀이됩니다. 도입에서 본 채용 도구가 지난 10년의 이력서로 다음 지원자를 평가한 것과 같은 구조입니다. 다만 이 데이터만으로 실제 배정이 불공정했는지를 판단할 수는 없습니다. 관객 수 예측을 영화의 예술적 가치나 완성도 평가로 소개해서도 안 됩니다.</p>
   <div class="l14-fig l14-loop">
   <div class="l14-scroll">
     <svg tabindex="0" viewBox="0 0 780 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="치우친 스크린 배정이 데이터와 모델을 거쳐 다시 배정의 근거가 되는 순환 구조">
@@ -626,6 +610,7 @@ main.eth .quiz details.reveal{border-radius:12px}
   <div class="l14-ctl"><button type="button" class="l14-btn l14-primary l14-play" aria-label="되먹임 고리 애니메이션 재생"></button><button type="button" class="l14-btn l14-step" aria-label="되먹임 고리 다음 단계"></button></div>
   </div>
   <p class="l14-cap">이 그림은 편향이 반복될 수 있는 과정을 설명한 가상 사례입니다. 현재 영화 데이터만으로 실제 배정의 원인이나 공정성을 판정하지는 않습니다.</p>
+  <details class="glossary"><summary>🔬 그림으로 — 스크린 수는 얼마나 치우쳐 있나</summary><div class="gin">
   <figure class="interactive" data-fig="screenSkew">
     <div class="widget" data-w="screenSkew">
   <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="영화 216편의 첫 관측일 스크린 수를 내림차순으로 세운 막대그래프: 상위 비율 슬라이더를 옮기면 파란 막대 구간과 그 구간이 차지하는 스크린 수 비율이 함께 바뀜">
@@ -878,6 +863,7 @@ main.eth .quiz details.reveal{border-radius:12px}
 </div>
     <figcaption>상위 비율 슬라이더를 움직이면 색이 바뀐 막대가 전체 스크린 수 합계에서 차지하는 비율이 함께 바뀝니다. 이 분포만으로는 스크린 배정의 원인이나 공정성을 판정하지 못합니다.</figcaption>
   </figure>
+  </div></details>
 
 
   <details class="glossary"><summary>더 알아보기 — 실제 사례 · 얼굴 성별 분류의 집단별 정확도 격차(2018)</summary><div class="gin">
@@ -902,17 +888,12 @@ main.eth .quiz details.reveal{border-radius:12px}
   </section>
   <section class="l14-scene">
   <h3>장면 4 — AI가 짠 코드의 책임은 누구에게</h3>
-  <p>AI가 작성한 코드의 결과를 앱으로 공개할 때는 개발자가 검증 과정에 참여해야 합니다. 결과가 잘못되었다면 데이터를 다시 확인하고, 오류를 고쳐 이용자에게 알려야 합니다. 8·10·12차시의 손계산과 예시 데이터 검산은 그 방법입니다. 책임을 한 사람에게만 돌리기보다, 데이터 제공자·도구 제공자·앱 운영자가 맡은 역할을 구분하고 자신이 확인한 범위와 한계를 밝힙니다.</p>
+  <p>AI가 작성한 코드의 결과를 앱으로 공개할 때는 만든 사람이 검증에 참여해야 합니다. 8·10·12차시의 손계산과 예시 데이터 검산이 그 방법입니다. 결과가 잘못되었다면 데이터를 다시 확인하고, 오류를 고쳐 이용자에게 알립니다. 자신이 확인한 범위와 한계를 함께 밝힙니다.</p>
   </section>
   </div>
 
   <h2>3. 점검 활동 — 앱을 공개하기 전 확인할 세 가지</h2>
-  <div class="tbquote">
-    <div class="h">📖 교과서의 근거 <span class="src">『데이터 과학』 38쪽</span></div>
-    <p class="q">"이를 예방하기 위해서는 데이터 수집 단계에서부터 데이터가 편향되지 않았는지 검토하고, 데이터 분석의 전 과정에서 편향을 최소화하기 위해 노력해야 한다." <span class="src">(38쪽)</span></p>
-    <p class="t">→ 공개 직전에 한 번 보는 것이 아니라 수집 단계부터 확인한다는 뜻입니다. 아래 점검 목록이 그 확인 절차입니다.</p>
-  </div>
-  <p>오늘은 앱을 만들지 않습니다. 대신 네 장면에서 확인한 기준을 점검 목록으로 정리합니다. 앞으로 앱을 만들어 공개할 때마다, 그리고 팀 프로젝트의 데이터를 고를 때마다 이 목록으로 확인합니다.</p>
+  <p>교과서 38쪽은 데이터 수집 단계에서부터 편향을 검토하라고 말합니다. 공개 직전에 한 번 보는 것이 아닙니다. 네 장면에서 확인한 기준을 점검 목록으로 정리합니다. 앞으로 앱을 공개할 때마다, 그리고 팀 프로젝트의 데이터를 고를 때마다 이 목록으로 확인합니다.</p>
   <div class="callout check l14-self">
     <div class="h">✔️ 앱 공개 전 점검 3항목</div>
     <div class="l14-prog" role="progressbar" aria-label="앱 공개 전 점검 진행" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0"><div class="l14-bar"><i></i></div><span class="l14-cnt">0/3</span><span class="l14-done" hidden>점검 완료</span></div>
@@ -922,7 +903,7 @@ main.eth .quiz details.reveal{border-radius:12px}
       <li><b>사람</b> — 데이터를 결합하면 개인이 드러날 수 있는가? 분석·공개가 특정 대상에게 불리하게 작용할 가능성을 점검했는가?</li>
     </ul>
   </div>
-  <p>점검 중 확인하지 못한 항목은 그대로 표시하고, 필요한 조치를 적습니다. 출처를 쓰는 것만으로 이용 조건을 충족하는 것은 아닙니다. 이름을 받지 않는 앱이라도 반복 참여와 참여자 구성을 확인해야 결과를 적절히 해석할 수 있습니다.</p>
+  <p>점검 중 확인하지 못한 항목은 '확인 필요'로 남겨 두고, 무엇을 더 확인해야 하는지 한 줄로 적습니다. 출처를 표기했다고 해서 이용 조건을 충족한 것은 아닙니다.</p>
   <figure class="interactive" data-fig="openCheck">
     <div class="widget" data-w="openCheck">
   <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="데이터 점검 항목 판정 그림">
@@ -933,11 +914,11 @@ main.eth .quiz details.reveal{border-radius:12px}
     </g>
     <g class="ocCard" data-s="1">
       <rect x="20" y="100" width="230" height="52" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
-      <text x="135" y="131" text-anchor="middle" font-size="15" fill="#1c2230">우리 반 설문 응답</text>
+      <text x="135" y="131" text-anchor="middle" font-size="13" fill="#1c2230">우리 반 설문 응답(자유 서술 포함)</text>
     </g>
     <g class="ocCard" data-s="2">
       <rect x="20" y="160" width="230" height="52" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
-      <text x="135" y="191" text-anchor="middle" font-size="15" fill="#1c2230">우리 반 설문 응답</text>
+      <text x="135" y="191" text-anchor="middle" font-size="13" fill="#1c2230">우리 반 설문 응답(앱으로 수집)</text>
     </g>
     <g class="ocCard" data-s="3">
       <rect x="20" y="220" width="230" height="52" rx="10" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
@@ -974,36 +955,55 @@ main.eth .quiz details.reveal{border-radius:12px}
   </svg>
   <div class="wctl">
     <button class="wbtn on" type="button" data-s="0">급식 식단</button>
-    <button class="wbtn" type="button" data-s="1">우리 반 설문 응답</button>
-    <button class="wbtn" type="button" data-s="2">우리 반 설문 응답</button>
+    <button class="wbtn" type="button" data-s="1">우리 반 설문 응답(자유 서술 포함)</button>
+    <button class="wbtn" type="button" data-s="2">우리 반 설문 응답(앱으로 수집)</button>
     <button class="wbtn" type="button" data-s="3">스마트폰 위치 기록</button>
     <span class="wout">열어 본 항목 0/3</span>
   </div>
 </div>
-    <figcaption>데이터를 바꾸고 세 줄을 열면 같은 항목이라도 데이터마다 걸리는 곳이 달라집니다. 판정은 이 화면이 아니라 데이터의 제공 조건에서 확인합니다.</figcaption>
+    <figcaption><b>줄을 열기 전에 먼저 판정합니다.</b> 데이터를 하나 고른 뒤, 키·출처·사람 세 항목을 각각 '위험 낮음·확인 필요·조심' 가운데 무엇으로 볼지 학습지에 적습니다. 그다음 줄을 열어 자신의 판정과 비교하고, 갈린 항목에는 왜 다르게 보았는지 한 줄을 적습니다. 최종 판정은 이 화면이 아니라 데이터의 제공 조건에서 확인합니다.</figcaption>
   </figure>
 
+  <div class="callout ask">
+    <div class="h">⚖️ 어느 쪽을 먼저 고칠까</div>
+    <p>우리 반 설문 결과로 만든 앱을 내일 공개합니다. 마감 전에 고칠 시간은 한 가지뿐입니다.<br>① 자유 서술 칸에 몇 명이 자기 별명을 적었는데 그대로 화면에 표시된다.<br>② 데이터 출처와 수집 시점을 화면 어디에도 표기하지 않았다.</p>
+    <ul>
+      <li>먼저 고쳐야 하는 쪽은 ①과 ② 가운데 어느 것인가? 미룬 쪽은 공개한 뒤 어떤 일이 생길 수 있는지 함께 적습니다.</li>
+    </ul>
+  </div>
 
-  <h2>4. 사례 토론 — 내 경험과 세계의 문제</h2>
-  <p>교과서 39쪽 조사하기 ①을 바탕으로 직접 겪었거나 데이터로 확인한 데이터 윤리 사례를 모둠에서 토의합니다. 어떤 데이터를 누가 사용했는지, 누구에게 어떤 영향이 있었는지, 확인된 사실과 추측은 무엇인지 구분해 설명합니다.</p>
+
+  <h2>4. 모둠 판단 — 우리가 만든 데이터는 누구의 것인가</h2>
+  <p>수업 중에 우리 반이 폼에 적어 제출한 응답을 떠올립니다. 그 응답은 적은 사람의 것일까요, 학교의 것일까요, 폼을 만든 기업의 것일까요(교과서 39쪽). 모둠에서 각자 하나를 고르고 이유를 한 줄로 적습니다.</p>
+  <div class="callout ask">
+    <div class="h">🤔 모둠에서 정합니다</div>
+    <ul>
+      <li>그 응답은 누구의 것인가? 고른 쪽과 이유를 한 줄로 적습니다.</li>
+      <li>우리 반 응답으로 만든 앱을 다른 학교에도 공개하려고 합니다. 누구에게 무엇을 물어야 하는가?</li>
+    </ul>
+  </div>
+  <p>모둠에서 정한 것을 발표합니다. 판단이 갈린 모둠은 왜 다르게 보았는지를 함께 말합니다.</p>
+  <details class="glossary"><summary>더 알아보기 — 데이터로 세계의 문제를 다루는 일(교과서 36·37쪽)</summary><div class="gin">
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 36쪽</span></div>
     <p class="q">"세계 연합(UN)은 전 세계 빈곤을 종식시키고, 지구를 보호하며, 2030년까지 모든 사람들이 평화와 번영을 누릴 수 있는 지속 가능한 미래를 만들기 위한 17개의 지속 가능 발전 목표(SDGs: Sustainable Development Goals)를 제시하였다." <span class="src">(36쪽)</span></p>
     <p class="t">→ 데이터는 문제를 만들기도 하지만, 기후·건강·교통 같은 세계의 문제를 <b>진단하고 해결하는</b> 도구이기도 합니다.</p>
   </div>
   <p>교과서 37쪽 조사하기 ①에서는 지속 가능한 미래를 위해 데이터 과학을 활용한 사례를 조사합니다. 해결하려는 문제, 사용한 데이터, 얻은 성과, 남은 한계를 함께 정리합니다. 데이터를 사용했다는 사실만으로 좋은 결과가 보장되는 것은 아닙니다.</p>
+  </div></details>
+
   <h2>5. 개념 정리 — 윤리는 별도 단원이 아니다</h2>
-  <p>데이터 윤리는 수집·분석·공개의 각 단계에서 고려해야 합니다. 데이터가 누구를 대표하는지, 이용 조건은 무엇인지, 개인을 알아볼 수 있는지, 결과가 어떤 영향을 주는지 점검합니다. AI를 사용한 분석에서도 검증한 내용과 한계를 밝히고 오류를 발견하면 수정합니다.</p>
-  <p>다음 시간에는 팀을 만들고 프로젝트 주제 후보를 고릅니다. 그때 후보마다 던지는 세 물음 가운데 <b>세 번째 물음이 오늘 세운 기준</b>입니다. 데이터가 아무리 많아도 이 관문을 통과하지 못하면 주제가 될 수 없습니다.</p>
+  <p>데이터 윤리는 수집·분석·공개의 각 단계에서 고려해야 합니다. 오늘 만든 점검 3항목이 그 확인 절차입니다.</p>
+  <p>다음 시간에는 팀을 만들고 프로젝트 주제 후보를 고릅니다. 그때 후보마다 던지는 세 물음 가운데 <b>세 번째 물음이 오늘 세운 기준</b>입니다. 데이터가 아무리 많아도 이 기준을 충족하지 못하면 주제로 삼을 수 없습니다.</p>
 
   <h2>6. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 급식 식단 데이터는 전량 내려받아 공개 앱으로 만들었지만, 개인 위치 데이터라면 같은 방식이 위험합니다. 두 데이터의 민감도를 가르는 기준은 무엇일까요? 고른 뒤, 차이를 자기 말로 설명해 보고 펼쳐 봅니다.</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">공개된 데이터인가 아닌가</button>
-        <button class="opt">데이터의 양이 많은가 적은가</button>
-        <button class="opt" data-ok="1">기록을 이어 붙였을 때 특정 개인을 추적할 수 있는가</button>
+        <button class="opt">누구나 내려받을 수 있게 공개된 데이터인가 아닌가</button>
+        <button class="opt">데이터의 행 수와 열 수가 얼마나 많은가</button>
+        <button class="opt" data-ok="1">다른 정보와 결합해 개인을 알아볼 수 있는가</button>
       </div>
       <div class="fb">이번 급식 데이터에는 개인별 섭취 기록이 없습니다. 한 사람의 이동 기록은 다른 정보와 쉽게 결합해 누구의 기록인지 알아볼 수 있다면 개인정보에 해당합니다. 판단의 근거는 위치 데이터라는 형식이나 공개 여부가 아니라 특정 개인을 알아볼 수 있는지입니다.</div>
     </div>
@@ -1012,7 +1012,7 @@ main.eth .quiz details.reveal{border-radius:12px}
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 비공개용 API 키를 코드에 적은 채 공개 저장소에 올리면 안 되는 이유를 두 가지 서술해 보세요.</div>
+    <div class="qq"><span class="qn">문제 2</span> 비공개용 API 키를 코드에 적은 채 공개 저장소에 올리면 안 되는 이유를 두 가지 서술합니다.</div>
     <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
       <p>① 비공개용 키가 공개되면 다른 사람이 그 권한으로 요청할 수 있습니다. ② 호출 한도가 소진되거나 허용된 기능이 오용될 수 있습니다. 비공개용 키는 코드와 분리해 보관하고, 유출되면 폐기·재발급합니다. 공개 사용을 전제로 한 키는 종류와 접근 권한 설정을 따로 확인합니다.</p>
     </details>
@@ -1021,20 +1021,20 @@ main.eth .quiz details.reveal{border-radius:12px}
     <div class="qq"><span class="qn">문제 3</span> 영화 관객 수를 예측하는 모델을 "좋은 영화를 가려내는 모델"이라고 소개하면 왜 문제가 될까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">스크린 수는 흥행 예측에 도움이 되지 않는 변수이기 때문</button>
-        <button class="opt">변수가 하나 늘면 모델의 정확도가 낮아지기 때문</button>
-        <button class="opt" data-ok="1">관객 수와 영화의 가치는 다른 평가 대상이며, 기존 배정의 치우침이 예측과 활용 과정에서 반복될 수도 있기 때문</button>
+        <button class="opt">스크린 수는 관객 수를 예측하는 데 도움이 되지 않는 변수이기 때문</button>
+        <button class="opt">변수를 하나 더 넣으면 모델의 정확도가 반드시 낮아지기 때문</button>
+        <button class="opt" data-ok="1">관객 수가 많은 것과 영화가 좋은 것은 서로 다른 평가이기 때문</button>
       </div>
-      <div class="fb">흥행 예측과 "좋은 영화를 가려내는 것"은 다릅니다. 치우친 데이터로 만든 모델은 특정 대상에게 불리하게 작동할 수 있다는 편향성 문제(교과서 38쪽)입니다.</div>
+      <div class="fb">흥행 예측과 좋은 영화를 가려내는 일은 서로 다른 평가입니다. 여기에 더해, 스크린을 많이 받은 영화의 기록으로 학습한 모델의 예측을 다시 배정에 사용하면 처음의 치우침이 되풀이됩니다. 치우친 데이터로 만든 모델이 특정 대상에게 불리하게 작동할 수 있다는 편향성 문제입니다(교과서 38쪽).</div>
     </div>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
-    <li>데이터 편향성·혐오 표현·소유권 문제를 각각 예를 들어 설명할 수 있습니다.</li>
+    <li>데이터 편향성·혐오 표현·소유권이 각각 무엇을 묻는 문제인지 구분해 말할 수 있습니다.</li>
     <li>앱을 공개하기 전 확인할 키·출처·사람에 미치는 영향 3항목을 점검 목록으로 정리했습니다.</li>
     <li>급식 데이터와 개인 위치 데이터의 민감도 차이를 설명할 수 있습니다.</li>
-    <li>내가 겪은 데이터 윤리 사례 하나를 모둠에서 이야기했습니다.</li>
+    <li>우리 반이 제출한 응답을 누구의 것으로 볼지 모둠에서 정하고 이유를 말했습니다.</li>
     <li>다음 시간에 팀 주제 후보를 판단할 세 번째 물음(윤리)의 기준을 오늘 세웠습니다.</li>
   </ul>
 
@@ -1045,7 +1045,7 @@ main.eth .quiz details.reveal{border-radius:12px}
     <tr><td class="term">데이터 소유권</td><td>생성된 데이터를 누구의 것으로 볼 것인가의 문제입니다(학생·학교·기업?).</td></tr>
     <tr><td class="term">개인정보</td><td>살아 있는 개인에 관한 정보로, 그 정보만으로 또는 다른 정보와 쉽게 결합하여 개인을 알아볼 수 있는 정보 등을 말합니다(개인정보 보호법 제2조).</td></tr>
     <tr><td class="term">인증키(API 키)</td><td>앱·프로젝트 등의 API 접근에 사용하는 값입니다. 공개 가능 여부와 허용 권한은 종류·서비스마다 다릅니다.</td></tr>
-    <tr><td class="term">SDGs</td><td>UN의 17개 지속 가능 발전 목표입니다. 데이터 과학이 진단과 해결에 쓰이는 무대입니다.</td></tr>
+    <tr><td class="term">SDGs</td><td>UN의 17개 지속 가능 발전 목표입니다. 데이터 과학이 진단과 해결에 사용되는 영역입니다.</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
