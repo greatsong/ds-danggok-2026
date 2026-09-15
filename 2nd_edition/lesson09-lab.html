@@ -355,7 +355,21 @@ st.caption("실루엣 점수가 가장 높은 묶음 수와 사람이 이해하�
   </table>
   <p>세 줄이 한 칸씩에 몰려 있지 않습니다. 미드필더는 ㉮와 ㉯로 나뉘었고, 수비수도 ㉯와 ㉰로 나뉘었습니다. k-평균은 포지션을 본 적이 없고 능력치만 사용했기 때문입니다. <b>군집은 분류가 아닙니다.</b> 묶음이 포지션과 얼마나 겹치는지는 결과를 읽은 뒤에 사람이 확인하는 것이지, 알고리즘이 맞히려고 한 목표가 아닙니다.</p>
 
-  <h2>2. 표준화 스위치 — 변화 폭을 맞추면 누가 옮겨 가는가</h2>
+  <h3>축을 하나 더 — 세 능력치로 보는 3차원 묶음</h3>
+<p>본문 1절의 그림은 두 능력치만 축으로 사용했습니다. 아래는 슈팅·수비·패스 세 능력치를 축으로 삼아 선수 800명 전체를 놓고 k=3으로 묶은 결과입니다. 가로로 뻗은 축이 슈팅, 안쪽으로 들어가는 축이 수비, 위로 선 축이 패스입니다. 마우스로 끌어 돌려 보고, 점에 마우스를 올리면 선수 이름과 세 값이 함께 표시됩니다.</p>
+<figure class="interactive" data-fig="km3d">
+<div class="widget" data-w="km3d">
+<div class="plot" style="width:100%;min-height:420px"></div>
+<div class="wctl">
+<button class="wbtn on" type="button" data-color="clu" aria-pressed="true">묶음 색</button>
+<button class="wbtn" type="button" data-color="pos" aria-pressed="false">포지션 색</button>
+<span class="wout"></span>
+</div>
+</div>
+<figcaption>축이 셋이면 점 하나가 공간의 한 자리가 됩니다. 두 축만 볼 때 겹쳐 보이던 선수들이 셋째 축에서는 떨어지는지 확인합니다.</figcaption>
+</figure>
+
+<h2>2. 표준화 스위치 — 변화 폭을 맞추면 누가 옮겨 가는가</h2>
   <p>여섯 능력치는 모두 0에서 100 사이의 값이지만 벌어지는 폭은 다릅니다. 수비는 포지션에 따라 크게 벌어져 표준편차가 18.1이고, 패스는 7.3에 그칩니다. 폭이 넓은 항목이 거리를 더 많이 정합니다. 아래 그림은 본문 위젯과 같은 선수 114명을 원래 값으로 묶었을 때와 표준화한 뒤 묶었을 때를 비교합니다. 두 결과에서 묶음이 달라지는 선수는 12명입니다. 점 하나를 누르면 그 선수의 원래값과 표준화값이 오른쪽에 함께 표시됩니다.</p>
   <figure class="interactive" data-fig="stdswitch">
     <div class="widget" data-w="stdswitch" style="overflow-x:auto">
@@ -437,6 +451,7 @@ st.caption("실루엣 점수가 가장 높은 묶음 수와 사람이 이해하�
 <script src="assets/quiz.js"></script>
 <script src="assets/soccer_data.js?v=1"></script>
 <script src="assets/widgets09c.js?v=1"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="assets/answer.js?v=3"></script>
 </body>
 </html>
