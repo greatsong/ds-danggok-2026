@@ -367,6 +367,7 @@ st.dataframe(흡연, width="stretch", hide_index=True)</pre></div></details>
   </ul>
   <p>다음은 사람을 나누는 일입니다. 번호 순으로 정렬해 열 명 가운데 앞 세 명을 채점용으로 떼어 놓고, 나머지로만 학습합니다. 채점용으로 떼어 놓은 사람들은 모델이 학습할 때 한 번도 본 적이 없어야 합니다. 나이와 혈당은 숫자의 크기가 크게 다르므로 9차시에서 한 표준화를 이번에도 합니다. 다만 이번에는 훈련용의 평균과 표준편차만 사용합니다. 채점용은 학습에 쓰지 않기 때문입니다.</p>
   <p>모델은 둘을 함께 만듭니다. 그리고 하나를 더 만듭니다. <b>입력을 하나도 보지 않고 훈련용에서 많은 쪽으로만 답하는 모델</b>입니다. 이 모델은 나이도 혈당도 보지 않고 모든 사람에게 같은 답을 내놓습니다. 점수를 비교할 기준이 하나 있어야 하므로 함께 만들어 둡니다.</p>
+  <p>앱은 입력으로 사용할 속성을 화면에서 고칠 수 있게 만듭니다. 처음에는 위의 네 가지가 골라져 있고, 표에 적을 세 값은 그 네 가지로 구한 값입니다. 속성을 바꾸면 값이 어떻게 달라지는지는 표를 채운 뒤에 확인합니다.</p>
 
   <h3>실습 ③ — 분류 모델 화면 더하기</h3>
   <ol class="steps">
@@ -374,7 +375,10 @@ st.dataframe(흡연, width="stretch", hide_index=True)</pre></div></details>
   <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>pages 폴더에 '분류 모델' 페이지를 추가해 줘. 파일 이름은 2_분류_모델.py.
 바뀐 파일 전체를 다시 줘. 바뀐 부분만 주지 말고.
 stroke가 1이면 뇌졸중, 0이면 아님이야. 뇌졸중을 양성으로 둬.
-입력으로는 age, avg_glucose_level, hypertension, heart_disease 네 가지를 사용해 줘.
+age, avg_glucose_level, bmi, hypertension, heart_disease 다섯 가운데
+입력으로 사용할 속성을 화면에서 고르게 하고, 처음에는 bmi를 뺀 넷이 골라져 있게 해 줘.
+두 개보다 적게 고르면 안내문을 표시하고 멈춰 줘.
+bmi는 비어 있는 사람이 있으니 고른 경우에만 훈련용의 중앙값으로 채워 줘.
 번호 순으로 정렬해 열 명 중 앞 세 명을 채점용으로 고정하고,
 나머지로만 학습과 크기 맞추기를 해 줘.
 확률로 답하는 모델과 질문의 순서로 답하는 모델을 각각 만들어 줘.
@@ -383,14 +387,17 @@ stroke가 1이면 뇌졸중, 0이면 아님이야. 뇌졸중을 양성으로 둬
 채점용 사람들로 두 모델의 정확도를 큰 숫자 카드로 보여 줘.
 같은 자리에 "입력을 하나도 보지 않고 훈련용에서 많은 쪽으로만 답하는 모델"의
 정확도도 카드로 보여 줘.
-확률로 답하는 모델이 계산한 확률을 나이를 가로축으로 점찍어 보여 주고,
-실제 뇌졸중 여부를 색으로 나눠 줘. 0.5 자리에 가로선을 그어 줘.
+고른 속성 가운데 둘을 골라 가로축과 세로축으로 삼는 그림을 그려 줘.
+채점용 사람들을 점으로 찍고 실제 뇌졸중 여부를 색으로 나눠 범례를 달아 줘.
+그 두 축만으로 다시 학습한 확률 모델이 0.5로 가르는 선을 그려 주고,
+선이 그림 밖이면 그렇다고 글로 적어 줘.
+질문으로 답하는 모델이 그 두 축을 나눈 칸도 옅은 색으로 칠해 줘.
 질문으로 답하는 모델이 던진 질문의 순서를 글로 적어 줘.
 그림은 plotly로만 그려 줘. requirements.txt는 그대로 두면 돼.</pre></div>
   <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">pages 폴더 안에 저장합니다. 데이터는 고정되어 있으므로 화면의 숫자는 언제 실행해도 같습니다. 다만 라이브러리 버전이나 설정을 바꾸면 값이 달라질 수 있습니다.</p>
-  <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">pages/2_분류_모델.py</button></span><button class="copy-btn">복사</button><pre># pages/2_분류_모델.py — 두 모델을 학습해 채점용 사람들로 정확도를 비교한다
+  <div class="codewrap code"><span class="label">② AI가 준 코드 예시 — <button type="button" class="fname">pages/2_분류_모델.py</button></span><button class="copy-btn">복사</button><pre># pages/2_분류_모델.py — 속성을 골라 두 모델을 학습하고, 두 축으로 자른 자리를 그림으로 본다
 import pandas as pd
-import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
@@ -401,9 +408,12 @@ st.title("🤖 분류 모델")
 st.write("뇌졸중을 겪었는지 아닌지를 맞히는 모델 두 개를 만들고, 채점용 사람들로 정확도를 봅니다.")
 
 데이터주소 = "https://raw.githubusercontent.com/greatsong/modudata/main/data/stroke.csv"
-입력열 = ["age", "avg_glucose_level", "hypertension", "heart_disease"]
-입력이름 = {"age": "나이", "avg_glucose_level": "평균 혈당",
+고를수있는열 = ["age", "avg_glucose_level", "bmi", "hypertension", "heart_disease"]
+기본열 = ["age", "avg_glucose_level", "hypertension", "heart_disease"]
+입력이름 = {"age": "나이", "avg_glucose_level": "평균 혈당", "bmi": "체질량지수",
             "hypertension": "고혈압", "heart_disease": "심장병"}
+칸수 = 60
+칸색 = ["#e2e8f0", "#fef3c7", "#dbeafe", "#dcfce7", "#fae8ff", "#ffe4e6", "#ede9fe", "#f8fafc"]
 
 
 @st.cache_data
@@ -412,48 +422,104 @@ def 데이터_읽기():
     return pd.read_csv(데이터주소, encoding="utf-8").sort_values("id").reset_index(drop=True)
 
 
+def 우리말(열):
+    return 입력이름[열]
+
+
 df = 데이터_읽기()
+고른열 = st.multiselect("입력으로 사용할 속성", 고를수있는열, default=기본열, format_func=우리말)
+입력열 = [열 for 열 in 고를수있는열 if 열 in 고른열]   # 고른 차례와 상관없이 늘 같은 순서로 둔다
+if len(입력열) &lt; 2:
+    st.warning("속성을 두 개 이상 골라 주세요. 하나만으로는 그림의 두 축을 만들 수 없습니다.")
+    st.stop()
 
 채점용 = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 명 중 앞 세 명이 채점용
-X = df[입력열]
+X = df[입력열].copy()
 y = df["stroke"]                                        # 1이면 뇌졸중, 0이면 아님. 뇌졸중이 양성이다
+if "bmi" in 입력열 and X["bmi"].isna().any():
+    중앙값 = float(X.loc[~채점용, "bmi"].median())
+    X["bmi"] = X["bmi"].fillna(중앙값)
+    st.warning(f"체질량지수가 비어 있는 사람은 훈련용의 중앙값 {중앙값:.1f}으로 채웠습니다.")
 
-크기맞추기 = StandardScaler().fit(X[~채점용])            # 크기 맞추기도 훈련용으로만 한다
-확률모델 = LogisticRegression(max_iter=2000).fit(크기맞추기.transform(X[~채점용]), y[~채점용])
-# 질문으로 답하는 모델은 값의 크기에 영향받지 않으므로 크기를 맞추지 않은 값을 그대로 사용한다
-질문모델 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~채점용], y[~채점용])
 
+def 학습(열들):
+    """고른 열로 두 모델을 학습해 돌려준다. 설정은 늘 같다."""
+    훈련 = X.loc[~채점용, 열들]
+    크기맞추기 = StandardScaler().fit(훈련)   # 크기 맞추기도 훈련용으로만 한다
+    확률모델 = LogisticRegression(max_iter=2000).fit(크기맞추기.transform(훈련), y[~채점용])
+    # 질문으로 답하는 모델은 값의 크기에 영향받지 않으므로 크기를 맞추지 않은 값을 그대로 사용한다
+    질문모델 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(훈련, y[~채점용])
+    return 크기맞추기, 확률모델, 질문모델
+
+
+크기맞추기, 확률모델, 질문모델 = 학습(입력열)
 많은쪽 = int(y[~채점용].mode()[0])                       # 훈련용에서 사람이 많은 범주
 실제 = y[채점용].to_numpy()
-확률 = 확률모델.predict_proba(크기맞추기.transform(X[채점용]))[:, 1]
 
 st.info(f"훈련용 {int((~채점용).sum()):,}명(그중 뇌졸중 {int(y[~채점용].sum()):,}명)으로 학습하고, "
-        f"채점용 {int(채점용.sum()):,}명으로 채점합니다. "
-        f"채점용 가운데 실제 뇌졸중은 {int(실제.sum()):,}명입니다.")
+        f"채점용 {int(채점용.sum()):,}명(그중 실제 뇌졸중 {int(실제.sum()):,}명)으로 채점합니다.")
 
 st.subheader("채점용 사람들에서의 정확도")
-예측 = {
-    "확률로 답하는 모델": (확률 &gt;= 0.5).astype(int),
-    "질문으로 답하는 모델": 질문모델.predict(X[채점용]),
-    "한쪽으로만 답하는 모델": pd.Series(많은쪽, index=y[채점용].index).to_numpy(),
-}
+예측 = {"확률로 답하는 모델": 확률모델.predict(크기맞추기.transform(X[채점용])),
+        "질문으로 답하는 모델": 질문모델.predict(X[채점용]),
+        "한쪽으로만 답하는 모델": pd.Series(많은쪽, index=y[채점용].index).to_numpy()}
 칸들 = st.columns(3)
 for 칸, (이름, 예측값) in zip(칸들, 예측.items()):
     칸.metric(이름, f"{(예측값 == 실제).mean():.4f}")
 st.caption("소수 넷째 자리까지 적었습니다. 맨 오른쪽은 입력을 하나도 보지 않고 훈련용에서 사람이 많은 쪽으로만 "
            "답하는 모델입니다. 세 값을 교재의 표에 적어 두세요.")
 
-st.subheader("확률로 답하는 모델은 사람마다 어떤 확률을 냈는가")
-점그림 = pd.DataFrame({
-    "나이": df.loc[채점용, "age"].to_numpy(),
-    "뇌졸중이라고 본 확률": 확률,
-    "실제": pd.Series(실제).map({1: "뇌졸중 있음", 0: "뇌졸중 없음"}),
-})
-그림 = px.scatter(점그림, x="나이", y="뇌졸중이라고 본 확률", color="실제",
-                  opacity=0.6, range_y=[0, 1], title="나이와 확률")
-그림.add_hline(y=0.5, line_dash="dash", annotation_text="0.5")
+st.subheader("고른 속성 가운데 둘을 축으로 놓고 본다")
+축칸 = st.columns(2)
+가로 = 축칸[0].selectbox("가로축", 입력열, index=0, format_func=우리말)
+세로후보 = [열 for 열 in 입력열 if 열 != 가로]
+세로 = 축칸[1].selectbox("세로축", 세로후보, index=0, format_func=우리말)
+
+두축 = [가로, 세로]
+그림크기맞추기, 그림확률모델, 그림질문모델 = 학습(두축)   # 그림은 두 축만으로 다시 학습한 모델로 그린다
+채점입력 = X[채점용]
+
+
+def 눈금(열):
+    """채점용에서 가장 작은 값부터 가장 큰 값까지 고르게 나눈 값들을 돌려준다."""
+    작은값, 큰값 = float(채점입력[열].min()), float(채점입력[열].max())
+    큰값 = 큰값 if 큰값 &gt; 작은값 else 작은값 + 1.0
+    return [작은값 + (큰값 - 작은값) * i / (칸수 - 1) for i in range(칸수)]
+
+
+def 두줄로(값들):   # 한 줄로 늘어선 값을 세로줄마다 잘라 표 모양으로 만든다
+    return [값들[i * 칸수:(i + 1) * 칸수] for i in range(칸수)]
+
+
+가로눈금, 세로눈금 = 눈금(가로), 눈금(세로)
+격자 = pd.DataFrame([{가로: 가, 세로: 세} for 세 in 세로눈금 for 가 in 가로눈금])[두축]
+확률격자 = 그림확률모델.predict_proba(그림크기맞추기.transform(격자))[:, 1].tolist()
+마디번호 = 그림질문모델.apply(격자).tolist()          # 각 자리가 트리의 어느 마디에 떨어지는지
+자리 = {마디: 번호 for 번호, 마디 in enumerate(sorted(set(마디번호)))}
+마디수 = len(자리)
+색단계 = [[(번호 + 끝) / 마디수, 칸색[번호 % len(칸색)]] for 번호 in range(마디수) for 끝 in (0, 1)]
+
+그림 = go.Figure()
+그림.add_trace(go.Heatmap(x=가로눈금, y=세로눈금, z=두줄로([자리[마디] for 마디 in 마디번호]),
+                          colorscale=색단계, zmin=-0.5, zmax=마디수 - 0.5, opacity=0.45,
+                          showscale=False, hoverinfo="skip"))
+그림.add_trace(go.Contour(x=가로눈금, y=세로눈금, z=두줄로(확률격자),
+                          contours=dict(coloring="lines", start=0.5, end=0.5, size=1),
+                          line=dict(width=3, color="#2563eb"), showscale=False, hoverinfo="skip"))
+점표 = pd.DataFrame({"가로": 채점입력[가로].to_numpy(), "세로": 채점입력[세로].to_numpy(),
+                     "실제": pd.Series(실제).map({1: "뇌졸중 있음", 0: "뇌졸중 없음"}).to_numpy()})
+for 이름, 색 in (("뇌졸중 없음", "#94a3b8"), ("뇌졸중 있음", "#7f1d1d")):
+    한무리 = 점표[점표["실제"] == 이름]
+    그림.add_trace(go.Scatter(x=한무리["가로"], y=한무리["세로"], mode="markers", name=이름,
+                              marker=dict(size=6, color=색, opacity=0.5)))
+그림.update_layout(title=f"가로축 {우리말(가로)} · 세로축 {우리말(세로)}", xaxis_title=우리말(가로),
+                   yaxis_title=우리말(세로), height=560)
 st.plotly_chart(그림, width="stretch")
-st.caption("가로축은 나이, 세로축은 모델이 계산한 확률입니다. 점선은 0.5 자리입니다.")
+if not (min(확률격자) &lt;= 0.5 &lt;= max(확률격자)):
+    st.info(f"이 그림 안에서 확률이 가장 높은 자리도 {max(확률격자):.2f}입니다. "
+            f"확률이 0.5를 넘는 자리가 없어 경계선이 그림 안에 없습니다.")
+st.caption("점은 채점용 사람들이고 색은 실제 뇌졸중 여부입니다. 파란 선은 확률로 답하는 모델이 0.5로 가르는 자리, "
+           "옅은 색으로 나뉜 바탕은 질문으로 답하는 모델이 두 축을 나눈 칸입니다. 고른 두 축만으로 다시 학습한 그림입니다.")
 
 st.subheader("질문으로 답하는 모델은 어떤 순서로 물었는가")
 st.text(export_text(질문모델, feature_names=[입력이름[열] for 열 in 입력열]))
@@ -473,7 +539,7 @@ st.caption("맨 위가 첫 질문입니다. class가 1이면 뇌졸중, 0이면 
   </table>
   <p>세 값을 모두 적습니다. 세 값은 모두 높고, 서로 크게 다르지 않습니다. 맨 아래 줄은 입력을 하나도 보지 않고 답한 점수인데도 그렇습니다. 이 세 값을 다음 시간에 다시 꺼냅니다.</p>
 
-  <p>정확도 표를 채웠으면 아래 두 화면을 봅니다. 먼저 산점도입니다. 가로축이 나이이고, 점 하나가 채점용 사람 한 명이며, 세로 위치가 그 사람에게 모델이 계산한 확률입니다. <b>나이가 많을수록 확률이 올라갑니까.</b> 올라간다면 모델이 나이에서 무언가를 배웠다는 뜻입니다. 점의 색은 실제 뇌졸중 여부이므로, 색이 다른 점들이 서로 다른 높이에 있는지도 함께 봅니다.</p>
+  <p>정확도 표를 채웠으면 아래 두 화면을 봅니다. 먼저 그림입니다. 고른 속성 가운데 둘을 가로축과 세로축으로 고르면, 점 하나가 채점용 사람 한 명이고 점의 색이 실제 뇌졸중 여부입니다. 파란 선은 확률로 답하는 모델이 0.5로 가르는 자리이고, 옅은 색으로 나뉜 바탕은 질문으로 답하는 모델이 두 축을 나눈 칸입니다. <b>축을 바꾸면 선과 칸이 어떻게 달라집니까.</b> 파란 선이 보이지 않으면 그림 아래에 그 까닭과 이 그림에서 가장 높은 확률이 적힙니다.</p>
   <p>다음은 질문으로 답하는 모델이 던진 질문의 순서입니다. 첫 질문이 어느 항목에서 나왔는지 확인합니다. 그 항목이 2절에서 두 무리의 차이가 가장 컸던 항목과 같은지 비교합니다. 첫 질문의 기준값도 함께 적어 둡니다.</p>
 
   <p>내 앱에서 본 두 화면은 채점용 사람들만 그린 것입니다. 아래 그림은 같은 5,110명을 모두 올려놓고 두 모델이 나이와 평균 혈당의 평면을 어떻게 나누는지 보여 줍니다. 버튼을 눌러 두 모델을 번갈아 봅니다.</p>
