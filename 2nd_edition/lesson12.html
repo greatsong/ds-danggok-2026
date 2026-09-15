@@ -508,10 +508,9 @@ st.subheader("5. 흡연 상태에는 어떤 값이 적혀 있는가")
 흡연.columns = ["흡연 상태", "사람 수"]
 흡연["비율(%)"] = (흡연["사람 수"] / len(df) * 100).round(1)
 st.dataframe(흡연, width="stretch", hide_index=True)</pre></div>
-<div class="codewrap code"><span class="label">네 번째 파일 — <button type="button" class="fname">pages/2_분류_모델.py</button></span><button class="copy-btn">복사</button><pre># pages/2_분류_모델.py — 두 모델을 학습해 채점용 사람들로 정확도를 비교하고, 갈라놓은 자리를 그림으로 본다
+<div class="codewrap code"><span class="label">네 번째 파일 — <button type="button" class="fname">pages/2_분류_모델.py</button></span><button class="copy-btn">복사</button><pre># pages/2_분류_모델.py — 두 모델을 학습해 채점용 사람들로 정확도를 비교한다
 import pandas as pd
 import plotly.express as px
-import plotly.graph_objects as go
 import streamlit as st
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
@@ -522,12 +521,9 @@ st.title("🤖 분류 모델")
 st.write("뇌졸중을 겪었는지 아닌지를 맞히는 모델 두 개를 만들고, 채점용 사람들로 정확도를 봅니다.")
 
 데이터주소 = "https://raw.githubusercontent.com/greatsong/modudata/main/data/stroke.csv"
-고를수있는열 = ["age", "avg_glucose_level", "bmi", "hypertension", "heart_disease"]
-기본열 = ["age", "avg_glucose_level", "hypertension", "heart_disease"]
-입력이름 = {"age": "나이", "avg_glucose_level": "평균 혈당", "bmi": "체질량지수",
+입력열 = ["age", "avg_glucose_level", "hypertension", "heart_disease"]
+입력이름 = {"age": "나이", "avg_glucose_level": "평균 혈당",
             "hypertension": "고혈압", "heart_disease": "심장병"}
-칸수 = 60          # 2차원 그림의 격자 촘촘함
-칸수3D = 26        # 3차원 평면의 격자 촘촘함
 
 
 @st.cache_data
@@ -536,28 +532,11 @@ def 데이터_읽기():
     return pd.read_csv(데이터주소, encoding="utf-8").sort_values("id").reset_index(drop=True)
 
 
-def 우리말(열):
-    return 입력이름[열]
-
-
 df = 데이터_읽기()
 
-고른열 = st.multiselect("입력으로 사용할 속성", 고를수있는열, default=기본열, format_func=우리말,
-                        help="처음에는 나이·평균 혈당·고혈압·심장병 네 가지가 골라져 있습니다.")
-입력열 = [열 for 열 in 고를수있는열 if 열 in 고른열]   # 고른 차례와 상관없이 늘 같은 순서로 둔다
-if len(입력열) &lt; 2:
-    st.warning("속성을 두 개 이상 골라 주세요. 하나만으로는 그림의 두 축을 만들 수 없습니다.")
-    st.stop()
-
 채점용 = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 명 중 앞 세 명이 채점용
-X = df[입력열].copy()
+X = df[입력열]
 y = df["stroke"]                                        # 1이면 뇌졸중, 0이면 아님. 뇌졸중이 양성이다
-
-if "bmi" in 입력열:
-    빈칸수 = int(X["bmi"].isna().sum())
-    중앙값 = float(X.loc[~채점용, "bmi"].median())
-    X["bmi"] = X["bmi"].fillna(중앙값)
-    st.warning(f"체질량지수가 비어 있는 {빈칸수:,}명은 훈련용의 중앙값 {중앙값:.1f}으로 채웠습니다.")
 
 크기맞추기 = StandardScaler().fit(X[~채점용])            # 크기 맞추기도 훈련용으로만 한다
 확률모델 = LogisticRegression(max_iter=2000).fit(크기맞추기.transform(X[~채점용]), y[~채점용])
@@ -581,141 +560,8 @@ st.subheader("채점용 사람들에서의 정확도")
 칸들 = st.columns(3)
 for 칸, (이름, 예측값) in zip(칸들, 예측.items()):
     칸.metric(이름, f"{(예측값 == 실제).mean():.4f}")
-찾아낸환자 = {이름: int(((실제 == 1) &amp; (예측값 == 1)).sum()) for 이름, 예측값 in 예측.items()}
 st.caption("소수 넷째 자리까지 적었습니다. 맨 오른쪽은 입력을 하나도 보지 않고 훈련용에서 사람이 많은 쪽으로만 "
            "답하는 모델입니다. 세 값을 교재의 표에 적어 두세요.")
-st.caption("찾아낸 환자(TP)는 " + " · ".join(f"{이름} {수}명" for 이름, 수 in 찾아낸환자.items()) + "입니다.")
-
-st.subheader("두 모델은 사람을 어디에서 갈라놓았는가")
-축칸 = st.columns(2)
-가로 = 축칸[0].selectbox("가로축", 입력열, index=0, format_func=우리말)
-세로후보 = [열 for 열 in 입력열 if 열 != 가로]
-세로 = 축칸[1].selectbox("세로축", 세로후보, index=0, format_func=우리말)
-
-채점입력 = X[채점용]
-고정값 = {열: float(채점입력[열].median()) for 열 in 입력열 if 열 not in (가로, 세로)}
-
-
-def 눈금(열, 개수):
-    """채점용에서의 가장 작은 값부터 가장 큰 값까지 고르게 나눈 값들을 돌려준다."""
-    작은값, 큰값 = float(채점입력[열].min()), float(채점입력[열].max())
-    if 큰값 &lt;= 작은값:
-        큰값 = 작은값 + 1.0
-    폭 = (큰값 - 작은값) / (개수 - 1)
-    return [작은값 + 폭 * i for i in range(개수)]
-
-
-def 두줄로(값들, 개수):
-    """한 줄로 늘어선 값을 세로줄마다 잘라 표 모양으로 만든다."""
-    return [값들[i * 개수:(i + 1) * 개수] for i in range(개수)]
-
-
-가로눈금, 세로눈금 = 눈금(가로, 칸수), 눈금(세로, 칸수)
-격자 = pd.DataFrame([dict(고정값, **{가로: 가, 세로: 세}) for 세 in 세로눈금 for 가 in 가로눈금])[입력열]
-확률격자 = 확률모델.predict_proba(크기맞추기.transform(격자))[:, 1].tolist()
-질문격자 = [float(값) for 값 in 질문모델.predict(격자).tolist()]
-
-그림2D = go.Figure()
-그림2D.add_trace(go.Heatmap(x=가로눈금, y=세로눈금, z=두줄로(질문격자, 칸수), zmin=0, zmax=1,
-                            colorscale=[[0, "rgba(0,0,0,0)"], [1, "rgba(245,158,11,0.30)"]],
-                            showscale=False, hoverinfo="skip", name="질문 모델이 뇌졸중이라고 답하는 영역"))
-그림2D.add_trace(go.Contour(x=가로눈금, y=세로눈금, z=두줄로(확률격자, 칸수),
-                            contours=dict(coloring="lines", showlabels=True, start=0.1, end=0.9, size=0.1),
-                            line_width=1, colorscale="Blues", showscale=False, hoverinfo="skip",
-                            name="확률 등고선"))
-그림2D.add_trace(go.Contour(x=가로눈금, y=세로눈금, z=두줄로(확률격자, 칸수),
-                            contours=dict(coloring="lines", start=0.5, end=0.5, size=1),
-                            line=dict(width=3, color="#dc2626"), showscale=False, hoverinfo="skip",
-                            name="확률 모델의 0.5 경계선"))
-점표 = pd.DataFrame({
-    "가로": 채점입력[가로].to_numpy(),
-    "세로": 채점입력[세로].to_numpy(),
-    "실제": pd.Series(실제).map({1: "뇌졸중 있음", 0: "뇌졸중 없음"}).to_numpy(),
-})
-for 이름, 색 in (("뇌졸중 없음", "#64748b"), ("뇌졸중 있음", "#b91c1c")):
-    한무리 = 점표[점표["실제"] == 이름]
-    그림2D.add_trace(go.Scatter(x=한무리["가로"], y=한무리["세로"], mode="markers", name=이름,
-                                marker=dict(size=6, color=색, opacity=0.55,
-                                            line=dict(width=0.5, color="white"))))
-그림2D.update_layout(title=f"{우리말(가로)}와 {우리말(세로)}로 본 두 모델",
-                     xaxis_title=우리말(가로), yaxis_title=우리말(세로),
-                     legend_title_text="실제", height=560)
-st.plotly_chart(그림2D, width="stretch")
-
-가장높은확률, 가장낮은확률 = max(확률격자), min(확률격자)
-if not (가장낮은확률 &lt;= 0.5 &lt;= 가장높은확률):
-    st.info(f"이 그림 안에서 확률이 가장 높은 자리도 {가장높은확률:.2f}입니다. "
-            f"확률이 0.5를 넘는 자리가 없어 0.5 경계선이 그림 안에 없습니다.")
-if max(질문격자) &lt; 0.5:
-    st.info("질문으로 답하는 모델은 이 그림 안 어디에서도 뇌졸중이라고 답하지 않습니다. "
-            "주황색 영역이 보이지 않는 것은 그 때문입니다.")
-고정설명 = " · ".join(f"{우리말(열)} {값:g}" for 열, 값 in 고정값.items())
-st.caption("점은 채점용 사람들이고 색은 실제 뇌졸중 여부입니다. 파란 선은 확률 모델이 계산한 확률의 등고선, "
-           "굵은 빨간 선은 그 모델이 0.5로 가르는 경계선, 주황색 영역은 질문으로 답하는 모델이 뇌졸중이라고 "
-           "답하는 자리입니다."
-           + (f" 두 축이 아닌 속성은 채점용의 중앙값({고정설명})으로 고정해 계산했습니다." if 고정값 else ""))
-
-if len(입력열) &gt;= 3:
-    st.subheader("축 셋으로 돌려 보기")
-    세축 = st.multiselect("3차원 산점도의 축 셋", 입력열, default=입력열[:3], max_selections=3,
-                          format_func=우리말)
-    if len(세축) != 3:
-        st.info("축을 정확히 세 개 골라 주세요.")
-    else:
-        가1, 가2, 가3 = 세축
-        계수 = 확률모델.coef_[0].tolist()
-        절편 = float(확률모델.intercept_[0])
-        평균, 폭 = 크기맞추기.mean_.tolist(), 크기맞추기.scale_.tolist()
-        자리 = {열: 번호 for 번호, 열 in enumerate(입력열)}
-
-        def 크기맞춘값(열, 값):
-            i = 자리[열]
-            return 계수[i] * (값 - 평균[i]) / 폭[i]
-
-        세로3 = 자리[가3]
-        남은값 = sum(크기맞춘값(열, float(채점입력[열].median()))
-                     for 열 in 입력열 if 열 not in 세축)
-        낮은끝, 높은끝 = float(채점입력[가3].min()), float(채점입력[가3].max())
-        눈금1, 눈금2 = 눈금(가1, 칸수3D), 눈금(가2, 칸수3D)
-        평면 = None
-        if 계수[세로3] != 0:
-            평면 = []
-            for 값2 in 눈금2:
-                한줄 = []
-                for 값1 in 눈금1:
-                    합 = 절편 + 남은값 + 크기맞춘값(가1, 값1) + 크기맞춘값(가2, 값2)
-                    해 = 평균[세로3] - 폭[세로3] * 합 / 계수[세로3]
-                    한줄.append(해 if 낮은끝 &lt;= 해 &lt;= 높은끝 else None)
-                평면.append(한줄)
-            if all(값 is None for 한줄 in 평면 for 값 in 한줄):
-                평면 = None
-
-        그림3D = go.Figure()
-        if 평면 is not None:
-            그림3D.add_trace(go.Surface(x=눈금1, y=눈금2, z=평면, showscale=False, opacity=0.45,
-                                        colorscale=[[0, "#dc2626"], [1, "#dc2626"]],
-                                        hoverinfo="skip", name="확률 0.5 평면"))
-        점표3 = pd.DataFrame({
-            "축1": 채점입력[가1].to_numpy(), "축2": 채점입력[가2].to_numpy(),
-            "축3": 채점입력[가3].to_numpy(),
-            "실제": pd.Series(실제).map({1: "뇌졸중 있음", 0: "뇌졸중 없음"}).to_numpy(),
-        })
-        for 이름, 색 in (("뇌졸중 없음", "#64748b"), ("뇌졸중 있음", "#b91c1c")):
-            한무리 = 점표3[점표3["실제"] == 이름]
-            그림3D.add_trace(go.Scatter3d(x=한무리["축1"], y=한무리["축2"], z=한무리["축3"],
-                                          mode="markers", name=이름,
-                                          marker=dict(size=3, color=색, opacity=0.6)))
-        그림3D.update_layout(height=620, legend_title_text="실제",
-                             scene=dict(xaxis_title=우리말(가1), yaxis_title=우리말(가2),
-                                        zaxis_title=우리말(가3)))
-        st.plotly_chart(그림3D, width="stretch")
-        if 평면 is None:
-            st.info("확률 0.5 평면이 이 그림 안에 없습니다. 그림 안의 어느 자리에서도 확률이 0.5에 닿지 않기 "
-                    "때문입니다. 점만 돌려 보세요.")
-        st.caption("마우스로 끌면 돌려 볼 수 있습니다. 점의 색은 실제 뇌졸중 여부이고, 붉은 면은 확률 모델이 "
-                   "0.5로 가르는 자리입니다."
-                   + (" 축 셋이 아닌 속성은 채점용의 중앙값으로 고정해 계산했습니다."
-                      if len(입력열) &gt; 3 else ""))
 
 st.subheader("확률로 답하는 모델은 사람마다 어떤 확률을 냈는가")
 점그림 = pd.DataFrame({
@@ -1525,7 +1371,7 @@ st.info("**이 흐름은 다른 데이터에도 그대로 됩니다** · 오늘�
 <script src="assets/quiz.js"></script>
 <script src="assets/widgets10.js?v=3"></script>
 <script src="assets/stroke_data.js?v=1"></script>
-<script src="assets/stroke_widgets.js?v=1"></script>
+<script src="assets/stroke_widgets.js?v=2"></script>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="assets/answer.js?v=3"></script>
 <script src="assets/lesson08-board.js"></script>
