@@ -3,9 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>10차시 · 연관 분석 — 급식에서 규칙 찾기 · 데이터 과학 당곡고 · 개정 검토본</title>
+<title>10차시 · 연관 분석 — 우리 학교 급식 세트와 금지 짝 · 데이터 과학 당곡고 · 개정 검토본</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<style>
+/* 도입 감 퀴즈 — 정답을 표시하지 않으므로 버튼이 아니라 목록으로 둔다 */
+.quiz.qinline .qopts-still { list-style: none; margin: 8px 0 0; padding: 0; }
+.quiz.qinline .qopts-still li { border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: #fffdf6; padding: 7px 16px; font-size: 0.88rem; font-weight: 700; }
+</style>
 <link rel="stylesheet" href="assets/review.css">
 </head>
 <body>
@@ -20,7 +25,7 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 10차시</span>
-  <h1>연관 분석 · <span class="a">우리 학교 급식에서 규칙 찾기</span></h1>
+  <h1>연관 분석 · <span class="a">우리 학교 급식 세트와 금지 짝을 퀴즈로 낸다</span></h1>
   <div class="under"></div>
 
   <div class="quote">
@@ -28,40 +33,48 @@
     <span class="by">속담 — 함께 등장하는 메뉴를 찾고, 규칙의 방향과 등장 빈도를 비교합니다</span>
   </div>
 
-  <p class="lead">지난 시간에는 정답표 없이 영화를 비슷한 것끼리 묶었습니다. 오늘도 정답표는 없습니다. 묶는 대신 함께 나타나는 것을 찾습니다. “제육볶음이 나오는 날 배추김치도 나올까?” <b>지지도·신뢰도·향상도</b>를 손으로 계산한 뒤 당곡고 급식 데이터에서 메뉴의 동시 등장 패턴을 찾습니다. 세 지표의 차이를 이해하고, 표본에서 찾은 규칙을 어디까지 해석할 수 있는지 판단합니다.</p>
-
-  <p class="mini">이 수업에서 사용하는 급식 데이터는 기준 기간인 2026년 9월 30일까지의 중식입니다. 손계산과 검산의 기준은 3절에 연결한 <b>184일 저장본</b>입니다.</p>
+  <p class="lead">지난 시간에는 정답표 없이 영화를 비슷한 것끼리 묶었습니다. 오늘도 정답표는 없습니다. 묶는 대신 같은 날 함께 나오는 메뉴를 찾습니다. 재료는 당곡고 중식 184일입니다. 오늘 할 일은 세 가지입니다. <b>지지도·신뢰도·향상도</b> 세 숫자를 손으로 구하고, 선생님이 배포한 탐색 앱으로 세트와 금지 짝을 찾으며, 찾은 규칙을 근거 숫자와 함께 <b>우리 학교 급식 퀴즈</b>로 만듭니다.</p>
 
   <div class="callout data">
-    <div class="h">🏪 도입 — 박카스 옆에 무엇이 함께 찍혔는가</div>
-    <p>여러분이 편의점 본사의 상품기획 담당자라고 가정합니다. 하루에 쌓이는 영수증은 수백만 장입니다. 그 안에서 한 가지만 확인합니다. 박카스가 찍힌 영수증에는 무엇이 함께 찍혀 있는가. GS25가 얻은 답은 1위 얼음컵, 2위 사이다였습니다. 이미 많은 손님이 세 가지를 따로 사서 직접 섞어 마시고 있었습니다. GS25는 이 결과를 동아제약에 가져가 세 가지를 합친 음료를 제안했고, 2025년 6월 25일 '얼박사'라는 이름으로 출시했습니다. 두 달 만에 누적 판매량 278만 개를 기록했습니다.</p>
-    <p>여기서 확인해 둘 것이 있습니다. "함께 많이 팔린 1위"는 아직 한 가지 숫자일 뿐입니다. 얼음컵은 원래 거의 모든 음료와 함께 팔리는 상품일 수도 있습니다. 그 구분을 하려면 숫자가 하나 더 필요합니다. 오늘 집계하는 것은 영수증이 아니라 당곡고 급식 184일입니다. 어느 반찬이 어느 반찬과 함께 나오는지부터 집계합니다.</p>
-    <p class="mini">출처: <a href="https://zdnet.co.kr/view/?no=20250624090313" target="_blank" rel="noopener">ZDNet Korea 2025년 6월 24일</a>, <a href="https://v.daum.net/v/20250924162420353" target="_blank" rel="noopener">파이낸셜뉴스 2025년 9월 24일</a>. 기사가 밝힌 것은 함께 소비하는 다빈도 상품 1위와 2위까지이며, GS25가 어떤 지표를 계산했는지는 공개되지 않았습니다.</p>
-    <ul>
-      <li><b>문제.</b> 당곡고 중식 184일 가운데 배추김치가 나온 날은 며칠일까요.
-        <div class="quiz qinline"><div class="qitem">
-          <div class="qopts qopts-col"><button class="opt">62일</button><button class="opt" data-ok="1">102일</button><button class="opt">140일</button></div>
-          <div class="fb">102일입니다. 184일의 약 55%이므로 이틀에 한 번 이상 나옵니다. 그렇다면 "제육볶음이 나오는 날에는 배추김치가 나온다"는 말은 알아낼 가치가 있는 규칙입니까. 오늘은 그것을 판단하는 숫자 셋을 계산합니다.</div>
-        </div></div>
-      </li>
-    </ul>
+    <div class="h">🍚 도입 — 우리 학교 급식, 감으로 먼저 답합니다</div>
+    <p>아래 두 문제는 급식을 먹어 본 감으로 답합니다. 아직 계산하지 않습니다. 공책에 답을 적고, 학급의 답 분포를 선생님이 칠판에 적습니다. 정답은 지금 공개하지 않습니다. 3절에서 탐색 앱으로 스스로 확인합니다.</p>
+      <div class="quiz qinline">
+        <div class="qq"><span class="qn">문제 1</span> 우리 학교 급식의 대표 세트 메뉴는?</div>
+        <div class="qitem"><ul class="qopts qopts-col qopts-still">
+          <li>㉮ 제육볶음 + 배추김치</li>
+          <li>㉯ 쇠고기미역국 + 칼슘강화기장밥</li>
+          <li>㉰ 떡볶이 + 배추김치</li>
+          <li>㉱ 순대국 + 배추김치</li>
+        </ul></div>
+      </div>
+      <div class="quiz qinline">
+        <div class="qq"><span class="qn">문제 2</span> 다음 중 우리 학교 급식에서 절대 같이 나오지 않는 짝은?</div>
+        <div class="qitem"><ul class="qopts qopts-col qopts-still">
+          <li>㉮ 배추김치 + 깍두기</li>
+          <li>㉯ 배추김치 + 제육볶음</li>
+          <li>㉰ 친환경현미밥 + 배추김치</li>
+          <li>㉱ 칼슘강화기장밥 + 쇠고기미역국</li>
+        </ul></div>
+      </div>
+    <p class="mini">정답은 3절에서 탐색 앱으로 확인합니다.</p>
+    <p>두 문제의 답을 감으로 고른 결과는 학생마다 서로 다르게 나타납니다. 자주 나오는 반찬은 다른 메뉴와도 함께 자주 등장하므로, 함께 나온 횟수만으로는 세트를 정할 수 없습니다. 오늘 구하는 세 가지 숫자가 감에 의존하던 판정을 수치로 바꿉니다. 정답은 3절에서 탐색 앱으로 직접 확인합니다.</p>
   </div>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>손계산</b> — 활동지 기본 문제의 세 규칙을 지지도·신뢰도·향상도 순서로 푼다</li>
-      <li><b>바이브 코딩</b> — 급식 184일에서 규칙을 찾는 앱을 만들고 손계산과 대조한다</li>
-      <li><b>판정</b> — 신뢰도가 높아도 기본 등장률과 차이가 작을 수 있음을 확인한다</li>
+      <li><b>손계산</b> — 활동지 기본 문제의 규칙 A·B를 지지도·신뢰도·향상도 순서로 푼다</li>
+      <li><b>탐색</b> — 선생님이 배포한 탐색 앱으로 세트·금지 짝·함정을 찾는다</li>
+      <li><b>바이브 코딩</b> — 찾은 규칙을 근거 숫자와 함께 우리 학교 급식 퀴즈 앱으로 만든다</li>
     </ul>
   </div>
 
   <h2>0. 오늘의 목표</h2>
-  <p>연관 분석은 함께 나타나는 항목의 패턴을 찾습니다. 자주 나오는 메뉴는 다른 여러 메뉴와도 자주 겹치므로, 동시 등장 횟수뿐 아니라 각 메뉴의 기본 등장률도 함께 살펴야 합니다. 하루 중식 식단을 한 건으로 보고 두 메뉴의 관계를 비교합니다.</p>
+  <p>연관 분석은 함께 나타나는 항목의 패턴을 찾는 방법입니다. 하루 중식 식단을 한 건으로 보고 두 메뉴의 관계를 숫자로 나타냅니다. 자주 나오는 메뉴는 다른 여러 메뉴와도 자주 겹치므로 동시 등장 횟수뿐 아니라 각 메뉴의 등장률도 함께 봐야 합니다. 오늘의 결과물은 근거 숫자가 붙은 퀴즈 세 문항입니다.</p>
   <ul class="steps">
-    <li><b>지지도·신뢰도·향상도</b>의 분모가 각각 무엇인지 말할 수 있다.</li>
-    <li>같은 두 메뉴라도 <b>규칙의 방향</b>이 바뀌면 신뢰도가 달라진다는 것을 설명할 수 있다.</li>
-    <li><b>향상도</b>를 결과 메뉴의 기본 등장률과 비교해 규칙을 판정할 수 있다.</li>
+    <li><b>지지도·신뢰도·향상도</b>의 분모를 말하고, 손으로 구할 수 있다.</li>
+    <li>신뢰도가 높아도 향상도가 1 근처면 정보가 없는 규칙임을 실제 급식 규칙으로 보일 수 있다.</li>
+    <li>찾은 규칙을 근거 숫자(동시·신뢰도·향상도)와 함께 퀴즈 문항으로 쓸 수 있다.</li>
   </ul>
 
   <h2>1. 개념 이해 — 교과서의 세 숫자</h2>
@@ -71,7 +84,7 @@
     <p class="q">"연관 분석은 고객의 구매 내역을 분석하는 데 흔히 쓰여 '장바구니 분석'이라고도 한다." <span class="src">(157쪽)</span></p>
     <p class="t">→ 오늘은 급식 184일치를 장바구니로 삼아, 같은 날 함께 나온 메뉴의 규칙을 찾습니다.</p>
   </div>
-  <p>당곡고 중식 184일에서 괄호를 제외하고 센 메뉴는 506종입니다. 그 가운데 같은 날 함께 나온 적이 있는 두 메뉴의 짝은 3,146가지입니다. 규칙에는 방향이 있으므로 짝 하나에서 규칙이 두 개 나오고, 앱의 표에는 그 두 배가 실립니다. 어느 짝이 볼 만한지를 세 숫자로 정합니다.</p>
+  <p>당곡고 중식에서 같은 날 함께 나온 적이 있는 두 메뉴의 짝은 수천 가지입니다. 규칙에는 방향이 있으므로 짝 하나에서 규칙이 두 개 나옵니다. 어느 짝이 볼 만한지를 세 숫자로 정합니다.</p>
   <div class="tbquote">
     <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 159·160쪽</span></div>
     <p class="q">"지지도는 두 개의 사건이 동시에 발생하는 비율이며 …" <span class="src">(159쪽)</span></p>
@@ -87,6 +100,7 @@
       <tr><td><b>향상도</b></td><td>신뢰도 ÷ (B 등장 일수 ÷ N)</td><td>A가 있을 때 B의 등장률은 기본 등장률의 몇 배인가</td></tr>
     </tbody>
   </table>
+  <p>세 숫자를 <b>급식표 맞히기</b> 점수표로 읽을 수 있습니다. 지지도는 이 상황이 전체에서 얼마나 자주 오는가입니다. 신뢰도는 앞 메뉴를 보고 뒤 메뉴를 찍었을 때 맞힐 비율입니다. 향상도는 그 찍기가 아무 날이나 뒤 메뉴를 찍는 것보다 몇 배 잘 맞는가입니다. 계산식은 교과서와 같고 읽는 말만 다릅니다.</p>
   <div class="callout theory">
     <div class="h">🧩 향상도 1이 뜻하는 것</div>
     <p>향상도가 <b>1</b>이면 A가 나온 날의 B 비율과 B의 기본 등장률이 같다는 뜻입니다. <b>1보다 크면</b> A가 나온 날에 B가 더 자주 나왔고, <b>1보다 작으면</b> 덜 나왔습니다.</p>
@@ -94,7 +108,7 @@
   <p>교과서의 {삼겹살} → {쌈채소} 규칙은 향상도가 1.67입니다. 삼겹살을 산 거래에서 쌈채소를 산 비율이 전체 거래의 쌈채소 구매 비율의 약 1.67배라는 뜻입니다.</p>
 
   <h2>2. 손계산이 먼저 — 활동지 기본 문제</h2>
-  <p>오늘의 계산은 활동지에 손으로 적습니다. 기본 문제의 세 규칙을 같은 스무 날 기록으로 풀면서 세 지표가 각각 무엇을 보여 주는지 비교합니다. 활동지의 수는 계산이 떨어지도록 고른 값이며 실제 관측값이 아니고, 나눗셈이 모두 두 자리 소수에서 끝나 계산기 없이 풀 수 있습니다. 연습 문제(매점 묶음 할인)는 같은 순서로 혼자 푸는 과제입니다.</p>
+  <p>계산은 활동지에 손으로 적습니다. 기본 문제의 규칙 두 개를 지지도·신뢰도·향상도 순서로 풉니다. 규칙 A 제육볶음 → 배추김치, 규칙 B 순대국 → 석박지입니다. 활동지의 수는 계산이 떨어지도록 고른 값이며 실제 관측값이 아닙니다. 나눗셈이 두 자리 소수에서 끝나 계산기 없이 풀 수 있습니다. 활동지 뒷부분(향상도가 1보다 작은 경우, 방향을 바꾸면)과 연습 문제(매점 묶음 할인)는 과제입니다. 수업 중에는 ⑥ 판단까지만 적습니다.</p>
   <div class="callout warn">
     <div class="h">🖥️ 위젯은 선생님 화면으로 함께 봅니다</div>
     <p>이 차시의 위젯은 선생님이 앞에서 보여 주는 시연용입니다. 화면이 답을 먼저 표시하면 계산 순서를 익힐 수 없습니다. 학생은 활동지에 손으로 적고, 다 푼 뒤에 화면의 값과 대조합니다.</p>
@@ -107,23 +121,20 @@
       <tr><td><b>③ 신뢰도</b></td><td>함께 나온 횟수 ÷ 앞 항목의 횟수</td><td>분모가 앞 항목입니다. 지지도와 분모가 다릅니다.</td></tr>
       <tr><td><b>④ 등장률</b></td><td>뒤 항목의 횟수 ÷ 전체</td><td>비교의 기준이 되는 값입니다.</td></tr>
       <tr><td><b>⑤ 향상도</b></td><td>신뢰도 ÷ 등장률</td><td>1이면 신뢰도와 뒤 항목의 등장률이 같습니다. 분모는 뒤 항목의 등장률입니다.</td></tr>
-      <tr><td><b>⑥ 판단</b></td><td>어느 규칙을 고를지와 그 까닭</td><td>지표가 서로 다른 규칙을 가리키면 문제의 목적을 먼저 정하고 그에 맞는 지표를 근거로 삼습니다.</td></tr>
+      <tr><td><b>⑥ 판단</b></td><td>어느 규칙으로 찍을지와 그 까닭</td><td>지표가 서로 다른 규칙을 가리키면 문제의 목적을 먼저 정하고 그에 맞는 지표를 근거로 삼습니다.</td></tr>
     </tbody>
   </table>
   <div class="callout mini">
-    <div class="h">✍️ 기본 문제 · 급식 안내 화면에 무엇을 표시할까</div>
-    <p>규칙 A를 풀기 전에, 제육볶음이 나온 날에 배추김치도 나올 비율이 얼마일 것 같은지 숫자 하나를 먼저 적습니다. ③단계에서 구하는 신뢰도가 바로 그 숫자입니다. ⑤단계에서는 그 비율이 배추김치의 기본 등장률과 같은 값이라는 것을 확인합니다.</p>
-    <p>지지도로 보면 규칙 A가 앞서지만 신뢰도에서는 순위가 뒤집힙니다. 지지도부터 차례로 구합니다.</p>
-    <p>세 번째 규칙 <b>배추김치 → 미역국</b>은 향상도가 1보다 작게 나옵니다. 값을 구한 뒤, 배추김치가 나온 날의 미역국 비율과 미역국의 기본 등장률을 나란히 놓고 한 문장으로 적습니다.</p>
-    <p>⑤단계까지 마치면 활동지 끝에 <b>방향 바꾸기 표</b>가 있습니다. 규칙 A와 규칙 B의 앞뒤를 바꾸어 신뢰도와 향상도를 다시 구하고, 달라진 값과 그대로인 값을 각각의 분모와 함께 적습니다.</p>
+    <div class="h">✍️ 기본 문제 · 급식표 맞히기</div>
+    <p>급식표에서 메뉴 하나만 보고 나머지 반찬 하나를 찍는다면 어느 규칙으로 찍을지 정하는 문제입니다. 규칙 A를 풀기 전에, 제육볶음이 나온 날 배추김치도 나올 비율을 숫자 하나로 먼저 적습니다. ③단계의 신뢰도가 그 숫자입니다. 지지도로 보면 규칙 A가 앞서지만 신뢰도에서 순위가 뒤집힙니다. ⑤단계 향상도에서 규칙 A의 신뢰도가 배추김치의 등장률과 같은 값임을 확인합니다. ⑥ 판단에서 어느 규칙으로 찍을지와 근거 지표 하나를 적습니다.</p>
   </div>
   <div class="callout warn">
     <div class="h">⚠️ 계산이 끝나면 판단이 달라진다</div>
-    <p>세 규칙 모두 그럴듯해 보이지만, 향상도를 구하면 판단이 달라집니다. 활동지에서 만든 이 판정 순서를 그대로 적용하여 우리 학교 급식으로 넘어갑니다.</p>
+    <p>두 규칙 모두 그럴듯해 보이지만, 향상도를 구하면 판단이 달라집니다. 활동지에서 만든 이 판정 순서를 그대로 적용하여 우리 학교 급식으로 넘어갑니다.</p>
   </div>
   <div class="callout theory">
     <div class="h">🧩 규칙에는 방향이 있습니다</div>
-    <p>A → B와 B → A는 다른 규칙입니다. 신뢰도의 분모가 <b>앞에 오는 메뉴가 나온 일수</b>이기 때문입니다. 184일 저장본으로 확인합니다. 순대국 5일, 석박지 20일, 함께 나온 날 5일이므로 순대국 → 석박지의 신뢰도는 5÷5 = 1.00이고, 석박지 → 순대국의 신뢰도는 5÷20 = 0.25입니다. 활동지 기본 문제는 스무 날 기준이라 수가 다릅니다.</p>
+    <p>A → B와 B → A는 다른 규칙입니다. 신뢰도의 분모가 <b>앞에 오는 메뉴가 나온 일수</b>이기 때문입니다. 급식 184일에서 확인합니다. 순대국 5일, 석박지 20일, 함께 나온 날 5일이므로 순대국 → 석박지의 신뢰도는 5÷5 = 1.00이고, 석박지 → 순대국의 신뢰도는 5÷20 = 0.25입니다. 활동지 기본 문제는 스무 날 기준이라 수가 다릅니다.</p>
     <p>반면 <b>지지도와 향상도는 방향을 바꾸어도 같습니다</b>. 지지도의 분모는 전체 일수 하나뿐이고, 향상도는 두 방향 모두 9.20으로 같습니다.</p>
     <p>그러므로 "B가 나오는 날은 A가 나온다"라고 말하려면 <b>그 문장의 방향에 해당하는 신뢰도</b>를 확인해야 합니다.</p>
   </div>
@@ -190,16 +201,13 @@
     <figcaption>정렬을 바꾸면 신뢰도가 가장 높은 규칙과 향상도가 가장 높은 규칙이 서로 다르게 표시됩니다. 신뢰도가 1.00인 규칙 여섯 개의 향상도는 1.80부터 9.20까지 나타납니다.</figcaption>
   </figure>
 
-  <h2>3. 실습 ① — 내 앱이 같은 값을 내는가</h2>
+  <h2>3. 탐색 — 선생님이 배포한 탐색 앱으로 세트와 금지 짝을 찾는다</h2>
   <div class="callout tip">
     <div class="h">🍚 우리는 DG푸드의 데이터 과학 인턴입니다</div>
     <p>DG푸드는 이 수업에서만 사용하는 가상의 급식 납품 회사입니다. 분석에 사용하는 급식 기록은 <b>당곡고에 실제로 나온 식단</b>입니다.</p>
     <p>식단팀은 어느 반찬이 어느 반찬과 함께 나가는지를 알아야 재료를 미리 준비하고 안내를 붙일 수 있습니다.</p>
-    <p>인턴은 찾은 규칙을 그대로 사용하지 않습니다. <b>어느 규칙에 재료와 진열 공간을 걸지 근거를 들어 보고합니다.</b></p>
+    <p>인턴은 찾은 세트를 그대로 보고하지 않습니다. <b>근거 숫자를 붙여 어느 규칙이 세트인지 보고합니다.</b></p>
   </div>
-  <p>앱을 실행하기 전에 같은 날 함께 나올 것 같은 메뉴 쌍 세 개를 먼저 적습니다. 급식을 먹으면서 알게 된 것이면 충분합니다.</p>
-  <p>예상 쌍 셋: <input class="answer-cell" style="max-width:420px;text-align:left" aria-label="예상한 메뉴 쌍 셋" placeholder="세 쌍을 쉼표로 구분해 적습니다"></p>
-  <p>앱은 5차시의 인증키로 급식 API에서 2025년 9월 1일부터 2026년 9월 30일까지의 중식을 조회합니다. <b>기간이 같아도 원데이터의 수정·추가에 따라 결과가 달라지므로</b>, 실행 결과가 <a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/danggok_meals_live.csv" target="_blank" rel="noopener">184일 급식 저장본</a>과 다르면 조회 시점과 일수, 메뉴 정리 기준부터 확인합니다.</p>
   <div class="specimen-row" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
     <div class="specimen st">
       <div class="tag">원본 — 급식 API가 준 하루</div>
@@ -277,409 +285,253 @@
     <figcaption>하루 식단 한 줄이 장바구니 한 건이 되고, 괄호를 그대로 두면 이름이 510개, 괄호를 제거하면 506종입니다. 누적 곡선은 184일째까지 계속 올라가며, 마지막 46일에도 새 메뉴가 82종 나옵니다.</figcaption>
   </figure>
 
-  <p>이번에는 아무 기준도 걸지 않고 규칙을 전부 봅니다. 표의 맨 위가 어떤 규칙으로 채워지는지가 4절의 출발점입니다.</p>
-  <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"급식 규칙 찾기" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py.
-당곡고 급식을 나이스 급식 API로 받아서 하루 중식 식단을 장바구니 하나로 보고,
-같은 날 함께 나온 메뉴 쌍을 찾아 줘.
-- 인증키는 비밀 금고에 NEIS_API_KEY라는 이름으로 넣어 뒀어. 코드에 직접 적지 말고 거기서 꺼내 써.
-- 기간은 2025년 9월 1일부터 2026년 9월 30일까지, 중식만. 조회된 모든 페이지를 받아 날짜별로 한 건씩 세어 줘.
-- 조회된 전체 건수보다 적게 받았으면 계산하지 말고 안내 문구를 보여 줘.
-- 하루 식단을 메뉴별로 나누고, 메뉴 이름의 괄호와 그 안의 내용은 전부 제외해 세 줘.
-- 화면 맨 위에 조회 기간, 분석한 날 수, 메뉴 종류 수, 같은 날 함께 나온 적이 있는 메뉴 쌍의 수를 적어 줘.
-- 결과 표의 열은 조건, 결과, 동시, 지지도, 신뢰도, 향상도로 하고 향상도가 높은 순으로 정렬해 줘.
-  이번에는 걸러 내지 말고 전부 보여 줘.
-- 메뉴 이름을 고르면 그 메뉴가 들어간 규칙만 모아 볼 수 있게 해 줘.
-- 향상도 상위 열 개는 plotly로 가로 막대그래프도 그려 줘. 메뉴로 좁히면 그래프도 함께 좁혀 줘.
-- 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.
-
-──── 아래는 나이스 교육정보 개방 포털 문서에서 복사한 부분 ────
-[급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo
-요청변수: Type=json · 글자는 UTF-8 · KEY(인증키) ·
-  ATPT_OFCDC_SC_CODE=B10(서울특별시교육청) · SD_SCHUL_CODE=7010073(당곡고등학교) ·
-  MMEAL_SC_CODE=2(중식) · MLSV_FROM_YMD=20250901, MLSV_TO_YMD=20260930 ·
-  pSize(한 번에 받을 행 수, 상한 1000) · pIndex(쪽 번호, 1부터)
-응답 구조: mealServiceDietInfo의 첫 번째 상자 head 안에 list_total_count(전체 건수),
-  두 번째 상자 안 row 목록에 하루마다 MLSV_YMD(급식일자, 하이픈 없는 여덟 자리) ·
-  DDISH_NM(식단 이름, 메뉴 사이 구분은 &lt;br/&gt;, 괄호 안은 알레르기 번호이거나 (자율)·(대)·(소스) 같은 표기)</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 급식은 날마다 쌓이므로 날 수와 메뉴 종류 수, 규칙의 수는 실행하는 날에 따라 달라집니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 급식 규칙 찾기: 같은 날 함께 나온 메뉴 쌍을 센다
-import re
-from collections import Counter
-from itertools import combinations
-
-import pandas as pd
-import plotly.express as px
-import requests
-import streamlit as st
-
-st.title("🍚 급식 규칙 찾기")
-
-
-@st.cache_data(ttl=3600)
-def load_baskets(api_key):
-    rows, page = [], 1
-    params = {"Type": "json", "KEY": api_key,
-              "pSize": 1000, "ATPT_OFCDC_SC_CODE": "B10",
-              "SD_SCHUL_CODE": "7010073", "MMEAL_SC_CODE": "2",
-              "MLSV_FROM_YMD": "20250901", "MLSV_TO_YMD": "20260930"}
-    while True:
-        response = requests.get("https://open.neis.go.kr/hub/mealServiceDietInfo",
-                                params={**params, "pIndex": page}, timeout=20)
-        response.raise_for_status()
-        data = response.json()
-        if "mealServiceDietInfo" not in data:
-            raise ValueError("급식을 조회하지 못했습니다.")
-        blocks = data["mealServiceDietInfo"]
-        head = next(block["head"] for block in blocks if "head" in block)
-        total = next(item["list_total_count"] for item in head if "list_total_count" in item)
-        chunk = next((block["row"] for block in blocks if "row" in block), [])
-        rows.extend(chunk)
-        if len(rows) &gt;= total:
-            break
-        if not chunk:                          # 전체 건수를 채우기 전에 빈 쪽이 오면 중단한다
-            raise ValueError("전체 건수보다 적게 받았습니다.")
-        page += 1
-    days = {}
-    for row in rows:
-        basket = days.setdefault(row["MLSV_YMD"], set())
-        for dish in re.split(r"&lt;br\s*/?&gt;", row["DDISH_NM"], flags=re.I):
-            name = re.sub(r"\([^)]*\)", "", dish).strip()   # 괄호와 그 안의 내용은 제외한다
-            if name:
-                basket.add(name)
-    return [sorted(basket) for basket in days.values() if basket]
-
-
-try:
-    api_key = st.secrets["NEIS_API_KEY"]
-except Exception:
-    st.error("비밀 금고에 NEIS_API_KEY를 설정하세요. 5차시 안내를 확인합니다.")
-    st.stop()
-if not api_key.strip():
-    st.error("인증키가 비어 있습니다.")
-    st.stop()
-try:
-    baskets = load_baskets(api_key)
-except (requests.RequestException, ValueError, KeyError, StopIteration):
-    st.error("급식을 모두 조회하지 못했습니다. 인증키·조회 조건·연결 상태를 확인하세요.")
-    st.stop()
-if not baskets:
-    st.info("조회 기간에 분석할 중식 데이터가 없습니다.")
-    st.stop()
-
-n = len(baskets)
-single = Counter(item for b in baskets for item in b)      # 메뉴가 나온 날 수
-pair = Counter(c for b in baskets for c in combinations(b, 2))   # 두 메뉴가 함께 나온 날 수
-
-rows = []
-for (a, b), together in pair.items():
-    for x, y in [(a, b), (b, a)]:              # 한 쌍에서 두 방향의 규칙이 나온다
-        rows.append({"조건": x, "결과": y, "동시": together,
-                     "지지도": round(together / n, 3),
-                     "신뢰도": round(together / single[x], 3),
-                     "향상도": round((together / single[x]) / (single[y] / n), 2)})
-rules = pd.DataFrame(rows, columns=["조건", "결과", "동시", "지지도", "신뢰도", "향상도"])
-rules = rules.sort_values("향상도", ascending=False)
-
-st.caption(f"조회 2025-09-01~2026-09-30 · 급식 {n}일 · 메뉴 {len(single)}종 · "
-           f"메뉴 쌍 {len(pair):,}개 · 규칙 {len(rules):,}개")
-
-메뉴 = st.selectbox("메뉴로 좁혀 보기", ["(전체)"] + sorted(single))
-보기 = rules if 메뉴 == "(전체)" else rules[(rules["조건"] == 메뉴) | (rules["결과"] == 메뉴)]
-st.dataframe(보기, width="stretch", hide_index=True)
-
-top = 보기.head(10).copy()
-top["규칙"] = top["조건"] + " → " + top["결과"]
-fig = px.bar(top, x="향상도", y="규칙", orientation="h", text="향상도")
-fig.update_layout(yaxis={"categoryorder": "total ascending"}, height=420)
-st.plotly_chart(fig, use_container_width=True)</pre></div>
-      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
-pandas
-requests
-plotly</pre></div></details>
-    </li>
-    <li><span class="st">② AI가 준 코드 — 실행하고 표를 읽는다</span><br>
-      표가 나타나면 열 이름 <b>신뢰도</b>를 눌러 한 번, <b>향상도</b>를 눌러 한 번 정렬해 봅니다. 두 순위가 서로 다르다는 것이 오늘의 발견입니다.</li>
-  </ol>
-  <div class="callout tip">
-    <div class="h">💡 프롬프트에 코드가 없다는 것</div>
-    <p>프롬프트에는 분석 대상, 메뉴 정리 기준, 원하는 결과를 명확히 적습니다. AI가 계산 코드를 작성하더라도 메뉴가 올바르게 나뉘었는지와 분모가 맞는지는 확인해야 합니다. 대표 규칙 몇 개를 직접 계산해 보면 오류를 찾는 데 도움이 됩니다.</p>
-  </div>
-  <h3>손계산한 규칙을 앱에서 찾습니다</h3>
-  <p>메뉴로 좁혀 보기에서 <b>제육볶음</b>을 고르고, 활동지 규칙 A와 같은 규칙을 표에서 찾습니다. 제육볶음으로 좁히면 규칙이 86개라 향상도 순에서는 규칙 A가 아래쪽에 있으므로, 동시 등장 열로 정렬하면 맨 위에 옵니다. <b>순대국</b>으로도 같은 일을 하고, 판정 칸에는 향상도를 기본 등장률과 비교한 결과를 적습니다.</p>
-  <p>규칙 A는 신뢰도가 손계산과 같게 나오지만 향상도는 다릅니다. 활동지의 스무 날에서는 배추김치의 기본 등장률을 실제보다 높게 잡았기 때문입니다. 두 값이 <b>같은 분모</b>에서 나왔는지 확인합니다.</p>
-  <p class="mini">손계산의 세 번째 규칙 배추김치 → 미역국은 앱에서 찾지 않습니다. 저장본에서 미역국은 종류별로 나뉘어 있어 그 이름의 규칙이 표에 없고, 이 규칙은 향상도가 1보다 작은 경우를 손으로 보기 위한 값이기 때문입니다.</p>
-  <div style="overflow-x:auto">
-  <table class="daymap" style="min-width:520px">
-    <thead><tr><th>규칙</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr></thead>
-    <tbody>
-      <tr><td><b>제육볶음 → 배추김치</b></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td><b>순대국 → 석박지</b></td><td></td><td></td><td></td><td></td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p>여기에 적은 두 값을 활동지 끝의 <b>화면과 대조하기</b> 표에 옮겨 손계산과 맞춰 봅니다.</p>
-  <h3>예상한 쌍을 표에서 찾습니다</h3>
-  <p>앞에 적은 예상 세 쌍을 결과 표에서 찾아 아래 칸을 채웁니다. 표에 없으면 동시 칸에 '표에 없음'이라고 적습니다.</p>
-  <div style="overflow-x:auto">
-  <table class="daymap" style="min-width:480px">
-    <thead><tr><th>구분</th><th>동시</th><th>향상도</th><th>판정</th></tr></thead>
-    <tbody>
-      <tr><td><b>예상 ①</b></td><td></td><td></td><td></td></tr>
-      <tr><td><b>예상 ②</b></td><td></td><td></td><td></td></tr>
-      <tr><td><b>예상 ③</b></td><td></td><td></td><td></td></tr>
-    </tbody>
-  </table>
-  </div>
-  <div class="callout ask">
-    <div class="h">❓ 표를 채운 뒤 함께 답할 질문</div>
-    <ul>
-      <li>신뢰도 순 1위와 향상도 순 1위는 같은 규칙입니까. 두 규칙의 이름과 동시 등장 일수를 나란히 적습니다.</li>
-    </ul>
-  </div>
-  <p>여기에 적은 예상과 표의 값을 근거로 폼 Ⅲ-04d의 두 문항을 씁니다.</p>
-  <h2>4. 실습 ③ — 최소 기준과 함께 안 나오는 짝</h2>
+  <p>3절에서는 앱을 만들지 않습니다. 선생님이 미리 배포한 탐색 앱 주소로 들어갑니다. 짝과 함께 한 화면을 봅니다. 앱은 5차시와 같은 급식 API로 2025년 9월 1일부터 2026년 9월 30일까지의 중식을 조회하고, 하루 식단을 장바구니 한 건으로 바꿉니다. 메뉴 이름의 괄호는 제거합니다. 화면은 넷입니다. 세트 찾기, 금지 짝 찾기, 요일, 메뉴 확인입니다. <b>탐색 앱</b>의 탐색 카드 세 장을 순서대로 진행하고, 카드마다 끝에 퀴즈 문항 후보 한 줄을 적습니다.</p>
+  <p>화면은 앱 왼쪽의 메뉴에서 고릅니다. 오늘 찾는 것은 셋입니다.</p>
+  <ul class="steps">
+    <li><b>세트</b> — 앞 메뉴가 나온 날에는 뒤 메뉴도 거의 늘 나오고(신뢰도가 높고), 그 뒤 메뉴가 아무 날이나 나오는 메뉴는 아닌(향상도가 높은) 규칙</li>
+    <li><b>금지 짝</b> — 둘 다 자주 나오는데 같은 날 나온 적이 한 번도 없는 두 메뉴(동시 0)</li>
+    <li><b>함정</b> — 앞 메뉴가 나온 날 뒤 메뉴도 자주 나오지만(신뢰도가 높지만), 그 뒤 메뉴는 원래 아무 날이나 나와서 향상도가 1 근처인 규칙</li>
+  </ul>
   <div class="callout theory">
-    <div class="h">🧩 규칙 후보를 걸러 내는 최소 등장 기준 — 최소 지지도와 최소 횟수</div>
-    <p class="q">교과서 162쪽은 규칙 후보를 추리기 전에 최소 지지도를 먼저 정하는 절차를 다룹니다.</p>
-    <p><b>최소 지지도</b>는 규칙 후보로 남길 최소 등장 <b>비율</b>이지만, 이번 실습이 사용하는 기준은 <b>동시 등장 횟수</b>입니다. 단위가 다르므로 184일 저장본에서 5회는 지지도 5 ÷ 184 ≈ 0.027에 해당하지만, 조회한 일수가 달라지면 같은 5회가 다른 지지도가 됩니다.</p>
+    <div class="h">🧩 규칙 후보를 걸러 내는 최소 기준 — 교과서 162쪽의 최소 지지도</div>
+    <p>교과서 162쪽은 규칙 후보를 추리기 전에 최소 지지도를 먼저 정하는 절차를 다룹니다. 탐색 앱의 "최소 동시 일수" 슬라이더가 같은 역할을 합니다. 단위만 다릅니다. 동시 4일은 184일 기준으로 지지도 약 0.022에 해당하고, 조회한 일수가 달라지면 같은 4일이 다른 지지도가 됩니다.</p>
+    <p>이 기준이 필요한 까닭은 같은 날 함께 나온 적이 있는 쌍의 대부분이 동시 1일이기 때문입니다. 한 번의 우연도 규칙 표에 오르면 향상도가 크게 나올 수 있습니다. 활동지 연습 문제의 "딱 한 번의 우연"이 그 계산입니다.</p>
   </div>
-  <p>아래 그림에서 기준을 옮겨 보고, 이어서 같은 일을 자기 앱에서 합니다.</p>
-  <figure class="interactive" data-fig="minco">
-    <div class="widget" data-w="minco">
-      <div class="wctl"><label>최소 동시 등장 <input class="thr" type="range" min="1" max="10" step="1" value="5"></label> <span class="wout">5일</span></div>
-      <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="메뉴 쌍 3,146개를 동시 등장 일수별로 나눈 가로 띠와, 최소 동시 등장 기준에 따라 달라지는 규칙 수·상위 규칙 표.">
-        <text class="sum" x="24" y="20" font-size="17" font-weight="800" fill="#1c2230"></text>
-        <text class="sum2" x="480" y="20" font-size="14" fill="#6b7385"></text>
+  <div class="callout data">
+    <div class="h">🔎 탐색 카드 1 · 세트 찾기</div>
+    <p>세트 찾기 화면에서 최소 동시 일수 슬라이더를 4로 둡니다. 신뢰도 순으로 정렬해 신뢰도 1.00인 규칙을 셋 적습니다. 향상도 순으로 다시 정렬합니다. 방금 적은 셋 중 위에 남는 것과 아래로 밀리는 것을 나눕니다. 밀린 규칙의 뒤 메뉴가 무엇인지 적고, 메뉴 확인 화면에서 그 메뉴의 등장 일수를 찾아 적습니다. 이 등장 일수가 도입 문제 1의 답을 가름합니다.</p>
+    <p>적은 것: <input class="answer-cell" style="max-width:420px;text-align:left" aria-label="탐색 카드 1에 적은 것" placeholder="앱 화면에서 찾은 것"></p>
+    <p>퀴즈 문항 후보: <input class="answer-cell" style="max-width:420px;text-align:left" aria-label="탐색 카드 1의 퀴즈 문항 후보" placeholder="문항 후보 한 줄"></p>
+  </div>
+  <div class="callout warn">
+    <div class="h">⚠️ 신뢰도 1.00인데 세트가 아닌 규칙</div>
+    <p>배추김치를 뒤에 둔 규칙은 신뢰도가 1.00인 경우가 여럿이며 향상도는 모두 1.80입니다. 배추김치는 등장률이 전체의 절반을 넘으므로 앞 메뉴가 무엇이든 배추김치를 찍으면 절반 넘게 맞습니다. 신뢰도 1.00은 이 규칙으로 찍으면 맞는다는 뜻이고, 향상도 1.80은 아무 날 찍기보다 1.80배라는 뜻입니다. 향상도 7.36(쇠고기미역국 → 칼슘강화기장밥)이나 9.20(순대국 → 석박지)과 비교하면 세트라고 부르기 어렵습니다.</p>
+  </div>
+  <div class="callout data">
+    <div class="h">🔎 탐색 카드 2 · 금지 짝 찾기</div>
+    <p>금지 짝 찾기 화면에서 배추김치를 고릅니다. 나온 목록(배추김치와 같은 날 한 번도 안 나왔으면서 혼자 열흘 이상 나온 메뉴)의 공통점을 한 문장으로 적습니다. 밥 하나(친환경현미밥)를 골라 같은 일을 합니다. 두 목록에서 읽어 낸 급식실의 운영 규칙을 한 문장으로 적습니다. 하루에 김치 몇 종류, 밥 몇 종류입니다. 이 화면이 도입 문제 2의 답입니다.</p>
+    <p>동시가 0이면 지지도·신뢰도·향상도가 모두 0입니다. 향상도가 1보다 작은 규칙을 음의 연관이라고 부르는데, 금지 짝은 그 가장 강한 경우입니다. 그래서 금지 짝 화면에는 세 지표 대신 두 메뉴의 등장 일수만 보입니다.</p>
+    <p>적은 것: <input class="answer-cell" style="max-width:420px;text-align:left" aria-label="탐색 카드 2에 적은 것" placeholder="앱 화면에서 찾은 것"></p>
+    <p>퀴즈 문항 후보: <input class="answer-cell" style="max-width:420px;text-align:left" aria-label="탐색 카드 2의 퀴즈 문항 후보" placeholder="문항 후보 한 줄"></p>
+  </div>
+  <div class="callout data">
+    <div class="h">🔎 탐색 카드 3 · 함정 찾기 (세트 찾기 화면)</div>
+    <p>세트 찾기 화면에서 신뢰도 0.60 이상이면서 향상도 1.20 아래인 규칙 하나를 고릅니다. 판정 열에 "아무 날 찍기와 같음"이 붙는 규칙도 후보입니다. 이 규칙으로 급식표를 찍으면 자주 맞히는데 왜 정보가 없는지 한 문장으로 적습니다. 뒤 메뉴의 등장률을 근거로 적습니다. 요일 화면도 한 번 봅니다. 월요일과 금요일에 어느 메뉴가 붙는지 적어 둡니다. 퀴즈 ③에서 씁니다.</p>
+    <p>적은 것: <input class="answer-cell" style="max-width:420px;text-align:left" aria-label="탐색 카드 3에 적은 것" placeholder="앱 화면에서 찾은 것"></p>
+    <p>퀴즈 문항 후보: <input class="answer-cell" style="max-width:420px;text-align:left" aria-label="탐색 카드 3의 퀴즈 문항 후보" placeholder="문항 후보 한 줄"></p>
+  </div>
+  <p>탐색 앱 주소는 선생님이 수업 시간에 알려 줍니다.</p>
 
-        <text x="24" y="46" font-size="14" fill="#6b7385">쌍 3,146개 전부</text>
-        <g class="b1">
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-          <rect class="b1r" rx="2"/>
-        </g>
-        <text class="b1in" x="34" y="70" font-size="14" fill="#ffffff">동시 1일 2,845쌍 · 전체의 90%</text>
-
-        <line class="lk1" y1="94" y2="112" x2="24" stroke="#e3ddcf" stroke-width="1"/>
-        <line class="lk2" x1="700" y1="94" x2="700" y2="112" stroke="#e3ddcf" stroke-width="1"/>
-
-        <text x="24" y="104" font-size="14" fill="#6b7385">동시 2일 이상 301쌍 확대</text>
-        <g class="b2">
-          <rect class="b2r" rx="2"/>
-          <rect class="b2r" rx="2"/>
-          <rect class="b2r" rx="2"/>
-          <rect class="b2r" rx="2"/>
-          <rect class="b2r" rx="2"/>
-          <rect class="b2r" rx="2"/>
-          <rect class="b2r" rx="2"/>
-          <rect class="b2r" rx="2"/>
-          <rect class="b2r" rx="2"/>
-        </g>
-        <g class="tks" font-size="14" fill="#6b7385" text-anchor="middle">
-          <text class="tkl" y="150"></text>
-          <text class="tkl" y="150"></text>
-          <text class="tkl" y="150"></text>
-          <text class="tkl" y="150"></text>
-          <text class="tkl" y="150"></text>
-          <text class="tkl" y="150"></text>
-        </g>
-        <text x="24" y="150" font-size="14" fill="#6b7385">오른쪽 끝 9·16·17일 각 1쌍</text>
-
-        <g class="cg1"><line class="cut1" x1="0" x2="0" y1="48" y2="86" stroke="#b07a00" stroke-width="2"/></g>
-        <g class="cg2"><line class="cut2" x1="0" x2="0" y1="108" y2="140" stroke="#b07a00" stroke-width="2"/></g>
-        <text class="cutlab" y="90" font-size="14" fill="#b07a00"></text>
-
-        <rect x="24" y="164" width="676" height="108" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
-        <text x="34" y="186" font-size="14" fill="#6b7385">조건 → 결과</text>
-        <text x="430" y="186" font-size="14" fill="#6b7385">동시</text>
-        <text x="510" y="186" font-size="14" fill="#6b7385">신뢰도</text>
-        <text x="610" y="186" font-size="14" fill="#6b7385">향상도</text>
-        <g class="r1">
-          <text class="c0" x="34" y="210" font-size="15" fill="#1c2230"></text>
-          <text class="c1" x="430" y="210" font-size="15" fill="#1c2230"></text>
-          <text class="c2" x="510" y="210" font-size="15" fill="#1c2230"></text>
-          <text class="c3" x="610" y="210" font-size="15" font-weight="800" fill="#1c2230"></text>
-        </g>
-        <g class="r2">
-          <text class="c0" x="34" y="234" font-size="15" fill="#1c2230"></text>
-          <text class="c1" x="430" y="234" font-size="15" fill="#1c2230"></text>
-          <text class="c2" x="510" y="234" font-size="15" fill="#1c2230"></text>
-          <text class="c3" x="610" y="234" font-size="15" font-weight="800" fill="#1c2230"></text>
-        </g>
-        <g class="r3">
-          <text class="c0" x="34" y="258" font-size="15" fill="#1c2230"></text>
-          <text class="c1" x="430" y="258" font-size="15" fill="#1c2230"></text>
-          <text class="c2" x="510" y="258" font-size="15" fill="#1c2230"></text>
-          <text class="c3" x="610" y="258" font-size="15" font-weight="800" fill="#1c2230"></text>
-        </g>
-        <g class="bdg" display="none">
-          <rect class="bdgbox" x="196" y="244" width="146" height="21" rx="999" fill="#ffffff" stroke="#e3ddcf"/>
-          <text class="bdgtxt" x="208" y="259" font-size="14" fill="#6b7385">기준에 걸려 표 밖</text>
-        </g>
-      </svg>
-    </div>
-    <figcaption>184일 저장본의 메뉴 쌍을 동시 등장 일수별로 나눈 그림입니다. 기준을 옮기면 어느 구간이 잘려 나가고 표 맨 위의 규칙이 어떻게 바뀌는지 선생님 화면으로 함께 봅니다.</figcaption>
-  </figure>
-  <ol class="steps" start="3">
-    <li><span class="st">③ 개선 프롬프트 — 최소 기준을 손으로 움직인다</span>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>앞 코드에 이어서 두 가지를 더해 줘. 바뀐 main.py 전체를 다시 줘. 바뀐 부분만 주지 말고.
-- 동시에 나온 날 수의 최소 기준을 1부터 10까지 슬라이더로 고르게 하고 기본값은 5로 해 줘.
-  고른 값보다 적게 겹친 규칙은 표에서 빼 줘.
-- 슬라이더를 움직이면 표에 남은 규칙 수를 한 줄로 적어 줘.
-- 향상도가 0.9와 1.1 사이인 규칙에는 "기본 등장률과 비슷함"이라고 표시해 줘.
-- 표 아래에 "함께 나온 적 없는 짝" 화면을 따로 만들어 줘. 메뉴 하나를 고르면, 그 메뉴와 같은 날
-  한 번도 함께 나오지 않았으면서 혼자서는 열흘 이상 나온 메뉴를 등장 일수가 많은 순으로 보여 주고,
-  고른 메뉴가 나온 날 수도 함께 적어 줘. 이 메뉴 고르기는 위의 좁혀 보기와 다른 이름으로 만들어 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">여기까지 만든 main.py 전체입니다. 파일을 통째로 바꿔 저장합니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 급식 규칙 찾기: 같은 날 함께 나온 메뉴 쌍을 센다
-import re
-from collections import Counter
-from itertools import combinations
-
-import pandas as pd
-import plotly.express as px
-import requests
-import streamlit as st
-
-st.title("🍚 급식 규칙 찾기")
-
-
-@st.cache_data(ttl=3600)
-def load_baskets(api_key):
-    rows, page = [], 1
-    params = {"Type": "json", "KEY": api_key,
-              "pSize": 1000, "ATPT_OFCDC_SC_CODE": "B10",
-              "SD_SCHUL_CODE": "7010073", "MMEAL_SC_CODE": "2",
-              "MLSV_FROM_YMD": "20250901", "MLSV_TO_YMD": "20260930"}
-    while True:
-        response = requests.get("https://open.neis.go.kr/hub/mealServiceDietInfo",
-                                params={**params, "pIndex": page}, timeout=20)
-        response.raise_for_status()
-        data = response.json()
-        if "mealServiceDietInfo" not in data:
-            raise ValueError("급식을 조회하지 못했습니다.")
-        blocks = data["mealServiceDietInfo"]
-        head = next(block["head"] for block in blocks if "head" in block)
-        total = next(item["list_total_count"] for item in head if "list_total_count" in item)
-        chunk = next((block["row"] for block in blocks if "row" in block), [])
-        rows.extend(chunk)
-        if len(rows) &gt;= total:
-            break
-        if not chunk:                          # 전체 건수를 채우기 전에 빈 쪽이 오면 중단한다
-            raise ValueError("전체 건수보다 적게 받았습니다.")
-        page += 1
-    days = {}
-    for row in rows:
-        basket = days.setdefault(row["MLSV_YMD"], set())
-        for dish in re.split(r"&lt;br\s*/?&gt;", row["DDISH_NM"], flags=re.I):
-            name = re.sub(r"\([^)]*\)", "", dish).strip()   # 괄호와 그 안의 내용은 제외한다
-            if name:
-                basket.add(name)
-    return [sorted(basket) for basket in days.values() if basket]
-
-
-try:
-    api_key = st.secrets["NEIS_API_KEY"]
-except Exception:
-    st.error("비밀 금고에 NEIS_API_KEY를 설정하세요. 5차시 안내를 확인합니다.")
-    st.stop()
-if not api_key.strip():
-    st.error("인증키가 비어 있습니다.")
-    st.stop()
-try:
-    baskets = load_baskets(api_key)
-except (requests.RequestException, ValueError, KeyError, StopIteration):
-    st.error("급식을 모두 조회하지 못했습니다. 인증키·조회 조건·연결 상태를 확인하세요.")
-    st.stop()
-if not baskets:
-    st.info("조회 기간에 분석할 중식 데이터가 없습니다.")
-    st.stop()
-
-n = len(baskets)
-single = Counter(item for b in baskets for item in b)      # 메뉴가 나온 날 수
-pair = Counter(c for b in baskets for c in combinations(b, 2))   # 두 메뉴가 함께 나온 날 수
-
-rows = []
-for (a, b), together in pair.items():
-    for x, y in [(a, b), (b, a)]:              # 한 쌍에서 두 방향의 규칙이 나온다
-        rows.append({"조건": x, "결과": y, "동시": together,
-                     "지지도": round(together / n, 3),
-                     "신뢰도": round(together / single[x], 3),
-                     "향상도": round((together / single[x]) / (single[y] / n), 2)})
-rules = pd.DataFrame(rows, columns=["조건", "결과", "동시", "지지도", "신뢰도", "향상도"])
-rules["판정"] = rules["향상도"].apply(lambda v: "기본 등장률과 비슷함" if 0.9 &lt;= v &lt;= 1.1 else "")
-rules = rules.sort_values("향상도", ascending=False)
-
-st.caption(f"조회 2025-09-01~2026-09-30 · 급식 {n}일 · 메뉴 {len(single)}종 · "
-           f"메뉴 쌍 {len(pair):,}개 · 규칙 {len(rules):,}개")
-
-기준 = st.slider("최소 동시 등장 일수", 1, 10, 5)     # 이 일수보다 적게 겹친 규칙은 표에서 뺀다
-걸러낸규칙 = rules[rules["동시"] &gt;= 기준]
-st.write(f"동시에 나온 날이 {기준}일 이상인 규칙은 {len(걸러낸규칙):,}개입니다.")
-
-메뉴 = st.selectbox("메뉴로 좁혀 보기", ["(전체)"] + sorted(single))
-보기 = 걸러낸규칙 if 메뉴 == "(전체)" else 걸러낸규칙[(걸러낸규칙["조건"] == 메뉴) | (걸러낸규칙["결과"] == 메뉴)]
-if 보기.empty:
-    st.info("조건에 맞는 규칙이 없습니다. 최소 동시 등장 일수를 낮춰 봅니다.")
-else:
-    st.dataframe(보기, width="stretch", hide_index=True)
-    top = 보기.head(10).copy()
-    top["규칙"] = top["조건"] + " → " + top["결과"]
-    fig = px.bar(top, x="향상도", y="규칙", orientation="h", text="향상도")
-    fig.update_layout(yaxis={"categoryorder": "total ascending"}, height=420)
-    st.plotly_chart(fig, use_container_width=True)
-
-st.subheader("함께 나온 적 없는 짝")
-고른메뉴 = st.selectbox("메뉴 고르기", sorted(single), key="없는짝")
-같이나온메뉴 = {y for (a, b) in pair for x, y in [(a, b), (b, a)] if x == 고른메뉴}
-없는짝 = [{"메뉴": 이름, "나온 날": 날수} for 이름, 날수 in single.items()
-        if 이름 != 고른메뉴 and 이름 not in 같이나온메뉴 and 날수 &gt;= 10]   # 혼자서는 열흘 이상 나온 메뉴만
-
-st.write(f"{고른메뉴} · 나온 날 {single[고른메뉴]}일 · 함께 나온 적 없는 메뉴 {len(없는짝)}종")
-if not 없는짝:
-    st.info("열흘 이상 나오면서 한 번도 함께 나오지 않은 메뉴가 없습니다.")
-else:
-    표 = pd.DataFrame(없는짝).sort_values("나온 날", ascending=False)
-    st.dataframe(표, width="stretch", hide_index=True)</pre></div></details>
-    </li>
-  </ol>
-  <p>슬라이더를 1로 내렸다가 5로 올려 보고, 표에 남은 규칙 수를 적습니다. 기준 1일일 때 표 맨 위의 규칙이 며칠에서 나온 값인지도 화면에서 확인합니다.</p>
-  <table class="daymap">
-    <thead><tr><th>최소 동시 등장 기준</th><th>표에 남은 규칙 수</th></tr></thead>
+  <h2>4. 바이브 코딩 — 우리 학교 급식 퀴즈 앱</h2>
+  <p>탐색 카드에 적은 문항 후보 셋을 퀴즈 앱으로 만듭니다. 여기부터 바이브 코딩입니다. 문항 유형 세 가지는 고정입니다. <b>세트 맞히기</b>는 신뢰도 1.00에 향상도가 높은 규칙입니다. <b>절대 같이 안 나오는 짝</b>은 둘 다 자주 나오는데 동시 0입니다. <b>함정</b>은 신뢰도는 높은데 향상도가 1 근처입니다. 문항마다 선지 셋, 정답 하나, 근거 숫자 해설을 적습니다. 근거는 동시·신뢰도·향상도 또는 등장 일수와 동시 0입니다. 근거 숫자가 없는 문항은 퀴즈가 아니라 퀴즈 형태의 추측입니다. 문항이 친구와 겹쳐도 됩니다. 평가하는 것은 해설의 근거 문장입니다.</p>
+  <div style="overflow-x:auto">
+  <table class="daymap" style="min-width:560px">
+    <thead><tr><th>유형</th><th>문항</th><th>선지 셋</th><th>정답</th><th>근거 숫자</th></tr></thead>
     <tbody>
-      <tr><td><b>1일</b></td><td></td></tr>
-      <tr><td><b>5일</b></td><td></td></tr>
+      <tr><td><b>세트 맞히기</b></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>절대 같이 안 나오는 짝</b></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td><b>함정</b></td><td></td><td></td><td></td><td></td></tr>
     </tbody>
   </table>
-  <p>다음은 <b>함께 나온 적 없는 짝</b> 화면입니다. <b>배추김치</b>를 고르고, 혼자 열흘 이상 나왔으면서 배추김치와 한 번도 겹치지 않은 메뉴 이름을 적습니다.</p>
-  <p>메뉴 이름: <input class="answer-cell" style="max-width:420px;text-align:left" aria-label="함께 나온 적 없는 메뉴 이름" placeholder="화면에 표시된 메뉴 이름"></p>
-  <div class="callout ask">
-    <div class="h">❓ 적은 뒤 답할 질문</div>
-    <ul>
-      <li>적어 낸 메뉴들의 공통점을 한 문장으로 적습니다.</li>
-      <li>그 메뉴들이 모두 김치라면, 급식실은 하루에 김치를 몇 종류 내고 있다고 볼 수 있습니까. 데이터에서 읽어 낸 운영 방침을 한 문장으로 적습니다.</li>
-    </ul>
   </div>
-  <div class="callout mini">
-    <div class="h">🏅 도전 (선택)</div>
-    <p>자기 반이 좋아하는 메뉴 하나를 골라 같은 화면을 봅니다. 함께 나온 적 없는 짝이 김치처럼 한 갈래로 묶입니까, 아니면 흩어져 있습니까.</p>
-    <p>급식이 왜 그렇게 짜여 있다고 생각합니까. 그리고 함께 나온 적 없는 짝은 동시 등장이 0일이므로 향상도가 얼마가 되는지도 적어 봅니다.</p>
+  <p>아래 프롬프트에는 예시 문항 세 개가 들어 있습니다. 순대국 → 석박지, 배추김치·깍두기, 제육볶음 → 배추김치입니다. 예시는 형식을 보여 주는 것이며, 붙여 넣기 전에 자기가 카드에 적은 문항 세 개로 바꿉니다. 문항·선지·정답·근거 숫자 네 가지가 다 있어야 앱이 해설을 보여 줄 수 있습니다.</p>
+  <ol class="steps">
+    <li><span class="st">① 샘플 프롬프트 — 문항 세 개를 내 것으로 바꿔 붙여 넣기</span>
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"우리 학교 급식 퀴즈" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py.
+- 문항을 한 번에 하나씩 보여 주고, 선지 셋 가운데 하나를 골라 제출하면 맞았는지 알려 주고 해설도 보여 줘.
+- 다음 문항으로 넘어가는 버튼을 두고, 세 문항을 다 풀면 점수를 보여 줘.
+- 문항·선지·정답·해설은 아래 글을 그대로 써 줘.
+- 화면은 한국어로 만들고, 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.
+
+1번. 순대국이 나온 날 함께 나온 반찬은?
+선지: 배추김치 / 석박지 / 깍두기
+정답: 석박지
+해설: 순대국이 나온 날은 5일이고, 그 5일 모두 석박지가 함께 나왔습니다. 신뢰도 1.00, 향상도 9.20입니다.
+
+2번. 우리 학교 급식에서 한 번도 같은 날 나온 적이 없는 짝은?
+선지: 배추김치와 깍두기 / 배추김치와 제육볶음 / 칼슘강화기장밥과 쇠고기미역국
+정답: 배추김치와 깍두기
+해설: 배추김치는 102일, 깍두기는 32일 나왔는데 둘이 같은 날 나온 적은 하루도 없습니다. 동시 0이면 향상도도 0입니다. 김치는 하루에 한 종류만 나옵니다.
+
+3번. 제육볶음이 나온 날 배추김치가 나올 확률은 0.60입니다. 이 규칙으로 무엇을 알 수 있나요?
+선지: 제육볶음과 배추김치는 세트다 / 아무 날이나 찍어도 비슷하다 / 제육볶음이 나오면 배추김치는 안 나온다
+정답: 아무 날이나 찍어도 비슷하다
+해설: 제육볶음 10일 가운데 6일에 배추김치가 나왔습니다. 배추김치는 184일 가운데 102일 나와서 아무 날이나 찍어도 0.55입니다. 향상도는 1.08입니다.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 문항과 해설을 자기 것으로 바꾸면 화면의 글도 함께 바뀝니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 우리 학교 급식 퀴즈
+import streamlit as st
+
+st.title("🍚 우리 학교 급식 퀴즈")
+
+# 문항·선지·정답·해설을 한곳에 모아 둔다
+QUESTIONS = [
+    {"question": "순대국이 나온 날 함께 나온 반찬은?",
+     "choices": ["배추김치", "석박지", "깍두기"],
+     "answer": "석박지",
+     "explain": "순대국이 나온 날은 5일이고, 그 5일 모두 석박지가 함께 나왔습니다. "
+                "신뢰도 1.00, 향상도 9.20입니다."},
+    {"question": "우리 학교 급식에서 한 번도 같은 날 나온 적이 없는 짝은?",
+     "choices": ["배추김치와 깍두기", "배추김치와 제육볶음", "칼슘강화기장밥과 쇠고기미역국"],
+     "answer": "배추김치와 깍두기",
+     "explain": "배추김치는 102일, 깍두기는 32일 나왔는데 둘이 같은 날 나온 적은 하루도 "
+                "없습니다. 동시 0이면 향상도도 0입니다. 김치는 하루에 한 종류만 나옵니다."},
+    {"question": "제육볶음이 나온 날 배추김치가 나올 확률은 0.60입니다. "
+                 "이 규칙으로 무엇을 알 수 있나요?",
+     "choices": ["제육볶음과 배추김치는 세트다", "아무 날이나 찍어도 비슷하다",
+                 "제육볶음이 나오면 배추김치는 안 나온다"],
+     "answer": "아무 날이나 찍어도 비슷하다",
+     "explain": "제육볶음 10일 가운데 6일에 배추김치가 나왔습니다. 배추김치는 184일 가운데 "
+                "102일 나와서 아무 날이나 찍어도 0.55입니다. 향상도는 1.08입니다."},
+]
+
+# 몇 번째 문항인지, 몇 개를 맞혔는지, 제출했는지를 기억한다
+if "index" not in st.session_state:
+    st.session_state.index = 0
+    st.session_state.score = 0
+    st.session_state.submitted = False
+
+index = st.session_state.index
+
+if index &lt; len(QUESTIONS):
+    item = QUESTIONS[index]
+    st.subheader(f"{index + 1}번. {item['question']}")
+    st.progress((index + 1) / len(QUESTIONS))
+    picked = st.radio("답을 고르세요.", item["choices"], key=f"choice{index}",
+                      disabled=st.session_state.submitted)
+
+    if not st.session_state.submitted:
+        if st.button("제출"):
+            st.session_state.submitted = True
+            if picked == item["answer"]:
+                st.session_state.score += 1
+            st.rerun()
+    else:
+        if picked == item["answer"]:
+            st.success("정답입니다.")
+        else:
+            st.error(f"아쉽습니다. 정답은 {item['answer']}입니다.")
+        st.info(item["explain"])
+        label = "다음 문항" if index + 1 &lt; len(QUESTIONS) else "점수 보기"
+        if st.button(label):
+            st.session_state.index += 1
+            st.session_state.submitted = False
+            st.rerun()
+else:
+    total = len(QUESTIONS)
+    st.subheader("점수")
+    st.write(f"{total}문항 가운데 {st.session_state.score}문항을 맞혔습니다.")
+    if st.button("다시 풀기"):
+        st.session_state.index = 0
+        st.session_state.score = 0
+        st.session_state.submitted = False
+        st.rerun()</pre></div>
+      <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit</pre></div></details>
+    </li>
+    <li><span class="st">② AI가 준 코드 — 실행하고 자기 문항을 풀어 본다</span><br>
+      앱이 실행되면 자기 문항 세 개를 직접 풀어 봅니다. 확인할 것은 둘입니다. 정답을 골랐을 때 근거 숫자가 해설에 그대로 나오는가와, 오답을 골랐을 때도 해설이 나오는가를 봅니다. 근거 숫자가 탐색 앱의 값과 같은지 한 번 더 대조합니다. 다르면 프롬프트의 숫자를 고쳐 다시 만듭니다.</li>
+    <li><span class="st">③ 개선 프롬프트 — 요일 문항과 근거 데이터 안내</span>
+      <p>③에서 세 가지를 더합니다. 요일 문항 하나(카드 3에서 적어 둔 월요일·금요일 메뉴), 첫 화면에 근거 데이터 안내(당곡고 중식, 분석한 일수, 조회 기간), 다 풀면 근거 숫자를 보고 납득했는지 묻는 칸입니다. 요일은 급식 메뉴가 아니지만 하루의 항목으로 넣으면 같은 방법으로 규칙이 나옵니다. 근거 데이터 안내가 있어야 친구가 퀴즈의 숫자를 탐색 앱에서 검증할 수 있습니다.</p>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>앞에서 만든 퀴즈 앱에 아래 셋을 더해 줘. 고친 main.py 전체를 한 번에 다시 줘.
+- 요일 문항을 하나 더 넣어 줘. 네 번째 문항이고, 점수도 네 문항 기준으로 세어 줘.
+- 첫 화면에 이 퀴즈의 근거 데이터를 적어 줘. 당곡고 중식, 분석한 날 184일, 조회 기간 2025년 9월 1일부터 2026년 9월 30일까지.
+- 점수를 보여 준 다음에 "근거 숫자를 보고 납득했나요"를 예·아니요로 고르는 칸을 두고, 고르면 한 줄로 답해 줘.
+
+4번. 월요일에 가장 자주 나오는 밥은?
+선지: 칼슘강화기장밥 / 친환경현미밥 / 추가밥
+정답: 칼슘강화기장밥
+해설: 월요일 38일 가운데 17일이 칼슘강화기장밥이었습니다. 친환경칼슘기장밥 14일까지 더하면 월요일 38일 중 31일이 기장밥입니다. 친환경현미밥과 추가밥은 월요일에 각각 1일뿐입니다.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">여기까지 만든 main.py 전체입니다. 파일을 통째로 바꿔 저장합니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 우리 학교 급식 퀴즈
+import streamlit as st
+
+st.title("🍚 우리 학교 급식 퀴즈")
+st.caption("근거 데이터: 당곡고 중식 · 분석한 날 184일 · 조회 기간 2025년 9월 1일 ~ 2026년 9월 30일")
+
+# 문항·선지·정답·해설을 한곳에 모아 둔다
+QUESTIONS = [
+    {"question": "순대국이 나온 날 함께 나온 반찬은?",
+     "choices": ["배추김치", "석박지", "깍두기"],
+     "answer": "석박지",
+     "explain": "순대국이 나온 날은 5일이고, 그 5일 모두 석박지가 함께 나왔습니다. "
+                "신뢰도 1.00, 향상도 9.20입니다."},
+    {"question": "우리 학교 급식에서 한 번도 같은 날 나온 적이 없는 짝은?",
+     "choices": ["배추김치와 깍두기", "배추김치와 제육볶음", "칼슘강화기장밥과 쇠고기미역국"],
+     "answer": "배추김치와 깍두기",
+     "explain": "배추김치는 102일, 깍두기는 32일 나왔는데 둘이 같은 날 나온 적은 하루도 "
+                "없습니다. 동시 0이면 향상도도 0입니다. 김치는 하루에 한 종류만 나옵니다."},
+    {"question": "제육볶음이 나온 날 배추김치가 나올 확률은 0.60입니다. "
+                 "이 규칙으로 무엇을 알 수 있나요?",
+     "choices": ["제육볶음과 배추김치는 세트다", "아무 날이나 찍어도 비슷하다",
+                 "제육볶음이 나오면 배추김치는 안 나온다"],
+     "answer": "아무 날이나 찍어도 비슷하다",
+     "explain": "제육볶음 10일 가운데 6일에 배추김치가 나왔습니다. 배추김치는 184일 가운데 "
+                "102일 나와서 아무 날이나 찍어도 0.55입니다. 향상도는 1.08입니다."},
+    {"question": "월요일에 가장 자주 나오는 밥은?",
+     "choices": ["칼슘강화기장밥", "친환경현미밥", "추가밥"],
+     "answer": "칼슘강화기장밥",
+     "explain": "월요일 38일 가운데 17일이 칼슘강화기장밥이었습니다. 친환경칼슘기장밥 14일까지 "
+                "더하면 월요일 38일 중 31일이 기장밥입니다. 친환경현미밥과 추가밥은 월요일에 "
+                "각각 1일뿐입니다."},
+]
+
+# 몇 번째 문항인지, 몇 개를 맞혔는지, 제출했는지를 기억한다
+if "index" not in st.session_state:
+    st.session_state.index = 0
+    st.session_state.score = 0
+    st.session_state.submitted = False
+
+index = st.session_state.index
+
+if index &lt; len(QUESTIONS):
+    item = QUESTIONS[index]
+    st.subheader(f"{index + 1}번. {item['question']}")
+    st.progress((index + 1) / len(QUESTIONS))
+    picked = st.radio("답을 고르세요.", item["choices"], key=f"choice{index}",
+                      disabled=st.session_state.submitted)
+
+    if not st.session_state.submitted:
+        if st.button("제출"):
+            st.session_state.submitted = True
+            if picked == item["answer"]:
+                st.session_state.score += 1
+            st.rerun()
+    else:
+        if picked == item["answer"]:
+            st.success("정답입니다.")
+        else:
+            st.error(f"아쉽습니다. 정답은 {item['answer']}입니다.")
+        st.info(item["explain"])
+        label = "다음 문항" if index + 1 &lt; len(QUESTIONS) else "점수 보기"
+        if st.button(label):
+            st.session_state.index += 1
+            st.session_state.submitted = False
+            st.rerun()
+else:
+    total = len(QUESTIONS)
+    st.subheader("점수")
+    st.write(f"{total}문항 가운데 {st.session_state.score}문항을 맞혔습니다.")
+
+    st.subheader("마지막 질문")
+    convinced = st.radio("근거 숫자를 보고 납득했나요?", ["예", "아니요"], index=None)
+    if convinced == "예":
+        st.write("답해 주어 고맙습니다. 근거 숫자는 탐색 앱에서 다시 확인할 수 있습니다.")
+    elif convinced == "아니요":
+        st.write("답해 주어 고맙습니다. 어느 숫자가 걸렸는지 갤러리 댓글로 알려 주세요.")
+
+    if st.button("다시 풀기"):
+        st.session_state.index = 0
+        st.session_state.score = 0
+        st.session_state.submitted = False
+        st.rerun()</pre></div></details>
+    </li>
+  </ol>
+  <div class="callout data">
+    <div class="h">📌 과제</div>
+    <p>과제는 세 가지입니다. 첫째, 앱을 배포합니다. 방법은 2~4차시에서 한 것과 같습니다. 둘째, 배포 주소를 갤러리에 올립니다. 셋째, 친구의 퀴즈 두 개를 풀고 해설의 근거 숫자를 탐색 앱에서 찾아 같은지 확인한 뒤 갤러리 댓글로 남깁니다. 활동지 뒷부분(향상도가 1보다 작은 경우, 방향을 바꾸면)과 연습 문제도 과제입니다. 다음 시간 첫 5분에 반에서 가장 잘 만든 함정 문항을 함께 풉니다.</p>
   </div>
 
   <h2>5. 정리 — 교과서와 급식이 만나는 대목</h2>
   <p>지지도는 조합의 빈도를, 신뢰도는 조건부 비율을, 향상도는 기본 등장률과의 비율을 나타냅니다. 뒤 메뉴가 원래 거의 날마다 나오는 메뉴라면 신뢰도는 저절로 높아지지만 향상도는 1 언저리에 머뭅니다. 그래서 두 숫자를 함께 읽고, <b>관측 기간과 등장 횟수</b>도 기록합니다.</p>
   <p>향상도가 크게 나온 규칙도 앞 메뉴가 뒤 메뉴의 등장을 일으켰다는 인과관계의 증명은 아닙니다. 식단 구성 방침 등 다른 요인이 두 메뉴에 함께 작용했을 수 있습니다.</p>
-  <div class="callout ask">
-    <div class="h">❓ 도입으로 돌아갑니다</div>
-    <p>팀장이 "얼음컵이 1위니 얼음컵으로 가자"고 한다면, 여러분은 어느 숫자를 더 보자고 하겠습니까. 그 숫자가 무엇을 분모로 삼는지도 함께 말합니다.</p>
-  </div>
-  <p>오늘은 급식 기록을 날짜별로 묶어 규칙을 찾았습니다. 9차시와 오늘은 맞혀야 할 정답이 없는 데이터를 다루었습니다. 다음 시간에는 정답이 있는 문제로 돌아갑니다. 7차시에는 숫자를 예측했고, 다음 시간에는 예 또는 아니요를 예측합니다. 데이터는 급식도 영화도 아닌 새 데이터입니다.</p>
+  <p>오늘은 급식 기록을 날짜별로 묶어 세트·금지 짝·함정을 찾고, 근거 숫자를 붙여 퀴즈로 만들었습니다. 9차시와 오늘은 맞혀야 할 정답이 없는 데이터를 다루었습니다. 다음 시간에는 정답이 있는 문제로 돌아갑니다. 7차시에는 숫자를 예측했고, 다음 시간에는 예 또는 아니요를 예측합니다. 데이터는 급식도 영화도 아닌 새 데이터입니다.</p>
 
   <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
   <h3>연관 분석이 실제로 사용된 곳</h3>
@@ -687,6 +539,7 @@ else:
   <table class="daymap">
     <thead><tr><th>사례</th><th>무엇을 계산했나</th><th>세 지표로 보면</th></tr></thead>
     <tbody>
+      <tr><td><b>GS25의 얼박사</b></td><td>편의점 본사의 상품기획 담당자를 가정합니다. 하루에 쌓이는 영수증은 수백만 장입니다. 그 안에서 한 가지만 확인합니다. 박카스가 찍힌 영수증에는 무엇이 함께 찍혀 있는가. GS25가 얻은 답은 1위 얼음컵, 2위 사이다였습니다. 이미 많은 손님이 세 가지를 따로 사서 직접 섞어 마시고 있었습니다. GS25는 이 결과를 동아제약에 가져가 세 가지를 합친 음료를 제안했고, 2025년 6월 25일 '얼박사'라는 이름으로 출시했습니다. 두 달 만에 누적 판매량 278만 개를 기록했습니다.<p class="mini">출처: <a href="https://zdnet.co.kr/view/?no=20250624090313" target="_blank" rel="noopener">ZDNet Korea 2025년 6월 24일</a>, <a href="https://v.daum.net/v/20250924162420353" target="_blank" rel="noopener">파이낸셜뉴스 2025년 9월 24일</a>. 기사가 밝힌 것은 함께 소비하는 다빈도 상품 1위와 2위까지입니다.</p></td><td>함께 팔린 1위는 동시 등장 횟수 하나다. 얼음컵이 원래 거의 모든 음료와 함께 팔리는 상품이라면 신뢰도가 높아도 향상도는 1 근처가 된다. GS25가 어느 지표를 계산했는지는 기사에 없다.</td></tr>
       <tr><td><b>허리케인 직전의<br>딸기 팝타르트</b></td><td>2004년 미국 월마트는 허리케인 찰리 때의 판매 기록을 다시 계산했다. 허리케인 직전에 딸기 팝타르트가 평소의 약 7배 팔렸다. 월마트는 다음 허리케인의 진로에 있는 매장으로 두 품목을 미리 실어 보냈다 (<a href="https://www.nytimes.com/2004/11/14/business/yourmoney/what-walmart-knows-about-customers-habits.html" target="_blank" rel="noopener">보도 원문 보기</a>)</td><td>향상도를 실제로 사용한 사례다. 팝타르트는 전체 판매에서 차지하는 비중이 작아 지지도가 낮다. 조건을 허리케인 경보가 내려진 날로 좁히면 판매 비율이 평소의 약 7배가 된다. 지지도가 낮다는 이유로 걸렀다면 찾지 못했을 규칙이다.</td></tr>
       <tr><td><b>아마존의<br>자주 함께 구매하는 품목</b></td><td>아마존은 2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록을 비교한다. 이 방식은 지금도 상품 페이지의 자주 함께 구매하는 품목 칸으로 작동한다 (<a href="https://www.amazon.com/Sapiens-Humankind-Yuval-Noah-Harari/dp/0062316095" target="_blank" rel="noopener">상품 페이지 보기</a>)</td><td>지지도와 신뢰도의 차이를 보여 준다. 전체 주문 가운데 두 책이 함께 담긴 비율이 지지도이고 한 책을 산 사람 가운데 다른 책도 산 비율이 신뢰도이다. 전체 주문에서는 드문 조합도 한 상품을 산 거래에서는 자주 함께 등장할 수 있다. 따라서 지지도가 낮아도 신뢰도는 높을 수 있다.</td></tr>
     </tbody>
@@ -723,24 +576,24 @@ else:
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 어느 쌍의 향상도가 184로 나왔다(분석 기간 전체에서 동시 등장 1회, 각자 등장도 1회씩). 향상도 9.20인 순대국·석박지보다 스무 배 강한 규칙이라 말할 수 있을까요?</div>
+    <div class="qq"><span class="qn">문제 3</span> 어느 학생이 “쇠고기미역국이 나온 날에는 배추김치가 나온다”를 세트 맞히기 문항으로 냈습니다. 탐색 앱에서 동시 6일, 신뢰도 0.86입니다. 이 문항의 문제는 무엇일까요?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt">말할 수 있다 — 향상도는 배율이므로 184는 9.20보다 스무 배 강한 규칙이다</button>
-        <button class="opt">말할 수 없다 — 향상도가 100을 넘는 값은 계산이 잘못된 결과이기 때문이다</button>
-        <button class="opt" data-ok="1">말할 수 없다 — 동시 등장이 1회뿐이라 안정적인 패턴인지 판단할 수 없다</button>
+        <button class="opt">문제없다 — 신뢰도 0.86이면 세트다</button>
+        <button class="opt" data-ok="1">향상도가 1.55라 아무 날 찍기와 큰 차이가 없다. 같은 날의 칼슘강화기장밥(7/7, 향상도 7.36)이 세트다</button>
+        <button class="opt">동시 6일은 너무 적어 규칙이 될 수 없다</button>
       </div>
-      <div class="fb">동시 1회만으로 안정적인 패턴이라고 판단하기 어렵습니다. 동시 5회 이상은 이 실습의 최소 등장 기준이며, 184일에서 최소 지지도 5÷184 ≈ 0.027에 해당합니다.</div>
+      <div class="fb">어느 학생이 "쇠고기미역국이 나온 날에는 배추김치가 나온다"를 세트 문항으로 냅니다. 동시 6일, 신뢰도 0.86입니다. 문제점은 배추김치가 등장률이 절반을 넘어 아무 날 찍어도 절반 넘게 맞는다는 점입니다. 향상도는 1.55입니다. 같은 날의 칼슘강화기장밥은 동시 7일, 신뢰도 1.00, 향상도 7.36입니다. 세트 문항의 근거는 이쪽입니다. 세트 문항은 신뢰도만이 아니라 향상도까지 근거로 적어야 합니다.</div>
     </div>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
   <ul class="checklist">
     <li>지지도·신뢰도·향상도의 분모가 각각 무엇인지 말할 수 있다.</li>
-    <li>활동지 기본 문제의 세 규칙을 손으로 계산하고 판정했다.</li>
-    <li>손으로 구한 값과 내 앱 화면의 값을 대조했다.</li>
-    <li>급식 데이터에서 향상도가 높은 규칙과 기본 등장률에 가까운 규칙을 비교했다.</li>
-    <li>향상도만으로 인과관계나 다음 식단을 보장할 수 없는 이유를 설명할 수 있다.</li>
+    <li>규칙에는 방향이 있어 앞뒤를 바꾸면 신뢰도가 달라진다는 것을 설명할 수 있다.</li>
+    <li>신뢰도가 높아도 향상도가 1 근처면 정보가 없는 규칙이라는 것을 설명할 수 있다.</li>
+    <li>세트·금지 짝·함정 문항을 근거 숫자와 함께 쓸 수 있다.</li>
+    <li>친구 퀴즈의 근거 숫자를 탐색 앱에서 검증할 수 있다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
@@ -750,7 +603,11 @@ else:
     <tr><td class="term">지지도</td><td>전체 중 A·B가 함께 나온 비율</td></tr>
     <tr><td class="term">신뢰도</td><td>A가 나온 날 중 B도 나온 비율</td></tr>
     <tr><td class="term">향상도</td><td>신뢰도 ÷ B의 기본 등장률. 1이면 두 비율이 같음</td></tr>
-    <tr><td class="term">최소 지지도</td><td>규칙 후보로 남길 최소 등장 비율</td></tr>
+    <tr><td class="term">세트</td><td>이 수업에서 향상도가 높고 신뢰도도 높은 연관 규칙을 부르는 말. 교과서 용어는 연관 규칙</td></tr>
+    <tr><td class="term">금지 짝</td><td>둘 다 자주 나오는데 같은 날 나온 적이 없는 두 메뉴. 동시 0, 향상도 0인 음의 연관</td></tr>
+    <tr><td class="term">함정</td><td>신뢰도는 높지만 향상도가 1 근처인 규칙. 두 메뉴가 독립에 가깝다는 뜻(교과서 160쪽)</td></tr>
+    <tr><td class="term">등장률</td><td>어느 메뉴가 나온 날 수를 전체 일수로 나눈 값. 향상도의 분모</td></tr>
+    <tr><td class="term">최소 지지도</td><td>규칙 후보로 남길 최소 등장 비율(교과서 162쪽). 탐색 앱에서는 최소 동시 일수로 대신함</td></tr>
   </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
