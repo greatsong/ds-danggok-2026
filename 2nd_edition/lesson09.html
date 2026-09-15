@@ -68,113 +68,55 @@
     <p class="q">"데이터 속성 간의 유사성을 측정하여 유사한 데이터끼리 군집을 형성하는 것을 군집화라고 한다." <span class="src">(154쪽)</span></p>
     <p class="t">→ 군집의 개수 k는 사람이 직접 정합니다(146쪽). 정답이 없으므로, 몇 묶음이 적절한지도 판단 대상입니다. 교과서와 이 교재는 <b>군집</b>이라고 적고, 설명할 때는 <b>묶음</b>이라고도 부릅니다. 둘은 같은 것을 가리킵니다.</p>
   </div>
-  <p>k-평균은 먼저 군집 수 k와 시작 중심점을 정합니다. 각 데이터를 가장 가까운 중심점에 배정하고, 군집에 속한 데이터의 평균으로 중심점을 옮깁니다. 이 두 과정을 반복하다가 변화가 충분히 작아지면 멈춥니다. 아래 그림을 클릭하면 이 네 단계를 한 번에 하나씩 진행할 수 있습니다.</p>
-  <details class="glossary" open>
-    <summary>🔬 움직여 보기 — k-평균, 클릭으로 한 단계씩</summary>
-    <div class="gin">
-      <p style="margin:10px 0 12px">묶기 전의 데이터에서 시작합니다. 그림을 <b>클릭할 때마다 한 단계씩</b> 진행됩니다. ①중심점 놓기 → ②가까운 묶음에 넣기 → ③중심점 옮기기 → ④반복·수렴 순서입니다.</p>
-<svg id="km12" class="km12-svg" viewBox="0 0 700 275" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="k-평균 알고리즘이 네 단계를 반복하며 점들을 두 묶음으로 나누는 과정을 클릭으로 진행하는 그림" style="cursor:pointer">
-  <rect x="0" y="0" width="700" height="275" fill="transparent" pointer-events="all"/>
-  <text class="km12-hint" x="350" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#e8930c" pointer-events="none">👆 클릭 ① — 중심점 k=2개를 임의로 놓는다</text>
-  <g class="km12-stage" pointer-events="none">
-    <circle class="km12-dot" cx="150" cy="110" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
-    <circle class="km12-dot" cx="190" cy="90" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
-    <circle class="km12-dot" cx="230" cy="150" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
-    <circle class="km12-dot" cx="170" cy="165" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
-    <circle class="km12-dot" cx="255" cy="100" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
-    <circle class="km12-dot" cx="365" cy="170" r="9" fill="#b6b0a2" data-a1="t" data-a2="g"/>
-    <circle class="km12-dot" cx="410" cy="70" r="9" fill="#b6b0a2" data-a1="g" data-a2="t"/>
-    <circle class="km12-dot" cx="520" cy="95" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
-    <circle class="km12-dot" cx="565" cy="120" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
-    <circle class="km12-dot" cx="610" cy="85" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
-    <circle class="km12-dot" cx="585" cy="165" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
-    <circle class="km12-dot" cx="540" cy="155" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
-    <g class="km12-cg" data-k="g" data-x0="310" data-y0="55" data-x1="234.166667" data-y1="114.166667" data-x2="226.666667" data-y2="130.833333" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#f4b400" stroke="#c28f00" stroke-width="0.8">★</text></g>
-    <g class="km12-cg" data-k="t" data-x0="445" data-y0="195" data-x1="530.833333" data-y1="131.666667" data-x2="538.333333" data-y2="115" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#3ba6a0" stroke="#2b7a75" stroke-width="0.8">★</text></g>
-  </g>
-  <text x="350" y="243" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">"가깝다"는 두 점 사이의 거리(유클리드 거리, 교과서 148쪽)로 나타낸다.</text>
-  <text x="350" y="261" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">이 그림의 점은 알고리즘 진행을 보이기 위해 임의로 배치한 것이며 실제 기록이 아니다.</text>
+  <p>k-평균은 먼저 군집 수 k와 시작 중심점을 정합니다. 각 데이터를 가장 가까운 중심점에 배정하고, 군집에 속한 데이터의 평균으로 중심점을 옮깁니다. 이 두 과정을 반복하다가 변화가 충분히 작아지면 멈춥니다.</p>
+  <p>이 절의 그림에는 축구 게임 EA FC의 선수 능력치 데이터를 사용합니다. 800명 가운데 종합 능력치 순으로 고르게 뽑은 114명이고, 속도·슈팅·패스·드리블·수비·몸싸움 여섯 능력치와 시장 가치가 들어 있습니다. 아래 그림의 버튼을 누르면 한 단계씩 진행됩니다. 점이 놓인 자리도, 중심점이 옮겨 간 자리도, 반복 횟수도 이 114명으로 k-평균을 실제로 돌려 기록한 값입니다.</p>
+  <p class="mini">데이터: 게임사가 공식으로 배포한 파일이 아니라 공개 미러에 정리된 스냅샷입니다(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/eafc_players.csv" target="_blank" rel="noopener"><code>eafc_players.csv</code></a>, 선수 800명 고정본).</p>
+
+  <figure class="interactive" data-fig="km2d">
+    <div class="widget" data-w="km2d" style="overflow-x:auto">
+<svg viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="축구 선수 114명의 슈팅과 수비 능력치를 표준화한 산점도 위에서 k-평균이 중심점을 옮기며 묶음을 만드는 과정" style="min-width:640px">
+  <text x="20" y="28" font-size="16" font-weight="700" fill="#1c2230">k-평균을 한 단계씩 · 슈팅 × 수비(표준화)</text>
+  <g class="gr"></g>
+  <path d="M62 56 V336 H700" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+  <text x="381" y="374" font-size="13" fill="#6b7385" text-anchor="middle">슈팅(표준화)</text>
+  <text x="30" y="196" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 30 196)">수비(표준화)</text>
+  <g class="pts"></g>
+  <g class="cents"></g>
+  <text class="st-now" x="20" y="402" font-size="15" font-weight="700" fill="#b07a00">① 중심점을 임의로 놓는다</text>
+  <text x="20" y="426" font-size="13" fill="#6b7385">반복 <tspan class="st-it" font-weight="700" fill="#1c2230">시작</tspan> · 중심점이 움직인 거리 <tspan class="st-shift" font-weight="700" fill="#1c2230">—</tspan> · 묶음 인원 <tspan class="st-size" font-weight="700" fill="#1c2230">아직 배정 전</tspan></text>
+  <text x="20" y="446" font-size="12" fill="#6b7385"><tspan class="st-legend">색 = k-평균이 만든 묶음</tspan> <tspan class="st-done" fill="#b07a00"></tspan></text>
 </svg>
-<script>
-(function () {
-  var root = document.getElementById("km12");
-  if (!root) return;
-  var STEPS = [
-    "👆 클릭 ① — 중심점 k=2개를 임의로 놓는다",
-    "👆 클릭 ② — 각 점을 가장 가까운 중심점의 묶음에 넣는다",
-    "👆 클릭 ③ — 묶음의 평균 지점으로 중심점을 옮긴다",
-    "👆 클릭 ④ — ②③을 반복해 중심점이 더 움직이지 않으면 완성",
-    "✅ 완성! 클릭하면 처음부터"
-  ];
-  var COLORS = { g: "#f4b400", t: "#3ba6a0" };
-  var GRAY = "#b6b0a2";
-  var hint = root.querySelector(".km12-hint");
-  var stage = root.querySelector(".km12-stage");
-  var dots = [].slice.call(root.querySelectorAll(".km12-dot"));
-  var stars = {};
-  [].slice.call(root.querySelectorAll(".km12-cg")).forEach(function (g) {
-    stars[g.getAttribute("data-k")] = g;
-    g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
-  });
-  var links = dots.map(function (d) {
-    var k = d.getAttribute("data-a1");
-    var ln = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    ln.setAttribute("x1", d.getAttribute("cx"));
-    ln.setAttribute("y1", d.getAttribute("cy"));
-    ln.setAttribute("x2", stars[k].getAttribute("data-x0"));
-    ln.setAttribute("y2", stars[k].getAttribute("data-y0"));
-    ln.setAttribute("stroke", COLORS[k]);
-    ln.setAttribute("stroke-width", "1.3");
-    ln.setAttribute("opacity", "0");
-    ln.style.transition = "opacity 0.6s ease";
-    stage.insertBefore(ln, stage.firstChild);
-    return ln;
-  });
-  dots.forEach(function (d) { d.style.transition = "fill 0.6s ease"; });
-  function place(g, x, y) { g.style.transform = "translate(" + x + "px," + y + "px)"; }
-  function reset() {
-    Object.keys(stars).forEach(function (k) {
-      var g = stars[k];
-      g.style.transition = "none";
-      place(g, g.getAttribute("data-x0"), g.getAttribute("data-y0"));
-      g.style.opacity = 0;
-      g.getBoundingClientRect();
-      g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
-    });
-    dots.forEach(function (d) { d.style.fill = GRAY; });
-    links.forEach(function (ln) { ln.style.opacity = 0; });
-    hint.textContent = STEPS[0];
-  }
-  var s = 0;
-  reset();
-  root.addEventListener("click", function () {
-    s = (s + 1) % 5;
-    if (s === 1) {
-      stars.g.style.opacity = 1; stars.t.style.opacity = 1;
-    } else if (s === 2) {
-      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a1")]; });
-      links.forEach(function (ln) { ln.style.opacity = 1; });
-    } else if (s === 3) {
-      links.forEach(function (ln) { ln.style.opacity = 0; });
-      Object.keys(stars).forEach(function (k) {
-        var g = stars[k];
-        place(g, g.getAttribute("data-x1"), g.getAttribute("data-y1"));
-      });
-    } else if (s === 4) {
-      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a2")]; });
-      Object.keys(stars).forEach(function (k) {
-        var g = stars[k];
-        place(g, g.getAttribute("data-x2"), g.getAttribute("data-y2"));
-      });
-    } else {
-      s = 0; reset(); return;
-    }
-    hint.textContent = STEPS[s];
-  });
-})();
-</script>
+<div class="wctl">
+  <button class="wbtn" type="button" data-k="2" aria-pressed="false">k=2</button>
+  <button class="wbtn on" type="button" data-k="3" aria-pressed="true">k=3</button>
+  <button class="wbtn" type="button" data-k="4" aria-pressed="false">k=4</button>
+  <button class="wbtn" type="button" data-act="next">다음 단계 ▶</button>
+  <button class="wbtn" type="button" data-act="end">끝까지</button>
+  <button class="wbtn" type="button" data-act="reset">처음부터</button>
+  <button class="wbtn on" type="button" data-color="clu" aria-pressed="true">묶음 색</button>
+  <button class="wbtn" type="button" data-color="pos" aria-pressed="false">포지션 색</button>
+  <span class="wout"></span>
+</div>
+    </div>
+    <figcaption>점 하나가 선수 한 명이고, 가로세로는 슈팅과 수비 능력치를 표준화한 값입니다. ★가 중심점입니다. <b>포지션 색</b> 버튼을 누르면 k=3 묶음과 포지션이 겹치기는 하지만 일치하지는 않는 것이 보입니다. 묶음마다 가장 많은 포지션으로 맞혀도 114명 가운데 87명만 들어맞습니다. k-평균은 포지션을 모르는 채로 능력치만 사용해 묶었습니다.</figcaption>
+  </figure>
+
+  <details class="glossary">
+    <summary>🔭 축을 하나 더 · 세 능력치로 보는 3차원 묶음</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">위 그림은 두 능력치만 사용했습니다. 아래는 슈팅·수비·패스 세 능력치를 축으로 삼아 선수 800명 전체를 놓고 k=3으로 묶은 결과입니다. 가로로 뻗은 축이 슈팅, 안쪽으로 들어가는 축이 수비, 위로 선 축이 패스입니다. 마우스로 끌어 돌려 보고, 점에 마우스를 올리면 선수 이름과 세 값이 함께 표시됩니다.</p>
+      <div class="widget" data-w="km3d">
+        <div class="plot" style="width:100%;min-height:420px"></div>
+        <div class="wctl">
+          <button class="wbtn on" type="button" data-color="clu" aria-pressed="true">묶음 색</button>
+          <button class="wbtn" type="button" data-color="pos" aria-pressed="false">포지션 색</button>
+          <span class="wout"></span>
+        </div>
+      </div>
+      <p class="mini">속성이 셋이면 점 하나가 공간의 한 자리가 되고, 거리는 세 축의 차이를 모두 사용해 구합니다. 속성이 넷 이상이면 그림으로 그릴 수 없지만 거리 계산은 같은 방식으로 이어집니다.</p>
     </div>
   </details>
+
   <div class="callout theory">
     <div class="h">📏 "비슷하다"를 거리로 나타낸다 — 표준화가 필요한 까닭</div>
     <p>인용에서 "유사성을 측정"한다는 말이 실제로 무엇을 하는 일인지 살펴봅니다. 컴퓨터는 두 영화가 비슷한지 알지 못합니다. 아는 것은 숫자 사이의 <b>거리</b>뿐입니다. 속성이 넷이면 영화 한 편은 숫자 네 개로 된 점이고, 두 점의 거리는 속성마다 차이를 구해 제곱하고 모두 더한 뒤 제곱근을 씌워 구합니다. 이것을 <b>유클리드 거리</b>라고 합니다(교과서 148쪽). 그런데 거리는 속성의 단위를 그대로 물려받습니다. 누적 관객은 백만 단위로 벌어지고 10위권 일수는 며칠 단위로 벌어지므로, 원래 숫자를 그대로 사용하면 값이 큰 누적 관객이 거리를 거의 혼자 정합니다.</p>
@@ -183,34 +125,31 @@
 
   <figure class="interactive" data-fig="ruler">
     <div class="widget" data-w="ruler" style="overflow-x:auto">
-<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KBO 타자 43명의 삼진과 출루율 산점도. 원래 단위와 표준화 두 눈금, 선택 선수와 최근접 선수를 잇는 선" style="min-width:640px">
-  <text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">단위 바꾸기 · 삼진과 출루율</text>
-  <!-- 격자·눈금 숫자(모드별 두 겹, 전환 시 opacity 교차) -->
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="축구 선수 114명의 슈팅 능력치와 시장 가치 산점도. 원래 단위와 표준화 두 눈금, 선택한 선수와 가장 가까운 선수를 잇는 선" style="min-width:640px">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">단위 바꾸기 · 슈팅과 시장 가치</text>
   <g class="gr gr-raw"></g>
   <g class="gr gr-std" opacity="0"></g>
   <path d="M76 48 V300 H452" fill="none" stroke="#6b7385" stroke-width="1.2"/>
-  <text class="axx" x="264" y="326" font-size="13" fill="#6b7385" text-anchor="middle">삼진(개)</text>
-  <text class="axy" x="26" y="174" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 26 174)">출루율</text>
-  <!-- 연결선 → 점 43개 → 선택·최근접 덧점 → 이름 라벨 -->
+  <text class="axx" x="264" y="332" font-size="13" fill="#6b7385" text-anchor="middle">슈팅 능력치</text>
+  <text class="axy" x="22" y="174" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 22 174)">시장 가치(만 유로)</text>
   <line class="link" x1="76" y1="300" x2="76" y2="300" stroke="#2f9e5f" stroke-width="1.6" stroke-dasharray="4 3" opacity="0"/>
   <g class="pts"></g>
   <circle class="dot-near" cx="-30" cy="-30" r="7" fill="#2f9e5f"/>
   <circle class="dot-sel" cx="-30" cy="-30" r="7" fill="#b07a00"/>
   <g class="labs"></g>
-  <!-- 오른쪽 패널 -->
   <rect x="468" y="48" width="236" height="252" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1"/>
-  <text class="p-sel" x="480" y="76" font-size="14" font-weight="700" fill="#1c2230">선택 디아즈</text>
-  <text class="p-near" x="480" y="100" font-size="14" font-weight="700" fill="#2f9e5f">최근접 고명준</text>
-  <text x="480" y="132" font-size="13" fill="#6b7385">삼진 차</text>
-  <text class="v-k" x="692" y="132" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">1</text>
-  <text x="480" y="160" font-size="13" fill="#6b7385">출루율 차</text>
-  <text class="v-o" x="692" y="160" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">0.075</text>
+  <text class="p-sel" x="480" y="76" font-size="13" font-weight="700" fill="#1c2230">선택</text>
+  <text class="p-near" x="480" y="100" font-size="13" font-weight="700" fill="#2f9e5f">가장 가까운 선수</text>
+  <text x="480" y="132" font-size="13" fill="#6b7385">슈팅 차</text>
+  <text class="v-k" x="692" y="132" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">0</text>
+  <text x="480" y="160" font-size="13" fill="#6b7385">시장 가치 차</text>
+  <text class="v-o" x="692" y="160" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">0</text>
   <text x="480" y="188" font-size="13" fill="#6b7385">거리</text>
-  <text class="v-d" x="692" y="188" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">1.003</text>
-  <text x="480" y="216" font-size="13" fill="#6b7385">거리 제곱에서 삼진의 몫</text>
+  <text class="v-d" x="692" y="188" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">0</text>
+  <text x="480" y="216" font-size="12" fill="#6b7385">거리 제곱에서 시장 가치의 몫</text>
   <rect x="480" y="232" width="156" height="18" fill="#e3ddcf"/>
-  <rect class="bar" x="480" y="232" width="155.1" height="18" fill="#b07a00"/>
-  <text class="v-s" x="692" y="246" font-size="14" font-weight="700" fill="#b07a00" text-anchor="end">99.4%</text>
+  <rect class="bar" x="480" y="232" width="0" height="18" fill="#b07a00"/>
+  <text class="v-s" x="692" y="246" font-size="14" font-weight="700" fill="#b07a00" text-anchor="end">0%</text>
   <text x="480" y="272" font-size="13" fill="#6b7385">단위 맞추기</text>
   <text x="480" y="292" font-size="13" fill="#6b7385">항목 중요도 결정 아님</text>
 </svg>
@@ -218,10 +157,10 @@
   <button class="wbtn on" type="button" data-mode="raw" aria-pressed="true">원래 단위</button>
   <button class="wbtn" type="button" data-mode="std" aria-pressed="false">표준화</button>
   <button class="wbtn on" type="button" data-link="1" aria-pressed="true">가장 가까운 선수 잇기</button>
-  <span class="wout">최근접 바뀜 35 / 43</span>
+  <span class="wout"></span>
 </div>
-</div>
-    <figcaption>그림의 점은 2025 시즌 KBO 타자 43명입니다. 눈금을 바꾸면 가장 가까운 선수가 달라집니다. 같은 43명, 같은 기록입니다. 개념은 타자 43명으로 보고, 실습은 영화로 합니다.</figcaption>
+    </div>
+    <figcaption>점 하나가 선수 한 명이고, 클릭하면 그 선수를 선택합니다. 원래 단위에서는 시장 가치의 차이가 거리를 거의 혼자 정합니다. 오른쪽 아래 막대가 거리 제곱에서 시장 가치가 차지한 몫입니다. 표준화 버튼을 누르면 눈금이 달라지고, 114명 가운데 84명은 가장 가까운 선수가 바뀝니다. 같은 114명, 같은 기록입니다. 개념은 축구 선수로 보고, 실습은 영화로 합니다.</figcaption>
   </figure>
   <table class="daymap">
     <thead><tr><th>구분</th><th>정답(레이블)</th><th>모델이 하는 일</th><th>우리 수업의 예</th></tr></thead>
@@ -234,6 +173,7 @@
   <h2>2. 실습 ① — 영화를 유형으로 나눈다 (바이브 코딩)</h2>
   <p>사용하는 데이터는 7·8차시와 같은 영화 표입니다. 다만 오늘은 모델이 맞혀야 할 정답 열을 사용하지 않습니다. 묶는 데 사용할 속성은 넷입니다. 개봉 초기의 <b>스크린 수</b>, <b>누적 관객</b>, 10위권 안에 머문 <b>일수</b>, 그리고 누적 관객을 첫 주 관객으로 나눈 <b>롱런 지수</b>입니다. 롱런 지수가 크면 첫 주 이후에도 관객이 계속 든 영화이고, 1에 가까우면 첫 주에 관객이 몰렸다가 빠진 영화입니다.</p>
   <p>앞의 두 속성은 편마다 값이 백 배 넘게 벌어지므로 상용로그를 취해 폭을 줄인 뒤 사용합니다. 네 속성을 표준화하고 k-평균으로 세 묶음을 만드는 것이 첫 화면입니다. 묶음 번호에는 순위의 뜻이 없으므로 ㉮·㉯·㉰로 표시합니다.</p>
+  <p>화면에서는 묶는 데 사용할 속성을 골라 바꿀 수 있고, 산점도의 가로·세로축도 고를 수 있습니다. 속성을 셋 이상 고르면 1절에서 본 것과 같은 3차원 그림도 함께 표시됩니다.</p>
   <p class="mini">이 표는 날마다 새로 수집하므로 화면에 나오는 편수와 묶음별 인원은 사람마다, 날마다 다릅니다. 아래 표의 빈칸은 각자 자기 화면의 숫자로 채웁니다.</p>
 
     <ol class="steps">
@@ -246,8 +186,10 @@
 스크린 수(first_scrn)와 누적 관객(total_audi)은 숫자 차이가 너무 커서 상용로그를 취하고,
 10위권 일수(days_in_top10)는 그대로, 롱런 지수는 누적 관객을 첫 주 관객(first_week_audi)으로 나눠 만들고 20을 넘으면 20으로 잘라 줘.
 네 속성 중 값이 없거나 첫 주 관객이 0인 영화는 빼고, 전체 편수와 묶은 편수를 화면에 한 줄로 적어 줘.
-네 속성을 표준화한 뒤 k-평균으로 세 묶음으로 나눠 줘. 다시 실행해도 같은 결과가 나오게 난수를 고정해 줘.
-가로축 누적 관객(로그 눈금), 세로축 10위권 일수인 산점도를 묶음별 색으로 그리고, 점에 마우스를 올리면 제목이 보이게 해 줘.
+묶는 데 사용할 속성을 화면 위에서 고르게 해 줘. 둘 이상 고르게 하고 기본은 네 개 다야.
+고른 속성을 표준화한 뒤 k-평균으로 세 묶음으로 나눠 줘. 다시 실행해도 같은 결과가 나오게 난수를 고정해 줘.
+2차원 산점도는 가로축과 세로축에 사용할 속성을 고르게 하고, 점에 마우스를 올리면 제목이 보이게 해 줘.
+그 아래에 3차원 산점도를 하나 더 그려 줘. x·y·z 세 축의 속성을 고르게 하고, 마우스로 돌릴 수 있고, 묶음마다 색이 다르고, 점에 마우스를 올리면 제목이 보이게 해 줘. 고른 속성이 셋보다 적으면 3차원 대신 안내 문구를 표시해 줘.
 묶음마다 편수와 네 속성의 평균(원래 단위)을 표로 보여 줘.
 묶음마다 누적 관객이 많은 순서로 영화 다섯 편의 제목을 보여 줘.
 묶음 번호는 0·1·2가 아니라 ㉮·㉯·㉰로 표시하고, 누적 관객 평균이 큰 묶음부터 ㉮를 붙여 줘.
@@ -263,10 +205,10 @@ from sklearn.cluster import KMeans
 
 st.set_page_config(page_title="영화 유형 나누기", page_icon="🎬", layout="wide")
 st.title("🎬 영화 유형 나누기")
-st.caption("정답 열 없이, 네 가지 속성이 비슷한 영화끼리 묶습니다.")
+st.caption("정답 열 없이, 내가 고른 속성이 비슷한 영화끼리 묶습니다.")
 
 MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
-기호 = ["㉮", "㉯", "㉰", "㉱", "㉲", "㉳", "㉴"]          # 묶음 번호 대신 쓰는 표시
+기호 = ["㉮", "㉯", "㉰", "㉱", "㉲", "㉳", "㉴"]          # 묶음 번호 대신 사용하는 표시
 속성 = ["스크린 수(로그)", "누적 관객(로그)", "10위권 일수", "롱런 지수"]
 원래단위 = ["스크린 수", "누적 관객", "10위권 일수", "롱런 지수"]
 
@@ -296,9 +238,14 @@ df["누적 관객(로그)"] = np.log10(df["total_audi"])
 
 st.info(f"전체 {전체편수:,}편 가운데 네 속성을 모두 만들 수 있는 {len(df):,}편으로 묶었습니다.")
 
-# 네 속성을 표준화한 뒤 k-평균으로 나눈다. 난수를 고정해 다시 실행해도 같은 결과가 나오게 한다
+고른속성 = st.multiselect("묶는 데 사용할 속성 (둘 이상)", 속성, default=속성)
+if len(고른속성) &lt; 2:
+    st.warning("속성을 둘 이상 골라 주세요.")
+    st.stop()
+
+# 고른 속성을 표준화한 뒤 k-평균으로 나눈다. 난수를 고정해 다시 실행해도 같은 결과가 나오게 한다
 k = 3
-Xs = StandardScaler().fit_transform(df[속성])
+Xs = StandardScaler().fit_transform(df[고른속성])
 번호 = KMeans(n_clusters=k, n_init=10, random_state=42).fit_predict(Xs)
 
 # 누적 관객 평균이 큰 묶음부터 ㉮·㉯·㉰ 순으로 표시한다
@@ -306,13 +253,31 @@ Xs = StandardScaler().fit_transform(df[속성])
 자리 = {g: i for i, g in enumerate(순서)}
 df["묶음"] = [기호[자리[g]] for g in 번호]
 
-st.subheader("묶음 지도")
-fig = px.scatter(df, x="누적 관객", y="10위권 일수", color="묶음", hover_name="movieNm",
-                 log_x=True, category_orders={"묶음": 기호[:k]})
-fig.update_traces(marker=dict(size=10, opacity=0.8))
-fig.update_layout(height=460, xaxis_title="누적 관객(명) · 로그 눈금", yaxis_title="10위권에 머문 일수(일)")
+st.subheader("묶음 지도 · 2차원")
+c1, c2 = st.columns(2)
+x축 = c1.selectbox("가로축", 고른속성, index=0)
+y축 = c2.selectbox("세로축", 고른속성, index=min(1, len(고른속성) - 1))
+fig = px.scatter(df, x=x축, y=y축, color="묶음", hover_name="movieNm",
+                 category_orders={"묶음": 기호[:k]})
+fig.update_traces(marker=dict(size=9, opacity=0.8))
+fig.update_layout(height=460)
 st.plotly_chart(fig, width="stretch")
-st.caption("점 하나가 영화 한 편입니다. 색이 묶음이고, 점에 마우스를 올리면 제목이 보입니다.")
+st.caption("점 하나가 영화 한 편입니다. 축을 바꿔 보면 묶음이 나뉘는 축과 섞이는 축이 보입니다.")
+
+st.subheader("묶음 지도 · 3차원")
+if len(고른속성) &lt; 3:
+    st.info("속성을 셋 이상 고르면 3차원 그림이 표시됩니다.")
+else:
+    d1, d2, d3 = st.columns(3)
+    x3 = d1.selectbox("x축", 고른속성, index=0, key="x3")
+    y3 = d2.selectbox("y축", 고른속성, index=1, key="y3")
+    z3 = d3.selectbox("z축", 고른속성, index=2, key="z3")
+    fig3 = px.scatter_3d(df, x=x3, y=y3, z=z3, color="묶음", hover_name="movieNm",
+                         category_orders={"묶음": 기호[:k]})
+    fig3.update_traces(marker=dict(size=3, opacity=0.8))
+    fig3.update_layout(height=560, legend=dict(orientation="h"))
+    st.plotly_chart(fig3, width="stretch")
+    st.caption("마우스로 끌면 돌아갑니다. 점에 마우스를 올리면 제목이 보입니다.")
 
 st.subheader("묶음별 편수와 네 속성의 평균")
 요약 = df.groupby("묶음")[원래단위].mean().round(2)
@@ -344,7 +309,7 @@ scikit-learn</pre></div></details>
   </ol>
 
   <h3>화면 읽기 — 어느 영화가 한 묶음에 들어갔는가</h3>
-  <p>앱을 실행하면 산점도와 표가 표시됩니다. 산점도의 점 하나가 영화 한 편이고, 색이 묶음입니다. 점에 마우스를 올려 제목을 확인하고, 내가 본 영화가 어느 묶음에 들어갔는지 먼저 찾습니다. 그다음 묶음별 평균 표와 제목 목록을 읽고 아래 표를 채웁니다. 대표 영화 칸에는 그 묶음에서 누적 관객이 가장 많은 영화 한 편을 적습니다.</p>
+  <p>앱을 실행하면 산점도와 표가 표시됩니다. 산점도의 점 하나가 영화 한 편이고, 색이 묶음입니다. 점에 마우스를 올려 제목을 확인하고, 내가 본 영화가 어느 묶음에 들어갔는지 먼저 찾습니다. 그다음 가로·세로축을 다른 속성으로 바꿔 가며 색이 뚜렷하게 나뉘는 축과 색이 섞여 보이는 축을 구분합니다. 3차원 그림도 돌려 봅니다. 마지막으로 묶음별 평균 표와 제목 목록을 읽고 아래 표를 채웁니다. 대표 영화 칸에는 그 묶음에서 누적 관객이 가장 많은 영화 한 편을 적습니다.</p>
   <table class="daymap">
     <thead><tr><th>묶음</th><th>편수</th><th>스크린 수 평균</th><th>누적 관객 평균</th><th>10위권 일수 평균</th><th>롱런 지수 평균</th><th>대표 영화 한 편</th></tr></thead>
     <tbody>
@@ -353,7 +318,8 @@ scikit-learn</pre></div></details>
       <tr><td>㉰</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
     </tbody>
   </table>
-  <p>표를 채우고 나면 묶음마다 어느 속성이 크고 어느 속성이 작은지 보입니다. 세 묶음의 편수가 고르게 나뉘지 않는 것도 확인합니다. k-평균은 인원을 고르게 맞추지 않고 거리만 봅니다.</p>
+  <p>표를 채우고 나면 묶음마다 어느 속성이 크고 어느 속성이 작은지 보입니다. 세 묶음의 편수가 고르게 나뉘지 않는 것도 확인합니다. k-평균은 편수를 고르게 맞추지 않고 거리만 봅니다.</p>
+  <p><b>축을 바꿔 보면 묶음이 나뉘는 축은 무엇입니까.</b> 가로축으로 세웠을 때 색이 가장 뚜렷하게 나뉘는 속성 하나와, 색이 가장 많이 섞이는 속성 하나를 골라 적습니다. 뚜렷하게 나뉘는 축이 곧 묶음을 만든 속성입니다.</p>
 
   <h2>3. 실습 ③ — k는 몇 개가 좋을까</h2>
   <p>2절에서는 세 묶음으로 나눴습니다. 왜 셋입니까. 교과서는 k값에 따라 결과와 해석이 달라지므로 k를 적절히 설정하는 것이 중요하다고만 적고 있습니다(146쪽). 적절한 k를 고르는 방법 하나를 이 절에서 사용합니다.</p>
@@ -365,11 +331,12 @@ scikit-learn</pre></div></details>
 바뀐 main.py 전체를 다시 줘. 바뀐 부분만 주지 말고.
 묶음 수를 2에서 7까지 고를 수 있게 하고 기본값은 3으로 해 줘. 고른 값에 따라 위의 산점도·표·제목 목록이 다시 그려지게 해 줘.
 묶음 수가 셋보다 많아지면 표시 기호를 ㉱·㉲·㉳·㉴까지 이어 써 줘.
+아래 계산도 지금 고른 속성으로 다시 하게 해 줘.
 묶음 수를 1부터 7까지 바꿔 가며 각 묶음 안에서 점들이 중심에서 떨어진 거리의 제곱을 모두 더한 값을 구하고, 꺾은선 그래프로 그려 줘.
 지금 고른 묶음 수 자리에 세로선을 그어 줘.
 그래프 아래에 묶음 수마다 그 값과 바로 앞 값에서 얼마나 줄었는지를 표로 보여 줘. 맨 첫 줄은 비교할 앞 값이 없으니 빈칸으로 둬.
 고른 묶음 수의 실루엣 점수를 한 줄로 표시해 줘. 점수는 -1에서 1 사이이고 1에 가까울수록 묶음이 뚜렷하다는 뜻이야.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞의 main.py를 아래 내용으로 바꿉니다. requirements.txt는 그대로 둡니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 영화 유형 나누기: 묶음 수를 바꿔 가며 몇 갈래가 좋을지 정한다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞의 main.py를 아래 내용으로 바꿉니다. requirements.txt는 그대로 둡니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 영화 유형 나누기: 속성을 골라 묶고, 묶음 수도 바꿔 가며 정한다
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -380,10 +347,10 @@ from sklearn.metrics import silhouette_score
 
 st.set_page_config(page_title="영화 유형 나누기", page_icon="🎬", layout="wide")
 st.title("🎬 영화 유형 나누기")
-st.caption("정답 열 없이, 네 가지 속성이 비슷한 영화끼리 묶습니다.")
+st.caption("정답 열 없이, 내가 고른 속성이 비슷한 영화끼리 묶습니다.")
 
 MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
-기호 = ["㉮", "㉯", "㉰", "㉱", "㉲", "㉳", "㉴"]          # 묶음 번호 대신 쓰는 표시
+기호 = ["㉮", "㉯", "㉰", "㉱", "㉲", "㉳", "㉴"]          # 묶음 번호 대신 사용하는 표시
 속성 = ["스크린 수(로그)", "누적 관객(로그)", "10위권 일수", "롱런 지수"]
 원래단위 = ["스크린 수", "누적 관객", "10위권 일수", "롱런 지수"]
 
@@ -413,7 +380,12 @@ df["누적 관객(로그)"] = np.log10(df["total_audi"])
 
 st.info(f"전체 {전체편수:,}편 가운데 네 속성을 모두 만들 수 있는 {len(df):,}편으로 묶었습니다.")
 
-Xs = StandardScaler().fit_transform(df[속성])               # 네 속성을 표준화한다
+고른속성 = st.multiselect("묶는 데 사용할 속성 (둘 이상)", 속성, default=속성)
+if len(고른속성) &lt; 2:
+    st.warning("속성을 둘 이상 골라 주세요.")
+    st.stop()
+
+Xs = StandardScaler().fit_transform(df[고른속성])          # 고른 속성을 표준화한다
 k = st.slider("몇 묶음으로 나눌까요", 2, 7, 3)
 
 
@@ -424,18 +396,37 @@ def 나누기(개수):
 
 모델 = 나누기(k)
 번호 = 모델.labels_
+
 # 누적 관객 평균이 큰 묶음부터 ㉮·㉯·㉰ 순으로 표시한다
 순서 = pd.Series(df["누적 관객"].to_numpy()).groupby(번호).mean().sort_values(ascending=False).index
 자리 = {g: i for i, g in enumerate(순서)}
 df["묶음"] = [기호[자리[g]] for g in 번호]
 
-st.subheader("묶음 지도")
-fig = px.scatter(df, x="누적 관객", y="10위권 일수", color="묶음", hover_name="movieNm",
-                 log_x=True, category_orders={"묶음": 기호[:k]})
-fig.update_traces(marker=dict(size=10, opacity=0.8))
-fig.update_layout(height=460, xaxis_title="누적 관객(명) · 로그 눈금", yaxis_title="10위권에 머문 일수(일)")
+st.subheader("묶음 지도 · 2차원")
+c1, c2 = st.columns(2)
+x축 = c1.selectbox("가로축", 고른속성, index=0)
+y축 = c2.selectbox("세로축", 고른속성, index=min(1, len(고른속성) - 1))
+fig = px.scatter(df, x=x축, y=y축, color="묶음", hover_name="movieNm",
+                 category_orders={"묶음": 기호[:k]})
+fig.update_traces(marker=dict(size=9, opacity=0.8))
+fig.update_layout(height=460)
 st.plotly_chart(fig, width="stretch")
-st.caption("점 하나가 영화 한 편입니다. 색이 묶음이고, 점에 마우스를 올리면 제목이 보입니다.")
+st.caption("점 하나가 영화 한 편입니다. 축을 바꿔 보면 묶음이 나뉘는 축과 섞이는 축이 보입니다.")
+
+st.subheader("묶음 지도 · 3차원")
+if len(고른속성) &lt; 3:
+    st.info("속성을 셋 이상 고르면 3차원 그림이 표시됩니다.")
+else:
+    d1, d2, d3 = st.columns(3)
+    x3 = d1.selectbox("x축", 고른속성, index=0, key="x3")
+    y3 = d2.selectbox("y축", 고른속성, index=1, key="y3")
+    z3 = d3.selectbox("z축", 고른속성, index=2, key="z3")
+    fig3 = px.scatter_3d(df, x=x3, y=y3, z=z3, color="묶음", hover_name="movieNm",
+                         category_orders={"묶음": 기호[:k]})
+    fig3.update_traces(marker=dict(size=3, opacity=0.8))
+    fig3.update_layout(height=560, legend=dict(orientation="h"))
+    st.plotly_chart(fig3, width="stretch")
+    st.caption("마우스로 끌면 돌아갑니다. 점에 마우스를 올리면 제목이 보입니다.")
 
 st.subheader("묶음별 편수와 네 속성의 평균")
 요약 = df.groupby("묶음")[원래단위].mean().round(2)
@@ -464,7 +455,7 @@ for i, 이름 in enumerate(기호[:k]):
 st.divider()
 st.subheader("묶음 수는 몇이 좋을까")
 
-# 묶음 안에서 점들이 중심에서 떨어진 거리의 제곱을 모두 더한 값(k=1~7)
+# 고른 속성으로 다시 계산한다. 묶음 안에서 점들이 중심에서 떨어진 거리의 제곱을 모두 더한 값(k=1~7)
 합 = pd.DataFrame({"묶음 수": list(range(1, 8)),
                    "거리 제곱의 합": [round(float(나누기(개수).inertia_), 1) for 개수 in range(1, 8)]})
 # 바로 앞 묶음 수에서 줄어든 크기. 맨 첫 줄은 비교할 앞 값이 없다
@@ -505,7 +496,7 @@ st.caption("실루엣 점수는 -1에서 1 사이이고, 1에 가까울수록 �
     <p class="q">"실루엣 계수는 -1에서 1 사이의 값을 가지며, 1에 가까울수록 근처의 다른 군집과 멀리 떨어져 있다는 것을 나타낸다." <span class="src">(153쪽)</span></p>
     <p class="t">→ 화면에 한 줄로 표시되는 실루엣 점수가 이 값입니다. 화면의 점수는 참고일 뿐이며 k의 정답을 주지 않습니다.</p>
   </div>
-  <p class="mini">🧪 같은 방법을 야구 기록에 적용해 보는 도전과 표준화 스위치 위젯, 확장 데이터 세 가지는 <a href="lesson09-lab.html">9차시 실험실</a>에 있습니다.</p>
+  <p class="mini">🧪 같은 방법을 축구 선수에게 적용해 보는 도전과 표준화 스위치 위젯, 확장 데이터 세 가지는 <a href="lesson09-lab.html">9차시 실험실</a>에 있습니다.</p>
 
   <h2>4. 활동 — 묶음에 이름 붙이기</h2>
   <p>이름을 붙이는 일이 무엇인지 먼저 한 장면으로 봅니다. 아래는 소리가 비슷한 아티스트를 묶어 만든 음악 장르 지도입니다. 이 지도의 장르 이름 6,291개도 컴퓨터가 지은 것이 아닙니다. 소리가 비슷한 아티스트를 묶는 일까지가 컴퓨터의 몫이고, 묶음마다 이름을 붙인 사람은 지도를 만든 글렌 맥도널드입니다. 여러분이 지금부터 하는 일이 그 일입니다.</p>
@@ -542,7 +533,7 @@ st.caption("실루엣 점수는 -1에서 1 사이이고, 1에 가까울수록 �
   <div class="tbquote">
     <div class="h">📖 교과서의 한 줄 <span class="src">『데이터 과학』 154쪽</span></div>
     <p class="q">"군집 분석 결과를 해석하기 위해서는 데이터에 대한 깊은 이해가 필요하다." <span class="src">(154쪽)</span></p>
-    <p class="t">→ 알고리즘은 묶음의 번호까지만 만듭니다. 이름과 의미는 야구를 아는 사람이 붙입니다.</p>
+    <p class="t">→ 알고리즘은 묶음의 번호까지만 만듭니다. 이름과 의미는 영화를 아는 사람이 붙입니다.</p>
   </div>
   <details class="glossary"><summary>더 알아보기 — 실제 사례 · NBA 포지션 재정의</summary><div class="gin">
   <h3>정답표 없이 묶고 이름을 사람이 붙인 또 하나의 사례입니다.</h3>
@@ -618,7 +609,9 @@ st.caption("실루엣 점수는 -1에서 1 사이이고, 1에 가까울수록 �
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets11.js"></script>
+<script src="assets/soccer_data.js?v=1"></script>
+<script src="assets/widgets09c.js?v=1"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="assets/answer.js?v=3"></script>
 </body>
 </html>
