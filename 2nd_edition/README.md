@@ -22,6 +22,8 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory web/2nd_edition
 - `original/assets`, `original/img`: 현재본 스냅샷이 사용하는 독립 자산
 - `snapshot-manifest.json`: 원본 기준과 생성 파일의 SHA-256
 
+9~12차시는 2026-09-15 교사 확정으로 순서가 바뀌었습니다(9 군집 · 10 연관 분석 · 11 분류 · 12 분류 평가). `original/`은 옛 번호의 현재본 스냅샷이므로 9~12차시는 `compare.html`에서 좌우 짝이 맞지 않습니다. 11·12차시 본문은 뇌졸중 데이터로 새로 제작 중입니다.
+
 본문에서 직접 연결되는 용어사전, 실험실, 준비 페이지와 프로젝트 안내도 두 영역에 각각 복사했습니다. `release.js`와 `gate.js`는 검토 페이지에서 불러오지 않으므로 1~15차시를 모두 열 수 있습니다.
 
 ## 재생성
@@ -36,4 +38,4 @@ python3 _workspace/review01-07-2026-09-12/build_2nd_edition.py
 
 검토본 주소: https://greatsong.github.io/ds-danggok-2026/2nd_edition/
 
-이번 검토본에는 6·9·12차시의 반복 주의 정리를 반영했습니다. 7차시의 예측 시점 설명은 유지하며, `teacher-notes.html`에 교사용 보충과 설명 역할 기준을 정리했습니다.
+이번 검토본에는 6차시와 군집·연관 차시의 반복 주의 정리를 반영했습니다. 7차시의 예측 시점 설명은 유지하며, `teacher-notes.html`에 교사용 보충과 설명 역할 기준을 정리했습니다.

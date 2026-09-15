@@ -1,10 +1,14 @@
-// 10차시 인터랙티브 위젯 — 슬라이드(teacher/slides/lesson10.html)와 교재(lesson10.html)가 공유한다.
+// 12차시(분류 평가 · 뇌졸중) 인터랙티브 위젯 — 교재 lesson12.html이 사용한다.
 // 각 위젯: <div class="widget" data-w="이름"> 조각 + function initW_이름(root, D). D = window.LESSON_DATA.
 // 계약: system/widgets/WIDGET_BRIEF_TEMPLATE.md. <body> 끝에서 로드한다.
-  window.LESSON_DATA = {"HAND":{"A":{"label":"활동지 기본 문제 · 모델 A (영화 20편)","pos":"성공","neg":"기준 미달","tp":6,"fp":6,"fn":2,"tn":6},"B":{"label":"활동지 기본 문제 · 모델 B (영화 20편)","pos":"성공","neg":"기준 미달","tp":4,"fp":1,"fn":4,"tn":11},"all":{"label":"활동지 기본 문제 · 전부 성공이라고 예측하는 단순 규칙","pos":"성공","neg":"기준 미달","tp":8,"fp":12,"fn":0,"tn":0},"C":{"label":"활동지 연습 문제 · 필터 C (메일 100통)","pos":"스팸","neg":"정상","tp":16,"fp":4,"fn":4,"tn":76},"D":{"label":"활동지 연습 문제 · 필터 D (메일 100통)","pos":"스팸","neg":"정상","tp":18,"fp":12,"fn":2,"tn":68},"allspam":{"label":"활동지 연습 문제 · 전부 스팸함으로 보내는 단순 규칙","pos":"스팸","neg":"정상","tp":20,"fp":80,"fn":0,"tn":0}},"T66":[[0.6923,1],[0.4919,0],[0.3801,0],[0.371,0],[0.2568,0],[0.2556,0],[0.2467,0],[0.2368,1],[0.2173,0],[0.2167,0],[0.2146,0],[0.1805,0],[0.1631,0],[0.1323,0],[0.1322,0],[0.1263,0],[0.1251,0],[0.1095,0],[0.081,0],[0.0688,1],[0.0683,0],[0.0683,0],[0.0654,0],[0.0643,0],[0.0612,1],[0.0608,0],[0.0559,0],[0.0534,0],[0.0504,0],[0.0497,0],[0.0481,0],[0.0475,0],[0.0468,0],[0.0464,0],[0.0427,0],[0.0397,1],[0.0391,0],[0.0387,0],[0.0323,0],[0.0312,0],[0.0236,1],[0.0235,0],[0.0227,0],[0.0226,0],[0.0198,0],[0.0186,0],[0.0184,0],[0.0178,0],[0.0171,0],[0.0169,0],[0.0152,0],[0.0152,0],[0.0115,0],[0.0115,0],[0.0102,0],[0.0099,0],[0.0073,0],[0.0072,0],[0.0068,0],[0.0067,0],[0.0067,0],[0.006,0],[0.0031,0],[0.0027,0],[0.0019,0],[0.001,0]],"titles":["연지구 디 오리지널 4K","줄무늬 파자마를 입은 소년","석류의 빛깔","만남의 집","전력질주","슈가","얼굴","나혼자 프린스","어쩔수가없다","세계의 주인","신의악단","내 이름은","나쁜계집애: 달려라 하니","우리에게는 아직 내일이 있다","블루 아카이브 : 디 오케스트라 인 시네마","다이 마이 러브","센티멘탈 밸류","끝이 없는 스칼렛","하우스메이드","바다 탐험대 옥토넛 어보브 앤 비욘드 : 육지생물 구조작전","우리는 매일매일","프레디의 피자가게 2","트론: 아레스","여행과 나날","호퍼스","부고니아","아바타: 불과 재","바다 탐험대 옥토넛 어보브 앤 비욘드 : 콰지의 깜짝 어드벤처","건국전쟁2","명탐정 코난: 17년 전의 진상","8번 출구","2016 방탄소년단 라이브 화양연화 온 스테이지 : 에필로그 리마스터링","극장판 주술회전: 회옥·옥절","아르코","원 인 어 밀리언","만달로리안과 그로구","극장판 똘똘이: 아기공룡의 비밀","척의 일생","후지모토 타츠키 17-26 파트 2","에이티즈 에이 투 지 온 스크린","신세기 에반게리온 극장판 사도신생","케이팝 데몬 헌터스","시라트","파더 마더 시스터 브라더","초속 5센티미터","악마는 프라다를 입는다 2","화양연화 특별판","모아나","슬라이드 스트럼 뮤트","시크릿 에이전트","짝사랑 세계","미니언즈 & 몬스터즈","폭탄","명탐정 코난: 세기말의 마술사","오피셜히게단디즘 라이브 앳 스타디움 2025","노멀","런닝맨: 라이트&쉐도우","극장판 반짝반짝 달님이: 싱어롱 파티","고트: 더 레전드","모탈 컴뱃 2","사랑의 하츄핑 특별판","너바나 더 밴드 : 전설적 밴드 ‘너바나’와는 별 관련 없는 ‘너바나 더 밴드’의 콤비 맷과 제이. 어느 날 공연을 위해 타임머신을 만드는 황당한 작전을 세우고 처음 만났던 17년 전으로 돌","리마인더스 오브 힘","극장판 도라에몽: 신 진구의 해저비밀성","그린랜드 2: 마이그레이션","정동원 팬콘서트 필름 : 다시 만나는 길"],"y":"000000101010000000000000001000000000000000000101000000000000000000","p":{"logit":"000000000000000000000000001000000000000000000000000000000000000000","tree":"000000000000000000000000001000000000000000000001000000000000000000","week":"000000001000000000000000001000000000000000000100000000000000000000"}};
+// 사용 중인 위젯: matrix(네 칸과 네 지표) · dial(기준 모델) · rareacc(드문 일).
+// threshold · walk와 LESSON_DATA의 T66 · titles · y · p는 11·12차시 뇌졸중 개편 이후 미사용이다.
+  window.LESSON_DATA = {"HAND":{"A":{"label":"활동지 기본 문제 · 모델 A (환자 20명)","pos":"뇌졸중","neg":"아님","tp":3,"fp":3,"fn":1,"tn":13},"B":{"label":"활동지 기본 문제 · 모델 B (환자 20명)","pos":"뇌졸중","neg":"아님","tp":1,"fp":0,"fn":3,"tn":16},"all":{"label":"활동지 기본 문제 · 규칙 C · 전부 아님이라고 답하는 규칙","pos":"뇌졸중","neg":"아님","tp":0,"fp":0,"fn":4,"tn":16},"C":{"label":"활동지 연습 문제 · 필터 C (메일 100통)","pos":"스팸","neg":"정상","tp":16,"fp":4,"fn":4,"tn":76},"D":{"label":"활동지 연습 문제 · 필터 D (메일 100통)","pos":"스팸","neg":"정상","tp":18,"fp":12,"fn":2,"tn":68},"allspam":{"label":"활동지 연습 문제 · 전부 스팸함으로 보내는 단순 규칙","pos":"스팸","neg":"정상","tp":20,"fp":80,"fn":0,"tn":0}},"T66":[[0.6923,1],[0.4919,0],[0.3801,0],[0.371,0],[0.2568,0],[0.2556,0],[0.2467,0],[0.2368,1],[0.2173,0],[0.2167,0],[0.2146,0],[0.1805,0],[0.1631,0],[0.1323,0],[0.1322,0],[0.1263,0],[0.1251,0],[0.1095,0],[0.081,0],[0.0688,1],[0.0683,0],[0.0683,0],[0.0654,0],[0.0643,0],[0.0612,1],[0.0608,0],[0.0559,0],[0.0534,0],[0.0504,0],[0.0497,0],[0.0481,0],[0.0475,0],[0.0468,0],[0.0464,0],[0.0427,0],[0.0397,1],[0.0391,0],[0.0387,0],[0.0323,0],[0.0312,0],[0.0236,1],[0.0235,0],[0.0227,0],[0.0226,0],[0.0198,0],[0.0186,0],[0.0184,0],[0.0178,0],[0.0171,0],[0.0169,0],[0.0152,0],[0.0152,0],[0.0115,0],[0.0115,0],[0.0102,0],[0.0099,0],[0.0073,0],[0.0072,0],[0.0068,0],[0.0067,0],[0.0067,0],[0.006,0],[0.0031,0],[0.0027,0],[0.0019,0],[0.001,0]],"titles":["연지구 디 오리지널 4K","줄무늬 파자마를 입은 소년","석류의 빛깔","만남의 집","전력질주","슈가","얼굴","나혼자 프린스","어쩔수가없다","세계의 주인","신의악단","내 이름은","나쁜계집애: 달려라 하니","우리에게는 아직 내일이 있다","블루 아카이브 : 디 오케스트라 인 시네마","다이 마이 러브","센티멘탈 밸류","끝이 없는 스칼렛","하우스메이드","바다 탐험대 옥토넛 어보브 앤 비욘드 : 육지생물 구조작전","우리는 매일매일","프레디의 피자가게 2","트론: 아레스","여행과 나날","호퍼스","부고니아","아바타: 불과 재","바다 탐험대 옥토넛 어보브 앤 비욘드 : 콰지의 깜짝 어드벤처","건국전쟁2","명탐정 코난: 17년 전의 진상","8번 출구","2016 방탄소년단 라이브 화양연화 온 스테이지 : 에필로그 리마스터링","극장판 주술회전: 회옥·옥절","아르코","원 인 어 밀리언","만달로리안과 그로구","극장판 똘똘이: 아기공룡의 비밀","척의 일생","후지모토 타츠키 17-26 파트 2","에이티즈 에이 투 지 온 스크린","신세기 에반게리온 극장판 사도신생","케이팝 데몬 헌터스","시라트","파더 마더 시스터 브라더","초속 5센티미터","악마는 프라다를 입는다 2","화양연화 특별판","모아나","슬라이드 스트럼 뮤트","시크릿 에이전트","짝사랑 세계","미니언즈 & 몬스터즈","폭탄","명탐정 코난: 세기말의 마술사","오피셜히게단디즘 라이브 앳 스타디움 2025","노멀","런닝맨: 라이트&쉐도우","극장판 반짝반짝 달님이: 싱어롱 파티","고트: 더 레전드","모탈 컴뱃 2","사랑의 하츄핑 특별판","너바나 더 밴드 : 전설적 밴드 ‘너바나’와는 별 관련 없는 ‘너바나 더 밴드’의 콤비 맷과 제이. 어느 날 공연을 위해 타임머신을 만드는 황당한 작전을 세우고 처음 만났던 17년 전으로 돌","리마인더스 오브 힘","극장판 도라에몽: 신 진구의 해저비밀성","그린랜드 2: 마이그레이션","정동원 팬콘서트 필름 : 다시 만나는 길"],"y":"000000101010000000000000001000000000000000000101000000000000000000","p":{"logit":"000000000000000000000000001000000000000000000000000000000000000000","tree":"000000000000000000000000001000000000000000000001000000000000000000","week":"000000001000000000000000001000000000000000000100000000000000000000"}};
+  // RARE10은 영화 기반이던 옛 차시의 값이다. 현재 교재에서는 사용하지 않는다(rareacc는 HTML의 고정값을 읽는다).
   window.RARE10 = {"total":236,"ten":2,"mil":25};
 function initW_matrix(root, D) {
-  // 혼동행렬 네 칸 + 정확도·정밀도·재현율. 분자는 TP 한 칸에 고정, 분모 범위만 열↔행으로 갈라진다.
+  // 혼동행렬 네 칸 + 정확도·정밀도·재현율·F1. 분자는 TP 한 칸에 고정, 분모 범위만 열↔행으로 갈라진다.
+  // F1은 네 칸에서 곧바로 나오지 않고 정밀도와 재현율에서 나오므로 분모 테두리를 표시하지 않는다.
   var q = function (s) { return root.querySelector(s); };
   var qa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
   var numAttr = function (el, a) { return Number(el.getAttribute(a)) || 0; };
@@ -17,10 +21,29 @@ function initW_matrix(root, D) {
     prec: { x: 150, y: 46, w: 144, h: 124 },
     rec: { x: 150, y: 46, w: 288, h: 62 }
   };
+  var KEYS = ['acc', 'prec', 'rec', 'f1'];
+  // ok = 값을 구할 수 있는가. sub = 값 확인을 눌렀을 때 식 자리에 적을 글.
   var FORM = {
-    acc: function (c) { return { num: c.tp + c.tn, den: c.tp + c.fp + c.fn + c.tn }; },
-    prec: function (c) { return { num: c.tp, den: c.tp + c.fp }; },
-    rec: function (c) { return { num: c.tp, den: c.tp + c.fn }; }
+    acc: function (c) {
+      var den = c.tp + c.fp + c.fn + c.tn;
+      return { ok: den > 0, v: den > 0 ? (c.tp + c.tn) / den : 0, sub: '= ' + (c.tp + c.tn) + ' ÷ ' + den };
+    },
+    prec: function (c) {
+      var den = c.tp + c.fp;
+      return { ok: den > 0, v: den > 0 ? c.tp / den : 0, sub: '= ' + c.tp + ' ÷ ' + den };
+    },
+    rec: function (c) {
+      var den = c.tp + c.fn;
+      return { ok: den > 0, v: den > 0 ? c.tp / den : 0, sub: '= ' + c.tp + ' ÷ ' + den };
+    },
+    f1: function (c) {
+      // 활동지 규칙: 정밀도와 재현율 가운데 하나라도 구할 수 없거나 0이면 F1도 0으로 둔다.
+      if (c.tp + c.fn === 0) return { ok: false, v: 0, sub: '' };
+      if (c.tp === 0) return { ok: true, v: 0, sub: '= 찾아낸 것이 없으므로 0' };
+      var p = c.tp / (c.tp + c.fp), r = c.tp / (c.tp + c.fn);
+      return { ok: true, v: 2 * p * r / (p + r),
+        sub: '= 2 × ' + p.toFixed(2) + ' × ' + r.toFixed(2) + ' ÷ ' + (p + r).toFixed(2) };
+    }
   };
 
   var caseBtns = qa('.wbtn[data-case]');
@@ -72,7 +95,7 @@ function initW_matrix(root, D) {
 
   function moveBars(target) {
     var id = ++barToken;
-    var keys = ['acc', 'prec', 'rec'];
+    var keys = KEYS;
     var start = {};
     keys.forEach(function (k) { start[k] = numAttr(groups[k].querySelector('.mx-bar'), 'width'); });
     tween(260, function (t) {
@@ -103,32 +126,43 @@ function initW_matrix(root, D) {
     cells.tn.textContent = 가림(c.tn);
 
     numTn.setAttribute('opacity', metric === 'acc' ? '1' : '0');
-    if (animate) moveDen(DEN[metric]);
-    else {
-      denToken++;
-      var d = DEN[metric];
-      den.setAttribute('x', d.x); den.setAttribute('y', d.y);
-      den.setAttribute('width', d.w); den.setAttribute('height', d.h);
+    // F1은 네 칸의 한 구역이 분모가 아니므로 테두리를 감춘다
+    den.setAttribute('opacity', metric === 'f1' ? '0' : '1');
+    if (metric !== 'f1') {
+      if (animate) moveDen(DEN[metric]);
+      else {
+        denToken++;
+        var d = DEN[metric];
+        den.setAttribute('x', d.x); den.setAttribute('y', d.y);
+        den.setAttribute('width', d.w); den.setAttribute('height', d.h);
+      }
     }
 
     var bars = {};
-    ['acc', 'prec', 'rec'].forEach(function (k) {
+    KEYS.forEach(function (k) {
       var g = groups[k];
       var f = FORM[k](c);
-      var ok = f.den > 0;
-      var v = ok ? f.num / f.den : 0;
       g.setAttribute('opacity', k === metric ? '1' : '0.45');
-      g.querySelector('.mx-sub').textContent = '= ' + 가림(f.num) + ' ÷ ' + 가림(f.den);
+      var sub = g.querySelector('.mx-sub');
       var val = g.querySelector('.mx-val');
-      if (!ok) { val.textContent = '계산 불가'; val.setAttribute('font-size', '14'); val.setAttribute('fill', '#9a8b6a'); }
-      else { val.textContent = shown ? v.toFixed(3) : '?'; val.setAttribute('font-size', '20'); val.setAttribute('fill', '#b07a00'); }
-      bars[k] = (shown && ok) ? v * 238 : 0;
+      if (!shown) {
+        sub.textContent = '= ?';
+        val.textContent = '?'; val.setAttribute('font-size', '20'); val.setAttribute('fill', '#b07a00');
+      } else if (!f.ok) {
+        sub.textContent = '분모가 0이므로 계산할 수 없음';
+        val.textContent = ''; val.setAttribute('font-size', '20'); val.setAttribute('fill', '#9a8b6a');
+      } else {
+        sub.textContent = f.sub;
+        val.textContent = f.v.toFixed(3); val.setAttribute('font-size', '20'); val.setAttribute('fill', '#b07a00');
+      }
+      bars[k] = (shown && f.ok) ? f.v * 238 : 0;
     });
     if (animate) moveBars(bars);
-    else { barToken++; ['acc', 'prec', 'rec'].forEach(function (k) { groups[k].querySelector('.mx-bar').setAttribute('width', bars[k].toFixed(1)); }); }
+    else { barToken++; KEYS.forEach(function (k) { groups[k].querySelector('.mx-bar').setAttribute('width', bars[k].toFixed(1)); }); }
 
     if (metric === 'prec') capLine.textContent = '분자 TP ' + c.tp + ' · 분모 예측 ' + c.pos + ' ' + (c.tp + c.fp);
     else if (metric === 'rec') capLine.textContent = '분자 TP ' + c.tp + ' · 분모 실제 ' + c.pos + ' ' + (c.tp + c.fn);
+    else if (metric === 'f1') capLine.textContent = '정밀도와 재현율에서 나오는 값 · 낮은 쪽에 더 끌린다';
     else capLine.textContent = '분자 TP+TN ' + (c.tp + c.tn) + ' · 분모 전체 ' + total;
 
     caseBtns.forEach(function (b) { var on = b.getAttribute('data-case') === cur; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
@@ -622,8 +656,8 @@ function initW_walk(root, D) {
 }
 
 function initW_dial(root) {
-  // 테스트용 66편의 성공 편수 k만 바꾼다. 기준 모델은 다수 범주를 그대로 예측하므로
-  // 성공작이 줄수록 정확도가 올라간다. 외부 데이터는 쓰지 않는다(상수 66과 정수 k만 사용).
+  // 설계값으로 둔 66명 가운데 뇌졸중 환자 수 k만 바꾼다. 기준 모델은 다수 범주를 그대로 예측하므로
+  // 환자가 줄수록 정확도가 올라간다. 외부 데이터는 사용하지 않는다(상수 66과 정수 k만 사용).
   var N = 66, NS = 'http://www.w3.org/2000/svg';
   var q = function (s) { return root.querySelector(s); };
   var qa = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
@@ -658,15 +692,15 @@ function initW_dial(root) {
     cellOn.push(false);
   }
 
-  var k = 6, prevMajor = null, flashToken = 0;
+  var k = 3, prevMajor = null, flashToken = 0;
 
-  // 기준 모델: 다수 범주 예측. 동률(k = 33)은 기준 미달 유지
+  // 기준 모델: 다수 범주 예측. 동률(k = 33)은 아님 예측 유지
   function stats(kk) {
     var neg = N - kk;
-    if (kk > N / 2) {   // 전부 성공 예측 → TP = kk, FP = neg, FN = 0, TN = 0
+    if (kk > N / 2) {   // 전부 뇌졸중 예측 → TP = kk, FP = neg, FN = 0, TN = 0
       return { major: 'pos', acc: kk / N, rec: 1, prec: kk / N };
     }
-    // 전부 기준 미달 예측 → TP = 0, FP = 0, FN = kk, TN = neg
+    // 전부 아님 예측 → TP = 0, FP = 0, FN = kk, TN = neg
     return { major: 'neg', acc: neg / N, rec: kk > 0 ? 0 : null, prec: null };
   }
 
@@ -698,12 +732,12 @@ function initW_dial(root) {
     var bar = g.querySelector('.dl-bar');
     var note = g.querySelector('.dl-note');
     if (v === null) {                       // 분모 0 → 값을 정의할 수 없다
-      val.textContent = '계산 불가';
-      val.setAttribute('font-size', '16');
+      val.textContent = '계산할 수 없음';
+      val.setAttribute('font-size', '15');
       val.setAttribute('font-weight', '700');
       val.setAttribute('fill', '#9a8b6a');
       bar.setAttribute('width', '0');
-      note.textContent = '분모 0 · 예측 양성 0편';
+      note.textContent = '분모 0 · 뇌졸중이라 예측한 사람 0명';
     } else {
       val.textContent = fmt(v);
       val.setAttribute('font-size', '24');
@@ -734,18 +768,18 @@ function initW_dial(root) {
       }
     }
 
-    title.textContent = '테스트용 ' + N + '편 · 성공 ' + k + '편 · 기준 미달 ' + neg + '편';
-    baseLab.textContent = '기준 모델 · 다수 범주 예측 · ' + (s.major === 'pos' ? '전부 성공' : '전부 기준 미달');
+    title.textContent = '채점용 ' + N + '명(설계값) · 뇌졸중 ' + k + '명 · 아님 ' + neg + '명';
+    baseLab.textContent = '기준 모델 · 다수 범주 예측 · ' + (s.major === 'pos' ? '전부 뇌졸중' : '전부 아님');
     setRow('acc', s.acc);
     setRow('rec', s.rec);
     setRow('prec', s.prec);
 
-    if (k === 0) capLine.textContent = '성공작 0편 · 재현율·정밀도 계산 불가 · 기준 모델 정확도 1.000';
-    else if (s.major === 'pos') capLine.textContent = '다수 범주가 성공으로 역전 · 재현율 1.000 · 정밀도는 성공 비율';
-    else capLine.textContent = '성공작이 적을수록 기준 모델 정확도 상승 · 재현율 0.000 유지';
+    if (k === 0) capLine.textContent = '뇌졸중 환자 0명 · 재현율·정밀도 계산할 수 없음 · 기준 모델 정확도 1.000';
+    else if (s.major === 'pos') capLine.textContent = '다수 범주가 뇌졸중으로 역전 · 재현율 1.000 · 정밀도는 환자 비율';
+    else capLine.textContent = '환자가 적을수록 기준 모델 정확도 상승 · 재현율 0.000 유지';
 
-    out.textContent = '성공 ' + k + '편 · 기준 모델 정확도 ' + fmt(s.acc) +
-      ' · 재현율 ' + (s.rec === null ? '계산 불가' : fmt(s.rec));
+    out.textContent = '뇌졸중 ' + k + '명 · 기준 모델 정확도 ' + fmt(s.acc) +
+      ' · 재현율 ' + (s.rec === null ? '계산할 수 없음' : fmt(s.rec));
 
     if (range.value !== String(k)) range.value = String(k);
     btns.forEach(function (b) {
@@ -774,7 +808,7 @@ function initW_dial(root) {
 }
 
 // 드문 일을 맞히는 척하기 — 전부 "아니다"라고만 답해도 정확도가 높게 나오는 것을 보여 준다.
-// 사례는 HTML의 data-case 버튼에 적어 둔다(전체 건수·양성 건수·이름). 데이터가 아니라 설명용 값이다.
+// 사례는 HTML의 data-case 버튼에 고정값으로 적어 둔다(data-total·data-pos·data-name·data-unit).
 function initW_rareacc(root) {
   const q = s => root.querySelector(s);
   const NS = 'http://www.w3.org/2000/svg';
@@ -789,10 +823,9 @@ function initW_rareacc(root) {
   const X0 = 56, X1 = 664, YT = 96, YB = 250, 열 = 40, 행 = 25;   // 점 1000개 = 40 × 25
 
   function 그리기(b) {
-    // 영화 사례는 날마다 갱신되므로 편수를 HTML에 적지 않고 RARE10에서 읽는다
-    const R = window.RARE10 || {};
-    const 전체 = b.dataset.live ? R.total : +b.dataset.total;
-    const 양성 = b.dataset.live ? R[b.dataset.live] : +b.dataset.pos;
+    // 뇌졸중 데이터는 고정본이므로 건수를 HTML 버튼에 그대로 적는다
+    const 전체 = +b.dataset.total;
+    const 양성 = +b.dataset.pos;
     const 단위 = b.dataset.unit;
     if (!전체) return;
     const 점양성 = Math.max(1, Math.round(양성 / 전체 * 열 * 행));   // 1000개 중 몇 개를 붉게 칠할지
@@ -810,7 +843,7 @@ function initW_rareacc(root) {
       + ' (' + (양성 / 전체 * 100).toFixed(양성 / 전체 < 0.01 ? 2 : 1) + '%)';
     정확도.textContent = (1 - 양성 / 전체).toFixed(3);
     재현율.textContent = '0.000';
-    한줄.textContent = '한 건도 찾아내지 못했는데 정확도는 ' + ((1 - 양성 / 전체) * 100).toFixed(1) + '%입니다';
+    한줄.textContent = '한 ' + 단위 + '도 찾아내지 못했는데 정확도는 ' + ((1 - 양성 / 전체) * 100).toFixed(1) + '%입니다';
     btns.forEach(x => x.classList.toggle('on', x === b));
     if (점수칸) 점수칸.style.display = 점수보임 ? '' : 'none';
     if (점수버튼) {
@@ -819,11 +852,6 @@ function initW_rareacc(root) {
     }
     현재 = b;
   }
-
-  // 본문 물음의 숫자도 같은 데이터에서 채운다
-  const 물음 = root.ownerDocument.querySelector('.ten-acc');
-  const R0 = window.RARE10 || {};
-  if (물음 && R0.total) 물음.textContent = 백분율(1 - R0.ten / R0.total);
 
   btns.forEach(b => b.addEventListener('click', () => 그리기(b)));
   if (점수버튼) 점수버튼.addEventListener('click', () => { 점수보임 = !점수보임; 그리기(현재); });

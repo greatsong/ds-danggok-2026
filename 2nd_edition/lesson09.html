@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>9차시 · 분류 — 로지스틱 회귀와 의사결정트리 · 데이터 과학 당곡고 · 개정 검토본</title>
+<title>9차시 · 군집 — 영화 유형 나누기 · 데이터 과학 당곡고 · 개정 검토본</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<style>main { overflow-wrap: anywhere; } .daymap { display: block; max-width: 100%; overflow-x: auto; }</style>
 <link rel="stylesheet" href="assets/review.css">
 </head>
 <body>
@@ -20,769 +21,607 @@
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 9차시</span>
-
-  <h1>분류 · <span class="a">로지스틱 회귀와 의사결정트리</span></h1>
-
+  <h1>군집 · <span class="a">영화 유형 나누기</span></h1>
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"문제를 잘 정의하면 절반은 푼 것이다."</div>
-    <span class="by">존 듀이가 한 말로 전해집니다 · 무엇을 맞힐지 정하는 일에서 오늘 수업이 시작됩니다</span>
+    <div class="q">"유유상종(類類相從) — 비슷한 것끼리 서로 따른다."</div>
+    <span class="by">옛말 — 컴퓨터는 비슷한 것끼리 묶기만 하고, 무엇이 비슷했는지 읽는 일은 사람 몫입니다</span>
   </div>
 
-  <p class="lead">7차시에서는 영화의 총 관객 수가 몇 명일지를 숫자로 예측했습니다. 오늘은 질문을 바꿉니다. 이 영화가 흥행에 성공할 것인가, 못 할 것인가. 답이 숫자가 아니라 둘 중 하나입니다. 오늘은 흥행 여부를 맞히는 분류기를 직접 만듭니다. 로지스틱 회귀와 의사결정트리, 두 가지로 만들어 봅니다. 만드는 것이 먼저입니다. 두 모델이 어떤 것인지는 만들고 나서 알아봅니다.</p>
-
-  <h2>0. 오늘의 목표</h2>
-  <ul class="steps">
-    <li>같은 영화 데이터라도 질문의 형태에 따라 회귀 문제가 되기도 하고 <b>이진 분류</b> 문제가 되기도 한다는 것을 설명할 수 있다.</li>
-    <li>바이브 코딩으로 영화 흥행 분류기를 <b>로지스틱 회귀</b>와 <b>의사결정트리</b> 두 가지로 만들 수 있다.</li>
-    <li>로지스틱 회귀는 확률로, 의사결정트리는 질문의 순서로 답한다는 차이를 말할 수 있다.</li>
-    <li>모델이 무엇을 단서로 삼았는지 화면에서 읽고, 그 단서가 흥행의 원인은 아니라는 점을 함께 말할 수 있다.</li>
-  </ul>
+  <p class="lead">지금까지의 모델에는 정답이 있었습니다. 기온이라는 실제 값(6차시), 영화의 누적 관객 수(7차시)가 있었고, 모델은 그 값을 맞히도록 학습했습니다. 오늘은 정답표 없이 시작합니다. 7·8차시에서 관객 수를 예측하고 평가했던 같은 영화 데이터를 이번에는 묶어 봅니다. 흥행 기록만 주고 "비슷한 영화끼리 묶어 보라"고 하면, 컴퓨터는 무엇을 기준으로 나눌까요?</p>
 
   <div class="callout data">
-    <div class="h">📱 도입 — 스미싱 문자를 발송 전에 가려내는 체계</div>
-    <p>여러분이 오늘 아침에 문자 한 통을 받았다고 하겠습니다. "[Web발신] 신호 위반 과태료가 부과되었습니다"라는 문장 아래에 주소가 하나 붙어 있습니다. 진짜 통지입니까, 스미싱입니까.</p>
-    <p>2025년 상반기에 탐지된 스미싱 문자는 100만 건입니다. 한국인터넷진흥원은 문자가 발송되기 전에 본문 대신 주소만 뽑아 검사하는 체계를 2025년 4월부터 시범 운영했고, 악성 주소를 가려낸 비율이 99%를 넘었습니다. 이 체계를 설계하고 점검하는 사람들의 직업이 정보보호 전문가와 데이터 분석가입니다.</p>
-    <p>이 체계가 문자 한 통마다 하는 일은 단순합니다. 스미싱이다, 아니다. 둘 중 하나로 답합니다. 이렇게 정해진 범주 가운데 하나를 맞히는 문제를 분류라고 합니다. 오늘 여러분이 만들 것도 같은 형태입니다. 다만 읽는 것이 문자가 아니라 영화 기록이고, 답하는 것이 스미싱 여부가 아니라 흥행 성공 여부입니다.</p>
+    <div class="h">🎬 도입 — 넷플릭스는 나이도 성별도 보지 않는다</div>
+    <p>여러분이 넷플릭스에서 무엇을 볼지 고르는 동안, 넷플릭스도 여러분을 어딘가에 넣고 있습니다. 넷플릭스는 이용자를 나라별로 나누지 않습니다. 제품 담당 부사장 토드 옐린은 2017년에 전 세계 이용자를 1,300개의 취향 커뮤니티로 묶고 있다고 밝혔습니다. 나이도 성별도 사는 곳도 사용하지 않고, 무엇을 끝까지 보았는지라는 시청 기록만 사용합니다. 그래서 서울의 고등학생과 브라질의 회사원이 같은 묶음에 들어가는 일이 생깁니다. 이 묶음에는 미리 정해진 정답이 없습니다. 어떤 알고리즘으로 묶는지 넷플릭스는 공개하지 않았고, 묶음에 이름을 붙이는 일은 사람이 나중에 합니다. 오늘 우리는 사람이 아니라 영화를 묶습니다. 스크린 수와 누적 관객, 10위권에 머문 일수를 사용해 지난 영화들이 몇 가지 유형으로 나뉘는지 확인합니다.</p>
   </div>
-  <p class="mini">출처: <a href="https://byline.network/2025/08/29-390/" target="_blank" rel="noopener">바이라인네트워크, 2025-08-29</a></p>
+  <p class="mini">출처: <a href="https://www.refinery29.com/en-us/2017/03/145981/netflix-worldwide-taste-communities-lab-days" target="_blank" rel="noopener">토드 옐린(넷플릭스 제품 담당 부사장) 인터뷰, 2017</a></p>
 
-  <h2>1. 오늘 맞힐 것</h2>
+  <div class="make-banner">
+    <div class="t">🎯 오늘 하는 것</div>
+    <ul>
+      <li><b>지도학습과 비지도학습 구분</b> — 정답이 있는 학습과 없는 학습</li>
+      <li><b>k-평균 군집</b> — 영화를 네 속성으로 묶고, 묶음마다 이름과 근거를 적는다</li>
+      <li><b>엘보우 기법</b> — 묶음 수 k를 바꿔 가며 어디에서 꺾이는지 보고 k를 정한다</li>
+    </ul>
+  </div>
 
-  <p>영화 표에는 관객 수만 있고 성공이라는 열이 없습니다. 정답부터 만들어야 합니다.</p>
+  <h2>0. 오늘의 목표</h2>
+  <p>군집화는 미리 정해 둔 정답 범주 없이, 선택한 속성이 비슷한 데이터끼리 묶는 비지도학습입니다. 오늘은 영화의 스크린 수·누적 관객·10위권 일수·롱런 지수로 군집을 만듭니다. 묶음을 영화의 고정된 등급이나 작품성 순위로 해석하지 않고, 선택한 기록에서 나타난 특징으로 설명합니다.</p>
+  <ul class="steps">
+    <li>정답(레이블)의 유무로 지도학습과 <b>비지도학습</b>을 구분할 수 있다.</li>
+    <li><b>k-평균</b>이 <b>거리</b>를 계산해 묶는 절차를 설명하고, <b>표준화</b>가 왜 필요한지 말할 수 있다.</li>
+    <li><b>엘보우 기법</b>으로 군집 수 k를 정한 근거를 말하고, 묶음마다 이름과 근거가 된 속성을 적을 수 있다.</li>
+  </ul>
 
   <div class="callout tip">
     <div class="h">🎬 우리는 DGV 배급사의 데이터 과학 인턴입니다</div>
     <p>DGV는 이 수업에서만 사용하는 가상의 영화사입니다. 분석에 사용하는 흥행 기록은 영화진흥위원회의 실제 데이터입니다.</p>
-    <p>배급이 끝난 영화의 지난 결과를 분석해 배급팀에 보고하는 것이 오늘 인턴이 할 일입니다.</p>
-    <p>배급팀은 앞으로 어느 영화에 상영관을 더 배정할지 정해야 하는데, 아직 개봉하지 않은 영화에는 기록이 없습니다. 그래서 이미 결과가 나온 영화에서 어떤 값이 함께 컸는지를 오늘 만드는 분류기로 먼저 확인합니다.</p>
+    <p>마케팅팀이 지난 영화들을 유형으로 나눠 달라고 의뢰했습니다. 어느 유형에 마케팅비를 더 쓸지 정하려는 것입니다. 그런데 이 문제에는 정답이 없습니다. 몇 갈래로 나눌지, 어느 속성을 볼지, 단위를 맞출지 말지를 우리가 정합니다.</p>
+    <p>인턴은 묶음만 보내지 않습니다. <b>몇 갈래로 나눴는지와 그렇게 정한 근거를 함께 보고합니다.</b></p>
   </div>
 
+  <h2>1. 개념 이해 — 정답 없이 묶는다는 것</h2>
   <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 135쪽</span></div>
-    <p class="q">"분류 모델 중 이진 분류는 어떤 특성을 '띤다' 또는 '띠지 않는다' 두 가지 경우의 수 중 하나로 예측하는 것을 말한다." <span class="src">(135쪽)</span></p>
-    <p class="t">→ 오늘의 "성공/기준 미달"이 이진 분류입니다.</p>
+    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 146·154쪽</span></div>
+    <p class="q">"k-평균 알고리즘은 k개의 군집을 구성하는 기계학습 알고리즘이다. 군집의 개수, 즉 k값에 따라 군집화 결과와 그에 따른 의미 해석이 달라지기 때문에 k값을 적절히 설정하는 것이 중요하다." <span class="src">(146쪽)</span></p>
+    <p class="q">"데이터 속성 간의 유사성을 측정하여 유사한 데이터끼리 군집을 형성하는 것을 군집화라고 한다." <span class="src">(154쪽)</span></p>
+    <p class="t">→ 군집의 개수 k는 사람이 직접 정합니다(146쪽). 정답이 없으므로, 몇 묶음이 적절한지도 판단 대상입니다. 교과서와 이 교재는 <b>군집</b>이라고 적고, 설명할 때는 <b>묶음</b>이라고도 부릅니다. 둘은 같은 것을 가리킵니다.</p>
+  </div>
+  <p>k-평균은 먼저 군집 수 k와 시작 중심점을 정합니다. 각 데이터를 가장 가까운 중심점에 배정하고, 군집에 속한 데이터의 평균으로 중심점을 옮깁니다. 이 두 과정을 반복하다가 변화가 충분히 작아지면 멈춥니다. 아래 그림을 클릭하면 이 네 단계를 한 번에 하나씩 진행할 수 있습니다.</p>
+  <details class="glossary" open>
+    <summary>🔬 움직여 보기 — k-평균, 클릭으로 한 단계씩</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">묶기 전의 데이터에서 시작합니다. 그림을 <b>클릭할 때마다 한 단계씩</b> 진행됩니다. ①중심점 놓기 → ②가까운 묶음에 넣기 → ③중심점 옮기기 → ④반복·수렴 순서입니다.</p>
+<svg id="km12" class="km12-svg" viewBox="0 0 700 275" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="k-평균 알고리즘이 네 단계를 반복하며 점들을 두 묶음으로 나누는 과정을 클릭으로 진행하는 그림" style="cursor:pointer">
+  <rect x="0" y="0" width="700" height="275" fill="transparent" pointer-events="all"/>
+  <text class="km12-hint" x="350" y="30" text-anchor="middle" font-size="16" font-weight="800" fill="#e8930c" pointer-events="none">👆 클릭 ① — 중심점 k=2개를 임의로 놓는다</text>
+  <g class="km12-stage" pointer-events="none">
+    <circle class="km12-dot" cx="150" cy="110" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="190" cy="90" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="230" cy="150" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="170" cy="165" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="255" cy="100" r="9" fill="#b6b0a2" data-a1="g" data-a2="g"/>
+    <circle class="km12-dot" cx="365" cy="170" r="9" fill="#b6b0a2" data-a1="t" data-a2="g"/>
+    <circle class="km12-dot" cx="410" cy="70" r="9" fill="#b6b0a2" data-a1="g" data-a2="t"/>
+    <circle class="km12-dot" cx="520" cy="95" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="565" cy="120" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="610" cy="85" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="585" cy="165" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <circle class="km12-dot" cx="540" cy="155" r="9" fill="#b6b0a2" data-a1="t" data-a2="t"/>
+    <g class="km12-cg" data-k="g" data-x0="310" data-y0="55" data-x1="234.166667" data-y1="114.166667" data-x2="226.666667" data-y2="130.833333" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#f4b400" stroke="#c28f00" stroke-width="0.8">★</text></g>
+    <g class="km12-cg" data-k="t" data-x0="445" data-y0="195" data-x1="530.833333" data-y1="131.666667" data-x2="538.333333" data-y2="115" opacity="0"><text text-anchor="middle" font-size="30" y="11" fill="#3ba6a0" stroke="#2b7a75" stroke-width="0.8">★</text></g>
+  </g>
+  <text x="350" y="243" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">"가깝다"는 두 점 사이의 거리(유클리드 거리, 교과서 148쪽)로 나타낸다.</text>
+  <text x="350" y="261" text-anchor="middle" font-size="12" fill="#6b5836" pointer-events="none">이 그림의 점은 알고리즘 진행을 보이기 위해 임의로 배치한 것이며 실제 기록이 아니다.</text>
+</svg>
+<script>
+(function () {
+  var root = document.getElementById("km12");
+  if (!root) return;
+  var STEPS = [
+    "👆 클릭 ① — 중심점 k=2개를 임의로 놓는다",
+    "👆 클릭 ② — 각 점을 가장 가까운 중심점의 묶음에 넣는다",
+    "👆 클릭 ③ — 묶음의 평균 지점으로 중심점을 옮긴다",
+    "👆 클릭 ④ — ②③을 반복해 중심점이 더 움직이지 않으면 완성",
+    "✅ 완성! 클릭하면 처음부터"
+  ];
+  var COLORS = { g: "#f4b400", t: "#3ba6a0" };
+  var GRAY = "#b6b0a2";
+  var hint = root.querySelector(".km12-hint");
+  var stage = root.querySelector(".km12-stage");
+  var dots = [].slice.call(root.querySelectorAll(".km12-dot"));
+  var stars = {};
+  [].slice.call(root.querySelectorAll(".km12-cg")).forEach(function (g) {
+    stars[g.getAttribute("data-k")] = g;
+    g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
+  });
+  var links = dots.map(function (d) {
+    var k = d.getAttribute("data-a1");
+    var ln = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    ln.setAttribute("x1", d.getAttribute("cx"));
+    ln.setAttribute("y1", d.getAttribute("cy"));
+    ln.setAttribute("x2", stars[k].getAttribute("data-x0"));
+    ln.setAttribute("y2", stars[k].getAttribute("data-y0"));
+    ln.setAttribute("stroke", COLORS[k]);
+    ln.setAttribute("stroke-width", "1.3");
+    ln.setAttribute("opacity", "0");
+    ln.style.transition = "opacity 0.6s ease";
+    stage.insertBefore(ln, stage.firstChild);
+    return ln;
+  });
+  dots.forEach(function (d) { d.style.transition = "fill 0.6s ease"; });
+  function place(g, x, y) { g.style.transform = "translate(" + x + "px," + y + "px)"; }
+  function reset() {
+    Object.keys(stars).forEach(function (k) {
+      var g = stars[k];
+      g.style.transition = "none";
+      place(g, g.getAttribute("data-x0"), g.getAttribute("data-y0"));
+      g.style.opacity = 0;
+      g.getBoundingClientRect();
+      g.style.transition = "transform 1.8s ease-in-out, opacity 0.5s ease";
+    });
+    dots.forEach(function (d) { d.style.fill = GRAY; });
+    links.forEach(function (ln) { ln.style.opacity = 0; });
+    hint.textContent = STEPS[0];
+  }
+  var s = 0;
+  reset();
+  root.addEventListener("click", function () {
+    s = (s + 1) % 5;
+    if (s === 1) {
+      stars.g.style.opacity = 1; stars.t.style.opacity = 1;
+    } else if (s === 2) {
+      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a1")]; });
+      links.forEach(function (ln) { ln.style.opacity = 1; });
+    } else if (s === 3) {
+      links.forEach(function (ln) { ln.style.opacity = 0; });
+      Object.keys(stars).forEach(function (k) {
+        var g = stars[k];
+        place(g, g.getAttribute("data-x1"), g.getAttribute("data-y1"));
+      });
+    } else if (s === 4) {
+      dots.forEach(function (d) { d.style.fill = COLORS[d.getAttribute("data-a2")]; });
+      Object.keys(stars).forEach(function (k) {
+        var g = stars[k];
+        place(g, g.getAttribute("data-x2"), g.getAttribute("data-y2"));
+      });
+    } else {
+      s = 0; reset(); return;
+    }
+    hint.textContent = STEPS[s];
+  });
+})();
+</script>
+    </div>
+  </details>
+  <div class="callout theory">
+    <div class="h">📏 "비슷하다"를 거리로 나타낸다 — 표준화가 필요한 까닭</div>
+    <p>인용에서 "유사성을 측정"한다는 말이 실제로 무엇을 하는 일인지 살펴봅니다. 컴퓨터는 두 영화가 비슷한지 알지 못합니다. 아는 것은 숫자 사이의 <b>거리</b>뿐입니다. 속성이 넷이면 영화 한 편은 숫자 네 개로 된 점이고, 두 점의 거리는 속성마다 차이를 구해 제곱하고 모두 더한 뒤 제곱근을 씌워 구합니다. 이것을 <b>유클리드 거리</b>라고 합니다(교과서 148쪽). 그런데 거리는 속성의 단위를 그대로 물려받습니다. 누적 관객은 백만 단위로 벌어지고 10위권 일수는 며칠 단위로 벌어지므로, 원래 숫자를 그대로 사용하면 값이 큰 누적 관객이 거리를 거의 혼자 정합니다.</p>
+    <p>그래서 묶기 전에 <b>표준화</b>를 합니다. 각 항목에서 평균을 빼고 표준편차로 나누어 단위를 맞추는 것을 표준화라고 합니다. 오늘 처음 사용합니다. 이렇게 하면 모든 속성이 평균 0, 표준편차 1이 됩니다. 이 처리 뒤에는 각 속성에서 평균으로부터 얼마나 떨어졌는지를 같은 눈금으로 나타내므로, 단위가 큰 속성만 거리에 크게 반영되는 문제를 줄일 수 있습니다. 다만 표준화가 모든 속성을 똑같이 중요하게 만든다는 뜻은 아닙니다. 단위를 맞추었을 뿐이고, 어느 속성이 실제로 묶음을 나누었는지는 결과를 보고 따로 확인해야 합니다.</p>
   </div>
 
+  <figure class="interactive" data-fig="ruler">
+    <div class="widget" data-w="ruler" style="overflow-x:auto">
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KBO 타자 43명의 삼진과 출루율 산점도. 원래 단위와 표준화 두 눈금, 선택 선수와 최근접 선수를 잇는 선" style="min-width:640px">
+  <text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">단위 바꾸기 · 삼진과 출루율</text>
+  <!-- 격자·눈금 숫자(모드별 두 겹, 전환 시 opacity 교차) -->
+  <g class="gr gr-raw"></g>
+  <g class="gr gr-std" opacity="0"></g>
+  <path d="M76 48 V300 H452" fill="none" stroke="#6b7385" stroke-width="1.2"/>
+  <text class="axx" x="264" y="326" font-size="13" fill="#6b7385" text-anchor="middle">삼진(개)</text>
+  <text class="axy" x="26" y="174" font-size="13" fill="#6b7385" text-anchor="middle" transform="rotate(-90 26 174)">출루율</text>
+  <!-- 연결선 → 점 43개 → 선택·최근접 덧점 → 이름 라벨 -->
+  <line class="link" x1="76" y1="300" x2="76" y2="300" stroke="#2f9e5f" stroke-width="1.6" stroke-dasharray="4 3" opacity="0"/>
+  <g class="pts"></g>
+  <circle class="dot-near" cx="-30" cy="-30" r="7" fill="#2f9e5f"/>
+  <circle class="dot-sel" cx="-30" cy="-30" r="7" fill="#b07a00"/>
+  <g class="labs"></g>
+  <!-- 오른쪽 패널 -->
+  <rect x="468" y="48" width="236" height="252" rx="8" fill="#fff" stroke="#e3ddcf" stroke-width="1"/>
+  <text class="p-sel" x="480" y="76" font-size="14" font-weight="700" fill="#1c2230">선택 디아즈</text>
+  <text class="p-near" x="480" y="100" font-size="14" font-weight="700" fill="#2f9e5f">최근접 고명준</text>
+  <text x="480" y="132" font-size="13" fill="#6b7385">삼진 차</text>
+  <text class="v-k" x="692" y="132" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">1</text>
+  <text x="480" y="160" font-size="13" fill="#6b7385">출루율 차</text>
+  <text class="v-o" x="692" y="160" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">0.075</text>
+  <text x="480" y="188" font-size="13" fill="#6b7385">거리</text>
+  <text class="v-d" x="692" y="188" font-size="15" font-weight="700" fill="#1c2230" text-anchor="end">1.003</text>
+  <text x="480" y="216" font-size="13" fill="#6b7385">거리 제곱에서 삼진의 몫</text>
+  <rect x="480" y="232" width="156" height="18" fill="#e3ddcf"/>
+  <rect class="bar" x="480" y="232" width="155.1" height="18" fill="#b07a00"/>
+  <text class="v-s" x="692" y="246" font-size="14" font-weight="700" fill="#b07a00" text-anchor="end">99.4%</text>
+  <text x="480" y="272" font-size="13" fill="#6b7385">단위 맞추기</text>
+  <text x="480" y="292" font-size="13" fill="#6b7385">항목 중요도 결정 아님</text>
+</svg>
+<div class="wctl">
+  <button class="wbtn on" type="button" data-mode="raw" aria-pressed="true">원래 단위</button>
+  <button class="wbtn" type="button" data-mode="std" aria-pressed="false">표준화</button>
+  <button class="wbtn on" type="button" data-link="1" aria-pressed="true">가장 가까운 선수 잇기</button>
+  <span class="wout">최근접 바뀜 35 / 43</span>
+</div>
+</div>
+    <figcaption>그림의 점은 2025 시즌 KBO 타자 43명입니다. 눈금을 바꾸면 가장 가까운 선수가 달라집니다. 같은 43명, 같은 기록입니다. 개념은 타자 43명으로 보고, 실습은 영화로 합니다.</figcaption>
+  </figure>
   <table class="daymap">
-    <thead><tr><th>구분</th><th>질문</th><th>답의 형태</th><th>영화 데이터라면</th></tr></thead>
+    <thead><tr><th>구분</th><th>정답(레이블)</th><th>모델이 하는 일</th><th>우리 수업의 예</th></tr></thead>
     <tbody>
-      <tr><td><b>회귀</b> (6~8차시)</td><td>얼마나?</td><td>연속적인 숫자</td><td>총 관객 수는 몇 명일까</td></tr>
-      <tr><td><b>분류</b> (오늘)</td><td>어느 쪽?</td><td>정해진 범주 중 하나</td><td>흥행에 성공할까, 못 할까</td></tr>
+      <tr><td><b>지도학습</b></td><td>있음</td><td>정답을 맞히도록 학습</td><td>기온 회귀(6차시)와 영화 관객 수 회귀(7차시)입니다.</td></tr>
+      <tr><td><b>비지도학습</b></td><td>없음</td><td>데이터 안의 구조를 스스로 찾습니다.</td><td>영화 유형 군집(오늘)</td></tr>
     </tbody>
   </table>
 
-  <p>범주가 두 개면 이진 분류, 세 개 이상이면 다중 분류입니다. 오늘의 "성공/기준 미달"은 이진 분류입니다. 교과서의 책 장르처럼 여러 범주 중 하나를 고르는 문제는 다중 분류입니다.</p>
+  <h2>2. 실습 ① — 영화를 유형으로 나눈다 (바이브 코딩)</h2>
+  <p>사용하는 데이터는 7·8차시와 같은 영화 표입니다. 다만 오늘은 모델이 맞혀야 할 정답 열을 사용하지 않습니다. 묶는 데 사용할 속성은 넷입니다. 개봉 초기의 <b>스크린 수</b>, <b>누적 관객</b>, 10위권 안에 머문 <b>일수</b>, 그리고 누적 관객을 첫 주 관객으로 나눈 <b>롱런 지수</b>입니다. 롱런 지수가 크면 첫 주 이후에도 관객이 계속 든 영화이고, 1에 가까우면 첫 주에 관객이 몰렸다가 빠진 영화입니다.</p>
+  <p>앞의 두 속성은 편마다 값이 백 배 넘게 벌어지므로 상용로그를 취해 폭을 줄인 뒤 사용합니다. 네 속성을 표준화하고 k-평균으로 세 묶음을 만드는 것이 첫 화면입니다. 묶음 번호에는 순위의 뜻이 없으므로 ㉮·㉯·㉰로 표시합니다.</p>
+  <p class="mini">이 표는 날마다 새로 수집하므로 화면에 나오는 편수와 묶음별 인원은 사람마다, 날마다 다릅니다. 아래 표의 빈칸은 각자 자기 화면의 숫자로 채웁니다.</p>
 
-  <h3>성공을 무엇이라고 부를 것인가</h3>
-
-  <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 138쪽</span></div>
-    <p class="q">"레이블은 모델이 예측하고자 하는 정답 값을 의미한다." <span class="src">(138쪽)</span></p>
-    <p class="t">→ 분류 모델을 만들려면 각 데이터에 정답(레이블)이 먼저 붙어 있어야 합니다. 그런데 우리 영화 표에는 "성공/기준 미달" 열이 없습니다.</p>
-  </div>
-
-  <p>이 수업에서는 기록된 누적 관객 수가 100만 명 이상이면 성공, 미만이면 기준 미달로 정합니다. 이 숫자는 데이터에 원래 있던 것이 아니라 사람이 그은 선입니다. 교과서에서 말하는 레이블이 이것입니다. 10차시에서도 같은 기준을 사용하므로 두 차시의 결과를 이어서 볼 수 있습니다.</p>
-  <p>제작비와 수익 데이터가 없으므로 이 기준이 실제 흑자와 적자를 뜻하지는 않습니다. 기준을 바꾸면 정답이 바뀌고, 정답이 바뀌면 같은 모델의 점수도 바뀝니다. 그 이야기는 10차시에서 다룹니다.</p>
-
-  <details class="glossary"><summary>더 알아보기 — 분석 대상 영화의 관객 수 분포</summary><div class="gin">
-  <p>대부분의 영화가 100만 명에 한참 못 미칩니다. 기준을 어디에 긋느냐에 따라 성공 레이블이 붙는 편수가 크게 달라지는 것을 확인할 수 있습니다.</p>
-<figure class="interactive" data-fig="labelline">
-    <div class="widget" data-w="labelline">
-  <svg viewBox="0 0 720 348" role="img" aria-label="분석 대상 영화의 관객 수 분포와 성공 레이블 기준. 레이블 기준을 옮기면 성공 레이블 편수와 경계에 걸린 두 편이 바뀌고, 이유를 적어야 정확도가 공개되는 그림">
-    <text x="56" y="26" text-anchor="start" font-size="15" font-weight="800" fill="#1c2230">분석 대상 영화의 관객 수 분포 · 가로축 로그</text>
-    <g class="bars"></g>
-    <line x1="56" y1="214" x2="430" y2="214" stroke="#e3ddcf" stroke-width="1.5"/>
-    <text x="56" y="234" text-anchor="middle" font-size="14" fill="#6b7385">1천</text>
-    <text x="144" y="234" text-anchor="middle" font-size="14" fill="#6b7385">1만</text>
-    <text x="232" y="234" text-anchor="middle" font-size="14" fill="#6b7385">10만</text>
-    <text x="320" y="234" text-anchor="middle" font-size="14" fill="#6b7385">100만</text>
-    <text x="408" y="234" text-anchor="middle" font-size="14" fill="#6b7385">1000만</text>
-    <line class="thrline" x1="320" y1="60" x2="320" y2="222" stroke="#d64545" stroke-width="2"/>
-    <rect class="thrhandle" x="315" y="46" width="10" height="16" rx="3" fill="#d64545"/>
-
-    <g class="bpanel">
-      <rect x="452" y="40" width="244" height="92" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
-      <text class="b1" x="464" y="66" font-size="15" font-weight="800" fill="#1c2230"></text>
-      <text class="b2" x="464" y="90" font-size="14" fill="#6b7385"></text>
-      <text class="b3" x="464" y="116" font-size="14" font-weight="800" fill="#d64545"></text>
-    </g>
-
-    <line x1="56" y1="270" x2="696" y2="270" stroke="#e3ddcf" stroke-width="1"/>
-    <text class="dhead" x="56" y="290" font-size="14" font-weight="800" fill="#6b7385"></text>
-    <circle cx="62" cy="308" r="5" fill="#d64545"/>
-    <text class="dhi" x="76" y="312" font-size="14" fill="#1c2230"></text>
-    <circle cx="62" cy="330" r="5" fill="#b9b3a5"/>
-    <text class="dlo" x="76" y="334" font-size="14" fill="#1c2230"></text>
-  </svg>
-  <div class="wctl">
-    <label>기준선 옮기기 <input type="range" class="thr" min="0" max="9" step="1" value="5"> <span class="wv">100만 명</span></label>
-  </div>
-</div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 성공이라고 부를 영화는 몇 편인가. 막대는 관객 수 구간별 편수이고 가로축은 로그 눈금입니다. 붉은 선을 옮기면 그 위에 남는 편수가 바뀝니다. 이 수업의 기준은 100만 명이며, 선을 옮겨 보는 것은 분포를 살펴보기 위한 것입니다. 수집한 데이터를 그대로 집계해 그립니다.</figcaption>
-  </figure>
-  </div></details>
-
-  <h2>2. 로지스틱 회귀 분류 모델 만들기</h2>
-
-  <p>첫 번째로 만들 것은 영화마다 성공할 확률을 계산해 주는 분류기입니다. 로지스틱 회귀는 스크린 수와 상영 횟수 같은 값을 보고 0과 1 사이의 확률 하나를 내놓습니다. 확률이 0.5를 넘으면 성공으로 봅니다.</p>
-
-  <p>아래 프롬프트를 그대로 붙여 넣으면 앱이 만들어집니다. 만든 뒤에 화면에 표시된 확률과 정확도를 읽는 것이 이 절에서 할 일입니다. 확률 막대와 0.5 가로선이 화면에 함께 나옵니다. 막대가 가로선을 넘은 영화가 성공으로 분류된 영화입니다. 정확도 옆에는 <b>입력을 보지 않고 한쪽으로만 답했을 때의 점수</b>가 함께 나옵니다. 두 값을 비교해 보는 이야기는 10차시에서 이어집니다. 입력은 첫 관측일의 스크린 수, 같은 날의 상영 횟수, 성수기 개봉 여부 세 가지입니다.</p>
-
-  <p class="mini">이 표는 날마다 새로 수집하므로 화면에 나오는 편수와 점수가 사람마다, 날마다 다릅니다. 표의 first_scrn·first_show는 개봉일이 아니라 10위권에 처음 관측된 날의 집계입니다. 그리고 표에는 개봉한 지 얼마 안 된 영화도 들어 있어, 오늘 하는 일은 개봉 전 예측이 아니라 <b>수집된 누적 관객 기록이 기준을 넘는지 분류하는 연습</b>입니다.</p>
-
-  <details class="glossary"><summary>더 알아보기 — 입력을 이렇게 고른 까닭</summary><div class="gin">
-  <p>입력 속성은 세 가지입니다. 첫 관측일의 스크린 수, 같은 날의 상영 횟수, 성수기 개봉 여부입니다. 7차시에서 관객 수를 예측할 때 사용한 기본 속성과 같습니다. 같은 재료로 묻는 말만 바꾸는 것입니다. 장르와 국가도 표에 있지만 이번에는 넣지 않습니다. 갈래를 0과 1의 열로 바꾸면 열이 수십 개로 늘어나는데, 모델이 판단에 거의 사용하지 않았습니다. 속성을 더 넣는 것이 늘 도움이 되지는 않습니다. 이 문제는 4절에서 직접 확인합니다.</p>
-  <p>입력에서 빼는 값도 있습니다. 첫 주 관객 수와 7차시에서 만든 상영당 관객 수는 둘 다 <b>관객 수를 품고 있습니다.</b> 오늘의 정답 레이블을 바로 그 총 관객 수로 만들었으므로, 이 값을 입력에 넣으면 정답의 일부를 미리 알려 주게 됩니다. 두 값을 빼는 이유는 이 하나입니다. 스크린 수와 상영 횟수도 상영당 관객 수와 같은 날의 집계이지만 관객 수를 품고 있지 않아 남겨 둡니다. 어느 시점의 값을 입력에 사용할 수 있는지는 7차시에서 다뤘습니다.</p>
-  <p>스크린 수는 수백, 성수기는 0과 1이라 값의 크기가 크게 다르므로 훈련용 데이터를 기준으로 크기를 맞춥니다. 이것을 <b>표준화</b>라고 하며 11차시에서 다시 다룹니다.</p>
-  </div></details>
-
-  <ol class="steps" start="2">
+    <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
-      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"흥행 분류기" 스트림릿 앱을 파일 하나로 만들어 줘.
-앱 제목과 어울리는 아이콘을 넣고, 브라우저 탭에도 그 제목이 표시되게 해 줘.
+      <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>"영화 유형 나누기" 스트림릿 앱을 파일 하나로 만들어 줘.
+화면 맨 위에 앱 제목과 어울리는 아이콘을 넣고, 브라우저 탭에도 그 제목이 표시되게 해 줘.
 데이터: https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv
 이 파일의 열 이름은 movieCd, movieNm, openDt, genre, nation, first_scrn, first_show, first_date, peak, first_week_audi, total_audi, days_in_top10이고, 인코딩은 UTF-8이야.
-total_audi가 100만 명 이상이면 성공, 미만이면 기준 미달로 분류해 줘.
-입력은 first_scrn·first_show·peak 세 가지만 사용해 줘.
-first_week_audi·total_audi·days_in_top10은 입력에서 제외해 줘.
-영화 코드 순으로 정렬해 열 편 중 앞 세 편을 테스트용으로 고정하고, 훈련용으로만 학습과 표준화를 해 줘.
-로지스틱 회귀로 학습하고, 테스트용 데이터로 계산한 정확도와 "전부 기준 미달이라고만 답했을 때의 정확도"를 화면 위쪽에 큰 숫자 카드 둘로 나란히 보여 줘.
-성공 기준과 전체 편수·성공 편수를 한 줄로 적고, 정확도 카드 아래에는 테스트용 편수와 맞힌 편수를 적어 줘.
-테스트용 영화를 산점도로 그려 줘. 가로축은 스크린 수를 로그 눈금으로, 세로축은 추정 확률로.
-문턱값 0.5 가로선을 함께 표시하고 실제 성공과 기준 미달을 색으로 구분해 줘. 확률이 0.5 이상이면 성공으로 분류하는 거야.
-점에 마우스를 올리면 영화 제목이 표시되게 해 줘.
-테스트용 영화의 실제 레이블·예측 확률·스크린 수·누적 관객·개봉일을 표로 보여 줘.
-큰 숫자에는 쉼표를 넣고, 개봉일은 2026.09.02처럼, 예측 확률은 길이가 보이는 막대로 보여 줘.
-사용할 수 있는 라이브러리는 streamlit, pandas, plotly, scikit-learn 네 가지뿐이야. 그림은 plotly로 그려 줘.
+영화를 유형으로 묶을 거야. 정답 열은 없어. 묶는 데 사용할 속성은 네 가지야.
+스크린 수(first_scrn)와 누적 관객(total_audi)은 숫자 차이가 너무 커서 상용로그를 취하고,
+10위권 일수(days_in_top10)는 그대로, 롱런 지수는 누적 관객을 첫 주 관객(first_week_audi)으로 나눠 만들고 20을 넘으면 20으로 잘라 줘.
+네 속성 중 값이 없거나 첫 주 관객이 0인 영화는 빼고, 전체 편수와 묶은 편수를 화면에 한 줄로 적어 줘.
+네 속성을 표준화한 뒤 k-평균으로 세 묶음으로 나눠 줘. 다시 실행해도 같은 결과가 나오게 난수를 고정해 줘.
+가로축 누적 관객(로그 눈금), 세로축 10위권 일수인 산점도를 묶음별 색으로 그리고, 점에 마우스를 올리면 제목이 보이게 해 줘.
+묶음마다 편수와 네 속성의 평균(원래 단위)을 표로 보여 줘.
+묶음마다 누적 관객이 많은 순서로 영화 다섯 편의 제목을 보여 줘.
+묶음 번호는 0·1·2가 아니라 ㉮·㉯·㉰로 표시하고, 누적 관객 평균이 큰 묶음부터 ㉮를 붙여 줘.
+사용할 수 있는 라이브러리는 streamlit, pandas, plotly, scikit-learn 네 가지뿐이야. 그림은 plotly로만 그려 줘.
 requirements.txt도 꼭 같이 만들어 줘. 그 네 가지를 버전 숫자 없이 이름만 적어 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 데이터가 날마다 쌓이므로 편수와 정확도는 실행하는 날에 따라 달라집니다. 라이브러리 버전이나 설정을 바꾸어도 결과가 달라질 수 있습니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 수집된 누적 관객 수가 기준을 넘는지 분류한다
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">main.py와 requirements.txt, 두 파일로 저장합니다. 데이터가 날마다 쌓이므로 편수와 묶음별 평균은 실행하는 날에 따라 달라집니다. 라이브러리 버전이나 설정을 바꾸어도 결과가 달라질 수 있습니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 영화 유형 나누기: 정답 없이 비슷한 영화끼리 묶는다
 import streamlit as st
+import numpy as np
 import pandas as pd
 import plotly.express as px
-from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score
+from sklearn.cluster import KMeans
 
-st.set_page_config(page_title="흥행 분류기", page_icon="🎬", layout="wide")
-st.title("🎬 흥행 분류기")
-st.caption("영화가 기준을 넘을지 확률로 판정합니다.")
+st.set_page_config(page_title="영화 유형 나누기", page_icon="🎬", layout="wide")
+st.title("🎬 영화 유형 나누기")
+st.caption("정답 열 없이, 네 가지 속성이 비슷한 영화끼리 묶습니다.")
 
 MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
-기준 = 1_000_000                                          # 누적 관객 100만 명 이상이면 성공
+기호 = ["㉮", "㉯", "㉰", "㉱", "㉲", "㉳", "㉴"]          # 묶음 번호 대신 쓰는 표시
+속성 = ["스크린 수(로그)", "누적 관객(로그)", "10위권 일수", "롱런 지수"]
+원래단위 = ["스크린 수", "누적 관객", "10위권 일수", "롱런 지수"]
 
 
 @st.cache_data
 def load_data():
-    return pd.read_csv(MOVIES, dtype={"movieCd": str}).sort_values("movieCd").reset_index(drop=True)
+    df = pd.read_csv(MOVIES, dtype={"movieCd": str})
+    df = df.sort_values("movieCd").reset_index(drop=True)
+    전체편수 = len(df)
+    # 네 속성을 만들 수 없는 영화는 뺀다: 값이 없거나 첫 주 관객이 0인 행
+    쓸열 = ["first_scrn", "total_audi", "days_in_top10", "first_week_audi"]
+    df = df.dropna(subset=쓸열 + ["movieNm"])
+    df = df[(df["first_scrn"] &gt; 0) &amp; (df["total_audi"] &gt; 0) &amp; (df["first_week_audi"] &gt; 0)]
+    df = df.reset_index(drop=True)
+    return df, 전체편수
 
 
-df = load_data()
-df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
-st.caption(f"누적 관객 {기준:,}명 이상을 성공으로 봅니다 · "
-           f"전체 {len(df):,}편 가운데 성공 {df['성공'].sum():,}편")
+df, 전체편수 = load_data()
 
-is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
-X = df[["first_scrn", "first_show", "peak"]].rename(
-    columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
-y = df["성공"]
+# 네 가지 속성을 만든다. 숫자 차이가 너무 큰 둘은 상용로그를 취한다
+df["스크린 수"] = df["first_scrn"]
+df["누적 관객"] = df["total_audi"]
+df["10위권 일수"] = df["days_in_top10"]
+df["롱런 지수"] = (df["total_audi"] / df["first_week_audi"]).clip(upper=20)   # 20을 넘으면 20으로
+df["스크린 수(로그)"] = np.log10(df["first_scrn"])
+df["누적 관객(로그)"] = np.log10(df["total_audi"])
 
-scaler = StandardScaler().fit(X[~is_test])               # 표준화도 훈련용으로만 맞춘다
-logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~is_test])
-prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
-예측 = (prob &gt;= 0.5).astype(int)                          # 문턱값 0.5
+st.info(f"전체 {전체편수:,}편 가운데 네 속성을 모두 만들 수 있는 {len(df):,}편으로 묶었습니다.")
 
-st.subheader("정확도")
-많은쪽 = 1 if y[~is_test].mean() &gt; 0.5 else 0             # 훈련용에서 편수가 많은 범주
-기준선 = float((y[is_test] == 많은쪽).mean())              # 그쪽으로만 답했을 때의 정확도
-c1, c2 = st.columns(2)
-c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], 예측):.3f}")
-c2.metric("한쪽으로만 답했을 때", f"{기준선:.3f}",
-          help="입력을 보지 않고 훈련용에서 편수가 많은 쪽으로만 답한 경우입니다.")
-맞힌편수 = int((예측 == y[is_test].to_numpy()).sum())
-st.caption(f"테스트용 영화 {int(is_test.sum()):,}편 가운데 {맞힌편수:,}편을 맞혔습니다 "
-           f"({맞힌편수:,} ÷ {int(is_test.sum()):,}).")
+# 네 속성을 표준화한 뒤 k-평균으로 나눈다. 난수를 고정해 다시 실행해도 같은 결과가 나오게 한다
+k = 3
+Xs = StandardScaler().fit_transform(df[속성])
+번호 = KMeans(n_clusters=k, n_init=10, random_state=42).fit_predict(Xs)
 
-확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
-                     "추정 확률": prob.round(3),
-                     "실제": ["성공" if v else "기준 미달" for v in y[is_test]],
-                     "스크린 수": df.loc[is_test, "first_scrn"].values,
-                     "누적 관객": df.loc[is_test, "total_audi"].values,
-                     "개봉일": pd.to_datetime(df.loc[is_test, "openDt"], format="%Y%m%d",
-                                           errors="coerce").dt.strftime("%Y.%m.%d").values})
-확률표 = 확률표.sort_values("추정 확률", ascending=False)
-fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
-                 log_x=True, color_discrete_map={"성공": "#d64545", "기준 미달": "#2b7fd6"})
-fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
-fig.update_traces(marker=dict(size=11, opacity=0.8))
-fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
+# 누적 관객 평균이 큰 묶음부터 ㉮·㉯·㉰ 순으로 표시한다
+순서 = pd.Series(df["누적 관객"].to_numpy()).groupby(번호).mean().sort_values(ascending=False).index
+자리 = {g: i for i, g in enumerate(순서)}
+df["묶음"] = [기호[자리[g]] for g in 번호]
+
+st.subheader("묶음 지도")
+fig = px.scatter(df, x="누적 관객", y="10위권 일수", color="묶음", hover_name="movieNm",
+                 log_x=True, category_orders={"묶음": 기호[:k]})
+fig.update_traces(marker=dict(size=10, opacity=0.8))
+fig.update_layout(height=460, xaxis_title="누적 관객(명) · 로그 눈금", yaxis_title="10위권에 머문 일수(일)")
 st.plotly_chart(fig, width="stretch")
-st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
-           "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 표시됩니다.")
-st.dataframe(확률표, width="stretch", hide_index=True, column_config={
-    "추정 확률": st.column_config.ProgressColumn("추정 확률", min_value=0.0, max_value=1.0, format="%.2f"),
-    "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
-    "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명"),
-})</pre></div>
+st.caption("점 하나가 영화 한 편입니다. 색이 묶음이고, 점에 마우스를 올리면 제목이 보입니다.")
+
+st.subheader("묶음별 편수와 네 속성의 평균")
+요약 = df.groupby("묶음")[원래단위].mean().round(2)
+요약.insert(0, "편수", df.groupby("묶음").size())
+요약 = 요약.reindex(기호[:k])
+st.dataframe(요약, width="stretch", column_config={
+    "편수": st.column_config.NumberColumn("편수", format="%,d편"),
+    "스크린 수": st.column_config.NumberColumn("스크린 수", format="%.1f개"),
+    "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,.0f명"),
+    "10위권 일수": st.column_config.NumberColumn("10위권 일수", format="%.1f일"),
+    "롱런 지수": st.column_config.NumberColumn("롱런 지수", format="%.2f배"),
+})
+st.caption("평균은 로그를 취하기 전의 원래 단위입니다. 롱런 지수는 누적 관객을 첫 주 관객으로 나눈 값이고 20에서 잘랐습니다.")
+
+st.subheader("묶음마다 관객이 많은 다섯 편")
+열 = st.columns(k)
+for i, 이름 in enumerate(기호[:k]):
+    묶음 = df[df["묶음"] == 이름].sort_values("누적 관객", ascending=False).head(5)
+    열[i].markdown(f"**{이름} 묶음 ({len(df[df['묶음'] == 이름]):,}편)**")
+    열[i].dataframe(pd.DataFrame({"영화": 묶음["movieNm"].to_numpy(),
+                                "누적 관객": 묶음["누적 관객"].to_numpy()}),
+                   width="stretch", hide_index=True,
+                   column_config={"누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명")})</pre></div>
       <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
 pandas
 plotly
 scikit-learn</pre></div></details>
     </li>
-    <li><span class="st">② AI가 준 코드 — 실행하고 확률을 읽는다</span><br>
-      받은 코드를 <b>main.py</b> 파일과 <b>requirements.txt</b> 파일 두 개로 저장해 실행합니다. 코드를 보면 로지스틱 회귀는 표준화한 값으로, 의사결정트리는 표준화하지 않은 값으로 학습합니다. 트리는 값을 크기 순서로만 나누기 때문에 값의 크기를 맞출 필요가 없습니다. 화면에 나타나는 산점도에서 점 하나가 테스트용 영화 한 편입니다. 가로 점선 위가 성공으로 예측한 영화이고, 색은 실제 레이블입니다. 점선 위에 있는데 색이 다른 영화, 곧 모델이 틀린 영화를 한 편 찾아 제목과 스크린 수를 확인합니다. 그런 영화가 없으면 반대 사례, 곧 점선 아래에 있는데 실제로는 성공인 영화를 찾습니다. 데이터가 날마다 쌓이므로 어느 쪽이 남는지는 실행하는 날에 따라 다릅니다. 화면에 표시되는 <b>로지스틱 회귀 정확도</b>를 기록해 둡니다.</li>
   </ol>
 
-  <h3>참고 · 로지스틱 회귀란</h3>
-
-  <p>방금 만든 것이 로지스틱 회귀입니다. 무엇을 하는 모델인지 여기에서 알아봅니다. 읽지 않아도 다음 실습은 진행됩니다. 필요할 때 돌아와 읽어도 됩니다. 이 모델은 영화마다 성공할 확률을 하나씩 계산해 줍니다.</p>
-
-  <div class="tbquote">
-    <div class="h">📖 교과서의 정의 <span class="src">『데이터 과학』 135·136쪽</span></div>
-    <p class="q">"로지스틱 회귀는 선형 회귀 모델을 로지스틱 함수와 결합하여 각 범주에 해당할 확률을 바탕으로 분류하는 방법이다." <span class="src">(135쪽)</span></p>
-    <p class="q">"… 출력값이 0.5보다 크면 양성, 작으면 음성으로 분류한다." <span class="src">(136쪽)</span></p>
-    <p class="t">→ 여기서 양성은 좋은 쪽이 아니라 <b>찾으려는 쪽</b>을 가리킵니다. 이 실습에서 찾으려는 것은 흥행에 성공할 영화이므로 성공이 양성입니다. 로지스틱 회귀는 양성일 확률을 추정하고, 0.5 이상이면 양성, 미만이면 음성으로 분류합니다.</p>
-  </div>
-
-  <div class="callout theory">
-    <div class="h">🧮 확률은 어디에서 나오나</div>
-    <div style="overflow-x:auto;margin:10px 0 4px">
-    <svg viewBox="0 0 720 210" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:560px;height:auto" role="img" aria-label="입력 세 가지와 절편에 각각 가중치를 곱해 모두 더하면 가중합이 되고, 가중합을 S자 곡선에 넣으면 확률이 되며, 확률을 문턱값 0.5로 가르면 성공과 기준 미달로 나뉘는 흐름도">
-  <defs>
-    <marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
-      <path d="M0,0 L8,4 L0,8 z" fill="#6b7385"/>
-    </marker>
-  </defs>
-  <g font-size="14" fill="#1c2230">
-    <rect x="8" y="20" width="104" height="28" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
-    <text x="60" y="39" text-anchor="middle">스크린 수</text>
-    <rect x="8" y="58" width="104" height="28" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
-    <text x="60" y="77" text-anchor="middle">상영 횟수</text>
-    <rect x="8" y="96" width="104" height="28" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
-    <text x="60" y="115" text-anchor="middle">성수기</text>
-    <rect x="8" y="140" width="104" height="28" rx="6" fill="#f6f2e8" stroke="#e3ddcf" stroke-width="1.5"/>
-    <text x="60" y="159" text-anchor="middle" fill="#6b7385">절편</text>
-  </g>
-  <g font-size="13" fill="#d64545" font-weight="800" text-anchor="middle">
-    <text x="150" y="30">×가중치</text><text x="150" y="68">×가중치</text><text x="150" y="106">×가중치</text>
-    <text x="150" y="150" fill="#6b7385">그대로</text>
-  </g>
-  <g stroke="#6b7385" stroke-width="1.5" fill="none" marker-end="url(#ar)">
-    <path d="M112,34 H186 Q198,34 198,46 V82"/>
-    <path d="M112,72 H186 Q198,72 198,80 V82"/>
-    <path d="M112,110 H186 Q198,110 198,98 V88"/>
-    <path d="M112,154 H186 Q198,154 198,110 V88"/>
-  </g>
-  <circle cx="198" cy="94" r="15" fill="#fff" stroke="#1c2230" stroke-width="1.5"/>
-  <text x="198" y="100" text-anchor="middle" font-size="17" font-weight="800" fill="#1c2230">+</text>
-  <text x="198" y="132" text-anchor="middle" font-size="13" fill="#6b7385">모두 더하기</text>
-  <line x1="215" y1="94" x2="248" y2="94" stroke="#6b7385" stroke-width="1.5" marker-end="url(#ar)"/>
-  <rect x="252" y="78" width="92" height="32" rx="6" fill="#fff" stroke="#1c2230" stroke-width="1.5"/>
-  <text x="298" y="99" text-anchor="middle" font-size="15" font-weight="800" fill="#1c2230">가중합</text>
-  <line x1="346" y1="94" x2="380" y2="94" stroke="#6b7385" stroke-width="1.5" marker-end="url(#ar)"/>
-  <rect x="384" y="60" width="86" height="68" rx="6" fill="#fff" stroke="#2b7fd6" stroke-width="2"/>
-  <polyline points="394,120 404,119 414,113 424,94 434,75 444,69 460,68" fill="none" stroke="#2b7fd6" stroke-width="2.5"/>
-  <text x="427" y="146" text-anchor="middle" font-size="13" font-weight="800" fill="#2b7fd6">S자 곡선</text>
-  <line x1="472" y1="94" x2="506" y2="94" stroke="#6b7385" stroke-width="1.5" marker-end="url(#ar)"/>
-  <rect x="510" y="78" width="86" height="32" rx="6" fill="#fff" stroke="#1c2230" stroke-width="1.5"/>
-  <text x="553" y="99" text-anchor="middle" font-size="15" font-weight="800" fill="#1c2230">확률</text>
-  <text x="553" y="126" text-anchor="middle" font-size="12" fill="#6b7385">0과 1 사이</text>
-  <line x1="598" y1="94" x2="622" y2="94" stroke="#6b7385" stroke-width="1.5"/>
-  <line x1="626" y1="42" x2="626" y2="150" stroke="#d64545" stroke-width="2" stroke-dasharray="5 4"/>
-  <text x="626" y="34" text-anchor="middle" font-size="12" font-weight="800" fill="#d64545">문턱값 0.5</text>
-  <g stroke="#6b7385" stroke-width="1.5" fill="none" marker-end="url(#ar)">
-    <path d="M626,94 Q640,94 640,70 H662"/>
-    <path d="M626,94 Q640,94 640,118 H662"/>
-  </g>
-  <text x="668" y="75" font-size="14" font-weight="800" fill="#d64545">성공</text>
-  <text x="668" y="123" font-size="14" font-weight="800" fill="#2b7fd6">기준 미달</text>
-  <text x="8" y="196" font-size="12" fill="#6b7385">곱한다 → 더한다 → 곡선에 넣는다 → 선으로 가른다. 실제 숫자는 앱 화면에서 확인합니다.</text>
-</svg>
-    </div>
-    <p>세 가지 입력에 각각 <b>가중치</b>를 곱해 모두 더하고, 어느 영화에나 같은 수 하나를 더합니다. 이렇게 나온 수가 <b>가중합</b>입니다. 가중치는 사람이 정한 것이 아니라 훈련용 데이터로 학습한 값입니다.</p>
-    <p>가중합은 아주 큰 값도 작은 값도 될 수 있어 그대로는 확률이 아닙니다. <b>시그모이드 함수</b>가 어떤 수든 0과 1 사이로 바꿔 줍니다. 선형 회귀를 먼저 학습한 뒤 출력만 바꾸는 절차가 아니라, 처음부터 분류에 맞게 가중치를 학습합니다. 그 확률을 가르는 경계가 <b>문턱값</b>이고, 이 실습에서는 0.5입니다.</p>
-  </div>
-
-  <details class="glossary"><summary>더 알아보기 — 로지스틱 회귀라는 이름은 어디에서 왔나</summary><div class="gin">
-    <p>시그모이드라는 말은 그리스 문자 시그마의 이름에 ‘닮은’이라는 뜻의 말꼬리가 붙어 만들어졌습니다. 이 이름은 함수의 성질이 아니라 곡선의 모양을 가리킵니다. 우리말로 옮기면 ‘S자를 닮은’이라는 뜻입니다.</p>
-    <p>로지스틱이라는 이름은 벨기에 수학자 피에르 프랑수아 베르휠스트가 1845년에 붙였습니다. 그는 인구가 늘어나다가 한계에 부딪혀 완만해지는 곡선을 연구하면서 이 곡선에 로지스틱이라는 이름을 붙이겠다고만 적었습니다. 왜 그 이름인지는 밝히지 않았습니다. 로지스틱은 ‘계산에 밝은’이라는 뜻의 그리스어에서 온 말입니다. 베르휠스트가 이 곡선을 로그 곡선과 나란히 놓고 설명했기 때문에 그 대비에서 나온 이름으로 추정할 뿐, 확실한 근거는 없습니다.</p>
-    <p>회귀라는 말은 영국의 프랜시스 골턴이 1886년 논문에서 사용했습니다. 그는 키가 아주 큰 부모의 자녀가 부모보다 작고, 키가 아주 작은 부모의 자녀가 부모보다 큰 쪽으로 평균에 되돌아가는 현상을 회귀라고 불렀습니다. 그 뒤 회귀라는 말의 쓰임이 넓어져, 변수 사이의 관계를 하나의 식으로 맞추는 일 전체를 회귀라고 부르게 되었습니다. 그래서 로지스틱 회귀는 범주를 예측하는데도 회귀라는 이름이 붙습니다. 답의 형태가 회귀여서가 아니라, 가중합이라는 식을 데이터에 맞추는 절차가 회귀에서 왔기 때문입니다.</p>
-    <p class="mini">출처: 베르휠스트의 1845년 논문 「인구 증가 법칙에 관한 수학적 연구」 · 골턴의 1886년 논문 「유전적 신장에서 평범으로의 회귀」</p>
-  </div></details>
-
-  <details class="glossary"><summary>더 알아보기 — 실제 사례 · 챌린저호 O-링과 로지스틱 회귀</summary><div class="gin">
-  <h3>챌린저호 O-링과 로지스틱 회귀</h3>
-  <p>1986년 1월 28일 미국 항공우주국 우주왕복선 챌린저호가 발사 73초 만에 공중분해되었고 승무원 7명이 사망했습니다. 사고 이전 23회 발사에 발사 당시 기온과 O-링 손상 여부가 기록으로 남아 있었습니다. 손상이 기록된 발사는 23회 중 7회입니다. 1989년 미국통계학회 학술지(JASA)에 실린 달랄 연구진의 분석은 로지스틱 회귀로 화씨 31도의 발사 조건에서 접합부 O-링 파손 확률을 최소 13%로, 화씨 60도로 연기했다면 최소 2%로 계산했습니다.</p>
+  <h3>화면 읽기 — 어느 영화가 한 묶음에 들어갔는가</h3>
+  <p>앱을 실행하면 산점도와 표가 표시됩니다. 산점도의 점 하나가 영화 한 편이고, 색이 묶음입니다. 점에 마우스를 올려 제목을 확인하고, 내가 본 영화가 어느 묶음에 들어갔는지 먼저 찾습니다. 그다음 묶음별 평균 표와 제목 목록을 읽고 아래 표를 채웁니다. 대표 영화 칸에는 그 묶음에서 누적 관객이 가장 많은 영화 한 편을 적습니다.</p>
   <table class="daymap">
-    <thead><tr><th>항목</th><th>챌린저호 사례</th><th>이 차시 개념과의 연결</th></tr></thead>
+    <thead><tr><th>묶음</th><th>편수</th><th>스크린 수 평균</th><th>누적 관객 평균</th><th>10위권 일수 평균</th><th>롱런 지수 평균</th><th>대표 영화 한 편</th></tr></thead>
     <tbody>
-      <tr><td><b>무엇을 예측했나</b></td><td>O-링 손상 여부(손상 있음·손상 없음 두 범주)</td><td>오늘의 성공·기준 미달과 같은 이진 분류</td></tr>
-      <tr><td><b>입력</b></td><td>발사 당시 기온(화씨) 하나</td><td>오늘은 스크린 수·상영 횟수·성수기 셋</td></tr>
-      <tr><td><b>데이터의 범위</b></td><td>23회 발사, 손상 기록 7회, 최저 기온 화씨 53도</td><td>발사 예정 기온 화씨 31도는 데이터 바깥</td></tr>
+      <tr><td>㉮</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>㉯</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>㉰</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
     </tbody>
   </table>
-  <figure class="case" style="margin:14px 0 6px">
-    <img src="img/lesson09_case1.png" alt="발사 기온과 O-링 손상 여부의 산점도 위에 로지스틱 회귀 곡선을 그린 그래프. 손상 있음 7회는 빨간 점, 손상 없음 16회는 회색 점이며 화씨 53도 아래는 데이터가 없는 구간으로 음영 처리되어 있다" style="width:100%;height:auto">
-    <figcaption style="margin-top:6px;font-size:.84rem;color:var(--text-soft)">데이터는 사고 이전 23회 발사의 O-링 기록 · 곡선은 이 데이터로 수업용 재계산 · 확률 계산은 Dalal 외(1989, JASA)</figcaption>
-  </figure>
-  <p>오늘 만든 로지스틱 회귀와 같은 형태로 입력 하나(기온)에서 확률을 추정하고 문턱값으로 판단을 정합니다. 기준과 입력을 사람이 정한다는 이 차시의 논점으로 이어집니다.</p>
-  <p class="mini">출처: <a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1989.10478858" target="_blank" rel="noopener">Dalal, Fowlkes &amp; Hoadley (1989), JASA 84(408)</a></p>
-  </div></details>
+  <p>표를 채우고 나면 묶음마다 어느 속성이 크고 어느 속성이 작은지 보입니다. 세 묶음의 편수가 고르게 나뉘지 않는 것도 확인합니다. k-평균은 인원을 고르게 맞추지 않고 거리만 봅니다.</p>
 
-  <h2>3. 의사결정트리 분류 모델 만들기</h2>
+  <h2>3. 실습 ③ — k는 몇 개가 좋을까</h2>
+  <p>2절에서는 세 묶음으로 나눴습니다. 왜 셋입니까. 교과서는 k값에 따라 결과와 해석이 달라지므로 k를 적절히 설정하는 것이 중요하다고만 적고 있습니다(146쪽). 적절한 k를 고르는 방법 하나를 이 절에서 사용합니다.</p>
+  <p>묶음마다 점들이 중심에서 떨어진 거리의 제곱을 모두 더한 값을 <b>군집 내 제곱합</b>이라고 합니다. 이 값은 묶음 수를 늘리면 반드시 줄어듭니다. 묶음이 많아질수록 중심이 가까워지기 때문입니다. 따라서 값이 가장 작은 k를 고르면 언제나 가장 큰 k가 답이 됩니다. 대신 값이 크게 줄다가 덜 줄기 시작하는 지점을 찾습니다. 꺾은선이 팔꿈치처럼 꺾이는 자리를 고른다고 해서 <b>엘보우 기법</b>이라고 합니다.</p>
 
-  <p>같은 문제를 다른 방식으로 푸는 모델을 하나 더 붙입니다. 확률 대신 질문을 차례로 던져서 답을 내는 모델입니다. 앞에서 만든 앱을 이어서 고치므로 처음부터 다시 만들지 않습니다. 나온 그림에서 모델이 어떤 질문을 어떤 순서로 던지는지 읽습니다.</p>
-
-  <p>만들기 전에 트리가 하는 일을 한 번 봅니다. 트리는 속성 하나에 기준을 두고 데이터를 둘로 나누는 일을 되풀이합니다. 속성이 둘이면 그 나누기가 평면 위의 선으로 보입니다. 아래에서 질문 개수를 늘려 가며 선이 어디에 그어지는지 확인합니다.</p>
-
-  <figure class="interactive" data-fig="planecut">
-    <div class="widget" data-w="planecut">
-<svg viewBox="0 0 720 478" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="스크린 수를 가로축, 상영 횟수를 세로축에 놓고 영화를 찍은 그림. 트리의 분기가 세로선과 가로선으로 그어져 평면이 직사각형으로 나뉘고, 각 칸은 그 칸의 판정에 따라 색이 칠해진다. 질문 개수를 1개에서 5개까지 늘리면 칸이 늘어나고, 버튼을 누르면 채점용 영화가 세모로 나타난다">
-  <text x="56" y="24" font-size="15" font-weight="800" fill="#1c2230">두 속성만으로 나눈 평면</text>
-  <g font-size="12.5" fill="#6b7385">
-    <circle cx="304" cy="20" r="4.4" fill="#d64545"/><text x="314" y="24">실제 성공</text>
-    <circle cx="392" cy="20" r="3.0" fill="#2b7fd6" fill-opacity="0.42"/><text x="402" y="24">기준 미달</text>
-    <circle cx="490" cy="20" r="4.4" fill="#6b7385" fill-opacity="0.5"/><text x="500" y="24">학습용</text>
-    <g class="tleg" style="display:none"><polygon points="578,15 572,25 584,25" fill="none" stroke="#6b7385" stroke-width="1.8"/><text x="592" y="24">채점용</text></g>
-  </g>
-  <g class="cells"></g>
-  <g class="dots"></g>
-  <g class="xticks" stroke-width="1"></g>
-  <g class="yticks" stroke-width="1"></g>
-  <text x="369" y="420" font-size="13" font-weight="800" fill="#6b7385" text-anchor="middle">스크린 수(개) · 제곱근 눈금</text>
-  <text x="18" y="214" font-size="13" font-weight="800" fill="#6b7385" text-anchor="middle" transform="rotate(-90 18 214)">상영 횟수(회) · 제곱근 눈금</text>
-  <text class="pinfo" x="56" y="446" font-size="13" font-weight="800" fill="#1c2230"></text>
-  <text class="pscore" x="56" y="468" font-size="13" font-weight="800" fill="#6b7385"></text>
-</svg>
-<div class="wctl">
-  <span>트리에게 허락한 질문 개수</span>
-  <button class="wbtn" type="button" data-depth="1">1개</button>
-  <button class="wbtn" type="button" data-depth="2">2개</button>
-  <button class="wbtn" type="button" data-depth="3">3개</button>
-  <button class="wbtn" type="button" data-depth="4">4개</button>
-  <button class="wbtn" type="button" data-depth="5">5개</button>
-  <button class="wbtn" type="button" data-depth="6">6개</button>
-  <button class="wbtn" type="button" data-depth="7">7개</button>
-  <button class="wbtn" type="button" data-test>채점용 영화 보기</button>
-</div>
-    </div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 트리는 선을 어디에 긋는가. 질문을 하나 허락할 때마다 평면이 다시 갈라지고 칸이 늘어납니다. 칸의 색은 그 칸에 도착한 영화에게 트리가 내리는 판정입니다. 학습용 영화로 그린 그림이며, 버튼을 누르면 채점용 영화가 세모로 함께 표시됩니다.</figcaption>
-  </figure>
-
-  <p class="mini">가지를 뻗는 횟수를 정해 주지 않으면 트리는 훈련용 데이터를 모두 맞힐 때까지 갈라집니다. 훈련용 정확도는 1에 가까워지지만 그림이 커져서 질문의 순서를 읽을 수 없고, 처음 보는 데이터에서는 오히려 더 틀립니다. 교과서 220쪽에서 말하는 <b>과대적합</b>이 이것입니다. 그래서 세 번까지만 뻗도록 정하고, <b>끝마디에 영화가 다섯 편 미만이면 더 나누지 않도록</b> 합니다. 한두 편으로 만든 규칙은 근거가 너무 얇습니다.</p>
-
-  <ol class="steps" start="3">
-    <li><span class="st">③ 개선 프롬프트 — 같은 문제를 트리에게</span>
-      <p class="mini">가지를 뻗는 횟수를 정해 주지 않으면 트리는 훈련용 데이터를 모두 맞힐 때까지 갈라집니다. 훈련용 정확도는 1에 가까워지지만 그림이 커져서 질문의 순서를 읽을 수 없고, 처음 보는 데이터에서는 오히려 더 틀립니다. 교과서 220쪽에서 말하는 <b>과대적합</b>이 이것입니다. 그래서 세 번까지만 뻗도록 정하고, <b>끝마디에 영화가 다섯 편 미만이면 더 나누지 않도록</b> 합니다. 한두 편으로 만든 규칙은 근거가 너무 얇습니다.</p>
-      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>앞 코드에 이어서 의사결정트리로도 만들어 줘.
+    <ol class="steps" start="3">
+    <li><span class="st">③ 개선 프롬프트 — 묶음 수를 바꿔 본다</span>
+      <div class="codewrap improve"><span class="label">③ 개선</span><button class="copy-btn">복사</button><pre>앞 코드에 이어서 묶음 수를 정하는 화면을 만들어 줘.
 바뀐 main.py 전체를 다시 줘. 바뀐 부분만 주지 말고.
-가지는 세 번까지만 뻗게 하고, 다시 실행해도 같은 결과가 나오게 난수를 고정해 줘.
-마지막 마디에 영화가 다섯 편 미만이면 더 나누지 말아 줘. 한두 편으로 만든 규칙을 막으려는 거야.
-어떤 질문을 어떤 순서로 던지는지 보여 줘.
-입력 열 이름은 스크린 수·상영 횟수·성수기라는 한글로 바꿔 줘.
-트리는 상자 그림 대신, 질문 한 줄에 예와 아니오로 갈라지는 글로 읽을 수 있게 해 줘.
-그 글은 코드처럼 보이지 않게, 읽기 좋은 글씨로 보여 줘.
-"스크린 수가 911개 이하인가?" 다음 줄에 "예 →", 그 아래 "아니오 →"가 들여쓰기로 붙는 형태야.
-각 줄 끝에 그 마디의 훈련용 영화가 몇 편이고 그중 성공이 몇 편인지 괄호로 적어 줘.
-상자 그림도 보고 싶으면 펼쳐 볼 수 있게 접어 둬 줘.
-상자 그림은 직접 그리지 말고 사이킷런이 만들어 주는 트리 글자 그림을 그대로 보여 줘.
-앞에서 정한 네 가지 라이브러리만 사용해 줘. 그림은 plotly로 그려 줘.
-로지스틱 회귀와 의사결정트리의 정확도를 큰 숫자 카드로 나란히 보여 줘.
-앞에서 만든 "한쪽으로만 답했을 때"의 정확도 카드는 지우지 말고 옆에 그대로 둬. 카드가 셋이 되는 거야.
-화면이 길어지니 탭으로 나눠 줘. 첫 탭은 확률로 보기, 둘째 탭은 질문으로 보기야.
-의사결정트리의 속성 중요도를 큰 순서로 표로 보여 줘.
-로지스틱 회귀의 가중치도 절댓값이 큰 순서로 표로 보여 줘. 부호는 그대로 두고 절편도 따로 적어 줘. 이 두 표는 "무엇을 보고 맞혔나"라는 셋째 탭에 넣어 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">여기까지 만든 main.py 전체입니다. 파일을 통째로 바꾸어 저장합니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 수집된 누적 관객 수가 기준을 넘는지 분류한다
-import math
+묶음 수를 2에서 7까지 고를 수 있게 하고 기본값은 3으로 해 줘. 고른 값에 따라 위의 산점도·표·제목 목록이 다시 그려지게 해 줘.
+묶음 수가 셋보다 많아지면 표시 기호를 ㉱·㉲·㉳·㉴까지 이어 써 줘.
+묶음 수를 1부터 7까지 바꿔 가며 각 묶음 안에서 점들이 중심에서 떨어진 거리의 제곱을 모두 더한 값을 구하고, 꺾은선 그래프로 그려 줘.
+지금 고른 묶음 수 자리에 세로선을 그어 줘.
+그래프 아래에 묶음 수마다 그 값과 바로 앞 값에서 얼마나 줄었는지를 표로 보여 줘. 맨 첫 줄은 비교할 앞 값이 없으니 빈칸으로 둬.
+고른 묶음 수의 실루엣 점수를 한 줄로 표시해 줘. 점수는 -1에서 1 사이이고 1에 가까울수록 묶음이 뚜렷하다는 뜻이야.</pre></div>
+      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞의 main.py를 아래 내용으로 바꿉니다. requirements.txt는 그대로 둡니다.</p><div class="codewrap code"><span class="label">main.py — 여기까지가 전체</span><button class="copy-btn">복사</button><pre># main.py — 영화 유형 나누기: 묶음 수를 바꿔 가며 몇 갈래가 좋을지 정한다
 import streamlit as st
+import numpy as np
 import pandas as pd
 import plotly.express as px
-from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score
-from sklearn.tree import DecisionTreeClassifier, export_graphviz
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
 
-st.set_page_config(page_title="흥행 분류기", page_icon="🎬", layout="wide")
-st.title("🎬 흥행 분류기")
-st.caption("영화가 기준을 넘을지 두 가지 모델로 판정합니다.")
+st.set_page_config(page_title="영화 유형 나누기", page_icon="🎬", layout="wide")
+st.title("🎬 영화 유형 나누기")
+st.caption("정답 열 없이, 네 가지 속성이 비슷한 영화끼리 묶습니다.")
 
 MOVIES = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
-기준 = 1_000_000                                          # 누적 관객 100만 명 이상이면 성공
+기호 = ["㉮", "㉯", "㉰", "㉱", "㉲", "㉳", "㉴"]          # 묶음 번호 대신 쓰는 표시
+속성 = ["스크린 수(로그)", "누적 관객(로그)", "10위권 일수", "롱런 지수"]
+원래단위 = ["스크린 수", "누적 관객", "10위권 일수", "롱런 지수"]
 
 
 @st.cache_data
 def load_data():
-    return pd.read_csv(MOVIES, dtype={"movieCd": str}).sort_values("movieCd").reset_index(drop=True)
+    df = pd.read_csv(MOVIES, dtype={"movieCd": str})
+    df = df.sort_values("movieCd").reset_index(drop=True)
+    전체편수 = len(df)
+    # 네 속성을 만들 수 없는 영화는 뺀다: 값이 없거나 첫 주 관객이 0인 행
+    쓸열 = ["first_scrn", "total_audi", "days_in_top10", "first_week_audi"]
+    df = df.dropna(subset=쓸열 + ["movieNm"])
+    df = df[(df["first_scrn"] &gt; 0) &amp; (df["total_audi"] &gt; 0) &amp; (df["first_week_audi"] &gt; 0)]
+    df = df.reset_index(drop=True)
+    return df, 전체편수
 
 
-df = load_data()
-df["성공"] = (df["total_audi"] &gt;= 기준).astype(int)
-st.caption(f"누적 관객 {기준:,}명 이상을 성공으로 봅니다 · "
-           f"전체 {len(df):,}편 가운데 성공 {df['성공'].sum():,}편")
+df, 전체편수 = load_data()
 
-is_test = pd.Series(df.index % 10 &lt; 3, index=df.index)   # 열 편 중 앞 세 편을 테스트용으로
-X = df[["first_scrn", "first_show", "peak"]].rename(
-    columns={"first_scrn": "스크린 수", "first_show": "상영 횟수", "peak": "성수기"})
-y = df["성공"]
+# 네 가지 속성을 만든다. 숫자 차이가 너무 큰 둘은 상용로그를 취한다
+df["스크린 수"] = df["first_scrn"]
+df["누적 관객"] = df["total_audi"]
+df["10위권 일수"] = df["days_in_top10"]
+df["롱런 지수"] = (df["total_audi"] / df["first_week_audi"]).clip(upper=20)   # 20을 넘으면 20으로
+df["스크린 수(로그)"] = np.log10(df["first_scrn"])
+df["누적 관객(로그)"] = np.log10(df["total_audi"])
 
-scaler = StandardScaler().fit(X[~is_test])
-logi = LogisticRegression(max_iter=2000).fit(scaler.transform(X[~is_test]), y[~is_test])
-prob = logi.predict_proba(scaler.transform(X[is_test]))[:, 1]
-예측 = (prob &gt;= 0.5).astype(int)
+st.info(f"전체 {전체편수:,}편 가운데 네 속성을 모두 만들 수 있는 {len(df):,}편으로 묶었습니다.")
 
-# 트리는 값의 크기에 영향받지 않으므로 표준화하지 않은 X를 그대로 사용한다
-# 끝마디에 영화가 다섯 편 미만이면 더 나누지 않는다. 한두 편으로 만든 규칙을 막는다
-tree = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~is_test], y[~is_test])
-
-st.subheader("두 모델의 정확도")
-많은쪽 = 1 if y[~is_test].mean() &gt; 0.5 else 0             # 훈련용에서 편수가 많은 범주
-기준선 = float((y[is_test] == 많은쪽).mean())              # 그쪽으로만 답했을 때의 정확도
-c1, c2, c3 = st.columns(3)
-c1.metric("로지스틱 회귀 정확도", f"{accuracy_score(y[is_test], 예측):.3f}")
-c2.metric("의사결정트리 정확도", f"{accuracy_score(y[is_test], tree.predict(X[is_test])):.3f}")
-c3.metric("한쪽으로만 답했을 때", f"{기준선:.3f}",
-          help="입력을 보지 않고 훈련용에서 편수가 많은 쪽으로만 답한 경우입니다.")
-맞힌편수 = int((예측 == y[is_test].to_numpy()).sum())
-st.caption(f"테스트용 영화 {int(is_test.sum()):,}편 가운데 로지스틱 회귀가 {맞힌편수:,}편을 맞혔습니다 "
-           f"({맞힌편수:,} ÷ {int(is_test.sum()):,}).")
-
-단위 = {"스크린 수": "개", "상영 횟수": "회"}
-예아니오 = {"성수기": "성수기에 개봉하지 않았는가?"}
-t = tree.tree_
-열이름 = list(X.columns)
+Xs = StandardScaler().fit_transform(df[속성])               # 네 속성을 표준화한다
+k = st.slider("몇 묶음으로 나눌까요", 2, 7, 3)
 
 
-def 조사(말):
-    """받침이 있으면 '이', 없으면 '가'를 붙인다."""
-    끝 = ord(말[-1])
-    받침 = (끝 - 0xAC00) % 28 if 0xAC00 &lt;= 끝 &lt;= 0xD7A3 else 0
-    return 말 + ("이" if 받침 else "가")
+def 나누기(개수):
+    """표준화한 값을 k-평균으로 나눈다. 난수를 고정해 다시 실행해도 결과가 같다."""
+    return KMeans(n_clusters=개수, n_init=10, random_state=42).fit(Xs)
 
 
-def 질문(마디):
-    """분기 조건을 한글 질문으로 바꾼다. '예'가 왼쪽 가지다."""
-    속성 = 열이름[t.feature[마디]]
-    경계 = float(t.threshold[마디])
-    if 속성 in 예아니오:                       # 0과 1뿐인 속성은 경계가 0.5다
-        return 예아니오[속성]
-    return f"{조사(속성)} {math.floor(경계):,}{단위.get(속성, '')} 이하인가?"
+모델 = 나누기(k)
+번호 = 모델.labels_
+# 누적 관객 평균이 큰 묶음부터 ㉮·㉯·㉰ 순으로 표시한다
+순서 = pd.Series(df["누적 관객"].to_numpy()).groupby(번호).mean().sort_values(ascending=False).index
+자리 = {g: i for i, g in enumerate(순서)}
+df["묶음"] = [기호[자리[g]] for g in 번호]
 
+st.subheader("묶음 지도")
+fig = px.scatter(df, x="누적 관객", y="10위권 일수", color="묶음", hover_name="movieNm",
+                 log_x=True, category_orders={"묶음": 기호[:k]})
+fig.update_traces(marker=dict(size=10, opacity=0.8))
+fig.update_layout(height=460, xaxis_title="누적 관객(명) · 로그 눈금", yaxis_title="10위권에 머문 일수(일)")
+st.plotly_chart(fig, width="stretch")
+st.caption("점 하나가 영화 한 편입니다. 색이 묶음이고, 점에 마우스를 올리면 제목이 보입니다.")
 
-def 마디설명(마디):
-    편수 = int(t.n_node_samples[마디])
-    성공 = int(round(t.value[마디][0][1] * 편수))
-    return f"영화 {편수}편 중 성공 {성공}편"
+st.subheader("묶음별 편수와 네 속성의 평균")
+요약 = df.groupby("묶음")[원래단위].mean().round(2)
+요약.insert(0, "편수", df.groupby("묶음").size())
+요약 = 요약.reindex(기호[:k])
+st.dataframe(요약, width="stretch", column_config={
+    "편수": st.column_config.NumberColumn("편수", format="%,d편"),
+    "스크린 수": st.column_config.NumberColumn("스크린 수", format="%.1f개"),
+    "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,.0f명"),
+    "10위권 일수": st.column_config.NumberColumn("10위권 일수", format="%.1f일"),
+    "롱런 지수": st.column_config.NumberColumn("롱런 지수", format="%.2f배"),
+})
+st.caption("평균은 로그를 취하기 전의 원래 단위입니다. 롱런 지수는 누적 관객을 첫 주 관객으로 나눈 값이고 20에서 잘랐습니다.")
 
+st.subheader("묶음마다 관객이 많은 다섯 편")
+열 = st.columns(k)
+for i, 이름 in enumerate(기호[:k]):
+    묶음 = df[df["묶음"] == 이름].sort_values("누적 관객", ascending=False).head(5)
+    열[i].markdown(f"**{이름} 묶음 ({len(df[df['묶음'] == 이름]):,}편)**")
+    열[i].dataframe(pd.DataFrame({"영화": 묶음["movieNm"].to_numpy(),
+                                "누적 관객": 묶음["누적 관객"].to_numpy()}),
+                   width="stretch", hide_index=True,
+                   column_config={"누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명")})
 
-def 답(마디):
-    편수 = int(t.n_node_samples[마디])
-    성공 = int(round(t.value[마디][0][1] * 편수))
-    return "성공" if 성공 * 2 &gt; 편수 else "기준 미달"
+# 여기부터 ③ — 묶음 수를 몇으로 할지 정하는 화면
+st.divider()
+st.subheader("묶음 수는 몇이 좋을까")
 
+# 묶음 안에서 점들이 중심에서 떨어진 거리의 제곱을 모두 더한 값(k=1~7)
+합 = pd.DataFrame({"묶음 수": list(range(1, 8)),
+                   "거리 제곱의 합": [round(float(나누기(개수).inertia_), 1) for 개수 in range(1, 8)]})
+# 바로 앞 묶음 수에서 줄어든 크기. 맨 첫 줄은 비교할 앞 값이 없다
+합["앞보다 줄어든 값"] = ["—" if pd.isna(v) else f"{v:,.1f}" for v in -합["거리 제곱의 합"].diff()]
 
-def 트리읽기(마디=0, 들여=""):
-    """트리를 질문과 예·아니오로 읽어 내려간다."""
-    if t.feature[마디] &lt; 0:
-        return [f"판정: {답(마디)}  ({마디설명(마디)})"]
-    줄 = [f"{질문(마디)}  ({마디설명(마디)})"]
-    for 답변, 자식 in (("예", t.children_left[마디]), ("아니오", t.children_right[마디])):
-        아래 = 트리읽기(자식, 들여)
-        줄.append(f"{들여}   {답변} → {아래[0]}")
-        줄.extend(f"{들여}        {x}" for x in 아래[1:])
-    return 줄
+꺾은선 = px.line(합, x="묶음 수", y="거리 제곱의 합", markers=True)
+꺾은선.add_vline(x=k, line_dash="dash", annotation_text=f"지금 고른 묶음 수 {k}")
+꺾은선.update_layout(height=380, xaxis_title="묶음 수(k)", yaxis_title="묶음 안 거리 제곱의 합")
+st.plotly_chart(꺾은선, width="stretch")
+st.caption("묶음 수를 늘리면 값은 반드시 줄어듭니다. 줄어드는 폭이 크게 꺾이는 자리를 찾습니다.")
 
+st.dataframe(합, width="stretch", hide_index=True)
 
-탭1, 탭2, 탭3 = st.tabs(["확률로 보기", "질문으로 보기", "무엇을 보고 맞혔나"])
-
-with 탭1:
-    확률표 = pd.DataFrame({"영화": df.loc[is_test, "movieNm"].values,
-                         "추정 확률": prob.round(3),
-                         "실제": ["성공" if v else "기준 미달" for v in y[is_test]],
-                         "스크린 수": df.loc[is_test, "first_scrn"].values,
-                         "누적 관객": df.loc[is_test, "total_audi"].values,
-                         "개봉일": pd.to_datetime(df.loc[is_test, "openDt"], format="%Y%m%d",
-                                               errors="coerce").dt.strftime("%Y.%m.%d").values})
-    확률표 = 확률표.sort_values("추정 확률", ascending=False)
-    fig = px.scatter(확률표, x="스크린 수", y="추정 확률", color="실제", hover_name="영화",
-                     log_x=True, color_discrete_map={"성공": "#d64545", "기준 미달": "#2b7fd6"})
-    fig.add_hline(y=0.5, line_dash="dash", annotation_text="문턱값 0.5")
-    fig.update_traces(marker=dict(size=11, opacity=0.8))
-    fig.update_layout(height=420, xaxis_title="스크린 수(개) · 로그 눈금", yaxis_title="추정 성공 확률")
-    st.plotly_chart(fig, width="stretch")
-    st.caption("점 하나가 테스트용 영화 한 편입니다. 색은 실제 레이블이고, "
-               "가로 점선 위가 성공으로 예측한 영화입니다. 점에 마우스를 올리면 제목이 표시됩니다.")
-    st.dataframe(확률표, width="stretch", hide_index=True, column_config={
-        "추정 확률": st.column_config.ProgressColumn("추정 확률", min_value=0.0, max_value=1.0, format="%.2f"),
-        "스크린 수": st.column_config.NumberColumn("스크린 수", format="%,d개"),
-        "누적 관객": st.column_config.NumberColumn("누적 관객", format="%,d명"),
-    })
-
-with 탭2:
-    st.subheader("트리는 어떤 질문을 던지나")
-    st.markdown("&lt;div style='font-size:1.02rem; line-height:1.95; white-space:pre-wrap'&gt;"
-                + "\n".join(트리읽기()) + "&lt;/div&gt;", unsafe_allow_html=True)
-    st.caption("위에서부터 질문에 답하며 내려가면 마지막 줄의 판정에 닿습니다. "
-               "괄호 안은 그 마디에 있는 훈련용 영화의 편수입니다. "
-               "끝마디의 판정은 그 안에서 편수가 많은 쪽입니다. "
-               "성공과 기준 미달이 같은 수이면 기준 미달로 판정합니다.")
-
-    with st.expander("트리 그림으로 보기"):
-        st.graphviz_chart(export_graphviz(tree, out_file=None, feature_names=열이름,
-                                          class_names=["기준 미달", "성공"], filled=True, rounded=True))
-
-with 탭3:
-    st.subheader("의사결정트리가 본 것 — 속성 중요도")
-    중요도 = pd.Series(tree.feature_importances_, index=X.columns).sort_values(ascending=False)
-    중요도표 = 중요도.round(3).reset_index()
-    중요도표.columns = ["속성", "중요도"]
-    st.dataframe(중요도표, width="stretch", hide_index=True)
-    st.caption("중요도는 트리가 그 속성으로 얼마나 많이, 얼마나 크게 나눴는지를 나타냅니다. "
-               "모두 더하면 1입니다. 0이면 그 속성으로는 한 번도 나누지 않았다는 뜻입니다.")
-
-    st.subheader("로지스틱 회귀가 본 것 — 가중치")
-    가중치 = pd.Series(logi.coef_[0], index=X.columns)
-    가중치표 = 가중치.reindex(가중치.abs().sort_values(ascending=False).index).round(3).reset_index()
-    가중치표.columns = ["속성", "가중치"]
-    st.dataframe(가중치표, width="stretch", hide_index=True)
-    st.caption(f"절편은 {logi.intercept_[0]:.3f}입니다. 가중치는 표준화한 값에 곱하는 수입니다. "
-               "0보다 크면 그 값이 클수록 성공 확률이 올라가고, 작으면 내려갑니다. "
-               "중요도와 달리 부호가 있고, 모두 더해도 1이 되지 않습니다.")</pre></div></details>
+점수 = silhouette_score(Xs, 번호)
+st.metric(f"묶음 {k}개일 때의 실루엣 점수", f"{점수:.3f}")
+st.caption("실루엣 점수는 -1에서 1 사이이고, 1에 가까울수록 묶음이 뚜렷하다는 뜻입니다. "
+           "점수가 가장 높은 묶음 수와 사람이 이해하기 좋은 묶음 수가 늘 같지는 않습니다.")</pre></div></details>
     </li>
   </ol>
 
-  <div class="callout theory">
-    <div class="h">🧩 정확도</div>
-    <p>정확도는 테스트용 영화 가운데 예측이 실제와 같았던 편수의 비율입니다. 맞힌 편수 ÷ 전체 편수로 구합니다. 내 앱 화면에서 테스트용 편수와 맞힌 편수를 찾아, 그 나눗셈이 화면의 정확도와 같은지 확인합니다. 맞힌 것과 틀린 것을 네 칸으로 나누어 보는 방법은 10차시에서 다룹니다.</p>
-  </div>
-
-  <p class="mini">이 표는 ③까지 마친 뒤 채웁니다.</p>
-
+  <h3>화면 읽기 — 어디에서 덜 줄기 시작하는가</h3>
+  <p>꺾은선의 값과 감소폭 표를 보고 아래 표를 채웁니다. 감소폭은 앞의 k에서 얼마나 줄었는지입니다. 표를 채운 뒤에는 묶음 수를 2·3·4로 바꿔 가며 산점도와 제목 목록이 어떻게 달라지는지 봅니다. 묶음이 나뉠 때 어느 영화가 어느 쪽으로 가는지가 관찰할 거리입니다.</p>
   <table class="daymap">
-    <thead><tr><th>모델</th><th>답하는 방식</th><th>내 앱의 정확도</th></tr></thead>
+    <thead><tr><th>묶음 수 k</th><th>군집 내 제곱합</th><th>앞의 k에서 줄어든 값</th></tr></thead>
     <tbody>
-      <tr><td><b>로지스틱 회귀</b></td><td>0~1 사이의 성공 확률</td><td></td></tr>
-      <tr><td><b>의사결정트리</b></td><td>질문의 순서(규칙)</td><td></td></tr>
-      <tr><td><b>한쪽으로만 답하는 모델</b></td><td>입력을 보지 않고 훈련용에서 편수가 많은 쪽</td><td></td></tr>
+      <tr><td>1</td><td></td><td></td></tr>
+      <tr><td>2</td><td></td><td></td></tr>
+      <tr><td>3</td><td></td><td></td></tr>
+      <tr><td>4</td><td></td><td></td></tr>
+      <tr><td>5</td><td></td><td></td></tr>
+      <tr><td>6</td><td></td><td></td></tr>
+      <tr><td>7</td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <p>표를 채우고 나면 꺾이는 자리가 한눈에 보이는 경우도 있고, 그렇지 않은 경우도 있습니다. 감소폭이 계단처럼 조금씩 줄어들기만 하면 팔꿈치가 어디인지 사람마다 다르게 읽습니다. <b>이것이 k를 사람이 정한다는 말의 뜻입니다.</b> 엘보우는 k를 자동으로 알려 주는 방법이 아니라, 어느 k를 골랐는지 설명할 근거를 만들어 주는 방법입니다. 모둠에서 고른 k와 그렇게 고른 까닭을 한 줄로 적어 둡니다.</p>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 설명 <span class="src">『데이터 과학』 153쪽</span></div>
+    <p class="q">"실루엣 계수는 -1에서 1 사이의 값을 가지며, 1에 가까울수록 근처의 다른 군집과 멀리 떨어져 있다는 것을 나타낸다." <span class="src">(153쪽)</span></p>
+    <p class="t">→ 화면에 한 줄로 표시되는 실루엣 점수가 이 값입니다. 화면의 점수는 참고일 뿐이고 k의 정답을 주지 않습니다.</p>
+  </div>
+  <p class="mini">🧪 같은 방법을 야구 기록에 적용해 보는 도전과 표준화 스위치 위젯, 확장 데이터 세 가지는 <a href="lesson09-lab.html">9차시 실험실</a>에 있습니다.</p>
+
+  <h2>4. 활동 — 묶음에 이름 붙이기</h2>
+  <p>이름을 붙이는 일이 무엇인지 먼저 한 장면으로 봅니다. 아래는 소리가 비슷한 아티스트를 묶어 만든 음악 장르 지도입니다. 이 지도의 장르 이름 6,291개도 컴퓨터가 지은 것이 아닙니다. 소리가 비슷한 아티스트를 묶는 일까지가 컴퓨터의 몫이고, 묶음마다 이름을 붙인 사람은 지도를 만든 글렌 맥도널드입니다. 여러분이 지금부터 하는 일이 그 일입니다.</p>
+  <figure class="case" style="margin:16px 0"><img src="img/lesson11_case2.png" loading="lazy" alt="흰 바탕에 장르 이름 수천 개가 흩어진 화면. 왼쪽에는 metalcore와 thrash metal이 붉은색으로, 가운데와 오른쪽 아래에는 k-pop과 j-pop, trap이 노란색과 주황색으로 모여 있습니다." style="width:100%;max-width:560px;display:block;border:1px solid #e3ddcf;border-radius:6px"><figcaption style="font-size:.85rem;color:#6b5836;margin-top:6px">화면: <a href="https://everynoise.com/" target="_blank" rel="noopener">everynoise.com</a> — 스포티파이 장르 6,291개(2023년 12월 기준, 아티스트 약 100만 명)를 소리의 비슷함으로 배치한 지도, 글렌 맥도널드 제작</figcaption></figure>
+  <p>이제 여러분의 화면에 있는 세 묶음에 이름을 붙입니다. 알고리즘이 만든 것은 ㉮·㉯·㉰라는 번호까지이고, 이름과 의미는 영화를 아는 사람이 붙입니다. 2절에서 채운 평균 표와 제목 목록을 근거로 삼습니다. 이름은 짧게 짓되, 어느 속성을 보고 그렇게 불렀는지 두 가지를 반드시 적습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>묶음</th><th>붙인 이름</th><th>근거가 된 속성 둘</th><th>대표 영화 한 편</th></tr></thead>
+    <tbody>
+      <tr><td>㉮</td><td></td><td></td><td></td></tr>
+      <tr><td>㉯</td><td></td><td></td><td></td></tr>
+      <tr><td>㉰</td><td></td><td></td><td></td></tr>
     </tbody>
   </table>
 
-  <p>세 값을 모두 적습니다. 맨 아래 줄은 입력을 하나도 보지 않고 답한 점수입니다. 다음 시간에 이 세 값을 나란히 놓고 비교합니다.</p>
-
-  <p class="mini">표에는 스크린 수·상영 횟수·성수기 세 가지로 학습했을 때의 숫자를 적습니다. 실험실에서 입력을 바꿔 본 뒤의 숫자는 여기에 적지 않습니다.</p>
-
-  <p class="mini">영화 열 편 중 세 편은 학습에서 빼 두었다가 채점에만 사용합니다. 학습에 사용한 영화로 채점하면 점수가 실제보다 높게 나오기 때문이며, 7차시와 8차시에서도 같은 방법을 사용했습니다. 데이터가 날마다 쌓이므로 화면에 표시된 숫자를 그대로 적습니다.</p>
-
-  <h3>참고 · 의사결정트리란</h3>
-
-  <p>방금 만든 것이 의사결정트리입니다. 읽지 않아도 다음 절은 진행됩니다. 이 모델은 확률 하나를 내놓는 대신 조건을 차례로 따져 데이터를 둘로 나눕니다.</p>
-
-  <div class="callout theory">
-    <div class="h">🌳 의사결정트리는 무엇을 보고 가지를 나누는가</div>
-    <div class="tbquote" style="margin-top:10px">
-      <div class="h">📖 교과서의 설명 <span class="src">『데이터 과학』 220쪽(부록)</span></div>
-      <p class="q">"의사결정트리는 규칙을 만족하는지 아닌지에 따라 대상을 분류하는 모델로, 스무고개 놀이에 비유할 수 있다. … 같은 클래스의 데이터로만 구성될수록 그 노드의 불순도가 낮다고 말한다. 즉, 의사결정트리는 불순도를 낮추는 규칙을 찾는 모델이다." <span class="src">(220쪽)</span></p>
-      <p class="q">"의사결정트리는 결과를 직관적으로 이해하기 쉽고 규칙이 명확하게 도출된다는 장점을 갖는다. 하지만 과대적합에 빠지기 쉽다는 단점이 있다." <span class="src">(220쪽)</span></p>
-      <p class="t">→ 아래에서 말하는 "덜 섞이게 자른다"가 교과서의 <b>불순도를 낮춘다</b>와 같은 뜻입니다.</p>
-    </div>
-    <p>3절 앞에서 본 평면 그림의 선 하나하나를 트리가 어떻게 고르는지가 여기에 있습니다. 트리는 한 마디에서 데이터를 두 갈래로 나눌 지점을 속성마다, 값마다 모두 따져 본 뒤 가장 좋은 하나를 남깁니다. 무엇이 좋은 지점인지는 섞임으로 판단하며, 한 갈래에 한 범주만 있으면 <b>섞임은 0</b>이고 두 범주가 반씩 있으면 섞임이 가장 큽니다. 트리는 편수가 많은 갈래의 섞임을 더 크게 반영해 섞임을 가장 많이 줄이는 지점을 고르고, 나뉜 각 갈래에서 같은 일을 되풀이합니다. 어느 속성을 먼저 볼지 사람이 정하지 않습니다. 데이터가 정합니다.</p>
-    <p class="mini">교과서 본문은 로지스틱 회귀를 다루고, 의사결정트리는 부록 220~223쪽에서 설명합니다. 부록도 분기 계산의 수식과 속성 중요도까지는 다루지 않으므로, 위 설명은 이 실습이 사용하는 라이브러리의 기본 설정을 풀어 쓴 것입니다.</p>
+  <div class="callout tip">
+    <div class="h">🏷️ 모둠 활동 — 이 이름, 누구 묶음일까</div>
+    <ol class="steps">
+      <li>모둠마다 ㉮·㉯·㉰ 세 묶음에 이름을 붙이고, <b>이름만</b> 칠판에 적습니다. 근거는 아직 적지 않습니다.</li>
+      <li>다른 모둠이 적은 이름 세 개를 보고 어느 이름이 어느 묶음인지 맞혀 봅니다.</li>
+      <li>맞힌 이름과 맞히지 못한 이름을 나눕니다. 잘 지은 이름은 묶음별 평균만 보고도 짝을 찾을 수 있습니다.</li>
+      <li>맞히지 못한 이름을 낸 모둠이 근거가 된 속성을 말합니다.</li>
+    </ol>
   </div>
 
-  <figure class="interactive" data-fig="splitpick">
-    <div class="widget" data-w="splitpick">
-<svg viewBox="0 0 720 486" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="훈련용 영화를 스크린 수 축에 늘어놓고 자를 지점을 옮기는 그림. 자른 지점마다 좌우 갈래의 성공 편수와 섞임 정도가 바뀌고, 두 갈래를 합치는 계산이 한 줄로 표시되고, 아래 띠에 후보 지점마다 섞임이 줄어드는 정도가 그려진다">
-  <text x="56" y="24" font-size="15" font-weight="800" fill="#1c2230">훈련용 영화를 스크린 수 축에 늘어놓았습니다</text>
-  <text class="head" x="664" y="24" text-anchor="end" font-size="14" font-weight="800" fill="#d64545" style="font-variant-numeric:tabular-nums"></text>
+  <div class="callout ask">
+    <div class="h">❓ 이름을 붙이며 답할 질문</div>
+    <ul>
+      <li>세 묶음을 각각 무엇이라 부르겠습니까. 위 표에 적은 이름을 그대로 말합니다.</li>
+      <li>그렇게 부른 근거가 되는 속성은 무엇입니까. 어느 숫자를 보고 정했는지 적습니다.</li>
+      <li>네 속성 대신 장르나 국가를 골랐다면 이름이 달라졌겠습니까.</li>
+    </ul>
+  </div>
 
-  <line class="cutline" x1="200" y1="58" x2="200" y2="190" stroke="#d64545" stroke-width="2"/>
-  <rect class="cuthandle" x="195" y="44" width="10" height="14" rx="3" fill="#d64545"/>
-  <text class="cutlab" x="190" y="56" text-anchor="end" font-size="13" font-weight="800" fill="#d64545"></text>
-  <g class="dots"></g>
-
-  <line x1="56" y1="190" x2="664" y2="190" stroke="#e3ddcf" stroke-width="1.5"/>
-  <g class="xticks" font-size="14" text-anchor="middle" fill="#6b7385"></g>
-  <text x="360" y="228" text-anchor="middle" font-size="14" fill="#6b7385">스크린 수(개) · 10위권에 처음 관측된 날</text>
-
-  <g class="lpanel">
-    <rect x="56" y="238" width="296" height="104" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
-    <text class="l1" x="68" y="260" font-size="14" font-weight="800" fill="#1c2230"></text>
-    <text class="l2" x="68" y="282" font-size="14" fill="#1c2230"></text>
-    <rect x="68" y="292" width="272" height="10" rx="5" fill="#2b7fd6" fill-opacity="0.35"/>
-    <rect class="lbar" data-bw="272" x="68" y="292" width="0" height="10" rx="5" fill="#d64545"/>
-    <text class="l3" x="68" y="318" font-size="14" font-weight="800" fill="#6b7385" style="font-variant-numeric:tabular-nums"></text>
-    <text class="l4" x="68" y="336" font-size="13" fill="#6b7385"></text>
-  </g>
-  <g class="rpanel">
-    <rect x="368" y="238" width="296" height="104" rx="6" fill="#fff" stroke="#e3ddcf" stroke-width="1.5"/>
-    <text class="r1" x="380" y="260" font-size="14" font-weight="800" fill="#1c2230"></text>
-    <text class="r2" x="380" y="282" font-size="14" fill="#1c2230"></text>
-    <rect x="380" y="292" width="272" height="10" rx="5" fill="#2b7fd6" fill-opacity="0.35"/>
-    <rect class="rbar" data-bw="272" x="380" y="292" width="0" height="10" rx="5" fill="#d64545"/>
-    <text class="r3" x="380" y="318" font-size="14" font-weight="800" fill="#6b7385" style="font-variant-numeric:tabular-nums"></text>
-    <text class="r4" x="380" y="336" font-size="13" fill="#6b7385"></text>
-  </g>
-
-  <text class="calc" x="56" y="370" font-size="13.5" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
-  <text x="56" y="406" font-size="14" font-weight="800" fill="#6b7385">후보 지점마다 섞임이 줄어드는 정도</text>
-  <g font-size="13" fill="#6b7385">
-    <circle cx="468" cy="402" r="4.5" fill="#d64545"/><text x="478" y="406">실제 성공</text>
-    <circle cx="560" cy="402" r="3.4" fill="#2b7fd6" fill-opacity="0.5"/><text x="570" y="406">기준 미달</text>
-  </g>
-  <line x1="56" y1="468" x2="664" y2="468" stroke="#e3ddcf" stroke-width="1.5"/>
-  <polyline class="gcurve" points="" fill="none" stroke="#2b7fd6" stroke-width="2"/>
-  <circle class="gbest" cx="0" cy="0" r="5" fill="none" stroke="#2f9e5f" stroke-width="2"/>
-  <circle class="gnow" cx="0" cy="0" r="4.5" fill="#d64545"/>
-  <text class="note" x="56" y="484" font-size="13" font-weight="800" fill="#2f9e5f"></text>
-</svg>
-<div class="wctl">
-  <label>자를 지점 <input type="range" class="cut" min="0" max="1" step="1" value="0"> <span class="wv"></span></label>
-  <button class="wbtn" type="button" data-go="best">섞임이 가장 줄어드는 지점</button>
-  <button class="wbtn" type="button" data-go="tree">트리가 고른 지점</button>
-</div>
-</div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 트리는 자를 지점을 어떻게 고르는가. 점 하나가 훈련용 영화 한 편이고 세로 위치에는 뜻이 없습니다. 두 갈래의 섞임을 편수로 가중해 합치는 계산이 상자 아래에 그대로 표시됩니다. 아래 띠는 후보 지점을 모두 따져 본 결과입니다.</figcaption>
-  </figure>
-
-  <p><b>슬라이더를 양 끝으로 보내 봅니다.</b> 한쪽 갈래의 섞임은 0이 되지만 그 갈래에 영화가 한 편뿐이라 합친 섞임은 거의 줄지 않습니다. 섞임이 0인 갈래를 만드는 것이 목적이 아니라, 두 갈래를 합친 섞임을 줄이는 것이 목적입니다.</p>
-
-  <p>첫 번째 분기만으로 어떤 속성이 중요한지 다 판단할 수는 없습니다. 트리 전체가 무엇을 보았는지는 4절에서 확인합니다.</p>
-
-  <details class="glossary"><summary>더 알아보기 — 트리와 지니, 이름의 내력</summary><div class="gin">
-    <p>의사결정트리라는 이름은 그림의 모양에서 왔습니다. 나무를 거꾸로 세운 모양이어서 맨 위에서 시작해 아래로 갈라집니다. 시작하는 맨 위 마디를 뿌리 마디라고 부릅니다. 갈라지는 지점은 마디, 더 갈라지지 않는 맨 아래 끝은 잎 마디라고 부릅니다. 실제 나무와 위아래만 반대입니다.</p>
-    <p>섞임을 계산하는 방법에는 여러 가지가 있습니다. 이 실습이 사용하는 라이브러리는 지니 불순도라는 방법을 기본으로 사용합니다. 지니는 이탈리아 통계학자 코라도 지니의 이름입니다. 그는 1912년에 낸 책에서 값이 얼마나 고르게 퍼져 있는지 계산하는 여러 방법을 제시했습니다. 같은 책에서 나온 다른 지표가 소득 불평등을 계산하는 지니 계수입니다. 뉴스에서 말하는 그 지니 계수입니다. 두 지표는 이름과 출발점을 공유하지만 계산하는 대상이 다릅니다. 같은 식이 아닙니다.</p>
-    <p>지금의 형태로 트리의 분기 기준에 넣은 것은 브레이먼을 비롯한 네 사람이 1984년에 낸 책입니다. 오늘 실습에서 사용하는 라이브러리도 이 방식을 따릅니다. 교과서가 든 스무고개 비유는 정확합니다. 스무고개에서 좋은 질문이란 남은 후보를 크게 줄이는 질문입니다. 트리가 고르는 질문도 남은 데이터를 가장 덜 섞이게 나누는 질문입니다.</p>
-    <p class="mini">출처: 코라도 지니 『변동성과 가변성』(1912) · 브레이먼, 프리드먼, 올셴, 스톤 『분류와 회귀 나무』(1984) · 이 실습이 사용하는 scikit-learn의 <code>DecisionTreeClassifier</code> 기본 설정</p>
+  <div class="tbquote">
+    <div class="h">📖 교과서의 한 줄 <span class="src">『데이터 과학』 154쪽</span></div>
+    <p class="q">"군집 분석 결과를 해석하기 위해서는 데이터에 대한 깊은 이해가 필요하다." <span class="src">(154쪽)</span></p>
+    <p class="t">→ 알고리즘은 묶음의 번호까지만 만듭니다. 이름과 의미는 야구를 아는 사람이 붙입니다.</p>
+  </div>
+  <details class="glossary"><summary>더 알아보기 — 실제 사례 · NBA 포지션 재정의</summary><div class="gin">
+  <h3>정답표 없이 묶고 이름을 사람이 붙인 또 하나의 사례입니다.</h3>
+  <p>이 사례도 정답 레이블 없이 기록만으로 대상을 묶고 묶음의 이름은 사람이 붙였다는 점에서 오늘 실습과 같은 순서를 밟았습니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>무엇을 묶었나</th><th>사람이 정한 것</th></tr></thead>
+    <tbody>
+      <tr><td><b>NBA 포지션 재정의</b><br>MIT 슬론 스포츠 애널리틱스 콘퍼런스 2012</td><td>포지션 정보를 사용하지 않고 분당 기록 7가지(득점·리바운드·어시스트·스틸·블록·턴오버·파울)로 한 시즌 NBA 선수들을 묶었다. 묶는 방법은 k-평균이 아니라 위상 데이터 분석이다.</td><td>묶음의 개수 13과 묶음 이름은 사람이 정했다. 이름 예시로는 득점형 리바운더(노비츠키), 페인트존 수비수(챈들러), 유일무이형(로즈·하워드)이 있다.</td></tr>
+    </tbody>
+  </table>
+  <figure class="case" style="margin:16px 0"><img src="img/lesson11_case1.png" loading="lazy" alt="어두운 배경 위에 점과 선이 이어진 그물 모양 지도. 분당 득점이 낮은 쪽은 초록, 높은 쪽은 주황과 빨강으로 표시되고 갈라진 가지마다 Role Player, Scoring Rebounder, Paint Protector, One-of-a-kind 같은 유형 이름 13개가 붙어 있습니다." style="width:100%;max-width:560px;display:block;border:1px solid #e3ddcf;border-radius:6px"><figcaption style="font-size:.85rem;color:#6b5836;margin-top:6px">그림: 무투 알라가판, 「From 5 to 13: Redefining the Positions in Basketball」, MIT 슬론 스포츠 애널리틱스 콘퍼런스 2012 (<a href="https://www.sloansportsconference.com/research-papers/from-5-to-13-redefining-the-positions-in-basketball" target="_blank" rel="noopener">발표 데이터</a>)</figcaption></figure>
+  <p>이 사례의 순서도 정답 레이블을 사용하지 않고 기록 사이의 비슷한 정도로 묶은 뒤 묶음의 개수와 이름을 사람이 정하는 것입니다. 4절에서 세 묶음에 이름을 붙이는 일은 실제 분석에서도 사람의 몫입니다. 묶는 기준으로 어떤 속성을 사용하느냐에 따라 결과가 달라지며 이 점은 1절의 표준화 설명과 이어집니다.</p>
   </div></details>
 
-  <h2>4. 무엇을 보고 맞혔나</h2>
-
-  <p>한 분기가 섞임을 줄인 정도를 속성별로 더한 값을 <b>속성 중요도</b>(feature importance)라고 합니다. 학습한 의사결정트리의 속성 중요도를 화면에서 확인합니다. 각 값은 이 트리 안에서의 상대적인 기여를 나타내며, 모두 더하면 1이 됩니다. 입력이 세 가지뿐이므로 표도 세 줄 안쪽입니다.</p>
-
-  <p>고른 속성 가운데 <b>중요도가 0인 것이 나올 수 있습니다.</b> 트리가 그 속성으로는 한 번도 나누지 않았다는 뜻입니다. 화면에 표시된 것을 그대로 적고, 없으면 <b>해당 없음</b>이라고 적습니다.</p>
-
-  <table class="daymap">
-    <thead><tr><th>순위</th><th>속성 이름</th><th>중요도 (트리, 깊이 3)</th></tr></thead>
-    <tbody>
-      <tr><td>1위</td><td></td><td></td></tr>
-      <tr><td>2위</td><td></td><td></td></tr>
-      <tr><td>3위</td><td></td><td></td></tr>
-    </tbody>
-  </table>
-
-  <p class="mini">데이터가 날마다 쌓이므로 값도 순위도 달라집니다.</p>
-
-  <p>로지스틱 회귀의 가중치도 함께 확인합니다. 흐름도에서 입력마다 곱한다고 했던 그 값입니다. 트리의 중요도는 0 이상의 값이라 확률을 올리는 쪽인지 내리는 쪽인지 알 수 없지만, 가중치는 부호가 있어 <b>그 값이 클수록 성공 확률이 올라가는지 내려가는지</b>까지 알려 줍니다. 두 모델이 같은 속성을 보았는지 비교해 봅니다.</p>
-
-  <p><b>속성 중요도는 의사결정트리에만 있는 값입니다.</b> 로지스틱 회귀가 내놓는 것은 가중치이고, 둘은 읽는 법이 다릅니다.</p>
-
-  <p>속성 중요도도 가중치도 이 모델이 무엇을 단서로 삼았는지 보여 줄 뿐 인과관계의 증거가 아닙니다.</p>
-
-  <p class="mini">🧪 입력으로 사용할 속성을 바꿔 가며 점수가 어떻게 달라지는지 실험하는 도전과, 아직 결과가 나오지 않은 최근 개봉작으로 팀장 보고서를 만드는 도전은 <a href="lesson09-lab.html">9차시 실험실</a>에 있습니다.</p>
-
-  <h2>5. 정리</h2>
-
-  <p>정답이 붙어 있는 데이터로 배우는 방식을 지도학습이라고 합니다. 회귀와 분류가 모두 여기에 속합니다. 오늘은 같은 영화 데이터에 같은 질문을 주고, 두 가지 모델로 답을 받아 보았습니다. 로지스틱 회귀는 확률로 답했고, 의사결정트리는 질문의 순서로 답했습니다. 세 가지 정확도를 표에 적어 두었습니다. 그 정확도가 좋은 숫자인지는 아직 판단할 수 없습니다.</p>
-
-  <p>이 과정 전체는 교과서 116쪽 탐구활동의 스팸 메일 예측 모델을 만드는 과정과 같은 뼈대입니다. 폼 Ⅲ-01b에서 우리 실습을 그 단계에 맞춰 봅니다. 시간이 남으면 폼 Ⅲ-02e(교과서 142쪽 탐구활동 '데이터로 예측하기')에 내 분류기의 예측 하나를 기록합니다.</p>
-
-  <details class="glossary">
-    <summary>📖 대응표 펼쳐 보기 — 폼을 먼저 써 본 뒤 확인하세요</summary>
-  <table class="daymap">
-    <thead><tr><th>단계 (교과서 116쪽)</th><th>스팸 예측이라면</th><th>오늘 우리가 한 일</th></tr></thead>
-    <tbody>
-      <tr><td><b>데이터 전처리</b></td><td>스팸을 나타내는 속성 선택 · 훈련용/테스트용 분리</td><td>관객 수 기준으로 레이블을 만들고, 입력의 수집 시점을 확인함</td></tr>
-      <tr><td><b>모델 학습</b></td><td>예측에 적합한 알고리즘 선택</td><td>로지스틱 회귀와 의사결정트리에 같은 문제를 맡김</td></tr>
-      <tr><td><b>모델 평가</b></td><td>올바르게 예측했는지 지표로 확인</td><td>정확도 확인(이 지표로 충분한지는 10차시에서 다룸)</td></tr>
-    </tbody>
-  </table>
-  </details>
-
-  <p>4절에서 트리의 속성 중요도와 로지스틱 회귀의 가중치를 확인했습니다. 그것이 배급팀에 돌려줄 답입니다. 표 맨 위에 올라온 속성이 무엇이든, 그것은 흥행한 영화에서 그 값이 함께 컸다는 뜻입니다. 그 값을 키우면 흥행한다는 뜻이 아닙니다. 두 문장은 다릅니다. 인턴은 보고할 때 이 구분을 함께 적습니다.</p>
-
-  <p class="mini">다음 시간에는 그 정확도를 어떻게 읽어야 하는지 배웁니다. 항상 편수가 많은 쪽으로만 답하는 모델과 비교하고, 성공작을 얼마나 찾아냈는지도 계산합니다. 오늘 적어 둔 정확도를 그대로 가져갑니다.</p>
+  <h3>시연 — 군집과 분류는 다르다 (축구 선수 800명)</h3>
+  <p>선생님 화면으로 한 장면을 더 봅니다. 축구 게임(EA FC)의 필드플레이어 800명을 능력치 6종으로 묶으면, k=2에서 공격형(메시·음바페)과 수비형(판다이크·캉테)으로 나뉩니다. 그런데 이 묶음을 실제 포지션(공격수·미드필더·수비수)과 대조하면 겹치되 일치하지는 않습니다. 공격수처럼 뛰는 미드필더, 수비에 가담하는 공격수가 섞여 있기 때문입니다. 교과서 155쪽의 참고가 말하는 바가 이것입니다. 군집은 데이터의 유사도로 묶고, 다음 주에 배울 분류는 미리 정해 둔 체계로 나눕니다. 둘의 결과는 다를 수 있습니다. 덧붙여 이 능력치는 게임 회사가 매긴 주관적 평가라는 점도 기억해 둡니다. 데이터의 출처를 따지는 습관(14차시)은 여기서도 유효합니다.</p>
+  <p class="mini">데이터: <a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/eafc_players.csv" target="_blank" rel="noopener"><code>eafc_players.csv</code></a> — 필드플레이어 800명 × 14열, 게임 능력치 공개 미러를 정리한 고정 스냅샷입니다. 게임사가 공식 배포한 데이터가 아니며, 수치의 근거는 게임 회사의 평가에 있습니다.</p>
+  <h2>5. 개념 정리 — 정답이 없다는 것의 뜻</h2>
+  <p>회귀는 예측한 값을 실제 값과 비교하지만, 이 군집 실습에는 비교할 정답이 없습니다. 점수만으로 영화 유형의 의미를 확정할 수는 없으므로, 어떤 속성을 사용했는지·표준화했는지·k를 몇으로 두었는지를 함께 적고 해석의 근거를 설명합니다.</p>
+  <p>오늘 한 일을 순서대로 되짚으면 이렇습니다. 먼저 "비슷하다"를 <b>거리</b>로 바꾸었고, 속성마다 단위가 달라 <b>표준화</b>로 단위를 맞추었습니다. 그다음 <b>엘보우</b>로 k를 정해 묶고, 묶음의 평균을 근거로 <b>이름</b>을 붙였습니다. 알고리즘이 만든 것은 번호까지이고, 이름과 의미는 영화를 아는 사람이 붙였습니다.</p>
+  <p>넷플릭스가 1,300개 묶음에 이름을 붙이는 일을 사람이 한다고 했습니다. 오늘 여러분이 영화 묶음에 붙인 이름도 같은 일입니다.</p>
+  <p>다음 시간에는 급식 메뉴를 다룹니다. 어떤 반찬이 함께 나오는지를 집계해, 데이터 안에서 함께 일어나는 일을 찾는 방법을 살펴봅니다.</p>
 
   <h2>6. 확인 문제</h2>
-
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 1</span> 다음 물음이 회귀 문제인지 분류 문제인지 골라 보세요. 답을 눌러 확인합니다.</div>
+    <div class="qq"><span class="qn">문제 1</span> 기온 예측(6차시), 영화 관객 수 예측(7차시), 영화 유형 묶기(오늘) 가운데 비지도학습은 무엇일까요? 답을 눌러 확인합니다.</div>
     <div class="qitem">
-      <div class="qs">(가) 이 영화의 총 관객 수는 몇 명이 될까</div>
-      <div class="qopts"><button class="opt" data-ok="1">회귀</button><button class="opt">이진 분류</button><button class="opt">다중 분류</button></div>
-      <div class="fb">연속적인 숫자를 예측하므로 <b>회귀</b>입니다.</div>
-    </div>
-    <div class="qitem">
-      <div class="qs">(나) 이 영화의 기록된 관객 수는 100만 명 이상일까</div>
-      <div class="qopts"><button class="opt">회귀</button><button class="opt" data-ok="1">이진 분류</button><button class="opt">다중 분류</button></div>
-      <div class="fb">"100만 명 이상"과 "미만" 두 범주 중 하나이므로 <b>이진 분류</b>입니다. 같은 영화 데이터라도 묻는 형태가 모델을 정합니다.</div>
-    </div>
-    <div class="qitem">
-      <div class="qs">(다) 방금 받은 이 문자는 스미싱인가</div>
-      <div class="qopts"><button class="opt">회귀</button><button class="opt" data-ok="1">이진 분류</button><button class="opt">다중 분류</button></div>
-      <div class="fb">"스미싱이다"와 "아니다" 두 범주 중 하나이므로 <b>이진 분류</b>입니다. 다중 분류는 교과서 135쪽의 책 장르처럼 범주가 셋 이상일 때입니다.</div>
+      <div class="qopts"><button class="opt">기온 예측(6차시)</button><button class="opt">영화 관객 수 예측(7차시)</button><button class="opt" data-ok="1">영화 유형 묶기(오늘)</button></div>
+      <div class="fb">영화 묶기에는 정답표가 없고 데이터 속 유사성만으로 구조를 찾으므로 <b>비지도학습</b>입니다. 기온 예측에는 실제 기온이라는 정답이 있고, 관객 수 예측에는 실제 관객 수라는 정답이 있습니다. 두 가지 모두 정답을 맞히도록 학습하는 지도학습입니다.</div>
     </div>
   </div>
-
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 흥행 성공의 레이블 기준을 100만 명에서 300만 명으로 올리면 무엇이 달라지는지 두 가지 이상 쓰시오. 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>① 성공 레이블이 붙는 영화 수가 줄어든다(정답 자체가 바뀐다). ② 모델이 새 레이블로 다시 학습되므로 예측 결과와 정확도가 달라진다. 즉 레이블 기준은 데이터에 원래 있던 사실이 아니라 사람의 판단이며, 그 판단이 모델의 성능 수치까지 바꾼다.</p>
-    </details>
-  </div>
-
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 로지스틱 회귀는 이름에 "회귀"가 들어 있는데 왜 분류 모델인가? 자기 말로 답해 본 뒤 펼쳐 보세요.</div>
-    <details class="reveal"><summary>예시 답 펼쳐 보기</summary>
-      <p>입력 속성의 가중합에 시그모이드를 적용해 양성일 확률을 추정하고, 문턱값으로 범주를 정하기 때문입니다. 이 실습에서는 확률이 0.5 이상이면 성공, 미만이면 기준 미달로 분류합니다. 선형 회귀를 먼저 학습하는 절차는 아닙니다.</p>
-    </details>
-  </div>
-
-  <div class="quiz">
-    <div class="qq"><span class="qn">문제 4</span> 앞 표에 적은 중요도 1위 속성과 그 값을 가져옵니다. 이 결과에서 끌어낼 수 있는 말로 알맞은 것은?</div>
+    <div class="qq"><span class="qn">문제 2</span> 오늘 사용한 네 속성 가운데 누적 관객만 값이 백만 단위입니다. 표준화하지 않고 원래 숫자 그대로 거리를 계산하면 어떤 일이 생길까요?</div>
     <div class="qitem">
-      <div class="qopts qopts-col"><button class="opt">그 속성을 키우면 흥행에 성공한다는 것이 밝혀졌다</button><button class="opt" data-ok="1">이 모델이 그 속성을 가장 큰 단서로 삼았다</button><button class="opt">1위가 아닌 속성은 흥행과 아무 관계가 없다</button></div>
-      <div class="fb">중요도는 '무엇을 단서로 삼았나'를 보여 줄 뿐 원인의 증거가 아닙니다. 스크린 수가 1위로 나왔다면, 기대작에 스크린을 몰아주는 결정이 먼저였을 수도 있습니다. 중요도는 데이터와 모델 설정에 따라 달라질 수 있습니다.</div>
+      <div class="qopts qopts-col"><button class="opt" data-ok="1">누적 관객의 차이가 거리를 거의 혼자 정합니다.</button><button class="opt">네 속성이 거리에 똑같은 비중으로 반영됩니다.</button><button class="opt">값이 가장 작은 10위권 일수가 거리를 정하게 됩니다.</button></div>
+      <div class="fb">거리는 속성의 단위를 그대로 물려받습니다. 백만 단위로 벌어지는 속성 하나가 있으면 나머지 속성의 차이는 거리에 거의 반영되지 않습니다. 각 속성에서 평균을 빼고 표준편차로 나누는 <b>표준화</b>로 단위를 맞춘 뒤 묶습니다.</div>
+    </div>
+  </div>
+  <div class="quiz">
+    <div class="qq"><span class="qn">문제 3</span> 어떤 모둠의 화면에서 군집 내 제곱합이 k=1부터 차례로 520, 300, 210, 190, 175, 163, 154로 나왔습니다. 엘보우 기법으로 읽으면 꺾이는 자리는 어디일까요?</div>
+    <div class="qitem">
+      <div class="qopts"><button class="opt">k=2</button><button class="opt" data-ok="1">k=3</button><button class="opt">k=7</button></div>
+      <div class="fb">줄어든 값을 차례로 구하면 220, 90, 20, 15, 12, 9입니다. k=3까지는 크게 줄다가 k=4부터 감소폭이 작아지므로 꺾이는 자리는 <b>k=3</b>입니다. k=7은 값이 가장 작지만, 묶음 수를 늘리면 이 값은 언제나 줄어들므로 근거가 되지 않습니다. 실제 데이터에서는 감소폭이 이만큼 뚜렷하지 않아 사람마다 다르게 읽는 경우도 있습니다.</div>
     </div>
   </div>
 
   <h2>🎒 오늘의 체크</h2>
-
   <ul class="checklist">
-    <li>흥행 분류기를 만들어 실행하고, 테스트용 영화의 성공 확률과 정확도를 읽었다.</li>
-    <li>같은 앱에 의사결정트리를 더하고, 트리가 먼저 던진 질문이 무엇인지 읽었다.</li>
-    <li>세 가지 정확도를 표에 적고, 속성 중요도와 가중치를 보고 모델이 무엇을 단서로 삼았는지 적었다.</li>
+    <li>지도학습과 비지도학습을 정답(레이블)의 유무로 구분할 수 있다.</li>
+    <li>k-평균 알고리즘의 네 단계 반복 과정을 말할 수 있다.</li>
+    <li>단위가 다른 속성을 표준화하는 까닭을 누적 관객을 예로 설명할 수 있다.</li>
+    <li>엘보우 꺾은선을 읽고 고른 k와 그 근거를 말할 수 있다.</li>
+    <li>세 묶음에 붙인 이름의 근거를 속성 두 가지로 말할 수 있다.</li>
   </ul>
 
   <h2>📚 오늘의 용어</h2>
-
   <table class="glossary-table">
     <tr><th>용어</th><th>뜻</th></tr>
-    <tr><td class="term">지도학습</td><td>정답이 붙어 있는 데이터로 배우는 방식. 회귀와 분류가 모두 여기에 속한다.</td></tr>
-    <tr><td class="term">분류</td><td>정해진 범주 중 하나를 예측하는 문제(이진 분류: 두 범주)</td></tr>
-    <tr><td class="term">레이블</td><td>모델이 예측하려는 정답 값. 없으면 사람이 기준을 정해 붙인다.</td></tr>
-    <tr><td class="term">로지스틱 회귀</td><td>입력의 가중합에 시그모이드를 적용해 확률을 추정하고 분류하는 모델</td></tr>
-    <tr><td class="term">시그모이드 함수</td><td>실수 입력을 0과 1 사이 값으로 바꾸는 S자 형태의 함수</td></tr>
-    <tr><td class="term">의사결정트리</td><td>질문을 차례로 던져 가지를 나누며 분류하는 모델. 판단 순서가 그림으로 보인다.</td></tr>
-    <tr><td class="term">불순도(섞임)</td><td>한 마디에 두 범주가 얼마나 섞여 있는지 나타내는 값. 한 범주만 있으면 0이다. 교과서가 사용하는 말은 불순도이고, 이 교재 본문과 그림에서는 "섞임"이라고 적는다. 이 실습이 사용하는 계산 방법은 지니 불순도이다.</td></tr>
-    <tr><td class="term">문턱값</td><td>확률을 범주로 바꾸는 경계(이 실습: 0.5 이상이면 양성)</td></tr>
-    <tr><td class="term">표준화</td><td>입력마다 다른 값의 크기를 훈련용 데이터의 평균과 퍼짐을 기준으로 맞추는 처리. 11차시에서 다시 다룬다.</td></tr>
-    <tr><td class="term">정확도</td><td>테스트용 데이터에서 예측이 실제와 같았던 비율. 맞힌 편수 ÷ 전체 편수로 구한다.</td></tr>
-      <tr><td class="term">속성 중요도(feature importance)</td><td>각 속성의 분기가 불순도를 줄이는 데 기여한 정도를 나타내는 상대적인 값. 단서일 뿐 원인의 증거는 아니다.</td></tr>
-</table>
-
+    <tr><td class="term">비지도학습</td><td>정답(레이블) 없이 데이터 안의 구조를 스스로 찾는 학습.</td></tr>
+    <tr><td class="term">군집화</td><td>속성 간 유사성을 측정해 유사한 데이터끼리 묶는 것.</td></tr>
+    <tr><td class="term">k-평균</td><td>k개의 중심점을 반복 조정하며 군집을 만드는 알고리즘. k는 사람이 정한다.</td></tr>
+    <tr><td class="term">표준화</td><td>이 실습에서는 각 속성에서 평균을 빼고 표준편차로 나누는 처리. 평균 0, 표준편차 1로 맞춤.</td></tr>
+    <tr><td class="term">엘보우 기법</td><td>묶음 수를 늘려도 군집 내 제곱합이 더 줄지 않는 지점을 찾아 k를 정하는 방법.</td></tr>
+    <tr><td class="term">실루엣 계수</td><td>-1에서 1 사이의 값을 가지며, 1에 가까울수록 근처의 다른 군집과 멀리 떨어져 있다는 것을 나타낸다(교과서 153쪽).</td></tr>
+  </table>
   <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
 
   <div class="pager">
     <a class="prev" href="lesson08.html"><div class="dir">← 이전</div><div class="tt">8차시 · 회귀 평가 손계산</div></a>
-    <a class="next" href="lesson10.html"><div class="dir">다음 →</div><div class="tt">10차시 · 분류 평가 손계산</div></a>
+    <a class="next" href="lesson10.html"><div class="dir">다음 →</div><div class="tt">10차시 · 연관 분석</div></a>
   </div>
 </main>
 </div>
+
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets09.js?v=2"></script>
+<script src="assets/widgets11.js"></script>
 <script src="assets/answer.js?v=3"></script>
 </body>
 </html>
