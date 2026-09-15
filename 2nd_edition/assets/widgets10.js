@@ -37,8 +37,8 @@ function initW_matrix(root, D) {
       return { ok: den > 0, v: den > 0 ? c.tp / den : 0, sub: '= ' + c.tp + ' ÷ ' + den };
     },
     f1: function (c) {
-      // 활동지 규칙: 정밀도와 재현율 가운데 하나라도 구할 수 없거나 0이면 F1도 0으로 둔다.
-      if (c.tp + c.fn === 0) return { ok: false, v: 0, sub: '' };
+      // 활동지 규칙: 정밀도를 구할 수 없으면(예측 양성 0) F1도 구할 수 없다. 정밀도는 있는데 재현율이 0이면 F1은 0이다.
+      if (c.tp + c.fp === 0 || c.tp + c.fn === 0) return { ok: false, v: 0, sub: '정밀도를 구할 수 없음' };
       if (c.tp === 0) return { ok: true, v: 0, sub: '= 찾아낸 것이 없으므로 0' };
       var p = c.tp / (c.tp + c.fp), r = c.tp / (c.tp + c.fn);
       return { ok: true, v: 2 * p * r / (p + r),
