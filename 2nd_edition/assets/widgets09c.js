@@ -13,6 +13,21 @@ var S09 = {
   GRAY: '#b6b0a2'
 };
 
+// 화면에 적는 이름 — 한글 표기가 있으면 한글로, 없으면 영문 표기 그대로.
+S09.nm = function (D, i) {
+  var k = D && D.nk && D.nk[i];
+  return k ? k : D.n[i];
+};
+// 글자 폭 어림값(범례 칸 배치용) — 한글은 12px, 영문·숫자는 6.6px로 계산한다.
+S09.tw = function (t, size) {
+  var w = 0, i, c;
+  for (i = 0; i < t.length; i++) {
+    c = t.charCodeAt(i);
+    w += (c > 0x2000) ? 1 : (c === 32 ? 0.34 : 0.56);
+  }
+  return w * (size || 12);
+};
+
 S09.ticks = function (lo, hi, n) {
   var span = hi - lo, step = Math.pow(10, Math.floor(Math.log(span / n) / Math.LN10));
   var best = step;
@@ -37,7 +52,9 @@ S09.el = function (doc, tag, attrs, text) {
 // 1. ruler — 단위 바꾸기: 슈팅(0~100)과 시장 가치(만 유로)
 // ─────────────────────────────────────────────────────────────────────────
 function initW_ruler(root, D) {
-  var R = D.ruler, NM = D.n, N = NM.length;
+  var R = D.ruler, N = D.n.length;
+  var NM = [];
+  for (var t0 = 0; t0 < N; t0++) NM.push(S09.nm(D, t0));
   var q = function (s) { return root.querySelector(s); };
   var doc = root.ownerDocument, view = doc && doc.defaultView;
   var reduce = !!(view && view.matchMedia && view.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -93,12 +110,13 @@ function initW_ruler(root, D) {
   var labs = q('.labs'), line = q('.link'), bar = q('.bar');
   var dSel = q('.dot-sel'), dNear = q('.dot-near');
   var mode = 'raw', link = true, busy = false, seq = 0;
-  var sel = 0, cur = [];
+  var sel = (R.sel0 === undefined || R.sel0 === null) ? 0 : R.sel0;
+  var cur = [];
   for (i = 0; i < N; i++) { var p1 = pos(i, 'raw'); cur.push([p1[0], p1[1]]); }
   function near() { return mode === 'raw' ? R.nRaw[sel] : R.nStd[sel]; }
 
   var BAR_W = 156;
-  function nameW(t) { return t.length * 7.4 + 4; }
+  function nameW(t) { return S09.tw(t, 12) + 6; }
   function box(k, ty) {
     var x = cur[k][0], w = nameW(NM[k]);
     var right = x + 9 + w <= 462;
@@ -232,7 +250,9 @@ function initW_ruler(root, D) {
 function initW_km2d(root, D) {
   var doc = root.ownerDocument;
   var q = function (s) { return root.querySelector(s); };
-  var X = D.km2d.x, Y = D.km2d.y, NM = D.n, GP = D.grp, N = NM.length;
+  var X = D.km2d.x, Y = D.km2d.y, GP = D.grp, N = D.n.length;
+  var NM = [];
+  for (var t0 = 0; t0 < N; t0++) NM.push(S09.nm(D, t0));
   var PX0 = 62, PX1 = 700, PY0 = 56, PY1 = 336;
   var xLo = -3.5, xHi = 2.2, yLo = -2.3, yHi = 1.9;
   function gx(v) { return PX0 + (v - xLo) / (xHi - xLo) * (PX1 - PX0); }
@@ -282,6 +302,29 @@ function initW_km2d(root, D) {
     if (!a) return S09.GRAY;
     return S09.CLU[remapped(a[i])];
   }
+  var gLgd = q('.lgd');
+  function legend() {
+    var items = [], t;
+    if (colorBy === 'pos') {
+      ['FW', 'MF', 'DF'].forEach(function (g2) {
+        items.push({ c: S09.POS[g2], t: S09.POSN[g2] });
+      });
+    } else {
+      for (t = 0; t < k; t++) items.push({ c: S09.CLU[t], t: S09.SYM[t] + ' 묶음' });
+    }
+    var head = colorBy === 'pos' ? '색 = 포지션' : '색 = k-평균이 만든 묶음';
+    var x = 20 + S09.tw(head, 12) + 12;
+    var html = '<text x="20" y="446" font-size="12" fill="#6b7385">' + head + '</text>';
+    for (t = 0; t < items.length; t++) {
+      html += '<rect x="' + x.toFixed(1) + '" y="436" width="12" height="12" rx="2.5" fill="'
+        + items[t].c + '" stroke="#ffffff" stroke-width="0.8"/>';
+      html += '<text x="' + (x + 17).toFixed(1) + '" y="446" font-size="12" fill="#1c2230">'
+        + items[t].t + '</text>';
+      x += 17 + S09.tw(items[t].t, 12) + 16;
+    }
+    gLgd.innerHTML = html;
+  }
+
   function render() {
     var s2 = state(), t;
     for (t = 0; t < N; t++) dots[t].setAttribute('fill', colorOf(t, s2.a));
@@ -315,6 +358,7 @@ function initW_km2d(root, D) {
       : '';
     q('.wout').textContent = 'k=' + k + ' · 전체 ' + run().iters + '회 반복으로 수렴 · '
       + (stage === 0 ? '시작 전' : Math.ceil(stage / 2) + '회째');
+    legend();
   }
 
   function setK(nk) {
@@ -344,9 +388,6 @@ function initW_km2d(root, D) {
         x.classList.toggle('on', on);
         x.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
-      q('.st-legend').textContent = colorBy === 'pos'
-        ? '색 = 포지션 · 공격수 · 미드필더 · 수비수'
-        : '색 = k-평균이 만든 묶음';
       render();
     });
   });
@@ -374,7 +415,8 @@ function initW_km3d(root, D) {
       var x = [], y = [], z = [], t = [];
       for (var i = 0; i < src.length; i++) {
         if (src[i] !== g.key) continue;
-        x.push(T.x[i]); y.push(T.y[i]); z.push(T.z[i]); t.push(T.n[i]);
+        x.push(T.x[i]); y.push(T.y[i]); z.push(T.z[i]);
+        t.push((T.nk && T.nk[i]) ? T.nk[i] : T.n[i]);
       }
       return { x: x, y: y, z: z, text: t, name: g.name + ' ' + x.length + '명',
         type: 'scatter3d', mode: 'markers',
@@ -510,6 +552,8 @@ function initW_stdswitch(root, D) {
   var SYM_S = S09.SYM, SYM_R = ['①', '②', '③'];
 
   var raw = D.abv, names = D.n, N = raw.length;
+  var show = [];
+  for (var t9 = 0; t9 < N; t9++) show.push(S09.nm(D, t9));
   var labS = D.std.stdl, labR = D.std.raw;
   var share = { rawA: D.std.shareA.raw, stdA: D.std.shareA.std, rawB: D.std.shareB.raw, stdB: D.std.shareB.std };
   var gs = labS, gr = labR, i;
@@ -588,7 +632,7 @@ function initW_stdswitch(root, D) {
   for (i = 0; i < N; i++) {
     var c = S09.el(doc, 'circle', { cx: px[i].toFixed(1), cy: py[i].toFixed(1), r: '5',
       'fill-opacity': '0.85', 'stroke-width': '0.8', tabindex: '0', 'data-i': String(i), style: 'cursor:pointer' });
-    c.appendChild(S09.el(doc, 'title', {}, names[i]));
+    c.appendChild(S09.el(doc, 'title', {}, show[i]));
     gPts.appendChild(c); dots.push(c);
   }
   for (i = 0; i < N; i++) {
@@ -682,7 +726,7 @@ function initW_stdswitch(root, D) {
     }
   }
   function paintPanel() {
-    pname.textContent = names[sel];
+    pname.textContent = show[sel];
     for (var t = 0; t < 6; t++) {
       pv[t].textContent = f1(raw[sel][t]);
       pz[t].textContent = f2(zval(sel, t));

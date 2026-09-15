@@ -64,12 +64,12 @@
     <p class="t">→ 군집의 개수 k는 사람이 직접 정합니다(146쪽). 정답이 없으므로, 몇 묶음이 적절한지도 판단 대상입니다. 교과서와 이 교재는 <b>군집</b>이라고 적고, 설명할 때는 <b>묶음</b>이라고도 부릅니다. 둘은 같은 것을 가리킵니다.</p>
   </div>
   <p>k-평균은 먼저 군집 수 k와 시작 중심점을 정합니다. 각 데이터를 가장 가까운 중심점에 배정하고, 군집에 속한 데이터의 평균으로 중심점을 옮깁니다. 이 두 과정을 반복하다가 변화가 충분히 작아지면 멈춥니다.</p>
-  <p>절차를 눈으로 보려면 점이 어디에 있는지 학생이 이미 아는 데이터가 좋습니다. 그래서 개념은 축구 선수로 보고, 실습은 영화로 합니다. 이 절의 그림에는 축구 게임 EA FC의 선수 능력치 데이터를 사용합니다. 800명 가운데 종합 능력치 순으로 고르게 뽑은 114명이고, 속도·슈팅·패스·드리블·수비·몸싸움 여섯 능력치와 시장 가치가 들어 있습니다. 아래 그림의 버튼을 누르면 한 단계씩 진행됩니다. 점이 놓인 자리도, 중심점이 옮겨 간 자리도, 반복 횟수도 이 114명으로 k-평균을 실제로 돌려 기록한 값입니다.</p>
-  <p class="mini">데이터: 게임사가 공식으로 배포한 파일이 아니라 공개 미러에 정리된 스냅샷입니다(<a href="https://github.com/greatsong/modudata/blob/bb860932644270ad1199f10d3e7670e30231bce4/data/eafc_players.csv" target="_blank" rel="noopener"><code>eafc_players.csv</code></a>, 선수 800명 고정본).</p>
+  <p>절차를 눈으로 보려면 점이 어디에 있는지 학생이 이미 아는 데이터가 좋습니다. 그래서 개념은 축구 선수로 보고, 실습은 영화로 합니다. 이 절의 그림에는 축구 게임 EA SPORTS FC 25(2024년 시즌)의 선수 능력치 데이터를 사용합니다. 800명 가운데 종합 능력치가 가장 높은 100명이고, 속도·슈팅·패스·드리블·수비·몸싸움 여섯 능력치와 시장 가치가 들어 있습니다. 아래 그림의 버튼을 누르면 한 단계씩 진행됩니다. 점이 놓인 자리도, 중심점이 옮겨 간 자리도, 반복 횟수도 이 100명으로 k-평균을 실제로 돌려 기록한 값입니다.</p>
+  <p class="mini">데이터: 게임사가 공식으로 배포한 파일이 아니라 공개된 능력치를 정리한 스냅샷입니다(<a href="https://github.com/greatsong/modudata/blob/main/data/eafc25_players.csv" target="_blank" rel="noopener"><code>eafc25_players.csv</code></a>, 골키퍼를 뺀 선수 800명). 손흥민이 토트넘 소속으로 적혀 있는 것이 2024년 시즌 데이터라는 근거입니다. 선수 이름은 국내 언론에서 사용하는 한글 표기로 적었고, 통용 표기를 확인하지 못한 한 명은 원문 표기 그대로 두었습니다.</p>
 
   <figure class="interactive" data-fig="km2d">
     <div class="widget" data-w="km2d" style="overflow-x:auto">
-<svg viewBox="0 0 720 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="축구 선수 114명의 슈팅과 수비 능력치를 표준화한 산점도 위에서 k-평균이 중심점을 옮기며 묶음을 만드는 과정" style="min-width:640px">
+<svg viewBox="0 0 720 474" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="축구 선수 100명의 슈팅과 수비 능력치를 표준화한 산점도 위에서 k-평균이 중심점을 옮기며 묶음을 만드는 과정" style="min-width:640px">
   <text x="20" y="28" font-size="16" font-weight="700" fill="#1c2230">k-평균을 한 단계씩 · 슈팅 × 수비(표준화)</text>
   <g class="gr"></g>
   <path d="M62 56 V336 H700" fill="none" stroke="#6b7385" stroke-width="1.2"/>
@@ -79,7 +79,8 @@
   <g class="cents"></g>
   <text class="st-now" x="20" y="402" font-size="15" font-weight="700" fill="#b07a00">① 중심점을 임의로 놓는다</text>
   <text x="20" y="426" font-size="13" fill="#6b7385">반복 <tspan class="st-it" font-weight="700" fill="#1c2230">시작</tspan> · 중심점이 움직인 거리 <tspan class="st-shift" font-weight="700" fill="#1c2230">—</tspan> · 묶음 인원 <tspan class="st-size" font-weight="700" fill="#1c2230">아직 배정 전</tspan></text>
-  <text x="20" y="446" font-size="12" fill="#6b7385"><tspan class="st-legend">색 = k-평균이 만든 묶음</tspan> <tspan class="st-done" fill="#b07a00"></tspan></text>
+  <g class="lgd"></g>
+  <text class="st-done" x="20" y="468" font-size="12" fill="#b07a00"></text>
 </svg>
 <div class="wctl">
   <button class="wbtn" type="button" data-k="2" aria-pressed="false">k=2</button>
@@ -93,19 +94,19 @@
   <span class="wout"></span>
 </div>
     </div>
-    <figcaption>점 하나가 선수 한 명이고, 가로세로는 슈팅과 수비 능력치를 표준화한 값입니다. ★가 중심점입니다. <b>포지션 색</b> 버튼을 누르면 k=3 묶음과 포지션이 겹치기는 하지만 일치하지는 않는 것이 보입니다. 묶음마다 가장 많은 포지션으로 맞혀도 114명 가운데 87명만 들어맞습니다. k-평균은 포지션을 모르는 채로 능력치만 사용해 묶었습니다.</figcaption>
+    <figcaption>점 하나가 선수 한 명이고, 가로세로는 슈팅과 수비 능력치를 표준화한 값입니다. ★가 중심점입니다. <b>포지션 색</b> 버튼을 누르면 그림 아래 범례가 공격수·미드필더·수비수 세 색으로 바뀌고, k=3 묶음과 포지션이 겹치기는 하지만 일치하지는 않는 것이 보입니다. 묶음마다 가장 많은 포지션으로 맞혀도 100명 가운데 76명만 들어맞습니다. k-평균은 포지션을 모르는 채로 능력치만 사용해 묶었습니다.</figcaption>
   </figure>
 
   <div class="callout theory">
     <div class="h">📏 "비슷하다"를 거리로 나타낸다 — 표준화가 필요한 까닭</div>
     <p>인용에서 "유사성을 측정"한다는 말이 실제로 무엇을 하는 일인지 살펴봅니다. 컴퓨터는 두 선수가 비슷한지 알지 못합니다. 아는 것은 숫자 사이의 <b>거리</b>뿐이므로, 비슷하다는 말을 두 점이 가깝다는 말로 바꾸어 계산합니다. 속성이 넷이면 대상 하나는 숫자 네 개로 된 점이고, 두 점의 거리는 속성마다 생긴 차이를 모아 한 값으로 구합니다. 이것을 <b>유클리드 거리</b>라고 합니다(교과서 148쪽). 속성이 셋이면 점 하나가 공간의 한 자리가 되고, 거리는 세 축의 차이를 모두 사용해 구합니다. 속성이 넷 이상이면 그림으로 그릴 수 없지만 거리 계산은 같은 방식으로 이어집니다.</p>
-    <p>그런데 거리는 속성의 단위를 그대로 물려받습니다. 아래 그림의 두 축이 그렇습니다. 슈팅 능력치는 0에서 100 사이의 값이고, 시장 가치는 만 유로 단위라 400에서 10,000까지 벌어집니다. 그림을 처음 열면 메시가 선택되어 있는데, 이때 거리 제곱에서 시장 가치의 차이가 차지하는 몫이 97.5%입니다. 슈팅 능력치의 차이는 거리에 거의 반영되지 않습니다.</p>
+    <p>그런데 거리는 속성의 단위를 그대로 물려받습니다. 아래 그림의 두 축이 그렇습니다. 슈팅 능력치는 0에서 100 사이의 값이고, 시장 가치는 만 유로 단위라 750에서 17,450까지 벌어집니다. 그림을 처음 열면 살라가 선택되어 있는데, 이때 거리 제곱에서 시장 가치의 차이가 차지하는 몫이 99.7%입니다. 슈팅 능력치의 차이는 거리에 거의 반영되지 않습니다.</p>
     <p>그래서 묶기 전에 <b>표준화</b>를 합니다. 각 항목에서 평균을 빼고 표준편차로 나누어 모든 항목을 같은 눈금에 올리는 처리이고, 오늘 처음 사용합니다. 표준화한 뒤에는 모든 속성이 평균 0, 표준편차 1이 되므로 단위가 큰 속성 하나가 거리를 혼자 정하는 일이 사라집니다. 어느 속성이 실제로 묶음을 나누었는지는 결과를 보고 따로 확인합니다.</p>
   </div>
 
   <figure class="interactive" data-fig="ruler">
     <div class="widget" data-w="ruler" style="overflow-x:auto">
-<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="축구 선수 114명의 슈팅 능력치와 시장 가치 산점도. 원래 단위와 표준화 두 눈금, 선택한 선수와 가장 가까운 선수를 잇는 선" style="min-width:640px">
+<svg viewBox="0 0 720 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="축구 선수 100명의 슈팅 능력치와 시장 가치 산점도. 원래 단위와 표준화 두 눈금, 선택한 선수와 가장 가까운 선수를 잇는 선" style="min-width:640px">
   <text x="20" y="26" font-size="16" font-weight="700" fill="#1c2230">단위 바꾸기 · 슈팅과 시장 가치</text>
   <g class="gr gr-raw"></g>
   <g class="gr gr-std" opacity="0"></g>
@@ -140,7 +141,7 @@
   <span class="wout"></span>
 </div>
     </div>
-    <figcaption>점 하나가 선수 한 명이고, 클릭하면 그 선수를 선택합니다. 원래 단위에서는 시장 가치의 차이가 거리를 거의 혼자 정합니다. 오른쪽 아래 막대가 거리 제곱에서 시장 가치가 차지한 몫입니다. 표준화 버튼을 누르면 눈금이 달라지고, 114명 가운데 84명은 가장 가까운 선수가 바뀝니다. 같은 114명, 같은 기록입니다.</figcaption>
+    <figcaption>점 하나가 선수 한 명이고, 클릭하면 그 선수를 선택합니다. 원래 단위에서는 시장 가치의 차이가 거리를 거의 혼자 정합니다. 오른쪽 아래 막대가 거리 제곱에서 시장 가치가 차지한 몫입니다. 표준화 버튼을 누르면 눈금이 달라지고, 100명 가운데 70명은 가장 가까운 선수가 바뀝니다. 같은 100명, 같은 기록입니다.</figcaption>
   </figure>
   <table class="daymap">
     <thead><tr><th>구분</th><th>정답(레이블)</th><th>모델이 하는 일</th><th>우리 수업의 예</th></tr></thead>
@@ -575,8 +576,8 @@ st.caption("실루엣 점수는 -1에서 1 사이이고, 1에 가까울수록 �
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/soccer_data.js?v=1"></script>
-<script src="assets/widgets09c.js?v=1"></script>
+<script src="assets/soccer_data.js?v=3"></script>
+<script src="assets/widgets09c.js?v=3"></script>
 <script src="assets/answer.js?v=3"></script>
 </body>
 </html>
