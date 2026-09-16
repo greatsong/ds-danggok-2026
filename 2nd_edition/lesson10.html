@@ -214,8 +214,8 @@ figure[data-fig="baseline"] .wctl label, figure[data-fig="baseline"] .wctl .wout
   </div>
   <p>손으로 구한 값을 아래 그림의 막대 두 개와 비교합니다. 위 막대가 신뢰도, 아래 막대가 뒤 메뉴의 등장률입니다. [방향 바꾸기] 버튼을 누르면 앞뒤를 바꾼 값이 표시됩니다.</p>
   <figure class="interactive" data-fig="baseline">
-    <div class="widget" data-w="baseline">
-  <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="0에서 1까지의 같은 눈금 위에 신뢰도 막대와 기본 등장률 막대를 나란히 놓고, 두 길이의 비가 향상도임을 보이는 그림. 아래 격자는 전체 일수와 각 메뉴의 등장 일수를 칸 수로 나타냅니다.">
+    <div class="widget" data-w="baseline" data-simple="1">
+  <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="0에서 1까지의 같은 눈금 위에 신뢰도 막대와 기본 등장률 막대를 나란히 놓고, 두 길이의 비가 향상도임을 보이는 그림. 아래 카드에는 신뢰도·기본 등장률·향상도의 계산식을 분수로 적었습니다.">
     <text class="ttl" x="24" y="26" font-size="18" font-weight="800" fill="#1c2230"></text>
     <g class="bdg" opacity="0">
       <rect class="bdgbox" x="512" y="8" width="188" height="24" rx="999" fill="#ffffff" stroke="#b07a00"/>
@@ -251,7 +251,7 @@ figure[data-fig="baseline"] .wctl label, figure[data-fig="baseline"] .wctl .wout
     <text x="24" y="170" font-size="14" fill="#6b7385">막대 두 개의 길이 비 = 향상도</text>
     <text class="gnote" x="24" y="192" font-size="14" fill="#6b7385" opacity="0">배열 순서 무관</text>
     <g class="grid"></g>
-    <rect x="380" y="188" width="320" height="142" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
+    <rect class="card" x="380" y="188" width="320" height="142" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
     <text class="c1a" x="392" y="212" font-size="14" fill="#6b7385"></text>
     <text class="c1b" x="392" y="222" font-size="14" fill="#6b7385"></text>
     <text class="c2" x="392" y="240" font-size="15" fill="#1c2230"></text>
@@ -949,7 +949,7 @@ else:
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets12.js?v=3"></script>
+<script src="assets/widgets12.js?v=4"></script>
 <script>
 // 2절 위젯을 손계산 20일 모드로 고정하고, 규칙 A·B 선택 버튼만 둔다
 (function () {
