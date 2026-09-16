@@ -17,6 +17,9 @@
 .newscard .hl { font-size: 1.02rem; font-weight: 800; line-height: 1.35; margin-bottom: 6px; }
 .newscard .sum { font-size: 0.86rem; color: #333; margin-bottom: 8px; }
 .newscard .go { font-size: 0.84rem; font-weight: 700; color: #1a56db; }
+.frac { display:inline-flex; flex-direction:column; align-items:center; vertical-align:middle; line-height:1.15; margin:0 4px; font-size:0.95em; }
+.frac .num { border-bottom:1.5px solid currentColor; padding:0 5px 1px; }
+.frac .den { padding:1px 5px 0; }
 </style>
 <link rel="stylesheet" href="assets/review.css">
 </head>
@@ -125,13 +128,13 @@
     <table class="daymap">
       <thead><tr><th style="white-space:nowrap">단계</th><th style="white-space:nowrap">계산</th><th>값</th><th>묻는 말</th></tr></thead>
       <tbody>
-        <tr><td style="white-space:nowrap">① <b>지지도</b></td><td>동시 ÷ 전체 = 6 ÷ 184</td><td>0.033</td><td>이 조합은 전체에서 얼마나 자주 있는 일인가</td></tr>
-        <tr><td style="white-space:nowrap">② <b>신뢰도</b></td><td>동시 ÷ 앞 메뉴 = 6 ÷ 6</td><td>1.00</td><td>돈육감자탕을 보고 석박지를 찍으면 맞힐 확률</td></tr>
-        <tr><td style="white-space:nowrap">③ <b>등장률</b></td><td>뒤 메뉴 ÷ 전체 = 20 ÷ 184</td><td>0.11</td><td>아무 날이나 석박지를 찍으면 맞힐 확률</td></tr>
-        <tr><td style="white-space:nowrap">④ <b>향상도</b></td><td>신뢰도 ÷ 등장률 = 1.00 ÷ 0.11</td><td>9.20</td><td>돈육감자탕을 보고 찍는 것이 아무 날 찍기보다 몇 배 잘 맞는가</td></tr>
+        <tr><td style="white-space:nowrap">① <b>지지도</b></td><td><span class="frac"><span class="num">동시</span><span class="den">전체</span></span> = <span class="frac"><span class="num">6</span><span class="den">184</span></span></td><td>0.033</td><td>이 조합은 전체에서 얼마나 자주 있는 일인가</td></tr>
+        <tr><td style="white-space:nowrap">② <b>신뢰도</b></td><td><span class="frac"><span class="num">동시</span><span class="den">앞 메뉴</span></span> = <span class="frac"><span class="num">6</span><span class="den">6</span></span></td><td>1.00</td><td>돈육감자탕을 보고 석박지를 찍으면 맞힐 확률</td></tr>
+        <tr><td style="white-space:nowrap">③ <b>등장률</b></td><td><span class="frac"><span class="num">뒤 메뉴</span><span class="den">전체</span></span> = <span class="frac"><span class="num">20</span><span class="den">184</span></span></td><td>0.11</td><td>아무 날이나 석박지를 찍으면 맞힐 확률</td></tr>
+        <tr><td style="white-space:nowrap">④ <b>향상도</b></td><td><span class="frac"><span class="num">신뢰도</span><span class="den">등장률</span></span> = <span class="frac"><span class="num">1.00</span><span class="den">0.11</span></span></td><td>9.20</td><td>돈육감자탕을 보고 찍는 것이 아무 날 찍기보다 몇 배 잘 맞는가</td></tr>
       </tbody>
     </table>
-    <p>신뢰도 1.00은 돈육감자탕이 나온 날에 석박지가 빠짐없이 나왔다는 뜻입니다. 여기까지는 숫자 두 개로 충분해 보입니다. 그런데 뒤 메뉴가 원래 거의 날마다 나오는 반찬이면, 앞 메뉴가 무엇이든 따라 나오므로 신뢰도가 1.00이어도 새로 알게 되는 것이 없습니다. 그래서 ③④가 필요합니다.</p>
+    <p>신뢰도 1.00은 돈육감자탕이 나온 날에 석박지가 빠짐없이 나왔다는 뜻입니다. 여기까지는 숫자 두 개로 충분해 보입니다. 그런데 뒤 메뉴가 원래 거의 날마다 나오는 반찬이면, 앞 메뉴가 무엇이든 따라 나오므로 신뢰도가 1.00이어도 새로 알게 되는 것이 적습니다. 그래서 ③④가 필요합니다.</p>
   </div>
 
   <div class="callout warn">
@@ -143,18 +146,18 @@
         <tr><td>신뢰도</td><td><b>1.00</b></td><td><b>1.00</b></td></tr>
         <tr><td>뒤 메뉴의 등장률</td><td>0.11 (20일)</td><td>0.55 (이틀에 한 번 넘게)</td></tr>
         <tr><td>향상도</td><td><b>9.20</b></td><td><b>1.80</b></td></tr>
-        <tr><td>판정</td><td>세트. 감자탕이 석박지를 알려 준다</td><td>정보 없음. 아무 날 찍어도 절반 넘게 맞는다</td></tr>
+        <tr><td>판정</td><td>세트. 감자탕이 석박지를 알려 준다</td><td>정보가 적다. 어울리는 짝이지만 아무 날 찍어도 절반 넘게 맞으므로 카레라이스가 더해 주는 정보는 작다</td></tr>
       </tbody>
     </table>
-    <p>두 규칙은 신뢰도가 같습니다. 그러나 배추김치는 카레라이스를 보지 않고 아무 날이나 찍어도 절반 넘게 맞습니다. 향상도가 그 차이를 보여 줍니다. 세트라고 부를 수 있는 쪽은 돈육감자탕 → 석박지입니다.</p>
+    <p>두 규칙은 신뢰도가 같습니다. 카레라이스와 배추김치도 어울리는 짝입니다. 그러나 배추김치는 카레라이스를 보지 않고 아무 날이나 찍어도 절반 넘게 맞으므로, 카레라이스가 더해 주는 정보는 작습니다. 향상도가 그 차이를 보여 줍니다. 세트라고 부를 수 있는 쪽은 돈육감자탕 → 석박지입니다.</p>
   </div>
 
   <table class="daymap">
     <thead><tr><th>숫자</th><th>계산식 (N: 전체 일수)</th><th>묻는 말</th></tr></thead>
     <tbody>
-      <tr><td><b>지지도</b></td><td>A·B 동시 일수 ÷ N</td><td>이 조합은 얼마나 자주 있는 일인가</td></tr>
-      <tr><td><b>신뢰도</b></td><td>A·B 동시 일수 ÷ A 등장 일수</td><td>A가 나온 날에 B도 나오는가</td></tr>
-      <tr><td><b>향상도</b></td><td>신뢰도 ÷ (B 등장 일수 ÷ N)</td><td>아무 날이나 B를 찍는 것보다 몇 배 잘 맞는가</td></tr>
+      <tr><td><b>지지도</b></td><td><span class="frac"><span class="num">A·B 동시 일수</span><span class="den">N</span></span></td><td>이 조합은 얼마나 자주 있는 일인가</td></tr>
+      <tr><td><b>신뢰도</b></td><td><span class="frac"><span class="num">A·B 동시 일수</span><span class="den">A 등장 일수</span></span></td><td>A가 나온 날에 B도 나오는가</td></tr>
+      <tr><td><b>향상도</b></td><td><span class="frac"><span class="num">신뢰도</span><span class="den">B 등장률</span></span> &nbsp;(B 등장률 = <span class="frac"><span class="num">B 등장 일수</span><span class="den">N</span></span>)</td><td>아무 날이나 B를 찍는 것보다 몇 배 잘 맞는가</td></tr>
     </tbody>
   </table>
   <div class="tbquote">
@@ -181,10 +184,10 @@
     <thead><tr><th>단계</th><th>활동지에 적는 것</th><th>확인할 점</th></tr></thead>
     <tbody>
       <tr><td><b>① 횟수</b></td><td>앞 항목·뒤 항목·함께 나온 횟수</td><td>세 수를 먼저 적어야 나머지가 나옵니다.</td></tr>
-      <tr><td><b>② 지지도</b></td><td>함께 나온 횟수 ÷ 전체</td><td>이 조합이 얼마나 자주 있는 일인지를 봅니다.</td></tr>
-      <tr><td><b>③ 신뢰도</b></td><td>함께 나온 횟수 ÷ 앞 항목의 횟수</td><td>분모가 앞 항목입니다. 지지도와 분모가 다릅니다.</td></tr>
-      <tr><td><b>④ 등장률</b></td><td>뒤 항목의 횟수 ÷ 전체</td><td>비교의 기준이 되는 값입니다.</td></tr>
-      <tr><td><b>⑤ 향상도</b></td><td>신뢰도 ÷ 등장률</td><td>분모는 뒤 항목의 등장률입니다. 1이 나오면 두 값이 같다는 뜻입니다.</td></tr>
+      <tr><td><b>② 지지도</b></td><td><span class="frac"><span class="num">함께 나온 횟수</span><span class="den">전체</span></span></td><td>이 조합이 얼마나 자주 있는 일인지를 봅니다.</td></tr>
+      <tr><td><b>③ 신뢰도</b></td><td><span class="frac"><span class="num">함께 나온 횟수</span><span class="den">앞 항목의 횟수</span></span></td><td>분모가 앞 항목입니다. 지지도와 분모가 다릅니다.</td></tr>
+      <tr><td><b>④ 등장률</b></td><td><span class="frac"><span class="num">뒤 항목의 횟수</span><span class="den">전체</span></span></td><td>비교의 기준이 되는 값입니다.</td></tr>
+      <tr><td><b>⑤ 향상도</b></td><td><span class="frac"><span class="num">신뢰도</span><span class="den">등장률</span></span></td><td>분모는 뒤 항목의 등장률입니다. 1이 나오면 두 값이 같다는 뜻입니다.</td></tr>
       <tr><td><b>⑥ 판단</b></td><td>어느 규칙으로 찍을지와 그 까닭</td><td>두 지표가 다른 규칙을 가리키면 목적을 먼저 정합니다.</td></tr>
     </tbody>
   </table>
