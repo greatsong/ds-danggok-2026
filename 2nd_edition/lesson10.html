@@ -10,6 +10,14 @@
 /* 도입 감 퀴즈 — 정답을 표시하지 않으므로 버튼이 아니라 목록으로 둔다 */
 .quiz.qinline .qopts-still { list-style: none; margin: 8px 0 0; padding: 0; }
 .quiz.qinline .qopts-still li { border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: #fffdf6; padding: 7px 16px; font-size: 0.88rem; font-weight: 700; }
+.newscards { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 12px; }
+.newscard { display:block; border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: #fff; padding: 12px 14px; text-decoration: none; color: inherit; }
+.newscard:hover { border-color: #16181d; }
+.newscard .src { font-size: 0.78rem; color: #666; margin-bottom: 4px; }
+.newscard .hl { font-size: 1.02rem; font-weight: 800; line-height: 1.35; margin-bottom: 6px; }
+.newscard .sum { font-size: 0.86rem; color: #333; margin-bottom: 8px; }
+.newscard .go { font-size: 0.84rem; font-weight: 700; color: #1a56db; }
+@media (max-width: 640px) { .newscards { grid-template-columns: 1fr; } }
 </style>
 <link rel="stylesheet" href="assets/review.css">
 </head>
@@ -37,12 +45,26 @@
 
   <div class="callout data">
     <div class="h">🏪 도입 — 박카스 옆에 무엇이 함께 찍혔는가</div>
+    <p>먼저 기사 두 개를 엽니다. 편의점 영수증에서 찾은 규칙 하나가 넉 달 사이에 어떤 일을 만들었는지 확인합니다.</p>
+    <div class="newscards">
+      <a class="newscard" href="https://zdnet.co.kr/view/?no=20250624090313" target="_blank" rel="noopener">
+        <div class="src">ZDNet Korea · 2025년 6월 24일</div>
+        <div class="hl">‘얼박사’ 캔으로 만난다…GS25, 동아제약과 손잡고 상품화</div>
+        <div class="sum">박카스가 찍힌 영수증에 함께 찍힌 상품 1위는 얼음컵, 2위는 사이다였습니다. 손님들이 이미 셋을 섞어 마시고 있었습니다.</div>
+        <div class="go">기사 열기 ↗</div>
+      </a>
+      <a class="newscard" href="https://v.daum.net/v/20250924162420353" target="_blank" rel="noopener">
+        <div class="src">파이낸셜뉴스 · 2025년 9월 24일</div>
+        <div class="hl">GS25, 박카스와 사이다 합친 '얼박사' 출시 두달 만에 278만개 '대박'</div>
+        <div class="sum">출시 두 달 만에 누적 278만 개, 편의점 음료 매출 1위. 영수증에서 찾은 규칙이 상품이 되었습니다.</div>
+        <div class="go">기사 열기 ↗</div>
+      </a>
+    </div>
     <p>여러분이 편의점 본사의 상품기획 담당자라고 가정합니다. 하루에 쌓이는 영수증은 수백만 장입니다. 그 안에서 한 가지만 확인합니다. 박카스가 찍힌 영수증에는 무엇이 함께 찍혀 있는가.</p>
     <p>GS25가 얻은 답은 1위 얼음컵, 2위 사이다였습니다. 이미 많은 손님이 세 가지를 따로 사서 직접 섞어 마시고 있었습니다. GS25는 이 결과를 동아제약에 가져갔습니다. 세 가지를 합친 음료를 제안했고, 2025년 6월 25일 '얼박사'라는 이름으로 출시했습니다. 두 달 만에 누적 판매량 278만 개를 기록했습니다.</p>
     <p>여기서 확인해 둘 것이 있습니다. "함께 많이 팔린 1위"는 아직 한 가지 숫자일 뿐입니다. 얼음컵은 원래 거의 모든 음료와 함께 팔리는 상품일 수도 있습니다. 그 구분을 하려면 숫자가 하나 더 필요합니다.</p>
     <p>오늘 우리가 세는 것은 영수증이 아니라 당곡고 급식 184일입니다. 어느 반찬이 어느 반찬과 함께 나오는지부터 세어 봅니다.</p>
   </div>
-  <p class="mini">출처: <a href="https://zdnet.co.kr/view/?no=20250624090313" target="_blank" rel="noopener">ZDNet Korea 2025년 6월 24일</a>, <a href="https://v.daum.net/v/20250924162420353" target="_blank" rel="noopener">파이낸셜뉴스 2025년 9월 24일</a>. 기사가 밝힌 것은 함께 소비하는 다빈도 상품 1위와 2위까지입니다.</p>
 
   <div class="callout data">
     <div class="h">🍚 계산하기 전에 — 우리 학교 급식, 감으로 먼저 답합니다</div>
@@ -96,6 +118,8 @@
   </div>
   <p>당곡고 중식 184일에서 같은 날 함께 나온 두 메뉴의 짝은 3,000가지가 넘습니다. 이 가운데 볼 만한 짝을 고르려면 기준이 필요합니다. 오늘 사용할 기준은 숫자 세 개입니다.</p>
 
+  <figure class="case" style="margin:14px 0 6px"><img src="img/lesson10_gamjatang.jpg" alt="뚝배기에 담긴 붉은 감자탕과 그 둘레에 놓인 김치 등 반찬 그릇들" loading="lazy" width="1400" height="1050" style="width:100%;height:auto;border-radius:10px">
+    <figcaption>감자탕과 김치 반찬. 당곡고 급식에서 돈육감자탕이 나온 6일에는 모두 석박지가 함께 나왔습니다. 사진: T.Tseng, 위키미디어 공용, CC BY 2.0 (식당 상차림 사진이며 급식 사진이 아닙니다)</figcaption></figure>
   <p>숫자 세 개를 급식 하나로 익힙니다. 184일 가운데 돈육감자탕은 6일 나왔습니다. 석박지는 20일 나왔고, 둘이 같은 날 함께 나온 날은 6일입니다.</p>
   <p>먼저 184일 가운데 6일입니다. 6 ÷ 184 = 0.033입니다. 이 조합이 전체에서 얼마나 자주 있는 일인지 알려 주는 이 비율을 <b>지지도</b>라고 합니다.</p>
   <p>다음은 돈육감자탕이 나온 6일 가운데 6일입니다. 6 ÷ 6 = 1.00입니다. 앞 메뉴가 나온 날에 뒤 메뉴도 나온 이 비율을 <b>신뢰도</b>라고 합니다.</p>
