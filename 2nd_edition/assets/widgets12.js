@@ -240,13 +240,13 @@ function initW_baseline(root, D) {
     outList.push(r);
   }
 
-  // ── 세트 ③ 손계산 20일 — 활동지 자작 수치 ──
+  // ── 세트 ③ 손계산 100일 — 활동지 설계값 ──
   function raw(an, bn, co, na, nb, N) {
     const conf = na ? co / na : 0, base = nb / N;
     return { ai: -1, bi: -1, an: an, bn: bn, co: co, na: na, nb: nb, N: N,
       conf: conf, base: base, lift: base ? conf / base : 0, tag: '' };
   }
-  const handList = [raw('제육볶음', '배추김치', 6, 10, 12, 20), raw('순대국', '석박지', 3, 4, 5, 20)];
+  const handList = [raw('제육볶음', '배추김치', 6, 10, 60, 100), raw('순대국', '석박지', 5, 5, 20, 100)];
 
   const SETS = {
     meal: { list: mealList, sortable: true },

@@ -177,7 +177,7 @@ figure[data-fig="baseline"] .wctl label, figure[data-fig="baseline"] .wctl .wout
 
   <h2>2. 손계산이 먼저 — 활동지 기본 문제</h2>
   <p>계산은 활동지에 손으로 적습니다. 규칙 A는 제육볶음 → 배추김치, 규칙 B는 순대국 → 석박지입니다. 두 규칙을 지지도·신뢰도·향상도 순서로 풉니다.</p>
-  <p>활동지의 수는 계산이 떨어지도록 고른 값이며 실제 관측값이 아닙니다. 나눗셈이 두 자리 소수에서 끝나므로 계산기가 필요 없습니다.</p>
+  <p>활동지의 수는 지난 100일의 급식을 손계산하기 쉽게 다듬은 값입니다. 나눗셈이 두 자리 소수에서 끝나므로 계산기가 필요 없습니다.</p>
   <div class="callout warn">
     <div class="h">🖥️ 위젯은 선생님 화면으로 함께 봅니다</div>
     <p>이 차시의 위젯은 선생님이 앞에서 보여 주는 화면입니다. 화면이 답을 먼저 보여 주면 계산 순서를 익힐 수 없습니다. 먼저 활동지에 손으로 적고, 다 푼 뒤에 화면의 값과 대조합니다.</p>
@@ -209,7 +209,7 @@ figure[data-fig="baseline"] .wctl label, figure[data-fig="baseline"] .wctl .wout
     <p>급식 184일에서 확인합니다. 순대국은 5일, 석박지는 20일 나왔고 함께 나온 날은 5일입니다. 순대국 → 석박지의 신뢰도는 5 ÷ 5 = 1.00, 석박지 → 순대국의 신뢰도는 5 ÷ 20 = 0.25입니다.</p>
     <p><b>지지도와 향상도는 방향을 바꾸어도 같습니다.</b> 지지도의 분모는 전체 일수 하나뿐이고, 향상도는 두 방향 모두 9.20입니다.</p>
     <p>그러므로 "석박지가 나오는 날은 순대국이 나온다"라고 말하려면 석박지 → 순대국의 신뢰도를 확인해야 합니다.</p>
-    <p class="mini">활동지 기본 문제는 스무 날 기준이므로 수가 다릅니다.</p>
+    <p class="mini">활동지 기본 문제는 100일 기준이라 신뢰도는 1.00·0.25로 같고 향상도만 5.00으로 다릅니다.</p>
   </div>
   <p>손으로 구한 값을 아래 그림의 막대 두 개와 비교합니다. 위 막대가 신뢰도, 아래 막대가 뒤 메뉴의 등장률입니다. [방향 바꾸기] 버튼을 누르면 앞뒤를 바꾼 값이 표시됩니다.</p>
   <figure class="interactive" data-fig="baseline">
@@ -262,7 +262,7 @@ figure[data-fig="baseline"] .wctl label, figure[data-fig="baseline"] .wctl .wout
   <div class="wctl">
     <span><button class="wbtn on" type="button" data-set="meal">급식 184일</button>
       <button class="wbtn" type="button" data-set="out">표 밖 조합</button>
-      <button class="wbtn" type="button" data-set="hand">손계산 20일</button></span>
+      <button class="wbtn" type="button" data-set="hand">손계산 100일</button></span>
     <span><button class="wbtn on" type="button" data-sort="lift">향상도 순</button>
       <button class="wbtn" type="button" data-sort="conf">신뢰도 순</button>
       <button class="wbtn" type="button" data-sort="co">동시 순</button></span>
@@ -396,8 +396,8 @@ plotly</pre></div></details>
       <tr><td><b>규칙 B</b> 순대국 → 석박지</td><td></td><td></td><td></td></tr>
     </tbody>
   </table>
-  <p class="mini">활동지의 수는 계산이 떨어지도록 고른 설계값이므로 앱이 표시하는 값과 다릅니다.</p>
-  <p>배추김치는 184일 가운데 102일 나옵니다. 아무 날이나 배추김치를 찍어도 절반 넘게 맞습니다. 그래서 배추김치를 뒤에 둔 규칙은 앞 메뉴가 무엇이든 신뢰도가 높게 나옵니다. 규칙 A의 신뢰도가 0.60인데 향상도는 1에 가까운 까닭이 이것입니다. 신뢰도만 보면 놓치는 것을 향상도가 잡아 줍니다.</p>
+  <p class="mini">활동지의 수는 100일 기준으로 다듬은 설계값이므로 앱이 표시하는 184일 값과 다릅니다.</p>
+  <p>배추김치는 184일 가운데 102일 나옵니다. 아무 날이나 배추김치를 찍어도 절반 넘게 맞습니다. 그래서 배추김치를 뒤에 둔 규칙은 앞 메뉴가 무엇이든 신뢰도가 높게 나옵니다. 184일에서도 규칙 A의 신뢰도는 0.60인데 향상도가 1 근처인 까닭이 이것입니다. 신뢰도만 보면 놓치는 것을 향상도가 잡아 줍니다.</p>
 
   <h3>실습 ③ — 우연을 걸러 내고, 함께 안 나오는 짝을 찾는다</h3>
   <p>표에 오른 메뉴 쌍은 대부분 동시 1일입니다. 하루만 겹친 우연도 규칙이 되고, 그 규칙의 향상도는 크게 나옵니다. 그래서 최소 기준을 먼저 정하고 그보다 적게 겹친 규칙을 표에서 걸러 냅니다. 교과서 162쪽의 최소 지지도가 같은 역할을 합니다.</p>
@@ -570,9 +570,9 @@ else:
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets12.js?v=4"></script>
+<script src="assets/widgets12.js?v=5"></script>
 <script>
-// 2절 위젯을 손계산 20일 모드로 고정하고, 규칙 A·B 선택 버튼만 둔다
+// 2절 위젯을 손계산 100일 모드로 고정하고, 규칙 A·B 선택 버튼만 둔다
 (function () {
   function setup() {
     var fig = document.querySelector('figure[data-fig="baseline"]'); if (!fig) return;
