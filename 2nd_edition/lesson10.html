@@ -103,6 +103,22 @@
   <p>세 숫자를 <b>급식표 맞히기</b> 점수표로 읽을 수 있습니다. 지지도는 이 상황이 전체에서 얼마나 자주 오는가입니다. 신뢰도는 앞 메뉴를 보고 뒤 메뉴를 찍었을 때 맞힐 비율입니다. 향상도는 그 찍기가 아무 날이나 뒤 메뉴를 찍는 것보다 몇 배 잘 맞는가입니다. 계산식은 교과서와 같고 읽는 말만 다릅니다.</p>
   <div class="callout theory">
     <div class="h">🧩 향상도 1이 뜻하는 것</div>
+
+  <h3>실생활에서 연관 분석이 쓰이는 곳</h3>
+  <div class="gin">
+  <p>세 지표는 교과서 안에서만 사용하는 계산이 아닙니다. 실제 매장과 상품 페이지에서도 함께 팔린 기록을 바탕으로 진열과 추천 후보를 정합니다.</p>
+  <table class="daymap">
+    <thead><tr><th>사례</th><th>무엇을 계산했나</th><th>세 지표로 보면</th></tr></thead>
+    <tbody>
+      <tr><td><b>GS25의 얼박사</b></td><td>편의점 본사의 상품기획 담당자를 가정합니다. 하루에 쌓이는 영수증은 수백만 장입니다. 그 안에서 한 가지만 확인합니다. 박카스가 찍힌 영수증에는 무엇이 함께 찍혀 있는가. GS25가 얻은 답은 1위 얼음컵, 2위 사이다였습니다. 이미 많은 손님이 세 가지를 따로 사서 직접 섞어 마시고 있었습니다. GS25는 이 결과를 동아제약에 가져가 세 가지를 합친 음료를 제안했고, 2025년 6월 25일 '얼박사'라는 이름으로 출시했습니다. 두 달 만에 누적 판매량 278만 개를 기록했습니다.<p class="mini">출처: <a href="https://zdnet.co.kr/view/?no=20250624090313" target="_blank" rel="noopener">ZDNet Korea 2025년 6월 24일</a>, <a href="https://v.daum.net/v/20250924162420353" target="_blank" rel="noopener">파이낸셜뉴스 2025년 9월 24일</a>. 기사가 밝힌 것은 함께 소비하는 다빈도 상품 1위와 2위까지입니다.</p></td><td>함께 팔린 1위는 동시 등장 횟수 하나다. 얼음컵이 원래 거의 모든 음료와 함께 팔리는 상품이라면 신뢰도가 높아도 향상도는 1 근처가 된다. GS25가 어느 지표를 계산했는지는 기사에 없다.</td></tr>
+      <tr><td><b>허리케인 직전의<br>딸기 팝타르트</b></td><td>2004년 미국 월마트는 허리케인 찰리 때의 판매 기록을 다시 계산했다. 허리케인 직전에 딸기 팝타르트가 평소의 약 7배 팔렸다. 월마트는 다음 허리케인의 진로에 있는 매장으로 두 품목을 미리 실어 보냈다 (<a href="https://www.nytimes.com/2004/11/14/business/yourmoney/what-walmart-knows-about-customers-habits.html" target="_blank" rel="noopener">보도 원문 보기</a>)</td><td>향상도를 실제로 사용한 사례다. 팝타르트는 전체 판매에서 차지하는 비중이 작아 지지도가 낮다. 조건을 허리케인 경보가 내려진 날로 좁히면 판매 비율이 평소의 약 7배가 된다. 지지도가 낮다는 이유로 걸렀다면 찾지 못했을 규칙이다.</td></tr>
+      <tr><td><b>아마존의<br>자주 함께 구매하는 품목</b></td><td>아마존은 2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록을 비교한다. 이 방식은 지금도 상품 페이지의 자주 함께 구매하는 품목 칸으로 작동한다 (<a href="https://www.amazon.com/Sapiens-Humankind-Yuval-Noah-Harari/dp/0062316095" target="_blank" rel="noopener">상품 페이지 보기</a>)</td><td>지지도와 신뢰도의 차이를 보여 준다. 전체 주문 가운데 두 책이 함께 담긴 비율이 지지도이고 한 책을 산 사람 가운데 다른 책도 산 비율이 신뢰도이다. 전체 주문에서는 드문 조합도 한 상품을 산 거래에서는 자주 함께 등장할 수 있다. 따라서 지지도가 낮아도 신뢰도는 높을 수 있다.</td></tr>
+    </tbody>
+  </table>
+  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson12_case1.jpg" alt="하늘색 바탕 위에 겹쳐 놓인 딸기 맛 팝타르트 두 장. 흰 아이싱 위에 빨강·초록·노랑 알갱이가 뿌려져 있습니다." loading="lazy" width="849" height="624" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>월마트의 허리케인 판매 분석: 뉴욕타임스 2004년 11월 14일 보도 · 사진: 딸기 팝타르트, 위키미디어 공용(퍼블릭 도메인)</figcaption></figure>
+  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson12_case2.jpg" alt="아마존 상품 페이지의 자주 함께 구매하는 품목 영역 화면. 세 권의 책이 더하기 기호로 이어져 있고 오른쪽에 총액과 장바구니 추가 버튼이 있습니다." loading="lazy" width="1200" height="404" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>화면: 아마존 『사피엔스』 상품 페이지의 자주 함께 구매하는 품목(2026년 9월 갈무리) · 방식 출처: Linden 외, IEEE Internet Computing(2003)</figcaption></figure>
+  <p>두 사례 모두 지표가 판단을 대신하지 않았습니다. 어느 규칙에 재고와 진열 공간을 걸지는 사람이 정했습니다.</p>
+  </div>
     <p>향상도가 <b>1</b>이면 A가 나온 날의 B 비율과 B의 기본 등장률이 같다는 뜻입니다. <b>1보다 크면</b> A가 나온 날에 B가 더 자주 나왔고, <b>1보다 작으면</b> 덜 나왔습니다.</p>
   </div>
   <p>교과서의 {삼겹살} → {쌈채소} 규칙은 향상도가 1.67입니다. 삼겹살을 산 거래에서 쌈채소를 산 비율이 전체 거래의 쌈채소 구매 비율의 약 1.67배라는 뜻입니다.</p>
@@ -751,21 +767,6 @@ else:
   <p>향상도가 크게 나온 규칙도 앞 메뉴가 뒤 메뉴의 등장을 일으켰다는 인과관계의 증명은 아닙니다. 식단 구성 방침 등 다른 요인이 두 메뉴에 함께 작용했을 수 있습니다.</p>
   <p>오늘은 급식 기록을 날짜별로 묶어 세트·금지 짝·함정을 찾고, 근거 숫자를 붙여 우리 학교 급식의 특징으로 정리했습니다. 9차시와 오늘은 맞혀야 할 정답이 없는 데이터를 다루었습니다. 다음 시간에는 정답이 있는 문제로 돌아갑니다. 7차시에는 숫자를 예측했고, 다음 시간에는 예 또는 아니요를 예측합니다. 데이터는 급식도 영화도 아닌 새 데이터입니다.</p>
 
-  <details class="glossary"><summary>더 알아보기 — 실제 사례</summary><div class="gin">
-  <h3>연관 분석이 실제로 사용된 곳</h3>
-  <p>세 지표는 교과서 안에서만 사용하는 계산이 아닙니다. 실제 매장과 상품 페이지에서도 함께 팔린 기록을 바탕으로 진열과 추천 후보를 정합니다.</p>
-  <table class="daymap">
-    <thead><tr><th>사례</th><th>무엇을 계산했나</th><th>세 지표로 보면</th></tr></thead>
-    <tbody>
-      <tr><td><b>GS25의 얼박사</b></td><td>편의점 본사의 상품기획 담당자를 가정합니다. 하루에 쌓이는 영수증은 수백만 장입니다. 그 안에서 한 가지만 확인합니다. 박카스가 찍힌 영수증에는 무엇이 함께 찍혀 있는가. GS25가 얻은 답은 1위 얼음컵, 2위 사이다였습니다. 이미 많은 손님이 세 가지를 따로 사서 직접 섞어 마시고 있었습니다. GS25는 이 결과를 동아제약에 가져가 세 가지를 합친 음료를 제안했고, 2025년 6월 25일 '얼박사'라는 이름으로 출시했습니다. 두 달 만에 누적 판매량 278만 개를 기록했습니다.<p class="mini">출처: <a href="https://zdnet.co.kr/view/?no=20250624090313" target="_blank" rel="noopener">ZDNet Korea 2025년 6월 24일</a>, <a href="https://v.daum.net/v/20250924162420353" target="_blank" rel="noopener">파이낸셜뉴스 2025년 9월 24일</a>. 기사가 밝힌 것은 함께 소비하는 다빈도 상품 1위와 2위까지입니다.</p></td><td>함께 팔린 1위는 동시 등장 횟수 하나다. 얼음컵이 원래 거의 모든 음료와 함께 팔리는 상품이라면 신뢰도가 높아도 향상도는 1 근처가 된다. GS25가 어느 지표를 계산했는지는 기사에 없다.</td></tr>
-      <tr><td><b>허리케인 직전의<br>딸기 팝타르트</b></td><td>2004년 미국 월마트는 허리케인 찰리 때의 판매 기록을 다시 계산했다. 허리케인 직전에 딸기 팝타르트가 평소의 약 7배 팔렸다. 월마트는 다음 허리케인의 진로에 있는 매장으로 두 품목을 미리 실어 보냈다 (<a href="https://www.nytimes.com/2004/11/14/business/yourmoney/what-walmart-knows-about-customers-habits.html" target="_blank" rel="noopener">보도 원문 보기</a>)</td><td>향상도를 실제로 사용한 사례다. 팝타르트는 전체 판매에서 차지하는 비중이 작아 지지도가 낮다. 조건을 허리케인 경보가 내려진 날로 좁히면 판매 비율이 평소의 약 7배가 된다. 지지도가 낮다는 이유로 걸렀다면 찾지 못했을 규칙이다.</td></tr>
-      <tr><td><b>아마존의<br>자주 함께 구매하는 품목</b></td><td>아마존은 2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록을 비교한다. 이 방식은 지금도 상품 페이지의 자주 함께 구매하는 품목 칸으로 작동한다 (<a href="https://www.amazon.com/Sapiens-Humankind-Yuval-Noah-Harari/dp/0062316095" target="_blank" rel="noopener">상품 페이지 보기</a>)</td><td>지지도와 신뢰도의 차이를 보여 준다. 전체 주문 가운데 두 책이 함께 담긴 비율이 지지도이고 한 책을 산 사람 가운데 다른 책도 산 비율이 신뢰도이다. 전체 주문에서는 드문 조합도 한 상품을 산 거래에서는 자주 함께 등장할 수 있다. 따라서 지지도가 낮아도 신뢰도는 높을 수 있다.</td></tr>
-    </tbody>
-  </table>
-  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson12_case1.jpg" alt="하늘색 바탕 위에 겹쳐 놓인 딸기 맛 팝타르트 두 장. 흰 아이싱 위에 빨강·초록·노랑 알갱이가 뿌려져 있습니다." loading="lazy" width="849" height="624" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>월마트의 허리케인 판매 분석: 뉴욕타임스 2004년 11월 14일 보도 · 사진: 딸기 팝타르트, 위키미디어 공용(퍼블릭 도메인)</figcaption></figure>
-  <figure class="case" style="margin:16px 0 4px"><img src="img/lesson12_case2.jpg" alt="아마존 상품 페이지의 자주 함께 구매하는 품목 영역 화면. 세 권의 책이 더하기 기호로 이어져 있고 오른쪽에 총액과 장바구니 추가 버튼이 있습니다." loading="lazy" width="1200" height="404" style="width:100%;height:auto;display:block;border:1px solid var(--border);border-radius:var(--radius);background:#fff"><figcaption>화면: 아마존 『사피엔스』 상품 페이지의 자주 함께 구매하는 품목(2026년 9월 갈무리) · 방식 출처: Linden 외, IEEE Internet Computing(2003)</figcaption></figure>
-  <p>두 사례 모두 지표가 판단을 대신하지 않았습니다. 어느 규칙에 재고와 진열 공간을 걸지는 사람이 정했습니다.</p>
-  </div></details>
 
   <h2>6. 확인 문제</h2>
   <div class="quiz">
