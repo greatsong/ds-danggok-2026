@@ -204,6 +204,131 @@ function initW_sigmoidPath(root, D) {
   paint();
 }
 
+function initW_splitpick(root, D) {
+  // D.train = [name 인덱스, 스크린 수, 상영 횟수] 훈련용 영화 전부. 트리는 이 데이터에서 분기를 고른다.
+  // D.tree[0] = 실제로 학습된 트리의 첫 분기. 버튼 "트리가 고른 지점"이 여기로 옮긴다.
+  // 값은 scripts/lesson09_live_data.py가 어제까지 모인 데이터로 다시 계산한다.
+  var LIM = 1000000;
+  var X0 = 56, X1 = 664, YT = 64, YB = 178;      // 점 판
+  var GT = 420, GB = 468;                        // 아래 띠 — 후보 지점마다의 섞임 감소
+  var q = function (sel) { return root.querySelector(sel); };
+  var f3 = function (v) { return v.toFixed(3); };
+  var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+
+  // 훈련용 영화를 스크린 수 오름차순으로 늘어놓는다
+  var pts = [], i;
+  for (i = 0; i < D.train.length; i++) {
+    pts.push({ i: D.train[i][0], s: D.train[i][1], y: D.audi[D.train[i][0]] >= LIM ? 1 : 0 });
+  }
+  pts.sort(function (a, b) { return a.s - b.s; });
+  var N = pts.length, POS = 0;
+  for (i = 0; i < N; i++) POS += pts[i].y;
+
+  var smax = 0;
+  for (i = 0; i < N; i++) if (pts[i].s > smax) smax = pts[i].s;
+  var TOP = Math.ceil(smax / 500) * 500;
+  var xs = function (v) { return X0 + v / TOP * (X1 - X0); };
+
+  function gini(n, k) { if (!n) return 0; var p = k / n; return 2 * p * (1 - p); }
+  var G0 = gini(N, POS);
+
+  // 후보 지점 — 이웃한 두 스크린 수의 가운데. 트리가 따져 보는 지점이 이것이다
+  var cut = [], nL = [], kL = [], gain = [];
+  var cn = 0, ck = 0;
+  for (i = 0; i < N - 1; i++) {
+    cn++; ck += pts[i].y;
+    if (pts[i + 1].s === pts[i].s) continue;
+    var t = (pts[i].s + pts[i + 1].s) / 2;
+    var g = G0 - (cn / N) * gini(cn, ck) - ((N - cn) / N) * gini(N - cn, POS - ck);
+    cut.push(t); nL.push(cn); kL.push(ck); gain.push(g);
+  }
+  var C = cut.length;
+  var best = 0, gmax = gain[0];
+  for (i = 1; i < C; i++) if (gain[i] > gmax) { gmax = gain[i]; best = i; }
+
+  // 트리가 실제로 고른 첫 분기와 가장 가까운 후보 지점
+  var rt = D.tree && D.tree[0], treeIdx = best, onScrn = !!rt && rt[0] === 'first_scrn';
+  if (onScrn) {
+    var d = Infinity;
+    for (i = 0; i < C; i++) { var dd = Math.abs(cut[i] - rt[1]); if (dd < d) { d = dd; treeIdx = i; } }
+  }
+
+  // 점 찍기 — 세로 위치는 겹침을 풀기 위한 흩뿌림이며 뜻이 없다
+  var dots = '';
+  for (i = 0; i < N; i++) {
+    var fr = Math.sin((pts[i].i + 1) * 12.9898) * 43758.5453;
+    fr = fr - Math.floor(fr);
+    var cy = YT + 6 + fr * (YB - YT - 12);
+    var fill = pts[i].y ? 'fill="#d64545"' : 'fill="#2b7fd6" fill-opacity="0.5"';
+    dots += '<circle class="pt" data-i="' + i + '" cx="' + xs(pts[i].s).toFixed(1) + '" cy="' + cy.toFixed(1) +
+      '" r="' + (pts[i].y ? 4.5 : 3.4) + '" ' + fill + '><title>' + esc(D.name[pts[i].i]) +
+      ' · 스크린 ' + pts[i].s + '개 · ' + (pts[i].y ? '성공' : '기준 미달') + '</title></circle>';
+  }
+  q('.dots').innerHTML = dots;
+
+  // 가로 눈금
+  var tk = '';
+  for (var v = 0; v <= TOP; v += 500) tk += '<text x="' + xs(v).toFixed(1) + '" y="208">' + v + '</text>';
+  q('.xticks').innerHTML = tk;
+
+  // 아래 띠 — 후보 지점마다 섞임이 얼마나 줄어드는지
+  var band = '';
+  for (i = 0; i < C; i++) {
+    band += (i ? ' ' : '') + xs(cut[i]).toFixed(1) + ',' + (GB - gain[i] / gmax * (GB - GT)).toFixed(1);
+  }
+  q('.gcurve').setAttribute('points', band);
+  q('.gbest').setAttribute('cx', xs(cut[best]).toFixed(1));
+  q('.gbest').setAttribute('cy', GT.toFixed(1));
+
+  var line = q('.cutline'), handle = q('.cuthandle'), mark = q('.gnow');
+  var slider = q('.cut'), wv = q('.wv');
+  var head = q('.head'), calc = q('.calc'), lp = [q('.l1'), q('.l2'), q('.l3'), q('.l4')], rp = [q('.r1'), q('.r2'), q('.r3'), q('.r4')];
+  var lbar = q('.lbar'), rbar = q('.rbar'), note = q('.note');
+  slider.max = String(C - 1);
+
+  function panel(box, bar, n, k, label, side) {
+    var miss = n - k, ans = k * 2 > n ? '성공' : '기준 미달', wrong = ans === '성공' ? miss : k;
+    box[0].textContent = side + ' · 스크린 수 ' + label;
+    box[1].textContent = n + '편 · 성공 ' + k + '편 · 기준 미달 ' + miss + '편';
+    box[2].textContent = '이 갈래의 섞임 ' + f3(gini(n, k));
+    box[3].textContent = '이 갈래의 답 ' + ans + ' · 틀리는 영화 ' + wrong + '편';
+    var w = n ? (k / n) * bar.dataset.bw : 0;
+    bar.setAttribute('width', w.toFixed(1));
+  }
+
+  function setIdx(j) {
+    j = j < 0 ? 0 : (j > C - 1 ? C - 1 : j);
+    slider.value = String(j);
+    var t = cut[j], x = xs(t);
+    line.setAttribute('x1', x.toFixed(1)); line.setAttribute('x2', x.toFixed(1));
+    handle.setAttribute('x', (x - 5).toFixed(1));
+    q('.cutlab').setAttribute('x', (x < 130 ? x + 10 : x - 10).toFixed(1));
+    q('.cutlab').setAttribute('text-anchor', x < 130 ? 'start' : 'end');
+    q('.cutlab').textContent = Math.round(t) + '개';
+    mark.setAttribute('cx', x.toFixed(1));
+    mark.setAttribute('cy', (GB - gain[j] / gmax * (GB - GT)).toFixed(1));
+    wv.textContent = '스크린 수 ' + Math.round(t) + '개';
+    head.textContent = '합친 섞임 ' + f3(G0) + ' → ' + f3(G0 - gain[j]) + ' · ' + f3(gain[j]) + ' 줄였습니다';
+    // 두 갈래를 편수로 가중해 더하는 과정을 그대로 보여 준다
+    var ln = nL[j], rn = N - ln;
+    calc.textContent = '합친 섞임 = 왼쪽 ' + f3(gini(ln, kL[j])) + ' × ' + ln + '편/' + N + '편'
+      + ' + 오른쪽 ' + f3(gini(rn, POS - kL[j])) + ' × ' + rn + '편/' + N + '편'
+      + ' = ' + f3(G0 - gain[j]);
+    panel(lp, lbar, nL[j], kL[j], Math.round(t) + '개 이하', '왼쪽');
+    panel(rp, rbar, N - nL[j], POS - kL[j], Math.round(t) + '개 초과', '오른쪽');
+    var s = '';
+    if (j === best) s = '섞임을 가장 많이 줄이는 지점입니다.';
+    if (onScrn && j === treeIdx) s += (s ? ' ' : '') + '트리가 실제로 고른 지점입니다.';
+    note.textContent = s;
+  }
+
+  root.querySelectorAll('.wbtn[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () { setIdx(b.dataset.go === 'tree' ? treeIdx : best); });
+  });
+  slider.addEventListener('input', function () { setIdx(+slider.value); });
+  setIdx(Math.round(C * 0.25));
+}
+
 function initW_twoDials(root, D) {
   // 좌표: 두 층 공통 가로 구간 72~676. 위 = 누적 관객 수 로그 척도(10^3~10^7.25), 아래 = 추정 확률 0~1
   var X0 = 72, X1 = 676, W = X1 - X0, PR = 696;
@@ -391,11 +516,8 @@ function initW_labelline(root, D) {
   function q(s) { return root.querySelector(s); }
   var bars = q('.bars'), thrLine = q('.thrline'), thrHandle = q('.thrhandle');
   var bPanel = q('.bpanel'), b1 = q('.b1'), b2 = q('.b2'), b3 = q('.b3');
-  var cLog = q('.clog'), cTree = q('.ctree');
-  var cover = q('.cover'), cv1 = q('.cv1'), cv2 = q('.cv2');
   var dHead = q('.dhead'), dHi = q('.dhi'), dLo = q('.dlo');
-  var slider = q('.thr'), wv = q('.wv'), wtxt = q('.wtxt'), wout = q('.wout'), go = q('.wgo');
-  var chips = Array.prototype.slice.call(root.querySelectorAll('.wbtn[data-r]'));
+  var slider = q('.thr'), wv = q('.wv');
 
   // ── 문자열 도구
   function comma(v) { return String(v).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
@@ -440,9 +562,6 @@ function initW_labelline(root, D) {
     b3.textContent = '테스트용 ' + NT + '편 중 성공 레이블 ' + r.k + '편' + (r.k <= 3 ? ' · 표본 극소' : '');
     b3.setAttribute('fill', r.k <= 3 ? '#d64545' : '#b07a00');
 
-    cLog.textContent = STOPS[idx][1].toFixed(3);
-    cTree.textContent = STOPS[idx][2].toFixed(3);
-
     var gap = r.hi - r.lo;
     dHead.textContent = '기준선 양옆 두 편 · 관객 수 차이 ' + comma(gap) + '명';
     dHead.setAttribute('fill', gap < 10000 ? '#d64545' : '#6b7385');
@@ -453,7 +572,8 @@ function initW_labelline(root, D) {
   }
 
   // ── 애니메이션(rAF, 재실행 안전)
-  var bSeq = 0, cSeq = 0;
+  var bSeq = 0;
+
   function fadeB() {
     var id = ++bSeq, t0 = 0;
     function step(ts) {
@@ -466,83 +586,28 @@ function initW_labelline(root, D) {
     bPanel.setAttribute('opacity', '0.35');
     requestAnimationFrame(step);
   }
-  function revealC() {
-    var id = ++cSeq, t0 = 0;
-    function step(ts) {
-      if (id !== cSeq) return;
-      if (!t0) t0 = ts;
-      var p = Math.min(1, (ts - t0) / 220);
-      cover.setAttribute('opacity', (1 - p).toFixed(3));
-      if (p < 1) requestAnimationFrame(step);
-      else cover.setAttribute('visibility', 'hidden');
-    }
-    cover.setAttribute('visibility', 'visible');
-    requestAnimationFrame(step);
-  }
-  function sealC(l1, l2) {
-    cSeq++;
-    cv1.textContent = l1;
-    cv2.textContent = l2;
-    cover.setAttribute('opacity', '1');
-    cover.setAttribute('visibility', 'visible');
-  }
 
-  // ── 상태 기계: 0 미제출 / 1 공개 / 2 재학습 대기
-  var state = 0, saved = '';
-  function reason() {
-    var v = wtxt.value.trim(), j;
-    if (v.length >= 8) return v;
-    for (j = 0; j < chips.length; j++) if (chips[j].classList.contains('on')) return chips[j].getAttribute('data-r');
-    return '';
-  }
-  function refreshBtn() {
-    go.disabled = state === 1 ? true : (state === 0 ? !reason() : false);
-  }
 
-  slider.addEventListener('input', function () {
-    draw(Number(slider.value));
-    if (state === 1) { state = 2; sealC('레이블 변경 · 재학습 필요', "'다시 학습' 버튼"); }
-    refreshBtn();
-  });
+  slider.addEventListener('input', function () { draw(Number(slider.value)); });
   slider.addEventListener('change', function () { fadeB(); });
 
-  chips.forEach(function (c) {
-    c.addEventListener('click', function () {
-      var on = c.classList.contains('on');
-      chips.forEach(function (o) { o.classList.remove('on'); });
-      if (!on) c.classList.add('on');
-      refreshBtn();
-    });
-  });
-  wtxt.addEventListener('input', refreshBtn);
 
-  go.addEventListener('click', function () {
-    if (go.disabled) return;
-    var r = reason();
-    if (r) saved = r;
-    state = 1;
-    draw(Number(slider.value));
-    revealC();
-    go.textContent = '다시 학습';
-    wout.textContent = '가정한 기준 ' + LBL[Number(slider.value)] + (saved ? ' · ' + saved : '');
-    refreshBtn();
-  });
 
-  // ── 초기 상태(기준 100만 명, 성능 봉인)
-  sealC('까닭을 적어야 공개', '사유 선택 또는 8자 이상 입력');
+  // ── 초기 상태(기준 100만 명)
   draw(Number(slider.value));
-  refreshBtn();
 }
 
 function initW_labelcurve(root, D) {
-  // 좌표: 열 개 기준 지점 x = 84 + i×60, 정확도 y = 186 − (acc − 0.70)/0.30 × 122
+  // 좌표: 열 개 기준 지점 x = 84 + i×60, 정확도 y = 186 − (acc − 0.60)/0.40 × 122
   const px = i => 84 + i * 60;
-  // 세로축은 0.70~1.00. 눈금은 그림에 고정되어 있으므로 벗어나는 값은 축 끝에 붙인다
-  const py = a => Math.max(64, Math.min(186, 186 - (a - 0.70) / 0.30 * 122));
+  // 세로축은 0.60~1.00. 눈금은 그림에 고정되어 있으므로 벗어나는 값은 축 끝에 붙인다
+  const py = a => Math.max(64, Math.min(186, 186 - (a - 0.60) / 0.40 * 122));
 
   const stops = D.stops;                                  // [기준값, 로지스틱, 트리] 10개
   const sub = D.audi.filter((_, i) => i % 10 < 3);        // 테스트용 영화
   const ks = stops.map(s => sub.reduce((c, v) => c + (v >= s[0] ? 1 : 0), 0));
+  const nT = sub.length;
+  const base = ks.map(k => (nT - k) / nT);                // 항상 다수 범주로만 찍었을 때의 정확도
   const manLab = t => (t / 10000) + '만';
   const f3 = v => v.toFixed(3);
 
@@ -565,7 +630,9 @@ function initW_labelcurve(root, D) {
     return '<polyline points="' + pts + '" fill="none" stroke="' + color + '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' +
       stops.map((s, i) => '<circle cx="' + px(i) + '" cy="' + py(s[j]).toFixed(1) + '" r="4" fill="' + color + '"/>').join('');
   };
-  curves.innerHTML = poly(1, '#2b7fd6') + poly(2, '#b07a00');
+  const basePts = base.map((a, i) => px(i) + ',' + py(a).toFixed(1)).join(' ');
+  curves.innerHTML = '<polyline points="' + basePts + '" fill="none" stroke="#6b7385" stroke-width="2" ' +
+    'stroke-dasharray="6 4" stroke-linejoin="round"/>' + poly(1, '#2b7fd6') + poly(2, '#b07a00');
 
   // 열 개 투명 히트 영역
   hits.innerHTML = stops.map((s, i) =>
@@ -597,8 +664,9 @@ function initW_labelcurve(root, D) {
     i = Math.max(0, Math.min(n - 1, i));
     cur = i;
     const s = stops[i], k = ks[i];
-    read.firstChild.nodeValue = '기준 ' + manLab(s[0]) + ' 명 · 로지스틱 ' + f3(s[1]) + ' · 트리 ' + f3(s[2]) + ' · ';
-    readk.textContent = '테스트용 성공 레이블 ' + k + '편';
+    read.firstChild.nodeValue = '기준 ' + manLab(s[0]) + ' 명 · 로지스틱 ' + f3(s[1]) + ' · 트리 ' + f3(s[2]) +
+      ' · 다수 범주 ' + f3(base[i]) + ' · ';
+    readk.textContent = '성공 레이블 ' + k + '편';
     readk.setAttribute('fill', k <= 3 ? '#d64545' : '#1c2230');
     btns.forEach(b => {
       const off = (+b.dataset.d < 0 && i === 0) || (+b.dataset.d > 0 && i === n - 1);
@@ -615,7 +683,90 @@ function initW_labelcurve(root, D) {
 
   setIdx(5, false);
 }
-  const WIDGET_INIT = {sigmoidPath: initW_sigmoidPath, twoDials: initW_twoDials, labelline: initW_labelline, labelcurve: initW_labelcurve};
+
+// 두 속성만으로 나눈 평면 — 세로선이 먼저 갈라 놓고, 가로선은 그 안에서만 그어진다.
+// D.plane = {xmax, ymax, pts:[[스크린 수, 상영 횟수, 성공여부]], cuts:{1:[칸], 2:[칸], 3:[칸]}}
+//   칸 = [x0, x1, y0, y1, 예측, 편수, 성공 편수]
+function initW_planecut(root, D) {
+  const P = D.plane;
+  if (!P) return;
+  const q = s => root.querySelector(s);
+  const NS = 'http://www.w3.org/2000/svg';
+  const X0 = 74, X1 = 664, YT = 44, YB = 384;
+  // 제곱근 눈금 — 선형은 점이 왼쪽 아래에 뭉치고, 로그는 칸이 구석으로 몰려 얇아진다
+  const SX = Math.sqrt(P.xmax), SY = Math.sqrt(P.ymax);
+  const px = v => X0 + Math.sqrt(Math.max(v, 0)) / SX * (X1 - X0);
+  const py = v => YB - Math.sqrt(Math.max(v, 0)) / SY * (YB - YT);
+  const 색 = {1: '#d64545', 0: '#2b7fd6'};
+  const el = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); return e; };
+  const 세모 = (x, y, r, c) => el('polygon', {
+    points: (x) + ',' + (y - r * 1.15) + ' ' + (x - r) + ',' + (y + r * 0.82) + ' ' + (x + r) + ',' + (y + r * 0.82),
+    fill: 'none', stroke: c, 'stroke-width': 1.8, 'stroke-opacity': 0.95});
+
+  // 눈금 — 로그 눈금이므로 1, 10, 100 … 자리에만 붙인다
+  const xt = q('.xticks'), yt = q('.yticks');
+  const 눈금값 = (최대, 후보) => [0].concat(후보.filter(v => v <= 최대)).concat([최대]);
+  눈금값(P.xmax, [100, 300, 600, 1000, 1500, 2000]).forEach(v => {
+    xt.appendChild(el('line', {x1: px(v), y1: YB, x2: px(v), y2: YB + 5, stroke: '#c9c2b4'}));
+    xt.appendChild(el('text', {x: px(v), y: YB + 19, 'font-size': 12, fill: '#6b7385', 'text-anchor': 'middle'})).textContent = v.toLocaleString();
+  });
+  눈금값(P.ymax, [500, 1500, 3000, 5000, 7000]).forEach(v => {
+    yt.appendChild(el('line', {x1: X0 - 5, y1: py(v), x2: X0, y2: py(v), stroke: '#c9c2b4'}));
+    yt.appendChild(el('text', {x: X0 - 9, y: py(v) + 4, 'font-size': 12, fill: '#6b7385', 'text-anchor': 'end'})).textContent = v.toLocaleString();
+  });
+
+  const cells = q('.cells'), dots = q('.dots'), info = q('.pinfo'), 점수 = q('.pscore');
+  const btns = Array.from(root.querySelectorAll('.wbtn[data-depth]'));
+  const tbtn = root.querySelector('.wbtn[data-test]'), tleg = root.querySelector('.tleg');
+  let 채점보임 = false, 현재 = 1;   // 먼저 학습만 본다. 버튼을 눌러야 채점용 영화가 나타난다
+
+  function 그리기(깊이) {
+    const 칸 = P.cuts[깊이] || P.cuts[String(깊이)];
+    cells.innerHTML = '';
+    칸.forEach(c => {
+      const x = px(c[0]), w = px(c[1]) - x, y = py(c[3]), h = py(c[2]) - y;
+      cells.appendChild(el('rect', {x: x, y: y, width: Math.max(w, 0), height: Math.max(h, 0),
+        fill: 색[c[4]], 'fill-opacity': 0.13, stroke: '#1c2230', 'stroke-width': 2}));
+      // 글자가 칸보다 넓으면 옆 칸을 침범한다. 폭에 맞는 것만 넣는다
+      const 글 = (w > 120 && h > 30) ? c[5] + '편 중 성공 ' + c[6] + '편'
+               : (w > 42 && h > 18) ? c[5] + '편' : '';
+      if (글) {
+        const t = el('text', {x: x + w / 2, y: y + h / 2 + 4, 'font-size': 12, 'font-weight': 700,
+          fill: '#1c2230', 'text-anchor': 'middle'});
+        t.textContent = 글;
+        cells.appendChild(t);
+      }
+    });
+    // 점은 칸 위에 찍는다. 동그라미는 학습에 사용한 영화, 세모는 채점에만 사용한 영화다
+    dots.innerHTML = '';
+    P.pts.forEach(p => dots.appendChild(el('circle', {cx: px(p[0]), cy: py(p[1]),
+      r: p[2] ? 4.4 : 3.0, fill: 색[p[2]], 'fill-opacity': p[2] ? 0.9 : 0.42})));
+    if (채점보임) {
+      (P.tpts || []).forEach(p => dots.appendChild(세모(px(p[0]), py(p[1]), p[2] ? 6 : 4.4, 색[p[2]])));
+    }
+    const acc = (P.acc || {})[깊이], tracc = (P.tracc || {})[깊이], moved = (P.moved || {})[깊이];
+    const 작은칸 = Math.min.apply(null, 칸.map(z => z[5]));
+    info.textContent = '질문 ' + 깊이 + '개까지 · 칸 ' + 칸.length + '개 · 가장 작은 칸 ' + 작은칸 + '편'
+      + (moved == null ? '' : moved === 0 ? ' · 판정 바뀐 영화 없음' : ' · 판정 ' + moved + '편 바뀜');
+    info.setAttribute('fill', 작은칸 < 5 ? '#d64545' : '#1c2230');
+    // 점수는 학습용을 먼저 보여 주고, 버튼을 눌러야 채점용이 드러난다
+    점수.textContent = (tracc == null ? '' : '학습용 ' + P.pts.length + '편으로 잰 정확도 ' + tracc.toFixed(3))
+      + (채점보임 && acc != null ? '  ·  채점용 ' + (P.tpts || []).length + '편으로 잰 정확도 ' + acc.toFixed(3) : '');
+    점수.setAttribute('fill', 채점보임 ? '#1c2230' : '#6b7385');
+    if (tleg) tleg.style.display = 채점보임 ? '' : 'none';
+    if (tbtn) {
+      tbtn.textContent = 채점보임 ? '채점용 영화 숨기기' : '채점용 영화 보기';
+      tbtn.classList.toggle('on', 채점보임);
+    }
+    btns.forEach(b => b.classList.toggle('on', +b.dataset.depth === 깊이));
+    현재 = 깊이;
+  }
+
+  btns.forEach(b => b.addEventListener('click', () => 그리기(+b.dataset.depth)));
+  if (tbtn) tbtn.addEventListener('click', () => { 채점보임 = !채점보임; 그리기(현재); });
+  그리기(1);
+}
+  const WIDGET_INIT = {sigmoidPath: initW_sigmoidPath, splitpick: initW_splitpick, twoDials: initW_twoDials, labelline: initW_labelline, labelcurve: initW_labelcurve, planecut: initW_planecut};
   function initWidgets(scope) { (scope || document).querySelectorAll('.widget[data-w]').forEach(el => { if (el.dataset.ready) return; const f = WIDGET_INIT[el.dataset.w]; if (f) { f(el, window.LESSON_DATA); el.dataset.ready = '1'; } }); }
   window.initWidgets = initWidgets;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => initWidgets()); else initWidgets();

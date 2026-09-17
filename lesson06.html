@@ -6,8 +6,7 @@
 <title>6차시 · 회귀 — 직선을 긋다 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
-<script src="assets/release.js"></script>
-<script src="assets/gate.js"></script>
+<link rel="stylesheet" href="assets/review.css">
 </head>
 <body>
 <div class="topbar"><div class="inner">
@@ -341,7 +340,7 @@
   </figure>
 
   <h3>직선을 읽는 두 숫자 — 기울기와 편향</h3>
-  <p>직선은 <b>예측값 = 기울기 × 독립 변수 + 편향</b>으로 나타냅니다. 기울기는 독립 변수가 1 증가할 때 예측값이 얼마나 달라지는지를 뜻합니다. 이번 문제에서는 연도가 1 증가할 때 예상 연평균기온이 변하는 양이며, 100을 곱하면 100년 단위의 변화량이 됩니다. <b>편향</b>은 독립 변수가 0일 때의 예측값입니다. 수학에서 부르는 이름은 절편이고, 교과서는 기울기를 가중치, 절편을 편향이라고 부릅니다(119쪽). 편향이 첫 관측 연도의 기온을 뜻하는 것은 아닙니다.</p>
+  <p>이 실습에서는 1908년을 0으로 두고, 연도에서 1908을 뺀 값을 독립 변수로 사용합니다. 직선은 <b>예측값 = 기울기 × (연도 − 1908) + 편향</b>으로 나타냅니다. 기울기는 1908년부터 지난 연수가 1 증가할 때 예측값이 얼마나 달라지는지를 뜻합니다. 따라서 연도가 1 증가할 때 예상 연평균기온이 변하는 양과 같고, 100을 곱하면 100년 단위의 변화량이 됩니다. <b>편향</b>은 독립 변수가 0일 때, 곧 1908년의 예측값입니다. 수학에서 부르는 이름은 절편이고, 교과서는 기울기를 가중치, 절편을 편향이라고 부릅니다(119쪽).</p>
   <figure class="interactive" data-fig="slopebias">
     <div class="widget" data-w="slopebias">
 <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="기울기와 편향 — 서울 연평균기온 산점도 위의 직선">
@@ -383,12 +382,12 @@
 </svg>
 <div class="wctl">
   <label>기울기 <input type="range" data-k="slope" min="-5" max="12" step="0.1" value="2.6"></label>
-  <label>편향(출발 높이) <input type="range" data-k="bias" min="8" max="16" step="0.1" value="10.3"></label>
+  <label>편향(1908년 예측값) <input type="range" data-k="bias" min="8" max="16" step="0.1" value="10.3"></label>
   <button class="wbtn on" type="button" data-act="reset">학습 결과로</button>
   <span class="wout">기울기 +2.60 · 편향 10.3</span>
 </div>
 </div>
-    <figcaption>두 슬라이더로 직선의 기울기와 편향을 바꾸면 산점도 위 직선의 위치가 달라집니다. '학습 결과로' 버튼을 누르면 학습으로 구한 직선으로 돌아옵니다.</figcaption>
+    <figcaption>두 슬라이더로 기울기와 1908년의 예측값인 편향을 바꾸면 산점도 위 직선의 위치가 달라집니다. '학습 결과로' 버튼을 누르면 학습으로 구한 직선으로 돌아옵니다.</figcaption>
   </figure>
 
   <h3>어느 직선이 "가장 잘 맞는" 직선인가</h3>
@@ -416,12 +415,12 @@
 <line x1="544" y1="167" x2="544" y2="181" stroke="#d64545" stroke-width="2" opacity=".85"/>
 <text x="556" y="179" font-size="14" fill="#1c2230">오차(세로 선분)</text>
 <text x="536" y="206" font-size="14" fill="#1c2230">기울기 <tspan font-weight="700" data-t="a">+2.60</tspan> ℃/100년</text>
-<text x="536" y="226" font-size="14" fill="#1c2230">편향(출발 높이) <tspan font-weight="700" data-t="h">12.9</tspan>℃</text>
+<text x="536" y="226" font-size="14" fill="#1c2230">2006년 예측값 <tspan font-weight="700" data-t="h">12.9</tspan>℃</text>
 <text x="278" y="253" font-size="14" fill="#6b7385" text-anchor="middle">오차 = 실젯값 − 예측값 · 제곱해서 더한 값이 작을수록 잘 맞는 직선</text>
 </svg>
 <div class="wctl">
 <label>기울기 <input type="range" min="-5" max="20" step="0.1" value="2.6" data-k="a"> <span data-v="a">+2.60 ℃/100년</span></label>
-<label>편향(출발 높이) <input type="range" min="11" max="15" step="0.1" value="12.9" data-k="h"> <span data-v="h">12.9℃</span></label>
+<label>2006년 예측값 <input type="range" min="11" max="15" step="0.1" value="12.9" data-k="h"> <span data-v="h">12.9℃</span></label>
 <button class="wbtn" type="button" data-act="best">최적 직선</button>
 <span class="wout">제곱오차 합 7.03 · 최소 4.76</span>
 </div>
@@ -443,8 +442,8 @@
 서울 기온 데이터(https://raw.githubusercontent.com/greatsong/modudata/bb860932644270ad1199f10d3e7670e30231bce4/data/seoul.csv)로 연도별 평균기온을 구해 줘.
 이 파일의 열 이름은 날짜, 지점, 평균기온, 최저기온, 최고기온이고, 인코딩은 UTF-8이야.
 수업의 기준 기간은 2025년까지야. 그 이후 데이터와 관측일이 300일이 안 되는 해는 빼 줘.
-산점도와 상관계수를 보여 주고, 남은 연평균기온에 맞춘 회귀 직선을 함께 표시해 줘.
-그래프는 plotly로 그려 줘.
+산점도와 상관계수를 보여 주고, 남은 연평균기온에 맞춘 회귀 직선을 함께 표시해 줘. 회귀선은 1908년부터 지난 연수를 독립 변수로 하여 구해 줘.
+그래프는 plotly로 그리되 가로축에는 연도를 그대로 보여 줘.
 연도를 슬라이더로 고르면 그 해의 예상 기온이 크게 표시되게 해 줘.
 슬라이더 범위는 1900년부터 2100년까지.
 직선을 만든 해의 개수와 시작 연도, 끝 연도를 화면에 적어 줘.
@@ -471,16 +470,17 @@ def load_yearly():
 
 
 yearly = load_yearly()
-a, b = np.polyfit(yearly["연도"], yearly["연평균기온"], 1)   # 기울기, 절편
+yearly["1908년부터 지난 연수"] = yearly["연도"] - 1908
+a, b = np.polyfit(yearly["1908년부터 지난 연수"], yearly["연평균기온"], 1)   # 기울기, 편향
 
 fig = px.scatter(yearly, x="연도", y="연평균기온", opacity=0.6)
-fig.add_scatter(x=yearly["연도"], y=a * yearly["연도"] + b, mode="lines", name="회귀 직선")
+fig.add_scatter(x=yearly["연도"], y=a * yearly["1908년부터 지난 연수"] + b, mode="lines", name="회귀 직선")
 st.plotly_chart(fig, width="stretch")
 st.caption(f"직선을 만든 해: {len(yearly)}개 ({yearly['연도'].min()}~{yearly['연도'].max()}년)")
 
 st.metric("연도와 연평균기온의 상관계수", f"{yearly['연도'].corr(yearly['연평균기온']):.3f}")
 year = st.slider("연도를 고르세요", 1900, 2100, 2045)
-st.metric(f"{year}년 예상 연평균기온", f"{a * year + b:.1f}℃")
+st.metric(f"{year}년 예상 연평균기온", f"{a * (year - 1908) + b:.1f}℃")
 if year &lt; yearly["연도"].min() or year &gt; yearly["연도"].max():
     st.info("학습 범위 밖의 외삽값입니다. 실제 미래 기온을 보장하지 않습니다.")</pre></div>
       <div class="codewrap code"><span class="label">두 번째 파일 — <button type="button" class="fname">requirements.txt</button></span><button class="copy-btn">복사</button><pre>streamlit
@@ -589,9 +589,9 @@ c2.metric("최근 20년 기울기", f"{a2 * 100:+.2f}℃ / 100년")</pre></div><
     <figcaption>학습 시작 연도를 바꾸면 학습 구간과 회귀선, 기울기, 2045년 예측값이 함께 달라집니다. 점은 서울의 실측 연평균기온입니다.</figcaption>
   </figure>
 
-  <div class="callout warn">
-    <div class="h">⚠️ 두 직선은 서로 다른 기간을 요약합니다</div>
-    <p>두 직선은 같은 계산 방법으로 서로 다른 기간의 추세를 요약합니다. 전체 기간의 직선과 최근 20년의 직선은 2045년 기온을 각각 13.9℃와 15.7℃로 예측합니다. 계산이 올바르다는 사실만으로 미래 예측이 정확하다고 판단할 수는 없습니다. <b>학습 기간과 예측하려는 시점</b>을 함께 확인합니다.</p>
+  <div class="callout tip">
+    <div class="h">🔎 두 직선은 서로 다른 기간을 요약합니다</div>
+    <p>두 직선은 같은 계산 방법으로 서로 다른 기간의 추세를 요약합니다. 전체 기간의 직선과 최근 20년의 직선은 2045년 기온을 각각 13.9℃와 15.7℃로 예측합니다. 두 예측값의 차이를 구하고, <b>학습 기간을 바꾸었을 때 예측값이 얼마나 달라지는지</b> 확인합니다.</p>
   </div>
   <p>슬라이더를 2045년과 2100년으로 옮겨 봅니다. 두 연도 모두 학습에 사용한 1908~2025년의 범위 밖에 있습니다. 학습 범위 밖의 값을 추정하는 것을 <b>외삽</b>이라고 합니다. 계산된 수치가 실제 미래 기온을 보장하지는 않습니다.</p>
   <figure class="interactive" data-fig="extrapolation">
@@ -808,7 +808,7 @@ c2.metric("최근 20년 기울기", f"{a2 * 100:+.2f}℃ / 100년")</pre></div><
   <g class="numbox" style="display:none">
     <rect x="386" y="40" width="184" height="50" rx="8" fill="#fff" fill-opacity=".9" stroke="#e3ddcf" stroke-width="1"/>
     <text x="398" y="61" font-size="14" fill="#1c2230">기울기 <tspan class="nb-slope" font-weight="700" fill="#2b7fd6">+2.60℃/100년</tspan></text>
-    <text x="398" y="83" font-size="14" fill="#1c2230">편향(1908년 높이) <tspan class="nb-bias" font-weight="700" fill="#2b7fd6">10.3℃</tspan></text>
+    <text x="398" y="83" font-size="14" fill="#1c2230">편향(1908년 예측값) <tspan class="nb-bias" font-weight="700" fill="#2b7fd6">10.3℃</tspan></text>
   </g>
   <text class="rlabel" x="520" y="270" font-size="14" fill="#1c2230" text-anchor="middle">하루하루의 기록 41,639일: 날씨·계절·관측 사정 전부</text>
   <text x="360" y="292" font-size="15" fill="#1c2230" text-anchor="middle">목적에 필요한 것만 남긴 축소판 = 모델</text>
@@ -1122,7 +1122,7 @@ c2.metric("최근 20년 기울기", f"{a2 * 100:+.2f}℃ / 100년")</pre></div><
     <tr><td class="term">선형 회귀</td><td>속성 사이에 선 모양의 관계를 가정하고 가장 잘 대표하는 선을 찾는 분석</td></tr>
     <tr><td class="term">회귀선</td><td>독립 변수와 종속 변수의 관계를 가장 잘 대표하는 직선</td></tr>
     <tr><td class="term">기울기</td><td>독립 변수가 1 증가할 때 예측값이 변하는 양입니다. 이번 문제의 단위는 ℃/년입니다.</td></tr>
-    <tr><td class="term">편향</td><td>독립 변수가 0일 때의 예측값인 편향을 뜻합니다(교과서 119쪽).</td></tr>
+    <tr><td class="term">편향</td><td>독립 변수가 0일 때의 예측값입니다. 이 실습에서는 1908년의 예측값입니다(교과서 119쪽).</td></tr>
     <tr><td class="term">모델</td><td>데이터에 담긴 관계를 목적에 맞게 요약한 것. 오늘의 모델은 기울기와 편향으로 정해지는 직선</td></tr>
     <tr><td class="term">모델링</td><td>모델을 만드는 과정. 형태를 정하고, 데이터에 맞는 숫자를 찾고, 얼마나 맞는지 평가한다</td></tr>
     <tr><td class="term">학습</td><td>제곱오차 합이 가장 작아지는 기울기와 편향을 계산으로 찾는 것</td></tr>

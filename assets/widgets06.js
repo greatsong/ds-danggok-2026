@@ -9,7 +9,7 @@ function initW_procedure(root, D) {
   const sx = yr => X0 + (yr - 1905) / (2028 - 1905) * (X1 - X0);
   const sy = t => Y0 + (16 - t) / (16 - 9) * (Y1 - Y0);
 
-  // 통계: 최소제곱 기울기 a, 편향 b, 피어슨 상관계수 r
+  // 통계: 원래 연도를 사용한 최소제곱 기울기 a, 절편 b, 피어슨 상관계수 r
   const n = D.length;
   let mx = 0, my = 0;
   for (const [x, y] of D) { mx += x; my += y; }
@@ -1069,7 +1069,7 @@ function initW_slopebias(root, D) {
   for (i = 0; i < n; i++) { sxy += (D[i][0] - mx) * (D[i][1] - my); sxx += (D[i][0] - mx) * (D[i][0] - mx); }
   var aLS = sxy / sxx, bLS = my - aLS * mx;
   var slopeLS = Math.round(aLS * 1000) / 10;              // ℃/100년, 슬라이더 단계 0.1
-  var biasLS = Math.round((aLS * X0 + bLS) * 10) / 10;    // 1908년(왼쪽 끝) 직선 높이
+  var biasLS = Math.round((aLS * X0 + bLS) * 10) / 10;    // 1908년을 0으로 둔 입력에서의 편향
 
   // 산점도(학습 데이터)
   var pts = '';
@@ -1174,7 +1174,7 @@ function initW_slopebias(root, D) {
     } else {
       line.setAttribute('visibility', 'hidden');
     }
-    // 편향: 왼쪽 끝 노랑 점 + 라벨(직선 반대쪽 줄에서 점이 적고 가까운 자리)
+    // 편향: 1908년을 0으로 둔 입력에서의 값. 왼쪽 끝 노랑 점과 라벨로 표시한다.
     dot.setAttribute('cy', f1(y1));
     var bc = [], d, row, k, pxk, pyk;
     for (row = 0; row < 2; row++) {
@@ -1367,7 +1367,7 @@ function initW_model(root, D) {
   }
   var f = fit(D);
   var slopeTxt = (f.a >= 0 ? '+' : '') + (f.a * 100).toFixed(2);   // 기울기 ℃/100년
-  var bias1908 = f.a * X0 + f.b;                                     // 편향 = 직선의 1908년 높이
+  var bias1908 = f.a * X0 + f.b;                                     // 1908년을 0으로 둔 입력에서의 편향
 
   // 그리기 — 세로 띠(①), 연평균 점(① 축 · ②~④ 축), 회귀선, 숫자 두 개
   var i, x, s = '';

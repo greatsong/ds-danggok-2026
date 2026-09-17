@@ -220,6 +220,9 @@ function initW_baseline(root, D) {
   // ── 좌표 상수: 자 x 214~700(길이 486), 왼쪽 라벨 폭 180, 수치판 안쪽 392~688 ──
   const X0 = 214, LEN = 486, LABW = 180, CARDX = 392, CARDW = 296;
 
+  // ── 간이 표시(root의 data-simple="1"): 격자를 그리지 않고 계산 카드를 전체 폭으로 넓혀 세로 분수로 적는다 ──
+  const SIMPLE = !!(root.dataset && root.dataset.simple === '1');
+
   // ── 세트 ① 급식 184일 — 동시 5일 이상 26쌍 × 양방향 = 52개 ──
   const mealList = G.rules.filter(r => r.co >= 5).sort(CMP.lift);
 
@@ -237,13 +240,13 @@ function initW_baseline(root, D) {
     outList.push(r);
   }
 
-  // ── 세트 ③ 손계산 20일 — 활동지 자작 수치 ──
+  // ── 세트 ③ 손계산 100일 — 활동지 설계값 ──
   function raw(an, bn, co, na, nb, N) {
     const conf = na ? co / na : 0, base = nb / N;
     return { ai: -1, bi: -1, an: an, bn: bn, co: co, na: na, nb: nb, N: N,
       conf: conf, base: base, lift: base ? conf / base : 0, tag: '' };
   }
-  const handList = [raw('제육볶음', '배추김치', 6, 10, 12, 20), raw('순대국', '석박지', 3, 4, 5, 20)];
+  const handList = [raw('제육볶음', '배추김치', 6, 10, 60, 100), raw('순대국', '석박지', 5, 5, 20, 100)];
 
   const SETS = {
     meal: { list: mealList, sortable: true },
@@ -288,6 +291,58 @@ function initW_baseline(root, D) {
   const c1a = q('.c1a'), c1b = q('.c1b'), c2 = q('.c2'), c3 = q('.c3');
   const c4a = q('.c4a'), c4b = q('.c4b'), c5 = q('.c5');
   const rng = q('.rng'), wout = q('.wout'), dirBtn = q('.dir');
+
+  // ── 간이 표시 배치: 카드를 전체 폭으로 넓히고 분수 세 줄을 만들어 둔다 ──
+  const SVGNS = 'http://www.w3.org/2000/svg';
+  const svgEl = root.querySelector('svg'), cardRect = q('.card');
+  const SLX = 56, SFX = 214, SFW = 80, SFC = SFX + SFW / 2, SEQ = 310, SVX = 332;
+  let rowConf = null, rowBase = null, rowLift = null;
+  function svgNode(tag, at) {
+    const el = document.createElementNS(SVGNS, tag);
+    for (const k in at) el.setAttribute(k, at[k]);
+    return el;
+  }
+  // 분수 한 줄: 라벨 · 분자 · 가로선 · 분모 · 등호 · 값
+  function makeRow(g, cy, vsize) {
+    const o = {
+      cy: cy,
+      lab: svgNode('text', { x: SLX, y: cy + 5, 'font-size': 17, fill: '#1c2230' }),
+      num: svgNode('text', { x: SFC, y: cy - 6, 'font-size': 16, fill: '#1c2230', 'text-anchor': 'middle' }),
+      den: svgNode('text', { x: SFC, y: cy + 16, 'font-size': 16, fill: '#1c2230', 'text-anchor': 'middle' }),
+      bar: svgNode('line', { y1: cy, y2: cy, stroke: '#1c2230', 'stroke-width': 1.4 }),
+      eq: svgNode('text', { x: SEQ, y: cy + 5, 'font-size': 17, fill: '#1c2230' }),
+      val: svgNode('text', { x: SVX, y: cy + 7, 'font-size': vsize, 'font-weight': 800, fill: '#1c2230' })
+    };
+    o.eq.textContent = '=';
+    g.appendChild(o.lab); g.appendChild(o.num); g.appendChild(o.den);
+    g.appendChild(o.bar); g.appendChild(o.eq); g.appendChild(o.val);
+    return o;
+  }
+  function setRow(o, label, num, den, val, color) {
+    o.lab.textContent = label;
+    const w = Math.max(put(o.num, num, 16), put(o.den, den, 16)) + 16;
+    o.bar.setAttribute('x1', (SFC - w / 2).toFixed(1));
+    o.bar.setAttribute('x2', (SFC + w / 2).toFixed(1));
+    o.val.textContent = val;
+    o.lab.setAttribute('fill', color); o.num.setAttribute('fill', color);
+    o.den.setAttribute('fill', color); o.eq.setAttribute('fill', color);
+    o.val.setAttribute('fill', color); o.bar.setAttribute('stroke', color);
+  }
+  if (SIMPLE) {
+    if (svgEl) svgEl.setAttribute('viewBox', '0 0 720 380');
+    if (gnote) { gnote.textContent = ''; gnote.setAttribute('opacity', '0'); }
+    if (cardRect) {
+      cardRect.setAttribute('x', '24'); cardRect.setAttribute('y', '182');
+      cardRect.setAttribute('width', '676'); cardRect.setAttribute('height', '186');
+    }
+    c1a.setAttribute('x', String(SLX)); c1b.setAttribute('x', String(SLX));
+    [c2, c3, c4a, c4b, c5].forEach(function (t) { t.textContent = ''; t.setAttribute('opacity', '0'); });
+    const g = svgNode('g', {});
+    if (svgEl) svgEl.appendChild(g);
+    rowConf = makeRow(g, 252, 21);
+    rowBase = makeRow(g, 298, 21);
+    rowLift = makeRow(g, 344, 26);
+  }
   const setBtns = Array.prototype.slice.call(root.querySelectorAll('.wbtn[data-set]'));
   const sortBtns = Array.prototype.slice.call(root.querySelectorAll('.wbtn[data-sort]'));
 
@@ -415,28 +470,38 @@ function initW_baseline(root, D) {
     badge(r);
     fold(l1a, l1b, r.an + ' 나온 날 중 ' + r.bn, r.an + ' 나온 날 중', r.bn, 70, 88, 76);
     fold(l2a, l2b, r.N + '일 전체 중 ' + r.bn, r.N + '일 전체 중', r.bn, 118, 136, 124);
-    gnote.setAttribute('opacity', setKey === 'hand' ? '1' : '0');
+    gnote.setAttribute('opacity', (!SIMPLE && setKey === 'hand') ? '1' : '0');
 
-    const one = '동시 ' + r.co + '칸 · ' + r.an + ' ' + r.na + '칸 · ' + r.bn + ' ' + r.nb + '칸 · 전체 ' + r.N + '칸';
-    if (put(c1a, one, 14) <= CARDW) { c1a.setAttribute('y', '212'); c1b.textContent = ''; }
-    else {
-      c1a.setAttribute('y', '204');
-      c1a.textContent = '동시 ' + r.co + '칸 · 전체 ' + r.N + '칸';
-      c1b.setAttribute('y', '222');
-      c1b.textContent = r.an + ' ' + r.na + '칸 · ' + r.bn + ' ' + r.nb + '칸';
-    }
-    c2.textContent = '신뢰도 = ' + r.co + ' ÷ ' + r.na + ' = ' + f2(r.conf);
-    c3.textContent = '기본 등장률 = ' + r.nb + ' ÷ ' + r.N + ' = ' + fBase(r.base);
-    const pre = '향상도 = ' + f2(r.conf) + ' ÷ ' + fBase(r.base) + ' =';
-    const pw = put(c4a, pre, 15);
-    c4b.setAttribute('x', (CARDX + pw + 8).toFixed(1));
-    c4b.textContent = fLift(r.lift);
     const band = r.lift >= 0.9 && r.lift <= 1.1;
-    c4a.setAttribute('fill', band ? '#b07a00' : '#1c2230');
-    c4b.setAttribute('fill', band ? '#b07a00' : '#1c2230');
-    c5.textContent = r.co === 0 ? '독립을 가정한 기대 동시 일수 ≈ ' + (r.na * r.nb / r.N).toFixed(1) + '일' : '';
+    if (SIMPLE) {
+      c1a.setAttribute('y', '206');
+      c1a.textContent = '동시 ' + r.co + '일 · 전체 ' + r.N + '일';
+      c1b.setAttribute('y', '224');
+      c1b.textContent = r.an + ' ' + r.na + '일 · ' + r.bn + ' ' + r.nb + '일';
+      setRow(rowConf, '신뢰도 =', String(r.co), String(r.na), f2(r.conf), '#1c2230');
+      setRow(rowBase, '기본 등장률 =', String(r.nb), String(r.N), fBase(r.base), '#1c2230');
+      setRow(rowLift, '향상도 =', f2(r.conf), fBase(r.base), fLift(r.lift), band ? '#b07a00' : '#1c2230');
+    } else {
+      const one = '동시 ' + r.co + '칸 · ' + r.an + ' ' + r.na + '칸 · ' + r.bn + ' ' + r.nb + '칸 · 전체 ' + r.N + '칸';
+      if (put(c1a, one, 14) <= CARDW) { c1a.setAttribute('y', '212'); c1b.textContent = ''; }
+      else {
+        c1a.setAttribute('y', '204');
+        c1a.textContent = '동시 ' + r.co + '칸 · 전체 ' + r.N + '칸';
+        c1b.setAttribute('y', '222');
+        c1b.textContent = r.an + ' ' + r.na + '칸 · ' + r.bn + ' ' + r.nb + '칸';
+      }
+      c2.textContent = '신뢰도 = ' + r.co + ' ÷ ' + r.na + ' = ' + f2(r.conf);
+      c3.textContent = '기본 등장률 = ' + r.nb + ' ÷ ' + r.N + ' = ' + fBase(r.base);
+      const pre = '향상도 = ' + f2(r.conf) + ' ÷ ' + fBase(r.base) + ' =';
+      const pw = put(c4a, pre, 15);
+      c4b.setAttribute('x', (CARDX + pw + 8).toFixed(1));
+      c4b.textContent = fLift(r.lift);
+      c4a.setAttribute('fill', band ? '#b07a00' : '#1c2230');
+      c4b.setAttribute('fill', band ? '#b07a00' : '#1c2230');
+      c5.textContent = r.co === 0 ? '독립을 가정한 기대 동시 일수 ≈ ' + (r.na * r.nb / r.N).toFixed(1) + '일' : '';
+    }
 
-    const fresh = grid(r);
+    const fresh = SIMPLE ? false : grid(r);
     wout.textContent = (idx + 1) + ' / ' + SETS[setKey].list.length;
     roll(r.conf, r.base, instant || fresh);
   }

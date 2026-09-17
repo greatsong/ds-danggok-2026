@@ -6,8 +6,7 @@
 <title>4차시 · 그래프 도감 Ⅱ — 분포·구성·관계 · 나만의 질문 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
-<script src="assets/release.js"></script>
-<script src="assets/gate.js"></script>
+<link rel="stylesheet" href="assets/review.css">
 </head>
 <body>
 <div class="topbar"><div class="inner">
@@ -70,11 +69,11 @@
           </table>
         </div>
       </div>
-      <div class="note">날짜 열이 사라지고, 대신 영화의 속성(장르·국가·개봉일 스크린수·첫 주 관객·총 관객)이 열로 들어왔습니다. genre 열에는 세로막대 기호(|)로 여러 장르가 적힌 영화가 있습니다.</div>
+      <div class="note">날짜 열이 사라지고, 대신 영화의 속성(장르·국가·첫 관측일 스크린 수·첫 주 관객·총 관객)이 열로 들어왔습니다. genre 열에는 세로막대 기호(|)로 여러 장르가 적힌 영화가 있습니다.</div>
     </div>
   </div>
   <h2>2. 뼈대 만들기 — 도넛까지 (①②)</h2>
-  <p>도감 Ⅰ과 같은 방식입니다. 뼈대(데이터 로드 + 첫 그래프)를 ①로 만들고, 그래프를 하나씩 추가 프롬프트로 쌓습니다. 오늘도 main.py를 새로 교체합니다.</p>
+  <p>도감 Ⅰ과 같은 방식으로 뼈대(데이터 로드 + 첫 그래프)를 ①로 만들고, 그래프를 하나씩 추가 프롬프트로 쌓습니다. ②에서 코드를 받은 뒤 깃허브에 <code>lesson04-graphs-shape</code>라는 새 공개 저장소를 만들고, <code>main.py</code>와 <code>requirements.txt</code>를 올립니다. Streamlit Community Cloud에서 <b>New app</b>을 누른 뒤 이 저장소와 <code>main.py</code>를 골라 새 앱을 배포합니다. 새 주소가 열리면 그래프를 확인합니다. 앞 차시 앱은 그대로 보존하고, 이 차시의 그래프는 <code>lesson04-graphs-shape</code>에서 추가합니다.</p>
   <ol class="steps">
     <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>스트림릿 앱(main.py)을 새로 만들어 줘. 제목은 '영화 데이터 그래프 도감 2 - 분포와 관계'.
@@ -83,7 +82,7 @@
   1년간 박스오피스 10위권에 든 영화 가운데 이 기간에 개봉한 216편의 요약표야. 열은
   movieCd(영화코드) · movieNm(영화명) · openDt(개봉일, 여덟 자리 숫자) ·
   genre(장르 - 세로막대 기호로 여러 개 적힌 영화는 첫 번째 장르만 써) · nation(제작 국가) ·
-  first_scrn(개봉일 스크린수) · first_show(개봉일 상영횟수) · first_week_audi(개봉 첫 주 관객) ·
+  first_scrn(첫 관측일 스크린 수) · first_show(첫 관측일 상영 횟수) · first_week_audi(개봉 첫 주 관객) ·
   total_audi(총 관객) · days_in_top10(10위권에 머문 날수).
 - 첫 그래프: 장르별 영화 편수를 플롯리 도넛 그래프로 보여 줘. 조각에 마우스를 올리면 편수와 비율이 보이게.
 - 그래프마다 아래에 '이 그래프로 알 수 있는 것' 한 문장을 넣을 자리를 만들고, 구역을 나눠 줘.
@@ -186,24 +185,24 @@ st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세
 
   <h3>그래프 4 · 산점도 (필수) — 스크린을 많이 받은 영화가 관객도 많나</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 네 번째 그래프를 추가해.
-- first_scrn(개봉일 스크린수)과 total_audi(총 관객)의 산점도를 그려 줘.
+- first_scrn(첫 관측일 스크린 수)과 total_audi(총 관객)의 산점도를 그려 줘.
 - 점에 마우스를 올리면 영화명이 보이게 하고, 장르별로 점 색을 다르게 해 줘.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 4. 스크린 수와 총 관객 (산점도) ──
-st.header("4. 개봉일 스크린 수와 총 관객 (산점도)")
+st.header("4. 첫 관측일 스크린 수와 총 관객 (산점도)")
 fig4 = px.scatter(df, x="first_scrn", y="total_audi", color="장르",
                   hover_name="movieNm")
 st.plotly_chart(fig4, width="stretch")
 st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
-  <p><b>읽는 법</b> — 산점도는 처음으로 <b>두 속성의 관계</b>를 묻는 그래프입니다. 점 하나가 영화 한 편이고, 가로가 개봉일 스크린수, 세로가 총 관객입니다. 점들이 대체로 오른쪽 위로 향하는지, 그 경향에서 멀리 벗어난 점은 어떤 영화인지 마우스를 올려 확인해 보세요.</p>
+  <p><b>읽는 법</b> — 산점도는 처음으로 <b>두 속성의 관계</b>를 묻는 그래프입니다. 점 하나가 영화 한 편이고, 가로는 그 영화가 10위권에 처음 등장한 날의 스크린 수, 세로는 총 관객입니다. 점들이 대체로 오른쪽 위로 향하는지, 그 경향에서 멀리 벗어난 점은 어떤 영화인지 마우스를 올려 확인해 보세요.</p>
   <div class="callout check">
     <div class="h">✔️ 미리 던져 두는 질문 — 이 점들 위에 직선을 긋는다면?</div>
-    <p>점들의 경향을 따라 직선 하나를 긋는다고 상상해 보세요. 그 직선이 있으면 "스크린 500개로 개봉하는 영화의 관객 수"를 짐작할 수 있게 됩니다. 어디에 그어야 가장 좋은 직선인지, 그 직선을 얼마나 믿을 수 있는지가 <b>6차시(회귀)</b>의 주제입니다. 오늘은 점들의 모양만 눈에 담아 둡니다.</p>
+    <p>점들의 경향을 따라 직선 하나를 긋는다고 상상해 보세요. 그 직선이 있으면 "첫 관측일 스크린 수가 500개인 영화의 총 관객 수"를 짐작할 수 있게 됩니다. 어디에 그어야 가장 좋은 직선인지, 그 직선을 얼마나 믿을 수 있는지가 <b>6차시(회귀)</b>의 주제입니다. 오늘은 점들의 모양만 눈에 담아 둡니다.</p>
   </div>
 
   <h3>그래프 5 · 박스플롯 (확장) — 장르별 관객 분포는 어떻게 다른가</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 다섯 번째 그래프를 추가해.
 - 영화가 10편 이상인 장르만 골라, 장르별 total_audi(총 관객)의 상자 그림(박스플롯)을 그려 줘.
-- 상자 밖으로 튀는 점에 마우스를 올리면 영화명이 보이게.</pre></div>
+- 수염 밖에 따로 표시한 점에 마우스를 올리면 영화명이 보이게.</pre></div>
       <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># ── 그래프 5. 장르별 총 관객 (박스플롯) ──
 st.header("5. 장르별 총 관객 (박스플롯)")
 big = df["장르"].value_counts()
@@ -212,7 +211,7 @@ fig5 = px.box(df[df["장르"].isin(big)], x="장르", y="total_audi", points="ou
               hover_name="movieNm")
 st.plotly_chart(fig5, width="stretch")
 st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세요)")</pre></div></details>
-  <p><b>읽는 법</b> — 상자의 가운데 선이 그 장르의 중앙값, 상자 밖으로 튀어 나간 점이 이상치입니다. 장르마다 상자의 위치와 높이가 다르고, 상자 위로 멀리 떨어진 점들이 곧 그 장르의 대작입니다. 히스토그램에서 본 쏠림을 장르별로 쪼개어 보는 그래프인 셈입니다.</p>
+  <p><b>읽는 법</b> — 상자 안의 선이 그 장르의 중앙값, 수염 밖에 따로 표시한 점이 이상치입니다. 장르마다 상자의 위치와 높이가 다르고, 위쪽 수염보다 멀리 떨어진 점은 그 장르에서 관객 수가 유난히 큰 영화입니다. 히스토그램에서 본 쏠림을 장르별로 쪼개어 보는 그래프인 셈입니다.</p>
 
   <h3>그래프 6 · 버블 (확장) — 첫 주 관객까지 넣으면 무엇이 더 보이나</h3>
   <div class="codewrap improve"><span class="label">추가 프롬프트</span><button class="copy-btn">복사</button><pre>좋아, 여섯 번째 그래프를 추가해.
@@ -286,7 +285,7 @@ st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세
   </table>
   <div class="callout tip">
     <div class="h">💡 질문에 쓸 수 있는 열</div>
-    <p>openDt(개봉일) · genre(장르) · nation(제작 국가) · first_scrn(개봉일 스크린수) · first_show(개봉일 상영횟수) · first_week_audi(개봉 첫 주 관객) · total_audi(총 관객) · days_in_top10(10위권에 머문 날수)</p>
+    <p>openDt(개봉일) · genre(장르) · nation(제작 국가) · first_scrn(첫 관측일 스크린 수) · first_show(첫 관측일 상영 횟수) · first_week_audi(개봉 첫 주 관객) · total_audi(총 관객) · days_in_top10(10위권에 머문 날수)</p>
   </div>
   <div class="codewrap improve"><span class="label">추가 프롬프트 — 질문 줄과 그래프 줄을 내 것으로 바꿔 쓴다</span><button class="copy-btn">복사</button><pre>좋아, 여기서 이어서 고쳐 줘. 여덟 번째 그래프를 추가해.
 - 내 질문: 10위권에 오래 머문 영화는 총 관객도 많은가
@@ -336,7 +335,7 @@ st.caption("이 그래프로 알 수 있는 것: (한 문장으로 적어 보세
       <div class="fb">값의 구간별로 몇 편씩 있는지 세는 <b>히스토그램</b>이 분포의 질문에 답합니다.</div>
     </div>
     <div class="qitem">
-      <div class="qs">(나) 개봉일 스크린수와 총 관객은 관계가 있는가?</div>
+      <div class="qs">(나) 첫 관측일 스크린 수와 총 관객은 관계가 있는가?</div>
       <div class="qopts"><button class="opt">트리맵</button><button class="opt">히스토그램</button><button class="opt" data-ok="1">산점도</button></div>
       <div class="fb">두 속성을 가로·세로 축에 놓고 점을 찍는 <b>산점도</b>가 관계의 질문에 답합니다.</div>
     </div>

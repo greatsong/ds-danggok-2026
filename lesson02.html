@@ -6,8 +6,7 @@
 <title>2차시 · 반정형 데이터 · API와 JSON · 어제의 박스오피스 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
-<script src="assets/release.js"></script>
-<script src="assets/gate.js"></script>
+<link rel="stylesheet" href="assets/review.css">
 </head>
 <body>
 <div class="topbar"><div class="inner">
@@ -40,7 +39,12 @@
     </ul>
   </div>
 
-  <h2>0. 왜 배우나</h2>
+  <h2>0. 오늘의 목표</h2>
+  <ul>
+    <li>정형·반정형·비정형 데이터를 구조에 따라 구분할 수 있다.</li>
+    <li>API의 요청 주소와 조건을 확인하고, JSON 응답에서 필요한 값을 찾을 수 있다.</li>
+    <li>인증키를 코드 밖의 비밀 금고에 저장해 어제의 박스오피스 앱을 배포할 수 있다.</li>
+  </ul>
   <p>버스 도착 알림, 날씨 앱, 예매 앱의 실시간 순위 — 이런 앱들은 파일을 내려받아 두지 않고, 화면을 여는 순간 서버에 <b>요청을 보내고 응답을 받아</b> 보여 줍니다. 오늘 데이터를 받는 이 두 번째 방법을 배웁니다. 재료는 영화진흥위원회가 운영하는 <b>KOBIS(영화관입장권 통합전산망)</b>입니다. 전국 극장의 관객 수가 매일 집계되는 공식 통계로, 뉴스에 나오는 "천만 영화"의 근거가 바로 이 데이터입니다.</p>
 
   <h2>1. 개념 이해 — 데이터의 세 가지 형태</h2>
@@ -110,7 +114,7 @@
     <p class="q">"이러한 반정형 데이터는 데이터 구조를 쉽게 변경할 수 있고, 필요한 경우 표 형태로도 쉽게 변환할 수 있어 데이터 공유에 많이 활용된다." <span class="src">(20쪽)</span></p>
     <p class="t">→ 오늘 KOBIS가 돌려주는 응답이 바로 이 JSON이다. "표로 쉽게 변환할 수 있다"는 문장을 실습에서 직접 확인한다.</p>
   </div>
-  <p>JSON은 <b>JavaScript Object Notation</b>의 약자입니다. 웹 프로그래밍 언어인 자바스크립트에서 데이터를 적던 표기법이 언어와 무관한 공용 형식으로 자리 잡았고, 오늘날 대부분의 API가 이 형식으로 응답합니다. 생김새는 <b>{"라벨": 값} 짝으로 이루어진 상자</b>입니다. 상자 안에 상자를 넣을 수 있어서, 복잡한 데이터도 층층이 담을 수 있습니다. 오늘 우리 앱이 받게 될 실제 응답의 일부를 봅니다. 이 교재를 만들던 날(2026년 8월 25일 조회)의 진짜 데이터입니다.</p>
+  <p>JSON은 <b>JavaScript Object Notation</b>의 약자입니다. 웹 프로그래밍 언어인 자바스크립트에서 데이터를 적던 표기법이 언어와 무관한 공용 형식으로 자리 잡았고, 오늘날 대부분의 API가 이 형식으로 응답합니다. 중괄호 <code>{}</code>는 <b>키와 값의 쌍으로 묶인 구조</b>로, 파이썬의 딕셔너리와 비슷합니다. 대괄호 <code>[]</code>는 <b>리스트</b>를 나타냅니다. <code>{}</code> 안의 값으로 또 다른 <code>{}</code>나 리스트 <code>[]</code>가 들어갈 수도 있습니다. 오늘 우리 앱이 받게 될 실제 응답의 일부를 봅니다. 이 교재를 만들던 날(2026년 8월 25일 조회)의 진짜 데이터입니다.</p>
   <div class="codewrap code"><span class="label">실제 응답 (일부 발췌)</span><pre>{
   "boxOfficeResult": {
     "boxofficeType": "일별 박스오피스",
@@ -130,7 +134,7 @@
   }
 }</pre></div>
   <ul>
-    <li><b>값 꺼내기 = 라벨을 따라 들어가기</b> — 겉상자 <code>boxOfficeResult</code> 안에서 <code>dailyBoxOfficeList</code> 목록을 꺼내면, <b>영화 한 편이 상자 하나</b>씩 들어 있습니다. 그 상자에서 <code>movieNm</code>(영화명)·<code>audiCnt</code>(그날 관객수)를 꺼내는 식이고, 상자 하나가 표의 행 하나가 됩니다 — 교과서 20쪽의 "표 형태로 쉽게 변환"이 바로 이 작업입니다.</li>
+    <li><b>값 꺼내기 = 라벨을 따라 들어가기</b> — 겉상자 <code>boxOfficeResult</code> 안에서 <code>dailyBoxOfficeList</code> 리스트를 꺼내면, <b>영화 한 편이 상자 하나</b>씩 들어 있습니다. 그 상자에서 <code>movieNm</code>(영화명)·<code>audiCnt</code>(그날 관객수)를 꺼내는 식이고, 상자 하나가 표의 행 하나가 됩니다 — 교과서 20쪽의 "표 형태로 쉽게 변환"이 바로 이 작업입니다.</li>
     <li><b>👀 눈여겨볼 것 — 숫자가 따옴표에 싸여 있다.</b> <code>"audiCnt": "164393"</code> — 16만 명이 넘는 관객수가 숫자가 아니라 <b>따옴표 친 글자</b>로 옵니다. 글자인 채로 정렬하면 사전순이 되어 "9"가 "164393"보다 커집니다. 크기 비교·정렬·그래프 전에 숫자로 바꾸는 한 단계가 꼭 필요합니다.</li>
       </ul>
 
@@ -187,7 +191,7 @@
       <text x="0" y="36" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0e9488" font-family="monospace">{"movieNm": "…"}</text>
     </g>
   </g>
-  <text x="400" y="232" text-anchor="middle" font-size="12.5" fill="#7a7f95" pointer-events="none">요청 = 주소 + 조건(날짜) + 🔑 인증키 · 응답 = 정해진 양식(JSON) · 상태코드 200이면 성공</text>
+  <text x="400" y="232" text-anchor="middle" font-size="12.5" fill="#7a7f95" pointer-events="none">요청 = 주소 + 조건(날짜) + 🔑 인증키 · 응답 = JSON · HTTP 상태와 응답 내용을 함께 확인</text>
 </svg>
 <script>
 (function () {
@@ -232,7 +236,9 @@
     </div>
   </details>
 
-  <p>내려받기와 API는 무엇이 다를까요? 1차시에 쓴 기온 CSV는 <b>그 시점의 복사본</b>입니다. 내일 기록이 늘어나도 내 파일은 반영하지 못합니다. API는 호출할 때마다 서버가 지금 가진 데이터를 보내 주므로 <b>항상 최신</b>이고, 날짜 같은 조건을 지정해 <b>필요한 만큼만</b> 받을 수 있습니다.</p>
+  <p>HTTP 요청 처리가 성공해 상태코드 200을 받아도 KOBIS가 요청 내용을 정상 처리했다는 뜻은 아닙니다. 인증키가 틀린 경우에는 <code>faultInfo</code>가 올 수 있으므로, 앱은 HTTP 상태와 JSON 내용을 함께 확인해야 합니다.</p>
+
+  <p>내려받기와 API는 무엇이 다를까요? 1차시에 쓴 기온 CSV는 <b>그 시점의 복사본</b>입니다. 내일 기록이 늘어나도 내 파일은 반영하지 못합니다. API를 호출하면 서버가 그때 보내는 응답을 받습니다. 날짜 같은 조건을 지정해 필요한 범위만 요청할 수 있고, 서버의 데이터가 갱신되면 다음 호출의 응답도 달라질 수 있습니다.</p>
 
   <h2>4. 주소창 맨눈 보기 — 약속의 실물 확인</h2>
   <p>코드를 쓰기 전에, API가 정말 "주소에 조건을 담아 보내면 JSON으로 답하는 약속"인지 브라우저로 확인합니다. 클래스룸에서 받은 <b>키</b>를 아래 상자에 붙여 넣으면 어제 날짜가 채워진 <b>완성 주소</b>가 만들어집니다. 그 주소를 새 탭에서 열어 봅니다.</p>
@@ -245,7 +251,7 @@
       <button class="copybtn" id="km-copy" type="button" disabled>📋 주소 복사</button>
       <a class="openbtn" id="km-open" target="_blank" rel="noopener" style="display:none">↗ 새 탭에서 열어 보기</a>
     </div>
-    <div class="um-note">키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다 · 날짜는 한국 시간 기준 어제로 자동 계산 · 아래 실습의 비밀 금고(Secrets) 예시에도 이 키가 자동으로 채워집니다</div>
+    <div class="um-note">이 입력란은 키를 저장하지 않습니다. 키는 완성 주소와 아래 Secrets 예시에만 채워집니다. ‘새 탭에서 열어 보기’를 누르면 키가 요청 주소에 포함되어 KOBIS 서버로 전송됩니다. 날짜는 한국 시간 기준 어제로 자동 계산됩니다.</div>
   </div>
   <p>새 탭에 화면 가득 글자 덩어리(JSON)가 뜨면 성공입니다. 한 줄로 뭉쳐 보여도 정상입니다. 중괄호와 따옴표 사이에서 다음을 찾습니다.</p>
   <ul>
@@ -416,11 +422,11 @@ pandas
 plotly
 requests</pre></div>
     </li>
-    <li><span class="st">깃허브에 올리기 — 커밋하면 다시 배포된다</span><br>
-      1차시 저장소에서 <button type="button" class="fname">main.py</button>를 열어 연필 아이콘으로 전체를 지우고 새 코드를 붙여 넣어 커밋합니다. <button type="button" class="fname">requirements.txt</button>도 열어 위 네 줄이 다 있는지 확인하고, 없는 줄은 추가해 커밋합니다. 커밋하면 앱이 스스로 다시 배포됩니다(1~3분). 파일 이름은 눌러서 그대로 복사해 쓰세요 — 한 글자만 달라도 앱이 찾지 못합니다.
+    <li><span class="st">깃허브에 새 저장소를 만들고 새 앱 배포하기</span><br>
+      깃허브에 <code>lesson02-boxoffice</code>라는 새 공개 저장소를 만들고, <button type="button" class="fname">main.py</button>와 <button type="button" class="fname">requirements.txt</button>를 올려 커밋합니다. 파일 이름은 눌러서 그대로 복사해 쓰세요. Streamlit Community Cloud에서 <b>New app</b>을 누른 뒤 <code>lesson02-boxoffice</code> 저장소와 main.py를 골라 새 앱을 배포합니다. 1~3분 뒤 2차시 앱의 새 주소가 생깁니다.
     </li>
-    <li><span class="st">스트림릿에서 키 넣기 — 비밀 금고(secrets)</span><br>
-      키는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 코드에 적어 공개 저장소에 올리는 순간 전 세계에 공개되고, 남이 내 이름으로 호출한 사용량과 책임은 내 몫이 됩니다. 배포된 내 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸에 아래 한 줄을 붙여 넣고 저장합니다. 저장하면 앱이 자동으로 다시 시작됩니다.
+    <li><span class="st">스트림릿에서 2차시 앱의 키 넣기 — 비밀 금고(secrets)</span><br>
+      키는 코드가 아니라 <b>비밀 금고에만</b> 둡니다. 코드에 적어 공개 저장소에 올리는 순간 전 세계에 공개되고, 남이 내 이름으로 호출한 사용량과 책임은 내 몫이 됩니다. 방금 만든 2차시 앱 오른쪽 아래의 <b>Manage app</b> → 메뉴(⋮) → <b>Settings</b> → <b>Secrets</b> 칸에 아래 한 줄을 붙여 넣고 저장합니다. 저장하면 앱이 자동으로 다시 시작됩니다.
       <div class="codewrap code"><span class="label">Secrets에 넣을 한 줄 (4절의 주소 만들기 상자에 키를 붙여 넣었다면 이미 채워져 있음)</span><pre class="secrets-sync">KOBIS_KEY = "선생님이 준 키를 여기에"</pre></div>
       <div class="callout warn">
         <div class="h">⚠️ 이름 세 곳 일치 — 하나라도 다르면 못 찾는다</div>
@@ -445,7 +451,7 @@ requests</pre></div>
 - 문서를 보니 rankInten이라는 값이 전날 대비 순위 증감이래. 양수면 순위가 오른 것, 음수면 내린 것.
   표에서 오른 영화는 빨간 위 화살표, 내린 영화는 파란 아래 화살표를 붙여 줘.
 - 누적관객이 100만 명을 넘은 영화는 영화명 옆에 트로피 이모지를 붙여 줘.</pre></div>
-      <details class="sample"><summary>선생님이 실행해 확인한 예시 코드</summary><p class="mini">앞 코드 끝에 이어 붙입니다</p><div class="codewrap code"><span class="label">main.py에 이어 붙일 부분</span><pre># 날짜를 골라 보는 박스오피스 — main.py에 이어 붙일 부분
+      <details class="sample"><summary>선생님이 실행해 확인한 개선 코드의 핵심 부분</summary><p class="mini">아래 코드는 달력 선택과 순위 변화 표시를 구현한 핵심 부분입니다. <code>main.py</code> 끝에 그대로 붙이지 말고, AI가 ③ 요청에 따라 고쳐 준 전체 <code>main.py</code>를 사용합니다.</p><div class="codewrap code"><span class="label">개선된 main.py의 핵심 부분</span><pre># 날짜를 골라 보는 박스오피스 — 개선된 main.py의 핵심 부분
 import datetime
 import pandas as pd
 import requests
@@ -537,7 +543,7 @@ st.caption("🔺 오른 영화 · 🔻 내린 영화 · 🏆 누적 100만 명�
         <button class="opt" data-ok="1">부를 때마다 그 시점의 데이터를 받고, 날짜 같은 조건으로 필요한 만큼만 받을 수 있다</button>
         <button class="opt">내려받은 파일은 표가 아니어서 분석에 쓸 수 없다</button>
       </div>
-      <div class="fb">내려받은 파일은 그 시점의 복사본으로 멈춰 있습니다. API는 호출할 때마다 최신이고, 조건(날짜 등)으로 필요한 만큼만 받습니다. 어느 쪽이 좋은가는 질문에 달려 있습니다 — 100년 치 역사가 필요하면 파일이, 어제의 순위가 필요하면 API가 맞습니다.</div>
+      <div class="fb">내려받은 파일은 저장한 시점의 복사본입니다. API는 호출할 때 서버가 현재 보내는 응답을 받고, 날짜 같은 조건으로 필요한 범위만 요청할 수 있습니다. 100여 년의 기온처럼 넓은 기간을 한꺼번에 분석할 때는 파일이 편리하고, 어제의 순위처럼 갱신되는 값을 받을 때는 API가 적합합니다.</div>
     </div>
   </div>
 

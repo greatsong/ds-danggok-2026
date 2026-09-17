@@ -3,92 +3,75 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>데이터 과학 · 당곡고 · 학생용 교재</title>
+<meta name="description" content="당곡고등학교 데이터 과학 웹교재. 15개 차시와 손계산 활동지, 개념 정리, 심화 실습을 한곳에서 찾아보세요.">
+<title>데이터 과학 · 당곡고등학교</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧭%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="assets/style.css?v=tb16">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
-<script src="assets/release.js"></script>
-<script src="assets/gate.js"></script>
+<style>
+.home{--maxw:1120px}.home .inner,.home main{max-width:1120px;margin:0 auto}.home main{padding:0 28px 72px}.home .inner{padding:15px 28px}
+.home a:focus-visible{outline:3px solid #237d78;outline-offset:5px;border-radius:6px}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}.skip{position:fixed;top:-80px;left:20px;z-index:100;background:#fff;padding:10px 18px}.skip:focus{top:12px}
+.home-nav{display:flex;gap:22px}.home-nav a{font-size:.86rem;text-decoration:none;color:var(--text-soft);font-weight:650}
+.home .hero{padding:68px 0 44px;border-bottom:1px solid var(--border)}.home .kicker{font-size:.8rem;letter-spacing:.09em;color:var(--text-soft);font-weight:700;margin:0 0 16px}.home h1{font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.22;letter-spacing:-.045em;margin:0 0 20px}.home .intro{max-width:590px;color:var(--text-soft);margin:0;font-size:1.02rem}.hero-links{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}.hero-links a{padding:10px 18px;border:1px solid var(--border);border-radius:8px;text-decoration:none;font-size:.9rem;font-weight:700;color:var(--text);background:#fff}.hero-links .start{background:#3a2e1a;color:#fff;border-color:#3a2e1a}
+.home section[id]{scroll-margin-top:95px}.section-title{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin:42px 0 20px}.home .section-title h2{margin:0;padding:0;border:0;font-size:1.45rem;letter-spacing:-.03em}.section-title p{margin:0;color:var(--text-soft);font-size:.82rem}
+.lesson-groups{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}.lesson-group{border:1px solid var(--border);border-radius:12px;background:#fff;overflow:hidden}.group-head{padding:20px;background:#fff6e0;border-bottom:1px solid var(--border)}.group-head span{font-size:.73rem;color:var(--text-soft)}.home .group-head h3{margin:3px 0 0;font-size:1.05rem}.lesson-group ol{list-style:none;padding:0;margin:0}.lesson-group li+li{border-top:1px solid #f0ede5}.lesson-link{display:flex;gap:13px;align-items:flex-start;padding:19px 17px;text-decoration:none;color:var(--text);min-height:100px}.lesson-link:hover{background:#fffbef}.lesson-number{font-size:.8rem;font-weight:750;color:#846b39;min-width:22px;padding-top:3px}.lesson-link strong{display:block;font-size:.96rem;line-height:1.5}.lesson-link small{display:block;color:var(--text-soft);font-size:.8rem;line-height:1.6;margin-top:4px}
+.resource-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.resource{display:block;padding:21px 19px;border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);background:#fff}.resource:hover{border-color:#c6a354;background:#fffbef}.resource strong{font-size:.95rem}.resource p{font-size:.8rem;line-height:1.65;color:var(--text-soft);margin:7px 0 0}.extra-links{display:flex;flex-wrap:wrap;gap:10px 26px;padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}.extra-links a{color:var(--text);text-decoration:none;font-size:.9rem}.extra-links a:hover{text-decoration:underline}.home .foot{font-size:.78rem}.home .brand{white-space:nowrap}
+@media(max-width:900px){.lesson-groups{gap:12px}.resource-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lesson-link{padding:16px 12px;gap:8px}}
+@media(max-width:680px){.home main{padding:0 20px 48px}.home .inner{padding:12px 20px}.home-nav{gap:14px}.home-nav a{font-size:.78rem}.home .brand{font-size:.9rem}.home .brand .a{display:none}.home .hero{padding:40px 0 32px}.lesson-groups{grid-template-columns:1fr;gap:20px}.lesson-link{min-height:0;padding:16px 20px;gap:16px}.section-title{margin-top:34px}.section-title p{font-size:.75rem}.resource{padding:17px 14px}.home .intro{font-size:.94rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
 </head>
-<body>
-<div class="topbar"><div class="inner">
-  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
-  <span class="spacer"></span>
-  <span class="badge">학생용</span>
-</div></div>
-
-<div class="wrap">
-<main>
-  <span class="eyebrow">당곡고등학교 · 데이터 과학 · 공통 15차시</span>
-  <h1>데이터 과학 <span class="a">당곡고</span></h1>
-  <div class="under"></div>
-
-  <h2>차시</h2>
-  <p class="mini">수업 진도에 맞춰 하나씩 열립니다.</p>
-  <div class="linkgrid">
-    <a class="linkcard" data-lesson="1"  href="lesson01.html"><div class="n">Ⅰ단원 · 1차시</div><div class="tt">데이터 분석의 6단계 · 질문 던지기</div><div class="d">좋은 질문이 좋은 분석을 만든다</div></a>
-    <a class="linkcard" data-lesson="2"  href="lesson02.html"><div class="n">Ⅰ·Ⅱ단원 · 2차시</div><div class="tt">반정형 데이터 · API와 JSON</div><div class="d">어제의 박스오피스가 내 앱에 뜬다</div></a>
-    <a class="linkcard" data-lesson="3"  href="lesson03.html"><div class="n">Ⅱ단원 · 3차시</div><div class="tt">그래프 도감 Ⅰ — 시간이 보이는 그래프</div><div class="d">하루치는 API가, 흥행 곡선은 쌓아 둔 표가 보여 준다</div></a>
-    <a class="linkcard" data-lesson="4"  href="lesson04.html"><div class="n">Ⅱ단원 · 4차시</div><div class="tt">그래프 도감 Ⅱ — 분포·구성·관계</div><div class="d">행의 단위가 바뀌면 그래프가 바뀐다 · 나만의 8번째 질문</div></a>
-    <a class="linkcard" data-lesson="5"  href="lesson05.html"><div class="n">Ⅱ단원 · 5차시</div><div class="tt">두 번째 API — 우리 학교 급식</div><div class="d">문서만 보고 스스로 붙인다 · 인증키는 팀당 하나 · 팀 미션으로 급식 앱</div></a>
-    <a class="linkcard" data-lesson="6"  href="lesson06.html"><div class="n">Ⅲ단원 · 6차시</div><div class="tt">회귀 — 직선을 긋다</div><div class="d">기울기가 말하는 것 · 슬라이더 예측기</div></a>
-    <a class="linkcard" data-lesson="7"  href="lesson07.html"><div class="n">Ⅲ단원 · 7차시</div><div class="tt">다중 선형회귀 — 영화 흥행 예측</div><div class="d">변수를 늘리면 무엇이 좋아지고, 무엇이 위험한가</div></a>
-    <a class="linkcard" data-lesson="8"  href="lesson08.html"><div class="n">Ⅲ단원 · 8차시</div><div class="tt">회귀 평가 손계산</div><div class="d">오차·MSE·결정계수를 손으로 구한다</div></a>
-    <a class="linkcard" data-lesson="9"  href="lesson09.html"><div class="n">Ⅲ단원 · 9차시</div><div class="tt">분류 — 로지스틱 회귀와 의사결정트리</div><div class="d">같은 데이터, 다른 질문 · 라벨 기준은 사람이 정한다</div></a>
-    <a class="linkcard" data-lesson="10" href="lesson10.html"><div class="n">Ⅲ단원 · 10차시</div><div class="tt">분류 평가 손계산 — 혼동행렬</div><div class="d">정확도만 보면 놓치는 것</div></a>
-    <a class="linkcard" data-lesson="11" href="lesson11.html"><div class="n">Ⅲ단원 · 11차시</div><div class="tt">군집 — 스포츠 선수 유형</div><div class="d">정답 없이 비슷한 것끼리 · 이름은 사람이 붙인다</div></a>
-    <a class="linkcard" data-lesson="12" href="lesson12.html"><div class="n">Ⅲ단원 · 12차시</div><div class="tt">연관 분석 — 급식에서 규칙 찾기</div><div class="d">함께 자주 나옴과 정말 관련 있음은 다르다</div></a>
-    <a class="linkcard" data-lesson="13"  href="lesson13.html"><div class="n">Ⅰ단원 · 13차시</div><div class="tt">데이터베이스와 SQL</div><div class="d">인스타·카톡·게임 화면 뒤에서 벌어지는 일</div></a>
-    <a class="linkcard" data-lesson="14" href="lesson14.html"><div class="n">Ⅰ·Ⅳ단원 · 14차시</div><div class="tt">데이터 윤리</div><div class="d">한 학기 내 실습 속의 윤리 쟁점을 찾는다</div></a>
-    <a class="linkcard" data-lesson="15" href="lesson15.html"><div class="n">Ⅰ·Ⅳ단원 · 15차시</div><div class="tt">우리 학교 급식 월드컵</div><div class="d">만들고, 모으고, 집계하기 · 팀 프로젝트 주제 고르기</div></a>
-    <a class="linkcard" data-lesson="4" href="data.html"><div class="n">참고 · 언제든</div><div class="tt">데이터 목록 — 무엇을 물어볼 수 있나</div><div class="d">수업과 팀 프로젝트에서 쓸 수 있는 API 2종·표 22종, 주소는 눌러 복사 (4차시부터 열림)</div></a>
-    <a class="linkcard" data-lesson="4" href="extra-api.html"><div class="n">심화 · 영화 트랙 마무리</div><div class="tt">영화 API 프로젝트 — 가설을 세우고 데이터로 확인한다</div><div class="d">12월 24일에는 로맨틱 코미디가 인기일까 (4차시부터 열림)</div></a>
-    <a class="linkcard" data-lesson="4" href="extra-movie.html"><div class="n">심화 · 자유 실습</div><div class="tt">영화 심화 — 타임머신 · 연간 TOP 10 · 역대 기록</div><div class="d">도감을 마친 사람의 다음 페이지 셋 (4차시부터 열림)</div></a>
-    <a class="linkcard" data-lesson="11" href="extra-models.html"><div class="n">심화 · 자유 실습</div><div class="tt">모델 도감 — 교과서 너머 (kNN·랜덤 포레스트·XGBoost)</div><div class="d">다섯 모델을 한 문제에 세우는 모델 오디션 (11차시부터 열림)</div></a>
-  </div>
-
-  <h2 id="appendix">부록 — 중간고사 대비</h2>
-  <p class="mini">시험 대비 시점에 열립니다.</p>
-  <div class="linkgrid">
-    <a class="linkcard" data-lesson="15" href="study-guide.html"><div class="n">부록 1 · 이론 정리</div><div class="tt">『데이터 과학』 이론 정리</div><div class="d">교과서 원문 인용 + 우리 실습 장면 + 확인 문제 · SQL·모델 도감 보충</div></a>
-    <a class="linkcard" data-lesson="15" href="eval-workbook.html"><div class="n">부록 2 · 손계산</div><div class="tt">모델 평가 손계산 활동지</div><div class="d">R² · 혼동행렬 · 향상도 · 군집 거리를 종이 위에서 직접</div></a>
-    <a class="linkcard" data-lesson="15" href="concepts.html"><div class="n">부록 3 · 개념 정리</div><div class="tt">교과서 원문 인용 모음</div><div class="d">정의를 쪽수와 함께, 실측 장면과 짝지어</div></a>
-    <a class="linkcard" data-lesson="15" href="glossary.html"><div class="n">부록 4 · 용어사전</div><div class="tt">전 차시 용어 102개</div><div class="d">차시 순서로 한 번에 훑어보기</div></a>
-  </div>
-
-  <details class="glossary">
-    <summary>데이터 출처</summary><div class="gin">
-    <ul>
-      <li><b>서울 기온</b> — 기상청 종관기상관측(ASOS) · <a href="https://data.kma.go.kr/" target="_blank" rel="noopener">기상자료개방포털</a></li>
-      <li><b>영화 박스오피스</b> — 영화진흥위원회 오픈API · <a href="https://www.kobis.or.kr/" target="_blank" rel="noopener">KOBIS 영화관입장권통합전산망</a></li>
-      <li><b>학교 급식</b> — 나이스 급식식단정보 API · <a href="https://open.neis.go.kr/" target="_blank" rel="noopener">나이스 교육정보 개방 포털</a></li>
-      <li><b>선수 기록</b> — <a href="https://www.koreabaseball.com/" target="_blank" rel="noopener">KBO 공식 기록실</a> 2025 시즌</li>
-      <li><b>공공데이터 탐색</b> — <a href="https://www.data.go.kr/" target="_blank" rel="noopener">공공데이터포털</a></li>
-    </ul>
-    <p class="mini">수업용으로 정리한 사본 일부는 <a href="https://github.com/greatsong/modudata" target="_blank" rel="noopener">modudata</a>에 있습니다.</p>
-    </div>
-  </details>
-
+<body class="home">
+<a class="skip" href="#content">본문 바로가기</a>
+<header class="topbar"><div class="inner">
+<a class="brand" href="index.html"><span class="chick" aria-hidden="true">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+<span class="spacer"></span><nav class="home-nav" aria-label="주요 메뉴"><a href="#lessons">차시별 교재</a><a href="#resources">학습 자료</a></nav>
+</div></header>
+<main id="content">
+<section class="hero" aria-labelledby="home-title">
+<p class="kicker">당곡고등학교 · 데이터 과학</p>
+<h1 id="home-title">데이터로 질문하고,<br>근거를 찾아 답하기.</h1>
+<p class="intro">기온, 영화, 급식, 스포츠 데이터로 분석을 시작합니다.<br>데이터를 모으고, 모델을 만들고, 결과를 설명해 봅시다.</p>
+<div class="hero-links"><a class="start" href="lesson01.html">1차시부터 시작하기 <span aria-hidden="true">↗</span></a><a href="eval-workbook.html">손계산 활동지</a></div>
+</section>
+<section id="lessons" aria-labelledby="lessons-title">
+<div class="section-title"><h2 id="lessons-title">차시별 교재</h2><p>공통 수업 · 1~15차시</p></div>
+<div class="lesson-groups">
+<section class="lesson-group" aria-labelledby="group-0"><div class="group-head"><span>1–5차시</span><h3 id="group-0">데이터 수집과 탐색</h3></div><ol start="1">
+<li><a class="lesson-link" href="lesson01.html"><span class="lesson-number">01<span class="sr-only">차시</span></span><span><strong>질문 던지기</strong><small>데이터 분석의 6단계와 좋은 질문</small></span></a></li>
+<li><a class="lesson-link" href="lesson02.html"><span class="lesson-number">02<span class="sr-only">차시</span></span><span><strong>API와 JSON</strong><small>박스오피스 데이터를 받아 표로 읽기</small></span></a></li>
+<li><a class="lesson-link" href="lesson03.html"><span class="lesson-number">03<span class="sr-only">차시</span></span><span><strong>그래프 도감 Ⅰ</strong><small>시간에 따른 변화와 흐름</small></span></a></li>
+<li><a class="lesson-link" href="lesson04.html"><span class="lesson-number">04<span class="sr-only">차시</span></span><span><strong>그래프 도감 Ⅱ</strong><small>분포·구성·관계에 맞는 그래프</small></span></a></li>
+<li><a class="lesson-link" href="lesson05.html"><span class="lesson-number">05<span class="sr-only">차시</span></span><span><strong>우리 학교 급식 API</strong><small>급식 데이터를 모아 질문에 답하기</small></span></a></li>
+</ol></section>
+<section class="lesson-group" aria-labelledby="group-1"><div class="group-head"><span>6–10차시</span><h3 id="group-1">예측과 규칙 발견</h3></div><ol start="6">
+<li><a class="lesson-link" href="lesson06.html"><span class="lesson-number">06<span class="sr-only">차시</span></span><span><strong>선형 회귀</strong><small>기온 데이터에 직선을 맞춰 예측하기</small></span></a></li>
+<li><a class="lesson-link" href="lesson07.html"><span class="lesson-number">07<span class="sr-only">차시</span></span><span><strong>다중 선형회귀</strong><small>여러 속성으로 영화 흥행 예측하기</small></span></a></li>
+<li><a class="lesson-link" href="lesson08.html"><span class="lesson-number">08<span class="sr-only">차시</span></span><span><strong>회귀 평가 손계산</strong><small>오차·MAE·MSE·결정계수</small></span></a></li>
+<li><a class="lesson-link" href="lesson09.html"><span class="lesson-number">09<span class="sr-only">차시</span></span><span><strong>군집</strong><small>영화를 유형으로 나누기</small></span></a></li>
+<li><a class="lesson-link" href="lesson10.html"><span class="lesson-number">10<span class="sr-only">차시</span></span><span><strong>연관 분석</strong><small>우리 학교 급식 세트와 금지 짝을 퀴즈로 낸다</small></span></a></li>
+</ol></section>
+<section class="lesson-group" aria-labelledby="group-2"><div class="group-head"><span>11–15차시</span><h3 id="group-2">분류와 데이터 활용</h3></div><ol start="11">
+<li><a class="lesson-link" href="lesson11.html"><span class="lesson-number">11<span class="sr-only">차시</span></span><span><strong>분류</strong><small>로지스틱 회귀와 의사결정트리</small></span></a></li>
+<li><a class="lesson-link" href="lesson12.html"><span class="lesson-number">12<span class="sr-only">차시</span></span><span><strong>분류 평가 손계산</strong><small>혼동행렬·정확도·정밀도·재현율</small></span></a></li>
+<li><a class="lesson-link" href="lesson13.html"><span class="lesson-number">13<span class="sr-only">차시</span></span><span><strong>데이터베이스와 SQL</strong><small>기록을 저장하고 묶어서 집계하기</small></span></a></li>
+<li><a class="lesson-link" href="lesson14.html"><span class="lesson-number">14<span class="sr-only">차시</span></span><span><strong>데이터 윤리</strong><small>내 실습에서 윤리 쟁점 찾기</small></span></a></li>
+<li><a class="lesson-link" href="lesson15.html"><span class="lesson-number">15<span class="sr-only">차시</span></span><span><strong>급식 월드컵</strong><small>만들고, 모으고, 집계하기</small></span></a></li>
+</ol></section>
+</div></section>
+<section id="resources" aria-labelledby="resources-title">
+<div class="section-title"><h2 id="resources-title">학습 자료</h2><p>개념을 찾고, 직접 계산하기</p></div>
+<div class="resource-grid">
+<a class="resource" href="eval-workbook.html"><strong>손계산 활동지 <span aria-hidden="true">↗</span></strong><p>회귀·분류·연관 분석의 지표를 직접 계산합니다.</p></a>
+<a class="resource" href="study-guide.html"><strong>이론 정리 <span aria-hidden="true">↗</span></strong><p>수업에서 배운 주요 개념을 다시 살펴봅니다.</p></a>
+<a class="resource" href="concepts.html"><strong>교과서 개념 <span aria-hidden="true">↗</span></strong><p>교과서의 설명과 수업 내용을 연결합니다.</p></a>
+<a class="resource" href="glossary.html"><strong>용어사전 <span aria-hidden="true">↗</span></strong><p>낯선 용어의 뜻을 찾아봅니다.</p></a>
+</div></section>
+<section id="explore" aria-labelledby="explore-title">
+<div class="section-title"><h2 id="explore-title">더 탐구하기</h2><p>심화 실습과 팀 프로젝트</p></div>
+<nav class="extra-links" aria-label="심화 및 프로젝트">
+<a href="extra-models.html">모델 도감 ↗</a><a href="extra-movie.html">영화 데이터 심화 ↗</a><a href="extra-api.html">영화 API 프로젝트 ↗</a><a href="data.html">데이터 목록 ↗</a><a href="project.html">팀 프로젝트 안내 ↗</a>
+</nav></section>
 </main>
-</div>
-
-<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재<br><span style="font-size:.86rem;opacity:.75">다른 학교 선생님께 — 이 교재는 복사해 쓰실 수 있습니다. <a href="fork-guide.html" style="color:inherit;text-decoration:underline">포크와 커스텀 안내 →</a></span></footer>
-
-<script>
-// 순차 공개 — release.js의 RELEASED_LESSON 이하 차시만 열고, 그 위는 잠근다.
-// (gate.js가 교사 열람 모드를 켜 두었으면 전 차시를 그대로 연다.)
-(function () {
-  if (window.__TEACHER_MODE__) return;
-  var released = (typeof window.RELEASED_LESSON === 'number') ? window.RELEASED_LESSON : 1;
-  document.querySelectorAll('.linkcard[data-lesson]').forEach(function (c) {
-    if (+c.getAttribute('data-lesson') > released) {
-      c.classList.add('locked');
-      c.setAttribute('aria-disabled', 'true');
-      c.removeAttribute('href');
-      var d = c.querySelector('.d');
-      if (d) d.textContent = '🔒 곧 공개';
-    }
-  });
-})();
-</script>
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 웹교재</footer>
 </body>
 </html>

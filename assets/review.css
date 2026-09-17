@@ -1,0 +1,10 @@
+/* 개정 검토본의 구분 표지와 모바일 상단 바만 보완합니다. */
+.review-edition{white-space:nowrap}
+.quote .who:has(> b){display:block}
+@media(max-width:520px){
+  .topbar .inner{gap:6px}
+  .topbar .brand{font-size:.86rem;white-space:nowrap}
+  .topbar .home{font-size:.76rem;white-space:nowrap}
+  .topbar .badge{font-size:.68rem;white-space:nowrap;padding:4px 6px}
+  .topbar .badge:not(.review-edition){display:none}
+}
