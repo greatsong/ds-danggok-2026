@@ -37,9 +37,11 @@ function initW_matrix(root, D) {
       return { ok: den > 0, v: den > 0 ? c.tp / den : 0, sub: '= ' + c.tp + ' ÷ ' + den };
     },
     f1: function (c) {
-      // 활동지 규칙: 정밀도를 구할 수 없으면(예측 양성 0) F1도 구할 수 없다. 정밀도는 있는데 재현율이 0이면 F1은 0이다.
-      if (c.tp + c.fp === 0 || c.tp + c.fn === 0) return { ok: false, v: 0, sub: '정밀도를 구할 수 없음' };
-      if (c.tp === 0) return { ok: true, v: 0, sub: '= 찾아낸 것이 없으므로 0' };
+      // 활동지 규칙: F1 = 2TP ÷ (2TP + FP + FN). 정밀도를 구할 수 없어도 이 식으로는 값이 나온다.
+      // 분모가 0인 경우(TP·FP·FN이 모두 0)에만 구할 수 없다.
+      var den1 = 2 * c.tp + c.fp + c.fn;
+      if (den1 === 0) return { ok: false, v: 0, sub: '분모가 0이므로 계산할 수 없음' };
+      if (c.tp === 0) return { ok: true, v: 0, sub: '= 2TP ÷ (2TP+FP+FN) = 0 ÷ ' + den1 };
       var p = c.tp / (c.tp + c.fp), r = c.tp / (c.tp + c.fn);
       return { ok: true, v: 2 * p * r / (p + r),
         sub: '= 2 × ' + p.toFixed(2) + ' × ' + r.toFixed(2) + ' ÷ ' + (p + r).toFixed(2) };
