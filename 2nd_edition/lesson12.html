@@ -589,8 +589,9 @@ st.caption("맨 위가 첫 질문입니다. class가 1이면 뇌졸중, 0이면 
 네 칸에 사람 수를 적고 행과 열의 합계도 적어 줘. 칸마다 TP·FP·FN·TN 약자를 함께 표시해 줘.
 네 칸에서 정확도·정밀도·재현율·F1을 구해 두 모델을 한 표에 나란히 보여 줘.
 정밀도의 분모는 뇌졸중이라 예측한 사람 수, 재현율의 분모는 실제 뇌졸중인 사람 수야.
-F1은 2 곱하기 정밀도 곱하기 재현율을 정밀도 더하기 재현율로 나눈 값이야.
-뇌졸중이라 예측한 사람이 0명이면 정밀도와 F1 자리에 "계산할 수 없음"이라고 적어 줘.
+F1은 2 곱하기 TP를 2 곱하기 TP 더하기 FP 더하기 FN으로 나눈 값이야.
+뇌졸중이라 예측한 사람이 0명이면 정밀도 자리에만 "계산할 수 없음"이라고 적어 줘.
+F1은 그 경우에도 위 식으로 계산해서 값을 적어 줘.
 같은 표에 "훈련용에서 많은 쪽으로만 답하는 모델"의 네 지표도 한 줄 더 넣어 줘.
 채점용 사람 수와 그중 뇌졸중인 사람 수를 표 위에 한 줄로 적어 줘.
 그 아래에 두 목록을 나란히 보여 줘. 왼쪽은 실제 뇌졸중인데 아니라고 예측한 사람(놓친 환자),
@@ -665,10 +666,8 @@ def 지표(TP, FN, FP, TN):
     정확도 = (TP + TN) / (TP + FN + FP + TN)
     정밀도 = TP / (TP + FP) if (TP + FP) &gt; 0 else None   # 분모는 뇌졸중이라 예측한 사람 수
     재현율 = TP / (TP + FN) if (TP + FN) &gt; 0 else None   # 분모는 실제 뇌졸중인 사람 수
-    if 정밀도 is None or 재현율 is None or (정밀도 + 재현율) == 0:
-        F1 = None
-    else:
-        F1 = 2 * 정밀도 * 재현율 / (정밀도 + 재현율)
+    F1_분모 = 2 * TP + FP + FN
+    F1 = 2 * TP / F1_분모 if F1_분모 &gt; 0 else None   # 정밀도를 구할 수 없어도 값이 나온다
     return 정확도, 정밀도, 재현율, F1
 
 
@@ -747,7 +746,7 @@ st.caption("이 목록에 있는 것은 번호뿐입니다. 누구인지 알 수
     <div class="h">❓ 표를 채운 뒤 답할 질문</div>
     <ul>
       <li>확률로 답하는 모델이 <b>찾아낸 환자(TP)</b>는 몇 명인가요?</li>
-      <li>기준 모델과 학습한 두 모델의 정확도는 얼마나 다른가요? 앱에서 정밀도와 F1이 숫자로 표시되지 않은 모델을 찾고, 그 이유를 설명합니다. 앱은 정밀도를 구할 수 없으면 F1도 표시하지 않습니다. 활동지에서는 혼동행렬의 인원으로 F1을 구해 0으로 적습니다.</li>
+      <li>기준 모델과 학습한 두 모델의 정확도는 얼마나 다른가요? 앱에서 <b>정밀도가 숫자로 표시되지 않은 모델</b>을 찾고, 그 이유를 설명합니다. 그 모델의 F1은 0으로 표시됩니다.</li>
     </ul>
   </div>
   <p>정확도만 비교했을 때는 세 모델이 비슷해 보였습니다. 하지만 찾아낸 환자와 놓친 환자를 구분하면 <b>모델이 잘한 일과 하지 못한 일</b>이 드러납니다.</p>
@@ -876,10 +875,8 @@ def 지표(TP, FN, FP, TN):
     정확도 = (TP + TN) / (TP + FN + FP + TN)
     정밀도 = TP / (TP + FP) if (TP + FP) &gt; 0 else None
     재현율 = TP / (TP + FN) if (TP + FN) &gt; 0 else None
-    if 정밀도 is None or 재현율 is None or (정밀도 + 재현율) == 0:
-        F1 = None
-    else:
-        F1 = 2 * 정밀도 * 재현율 / (정밀도 + 재현율)
+    F1_분모 = 2 * TP + FP + FN
+    F1 = 2 * TP / F1_분모 if F1_분모 &gt; 0 else None   # 정밀도를 구할 수 없어도 값이 나온다
     return 정확도, 정밀도, 재현율, F1
 
 
@@ -1285,7 +1282,7 @@ st.info("**이 흐름은 다른 데이터에도 그대로 됩니다** · 오늘�
 <script src="assets/copy.js"></script>
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
-<script src="assets/widgets10.js?v=5"></script>
+<script src="assets/widgets10.js?v=6"></script>
 <script src="assets/stroke_data.js?v=1"></script>
 <script src="assets/stroke_widgets.js?v=2"></script>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
