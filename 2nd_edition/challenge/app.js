@@ -28,7 +28,7 @@
     var 표 = {};
     줄들.forEach(function (r) {
       var 열쇠 = r.class_id + '/' + r.nickname;
-      var it = 표[열쇠] || (표[열쇠] = { 열쇠: 열쇠, 별명: r.nickname, 반: r.class_id,
+      var it = 표[열쇠] || (표[열쇠] = { 열쇠: 열쇠, 팀명: r.nickname, 반: r.class_id,
                                         시도: 0, 최고: null, 마지막: r.created_at });
       it.시도 += 1;
       if (r.created_at > it.마지막) it.마지막 = r.created_at;
@@ -64,7 +64,7 @@
       var b = it.최고;
       return '<div class="pod' + (순위계산(목록, i) === 1 ? ' first' : '') + '">' +
         '<div class="medal">' + 메달 + '</div>' +
-        '<div class="who">' + 글자(it.별명) + '</div>' +
+        '<div class="who">' + 글자(it.팀명) + '</div>' +
         '<div class="cls">' + 글자(it.반) + ' · 시도 ' + it.시도 + '번</div>' +
         '<div class="big">' + b.found + '<span>명</span></div>' +
         '<div class="set">정확도 ' + 지표(b,'accuracy') + ' · 재현율 ' + 지표(b,'recall') +
@@ -113,7 +113,7 @@
       var 메달 = it.순위 ? ['🥇', '🥈', '🥉'][it.순위 - 1] : null;
       return '<tr class="' + (이김 ? 'beat ' : '') + (새로움[it.열쇠] ? 'fresh' : '') + '">' +
         '<td class="rank' + (메달 ? ' m' : '') + '">' + (b ? (메달 || it.순위) : '—') + '</td>' +
-        '<td class="nick">' + 글자(it.별명) + (이김 ? '<span class="badge2">기본 이김</span>' : '') +
+        '<td class="nick">' + 글자(it.팀명) + (이김 ? '<span class="badge2">기본 이김</span>' : '') +
           '<div class="set2">' + 글자(it.반) + '</div></td>' +
         '<td><div class="bar"><i style="width:' + 폭 + '%"></i><b>' +
           (b ? b.found + '명 · ' + 폭 + '%' : '정원 초과') + '</b></div></td>' +
@@ -158,9 +158,9 @@
     var 대상 = 고른반 === 'all' ? 전체 : 전체.filter(function (r) { return r.class_id === 고른반; });
     var 목록 = 사람별(대상);
     시상대그리기(목록);
-    $('s인원').textContent = 목록.length + '명';
+    $('s인원').textContent = 목록.length + '팀';
     $('s시도').textContent = 대상.length + '번';
-    $('s넘김').textContent = 목록.filter(function (x) { return x.최고 && x.최고.found > 기본기록; }).length + '명';
+    $('s넘김').textContent = 목록.filter(function (x) { return x.최고 && x.최고.found > 기본기록; }).length + '팀';
     $('s최고').textContent = (목록[0] && 목록[0].최고) ? 목록[0].최고.found + '명' : '—';
     반대항그리기(전체);
     순위그리기(목록);

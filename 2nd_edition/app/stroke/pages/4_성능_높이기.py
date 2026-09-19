@@ -361,7 +361,7 @@ st.caption("훈련용은 학습에 사용한 사람들이고 테스트용은 사
 
 st.divider()
 st.subheader("📤 기록 올리기")
-st.caption("이름과 학번은 받지 않습니다. 별명과 반만 적습니다. "
+st.caption("이름과 학번은 받지 않습니다. 팀명과 반만 적습니다. "
            "올릴 만한 기록이 나왔을 때 버튼을 누릅니다. 같은 설정은 한 번만 올라갑니다.")
 저장주소 = "https://upkakhnpvepqhsbwdyjb.supabase.co/rest/v1/challenge_log"
 공개키 = "sb_publishable_16HKdOESG_9U5OVNGZMeYQ_of--7oV1"
@@ -369,7 +369,7 @@ st.caption("이름과 학번은 받지 않습니다. 별명과 반만 적습니�
 
 칸1, 칸2, 칸3 = st.columns([1.2, 2, 2])
 내반 = 칸1.selectbox("반", ["월수금반", "화수목반"])
-내별명 = 칸2.text_input("별명", max_chars=12, placeholder="열두 글자까지")
+내팀명 = 칸2.text_input("팀명", max_chars=12, placeholder="열두 글자까지")
 보낼까 = 칸3.button("이 기록 올리기", width="stretch")
 
 def 올리기(보낼것):
@@ -393,15 +393,15 @@ def 올리기(보낼것):
     return json.loads(읽기.responseText) if 읽기.status < 300 else []
 
 
-def 순위세기(줄들, 반, 별명):
-    """정원 안에 든 기록만 가지고 사람별 최고를 구해 내 자리를 센다."""
+def 순위세기(줄들, 반, 팀명):
+    """정원 안에 든 기록만 가지고 팀별 최고를 구해 우리 자리를 센다."""
     최고 = {}
     for r in 줄들:
         if not r.get("within_quota"):
             continue
         열쇠 = (r["class_id"], r["nickname"])
         최고[열쇠] = max(최고.get(열쇠, 0), int(r["found"]))
-    내점수 = 최고.get((반, 별명))
+    내점수 = 최고.get((반, 팀명))
     if 내점수 is None:
         return None
     전체 = sorted(최고.values(), reverse=True)
@@ -413,17 +413,17 @@ def 순위세기(줄들, 반, 별명):
     }
 
 
-지문 = (내반, 내별명.strip(), 결측처리, tuple(입력열), 내가중치, 내깊이, 내기준)
+지문 = (내반, 내팀명.strip(), 결측처리, tuple(입력열), 내가중치, 내깊이, 내기준)
 if "올린것" not in st.session_state:
     st.session_state["올린것"] = set()
 
-if 보낼까 and not 내별명.strip():
-    st.warning("별명을 적어 주세요.")
+if 보낼까 and not 내팀명.strip():
+    st.warning("팀명을 적어 주세요.")
 elif 보낼까 and 지문 in st.session_state["올린것"]:
     st.info("이미 올린 설정입니다. 설정을 바꾼 뒤에 다시 올려 주세요.")
 elif 보낼까:
     보낼것 = {
-        "class_id": 내반, "nickname": 내별명.strip(),
+        "class_id": 내반, "nickname": 내팀명.strip(),
         "model": 좋은모델, "inputs": " · ".join(우리말(열) for 열 in 입력열),
         "missing": 결측처리, "weighted": bool(내가중치),
         "depth": int(내깊이), "threshold": float(내기준),
@@ -442,15 +442,15 @@ elif 보낼까:
         st.error(f"올리지 못했습니다. 잠시 뒤 다시 눌러 주세요. ({type(오류).__name__})")
     else:
         st.session_state["올린것"].add(지문)
-        자리 = 순위세기(줄들, 내반, 내별명.strip())
+        자리 = 순위세기(줄들, 내반, 내팀명.strip())
         if 자리 is None:
             st.warning(f"안내 인원이 {보낼것['sent']:,}명이라 정원 {정원}명을 넘겼습니다. "
                        f"기록은 남았지만 순위에는 들어가지 않습니다. 안내 인원을 줄여 보세요.")
         else:
             위쪽 = 자리["전체등수"] / 자리["전체인원"] * 100
             st.success(f"### 찾아낸 환자 {자리['내점수']}명!\n"
-                       f"참가 {자리['전체인원']}명 가운데 **{자리['전체등수']}위** · 상위 {위쪽:.1f}%\n\n"
-                       f"{내반} 안에서는 {자리['반인원']}명 가운데 **{자리['반등수']}위**")
+                       f"참가 {자리['전체인원']}팀 가운데 **{자리['전체등수']}위** · 상위 {위쪽:.1f}%\n\n"
+                       f"{내반} 안에서는 {자리['반인원']}팀 가운데 **{자리['반등수']}위**")
             if 자리["전체등수"] == 1:
                 st.info("지금 1위입니다.")
             if 자리["내점수"] > 67:
