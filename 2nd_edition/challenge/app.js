@@ -146,7 +146,7 @@
       var 메달 = it.순위 ? ['🥇', '🥈', '🥉'][it.순위 - 1] : null;
       return '<tr class="' + (이김 ? 'beat ' : '') + (새로움[it.열쇠] ? 'fresh' : '') + '">' +
         '<td class="rank' + (메달 ? ' m' : '') + '">' + (b ? (메달 || it.순위) : '—') + '</td>' +
-        '<td class="nick">' + 글자(it.팀명) + (이김 ? '<span class="badge2">' + 기본기록 + ' 돌파</span>' : '') +
+        '<td class="nick">' + 글자(it.팀명) + (이김 ? '<span class="badge2">베이스라인 통과</span>' : '') +
           (교사용 && it.의심 ? '<span class="badge3">확인 필요 ' + it.의심 + '건</span>' : '') +
           '<div class="set2">' + 글자(it.반) + '</div></td>' +
         '<td><div class="bar"><i style="width:' + 폭 + '%"></i><b>' +
