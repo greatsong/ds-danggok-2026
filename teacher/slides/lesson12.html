@@ -360,12 +360,14 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 
 <section class="slide">
   <div class="kicker">12-14</div>
-  <h2>실습 — 채점표 페이지</h2>
-<div class="prompt">pages 폴더에 '채점표' 페이지를 추가해 줘. 파일 이름은 3_채점표.py.
-'분류 모델' 페이지와 똑같은 방법으로 데이터를 읽고 나누고 두 모델을 학습해 줘.
-테스트 데이터로 두 모델의 혼동행렬을 각각 2×2 표로 보여 줘.
-네 칸에서 정확도·재현율·정밀도·F1을 구해 한 표에 나란히 보여 줘.
-놓친 환자와 헛짚은 사람 목록도 나이가 많은 순서로 보여 줘.</div><p class="small">전문은 교재 4절 · 바뀐 파일 전체를 다시 받도록 지시</p>
+  <h2>오늘은 만들지 않고 엽니다</h2>
+<div class="memo" style="max-width:70vw">
+    <div class="t">뇌졸중 예측 실습실</div>
+    <div class="d" style="font-size:clamp(16px,2.1vw,30px);color:var(--accent);margin-top:1vh">
+      greatsong.github.io/ds-danggok-2026/app/stroke/</div>
+  </div>
+  <p class="lead" style="margin-top:1.6vh">설치할 것은 없습니다. 처음 열 때 30초에서 1분 걸립니다.</p>
+  <p class="small">채점표 · 성능 높이기 · 모델 소개 세 화면이 이미 들어 있습니다</p><p class="small">직접 만들어 볼 학생은 교재 4절의 샘플 프롬프트를 사용합니다</p>
 </section>
 
 <section class="slide">
@@ -402,9 +404,10 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <section class="slide">
   <div class="kicker">12-17</div>
   <h2>드문 쪽의 가중치를 같게 맞춥니다</h2>
-<div class="prompt">스위치를 켜면, 뇌졸중을 겪은 사람이 아주 드무니
-두 모델 모두 양쪽의 가중치를 같게 맞춰 학습해 줘.
-끈 상태와 켠 상태의 결과를 한 화면에 나란히 보여 줘.</div><p class="small">바꾸는 것은 가중치 하나 · 데이터·입력·분할은 그대로</p>
+<p class="lead">성능 높이기 화면 맨 위의 스위치를 켭니다.</p>
+  <p class="lead" style="margin-top:1vh">뇌졸중을 겪은 사람이 아주 드무니, 드문 쪽을 틀리는 것을
+  <b>스무 배 넘게 큰 손해</b>로 계산해 다시 학습합니다.</p>
+  <p class="small">끈 상태와 켠 상태의 결과는 스위치와 상관없이 늘 나란히 표시됩니다</p><p class="small">바꾸는 것은 가중치 하나 · 데이터·입력·분할은 그대로</p>
 </section>
 
 <section class="slide">

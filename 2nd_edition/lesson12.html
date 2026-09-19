@@ -339,9 +339,11 @@ table.mx td.miss{background:var(--red-soft);} table.mx td.miss .k{color:var(--re
 
   <p>활동지에서 익힌 계산을 지난 시간의 테스트 데이터에 적용합니다. 데이터의 크기는 달라져도 <b>혼동행렬을 만들고 평가 지표를 계산하는 방법</b>은 같습니다.</p>
 
-  <p>지난 시간 앱에 <b>‘채점표’, ‘성능 높이기’, ‘모델 소개’</b> 페이지를 차례로 추가합니다.</p>
+  <p><b>오늘은 앱을 만들지 않습니다.</b> 아래 주소를 열면 ‘채점표’, ‘성능 높이기’, ‘모델 소개’ 페이지가 이미 들어 있는 앱이 바로 뜹니다. 설치할 것은 없습니다.</p>
+  <p class="labgo"><a href="app/stroke/" target="_blank" rel="noopener">🩺 뇌졸중 예측 실습실 열기 →</a></p>
+  <p class="mini">처음 열 때 30초에서 1분쯤 걸립니다. 수업 시작 전에 미리 한 번 열어 두세요. 직접 만들어 보고 싶으면 아래 절마다 있는 <b>① 샘플 프롬프트</b>를 그대로 사용하면 됩니다. 팀 프로젝트에서 이 흐름을 다시 쓰게 됩니다.</p>
 <details class="sample"><summary>지난 시간 앱이 없는 경우 — 11차시 완성본 네 파일</summary>
-<p class="mini">지난 시간 앱이 없거나 화면이 다르면 아래 네 파일을 그대로 붙여 넣고 시작합니다. 오늘은 여기에 페이지를 세 개 더합니다.</p>
+<p class="mini">직접 만들어 볼 학생 가운데 지난 시간 앱이 없거나 화면이 다른 경우, 아래 네 파일을 그대로 붙여 넣고 시작합니다. 여기에 페이지를 세 개 더합니다.</p>
 <div class="codewrap code"><span class="label">첫 번째 파일 — <button type="button" class="fname">main.py</button></span><button class="copy-btn">복사</button><pre># main.py — 뇌졸중 예측 실습실: 이 데이터가 무엇인지 소개하는 첫 화면
 import pandas as pd
 import streamlit as st
@@ -687,7 +689,7 @@ st.caption(f"고른 속성은 {len(입력열)}가지였지만 이 나무가 실�
   <p>먼저 <b>‘채점표’ 페이지</b>를 만듭니다. 두 분류 모델의 혼동행렬과 네 지표를 표시하고, 놓친 환자와 헛짚은 사람의 목록도 확인할 수 있게 합니다.</p>
 
   <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+    <li><span class="st">① 샘플 프롬프트 — 직접 만들어 볼 학생만</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>pages 폴더에 '채점표' 페이지를 추가해 줘. 파일 이름은 3_채점표.py.
 바뀐 파일 전체를 다시 줘. 바뀐 부분만 주지 말고.
 '분류 모델' 페이지와 똑같은 방법으로 데이터를 읽고 나누고 두 모델을 학습해 줘.
@@ -853,7 +855,7 @@ st.caption("이 목록에 있는 것은 번호뿐입니다. 누구인지 알 수
   <p>가중치를 바꾸기 전과 후를 <b>같은 테스트 데이터로 평가</b>해 어떤 오류가 줄고 어떤 오류가 늘었는지 비교합니다.</p>
 
   <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+    <li><span class="st">① 샘플 프롬프트 — 직접 만들어 볼 학생만</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>pages 폴더에 '성능 높이기' 페이지를 추가해 줘. 파일 이름은 4_성능_높이기.py.
 바뀐 파일 전체를 다시 줘. 바뀐 부분만 주지 말고.
 '채점표' 페이지와 똑같은 방법으로 데이터를 읽고 나누되, 화면 맨 위에 고를 것을 세 개 둬.
@@ -1336,7 +1338,7 @@ st.caption("훈련용은 학습에 사용한 사람들이고 테스트용은 사
   <p>데이터의 출처, 모델의 입력, 개선 전후의 결과, 활용 조건과 한계를 <b>모델 소개 카드 한 장</b>에 정리합니다.</p>
 
   <ol class="steps">
-    <li><span class="st">① 샘플 프롬프트 — 그대로 붙여 넣기</span>
+    <li><span class="st">① 샘플 프롬프트 — 직접 만들어 볼 학생만</span>
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>pages 폴더에 '내가 만든 모델 소개' 페이지를 추가해 줘. 파일 이름은 5_내가_만든_모델_소개.py.
 바뀐 파일 전체를 다시 줘. 바뀐 부분만 주지 말고.
 이 페이지는 데이터를 읽지 않아. 내가 글을 적어 넣는 서식이야.
