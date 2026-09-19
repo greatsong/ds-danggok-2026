@@ -7,6 +7,28 @@
   var 고른반 = 'all', 지난최고 = {}, 첫판 = true;
   var $ = function (id) { return document.getElementById(id); };
 
+  // ── 올라온 기록이 실제로 나올 수 있는 값인지 정답표와 대조한다 ──────────
+  var 속성번호 = { '나이': 0, '평균 혈당': 1, '체질량지수': 2, '고혈압': 3, '심장병': 4 };
+
+  function 열쇠(r) {
+    var 번호 = r.inputs.split(' · ').map(function (x) { return 속성번호[x.trim()]; });
+    if (번호.some(function (n) { return n === undefined; })) return null;
+    번호.sort(function (a, b) { return a - b; });
+    var 모델 = (r.model || '').indexOf('확률') === 0 ? 'L' : 'T';
+    var 값 = 모델 === 'L' ? Number(r.threshold).toFixed(2) : String(r.depth);
+    return (r.missing === '지운다' ? '1' : '0') + (r.weighted ? '1' : '0') +
+           번호.join('') + 모델 + 값;
+  }
+
+  function 확인(r) {
+    var K = window.CHALLENGE_KEY;
+    if (!K) return null;                                 // 정답표가 없으면 판정하지 않는다
+    var k = 열쇠(r);
+    var 정답 = k && K.key[k];
+    if (!정답) return false;
+    return 정답[0] === r.sent && 정답[1] === r.found;
+  }
+
   function 글자(s) {
     return String(s).replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
@@ -29,9 +51,10 @@
     줄들.forEach(function (r) {
       var 열쇠 = r.class_id + '/' + r.nickname;
       var it = 표[열쇠] || (표[열쇠] = { 열쇠: 열쇠, 팀명: r.nickname, 반: r.class_id,
-                                        시도: 0, 최고: null, 마지막: r.created_at });
+                                        시도: 0, 의심: 0, 최고: null, 마지막: r.created_at });
       it.시도 += 1;
       if (r.created_at > it.마지막) it.마지막 = r.created_at;
+      if (r.확인 === false) { it.의심 += 1; return; }
       if (r.within_quota && (!it.최고 || r.found > it.최고.found)) it.최고 = r;
     });
     return Object.values(표).sort(function (a, b) {
@@ -114,6 +137,7 @@
       return '<tr class="' + (이김 ? 'beat ' : '') + (새로움[it.열쇠] ? 'fresh' : '') + '">' +
         '<td class="rank' + (메달 ? ' m' : '') + '">' + (b ? (메달 || it.순위) : '—') + '</td>' +
         '<td class="nick">' + 글자(it.팀명) + (이김 ? '<span class="badge2">기본 이김</span>' : '') +
+          (it.의심 ? '<span class="badge3">확인 필요 ' + it.의심 + '건</span>' : '') +
           '<div class="set2">' + 글자(it.반) + '</div></td>' +
         '<td><div class="bar"><i style="width:' + 폭 + '%"></i><b>' +
           (b ? b.found + '명 · ' + 폭 + '%' : '정원 초과') + '</b></div></td>' +
@@ -138,8 +162,9 @@
                marker: { size: 크기, color: 색, opacity: 투명, line: { width: 0 } } };
     }
     Plotly.react('plot', [
-      점(대상.filter(function (r) { return !r.within_quota; }), '정원 초과', '#9a8b6a', 0.35, 8),
-      점(대상.filter(function (r) { return r.within_quota; }), '정원 안', '#e8930c', 0.85, 11)
+      점(대상.filter(function (r) { return r.확인 !== false && !r.within_quota; }), '정원 초과', '#9a8b6a', 0.35, 8),
+      점(대상.filter(function (r) { return r.확인 !== false && r.within_quota; }), '정원 안', '#e8930c', 0.85, 11),
+      점(대상.filter(function (r) { return r.확인 === false; }), '확인 필요', '#e45756', 0.8, 11)
     ], {
       paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
       font: { family: 'Apple SD Gothic Neo, sans-serif', color: '#6b5836', size: 12 },
@@ -155,11 +180,15 @@
   }
 
   function 그리기(전체) {
+    전체.forEach(function (r) { r.확인 = 확인(r); });
     var 대상 = 고른반 === 'all' ? 전체 : 전체.filter(function (r) { return r.class_id === 고른반; });
     var 목록 = 사람별(대상);
     시상대그리기(목록);
     $('s인원').textContent = 목록.length + '팀';
     $('s시도').textContent = 대상.length + '번';
+    var 의심 = 대상.filter(function (r) { return r.확인 === false; }).length;
+    $('s의심').textContent = 의심 + '건';
+    $('s의심').style.color = 의심 ? 'var(--red)' : '';
     $('s넘김').textContent = 목록.filter(function (x) { return x.최고 && x.최고.found > 기본기록; }).length + '팀';
     $('s최고').textContent = (목록[0] && 목록[0].최고) ? 목록[0].최고.found + '명' : '—';
     반대항그리기(전체);

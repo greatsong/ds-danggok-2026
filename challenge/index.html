@@ -60,6 +60,9 @@
   .rank { font-weight:800; color:var(--muted); width:2.4rem; text-align:center; }
   .rank.m { font-size:1.15rem; }
   .nick { font-weight:700; overflow-wrap:anywhere; }
+  .badge3 { display:inline-block; white-space:nowrap; font-size:.68rem; font-weight:700;
+    padding:.08rem .45rem; border-radius:999px; background:var(--red); color:#fff;
+    margin-left:.35rem; vertical-align:middle; }
   .badge2 { display:inline-block; white-space:nowrap; font-size:.68rem; font-weight:700;
     padding:.08rem .45rem; border-radius:999px; background:var(--gold); color:#4a3608;
     margin-left:.35rem; vertical-align:middle; }
@@ -110,6 +113,7 @@
     <div><div class="t">올린 기록</div><div class="v" id="s시도">—</div></div>
     <div><div class="t">기본 67명을 넘긴 팀</div><div class="v" id="s넘김">—</div></div>
     <div><div class="t">지금 최고</div><div class="v" id="s최고">—</div></div>
+    <div><div class="t">확인 필요</div><div class="v" id="s의심">—</div></div>
   </div>
 
   <h2>반 대항</h2>
@@ -133,7 +137,8 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="key.js?v=1"></script>
 <script src="../gallery/config.js"></script>
-<script src="app.js?v=7"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>
