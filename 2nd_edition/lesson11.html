@@ -323,6 +323,8 @@ st.dataframe(흡연, width="stretch", hide_index=True)</pre></div></details>
   </ol>
 
   <h3>화면 읽기 — 두 그룹의 차이 찾기</h3>
+  <figure class="case" style="margin:12px 0 10px"><img src="img/lesson11_app_box.png" alt="나이 상자그림. 뇌졸중 있음 그룹의 가운데가 71세 부근, 없음 그룹은 43세 부근이며 두 상자가 겹치는 구간도 넓다" loading="lazy" style="width:100%;height:auto;border-radius:10px;border:1px solid var(--border)">
+    <figcaption>앱의 <b>탐색</b> 화면에 나오는 나이 상자그림입니다. 두 그룹의 가운데가 크게 떨어져 있지만 <b>겹치는 구간도 넓습니다.</b> 여러분의 화면에서 같은 그림을 찾아 기록표를 채웁니다.</figcaption></figure>
   <p>히스토그램에서 값이 어느 구간에 몰려 있는지 확인합니다. 이어서 상자그림과 평균 표를 참고해 아래 기록표를 채우고, <b>두 그룹의 차이가 두드러지는 항목</b>에 표시합니다.</p>
   <table class="daymap">
     <thead><tr><th>비교 대상</th><th>뇌졸중 있음</th><th>뇌졸중 없음</th></tr></thead>
@@ -557,6 +559,8 @@ st.caption("맨 위가 첫 질문입니다. class가 1이면 뇌졸중, 0이면 
       <tr><td>한쪽으로만 답하는 모델</td><td>입력을 보지 않고 훈련용에서 많은 쪽</td><td></td></tr>
     </tbody>
   </table>
+  <figure class="case" style="margin:12px 0 10px"><img src="img/lesson11_app_boundary.png" alt="나이와 평균 혈당 평면 위의 산점도. 옅은 색 직사각형이 질문으로 답하는 모델이 나눈 영역이고 붉은 점이 뇌졸중을 겪은 사람이다" loading="lazy" style="width:100%;height:auto;border-radius:10px;border:1px solid var(--border)">
+    <figcaption>앱의 <b>분류 모델</b> 화면입니다. 옅은 색 칸은 <b>질문으로 답하는 모델</b>이 나눈 영역이고, 붉은 점이 뇌졸중을 겪은 사람입니다. 화면의 축을 바꾸면 칸의 모양도 달라집니다.</figcaption></figure>
   <p>앱의 그래프에서 두 모델이 사람들을 어떻게 나누는지 비교합니다. 점 하나는 채점용 데이터의 한 사람을 나타냅니다. 질문으로 답하는 모델의 <b>첫 질문과 기준값</b>을 기록하고, 그 항목이 2절에서 두 그룹의 차이가 두드러졌던 항목과 같은지 비교합니다.</p>
 
   <p>세 모델의 정확도는 모두 높고 차이도 크지 않습니다. 그런데 이 중 하나는 <b>입력을 전혀 보지 않은 모델</b>입니다. 학습하지 않아도 높은 정확도를 얻는 이유는 무엇일까요?</p>
