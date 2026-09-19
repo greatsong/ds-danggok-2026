@@ -361,16 +361,15 @@ st.caption("훈련용은 학습에 사용한 사람들이고 테스트용은 사
 
 st.divider()
 st.subheader("📤 기록 올리기")
-st.caption("이름과 학번은 받지 않습니다. 별명과 반만 적습니다. "
-           "올린 기록은 반 순위판에 바로 나타납니다.")
+st.caption("이름과 학번은 받지 않습니다. 별명과 반만 적습니다. 별명을 적어 두면 설정을 바꿀 때마다 "
+           "그 기록이 순위판에 자동으로 올라갑니다. 같은 설정은 다시 올라가지 않습니다.")
 저장주소 = "https://upkakhnpvepqhsbwdyjb.supabase.co/rest/v1/challenge_log"
 공개키 = "sb_publishable_16HKdOESG_9U5OVNGZMeYQ_of--7oV1"
 순위판주소 = "https://greatsong.github.io/ds-danggok-2026/challenge/"
 
-칸1, 칸2, 칸3 = st.columns([1.2, 2, 2])
+칸1, 칸2 = st.columns([1, 2])
 내반 = 칸1.selectbox("반", ["월수금반", "화수목반"])
-내별명 = 칸2.text_input("별명", max_chars=12, placeholder="열두 글자까지")
-보낼까 = 칸3.button("이 기록 올리기", width="stretch")
+내별명 = 칸2.text_input("별명", max_chars=12, placeholder="열두 글자까지 · 적으면 자동으로 올라갑니다")
 
 def 올리기(보낼것):
     """기록을 보내고, 방금 올린 것까지 넣어 순위를 다시 센다. 브라우저에서만 동작한다."""
@@ -413,42 +412,48 @@ def 순위세기(줄들, 반, 별명):
     }
 
 
-if 보낼까:
-    if not 내별명.strip():
-        st.warning("별명을 적어 주세요.")
+지문 = (내반, 내별명.strip(), 결측처리, tuple(입력열), 내가중치, 내깊이, 내기준)
+if "올린것" not in st.session_state:
+    st.session_state["올린것"] = set()
+
+if not 내별명.strip():
+    st.info("별명을 적으면 지금 설정부터 순위판에 자동으로 올라갑니다.")
+elif 지문 in st.session_state["올린것"]:
+    st.caption("이미 올린 설정입니다. 설정을 바꾸면 새 기록이 올라갑니다.")
+else:
+    보낼것 = {
+        "class_id": 내반, "nickname": 내별명.strip(),
+        "model": 좋은모델, "inputs": " · ".join(우리말(열) for 열 in 입력열),
+        "missing": 결측처리, "weighted": bool(내가중치),
+        "depth": int(내깊이), "threshold": float(내기준),
+        "sent": int(값["안내 인원"]), "found": int(값["찾아낸 환자"]),
+        "accuracy": round(float(값["정확도"]), 4),
+        "recall": None if 값["재현율"] is None else round(float(값["재현율"]), 4),
+        "precision": None if 값["정밀도"] is None else round(float(값["정밀도"]), 4),
+        "f1": None if 값["F1"] is None else round(float(값["F1"]), 4),
+        "within_quota": bool(값["안내 인원"] <= 정원),
+    }
+    try:
+        줄들 = 올리기(보낼것)
+    except ModuleNotFoundError:
+        st.info("이 화면에서는 기록을 올릴 수 없습니다. 브라우저용 실습실 주소에서 올려 주세요.")
+    except Exception as 오류:
+        st.error(f"올리지 못했습니다. 잠시 뒤 설정을 다시 바꿔 보세요. ({type(오류).__name__})")
     else:
-        보낼것 = {
-            "class_id": 내반, "nickname": 내별명.strip(),
-            "model": 좋은모델, "inputs": " · ".join(우리말(열) for 열 in 입력열),
-            "missing": 결측처리, "weighted": bool(내가중치),
-            "depth": int(내깊이), "threshold": float(내기준),
-            "sent": int(값["안내 인원"]), "found": int(값["찾아낸 환자"]),
-            "accuracy": round(float(값["정확도"]), 4),
-            "recall": None if 값["재현율"] is None else round(float(값["재현율"]), 4),
-            "precision": None if 값["정밀도"] is None else round(float(값["정밀도"]), 4),
-            "f1": None if 값["F1"] is None else round(float(값["F1"]), 4),
-            "within_quota": bool(값["안내 인원"] <= 정원),
-        }
-        try:
-            줄들 = 올리기(보낼것)
-        except ModuleNotFoundError:
-            st.info("이 화면에서는 기록을 올릴 수 없습니다. 브라우저용 실습실 주소에서 올려 주세요.")
-        except Exception as 오류:
-            st.error(f"올리지 못했습니다. 잠시 뒤 다시 눌러 주세요. ({type(오류).__name__})")
+        st.session_state["올린것"].add(지문)
+        자리 = 순위세기(줄들, 내반, 내별명.strip())
+        if 자리 is None:
+            st.warning(f"안내 인원이 {보낼것['sent']:,}명이라 정원 {정원}명을 넘겼습니다. "
+                       f"기록은 남았지만 순위에는 들어가지 않습니다. 안내 인원을 줄여 보세요.")
         else:
-            자리 = 순위세기(줄들, 내반, 내별명.strip())
-            if 자리 is None:
-                st.warning(f"안내 인원이 {보낼것['sent']:,}명이라 정원 {정원}명을 넘겼습니다. "
-                           f"기록은 남았지만 순위에는 들어가지 않습니다. 안내 인원을 줄여 보세요.")
-            else:
-                위쪽 = 자리["전체등수"] / 자리["전체인원"] * 100
-                st.success(f"### 찾아낸 환자 {자리['내점수']}명!\n"
-                           f"참가 {자리['전체인원']}명 가운데 **{자리['전체등수']}위** · 상위 {위쪽:.1f}%\n\n"
-                           f"{내반} 안에서는 {자리['반인원']}명 가운데 **{자리['반등수']}위**")
-                if 자리["전체등수"] == 1:
-                    st.info("지금 1위입니다.")
-                if 자리["내점수"] > 67:
-                    st.info("수업 기본 설정의 67명을 넘겼습니다.")
-                    st.balloons()
+            위쪽 = 자리["전체등수"] / 자리["전체인원"] * 100
+            st.success(f"### 찾아낸 환자 {자리['내점수']}명!\n"
+                       f"참가 {자리['전체인원']}명 가운데 **{자리['전체등수']}위** · 상위 {위쪽:.1f}%\n\n"
+                       f"{내반} 안에서는 {자리['반인원']}명 가운데 **{자리['반등수']}위**")
+            if 자리["전체등수"] == 1:
+                st.info("지금 1위입니다.")
+            if 자리["내점수"] > 67:
+                st.info("수업 기본 설정의 67명을 넘겼습니다.")
+                st.balloons()
 
 st.markdown(f"[📊 우리 반 순위판 열기]({순위판주소})")
