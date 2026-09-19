@@ -15,7 +15,9 @@
     var 번호 = r.inputs.split(' · ').map(function (x) { return 속성번호[x.trim()]; });
     if (번호.some(function (n) { return n === undefined; })) return null;
     번호.sort(function (a, b) { return a - b; });
-    var 모델 = (r.model || '').indexOf('확률') === 0 ? 'L' : 'T';
+    // 앱이 보내는 이름은 정식 이름(로지스틱 회귀·의사결정트리)이다. 옛 기록의 교재 이름도 함께 받는다
+    var 이름 = r.model || '';
+    var 모델 = (이름.indexOf('로지스틱') >= 0 || 이름.indexOf('확률') >= 0) ? 'L' : 'T';
     var 값 = 모델 === 'L' ? Number(r.threshold).toFixed(2) : String(r.depth);
     return (r.missing === '지운다' ? '1' : '0') + (r.weighted ? '1' : '0') +
            번호.join('') + 모델 + 값;
