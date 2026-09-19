@@ -530,8 +530,8 @@ def 데이터_읽기():
 
 
 def 병기(이름):
-    """교재에서 쓰는 이름 뒤에 교과서의 정식 이름을 괄호로 붙인다."""
-    return f"{이름}({정식이름[이름]})" if 이름 in 정식이름 else 이름
+    """교과서의 정식 이름을 앞에 두고 교재에서 쓰는 이름을 괄호로 붙인다."""
+    return f"{정식이름[이름]}({이름})" if 이름 in 정식이름 else 이름
 
 
 def 우리말(열):
@@ -692,8 +692,8 @@ st.caption(f"고른 속성은 {len(입력열)}가지였지만 이 나무가 실�
       <div class="codewrap prompt"><span class="label">① 프롬프트</span><button class="copy-btn">복사</button><pre>pages 폴더에 '채점표' 페이지를 추가해 줘. 파일 이름은 3_채점표.py.
 바뀐 파일 전체를 다시 줘. 바뀐 부분만 주지 말고.
 '분류 모델' 페이지와 똑같은 방법으로 데이터를 읽고 나누고 두 모델을 학습해 줘.
-화면에 모델 이름을 적을 때는 확률로 답하는 모델(로지스틱 회귀),
-질문으로 답하는 모델(의사결정트리)처럼 교과서의 이름을 괄호로 함께 적어 줘.
+화면에 모델 이름을 적을 때는 로지스틱 회귀(확률로 답하는 모델),
+의사결정트리(질문으로 답하는 모델)처럼 교과서의 이름을 앞에 적어 줘.
 테스트 데이터로 두 모델의 혼동행렬을 각각 2×2 표로 보여 줘. 행은 실제, 열은 예측이야.
 네 칸에 사람 수를 적고 행과 열의 합계도 적어 줘. 칸마다 TP·FP·FN·TN 약자를 함께 표시해 줘.
 네 칸에서 정확도·재현율·정밀도·F1을 구해 두 모델을 한 표에 나란히 보여 줘.
@@ -777,8 +777,8 @@ def 지표(TP, FN, FP, TN):
 정식이름 = {"확률로 답하는 모델": "로지스틱 회귀", "질문으로 답하는 모델": "의사결정트리"}
 
 def 병기(이름):
-    """교재에서 쓰는 이름 뒤에 교과서의 정식 이름을 괄호로 붙인다."""
-    return f"{이름}({정식이름[이름]})" if 이름 in 정식이름 else 이름
+    """교과서의 정식 이름을 앞에 두고 교재에서 쓰는 이름을 괄호로 붙인다."""
+    return f"{정식이름[이름]}({이름})" if 이름 in 정식이름 else 이름
 
 def 소수(값):
     return "계산할 수 없음" if 값 is None else f"{값:.4f}"
@@ -865,8 +865,8 @@ st.caption("이 목록에 있는 것은 번호뿐입니다. 누구인지 알 수
 처음에는 age, avg_glucose_level, hypertension, heart_disease 네 가지가 골라져 있게 해 줘.
 가중치를 맞추기 전과 맞춘 뒤의 결과는 스위치와 상관없이 늘 한 화면에 나란히 보여 줘.
 두 모델마다 네 칸과 네 지표를 전·후로 나란히 놓은 표를 만들어 줘.
-화면에 모델 이름을 적을 때는 확률로 답하는 모델(로지스틱 회귀),
-질문으로 답하는 모델(의사결정트리)처럼 교과서의 이름을 괄호로 함께 적어 줘.
+화면에 모델 이름을 적을 때는 로지스틱 회귀(확률로 답하는 모델),
+의사결정트리(질문으로 답하는 모델)처럼 교과서의 이름을 앞에 적어 줘.
 표 맨 아래에 찾아낸 환자 수, 놓친 환자 수, 헛짚은 사람 수가
 몇 명에서 몇 명으로 바뀌었는지 한 줄로 적어 줘.
 고른 속성 가운데 둘을 골라 가로세로 축으로 삼는 산점도를 그리고, 점 색으로
@@ -990,8 +990,8 @@ def 지표(TP, FN, FP, TN):
 정식이름 = {"확률로 답하는 모델": "로지스틱 회귀", "질문으로 답하는 모델": "의사결정트리"}
 
 def 병기(이름):
-    """교재에서 쓰는 이름 뒤에 교과서의 정식 이름을 괄호로 붙인다."""
-    return f"{이름}({정식이름[이름]})" if 이름 in 정식이름 else 이름
+    """교과서의 정식 이름을 앞에 두고 교재에서 쓰는 이름을 괄호로 붙인다."""
+    return f"{정식이름[이름]}({이름})" if 이름 in 정식이름 else 이름
 
 def 소수(값):
     return "계산할 수 없음" if 값 is None else f"{값:.4f}"
@@ -1321,7 +1321,7 @@ elif 보낼까 and 지문 in st.session_state["올린것"]:
 elif 보낼까:
     보낼것 = {
         "class_id": 내반, "nickname": 내팀명.strip(),
-        "model": 좋은모델, "inputs": " · ".join(우리말(열) for 열 in 입력열),
+        "model": 정식이름.get(좋은모델, 좋은모델), "inputs": " · ".join(우리말(열) for 열 in 입력열),
         "missing": 결측처리, "weighted": bool(내가중치),
         "depth": int(내깊이), "threshold": float(내기준),
         "sent": int(값["안내 인원"]), "found": int(값["찾아낸 환자"]),
@@ -1362,7 +1362,7 @@ st.markdown(f"[📊 우리 반 순위판 열기]({순위판주소})")</pre></div
   <p>앱의 「고치기 전과 고친 뒤」 표에서 확률로 답하는 모델의 결과를 찾아 아래 표에 옮겨 적습니다. 전후 결과는 스위치 상태와 관계없이 나란히 표시됩니다.</p>
   <div class="mxgrid"><div class="mxwrap"><div class="cap">고치기 전</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div><div class="mxwrap"><div class="cap">고친 뒤</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div></div>
   <table class="daymap">
-    <thead><tr><th>확률로 답하는 모델<br><span class="mini">로지스틱 회귀</span></th><th>고치기 전</th><th>고친 뒤</th></tr></thead>
+    <thead><tr><th>로지스틱 회귀<br><span class="mini">확률로 답하는 모델</span></th><th>고치기 전</th><th>고친 뒤</th></tr></thead>
     <tbody>
       <tr><td>정확도</td><td></td><td></td></tr>
       <tr><td>재현율</td><td></td><td></td></tr>

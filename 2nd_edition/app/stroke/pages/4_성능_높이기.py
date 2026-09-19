@@ -93,8 +93,8 @@ def 지표(TP, FN, FP, TN):
 정식이름 = {"확률로 답하는 모델": "로지스틱 회귀", "질문으로 답하는 모델": "의사결정트리"}
 
 def 병기(이름):
-    """교재에서 쓰는 이름 뒤에 교과서의 정식 이름을 괄호로 붙인다."""
-    return f"{이름}({정식이름[이름]})" if 이름 in 정식이름 else 이름
+    """교과서의 정식 이름을 앞에 두고 교재에서 쓰는 이름을 괄호로 붙인다."""
+    return f"{정식이름[이름]}({이름})" if 이름 in 정식이름 else 이름
 
 def 소수(값):
     return "계산할 수 없음" if 값 is None else f"{값:.4f}"
@@ -424,7 +424,7 @@ elif 보낼까 and 지문 in st.session_state["올린것"]:
 elif 보낼까:
     보낼것 = {
         "class_id": 내반, "nickname": 내팀명.strip(),
-        "model": 좋은모델, "inputs": " · ".join(우리말(열) for 열 in 입력열),
+        "model": 정식이름.get(좋은모델, 좋은모델), "inputs": " · ".join(우리말(열) for 열 in 입력열),
         "missing": 결측처리, "weighted": bool(내가중치),
         "depth": int(내깊이), "threshold": float(내기준),
         "sent": int(값["안내 인원"]), "found": int(값["찾아낸 환자"]),
