@@ -40,17 +40,30 @@
     });
   }
 
+  function 순위계산(목록, i) {                          // 동점이면 같은 순위
+    var 점수 = 목록[i].최고 ? 목록[i].최고.found : null;
+    if (점수 === null) return null;
+    var 앞 = 0;
+    for (var k = 0; k < i; k++) {
+      var s2 = 목록[k].최고 ? 목록[k].최고.found : null;
+      if (s2 !== null && s2 > 점수) 앞 += 1;
+    }
+    return 앞 + 1;
+  }
+
   function 시상대그리기(목록) {
-    var 메달 = ['🥇', '🥈', '🥉'];
+    var 메달표 = ['🥇', '🥈', '🥉'];
     $('시상대').innerHTML = [0, 1, 2].map(function (i) {
       var it = 목록[i];
+      var 메달 = { 0: 메달표[0], 1: 메달표[1], 2: 메달표[2] };
+      메달 = (it && it.최고) ? (메달표[(순위계산(목록, i) - 1)] || 메달표[2]) : 메달표[i];
       if (!it || !it.최고) {
-        return '<div class="pod empty"><div class="medal">' + 메달[i] + '</div>' +
+        return '<div class="pod empty"><div class="medal">' + 메달표[i] + '</div>' +
                '<div class="who">비어 있습니다</div><div class="big">—</div></div>';
       }
       var b = it.최고;
-      return '<div class="pod' + (i === 0 ? ' first' : '') + '">' +
-        '<div class="medal">' + 메달[i] + '</div>' +
+      return '<div class="pod' + (순위계산(목록, i) === 1 ? ' first' : '') + '">' +
+        '<div class="medal">' + 메달 + '</div>' +
         '<div class="who">' + 글자(it.별명) + '</div>' +
         '<div class="cls">' + 글자(it.반) + ' · 시도 ' + it.시도 + '번</div>' +
         '<div class="big">' + b.found + '<span>명</span></div>' +
@@ -86,13 +99,20 @@
     });
     첫판 = false;
 
-    $('순위').innerHTML = 목록.map(function (it, i) {
+    var 앞점수 = null, 앞순위 = 0;
+    목록.forEach(function (it, i) {                       // 동점이면 같은 순위, 다음은 건너뛴다
+      var 점수 = it.최고 ? it.최고.found : null;
+      it.순위 = (점수 === null) ? null : (점수 === 앞점수 ? 앞순위 : i + 1);
+      if (점수 !== null) { 앞점수 = 점수; 앞순위 = it.순위; }
+    });
+
+    $('순위').innerHTML = 목록.map(function (it) {
       var b = it.최고;
       var 이김 = b && b.found > 기본기록;
       var 폭 = b ? Math.round(b.found / 대상자 * 100) : 0;
-      var 메달 = ['🥇', '🥈', '🥉'][i];
+      var 메달 = it.순위 ? ['🥇', '🥈', '🥉'][it.순위 - 1] : null;
       return '<tr class="' + (이김 ? 'beat ' : '') + (새로움[it.열쇠] ? 'fresh' : '') + '">' +
-        '<td class="rank' + (메달 ? ' m' : '') + '">' + (b ? (메달 || (i + 1)) : '—') + '</td>' +
+        '<td class="rank' + (메달 ? ' m' : '') + '">' + (b ? (메달 || it.순위) : '—') + '</td>' +
         '<td class="nick">' + 글자(it.별명) + (이김 ? '<span class="badge2">기본 이김</span>' : '') +
           '<div class="set2">' + 글자(it.반) + '</div></td>' +
         '<td><div class="bar"><i style="width:' + 폭 + '%"></i><b>' +
