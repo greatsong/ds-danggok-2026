@@ -363,7 +363,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
   <h2>실습 — 채점표 페이지</h2>
 <div class="prompt">pages 폴더에 '채점표' 페이지를 추가해 줘. 파일 이름은 3_채점표.py.
 '분류 모델' 페이지와 똑같은 방법으로 데이터를 읽고 나누고 두 모델을 학습해 줘.
-채점용 사람들로 두 모델의 혼동행렬을 각각 2×2 표로 보여 줘.
+테스트 데이터로 두 모델의 혼동행렬을 각각 2×2 표로 보여 줘.
 네 칸에서 정확도·재현율·정밀도·F1을 구해 한 표에 나란히 보여 줘.
 놓친 환자와 헛짚은 사람 목록도 나이가 많은 순서로 보여 줘.</div><p class="small">전문은 교재 4절 · 바뀐 파일 전체를 다시 받도록 지시</p>
 </section>
@@ -377,7 +377,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <section class="slide">
   <div class="kicker">12-15</div>
   <h2>찾아낸 환자 0명</h2>
-<div class="mxs"><div class="mxbox"><div class="cap">확률로 답하는 모델 · 채점용 1,533명</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div></div><p class="lead">실제 환자 82명 가운데 <b>한 명도 찾아내지 못했습니다.</b> 확률이 가장 높은 사람도 0.4298이라 <b>0.5를 넘는 사람이 없습니다.</b></p>
+<div class="mxs"><div class="mxbox"><div class="cap">확률로 답하는 모델 · 테스트 데이터 1,533명</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div></div><p class="lead">실제 환자 82명 가운데 <b>한 명도 찾아내지 못했습니다.</b> 확률이 가장 높은 사람도 0.4298이라 <b>0.5를 넘는 사람이 없습니다.</b></p>
 </section>
 
 <section class="slide">
@@ -442,7 +442,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <section class="slide">
   <div class="kicker">12-20</div>
   <h2>가중치를 켠 모델만 정원 안에 들어옵니다</h2>
-<table class="mini" style="font-size:clamp(13px,1.5vw,21px)"><thead><tr><th>채점용 1,533명</th><th>가중치 끔</th><th>가중치 켬</th><th>전원 발송</th></tr></thead><tbody>
+<table class="mini" style="font-size:clamp(13px,1.5vw,21px)"><thead><tr><th>테스트 데이터 1,533명</th><th>가중치 끔</th><th>가중치 켬</th><th>전원 발송</th></tr></thead><tbody>
     <tr><td>안내를 보낸 사람</td><td>0명</td><td>465명</td><td>1,533명</td></tr>
     <tr><td>비용</td><td>0원</td><td>93만 원</td><td>307만 원</td></tr>
     <tr><td>정원 500명 안</td><td>예</td><td><em>예</em></td><td>아니요</td></tr>
@@ -498,7 +498,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
     <li>어떤 데이터를 사용했는가 — 출처와 인원, 맞히려는 답</li>
     <li>무엇을 보고 맞히는가 — 입력 넷과 제외한 항목 하나</li>
     <li><b>어떤 오류를 먼저 줄이려 했는가</b> — 우선한 지표와 그 이유</li>
-    <li>무엇을 고쳤는가 — 전처리에서 바꾼 것 한 줄</li>
+    <li>내 최고 기록과 점수를 올린 방법</li>
     <li>검진센터가 사용해도 되는가 · 이 모델이 못 하는 것 하나</li>
   </ul>
   <div class="principle"><span class="lab">원리</span>지표 값과 <b>오류 인원</b>을 함께 적었는지 확인합니다.</div>

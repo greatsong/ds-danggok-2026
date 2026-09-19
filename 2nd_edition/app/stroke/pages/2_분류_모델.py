@@ -8,7 +8,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 st.set_page_config(page_title="분류 모델", page_icon="🤖", layout="wide")
 st.title("🤖 분류 모델")
-st.write("뇌졸중을 겪었는지 아닌지를 맞히는 모델 두 개를 만들고, 채점용 사람들로 정확도를 봅니다.")
+st.write("뇌졸중을 겪었는지 아닌지를 맞히는 모델 두 개를 만들고, 테스트 데이터로 정확도를 봅니다.")
 
 데이터주소 = "https://raw.githubusercontent.com/greatsong/modudata/main/data/stroke.csv"
 고를수있는열 = ["age", "avg_glucose_level", "bmi", "hypertension", "heart_disease"]
@@ -44,36 +44,36 @@ if len(입력열) < 2:
     st.warning("속성을 두 개 이상 골라 주세요. 하나만으로는 그림의 두 축을 만들 수 없습니다.")
     st.stop()
 
-채점용 = pd.Series(df.index % 10 < 3, index=df.index)   # 열 명 중 앞 세 명이 채점용
+테스트용 = pd.Series(df.index % 10 < 3, index=df.index)   # 열 명 중 앞 세 명이 테스트용
 X = df[입력열].copy()
 y = df["stroke"]                                        # 1이면 뇌졸중, 0이면 아님. 뇌졸중이 양성이다
 if "bmi" in 입력열 and X["bmi"].isna().any():
-    중앙값 = float(X.loc[~채점용, "bmi"].median())
+    중앙값 = float(X.loc[~테스트용, "bmi"].median())
     X["bmi"] = X["bmi"].fillna(중앙값)
     st.warning(f"체질량지수가 비어 있는 사람은 훈련용의 중앙값 {중앙값:.1f}으로 채웠습니다.")
 
 
 def 학습(열들):
     """고른 열로 두 모델을 학습해 돌려준다. 설정은 늘 같다."""
-    훈련 = X.loc[~채점용, 열들]
+    훈련 = X.loc[~테스트용, 열들]
     크기맞추기 = StandardScaler().fit(훈련)   # 크기 맞추기도 훈련용으로만 한다
-    확률모델 = LogisticRegression(max_iter=2000).fit(크기맞추기.transform(훈련), y[~채점용])
+    확률모델 = LogisticRegression(max_iter=2000).fit(크기맞추기.transform(훈련), y[~테스트용])
     # 질문으로 답하는 모델은 값의 크기에 영향받지 않으므로 크기를 맞추지 않은 값을 그대로 사용한다
-    질문모델 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(훈련, y[~채점용])
+    질문모델 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(훈련, y[~테스트용])
     return 크기맞추기, 확률모델, 질문모델
 
 
 크기맞추기, 확률모델, 질문모델 = 학습(입력열)
-많은쪽 = int(y[~채점용].mode()[0])                       # 훈련용에서 사람이 많은 범주
-실제 = y[채점용].to_numpy()
+많은쪽 = int(y[~테스트용].mode()[0])                       # 훈련용에서 사람이 많은 범주
+실제 = y[테스트용].to_numpy()
 
-st.info(f"훈련용 {int((~채점용).sum()):,}명(그중 뇌졸중 {int(y[~채점용].sum()):,}명)으로 학습하고, "
-        f"채점용 {int(채점용.sum()):,}명(그중 실제 뇌졸중 {int(실제.sum()):,}명)으로 채점합니다.")
+st.info(f"훈련용 {int((~테스트용).sum()):,}명(그중 뇌졸중 {int(y[~테스트용].sum()):,}명)으로 학습하고, "
+        f"테스트용 {int(테스트용.sum()):,}명(그중 실제 뇌졸중 {int(실제.sum()):,}명)으로 채점합니다.")
 
-st.subheader("채점용 사람들에서의 정확도")
-예측 = {"확률로 답하는 모델": 확률모델.predict(크기맞추기.transform(X[채점용])),
-        "질문으로 답하는 모델": 질문모델.predict(X[채점용]),
-        "한쪽으로만 답하는 모델": pd.Series(많은쪽, index=y[채점용].index).to_numpy()}
+st.subheader("테스트 데이터에서의 정확도")
+예측 = {"확률로 답하는 모델": 확률모델.predict(크기맞추기.transform(X[테스트용])),
+        "질문으로 답하는 모델": 질문모델.predict(X[테스트용]),
+        "한쪽으로만 답하는 모델": pd.Series(많은쪽, index=y[테스트용].index).to_numpy()}
 칸들 = st.columns(3)
 for 칸, (이름, 예측값) in zip(칸들, 예측.items()):
     칸.metric(병기(이름), f"{(예측값 == 실제).mean():.4f}")
@@ -86,13 +86,13 @@ st.subheader("고른 속성 가운데 둘을 축으로 놓고 본다")
 세로후보 = [열 for 열 in 입력열 if 열 != 가로]
 세로 = 축칸[1].selectbox("세로축", 세로후보, index=0, format_func=우리말)
 
-채점입력 = X[채점용]
-# 두 축이 아닌 속성은 채점용의 중앙값에 세워 둔다. 위에서 채점한 그 모델을 그대로 그린다
+채점입력 = X[테스트용]
+# 두 축이 아닌 속성은 테스트 데이터의 중앙값에 세워 둔다. 위에서 채점한 그 모델을 그대로 그린다
 고정값 = {열: float(채점입력[열].median()) for 열 in 입력열 if 열 not in (가로, 세로)}
 
 
 def 눈금(열):
-    """채점용에서 가장 작은 값부터 가장 큰 값까지 고르게 나눈 값들을 돌려준다."""
+    """테스트용에서 가장 작은 값부터 가장 큰 값까지 고르게 나눈 값들을 돌려준다."""
     작은값, 큰값 = float(채점입력[열].min()), float(채점입력[열].max())
     큰값 = 큰값 if 큰값 > 작은값 else 작은값 + 1.0
     return [작은값 + (큰값 - 작은값) * i / (칸수 - 1) for i in range(칸수)]
@@ -130,9 +130,9 @@ if not (min(확률격자) <= 0.5 <= max(확률격자)):
     st.info(f"이 그림 안에서 확률이 가장 높은 자리도 {max(확률격자):.2f}입니다. "
             f"이 그림에서는 0.5 경계선이 보이지 않습니다.")
 고정설명 = " · ".join(f"{우리말(열)} {값:g}" for 열, 값 in 고정값.items())
-st.caption("점은 채점용 사람들이고 색은 실제 뇌졸중 여부입니다. 파란 선은 확률로 답하는 모델이 0.5로 가르는 자리, "
+st.caption("점은 테스트 데이터이고 색은 실제 뇌졸중 여부입니다. 파란 선은 확률로 답하는 모델이 0.5로 가르는 자리, "
            "옅은 색으로 나뉜 바탕은 질문으로 답하는 모델이 두 축을 나눈 칸입니다. 위에서 채점한 그 모델을 그렸습니다."
-           + (f" 두 축이 아닌 속성은 채점용의 중앙값({고정설명})으로 고정해 계산했습니다." if 고정값 else ""))
+           + (f" 두 축이 아닌 속성은 테스트 데이터의 중앙값({고정설명})으로 고정해 계산했습니다." if 고정값 else ""))
 
 st.subheader("질문으로 답하는 모델은 어떤 순서로 물었는가")
 
@@ -144,10 +144,10 @@ def 가지그림(모델, 열들):
     더 묻지 않고 답을 내는 마디는 답에 따라 색을 달리한다.
     """
     나무 = 모델.tree_
-    훈련 = X.loc[~채점용, 열들]
+    훈련 = X.loc[~테스트용, 열들]
     지난자리 = 모델.decision_path(훈련).toarray()      # 사람마다 지나간 마디에 1이 선다
     온사람 = 지난자리.sum(axis=0)
-    뇌졸중 = 지난자리[y[~채점용].to_numpy() == 1].sum(axis=0)
+    뇌졸중 = 지난자리[y[~테스트용].to_numpy() == 1].sum(axis=0)
 
     줄 = ['digraph {', 'graph [ranksep=0.45 nodesep=0.28];',
           'node [shape=box style="filled,rounded" fontname="sans-serif" fontsize=13 '
@@ -178,7 +178,7 @@ st.graphviz_chart(가지그림(질문모델, 입력열))
 아님마디 = sum(1 for 마디 in 마지막마디 if int(질문모델.tree_.value[마디][0].argmax()) == 0)
 물은속성 = sorted({입력이름[입력열[열]] for 열 in 질문모델.tree_.feature if 열 >= 0})
 st.caption(f"맨 위가 첫 질문입니다. 예라고 답하면 왼쪽, 아니요라고 답하면 오른쪽으로 내려갑니다. "
-           f"색이 칠해진 칸이 더 묻지 않고 답을 내는 자리이고, 모두 {len(마지막마디)}칸입니다. "
-           f"그중 {아님마디}칸이 아님이라고 답합니다.")
+           f"색이 칠해진 마디가 더 묻지 않고 답을 내는 자리이고, 모두 {len(마지막마디)}개입니다. "
+           f"그중 {아님마디}개가 아님이라고 답합니다.")
 st.caption(f"고른 속성은 {len(입력열)}가지였지만 이 나무가 실제로 물은 것은 "
            f"{' · '.join(물은속성)} {len(물은속성)}가지입니다.")

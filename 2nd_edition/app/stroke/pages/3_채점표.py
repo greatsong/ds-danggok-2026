@@ -17,23 +17,23 @@ def 데이터_읽기():
     return pd.read_csv(데이터주소, encoding="utf-8").sort_values("id").reset_index(drop=True)
 
 df = 데이터_읽기()
-채점용 = pd.Series(df.index % 10 < 3, index=df.index)   # '분류 모델' 페이지와 같은 방법으로 나눈다
+테스트용 = pd.Series(df.index % 10 < 3, index=df.index)   # '분류 모델' 페이지와 같은 방법으로 나눈다
 X = df[입력열]
 y = df["stroke"]
 
-크기맞추기 = StandardScaler().fit(X[~채점용])
-확률모델 = LogisticRegression(max_iter=2000).fit(크기맞추기.transform(X[~채점용]), y[~채점용])
-질문모델 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~채점용], y[~채점용])
+크기맞추기 = StandardScaler().fit(X[~테스트용])
+확률모델 = LogisticRegression(max_iter=2000).fit(크기맞추기.transform(X[~테스트용]), y[~테스트용])
+질문모델 = DecisionTreeClassifier(max_depth=3, min_samples_leaf=5, random_state=0).fit(X[~테스트용], y[~테스트용])
 
-많은쪽 = int(y[~채점용].mode()[0])
-실제 = y[채점용].to_numpy()
+많은쪽 = int(y[~테스트용].mode()[0])
+실제 = y[테스트용].to_numpy()
 예측 = {
-    "확률로 답하는 모델": (확률모델.predict_proba(크기맞추기.transform(X[채점용]))[:, 1] >= 0.5).astype(int),
-    "질문으로 답하는 모델": 질문모델.predict(X[채점용]),
-    "한쪽으로만 답하는 모델": pd.Series(많은쪽, index=y[채점용].index).to_numpy(),
+    "확률로 답하는 모델": (확률모델.predict_proba(크기맞추기.transform(X[테스트용]))[:, 1] >= 0.5).astype(int),
+    "질문으로 답하는 모델": 질문모델.predict(X[테스트용]),
+    "한쪽으로만 답하는 모델": pd.Series(많은쪽, index=y[테스트용].index).to_numpy(),
 }
 
-st.info(f"채점용은 {len(실제):,}명이고 그중 실제 뇌졸중은 {int(실제.sum()):,}명입니다.")
+st.info(f"테스트용은 {len(실제):,}명이고 그중 실제 뇌졸중은 {int(실제.sum()):,}명입니다.")
 
 def 네칸(예측값):
     """행은 실제, 열은 예측. 네 칸의 사람 수를 센다."""
@@ -90,7 +90,7 @@ for 이름 in 예측:
                "FN (놓친 환자)": FN, "TN": TN, "정확도": 소수(정확도),
                "재현율": 소수(재현율), "정밀도": 소수(정밀도), "F1": 소수(F1)})
 st.dataframe(pd.DataFrame(줄), width="stretch", hide_index=True)
-st.caption("정확도의 분모는 채점용 전체 인원, 재현율의 분모는 실제 뇌졸중인 사람 수, "
+st.caption("정확도의 분모는 테스트용 전체 인원, 재현율의 분모는 실제 뇌졸중인 사람 수, "
            "정밀도의 분모는 뇌졸중이라 예측한 사람 수입니다. F1은 2 × TP ÷ (2 × TP + FP + FN)으로 구합니다. "
            "뇌졸중이라 예측한 사람이 0명이면 정밀도만 계산할 수 없고, F1은 0이 나옵니다.")
 
@@ -98,7 +98,7 @@ st.subheader("누구를 놓쳤고 누구를 헛짚었는가")
 고른모델 = st.radio("어느 모델의 목록을 볼까요", list(예측), horizontal=True, format_func=병기)
 TP, FN, FP, TN = 네칸값[고른모델]
 예측값 = 예측[고른모델]
-채점명단 = df[채점용].copy()
+채점명단 = df[테스트용].copy()
 채점명단["고혈압"] = 채점명단["hypertension"].map({1: "있음", 0: "없음"})
 채점명단["심장병"] = 채점명단["heart_disease"].map({1: "있음", 0: "없음"})
 보일열 = {"id": "번호", "age": "나이", "avg_glucose_level": "평균 혈당",
