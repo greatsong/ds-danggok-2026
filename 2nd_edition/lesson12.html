@@ -1257,8 +1257,8 @@ st.caption("이름과 학번은 받지 않습니다. 별명과 반만 적습니�
 공개키 = "sb_publishable_16HKdOESG_9U5OVNGZMeYQ_of--7oV1"
 순위판주소 = "https://greatsong.github.io/ds-danggok-2026/challenge/"
 
-칸1, 칸2, 칸3 = st.columns([1, 2, 2])
-내반 = 칸1.selectbox("반", ["B", "E"])
+칸1, 칸2, 칸3 = st.columns([1.2, 2, 2])
+내반 = 칸1.selectbox("반", ["월수금반", "화수목반"])
 내별명 = 칸2.text_input("별명", max_chars=12, placeholder="열두 글자까지")
 보낼까 = 칸3.button("이 기록 올리기", width="stretch")
 
