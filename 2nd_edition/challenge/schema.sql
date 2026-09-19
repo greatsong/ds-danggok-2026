@@ -22,6 +22,7 @@ create table if not exists public.challenge_log (
   threshold     numeric(4,2) not null check (threshold between 0 and 1),
 
   -- 테스트 데이터에서의 결과
+  accuracy      numeric(6,4),
   sent          integer not null check (sent >= 0),      -- 안내 인원 (TP + FP)
   found         integer not null check (found >= 0),     -- 찾아낸 환자 (TP)
   recall        numeric(6,4),

@@ -7,18 +7,74 @@
 <link rel="stylesheet" href="../assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
 <style>
-  .board { width:100%; border-collapse:collapse; margin:.8rem 0 1.2rem; }
-  .board th, .board td { border:1px solid var(--border); padding:.5rem .6rem; font-size:.95rem; }
-  .board th { background:var(--card); color:var(--text-soft); font-weight:700; }
-  .board td.num { text-align:right; font-variant-numeric:tabular-nums; }
-  .board tr.top td { background:var(--green-soft); font-weight:700; }
-  .ctl { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin:.6rem 0 1rem; }
-  .ctl select, .ctl button { padding:.4rem .7rem; font-size:.95rem; border:1px solid var(--border);
-    border-radius:8px; background:var(--card); color:var(--text); }
-  .stat { display:flex; gap:1.4rem; flex-wrap:wrap; margin:.4rem 0 1rem; }
-  .stat div b { display:block; font-size:1.5rem; color:var(--accent); }
-  #plot { width:100%; height:380px; }
+  .wrap { --maxw: 1100px; }
+  main { max-width: 1100px; }
+
+  /* 조작 줄 */
+  .ctl { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin:.4rem 0 1.2rem; }
+  .ctl .seg { display:flex; border:1px solid var(--border); border-radius:999px; overflow:hidden; background:var(--card); }
+  .ctl .seg button { border:0; background:transparent; padding:.45rem 1rem; font-size:.95rem;
+    color:var(--text-soft); cursor:pointer; font-family:var(--font); }
+  .ctl .seg button.on { background:var(--accent); color:#fff; font-weight:700; }
+  .ctl .live { margin-left:auto; font-size:.85rem; color:var(--muted); display:flex; align-items:center; gap:.4rem; }
+  .dot { width:.5rem; height:.5rem; border-radius:50%; background:var(--green); }
+  .dot.off { background:var(--muted); }
+
+  /* 시상대 */
+  .podium { display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem; margin:.2rem 0 1.4rem; }
+  .pod { border:1px solid var(--border-soft); border-radius:var(--radius); background:var(--bg);
+    padding:1rem .9rem; text-align:center; position:relative; min-width:0; }
+  .pod .medal { font-size:1.9rem; line-height:1; }
+  .pod .who { font-weight:800; font-size:1.05rem; margin:.35rem 0 .1rem; overflow-wrap:anywhere; }
+  .pod .cls { font-size:.78rem; color:var(--muted); }
+  .pod .big { font-size:2.3rem; font-weight:800; color:var(--accent); line-height:1.1; margin:.3rem 0 0; }
+  .pod .big span { font-size:.95rem; font-weight:600; color:var(--text-soft); }
+  .pod .set { font-size:.75rem; color:var(--text-soft); margin-top:.45rem; overflow-wrap:anywhere; }
+  .pod.first { background:linear-gradient(180deg,#fff3cf,#fff9ea); border-color:var(--gold); box-shadow:var(--shadow-lg); }
+  .pod.empty { opacity:.45; }
+
+  /* 요약 */
+  .kpi { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.8rem; margin:0 0 1.4rem; }
+  .kpi > div { border:1px solid var(--border-soft); border-radius:var(--radius-sm); padding:.7rem .85rem; background:var(--bg); }
+  .kpi .t { font-size:.82rem; color:var(--text-soft); }
+  .kpi .v { font-size:1.55rem; font-weight:800; color:var(--text); }
+
+  /* 반 대항 */
+  .vs { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; margin:0 0 1.6rem; }
+  .vs .side { border:1px solid var(--border); border-radius:var(--radius-sm); padding:.75rem .9rem; background:var(--bg); }
+  .vs .side .n { font-weight:700; font-size:.95rem; }
+  .vs .side .b { font-size:1.9rem; font-weight:800; color:var(--accent); }
+  .vs .side .s { font-size:.8rem; color:var(--text-soft); }
+  .vs .side.win { background:var(--green-soft); border-color:var(--green); }
+
+  /* 순위표 */
+  .board { width:100%; border-collapse:separate; border-spacing:0 .4rem; }
+  .board th { font-size:.8rem; color:var(--text-soft); text-align:left; padding:0 .6rem .2rem; font-weight:700; }
+  .board td { background:var(--bg); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft);
+    padding:.55rem .6rem; font-size:.93rem; vertical-align:middle; }
+  .board td:first-child { border-left:1px solid var(--border-soft); border-radius:var(--radius-sm) 0 0 var(--radius-sm); }
+  .board td:last-child  { border-right:1px solid var(--border-soft); border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+  .board tr.beat td { background:var(--green-soft); border-color:#cfe3c4; }
+  .board tr.fresh td { animation: 반짝 1.6s ease-out 1; }
+  @keyframes 반짝 { from { background:#fff1c9; } to {} }
+  .rank { font-weight:800; color:var(--muted); width:2.4rem; text-align:center; }
+  .rank.m { font-size:1.15rem; }
+  .nick { font-weight:700; overflow-wrap:anywhere; }
+  .badge2 { display:inline-block; white-space:nowrap; font-size:.68rem; font-weight:700;
+    padding:.08rem .45rem; border-radius:999px; background:var(--gold); color:#4a3608;
+    margin-left:.35rem; vertical-align:middle; }
+  .nick { line-height:1.45; }
+  .bar { position:relative; height:1.5rem; background:var(--border-soft); border-radius:999px; overflow:hidden; min-width:90px; }
+  .bar i { position:absolute; inset:0 auto 0 0; background:var(--accent); border-radius:999px; }
+  .bar b { position:relative; display:block; text-align:center; line-height:1.5rem; font-size:.82rem; color:var(--text); }
+  .num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .set2 { font-size:.76rem; color:var(--text-soft); overflow-wrap:anywhere; }
   .quiet { color:var(--text-soft); font-size:.9rem; }
+  #plot { width:100%; height:360px; }
+  @media (max-width:720px){
+    .podium { grid-template-columns:1fr; } .vs { grid-template-columns:1fr; }
+    .board .hide { display:none; }
+  }
 </style>
 </head>
 <body>
@@ -34,45 +90,50 @@
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 12차시</span>
   <h1>성능 높이기 <span class="a">챌린지 순위판</span></h1>
   <div class="under"></div>
-  <p class="lead">안내 인원이 상담 정원 <b>500명 이하</b>인 채로 찾아낸 환자를 가장 많이 만든 기록입니다.
-  정원을 넘긴 기록은 순위에 들어가지 않습니다.</p>
+  <p class="lead">안내 인원이 상담 정원 <b>500명 이하</b>인 채로 대상자 82명 가운데 가장 많이 찾아낸 기록입니다.
+  수업 기본 설정은 <b>67명</b>입니다.</p>
   <p class="mini"><a href="../app/stroke/" target="_blank" rel="noopener">🩺 실습실에서 기록 올리기 →</a></p>
 
   <div class="ctl">
-    <label>반
-      <select id="반"><option value="all">전체</option><option value="월수금반">월수금반</option><option value="화수목반">화수목반</option></select>
-    </label>
-    <button id="새로">지금 새로 읽기</button>
-    <span class="quiet" id="상태">읽는 중…</span>
+    <div class="seg" id="반">
+      <button data-v="all" class="on">전체</button>
+      <button data-v="월수금반">월수금반</button>
+      <button data-v="화수목반">화수목반</button>
+    </div>
+    <div class="live"><span class="dot" id="불"></span><span id="상태">읽는 중…</span></div>
   </div>
 
-  <div class="stat">
-    <div>참가한 별명<b id="s인원">—</b></div>
-    <div>올린 기록<b id="s시도">—</b></div>
-    <div>지금 1등<b id="s최고">—</b></div>
+  <div class="podium" id="시상대"></div>
+
+  <div class="kpi">
+    <div><div class="t">참가한 별명</div><div class="v" id="s인원">—</div></div>
+    <div><div class="t">올린 기록</div><div class="v" id="s시도">—</div></div>
+    <div><div class="t">기본 67명을 넘긴 사람</div><div class="v" id="s넘김">—</div></div>
+    <div><div class="t">지금 최고</div><div class="v" id="s최고">—</div></div>
   </div>
+
+  <h2>반 대항</h2>
+  <div class="vs" id="반대항"></div>
 
   <h2>순위</h2>
   <table class="board"><thead><tr>
-    <th>순위</th><th>별명</th><th>반</th><th>찾아낸 환자</th><th>안내 인원</th>
-    <th>재현율</th><th>설정</th><th>시도</th><th>마지막 기록</th>
+    <th class="rank">#</th><th>별명</th><th>찾아낸 환자 (82명 가운데)</th>
+    <th class="num">안내</th>
+    <th class="num hide">정확도</th><th class="num">재현율</th>
+    <th class="num hide">정밀도</th><th class="num">F1</th>
+    <th class="hide">설정</th><th class="num">시도</th><th class="num hide">마지막</th>
   </tr></thead><tbody id="순위"></tbody></table>
 
   <h2>시간에 따른 기록</h2>
   <div id="plot"></div>
   <p class="mini">점 하나가 올린 기록 하나입니다. 가로축은 올린 시각, 세로축은 찾아낸 환자 수입니다.
-  정원을 넘긴 기록은 옅게 표시합니다.</p>
-
-  <div class="callout tip">
-    <div class="h">🎯 넘어야 할 선</div>
-    <p>수업 기본 설정(나이·평균 혈당·고혈압·심장병 · 가중치 켬)은 <b>67명</b>입니다. 68명을 넘기면 기본을 이긴 것입니다.</p>
-  </div>
+  정원을 넘긴 기록은 옅게 표시하고 순위에서 뺍니다.</p>
 </main>
 </div>
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="../gallery/config.js"></script>
-<script src="app.js?v=1"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>
