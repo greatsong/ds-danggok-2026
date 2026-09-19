@@ -372,6 +372,47 @@ st.caption("이름과 학번은 받지 않습니다. 별명과 반만 적습니�
 내별명 = 칸2.text_input("별명", max_chars=12, placeholder="열두 글자까지")
 보낼까 = 칸3.button("이 기록 올리기", width="stretch")
 
+def 올리기(보낼것):
+    """기록을 보내고, 방금 올린 것까지 넣어 순위를 다시 센다. 브라우저에서만 동작한다."""
+    import json
+
+    import js                                           # 브라우저에서 실행할 때만 있다
+    보내기 = js.XMLHttpRequest.new()
+    보내기.open("POST", 저장주소, False)                 # False는 다 보낼 때까지 기다린다는 뜻
+    보내기.setRequestHeader("apikey", 공개키)
+    보내기.setRequestHeader("Content-Type", "application/json")
+    보내기.setRequestHeader("Prefer", "return=minimal")
+    보내기.send(json.dumps(보낼것, ensure_ascii=False))
+    if 보내기.status >= 300:
+        raise RuntimeError(f"보내기 실패 {보내기.status}")
+
+    읽기 = js.XMLHttpRequest.new()
+    읽기.open("GET", 저장주소 + "?select=class_id,nickname,found,within_quota", False)
+    읽기.setRequestHeader("apikey", 공개키)
+    읽기.send()
+    return json.loads(읽기.responseText) if 읽기.status < 300 else []
+
+
+def 순위세기(줄들, 반, 별명):
+    """정원 안에 든 기록만 가지고 사람별 최고를 구해 내 자리를 센다."""
+    최고 = {}
+    for r in 줄들:
+        if not r.get("within_quota"):
+            continue
+        열쇠 = (r["class_id"], r["nickname"])
+        최고[열쇠] = max(최고.get(열쇠, 0), int(r["found"]))
+    내점수 = 최고.get((반, 별명))
+    if 내점수 is None:
+        return None
+    전체 = sorted(최고.values(), reverse=True)
+    우리반 = sorted(v for (c, _), v in 최고.items() if c == 반)
+    return {
+        "내점수": 내점수,
+        "전체인원": len(전체), "전체등수": sum(1 for v in 전체 if v > 내점수) + 1,
+        "반인원": len(우리반), "반등수": sum(1 for v in 우리반 if v > 내점수) + 1,
+    }
+
+
 if 보낼까:
     if not 내별명.strip():
         st.warning("별명을 적어 주세요.")
@@ -389,19 +430,25 @@ if 보낼까:
             "within_quota": bool(값["안내 인원"] <= 정원),
         }
         try:
-            import json
-
-            import js                                  # 브라우저에서 실행할 때만 있다
-            js.fetch(저장주소, js.JSON.parse(json.dumps({
-                "method": "POST",
-                "headers": {"apikey": 공개키, "Authorization": "Bearer " + 공개키,
-                            "Content-Type": "application/json", "Prefer": "return=minimal"},
-                "body": json.dumps(보낼것, ensure_ascii=False),
-            })))
-            st.success(f"올렸습니다. 찾아낸 환자 {보낼것['found']}명 · 안내 {보낼것['sent']:,}명")
+            줄들 = 올리기(보낼것)
         except ModuleNotFoundError:
             st.info("이 화면에서는 기록을 올릴 수 없습니다. 브라우저용 실습실 주소에서 올려 주세요.")
         except Exception as 오류:
             st.error(f"올리지 못했습니다. 잠시 뒤 다시 눌러 주세요. ({type(오류).__name__})")
+        else:
+            자리 = 순위세기(줄들, 내반, 내별명.strip())
+            if 자리 is None:
+                st.warning(f"안내 인원이 {보낼것['sent']:,}명이라 정원 {정원}명을 넘겼습니다. "
+                           f"기록은 남았지만 순위에는 들어가지 않습니다. 안내 인원을 줄여 보세요.")
+            else:
+                위쪽 = 자리["전체등수"] / 자리["전체인원"] * 100
+                st.success(f"### 찾아낸 환자 {자리['내점수']}명!\n"
+                           f"참가 {자리['전체인원']}명 가운데 **{자리['전체등수']}위** · 상위 {위쪽:.1f}%\n\n"
+                           f"{내반} 안에서는 {자리['반인원']}명 가운데 **{자리['반등수']}위**")
+                if 자리["전체등수"] == 1:
+                    st.info("지금 1위입니다.")
+                if 자리["내점수"] > 67:
+                    st.info("수업 기본 설정의 67명을 넘겼습니다.")
+                    st.balloons()
 
 st.markdown(f"[📊 우리 반 순위판 열기]({순위판주소})")
