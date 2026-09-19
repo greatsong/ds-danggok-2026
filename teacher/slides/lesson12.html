@@ -3,665 +3,516 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>12차시 슬라이드 · 연관 분석 — 데이터 과학</title>
-<script src="../../assets/release.js"></script>
-<script src="../../assets/gate.js"></script>
+<title>12차시 슬라이드 · 분류 평가 — 데이터 과학</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --bg: #0f1219; --bg-accent: #161b26;
-    --ink: #f2f4f8; --ink-dim: #8b93a7;
-    --accent: #ffd166; --accent2: #7cc7ff; --quote: #e8ecf4;
-  }
-  html, body { height: 100%; }
-  body { background: var(--bg); color: var(--ink);
-    font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif; overflow: hidden; }
-  .slide { position: absolute; inset: 0; display: none; flex-direction: column;
-    justify-content: center; padding: 6vh 9vw; line-height: 1.55; }
-  .slide.on { display: flex; }
-  .kicker { font-size: clamp(15px, 1.6vw, 22px); letter-spacing: .14em;
-    color: var(--accent); font-weight: 700; margin-bottom: 2.2vh; }
-  .kicker.blue { color: var(--accent2); }
-  h1 { font-size: clamp(34px, 4.6vw, 64px); font-weight: 800; line-height: 1.25; }
-  h2 { font-size: clamp(26px, 3.4vw, 48px); font-weight: 800; line-height: 1.35; }
-  .sub { margin-top: 3vh; font-size: clamp(17px, 1.9vw, 26px); color: var(--ink-dim); }
-  blockquote { font-size: clamp(21px, 2.6vw, 38px); font-weight: 700; color: var(--quote);
-    line-height: 1.5; max-width: 28em; }
-  blockquote::before { content: "\201C"; color: var(--accent); }
-  blockquote::after { content: "\201D"; color: var(--accent); }
-  .facts { margin-top: 1vh; }
-  .facts li { list-style: none; font-size: clamp(19px, 2.3vw, 33px); margin: 2.4vh 0;
-    padding-left: 1.2em; text-indent: -1.2em; }
-  .facts li::before { content: "\00B7  "; color: var(--accent2); font-weight: 800; }
-  .facts b { color: var(--accent2); font-weight: 800; }
-  .point { margin-top: 3.4vh; font-size: clamp(20px, 2.5vw, 36px); font-weight: 700; }
-  .point b { color: var(--accent); }
-  .small { margin-top: 2.6vh; font-size: clamp(15px, 1.6vw, 22px); color: var(--ink-dim); }
-  .prompt { margin-top: 3vh; background: #101d1a; border: 1px solid #24463d; border-radius: 14px;
-    padding: 2.6vh 2vw; font-family: "SFMono-Regular", "D2Coding", Menlo, monospace;
-    font-size: clamp(14px, 1.55vw, 22px); line-height: 1.7; color: #d7f0ea; max-width: 40em; overflow-wrap: break-word; }
-  table.mini { margin-top: 3vh; border-collapse: collapse; font-size: clamp(16px, 1.9vw, 27px); }
-  table.mini th, table.mini td { padding: 1.2vh 1.4vw; border-bottom: 1px solid #2a3244; text-align: left; }
-  table.mini th { color: var(--accent); font-weight: 800; }
-  table.mini td:first-child { font-weight: 800; white-space: nowrap; }
-  table.mini td em { color: var(--accent2); font-style: normal; font-weight: 800; }
-  .split { margin-top: 3.4vh; display: flex; gap: 3vw; flex-wrap: wrap; }
-  .card { border: 1.5px solid #2a3244; border-radius: 16px; padding: 2.4vh 2vw; min-width: 15em; }
-  .card .t { color: var(--accent); font-weight: 800; font-size: clamp(16px, 1.8vw, 24px); }
-  .card .v { margin-top: 1.2vh; font-size: clamp(30px, 4vw, 58px); font-weight: 800; }
-  .card .d { margin-top: 1vh; color: var(--ink-dim); font-size: clamp(14px, 1.5vw, 20px); }
-  .withimg { display: flex; gap: 3vw; align-items: center; margin-top: 2vh; }
-  .withimg .txt { flex: 1 1 0; min-width: 0; }
-  .withimg img { max-height: 58vh; max-width: 32vw; border-radius: 14px; border: 1px solid #2a3244; object-fit: cover; }
-  .shot.tall img { max-height: 64vh; width: auto; margin: 0 auto; display: block; }
-  .shot.wide img { max-height: 46vh; width: auto; max-width: 100%; margin: 0 auto; display: block; }
-  .src { margin-top: 1.4vh; font-size: clamp(12px, 1.2vw, 16px); color: var(--ink-dim); }
-  .diagram { margin-top: 3vh; background: #f7f3e8; border-radius: 16px; padding: 2vh 1.4vw; overflow-x: auto; }
-  .diagram.short svg { max-height: var(--dh, 40vh); }
-  /* 인터랙티브 위젯 — 밝은 상자 안 */
-  .widget { color: #1c2230; }
-  .diagram .widget svg { width: auto; max-width: 100%; max-height: var(--wh, 44vh); height: auto; display: block; margin: 0 auto; }
-  .wctl { display: flex; flex-wrap: wrap; align-items: center; gap: .8vh 1.4vw; margin-top: 1.2vh;
-          font-size: clamp(14px, 1.5vw, 20px); font-weight: 700; }
-  .wctl label { display: flex; align-items: center; gap: .6vw; white-space: nowrap; }
-  .wctl input[type=range] { width: clamp(120px, 16vw, 260px); accent-color: #2b7fd6; }
-  .wbtn { border: 1.5px solid #c9c2b2; background: #fff; color: #1c2230; border-radius: 999px;
-          padding: .5vh 1.2vw; font: inherit; font-weight: 700; cursor: pointer; }
-  .wbtn.on { background: #2b7fd6; border-color: #2b7fd6; color: #fff; }
-  .wout { margin-left: auto; color: #b07a00; font-variant-numeric: tabular-nums; }
-  .diagram svg { width: auto; max-width: 100%; max-height: 50vh; height: auto; display: block; margin: 0 auto; }
-  .chapter { background: radial-gradient(ellipse at 20% 110%, #1c2434 0%, var(--bg) 60%); }
-  .foot span { white-space: nowrap; }
-  .foot { position: absolute; bottom: 3.4vh; left: 9vw; right: 9vw;
-    display: flex; justify-content: space-between; align-items: center;
-    color: var(--ink-dim); font-size: clamp(12px, 1.2vw, 16px); }
-  .dots { display: flex; gap: 6px; }
-  .dots i { width: 7px; height: 7px; border-radius: 50%; background: #333c4e; }
-  .dots i.here { background: var(--accent); }
-  .hint { position: absolute; top: 3.2vh; right: 4vw; color: var(--ink-dim);
-    font-size: clamp(11px, 1.1vw, 14px); }
-@media (max-width: 760px) { .dots { display: none; } }
+* { margin:0; padding:0; box-sizing:border-box; }
+:root{
+  --gold:#f4b400; --accent:#e8930c; --bg:#fffdf7; --card:#fff6e0;
+  --border:#f0e2bc; --border-soft:#f7edcf; --text:#3a2e1a; --text-soft:#6b5836;
+  --muted:#9a8b6a; --blue:#4c8df6; --green:#54a24b; --red:#e45756;
+  --font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Segoe UI",Roboto,sans-serif;
+  --mono:"SFMono-Regular","D2Coding",Consolas,Menlo,monospace;
+}
+html,body{height:100%;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);overflow:hidden;}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;
+  padding:6vh 6vw 14vh;line-height:1.6;}
+.slide.on{display:flex;}
+.kicker{font-size:clamp(16px,1.7vw,24px);letter-spacing:.1em;color:var(--accent);font-weight:800;margin-bottom:2.4vh;}
+.kicker.ask{color:var(--blue);}
+h1{font-size:clamp(36px,5vw,74px);font-weight:800;line-height:1.24;letter-spacing:-.02em;}
+h2{font-size:clamp(28px,3.9vw,58px);font-weight:800;line-height:1.35;letter-spacing:-.015em;}
+.q{font-size:clamp(31px,4.3vw,64px);font-weight:800;line-height:1.38;letter-spacing:-.015em;max-width:22em;}
+.sub{margin-top:3vh;font-size:clamp(19px,2.2vw,32px);color:var(--text-soft);}
+.lead{margin-top:2.4vh;font-size:clamp(21px,2.5vw,36px);max-width:34em;}
+.facts{margin-top:1.6vh;}
+.facts li{list-style:none;font-size:clamp(21px,2.5vw,36px);margin:1.7vh 0;padding-left:1.1em;text-indent:-1.1em;}
+.facts li::before{content:"·  ";color:var(--accent);font-weight:800;}
+.facts b,.lead b{color:var(--accent);font-weight:800;}
+.small{margin-top:1.8vh;font-size:clamp(15px,1.6vw,23px);color:var(--muted);}
+/* 원리 한 줄 — 모든 여는 화면의 같은 자리 */
+.principle{position:absolute;left:6vw;right:6vw;bottom:9.5vh;border-left:6px solid var(--gold);
+  background:var(--card);border-radius:0 12px 12px 0;padding:1.8vh 2vw;
+  font-size:clamp(20px,2.4vw,34px);font-weight:700;color:var(--text);}
+.principle .lab{display:block;font-size:clamp(12px,1.3vw,17px);letter-spacing:.12em;
+  color:var(--accent);font-weight:800;margin-bottom:.5vh;}
+.slide:not(.hasP){padding-bottom:9vh;}
+.slide.hasP{justify-content:center;padding-top:8vh;padding-bottom:22vh;}
+table.mini{margin-top:2.2vh;border-collapse:collapse;font-size:clamp(18px,2.2vw,32px);
+  background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+table.mini th,table.mini td{padding:1.2vh 1.6vw;border-bottom:1px solid var(--border-soft);text-align:left;}
+table.mini thead th{background:var(--card);color:var(--text);font-weight:800;}
+table.mini tr:last-child td{border-bottom:0;}
+table.mini td:first-child{font-weight:700;white-space:nowrap;}
+table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
+.split{margin-top:3vh;display:flex;gap:2.4vw;flex-wrap:wrap;}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:2.2vh 1.8vw;min-width:13em;
+  box-shadow:0 1px 4px rgba(180,140,20,.1);}
+.card .t{color:var(--accent);font-weight:800;font-size:clamp(17px,1.9vw,26px);}
+.card .v{margin-top:1vh;font-size:clamp(34px,4.6vw,68px);font-weight:800;}
+.card .d{margin-top:.8vh;color:var(--text-soft);font-size:clamp(16px,1.7vw,24px);}
+.prompt{margin-top:2.4vh;background:#2a2318;color:#f0e8d6;border-radius:12px;padding:2.4vh 1.8vw;
+  font-family:var(--mono);font-size:clamp(15px,1.7vw,24px);line-height:1.7;max-width:42em;overflow-wrap:break-word;}
+.diagram{margin-top:2.4vh;background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.6vh 1.2vw;overflow-x:auto;}
+.widget{color:#1c2230;}
+.diagram .widget svg{width:auto;max-width:100%;max-height:var(--wh,40vh);height:auto;display:block;margin:0 auto;}
+.wctl{display:flex;flex-wrap:wrap;align-items:center;gap:.7vh 1vw;margin-top:1vh;
+  font-size:clamp(15px,1.6vw,23px);font-weight:700;}
+.wbtn{border:1.5px solid var(--border);background:#fff;color:var(--text);border-radius:999px;
+  padding:.6vh 1.2vw;font:inherit;font-weight:700;cursor:pointer;}
+.wbtn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.calc-toolbar{display:none;}
+.calc-fullscreen{display:none;}
+.cover{background:radial-gradient(ellipse at 15% 0%, #fff6e0 0%, var(--bg) 62%);}
+.foot{position:absolute;bottom:3vh;left:6vw;right:6vw;display:flex;justify-content:space-between;
+  align-items:center;color:var(--muted);font-size:clamp(11px,1.2vw,15px);}
+.dots{display:flex;gap:5px;flex-wrap:wrap;max-width:60%;}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--border);}
+.dots i.here{background:var(--accent);}
+.hint{position:absolute;top:3vh;right:4vw;color:var(--muted);font-size:clamp(10px,1.1vw,13px);}
+
+/* 혼동행렬 — 모델을 비교할 때도 언제나 2x2 */
+.mxs{display:flex;gap:1.8vw;flex-wrap:wrap;margin-top:2.4vh;}
+.mxbox{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1.2vh 1vw;}
+.mxbox .cap{font-size:clamp(15px,1.7vw,24px);font-weight:800;color:var(--accent);margin-bottom:.8vh;text-align:center;}
+.mxbox table{border-collapse:collapse;font-size:clamp(14px,1.6vw,23px);}
+.mxbox th,.mxbox td{border:1px solid var(--border);padding:.7vh .9vw;text-align:center;}
+.mxbox th{background:var(--card);font-weight:700;color:var(--text-soft);font-size:clamp(13px,1.4vw,19px);white-space:nowrap;}
+.mxbox th.rowh{text-align:right;}
+.mxbox td{min-width:4.6em;}
+.mxbox td .n{display:block;font-size:clamp(21px,2.6vw,38px);font-weight:800;line-height:1.1;}
+.mxbox td .k{display:block;font-size:clamp(12px,1.3vw,17px);font-weight:800;letter-spacing:.04em;margin-top:.2vh;}
+.mxbox td.hit{background:var(--green-soft);} .mxbox td.hit .k{color:var(--green);}
+.mxbox td.miss{background:var(--red-soft);} .mxbox td.miss .k{color:var(--red);}
+
+/* 공식 — 분수로 크게 */
+.fxrow{display:flex;gap:3vw;flex-wrap:wrap;align-items:center;margin-top:2.6vh;}
+.fx{display:inline-flex;align-items:center;gap:.5em;font-size:clamp(26px,3.4vw,50px);font-weight:800;color:var(--text);}
+.fx .lhs{color:var(--accent);}
+.fx .frac{display:inline-flex;flex-direction:column;align-items:center;line-height:1.15;}
+.fx .frac .num{padding:0 .45em .06em;border-bottom:4px solid var(--text);}
+.fx .frac .den{padding:.06em .45em 0;}
+.fx .val{color:var(--accent);}
+@media (max-width:760px){.dots{display:none;}}
 </style>
 </head>
 <body>
 
-<section class="slide chapter on">
+<section class="slide cover">
   <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 12차시</div>
-  <h1>연관 분석</h1>
-  <p class="sub">함께 나오는 규칙의 손계산과 판정</p>
+  <h1>분류 평가<br><span style="color:var(--accent)">무엇을 근거로 고르는가</span></h1>
+  <p class="sub">혼동행렬 네 칸 · 재현율과 정밀도 · 무게 조정 전후 · 안내 대상 선정</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-1 · 목표</div>
-  <h2>오늘의 목표</h2>
-  <ul class="facts">
-    <li>지지도·신뢰도·향상도, 세 지표의 <b>분모</b></li>
-    <li>규칙의 <b>방향</b>이 바뀔 때 달라지는 신뢰도</li>
-    <li>결과 메뉴의 <b>기본 등장률</b>과 비교해 내리는 판정</li>
-  </ul>
-  <p class="point">함께 나온 횟수만으로는 판정 불가. <b>각 메뉴의 기본 등장률</b>까지 확인</p>
+  <div class="kicker ask">12-1 · 질문하기</div>
+  <p class="q">두 모델의 정확도가 나왔습니다.<br>A는 80%, B는 85%입니다.<br>지금 하나를 고른다면?</p>
+<table class="mini"><thead><tr><th>모델 A</th><th>모델 B</th></tr></thead><tbody><tr><td>80%</td><td>85%</td></tr></tbody></table>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-2 · 교과서 159쪽</div>
-  <h2>지지도와 신뢰도의 정의</h2>
-  <blockquote style="margin-top:2.6vh">지지도는 두 개의 사건이 동시에 발생하는 비율이며 …</blockquote>
-  <blockquote style="margin-top:2.2vh">신뢰도는 규칙의 결과 부분이 발생할 가능성을 측정한다.</blockquote>
-  <p class="small">『데이터 과학』 159쪽 · 지지도의 분모는 전체, 신뢰도의 분모는 앞 항목이 등장한 횟수</p>
+  <div class="kicker">12-1</div>
+  <h2>고른 사람도, 보류한 사람도 이유를 적습니다</h2>
+<ul class="facts"><li>지금 고를 수 있다면 <b>무엇을 근거로</b> 골랐습니까</li><li>고를 수 없다면 <b>무엇을 더 알아야</b> 합니까</li></ul><p class="small">활동지 12-1 · 수업이 끝날 때 이 선택으로 다시 돌아옵니다</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-3 · 교과서 160쪽</div>
-  <h2>향상도의 정의</h2>
-  <blockquote style="margin-top:3vh">두 사건 A와 B가 서로 영향을 주지 않고 독립적으로 발생한다면, 향상도는 1에 가까워진다.</blockquote>
-  <p class="point">향상도 1 = 표본에서 두 비율이 같음</p>
-  <p class="small">향상도 1은 독립이나 우연의 증명이 아님. 표본에서 관찰된 비의 값임</p>
+  <div class="kicker ask">12-2 · 질문하기</div>
+  <p class="q">5,110명 중 뇌졸중을 겪은 사람은 249명입니다.<br>모든 사람에게 무조건 “뇌졸중이 아니다”라고 답하는 규칙이 있습니다.<br>이 규칙의 정확도는 얼마일까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-2</div>
+  <h2>95.13%입니다</h2>
+<div class="fxrow"><div class="fx"><span class="lhs">정확도</span><span class="eq">=</span><span class="frac"><span class="num">4,861</span><span class="den">5,110</span></span><span class="eq">=</span><span class="val">0.9513</span></div></div><p class="lead">뇌졸중이 아닌 <b>4,861명</b>을 모두 맞혔기 때문입니다. 하지만 실제 환자는 <b>한 명도 찾아내지 못했습니다.</b></p>
+  <div class="principle"><span class="lab">원리</span>찾으려는 대상이 드물수록, 아무것도 하지 않는 규칙의 정확도가 높아집니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-4 · 원리</div>
-  <h2>세 지표의 분모</h2>
-  <table class="mini">
-    <thead><tr><th>숫자</th><th>계산식 (N: 전체 횟수)</th><th>묻는 말</th></tr></thead>
-    <tbody>
-      <tr><td>지지도</td><td>동시 등장 횟수 ÷ N</td><td>이 조합, 얼마나 자주 있는 일인가</td></tr>
-      <tr><td>신뢰도</td><td>동시 등장 횟수 ÷ 앞 항목의 횟수</td><td>앞이 나오면 뒤도 나오는가</td></tr>
-      <tr><td>향상도</td><td>신뢰도 ÷ (뒤 항목의 횟수 ÷ N)</td><td>우연히 겹치는 것보다 나은가</td></tr>
-    </tbody>
-  </table>
-  <p class="point">세 지표의 차이는 <b>분모의 차이</b></p>
+  <div class="kicker">12-3</div>
+  <h2>검진 기록 스무 명으로 세 규칙을 채점합니다</h2>
+<p class="lead">실제로 뇌졸중을 겪은 분은 <b>네 명</b>, 겪지 않은 분은 열여섯 명입니다. 같은 스무 명으로 세 규칙을 끝까지 채점합니다.</p>
+  <div class="mxs"><div class="mxbox"><div class="cap">모델 A</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">3</span><span class="k">TP</span></td><td class="miss"><span class="n">1</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">3</span><span class="k">FP</span></td><td class="hit"><span class="n">13</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">모델 B</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">1</span><span class="k">TP</span></td><td class="miss"><span class="n">3</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">16</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">규칙 C · 전부 아님</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">4</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">16</span><span class="k">TN</span></td></tr></table></div></div><p class="small">활동지 12-2</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-5 · 교과서 160쪽</div>
-  <h2>교과서 예시 — {삼겹살} → {쌈채소}</h2>
-  <ul class="facts">
-    <li>향상도 <b>1.67</b></li>
-    <li>삼겹살을 산 거래의 쌈채소 구매 비율 ÷ 전체 거래의 쌈채소 구매 비율 = 약 1.67배</li>
-    <li>구매의 원인이나 미래의 구매를 보장하는 값이 아님</li>
-    <li>자주 팔리는 상품은 다른 여러 상품과도 자주 겹침</li>
-  </ul>
-  <p class="point">동시 등장 횟수와 함께 <b>각 항목의 기본 등장률</b>도 확인</p>
+  <div class="kicker ask">12-4 · 질문하기</div>
+  <p class="q">실제 환자 네 명 가운데<br>모델 A가 찾아낸 사람은 몇 명일까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-4</div>
+  <h2>실제 환자 네 명 중 세 명</h2>
+<div class="fxrow"><div class="fx"><span class="lhs">재현율</span><span class="eq">=</span><span class="frac"><span class="num">TP</span><span class="den">TP + FN</span></span><span class="eq">=</span><span class="val">3 ÷ 4 = 0.75</span></div></div>
+  <div class="principle"><span class="lab">원리</span>재현율은 <b>실제 양성</b>을 분모로 삼으므로, 놓친 사례가 많을수록 낮아집니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-6 · 진행</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">위젯은 선생님 화면</h2>
-  <ul class="facts">
-    <li>이 차시의 위젯, 선생님이 앞에서 보여 주는 시연용</li>
-    <li>화면이 대신 계산하면 계산 순서가 손에 남지 않음</li>
-    <li>학생은 활동지에 손으로 먼저 계산</li>
-    <li>화면은 다 푼 뒤 <b>마지막 대조 순서</b>에서만 사용</li>
-  </ul>
-  <p class="point">계산 순서 ① 횟수 → ② 지지도 → ③ 신뢰도 → ④ 등장률 → ⑤ 향상도 → ⑥ 판단</p>
+  <div class="kicker ask">12-5 · 질문하기</div>
+  <p class="q">모델 A가 뇌졸중이라고 답한 사람은 여섯 명입니다.<br>그중 실제 환자는 몇 명일까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-5</div>
+  <h2>모델이 고른 여섯 명 중 세 명</h2>
+<div class="fxrow"><div class="fx"><span class="lhs">정밀도</span><span class="eq">=</span><span class="frac"><span class="num">TP</span><span class="den">TP + FP</span></span><span class="eq">=</span><span class="val">3 ÷ 6 = 0.50</span></div></div>
+  <div class="principle"><span class="lab">원리</span>정밀도는 <b>예측 양성</b>을 분모로 삼으므로, 잘못 예측한 사례가 많을수록 낮아집니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-7 · 활동지</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">기본 문제 — 급식 안내 화면에 무엇을 띄울까</h2>
-  <table class="mini" style="margin-top:2vh;font-size:clamp(14px,1.7vw,24px)">
-    <thead><tr><th>지난 스무 날</th><th>규칙 A · 제육볶음 → 배추김치</th><th>규칙 B · 순대국 → 석박지</th></tr></thead>
-    <tbody>
-      <tr><td>앞 메뉴가 나온 날</td><td>10일</td><td>4일</td></tr>
-      <tr><td>뒤 반찬이 나온 날</td><td>12일</td><td>5일</td></tr>
-      <tr><td>함께 나온 날</td><td>6일</td><td>3일</td></tr>
-    </tbody>
-  </table>
-  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">안내 화면에 예고 하나만 게시. <b>어느 규칙을 띄울 것인가</b></p>
-  <p class="small" style="margin-top:1.4vh">아무 날에나 나오는 반찬의 예고는 아무 정보도 주지 못함 · 계산이 떨어지도록 고른 값, 실제 관측값 아님</p>
+  <div class="kicker ask">12-6 · 질문하기</div>
+  <p class="q">찾아낸 세 명은 같은 사람인데<br>왜 값이 다를까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-6</div>
+  <h2>분자는 같고 분모가 다릅니다</h2>
+<div class="fxrow"><div class="fx"><span class="lhs">재현율</span><span class="eq">=</span><span class="frac"><span class="num">TP</span><span class="den">TP + FN</span></span></div><div class="fx"><span class="lhs">정밀도</span><span class="eq">=</span><span class="frac"><span class="num">TP</span><span class="den">TP + FP</span></span></div></div><p class="lead">재현율의 분모는 <b>실제 환자 4명</b>, 정밀도의 분모는 <b>모델이 고른 6명</b>입니다.</p>
+  <div class="principle"><span class="lab">원리</span>지표의 <b>이름보다 분모</b>를 먼저 살펴봅니다.</div>
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-7</div>
+  <h2>네 그룹에 이름을 붙입니다</h2>
+<table class="mini" style="font-size:clamp(14px,1.6vw,22px)"><thead><tr><th></th><th>예측: 뇌졸중</th><th>예측: 아님</th></tr></thead><tbody>
+    <tr><td>실제: 뇌졸중</td><td><em>TP</em> 찾아낸 환자</td><td><em>FN</em> 놓친 환자</td></tr>
+    <tr><td>실제: 아님</td><td><em>FP</em> 헛짚은 사람</td><td><em>TN</em> 아님을 맞힘</td></tr>
+  </tbody></table>
+  <p class="lead">앞 글자는 예측이 맞았는지를, 뒤 글자는 무엇이라고 예측했는지를 나타냅니다.</p><p class="small">교과서 139·140쪽</p>
+  <div class="principle"><span class="lab">원리</span>앞 글자는 <b>맞았는가</b>, 뒤 글자는 <b>무엇이라 예측했는가</b>를 나타냅니다.</div>
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-7</div>
+  <h2>네 지표의 공식</h2>
+<div class="fxrow"><div class="fx"><span class="lhs">정확도</span><span class="eq">=</span><span class="frac"><span class="num">TP + TN</span><span class="den">TP + FP + FN + TN</span></span></div><div class="fx"><span class="lhs">F1</span><span class="eq">=</span><span class="frac"><span class="num">2TP</span><span class="den">2TP + FP + FN</span></span></div></div><p class="lead">F1은 정밀도와 재현율을 함께 보는 값입니다. 정밀도를 구할 수 없을 때도 <b>인원으로는 계산</b>할 수 있습니다.</p>
+  <div class="principle"><span class="lab">원리</span>F1은 정밀도와 재현율 중 <b>낮은 쪽에 더 크게 영향을 받는</b> 평균입니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-8 · 활동지</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">①② 지지도 — 얼마나 자주 있는 일인가</h2>
-  <table class="mini" style="margin-top:2.4vh">
-    <thead><tr><th>계산</th><th>규칙 A</th><th>규칙 B</th></tr></thead>
-    <tbody>
-      <tr><td>함께 나온 날</td><td>6</td><td>3</td></tr>
-      <tr><td>지지도 = 함께 나온 날 ÷ 20</td><td><em>0.30</em></td><td>0.15</td></tr>
-    </tbody>
-  </table>
-  <p class="point">지지도로 보면 규칙 A가 <b>두 배</b> 자주 있는 일</p>
-  <p class="small" style="margin-top:1.6vh">순서를 지켜 지지도부터 계산 · 향상도를 먼저 구하면 이 차시가 보여 주려는 것이 사라짐</p>
+  <div class="kicker ask">12-8 · 질문하기</div>
+  <p class="q">모델 B와 규칙 C는<br>직접 계산해 볼까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-8</div>
+  <h2>정확도가 같아도 나머지는 갈립니다</h2>
+<table class="mini" style="font-size:clamp(14px,1.6vw,23px)"><thead><tr><th></th><th>정확도</th><th>재현율</th><th>정밀도</th><th>F1</th></tr></thead><tbody>
+    <tr><td>모델 A</td><td>0.80</td><td><em>0.75</em></td><td>0.50</td><td><em>0.60</em></td></tr>
+    <tr><td>모델 B</td><td><em>0.85</em></td><td>0.25</td><td><em>1.00</em></td><td>0.40</td></tr>
+    <tr><td>규칙 C</td><td>0.80</td><td>0.00</td><td>구할 수 없음</td><td>0.00</td></tr>
+  </tbody></table>
+  <p class="lead">규칙 C는 아무도 뇌졸중이라 답하지 않아 정밀도를 구할 수 없습니다. F1은 인원 식으로 0이 나옵니다.</p>
+  <div class="principle"><span class="lab">원리</span>정확도가 같아도 나머지 세 지표는 서로 다를 수 있습니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-9 · 활동지</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">③ 신뢰도 — 앞이 나오면 뒤도 나오는가</h2>
-  <table class="mini" style="margin-top:2.4vh">
-    <thead><tr><th>계산</th><th>규칙 A</th><th>규칙 B</th></tr></thead>
-    <tbody>
-      <tr><td>앞 메뉴가 나온 날</td><td>10</td><td>4</td></tr>
-      <tr><td>신뢰도 = 함께 나온 날 ÷ 앞 메뉴가 나온 날</td><td>6 ÷ 10 = 0.60</td><td><em>3 ÷ 4 = 0.75</em></td></tr>
-    </tbody>
-  </table>
-  <p class="point">여기서 순위가 <b>뒤집힘</b> — 신뢰도로 보면 규칙 B</p>
-  <p class="small" style="margin-top:1.6vh">분모가 전체에서 앞 메뉴로 바뀜 · 지지도와 분모가 다름</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-10 · 활동지</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">④⑤ 등장률과 향상도 — 우연보다 나은가</h2>
-  <table class="mini" style="margin-top:2vh;font-size:clamp(14px,1.7vw,24px)">
-    <thead><tr><th>계산</th><th>규칙 A</th><th>규칙 B</th></tr></thead>
-    <tbody>
-      <tr><td>뒤 반찬이 나온 날</td><td>12</td><td>5</td></tr>
-      <tr><td>등장률 = 뒤 반찬이 나온 날 ÷ 20</td><td>0.60</td><td>0.25</td></tr>
-      <tr><td>향상도 = 신뢰도 ÷ 등장률</td><td>0.60 ÷ 0.60 = <em>1.00</em></td><td>0.75 ÷ 0.25 = <em>3.00</em></td></tr>
-    </tbody>
-  </table>
-  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">향상도가 다툼을 끝냄 — 규칙 B가 <b>3.00</b></p>
-  <p class="small" style="margin-top:1.4vh">분모는 <b>뒤 항목</b>의 등장률. 앞 항목의 등장률이 아님</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-11 · 활동지</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">향상도가 1이라는 뜻</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:2vh 0">규칙 A의 신뢰도 <b>0.60</b> = 배추김치의 등장률 <b>0.60</b></li>
-    <li style="margin:2vh 0">제육볶음이 나오든 나오지 않든 배추김치는 열 날 중 여섯 날 등장</li>
-    <li style="margin:2vh 0">제육볶음이라는 조건이 아무것도 바꾸지 못함</li>
-    <li style="margin:2vh 0">1.00을 "관계가 100퍼센트"로 읽는 것은 오답</li>
-  </ul>
-  <p class="point">향상도 1 = <b>우연과 같음</b></p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-12 · 활동지</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">⑥ 판단 — 안내 화면에 띄울 규칙</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:1.8vh 0">고를 규칙 <b>규칙 B</b> · 결정적인 근거가 된 지표 <b>향상도</b></li>
-    <li style="margin:1.8vh 0">순대국이 나온 날 넷 중 셋에서 석박지 등장. 석박지는 스무 날 중 다섯 날만 등장</li>
-    <li style="margin:1.8vh 0">순대국이라는 정보가 실제로 예측을 바꿈</li>
-    <li style="margin:1.8vh 0">규칙 A를 띄우면 학생이 새로 알게 되는 것 없음. 등장률 0.60은 안내 없이도 예상 가능</li>
-  </ul>
-  <p class="point">지지도가 두 배여도 향상도가 1이면 <b>안내가 되지 못함</b></p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-13 · 활동지</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">연습 문제 — 매점 묶음 할인을 하나만 한다면</h2>
-  <table class="mini" style="margin-top:1.6vh;font-size:clamp(13px,1.55vw,22px)">
-    <thead><tr><th>거래 50건</th><th>규칙 C · 삼각김밥 → 컵라면</th><th>규칙 D · 떡볶이 → 치즈스틱</th></tr></thead>
-    <tbody>
-      <tr><td>지지도</td><td>15 ÷ 50 = <em>0.30</em></td><td>4 ÷ 50 = 0.08</td></tr>
-      <tr><td>신뢰도</td><td>15 ÷ 20 = 0.75</td><td>4 ÷ 4 = 1.00</td></tr>
-      <tr><td>뒤 상품의 등장률</td><td>25 ÷ 50 = 0.50</td><td>5 ÷ 50 = 0.10</td></tr>
-      <tr><td>향상도</td><td>0.75 ÷ 0.50 = 1.50</td><td>1.00 ÷ 0.10 = <em>10.00</em></td></tr>
-    </tbody>
-  </table>
-  <p class="small" style="margin-top:1.4vh">기본 문제와 같은 순서로 혼자 풀기 · 삼각김밥 20건 · 컵라면 25건 · 함께 15건 / 떡볶이 4건 · 치즈스틱 5건 · 함께 4건</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-14 · 판단</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">목적이 지표를 고른다</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:1.8vh 0">향상도로 보면 규칙 D가 규칙 C의 <b>여섯 배</b> 이상</li>
-    <li style="margin:1.8vh 0">지지도로 보면 규칙 C가 규칙 D의 거의 <b>네 배</b></li>
-    <li style="margin:1.8vh 0">할인이 많은 손님에게 닿을수록 매출 상승 → 고를 규칙은 <b>규칙 C</b></li>
-    <li style="margin:1.8vh 0">목표가 "떡볶이 손님이 하나라도 더 사게 하기"로 바뀌면 <b>규칙 D</b></li>
-  </ul>
-  <p class="point">지표가 규칙을 고르는 것이 아니라 <b>목적이 지표를 고름</b></p>
-  <p class="small" style="margin-top:1.2vh">규칙 D는 50건 중 4건에서만 성립. 할인을 걸어도 움직일 손님이 적음</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-15 · 활동지</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">기준과 비교 — 딱 한 번의 우연</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:1.8vh 0">거래 50건 중 <b>단 한 건</b>. 두 상품 모두 그 한 건에서만 판매</li>
-    <li style="margin:1.8vh 0">지지도 1 ÷ 50 = 0.02 · 신뢰도 1 ÷ 1 = 1.00 · 등장률 1 ÷ 50 = 0.02</li>
-    <li style="margin:1.8vh 0">향상도 1.00 ÷ 0.02 = <b>50.00</b> — 규칙 D의 다섯 배</li>
-    <li style="margin:1.8vh 0">근거는 단 한 건. 우연인지 확인할 방법 없음</li>
-  </ul>
-  <p class="point">등장 횟수가 적을수록 향상도는 부풀려짐 → <b>최소 지지도의 문턱</b>을 먼저 결정</p>
-  <p class="small" style="margin-top:1.2vh">교과서 162쪽</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-16 · 실습</div>
-  <h2>장바구니로의 변환</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,26px)">
-    <li style="margin:1.6vh 0"><b>하루 중식 식단 한 줄이 장바구니 1건, 메뉴 하나가 상품 하나</b></li>
-    <li style="margin:1.6vh 0">중식 184일 = 장바구니 184건</li>
-    <li style="margin:1.6vh 0">원본 열은 MLSV_YMD와 DDISH_NM, 메뉴 사이 구분은 &lt;br/&gt;</li>
-    <li style="margin:1.6vh 0">괄호 두 가지 — 알레르기 번호, (자율)·(대)·(소스) 같은 표기</li>
-    <li style="margin:1.6vh 0">이 실습의 기준, 괄호와 그 안의 내용을 제거한 이름으로 집계</li>
-    </ul>
-  <p class="small">괄호를 제거하면 용량·소스 구분은 사라짐 · 알레르기 안내에는 원래 식단을 사용 · 손계산 대조 기준은 modudata의 184일 급식 저장본(danggok_meals_live.csv)</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-17 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">장바구니 한 건과 누적 메뉴 종류</h2>
-  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="basket">
-<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="고른 날의 급식 메뉴를 칩으로 늘어놓은 그림과, 1일차부터 184일차까지 누적 메뉴 종류 수를 나타낸 꺾은선. 정리 기준에 따라 마지막 값이 506종과 510개로 갈립니다.">
-  <!-- 요약 줄 -->
-  <text class="sum" x="24" y="22" font-size="17" font-weight="800" fill="#1c2230">2025-09-02 · 메뉴 7개 · 만들어지는 쌍 21개</text>
-  <!-- 왼쪽: 하루 메뉴 칩 -->
-  <text x="24" y="44" font-size="14" fill="#6b7385">하루 식단 → 장바구니 1건</text>
-  <g class="chips"></g>
-  <!-- 오른쪽: 누적 메뉴 종류 곡선 -->
-  <text x="396" y="50" font-size="14" fill="#6b7385">누적 메뉴 종류 수</text>
-  <g stroke="#e3ddcf" stroke-width="1">
-    <line x1="396" y1="250" x2="700" y2="250"/>
-    <line x1="396" y1="204" x2="700" y2="204"/>
-    <line x1="396" y1="158" x2="700" y2="158"/>
-    <line x1="396" y1="112" x2="700" y2="112"/>
-    <line x1="396" y1="66" x2="700" y2="66"/>
-  </g>
-  <g font-size="14" fill="#6b7385" text-anchor="end">
-    <text x="390" y="255">0</text>
-    <text x="390" y="209">130</text>
-    <text x="390" y="163">260</text>
-    <text x="390" y="117">390</text>
-    <text x="390" y="71">520</text>
-  </g>
-  <g font-size="14" fill="#6b7385">
-    <text x="396" y="270">1</text>
-    <text x="470.8" y="270" text-anchor="middle">46</text>
-    <text x="547.2" y="270" text-anchor="middle">92</text>
-    <text x="623.6" y="270" text-anchor="middle">138</text>
-    <text x="700" y="270" text-anchor="end">184일</text>
-  </g>
-  <g class="curves" fill="none" stroke-linejoin="round" stroke-linecap="round">
-    <polyline class="craw" points="396,250 700,69.5" stroke="#b9b3a5" stroke-width="1.5" opacity=".6"/>
-    <polyline class="cclean" points="396,250 700,71" stroke="#2b7fd6" stroke-width="2"/>
-  </g>
-  <line class="vline" x1="397.7" y1="66" x2="397.7" y2="250" stroke="#b07a00" stroke-width="1" stroke-dasharray="3 3"/>
-  <circle class="cdot" cx="397.7" cy="245.0" r="4" fill="#b07a00"/>
-  <text class="cval" x="407.7" y="244.0" font-size="16" font-weight="800" fill="#b07a00" stroke="#f7f3e8" stroke-width="4" stroke-linejoin="round" paint-order="stroke">14종</text>
-  <!-- 마지막 값 두 줄 -->
-  <text class="foot1" x="700" y="292" text-anchor="end" font-size="15" fill="#2b7fd6">184일 · 506종</text>
-  <text class="foot2" x="700" y="312" text-anchor="end" font-size="14" fill="#b9b3a5">괄호 그대로면 510개</text>
-  <!-- 고정 안내 -->
-  <text x="24" y="320" font-size="14" fill="#6b7385">중식 184일 = 장바구니 184건 · 하루 6~8개 · 서로 다른 쌍 3,146개</text>
-</svg>
-<div class="wctl">
-  <label>날짜 <input type="range" min="0" max="183" step="1" value="1"></label>
-  <span class="wout">2025-09-02 (2일차)</span>
-</div>
-<div class="wctl">
-  <button class="wbtn on" type="button" data-m="clean">괄호 제거</button>
-  <button class="wbtn" type="button" data-m="raw">괄호 그대로</button>
-</div>
-</div></div>
-  <p class="small">하루 메뉴 6~8개 → 그날의 쌍 15~28개 · 누적 곡선, 184일째까지 꺾이지 않음 · 저장본 기준 수치이며 실행한 날의 조회 결과와 다를 수 있음</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-18 · 실습</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (1/2)</h2>
-  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">"급식 규칙 찾기" 스트림릿 앱을 만들어 줘. 파일 이름은 main.py.<br>
-당곡고 급식을 나이스 급식 API로 받아서 하루 중식 식단을 장바구니 하나로 보고,<br>
-함께 자주 나오는 메뉴 쌍을 찾아 줘.<br>
-- 인증키는 비밀 금고에 NEIS_API_KEY라는 이름으로 넣어 뒀어. 코드에 직접 적지 말고 거기서 꺼내 써.<br>
-- 기간은 2025년 9월 1일부터 2026년 9월 30일까지, 중식만. 조회된 모든 페이지를 받아 날짜별로 한 건씩 세어 줘.<br>
-- 조회 데이터 없음과 인증·통신 오류를 구분하고, 일부만 받은 데이터로 계산하지 않게 해 줘.<br>
-- 하루 식단을 메뉴별로 나누고, 메뉴 이름의 괄호와 그 안의 내용은 전부 제외해 세 줘.<br>
-- 화면 맨 위에 조회 기간과 분석한 날 수, 메뉴 종류 수를 적어 줘.<br>
-- 결과 표의 열은 조건, 결과, 동시, 지지도, 신뢰도, 향상도 여섯 개로 하고, 향상도가 높은 순으로 정렬해 줘.<br>
-- 동시에 나온 횟수가 5회 이상인 규칙만 보이게 해 줘.<br>
-- 향상도 상위 10개 규칙은 가로 막대그래프로도 보여 줘. 그래프는 plotly로 그려 줘.<br>
-- 필요한 라이브러리 목록(requirements.txt)도 같이 줘. 버전 숫자 없이 이름만.</div>
-  <p class="small">교재 ①과 같은 문장 · 파일명 main.py, 인증키는 비밀 금고, 기간 2025-09-01~2026-09-30 중식, 괄호 제거, 동시 5회 이상, plotly 지정까지 프롬프트에 포함</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-19 · 실습</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">샘플 프롬프트 작성 (2/2) — 포털 문서 붙여넣기</h2>
-  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">──── 아래는 나이스 교육정보 개방 포털 문서에서 복사한 부분 ────<br>
-[급식식단정보] 요청 주소: https://open.neis.go.kr/hub/mealServiceDietInfo<br>
-요청변수: Type=json(응답은 JSON, 글자는 UTF-8) · KEY(인증키) ·<br>
-&nbsp;&nbsp;ATPT_OFCDC_SC_CODE=B10(서울특별시교육청) · SD_SCHUL_CODE=7010073(당곡고등학교) ·<br>
-&nbsp;&nbsp;MMEAL_SC_CODE=2(중식) · MLSV_FROM_YMD=20250901, MLSV_TO_YMD=20260930 ·<br>
-&nbsp;&nbsp;pSize(한 번에 받을 행 수, 상한 1000) · pIndex(쪽 번호, 1부터)<br>
-응답 구조: mealServiceDietInfo의 첫 번째 상자 head 안에 list_total_count(전체 건수),<br>
-&nbsp;&nbsp;두 번째 상자 안 row 목록에 하루마다<br>
-&nbsp;&nbsp;MLSV_YMD(급식일자, 하이픈 없는 여덟 자리) ·<br>
-&nbsp;&nbsp;DDISH_NM(식단 이름, 메뉴 사이 구분은 &lt;br/&gt;, 괄호 안은 알레르기 번호이거나 (자율)·(대)·(소스) 같은 표기) ·<br>
-&nbsp;&nbsp;CAL_INFO(칼로리)<br>
-&nbsp;&nbsp;※ 조회 데이터가 없으면 RESULT의 CODE가 INFO-200이다.</div>
-  <p class="small">교재 ①과 같은 문장 · 열 이름·인코딩·응답 구조를 프롬프트에 적어 두면 AI의 열 이름 추측 방지</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-20 · 실습</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">개선 프롬프트 — 판정 표시와 메뉴 좁히기</h2>
-  <div class="prompt" style="font-size:clamp(12px,1.3vw,18px);line-height:1.5;max-width:46em;margin-top:2vh">향상도가 높은 순서로 정렬하고, 향상도가 1에 가까운 규칙(0.9~1.1)은<br>
-"기본 등장률과 비슷함"이라고 표시해 줘. 이 구간은 관찰용 기준이며 통계 검정 결과가 아니라고 안내해 줘.<br>
-그리고 메뉴 이름을 고르면 그 메뉴가 낀 규칙만 모아 볼 수 있게 해 줘.</div>
-  <p class="small">교재 ③과 같은 문장 · ② 단계에서 표를 신뢰도 순으로 한 번, 향상도 순으로 한 번 정렬. 두 순위의 차이가 오늘의 발견</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-21 · 결과</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">화면에서 찾아 채울 세 규칙</h2>
-  <table class="mini" style="margin-top:2vh;font-size:clamp(14px,1.7vw,24px)">
-    <thead><tr><th>규칙</th><th>등장 (앞 · 뒤)</th><th>동시</th><th>신뢰도</th><th>향상도</th><th>판정</th></tr></thead>
-    <tbody>
-      <tr><td>제육볶음 → 배추김치</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>순대국 → 석박지</td><td></td><td></td><td></td><td></td><td></td></tr>
-      <tr><td>배추김치 → 깍두기</td><td></td><td></td><td></td><td></td><td></td></tr>
-    </tbody>
-  </table>
-  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">세 규칙의 판정이 어떻게 갈리는지가 <b>오늘의 발견</b></p>
-  <p class="small" style="margin-top:1.4vh">실행한 날에 따라 급식 일수와 규칙 수가 달라짐 · 세 번째 규칙은 동시 등장이 드물어 결과 표에 없을 수 있음. 메뉴로 좁혀 보기나 원데이터에서 따로 확인</p>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-22 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">신뢰도와 기본 등장률의 비교</h2>
-  <div class="diagram" style="--wh:42vh">    <div class="widget" data-w="baseline">
-  <svg viewBox="0 0 720 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="0에서 1까지의 같은 눈금 위에 신뢰도 막대와 기본 등장률 막대를 나란히 놓고, 두 길이의 비가 향상도임을 보이는 그림. 아래 격자는 전체 일수와 각 메뉴의 등장 일수를 칸 수로 나타냅니다.">
-    <text class="ttl" x="24" y="26" font-size="18" font-weight="800" fill="#1c2230"></text>
-    <g class="bdg" opacity="0">
-      <rect class="bdgbox" x="512" y="8" width="188" height="24" rx="999" fill="#ffffff" stroke="#b07a00"/>
-      <text class="bdgtxt" x="524" y="25" font-size="14" fill="#b07a00"></text>
+  <div class="kicker">12-9</div>
+  <h2>손계산과 화면을 대조합니다</h2>
+<div class="diagram" style="--wh:56vh;padding:1.2vh .6vw">
+<div class="widget" data-w="matrix">
+<svg viewBox="0 0 720 300" role="img" aria-label="혼동행렬 네 칸과 정확도·재현율·정밀도·F1. 지표를 고르면 분모 범위가 테두리로 켜지고, 사례를 바꾸면 네 칸의 수와 네 값이 함께 바뀜">
+    <text class="mx-case" x="24" y="22" font-size="14" fill="#6b7385"></text>
+    <text class="mx-h" data-k="0" x="222" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-h" data-k="1" x="366" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-r" data-k="0" x="144" y="76" text-anchor="end" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-r" data-k="1" x="144" y="138" text-anchor="end" font-size="14" font-weight="800" fill="#1c2230"></text>
+    <text class="mx-rs" data-k="0" x="144" y="96" text-anchor="end" font-size="14" fill="#6b7385"></text>
+    <text class="mx-rs" data-k="1" x="144" y="158" text-anchor="end" font-size="14" fill="#6b7385"></text>
+    <rect x="150" y="46" width="144" height="62" fill="#54a24b" fill-opacity="0.16" stroke="#f0e2bc"></rect>
+    <rect x="294" y="46" width="144" height="62" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+    <rect x="150" y="108" width="144" height="62" fill="#e45756" fill-opacity="0.13" stroke="#f0e2bc"></rect>
+    <rect x="294" y="108" width="144" height="62" fill="#3ba6a0" fill-opacity="0.15" stroke="#f0e2bc"></rect>
+    <text x="160" y="68" font-size="14" font-weight="800" fill="#2f6d2a">TP</text>
+    <text x="304" y="68" font-size="14" font-weight="800" fill="#b23c3c">FN</text>
+    <text x="160" y="130" font-size="14" font-weight="800" fill="#b23c3c">FP</text>
+    <text x="304" y="130" font-size="14" font-weight="800" fill="#23706b">TN</text>
+    <text class="mx-v" data-k="tp" x="222" y="92" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="fn" x="366" y="92" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="fp" x="222" y="154" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-v" data-k="tn" x="366" y="154" text-anchor="middle" font-size="26" font-weight="800" fill="#1c2230" style="font-variant-numeric:tabular-nums"></text>
+    <text class="mx-cs" data-k="0" x="222" y="190" text-anchor="middle" font-size="14" fill="#6b7385"></text>
+    <text class="mx-cs" data-k="1" x="366" y="190" text-anchor="middle" font-size="14" fill="#6b7385"></text>
+    <rect class="mx-num" data-k="tn" x="294" y="108" width="144" height="62" fill="none" stroke="#23706b" stroke-width="2" opacity="0"></rect>
+    <rect class="mx-num" data-k="tp" x="150" y="46" width="144" height="62" fill="none" stroke="#2f6d2a" stroke-width="2"></rect>
+    <rect class="mx-den" x="150" y="46" width="144" height="124" rx="2" fill="none" stroke="#e8930c" stroke-width="3"></rect>
+    <g class="mx-m" data-m="acc">
+      <text x="462" y="52" font-size="14" font-weight="700" fill="#1c2230">정확도 = (TP + TN) ÷ 전체</text>
+      <text class="mx-sub" x="462" y="70" font-size="13" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="54" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="78" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="78" width="0" height="8" rx="4" fill="#b07a00"></rect>
     </g>
-    <g stroke="#e3ddcf" stroke-width="1">
-      <line x1="214" y1="44" x2="214" y2="150"/>
-      <line x1="335.5" y1="44" x2="335.5" y2="150"/>
-      <line x1="457" y1="44" x2="457" y2="150"/>
-      <line x1="578.5" y1="44" x2="578.5" y2="150"/>
-      <line x1="700" y1="44" x2="700" y2="150"/>
+    <g class="mx-m" data-m="rec">
+      <text x="462" y="110" font-size="14" font-weight="700" fill="#1c2230">재현율 = TP ÷ (TP + FN)</text>
+      <text class="mx-sub" x="462" y="128" font-size="13" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="112" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="136" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="136" width="0" height="8" rx="4" fill="#b07a00"></rect>
     </g>
-    <g font-size="14" fill="#6b7385" text-anchor="middle">
-      <text x="214" y="40">0</text>
-      <text x="335.5" y="40">0.25</text>
-      <text x="457" y="40">0.5</text>
-      <text x="578.5" y="40">0.75</text>
-      <text x="700" y="40">1</text>
+    <g class="mx-m" data-m="prec">
+      <text x="462" y="168" font-size="14" font-weight="700" fill="#1c2230">정밀도 = TP ÷ (TP + FP)</text>
+      <text class="mx-sub" x="462" y="186" font-size="13" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="170" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="194" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="194" width="0" height="8" rx="4" fill="#b07a00"></rect>
     </g>
-    <rect class="bar2" x="214" y="104" width="0" height="30" fill="#b9b3a5"/>
-    <rect class="bar1" x="214" y="56" width="0" height="30" fill="#2b7fd6"/>
-    <rect class="ov1" x="214" y="56" width="0" height="30" fill="#b07a00" fill-opacity="0.55"/>
-    <line class="cap1" x1="214" y1="56" x2="214" y2="86" stroke="#2b7fd6" stroke-width="2" stroke-opacity="0"/>
-    <line class="baseL" x1="214" y1="104" x2="214" y2="50" stroke="#b07a00" stroke-width="1.5" stroke-dasharray="3 3"/>
-    <text class="l1a" x="24" y="76" font-size="14" fill="#1c2230"></text>
-    <text class="l1b" x="24" y="88" font-size="14" fill="#1c2230"></text>
-    <text class="l2a" x="24" y="124" font-size="14" fill="#1c2230"></text>
-    <text class="l2b" x="24" y="136" font-size="14" fill="#1c2230"></text>
-    <line class="lead1" x1="214" y1="71" x2="214" y2="71" stroke="#b9b3a5" stroke-width="1" stroke-opacity="0"/>
-    <line class="lead2" x1="214" y1="119" x2="214" y2="119" stroke="#b9b3a5" stroke-width="1" stroke-opacity="0"/>
-    <text class="val1" x="222" y="76" font-size="16" font-weight="800" fill="#2b7fd6"></text>
-    <text class="val2" x="222" y="124" font-size="16" font-weight="800" fill="#6b7385"></text>
-    <text x="24" y="170" font-size="14" fill="#6b7385">막대 두 개의 길이 비 = 향상도</text>
-    <text class="gnote" x="24" y="192" font-size="14" fill="#6b7385" opacity="0">배열 순서 무관</text>
-    <g class="grid"></g>
-    <rect x="380" y="188" width="320" height="142" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
-    <text class="c1a" x="392" y="212" font-size="14" fill="#6b7385"></text>
-    <text class="c1b" x="392" y="222" font-size="14" fill="#6b7385"></text>
-    <text class="c2" x="392" y="240" font-size="15" fill="#1c2230"></text>
-    <text class="c3" x="392" y="264" font-size="15" fill="#1c2230"></text>
-    <text class="c4a" x="392" y="298" font-size="15" fill="#b07a00"></text>
-    <text class="c4b" x="560" y="298" font-size="24" font-weight="800" fill="#b07a00"></text>
-    <text class="c5" x="392" y="322" font-size="14" fill="#6b7385"></text>
+    <g class="mx-m" data-m="f1">
+      <text x="462" y="226" font-size="14" font-weight="700" fill="#1c2230">F1 = 2 × 정밀도 × 재현율 ÷ 합</text>
+      <text class="mx-sub" x="462" y="244" font-size="13" fill="#6b7385"></text>
+      <text class="mx-val" x="700" y="228" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
+      <rect x="462" y="252" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
+      <rect class="mx-bar" x="462" y="252" width="0" height="8" rx="4" fill="#b07a00"></rect>
+    </g>
+    <text class="mx-cap" x="24" y="232" font-size="14" font-weight="700" fill="#1c2230"></text>
+    <text x="24" y="258" font-size="14" fill="#6b7385">재현율 · 정밀도 → 분자 같음 · 분모 다름</text>
+    <text x="24" y="280" font-size="14" fill="#6b7385">F1 → 두 값 가운데 낮은 쪽에 더 끌린다</text>
   </svg>
   <div class="wctl">
-    <span><button class="wbtn on" type="button" data-set="meal">급식 184일</button>
-      <button class="wbtn" type="button" data-set="out">표 밖 조합</button>
-      <button class="wbtn" type="button" data-set="hand">손계산 20일</button></span>
-    <span><button class="wbtn on" type="button" data-sort="lift">향상도 순</button>
-      <button class="wbtn" type="button" data-sort="conf">신뢰도 순</button>
-      <button class="wbtn" type="button" data-sort="co">동시 순</button></span>
-    <label>규칙 <input class="rng" type="range" min="0" max="51" step="1" value="40"></label>
-    <span class="wout"></span>
-    <button class="wbtn dir" type="button">방향 바꾸기</button>
+    <button class="wbtn on" type="button" data-case="A" aria-pressed="true">모델 A</button>
+    <button class="wbtn" type="button" data-case="B" aria-pressed="false">모델 B</button>
+    <button class="wbtn" type="button" data-case="all" aria-pressed="false">규칙 C · 전부 아님</button>
+    <button class="wbtn" type="button" data-case="C" aria-pressed="false">필터 C</button>
+    <button class="wbtn" type="button" data-case="D" aria-pressed="false">필터 D</button>
+    <button class="wbtn" type="button" data-case="allspam" aria-pressed="false">전부 스팸함</button>
+    <button class="wbtn" type="button" data-m="acc" aria-pressed="false">정확도</button>
+    <button class="wbtn on" type="button" data-m="rec" aria-pressed="true">재현율</button>
+    <button class="wbtn" type="button" data-m="prec" aria-pressed="false">정밀도</button>
+    <button class="wbtn" type="button" data-m="f1" aria-pressed="false">F1</button>
+    <button class="wbtn" type="button" data-act="reveal" aria-pressed="false">값 확인</button>
   </div>
-</div></div>
-  <p class="small">같은 눈금 위의 두 막대 — 위는 신뢰도, 아래는 뒤 항목의 기본 등장률. 두 길이의 비가 향상도</p>
+</div>
+</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-23 · 원리</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">규칙에는 방향이 있다</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:2vh 0">규칙 B를 뒤집으면 "석박지 → 순대국"</li>
-    <li style="margin:2vh 0">신뢰도 3 ÷ 5 = <b>0.60</b> — 0.75에서 달라짐</li>
-    <li style="margin:2vh 0">향상도 0.60 ÷ 0.20 = <b>3.00</b> — 그대로</li>
-    <li style="margin:2vh 0">지지도도 방향과 무관</li>
-  </ul>
-  <p class="point">신뢰도는 방향에 따라 달라지고, 지지도와 향상도는 <b>대칭</b></p>
+  <div class="kicker ask">12-10 · 질문하기</div>
+  <p class="q">체육대회에서 도움이 필요한 사람을<br>놓치지 않으려면 무엇부터 세야 할까요?</p>
+<p class="lead">오래 뛴 뒤 더위에 지치거나 다쳐서 도움이 필요한 사람이 생깁니다. 한 팀이 운동장을 돌며 보건 선생님께 알립니다.</p>
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-10</div>
+  <h2>실제로 도움이 필요했던 사람부터 — 재현율</h2>
+<table class="mini"><thead><tr><th>실제 4명 중</th><th>규칙 A</th><th>규칙 B</th></tr></thead><tbody>
+    <tr><td>찾아낸 사람</td><td>3명</td><td>1명</td></tr>
+    <tr><td>놓친 사람</td><td>1명</td><td>3명</td></tr>
+    <tr><td>필요 없는데 알린 사람</td><td>3명</td><td>0명</td></tr>
+    <tr><td>재현율</td><td><em>0.75</em></td><td>0.25</td></tr>
+  </tbody></table>
+  <div class="principle"><span class="lab">원리</span><b>줄이려는 오류</b>가 분모를 결정합니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-24 · 발견</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">결과 표에서 확인할 세 가지</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:2vh 0"><b>신뢰도는 혼자 읽지 않음</b> — 결과 메뉴가 원래 얼마나 자주 나오는지를 함께 확인</li>
-    <li style="margin:2vh 0"><b>정렬 기준을 바꾸면 순위가 갈림</b> — 신뢰도 1위와 향상도 1위가 다를 수 있음</li>
-    <li style="margin:2vh 0"><b>동시 0회도 관찰 결과</b> — 실제 운영 원칙인지는 별도 확인</li>
-  </ul>
-  <p class="point">어느 숫자를 근거로 삼을지는 <b>무엇을 묻고 있는지</b>에 따라 결정</p>
+  <div class="kicker ask">12-11 · 질문하기</div>
+  <p class="q">새치기하지 않았는데 지목되었습니다.<br>이번에는 무엇부터 세야 할까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-11</div>
+  <h2>고른 사례부터 — 정밀도</h2>
+<table class="mini" style="margin-top:1.6vh;font-size:clamp(16px,1.9vw,27px)"><thead><tr><th>실제 4건 중</th><th>규칙 A</th><th>규칙 B</th></tr></thead><tbody>
+    <tr><td>새치기라고 고른 건수</td><td>6건</td><td>1건</td></tr>
+    <tr><td>그중 실제 새치기</td><td>3건</td><td>1건</td></tr>
+    <tr><td>잘못 지목한 건수</td><td>3건</td><td>0건</td></tr>
+    <tr><td>놓친 새치기</td><td>1건</td><td>3건</td></tr>
+    <tr><td>정밀도</td><td>0.50</td><td><em>1.00</em></td></tr>
+  </tbody></table>
+  <div class="principle"><span class="lab">원리</span>여러 사람 앞에서 하는 지목은 되돌릴 수 없으므로 <b>정밀도를 먼저</b> 고려합니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-25 · 그림</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">최소 동시 등장 기준과 규칙 수</h2>
-  <div class="diagram" style="--wh:40vh">    <div class="widget" data-w="minco">
-  <div class="wctl"><label>최소 동시 등장 <input class="thr" type="range" min="1" max="10" step="1" value="5"></label> <span class="wout">5일</span></div>
-  <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="메뉴 쌍 3,146개를 동시 등장 일수별로 나눈 가로 띠와, 최소 동시 등장 기준에 따라 달라지는 규칙 수·상위 규칙 표.">
-    <text class="sum" x="24" y="20" font-size="17" font-weight="800" fill="#1c2230"></text>
-    <text class="sum2" x="480" y="20" font-size="14" fill="#6b7385"></text>
+  <div class="kicker ask">12-12 · 질문하기</div>
+  <p class="q">아무도 지목하지 않으면<br>어떻게 될까요?</p>
 
-    <text x="24" y="46" font-size="14" fill="#6b7385">쌍 3,146개 전부</text>
-    <g class="b1">
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-      <rect class="b1r" rx="2"/>
-    </g>
-    <text class="b1in" x="34" y="70" font-size="14" fill="#ffffff">동시 1일 2,845쌍 · 전체의 90%</text>
+</section>
 
-    <line class="lk1" y1="94" y2="112" x2="24" stroke="#e3ddcf" stroke-width="1"/>
-    <line class="lk2" x1="700" y1="94" x2="700" y2="112" stroke="#e3ddcf" stroke-width="1"/>
+<section class="slide hasP">
+  <div class="kicker">12-12</div>
+  <h2>잘못 지목은 0, 찾아낸 새치기도 0</h2>
+<p class="lead">2절에서 본 <b>규칙 C</b>가 바로 그런 규칙입니다.</p>
+  <div class="principle"><span class="lab">원리</span>비율 하나만 보면, <b>아무 일도 하지 않는 규칙</b>이 가장 좋아 보입니다.</div>
+</section>
 
-    <text x="24" y="104" font-size="14" fill="#6b7385">동시 2일 이상 301쌍 확대</text>
-    <g class="b2">
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-      <rect class="b2r" rx="2"/>
-    </g>
-    <g class="tks" font-size="14" fill="#6b7385" text-anchor="middle">
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-      <text class="tkl" y="150"></text>
-    </g>
-    <text x="24" y="150" font-size="14" fill="#6b7385">오른쪽 끝 9·16·17일 각 1쌍</text>
-
-    <g class="cg1"><line class="cut1" x1="0" x2="0" y1="48" y2="86" stroke="#b07a00" stroke-width="2"/></g>
-    <g class="cg2"><line class="cut2" x1="0" x2="0" y1="108" y2="140" stroke="#b07a00" stroke-width="2"/></g>
-    <text class="cutlab" y="90" font-size="14" fill="#b07a00"></text>
-
-    <rect x="24" y="164" width="676" height="108" rx="8" fill="#ffffff" stroke="#e3ddcf"/>
-    <text x="34" y="186" font-size="14" fill="#6b7385">조건 → 결과</text>
-    <text x="430" y="186" font-size="14" fill="#6b7385">동시</text>
-    <text x="510" y="186" font-size="14" fill="#6b7385">신뢰도</text>
-    <text x="610" y="186" font-size="14" fill="#6b7385">향상도</text>
-    <g class="r1">
-      <text class="c0" x="34" y="210" font-size="15" fill="#1c2230"></text>
-      <text class="c1" x="430" y="210" font-size="15" fill="#1c2230"></text>
-      <text class="c2" x="510" y="210" font-size="15" fill="#1c2230"></text>
-      <text class="c3" x="610" y="210" font-size="15" font-weight="800" fill="#1c2230"></text>
-    </g>
-    <g class="r2">
-      <text class="c0" x="34" y="234" font-size="15" fill="#1c2230"></text>
-      <text class="c1" x="430" y="234" font-size="15" fill="#1c2230"></text>
-      <text class="c2" x="510" y="234" font-size="15" fill="#1c2230"></text>
-      <text class="c3" x="610" y="234" font-size="15" font-weight="800" fill="#1c2230"></text>
-    </g>
-    <g class="r3">
-      <text class="c0" x="34" y="258" font-size="15" fill="#1c2230"></text>
-      <text class="c1" x="430" y="258" font-size="15" fill="#1c2230"></text>
-      <text class="c2" x="510" y="258" font-size="15" fill="#1c2230"></text>
-      <text class="c3" x="610" y="258" font-size="15" font-weight="800" fill="#1c2230"></text>
-    </g>
-    <g class="bdg" display="none">
-      <rect class="bdgbox" x="196" y="244" width="146" height="21" rx="999" fill="#ffffff" stroke="#e3ddcf"/>
-      <text class="bdgtxt" x="208" y="259" font-size="14" fill="#6b7385">기준에 걸려 표 밖</text>
-    </g>
-  </svg>
-</div></div>
-  <p class="small">슬라이더로 기준을 옮기면 남는 규칙 수와 상위 규칙이 함께 바뀜 · 흐려진 구간은 표에서 빠진 조합</p>
+<section class="slide hasP">
+  <div class="kicker">12-13</div>
+  <h2>지표를 고르는 세 걸음</h2>
+<div class="split">
+    <div class="card" style="flex:1 1 13em"><div class="t">하나</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--text);margin-top:.8vh">무엇을 줄일지 정합니다</div></div>
+    <div class="card" style="flex:1 1 13em"><div class="t">둘</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--text);margin-top:.8vh">그것을 분모로 세웁니다</div></div>
+    <div class="card" style="flex:1 1 13em"><div class="t">셋</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--text);margin-top:.8vh">그 분모를 쓰는 지표를 고릅니다</div></div>
+  </div>
+  <div class="principle"><span class="lab">원리</span>심각하면 재현율, 사소하면 정밀도라고 <b>기계적으로 외우지 않습니다</b>.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-26 · 원리</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">최소 지지도 — 후보를 걸러 내는 문턱</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:1.8vh 0"><b>최소 지지도</b> — 규칙 후보로 남길 최소 등장 비율 (교과서 162쪽)</li>
-    <li style="margin:1.8vh 0">이 실습의 기준 — 동시 등장 5회 이상</li>
-    <li style="margin:1.8vh 0">기준을 낮추면 우연한 조합이 섞여 들어옴. 단 하루 겹친 조합이 표의 맨 위 차지</li>
-    <li style="margin:1.8vh 0">기준을 높이면 드물지만 의미 있는 조합까지 사라짐</li>
-  </ul>
-  <p class="point">결과 표에 없다는 것과 <b>관련이 없다는 것</b>은 다름</p>
+  <div class="kicker">12-14</div>
+  <h2>실습 — 채점표 페이지</h2>
+<div class="prompt">pages 폴더에 '채점표' 페이지를 추가해 줘. 파일 이름은 3_채점표.py.
+'분류 모델' 페이지와 똑같은 방법으로 데이터를 읽고 나누고 두 모델을 학습해 줘.
+채점용 사람들로 두 모델의 혼동행렬을 각각 2×2 표로 보여 줘.
+네 칸에서 정확도·재현율·정밀도·F1을 구해 한 표에 나란히 보여 줘.
+놓친 환자와 헛짚은 사람 목록도 나이가 많은 순서로 보여 줘.</div><p class="small">전문은 교재 4절 · 바뀐 파일 전체를 다시 받도록 지시</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-27 · 대조</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">손으로 구한 값과 화면의 값</h2>
-  <table class="mini" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">
-    <thead><tr><th>대조할 값</th><th>손으로 구한 값</th><th>화면의 값</th><th>같으면 ○</th></tr></thead>
-    <tbody>
-      <tr><td>규칙 A의 향상도</td><td></td><td></td><td></td></tr>
-      <tr><td>규칙 B의 향상도</td><td></td><td></td><td></td></tr>
-      <tr><td>규칙 C의 지지도</td><td></td><td></td><td></td></tr>
-      <tr><td>규칙 D의 향상도</td><td></td><td></td><td></td></tr>
-    </tbody>
-  </table>
-  <p class="point" style="font-size:clamp(16px,1.9vw,26px)">같은 지표를 <b>손과 화면</b> 두 방법으로 확인</p>
-  <p class="small" style="margin-top:1.2vh">값이 다르면 어느 단계에서 갈렸는지 되짚기 · AI가 계산한 숫자를 스스로 검산할 수 있는 사람 되기</p>
+  <div class="kicker ask">12-15 · 질문하기</div>
+  <p class="q">내 앱의 네 칸은 몇일까요?</p>
+
 </section>
 
 <section class="slide">
-  <div class="kicker">12-28 · 판단</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">향상도와 인과관계</h2>
-  <ul class="facts" style="font-size:clamp(16px,1.9vw,27px)">
-    <li style="margin:1.8vh 0">향상도가 커도 앞 메뉴가 뒤 메뉴의 등장을 일으켰다는 증명 아님</li>
-    <li style="margin:1.8vh 0">식단 구성 방침 등 다른 요인이 두 메뉴에 함께 작용했을 수 있음</li>
-    <li style="margin:1.8vh 0">신뢰도 1.00도 조건 메뉴가 나온 며칠에서 관찰된 값. 다음 식단을 보장하지 않음</li>
-    <li style="margin:1.8vh 0">동시 5회 이상은 드문 조합을 제외하는 실습 기준. 통계적 유의성 보장 아님</li>
-  </ul>
-  <p class="small">세 지표와 함께 <b>관측 기간과 등장 횟수</b>를 기록</p>
+  <div class="kicker">12-15</div>
+  <h2>찾아낸 환자 0명</h2>
+<div class="mxs"><div class="mxbox"><div class="cap">확률로 답하는 모델 · 채점용 1,533명</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div></div><p class="lead">실제 환자 82명 가운데 <b>한 명도 찾아내지 못했습니다.</b> 확률이 가장 높은 사람도 0.4298이라 <b>0.5를 넘는 사람이 없습니다.</b></p>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-29 · 사례</div>
-  <h2>허리케인 직전의 딸기 팝타르트</h2>
-  <div class="withimg"><div class="txt"><ul class="facts">
-    <li>2004년 미국 월마트, 허리케인 찰리 때의 판매 기록 재계산</li>
-    <li>허리케인 직전 딸기 팝타르트, 평소의 약 <b>7배</b> 판매. 최다 판매 품목은 맥주</li>
-    <li>다음 허리케인의 진로에 있는 매장으로 두 품목 사전 배송</li>
-    <li>팝타르트, 전체 판매 비중이 작아 지지도 낮음. 지지도로 걸렀다면 놓쳤을 규칙</li>
-  </ul></div><img src="img/lesson12_case1.jpg" alt="하늘색 바탕 위에 겹쳐 놓인 딸기 맛 팝타르트 두 장. 흰 아이싱 위에 빨강·초록·노랑 알갱이가 뿌려져 있습니다."></div>
-  <p class="src">뉴욕타임스 2004년 11월 14일 보도 · 사진: 위키미디어 공용(퍼블릭 도메인)</p>
+  <div class="kicker ask">12-16 · 질문하기</div>
+  <p class="q">정확도는 세 모델을 구별했을까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-16</div>
+  <h2>구별하지 못했습니다</h2>
+<div class="mxs"><div class="mxbox"><div class="cap">확률로 답하는 모델</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">질문으로 답하는 모델</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">1</span><span class="k">TP</span></td><td class="miss"><span class="n">81</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">5</span><span class="k">FP</span></td><td class="hit"><span class="n">1,446</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">한쪽으로만 답하는 모델</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div></div><p class="lead" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">정확도 0.9465 · 0.9439 · 0.9465 &nbsp;|&nbsp; 재현율 <b>0.0000</b> · 0.0122 · 0.0000</p>
+  <div class="principle"><span class="lab">원리</span><b>기준 모델과 비교</b>해야 점수의 의미를 제대로 알 수 있습니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-30 · 사례</div>
-  <h2 style="font-size:clamp(20px,2.4vw,32px)">아마존의 자주 함께 구매하는 품목</h2>
-  <ul class="facts" style="font-size:clamp(14px,1.5vw,20px);margin-top:0">
-    <li style="margin:1.1vh 0">2003년 IEEE Internet Computing에 발표한 방식으로 상품과 상품의 동시 구매 기록 비교</li>
-    <li style="margin:1.1vh 0">상품 페이지의 '자주 함께 구매하는 품목' 칸으로 현재도 작동함</li>
-    <li style="margin:1.1vh 0">파는 상품이 많으면 어떤 두 상품의 지지도든 낮음. 신뢰도와 향상도가 높으면 추천 대상</li>
-    <li style="margin:1.1vh 0">어느 규칙에 재고와 화면 공간을 걸지는 사람이 결정</li>
-  </ul>
-  <div class="shot wide" style="margin-top:1.4vh"><img src="img/lesson12_case2.jpg" style="max-height:35vh" alt="아마존 상품 페이지의 자주 함께 구매하는 품목 영역 화면. 세 권의 책이 더하기 기호로 이어져 있고 오른쪽에 총액과 장바구니 추가 단추가 있습니다."></div>
-  <p class="src">화면 — 아마존 『사피엔스』 상품 페이지(2026년 9월 갈무리) · 방식 출처: Linden 외, IEEE Internet Computing(2003)</p>
+  <div class="kicker ask">12-17 · 질문하기</div>
+  <p class="q">무엇을 바꾸면<br>환자를 찾을 수 있을까요?</p>
+
 </section>
 
 <section class="slide">
+  <div class="kicker">12-17</div>
+  <h2>드문 쪽의 무게를 같게 맞춥니다</h2>
+<div class="prompt">스위치를 켜면, 뇌졸중을 겪은 사람이 아주 드무니
+두 모델 모두 양쪽의 무게를 같게 맞춰 학습해 줘.
+끈 상태와 켠 상태의 결과를 한 화면에 나란히 보여 줘.</div><p class="small">바꾸는 것은 무게 하나 · 데이터·입력·분할은 그대로</p>
+</section>
+
+<section class="slide">
+  <div class="kicker ask">12-18 · 질문하기</div>
+  <p class="q">무게를 맞춘 뒤<br>무엇이 줄고 무엇이 늘었을까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-18</div>
+  <h2>정확도는 내려가고 찾아낸 환자는 늘었습니다</h2>
+<div class="mxs"><div class="mxbox"><div class="cap">무게 끔</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">무게 켬</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">67</span><span class="k">TP</span></td><td class="miss"><span class="n">15</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">398</span><span class="k">FP</span></td><td class="hit"><span class="n">1,053</span><span class="k">TN</span></td></tr></table></div></div><p class="lead" style="margin-top:1.6vh;font-size:clamp(16px,1.9vw,27px)">정확도 0.9465 → 0.7306 · 재현율 0.0000 → <b>0.8171</b> · 정밀도 구할 수 없음 → 0.1441</p>
+  <div class="principle"><span class="lab">원리</span>놓침을 줄이면 <b>헛짚음이 늘어나는 경우가 많습니다</b>.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker ask">12-19 · 질문하기</div>
+  <p class="q">그래도 놓친 열다섯 명은<br>어떤 사람일까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-19</div>
+  <h2>전원 고혈압도 심장병도 없습니다</h2>
+<ul class="facts"><li>열다섯 명 <b>전원</b>이 고혈압도 심장병도 없음</li><li>가장 어린 사람 <b>열네 살</b></li><li>헛짚은 398명은 나이 중앙값 68세</li></ul>
+  <div class="principle"><span class="lab">원리</span>모델은 <b>입력으로 주어진 항목만</b> 보고 판정합니다.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker ask">12-20 · 질문하기</div>
+  <p class="q">검진센터는 몇 명에게<br>안내를 보낼 수 있을까요?</p>
+<p class="lead">안내 한 통에 <b>2,000원</b>, 이번 달 상담 정원은 <b>500명</b>입니다. 두 값은 수업을 위해 정한 값입니다.</p>
+</section>
+
+<section class="slide">
+  <div class="kicker">12-20</div>
+  <h2>무게를 켠 모델만 정원 안에 들어옵니다</h2>
+<table class="mini" style="font-size:clamp(13px,1.5vw,21px)"><thead><tr><th>채점용 1,533명</th><th>무게 끔</th><th>무게 켬</th><th>전원 발송</th></tr></thead><tbody>
+    <tr><td>안내를 보낸 사람</td><td>0명</td><td>465명</td><td>1,533명</td></tr>
+    <tr><td>비용</td><td>0원</td><td>93만 원</td><td>307만 원</td></tr>
+    <tr><td>정원 500명 안</td><td>예</td><td><em>예</em></td><td>아니요</td></tr>
+    <tr><td>안내가 닿은 대상자</td><td>0명</td><td><em>67명</em></td><td>82명</td></tr>
+  </tbody></table>
+</section>
+
+<section class="slide">
+  <div class="kicker ask">12-21 · 질문하기</div>
+  <p class="q">무작위로 465명을 골랐다면<br>대상자가 몇 명 들어왔을까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-21</div>
+  <h2>약 25명 — 모델은 67명</h2>
+<div class="split">
+    <div class="card"><div class="t">모델이 고른 465명</div><div class="v" style="color:var(--accent)">67명</div><div class="d">대상자의 82%</div></div>
+    <div class="card"><div class="t">무작위 465명</div><div class="v">약 25명</div><div class="d">1,533명 중 82명 비율</div></div>
+  </div>
+  <div class="principle"><span class="lab">원리</span>판정하지 못하는 모델도 <b>순서를 정하는 데</b>는 쓸 수 있습니다.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker ask">12-22 · 질문하기</div>
+  <p class="q">그러면 이 모델을<br>검진센터에서 사용해도 될까요?</p>
+
+</section>
+
+<section class="slide hasP">
+  <div class="kicker">12-22</div>
+  <h2>사용할 수 없습니다</h2>
+<ul class="facts"><li>누구를 모은 명단인지 <b>알 수 없음</b></li><li>검진을 받은 시점과 뇌졸중을 겪은 시점이 <b>나뉘어 있지 않음</b></li><li>빈 값 201명을 지우면 기준 모델 정확도가 0.9465에서 <b>0.9613</b>으로 상승</li></ul>
+  <div class="principle"><span class="lab">원리</span>사용할 수 있는지는 <b>점수가 아니라 조건</b>이 결정합니다.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker ask">12-23 · 질문하기</div>
+  <p class="q">처음에 고른 A와 B를<br>그대로 고르겠습니까?</p>
+
+</section>
+
+<section class="slide">
+  <div class="kicker">12-23</div>
+  <h2>처음에 적어 둔 이유와 지금의 근거를 나란히 놓습니다</h2>
+<p class="lead">바꾸어도 좋고 유지해도 좋습니다. <b>근거를 적으면 됩니다.</b></p><p class="small">활동지 12-1로 돌아가기</p>
+</section>
+
+<section class="slide hasP">
   <div class="kicker">정리</div>
   <h2>12차시 요약</h2>
-  <div class="split" style="margin-top:2.2vh;gap:2vw"><div class="card"><div class="t">세 숫자</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">지지도는 전체 대비 동시 비율, 신뢰도는 앞 항목이 나온 횟수 중 뒤 항목의 비율, 향상도는 신뢰도 ÷ 뒤 항목의 기본 등장률</div></div><div class="card"><div class="t">순서</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">지지도 → 신뢰도 → 향상도. 지표마다 가리키는 규칙이 달라짐. 향상도 1은 우연과 같음</div></div><div class="card"><div class="t">문턱</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">등장 횟수가 적을수록 향상도가 부풀려짐. 최소 지지도를 먼저 정함</div></div><div class="card"><div class="t">판단</div><div class="d" style="font-size:clamp(14px,1.5vw,20px);color:var(--ink);margin-top:.6vh">향상도가 커도 인과의 증명 아님. 목적이 지표를 고름</div></div></div>
-  <p class="point">세 지표 함께 확인. <b>관측 기간과 등장 횟수</b>까지 기록</p>
+<div class="split">
+    <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">네 칸</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">실제와 예측을 교차한 TP·FP·FN·TN</div></div>
+    <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">분모</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">재현율 실제 양성 · 정밀도 예측 양성</div></div>
+    <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">갈림</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">정확도가 같아도 F1은 0.60과 0.00</div></div>
+    <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">전후</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">찾아낸 환자 0 → 67 · 헛짚은 사람 0 → 398</div></div>
+    <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">쓰임</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">판정이 아니라 안내 순서 정하기</div></div>
+  </div>
+  <div class="principle"><span class="lab">원리</span>지표가 모델을 고르는 것이 아니라, <b>하려는 일이 지표를 고릅니다</b>.</div>
 </section>
 
-<div class="hint">← → 이동 · Home 처음으로 · 그림 안 슬라이더·버튼은 마우스로 조작</div>
+<section class="slide">
+  <div class="kicker">다음 시간</div>
+  <h2>13차시 예고</h2>
+  <p class="lead">지금까지는 파일을 주소 하나로 불러와 분석했습니다.</p>
+  <p class="lead">다음 시간에는 여러 사람이 함께 쓰는 서비스가 <b>데이터를 어떻게 저장하는지</b> 봅니다.</p>
+  <p class="small">주제 — 데이터베이스와 수파베이스</p>
+</section>
+
+<div class="hint">← → 이동 · Home 처음으로</div>
 <div class="foot">
   <span>당곡고 데이터 과학 · 12차시</span>
   <div class="dots" id="dots"></div>
   <span id="pageno"></span>
 </div>
 
-<script src="../../assets/widgets12.js"></script>
+<script src="../../assets/widgets10.js?v=3"></script>
 <script>
   const slides = [...document.querySelectorAll('.slide')];
   const dots = document.getElementById('dots');
@@ -674,7 +525,7 @@
     document.getElementById('pageno').textContent = (cur + 1) + ' / ' + slides.length;
   }
   addEventListener('keydown', e => {
-    if (e.target.matches('input, select, textarea, button')) return;   // 위젯 조작 중에는 넘기지 않음
+    if (e.target instanceof Element && e.target.matches('input, select, textarea, button')) return;
     if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) show(cur + 1);
     if (['ArrowLeft', 'PageUp'].includes(e.key)) show(cur - 1);
     if (e.key === 'Home') show(0);

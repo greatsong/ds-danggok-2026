@@ -6,7 +6,18 @@
 <title>12차시 · 분류 평가 — 정확도를 믿으면 안 되는구나 · 데이터 과학 당곡고 · 개정 검토본</title>
 <link rel="stylesheet" href="assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
-<style>main { overflow-wrap: anywhere; } .daymap { display: block; max-width: 100%; overflow-x: auto; }</style>
+<style>main { overflow-wrap: anywhere; } .daymap { display: block; max-width: 100%; overflow-x: auto; }
+.mxgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5rem,1fr));gap:.9rem;margin:.8rem 0 1.1rem;}
+.mxwrap{min-width:0;}
+.mxwrap .cap{font-weight:700;color:var(--accent);font-size:.92rem;margin-bottom:.35rem;text-align:center;}
+table.mx{border-collapse:collapse;width:100%;}
+table.mx th,table.mx td{border:1px solid var(--border);padding:.45rem .3rem;text-align:center;font-size:.88rem;}
+table.mx th{background:var(--card);font-weight:700;color:var(--text-soft);}
+table.mx th.rh{text-align:right;white-space:nowrap;}
+table.mx td{height:2.7rem;}
+table.mx td .k{display:block;font-size:.72rem;font-weight:800;letter-spacing:.03em;}
+table.mx td.hit{background:var(--green-soft);} table.mx td.hit .k{color:var(--green);}
+table.mx td.miss{background:var(--red-soft);} table.mx td.miss .k{color:var(--red);}</style>
 <link rel="stylesheet" href="assets/review.css">
 <link rel="stylesheet" href="assets/lesson08-board.css?v=2">
 </head>
@@ -31,7 +42,7 @@
     <span class="who"><b>윌리엄 브루스 캐머런</b>(1915~1983)은 미국의 사회학자입니다. 이 문장은 오랫동안 <b>아인슈타인이 한 말</b>로 인용되었지만, 실제 출처는 캐머런이 1963년에 펴낸 사회학 입문서입니다. 숫자든 인용이든 어디에서 나온 것인지 확인하는 일이 오늘의 주제이기도 합니다.</span>
   </div>
 
-  <p class="lead">지난 시간에 비교한 세 모델은 모두 높은 정확도를 보였습니다. 하지만 <b>무엇을 맞히고 무엇을 놓쳤는지</b>는 아직 확인하지 않았습니다. 이번에는 예측 결과를 네 칸으로 나누고, 정확도·정밀도·재현율·F1을 직접 계산해 앱의 결과와 비교합니다.</p>
+  <p class="lead">지난 시간에 비교한 세 모델은 모두 높은 정확도를 보였습니다. 하지만 <b>무엇을 맞히고 무엇을 놓쳤는지</b>는 아직 확인하지 않았습니다. 이번에는 예측 결과를 네 칸으로 나누고, 정확도·재현율·정밀도·F1을 직접 계산해 앱의 결과와 비교합니다.</p>
 
   <div class="callout data">
     <div class="h">🧪 도입 — 정확도 99.7%짜리 검사</div>
@@ -80,7 +91,7 @@
   <div class="make-banner">
     <div class="t">🎯 오늘 하는 것</div>
     <ul>
-      <li><b>평가 지표 계산</b> — 20명의 예측 결과로 혼동행렬을 완성하고, 정확도·정밀도·재현율·F1을 계산해 세 규칙을 비교한다</li>
+      <li><b>평가 지표 계산</b> — 20명의 예측 결과로 혼동행렬을 완성하고, 정확도·재현율·정밀도·F1을 계산해 세 규칙을 비교한다</li>
       <li><b>모델 평가 화면 만들기</b> — 앱의 ‘채점표’ 페이지에서 혼동행렬과 네 지표를 확인하고, 놓친 환자와 헛짚은 사람의 목록을 살펴본다</li>
       <li><b>전처리 전후 비교</b> — 드문 범주에 더 큰 무게를 두고 다시 학습한 뒤, 평가 지표와 두 종류의 오류가 어떻게 달라졌는지 비교한다</li>
     </ul>
@@ -90,7 +101,7 @@
   <p>정확도만으로는 어떤 예측이 맞았고 어떤 예측이 틀렸는지 구분하기 어렵습니다. 이번에는 <b>실제 범주와 예측 범주를 교차해 결과를 네 칸으로 나누고</b>, 각 칸의 인원으로 평가 지표를 계산합니다.</p>
   <ul class="steps">
     <li>실제 범주와 예측 범주를 <b>혼동행렬</b>의 네 칸(TP·FP·FN·TN)으로 나누어 채울 수 있다.</li>
-    <li>네 칸에서 <b>정확도·정밀도·재현율·F1</b>을 손으로 계산하고, 각 지표의 분모가 다른 까닭을 설명할 수 있다.</li>
+    <li>네 칸에서 <b>정확도·재현율·정밀도·F1</b>을 손으로 계산하고, 각 지표의 분모가 다른 이유를 설명할 수 있다.</li>
     <li>드문 범주의 무게를 조정한 <b>전과 후</b>를 비교하고, 평가 지표와 오류 유형별 인원이 어떻게 달라졌는지 설명할 수 있다.</li>
     <li>어느 오류의 대가가 더 큰지를 근거로 볼 지표를 정하고, 그 모델을 사용해도 되는지 판단할 수 있다.</li>
   </ul>
@@ -99,7 +110,7 @@
 
   <p>뇌졸중을 <b>한 명도 찾아내지 않고</b> 정확도 95%를 넘길 수 있을까요?</p>
 
-  <p>할 수 있습니다. 5,110명 가운데 뇌졸중을 겪은 사람은 249명, 4.87%뿐입니다. 모두에게 <b>‘아닙니다’</b>라고 답해도 95.13%를 맞힙니다. 환자는 한 명도 찾지 못했는데 정확도는 높습니다.</p>
+  <p>할 수 있습니다. 5,110명 가운데 뇌졸중을 겪은 사람은 249명, 4.87%뿐입니다. 모두에게 <b>‘아닙니다’</b>라고 답해도 95.13%를 맞힙니다. 뇌졸중이 아닌 <b>4,861명</b>을 모두 맞혔기 때문입니다. <b>4,861 ÷ 5,110 = 0.9513</b>입니다. 환자는 한 명도 찾지 못했는데 정확도는 높습니다.</p>
 
   <figure class="interactive" data-fig="rareacc">
     <div class="widget" data-w="rareacc">
@@ -135,7 +146,7 @@
   <h2>2. 혼동행렬과 평가 지표</h2>
   <div class="calc-intro">활동지를 풀 때 아래 계산식을 펼쳐 두세요. 기본 문제는 수업 시간에 함께 풀고, 연습 문제는 과제로 풉니다.</div>
   <details class="calc-fold" id="calculation-formulas">
-    <summary>계산식 펼치기 · 네 칸 · 정확도 · 정밀도 · 재현율 · F1</summary>
+    <summary>계산식 펼치기 · 네 칸 · 정확도 · 재현율 · 정밀도 · F1</summary>
     <section class="calc-board" aria-label="분류 평가 계산식">
       <div class="calc-toolbar"><b>계산식 한눈에 보기</b><button type="button" class="calc-fullscreen">화면 가득 보기</button></div>
       <p class="calc-error">양성 = 찾으려는 쪽</p>
@@ -150,10 +161,10 @@
       </div>
       <p class="calc-note">앞 글자 <b>T·F</b>는 그 예측이 맞았는지 틀렸는지를, 뒤 글자 <b>P·N</b>은 무엇이라고 예측했는지를 나타냅니다.</p>
       <div class="calc-equation"><div><strong>정확도</strong><small>전체가 분모</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP + TN</span><span>TP + FP + FN + TN</span></span></div></div>
-      <div class="calc-equation"><div><strong>정밀도</strong><small>예측이 분모</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP</span><span>TP + FP</span></span></div></div>
       <div class="calc-equation"><div><strong>재현율</strong><small>실제가 분모</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP</span><span>TP + FN</span></span></div></div>
+      <div class="calc-equation"><div><strong>정밀도</strong><small>예측이 분모</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>TP</span><span>TP + FP</span></span></div></div>
       <div class="calc-equation"><div><strong>F1</strong><small>두 값을 함께</small></div><div class="calc-math"><span>=</span><span class="calc-fraction"><span>2 × 정밀도 × 재현율</span><span>정밀도 + 재현율</span></span></div></div>
-      <p class="calc-note">정밀도와 재현율은 <b>분자가 TP로 같고 분모만 다릅니다.</b><br>정밀도의 분모는 뇌졸중이라고 <b>예측한</b> 사람 수이고, 재현율의 분모는 <b>실제로</b> 뇌졸중인 사람 수입니다.<br>뇌졸중이라고 예측한 사람이 0명이면 정밀도는 계산할 수 없습니다.</p>
+      <p class="calc-note">재현율과 정밀도는 <b>분자가 TP로 같고 분모만 다릅니다.</b><br>재현율의 분모는 <b>실제로</b> 뇌졸중인 사람 수이고, 정밀도의 분모는 뇌졸중이라고 <b>예측한</b> 사람 수입니다.<br>뇌졸중이라고 예측한 사람이 0명이면 정밀도는 계산할 수 없습니다.</p>
     </section>
   </details>
 
@@ -173,14 +184,14 @@
     <thead><tr><th>지표</th><th>계산 (140쪽 공식)</th><th>묻는 말</th></tr></thead>
     <tbody>
       <tr><td><b>정확도</b></td><td>(TP+TN) ÷ 전체</td><td>전체 가운데 얼마나 맞혔는가</td></tr>
-      <tr><td><b>정밀도</b></td><td>TP ÷ (TP+FP)</td><td>뇌졸중이라 예측한 사람 가운데 실제 환자의 비율은 얼마인가</td></tr>
       <tr><td><b>재현율</b></td><td>TP ÷ (TP+FN)</td><td>실제 환자 가운데 얼마나 찾아냈는가</td></tr>
+      <tr><td><b>정밀도</b></td><td>TP ÷ (TP+FP)</td><td>뇌졸중이라 예측한 사람 가운데 실제 환자의 비율은 얼마인가</td></tr>
       <tr><td><b>F1</b></td><td>2 × 정밀도 × 재현율 ÷ (정밀도 + 재현율)</td><td>정밀도와 재현율이 함께 높은가</td></tr>
     </tbody>
   </table>
   <div class="callout theory">
-    <div class="h">🧮 F1 — 두 값 가운데 낮은 쪽에 더 끌려가는 평균</div>
-    <p>정밀도와 재현율이 서로 다른 방향을 가리킬 때 둘을 한 값으로 묶어 보는 것이 <b>F1</b>입니다. F1은 두 값 가운데 낮은 쪽의 영향을 크게 받습니다. 한쪽이 0이면 F1도 0입니다. 정밀도를 계산할 수 없을 때는 혼동행렬의 인원으로 <b>F1 = 2TP ÷ (2TP + FP + FN)</b>을 계산합니다.</p>
+    <div class="h">🧮 F1 — 낮은 쪽에 더 크게 영향을 받는 평균</div>
+    <p>정밀도와 재현율이 서로 다른 방향을 가리킬 때 둘을 한 값으로 묶어 보는 것이 <b>F1</b>입니다. F1은 정밀도와 재현율 중 낮은 쪽에 더 크게 영향을 받습니다. 한쪽이 0이면 F1도 0입니다. 정밀도를 계산할 수 없을 때는 혼동행렬의 인원으로 <b>F1 = 2TP ÷ (2TP + FP + FN)</b>을 계산합니다.</p>
     <p class="t">F1은 정밀도와 재현율의 조화평균입니다. 식은 교과서 139쪽에 있습니다.</p>
   </div>
 
@@ -191,7 +202,7 @@
     <ul>
       <li><b>먼저 활동지에 손으로 계산합니다.</b> 계산을 마친 뒤 선생님 화면의 위젯으로 결과를 함께 확인합니다.</li>
       <li><b>계산 과정을 남깁니다.</b> 각 지표의 분자와 분모를 적어 두어야 결과가 다를 때 어느 단계에서 어긋났는지 확인할 수 있습니다.</li>
-      <li><b>값이 다르면 혼동행렬부터 확인합니다.</b> 활동지 ① 네 칸의 인원이 맞는지, ③ 정밀도와 재현율의 분모를 바꾸어 쓰지 않았는지 점검합니다.</li>
+      <li><b>값이 다르면 혼동행렬부터 확인합니다.</b> 활동지 ① 네 칸의 인원이 맞는지, ③ 재현율과 정밀도의 분모를 바꾸어 쓰지 않았는지 점검합니다.</li>
     </ul>
   </div>
   <table class="daymap">
@@ -199,18 +210,18 @@
     <tbody>
       <tr><td><b>① 혼동행렬</b></td><td>주어진 네 칸을 읽고 비어 있는 행·열 합계를 채웁니다</td><td>행의 합은 실제 인원, 열의 합은 예측 인원입니다. 두 합이 모두 맞아야 다음으로 넘어갑니다.</td></tr>
       <tr><td><b>② 정확도</b></td><td>(TP + TN) ÷ 20</td><td>맞힌 두 칸을 하나로 묶은 값입니다.</td></tr>
-      <tr><td><b>③ 정밀도 · 재현율</b></td><td>TP ÷ (TP + FP)와 TP ÷ (TP + FN)</td><td>분자는 같고 분모가 다릅니다. 정밀도는 예측이 기준, 재현율은 실제가 기준입니다.</td></tr>
+      <tr><td><b>③ 재현율 · 정밀도</b></td><td>TP ÷ (TP + FN)과 TP ÷ (TP + FP)</td><td>분자는 같고 분모가 다릅니다. 재현율은 실제가 기준, 정밀도는 예측이 기준입니다.</td></tr>
       <tr><td><b>④ F1</b></td><td>2 × 정밀도 × 재현율 ÷ (정밀도 + 재현율)</td><td>③에서 구한 두 값으로 계산합니다. 두 문제 모두 같은 수로 나누게 되어 있습니다.</td></tr>
-      <tr><td><b>⑤ 판단</b></td><td>볼 지표와 고를 모델, 그리고 그렇게 정한 까닭</td><td>①~④에서 구한 값을 보고 판단하는 단계입니다. 네 지표가 같은 모델을 가리키는지부터 확인합니다.</td></tr>
+      <tr><td><b>⑤ 판단</b></td><td>볼 지표와 고를 모델, 그리고 그렇게 정한 이유</td><td>①~④에서 구한 값을 보고 판단하는 단계입니다. 네 지표가 같은 모델을 가리키는지부터 확인합니다.</td></tr>
     </tbody>
   </table>
-  <p>규칙 C는 모두에게 ‘아님’이라고 답하는 <b>기준 모델</b>입니다. 모델 A와 정확도는 같지만 정밀도·재현율·F1은 다릅니다. 규칙 C에서는 <b>정밀도가 정의되지 않습니다.</b> <b>정확도가 같아도 두 방법을 다르게 평가해야 하는 이유</b>를 활동지 ⑤에 적습니다.</p>
+  <p>규칙 C는 모두에게 ‘아님’이라고 답하는 <b>기준 모델</b>입니다. 모델 A와 정확도는 같지만 재현율·정밀도·F1은 다릅니다. 규칙 C에서는 <b>정밀도가 정의되지 않습니다.</b> <b>정확도가 같아도 두 방법을 다르게 평가해야 하는 이유</b>를 활동지 ⑤에 적습니다.</p>
   <p>계산을 마치면 위젯의 결과와 대조합니다. 값이 다를 때는 <b>혼동행렬의 인원 → 지표의 분모 → 계산 과정</b> 순서로 확인합니다.</p>
 
   <figure class="interactive" data-fig="matrix">
     <div class="widget calc-board" data-w="matrix">
   <div class="calc-toolbar"><b>활동지와 함께 보는 풀이 화면</b><button type="button" class="calc-fullscreen">화면 가득 보기</button></div>
-  <svg viewBox="0 0 720 300" role="img" aria-label="혼동행렬 네 칸과 정확도·정밀도·재현율·F1. 지표를 고르면 분모 범위가 테두리로 켜지고, 사례를 바꾸면 네 칸의 수와 네 값이 함께 바뀜">
+  <svg viewBox="0 0 720 300" role="img" aria-label="혼동행렬 네 칸과 정확도·재현율·정밀도·F1. 지표를 고르면 분모 범위가 테두리로 켜지고, 사례를 바꾸면 네 칸의 수와 네 값이 함께 바뀜">
     <text class="mx-case" x="24" y="22" font-size="14" fill="#6b7385"></text>
     <text class="mx-h" data-k="0" x="222" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
     <text class="mx-h" data-k="1" x="366" y="42" text-anchor="middle" font-size="14" font-weight="800" fill="#1c2230"></text>
@@ -242,15 +253,15 @@
       <rect x="462" y="78" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
       <rect class="mx-bar" x="462" y="78" width="0" height="8" rx="4" fill="#b07a00"></rect>
     </g>
-    <g class="mx-m" data-m="prec">
-      <text x="462" y="110" font-size="14" font-weight="700" fill="#1c2230">정밀도 = TP ÷ (TP + FP)</text>
+    <g class="mx-m" data-m="rec">
+      <text x="462" y="110" font-size="14" font-weight="700" fill="#1c2230">재현율 = TP ÷ (TP + FN)</text>
       <text class="mx-sub" x="462" y="128" font-size="13" fill="#6b7385"></text>
       <text class="mx-val" x="700" y="112" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
       <rect x="462" y="136" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
       <rect class="mx-bar" x="462" y="136" width="0" height="8" rx="4" fill="#b07a00"></rect>
     </g>
-    <g class="mx-m" data-m="rec">
-      <text x="462" y="168" font-size="14" font-weight="700" fill="#1c2230">재현율 = TP ÷ (TP + FN)</text>
+    <g class="mx-m" data-m="prec">
+      <text x="462" y="168" font-size="14" font-weight="700" fill="#1c2230">정밀도 = TP ÷ (TP + FP)</text>
       <text class="mx-sub" x="462" y="186" font-size="13" fill="#6b7385"></text>
       <text class="mx-val" x="700" y="170" text-anchor="end" font-size="20" font-weight="800" fill="#b07a00" style="font-variant-numeric:tabular-nums"></text>
       <rect x="462" y="194" width="238" height="8" rx="4" fill="#e3ddcf"></rect>
@@ -264,8 +275,8 @@
       <rect class="mx-bar" x="462" y="252" width="0" height="8" rx="4" fill="#b07a00"></rect>
     </g>
     <text class="mx-cap" x="24" y="232" font-size="14" font-weight="700" fill="#1c2230"></text>
-    <text x="24" y="258" font-size="14" fill="#6b7385">정밀도 · 재현율 → 분자 같음 · 분모 다름</text>
-    <text x="24" y="280" font-size="14" fill="#6b7385">F1 → 두 값 가운데 낮은 쪽에 더 끌린다</text>
+    <text x="24" y="258" font-size="14" fill="#6b7385">재현율 · 정밀도 → 분자 같음 · 분모 다름</text>
+    <text x="24" y="280" font-size="14" fill="#6b7385">F1 → 낮은 쪽에 더 크게 영향을 받는다</text>
   </svg>
   <div class="wctl">
     <button class="wbtn on" type="button" data-case="A" aria-pressed="true">모델 A</button>
@@ -275,8 +286,8 @@
     <button class="wbtn" type="button" data-case="D" aria-pressed="false">필터 D</button>
     <button class="wbtn" type="button" data-case="allspam" aria-pressed="false">전부 스팸함</button>
     <button class="wbtn" type="button" data-m="acc" aria-pressed="false">정확도</button>
-    <button class="wbtn on" type="button" data-m="prec" aria-pressed="true">정밀도</button>
-    <button class="wbtn" type="button" data-m="rec" aria-pressed="false">재현율</button>
+    <button class="wbtn on" type="button" data-m="rec" aria-pressed="true">재현율</button>
+    <button class="wbtn" type="button" data-m="prec" aria-pressed="false">정밀도</button>
     <button class="wbtn" type="button" data-m="f1" aria-pressed="false">F1</button>
     <button class="wbtn" type="button" data-act="reveal" aria-pressed="false">값 확인</button>
   </div>
@@ -284,7 +295,47 @@
     <figcaption>앞의 세 사례는 활동지의 기본 문제입니다. 손계산을 마친 뒤 선생님 화면에서 결과를 함께 확인합니다. 지표 버튼을 누르면 분모에 포함되는 범위가 테두리로 표시됩니다. 분모를 확인한 뒤 ‘값 확인’을 눌러 계산 결과와 비교합니다.</figcaption>
   </figure>
 
-  <h2>3. 내 모델 평가하기</h2>
+  <h2>3. 어느 오류를 줄일 것인가</h2>
+  <p>재현율과 정밀도는 분모가 다릅니다. 따라서 어느 쪽을 먼저 볼지는 상황에 따라 정해집니다. 학교에서 겪을 만한 두 가지 상황으로 연습해 보겠습니다. 두 상황 모두 앞서 본 <b>모델 A·B와 같은 인원 구성</b>을 사용합니다. 같은 관측 결과를 뜻하는 것이 아니라, 분모만 바꾸어 읽는 연습입니다.</p>
+
+  <h3>함께 판단하기 — 체육대회에서 도움이 필요한 사람 찾기</h3>
+  <p>체육대회 날 운동장에 사람이 많습니다. 오래 뛰고 난 뒤 더위에 지치거나 다쳐서 도움이 필요한 사람이 생길 수 있습니다. 한 팀이 운동장을 돌며 도움이 필요해 보이는 사람을 보건 선생님께 알립니다.</p>
+  <p>알림은 누군가를 판정하는 신호가 아닙니다. 선생님이 직접 가서 확인하는 신호입니다. 이번에는 <b>도움이 필요한 사람을 놓치는 일을 먼저 줄이기</b>로 합니다.</p>
+  <p>그렇다면 무엇부터 모아야 할까요? 놓치는 일을 줄이려면 <b>실제로 도움이 필요했던 사람</b>을 먼저 모으고, 그중 몇 명을 찾아냈는지 셉니다. 분모가 실제이므로 <b>재현율</b>입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>실제로 도움이 필요했던 사람 4명</th><th>규칙 A</th><th>규칙 B</th></tr></thead>
+    <tbody>
+      <tr><td>찾아낸 사람</td><td>3명</td><td>1명</td></tr>
+      <tr><td>놓친 사람</td><td>1명</td><td>3명</td></tr>
+      <tr><td>도움이 필요 없는데 알린 사람</td><td>3명</td><td>0명</td></tr>
+      <tr><td><b>재현율</b></td><td><b>3 ÷ 4 = 0.75</b></td><td>1 ÷ 4 = 0.25</td></tr>
+    </tbody>
+  </table>
+  <p>이번 목적에서는 A를 고릅니다. 다만 A는 도움이 필요하지 않은 세 사람에게도 알림이 갔습니다. <b>재현율을 먼저 본다고 해서 FP(잘못 알림)를 무시하지는 않습니다.</b></p>
+
+  <h3>스스로 판단하기 — 급식 줄 새치기 지목</h3>
+  <p>이번에는 급식 줄에서 새치기한 사람을 고르는 규칙입니다. 줄을 제대로 섰는데 지목되면 어떨까요? 줄을 선 사람들이 모두 보는 앞에서 지목합니다. 아니라고 밝혀져도 지목당한 일은 남습니다.</p>
+  <p>그래서 이번에는 <b>고른 사람 가운데 실제로 맞은 비율</b>을 먼저 봅니다. 분모가 예측이므로 <b>정밀도</b>입니다.</p>
+  <table class="daymap">
+    <thead><tr><th>실제 새치기 4건</th><th>규칙 A</th><th>규칙 B</th></tr></thead>
+    <tbody>
+      <tr><td>새치기라고 고른 건수</td><td>6건</td><td>1건</td></tr>
+      <tr><td>그중 실제 새치기</td><td>3건</td><td>1건</td></tr>
+      <tr><td>잘못 지목한 건수</td><td>3건</td><td>0건</td></tr>
+      <tr><td>놓친 새치기</td><td>1건</td><td>3건</td></tr>
+      <tr><td><b>정밀도</b></td><td>3 ÷ 6 = 0.50</td><td><b>1 ÷ 1 = 1.00</b></td></tr>
+    </tbody>
+  </table>
+  <p>이번 목적에서는 B를 고를 수 있습니다. 다만 B는 실제 새치기 세 건을 놓쳤고, 정밀도 1.00도 한 건만 지목해서 나온 값입니다.</p>
+
+  <div class="callout ask">
+    <div class="h">❓ 아무도 지목하지 않으면 어떻게 됩니까</div>
+    <p>잘못 지목한 건수는 0이 됩니다. 그런데 실제 새치기도 한 건 찾지 못합니다. 2절에서 본 <b>규칙 C</b>가 바로 그런 규칙입니다. 그래서 정밀도만 보지 않고 <b>놓친 건수도 함께 적습니다.</b></p>
+  </div>
+
+  <p>두 상황에서 한 일은 같습니다. <b>무엇을 줄일지 정하고, 그것을 분모로 세우고, 그 분모를 쓰는 지표를 고릅니다.</b> 이제 우리 모델에도 같은 판단을 적용해 보겠습니다.</p>
+
+  <h2>4. 내 모델 평가하기</h2>
 
   <p>활동지에서 익힌 계산을 지난 시간의 채점용 데이터에 적용합니다. 데이터의 크기는 달라져도 <b>혼동행렬을 만들고 평가 지표를 계산하는 방법</b>은 같습니다.</p>
 
@@ -361,7 +412,7 @@ st.caption("이 데이터를 올린 사람은 원본 데이터가 어디서 왔�
 pandas
 plotly
 scikit-learn</pre></div>
-<div class="codewrap code"><span class="label">세 번째 파일 — <button type="button" class="fname">pages/1_탐색.py</button></span><button class="copy-btn">복사</button><pre># pages/1_탐색.py — 나이·혈당의 분포, 두 무리 비교, 고혈압·심장병별 비율, 빈 값 살펴보기
+<div class="codewrap code"><span class="label">세 번째 파일 — <button type="button" class="fname">pages/1_탐색.py</button></span><button class="copy-btn">복사</button><pre># pages/1_탐색.py — 나이·혈당의 분포, 두 그룹 비교, 고혈압·심장병별 비율, 빈 값 살펴보기
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -399,18 +450,18 @@ with 오른쪽:
     st.plotly_chart(px.box(df, x="뇌졸중", y="avg_glucose_level", color="뇌졸중", title="평균 혈당 비교",
                            labels={"avg_glucose_level": "평균 혈당"}), width="stretch")
 
-두무리 = df.groupby("뇌졸중").agg(
+두그룹 = df.groupby("뇌졸중").agg(
     평균_나이=("age", "mean"),
     평균_혈당=("avg_glucose_level", "mean"),
     고혈압_비율=("hypertension", "mean"),
     심장병_비율=("heart_disease", "mean"),
     사람_수=("id", "size"),
 ).reset_index()
-두무리["평균_나이"] = 두무리["평균_나이"].round(1)
-두무리["평균_혈당"] = 두무리["평균_혈당"].round(1)
-두무리["고혈압_비율"] = (두무리["고혈압_비율"] * 100).round(1).astype(str) + "%"
-두무리["심장병_비율"] = (두무리["심장병_비율"] * 100).round(1).astype(str) + "%"
-st.dataframe(두무리, width="stretch", hide_index=True)
+두그룹["평균_나이"] = 두그룹["평균_나이"].round(1)
+두그룹["평균_혈당"] = 두그룹["평균_혈당"].round(1)
+두그룹["고혈압_비율"] = (두그룹["고혈압_비율"] * 100).round(1).astype(str) + "%"
+두그룹["심장병_비율"] = (두그룹["심장병_비율"] * 100).round(1).astype(str) + "%"
+st.dataframe(두그룹, width="stretch", hide_index=True)
 
 st.subheader("3. 고혈압과 심장병이 있으면 뇌졸중 비율이 다른가")
 
@@ -561,8 +612,8 @@ def 두줄로(값들):   # 한 줄로 늘어선 값을 세로줄마다 잘라 �
 점표 = pd.DataFrame({"가로": 채점입력[가로].to_numpy(), "세로": 채점입력[세로].to_numpy(),
                      "실제": pd.Series(실제).map({1: "뇌졸중 있음", 0: "뇌졸중 없음"}).to_numpy()})
 for 이름, 색 in (("뇌졸중 없음", "#94a3b8"), ("뇌졸중 있음", "#7f1d1d")):
-    한무리 = 점표[점표["실제"] == 이름]
-    그림.add_trace(go.Scatter(x=한무리["가로"], y=한무리["세로"], mode="markers", name=이름,
+    한그룹 = 점표[점표["실제"] == 이름]
+    그림.add_trace(go.Scatter(x=한그룹["가로"], y=한그룹["세로"], mode="markers", name=이름,
                               marker=dict(size=6, color=색, opacity=0.5)))
 그림.update_layout(title=f"가로축 {우리말(가로)} · 세로축 {우리말(세로)}", xaxis_title=우리말(가로),
                    yaxis_title=우리말(세로), height=560)
@@ -587,8 +638,8 @@ st.caption("맨 위가 첫 질문입니다. class가 1이면 뇌졸중, 0이면 
 '분류 모델' 페이지와 똑같은 방법으로 데이터를 읽고 나누고 두 모델을 학습해 줘.
 채점용 사람들로 두 모델의 혼동행렬을 각각 2×2 표로 보여 줘. 행은 실제, 열은 예측이야.
 네 칸에 사람 수를 적고 행과 열의 합계도 적어 줘. 칸마다 TP·FP·FN·TN 약자를 함께 표시해 줘.
-네 칸에서 정확도·정밀도·재현율·F1을 구해 두 모델을 한 표에 나란히 보여 줘.
-정밀도의 분모는 뇌졸중이라 예측한 사람 수, 재현율의 분모는 실제 뇌졸중인 사람 수야.
+네 칸에서 정확도·재현율·정밀도·F1을 구해 두 모델을 한 표에 나란히 보여 줘.
+재현율의 분모는 실제 뇌졸중인 사람 수, 정밀도의 분모는 뇌졸중이라 예측한 사람 수야.
 F1은 2 곱하기 TP를 2 곱하기 TP 더하기 FP 더하기 FN으로 나눈 값이야.
 뇌졸중이라 예측한 사람이 0명이면 정밀도 자리에만 "계산할 수 없음"이라고 적어 줘.
 F1은 그 경우에도 위 식으로 계산해서 값을 적어 줘.
@@ -692,11 +743,11 @@ for 이름 in 예측:
     정확도, 정밀도, 재현율, F1 = 지표(TP, FN, FP, TN)
     줄.append({"모델": 이름, "TP (찾아낸 환자)": TP, "FP (헛짚은 사람)": FP,
                "FN (놓친 환자)": FN, "TN": TN, "정확도": 소수(정확도),
-               "정밀도": 소수(정밀도), "재현율": 소수(재현율), "F1": 소수(F1)})
+               "재현율": 소수(재현율), "정밀도": 소수(정밀도), "F1": 소수(F1)})
 st.dataframe(pd.DataFrame(줄), width="stretch", hide_index=True)
-st.caption("정확도의 분모는 채점용 전체 인원, 정밀도의 분모는 뇌졸중이라 예측한 사람 수, "
-           "재현율의 분모는 실제 뇌졸중인 사람 수입니다. F1은 2 × 정밀도 × 재현율 ÷ (정밀도 + 재현율)입니다. "
-           "뇌졸중이라 예측한 사람이 0명이면 정밀도와 F1은 계산할 수 없습니다.")
+st.caption("정확도의 분모는 채점용 전체 인원, 재현율의 분모는 실제 뇌졸중인 사람 수, "
+           "정밀도의 분모는 뇌졸중이라 예측한 사람 수입니다. F1은 2 × TP ÷ (2 × TP + FP + FN)으로 구합니다. "
+           "뇌졸중이라 예측한 사람이 0명이면 정밀도만 계산할 수 없고, F1은 0이 나옵니다.")
 
 st.subheader("누구를 놓쳤고 누구를 헛짚었는가")
 고른모델 = st.radio("어느 모델의 목록을 볼까요", list(예측), horizontal=True)
@@ -731,13 +782,13 @@ st.caption("이 목록에 있는 것은 번호뿐입니다. 누구인지 알 수
   </ol>
 
   <h3>화면 읽기 — 세 모델의 평가 결과 비교하기</h3>
-  <p>앱에서 TP, FN, 정확도, F1을 찾아 아래 표에 옮겨 적습니다. <b>같은 채점용 데이터에서 얻은 세 모델의 결과</b>를 나란히 비교합니다.</p>
+  <p>앱의 혼동행렬을 보고 아래 네 칸을 먼저 채운 뒤, 지표를 옮겨 적습니다. <b>같은 채점용 데이터에서 얻은 세 모델의 결과</b>를 나란히 비교합니다.</p>
+  <div class="mxgrid"><div class="mxwrap"><div class="cap">확률로 답하는 모델</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div><div class="mxwrap"><div class="cap">질문으로 답하는 모델</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div><div class="mxwrap"><div class="cap">한쪽으로만 답하는 모델</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div></div>
   <table class="daymap">
     <thead><tr><th></th><th>확률로 답하는 모델</th><th>질문으로 답하는 모델</th><th>한쪽으로만 답하는 모델</th></tr></thead>
     <tbody>
-      <tr><td>TP (찾아낸 환자)</td><td></td><td></td><td></td></tr>
-      <tr><td>FN (놓친 환자)</td><td></td><td></td><td></td></tr>
       <tr><td>정확도</td><td></td><td></td><td></td></tr>
+      <tr><td>재현율</td><td></td><td></td><td></td></tr>
       <tr><td>F1</td><td></td><td></td><td></td></tr>
     </tbody>
   </table>
@@ -752,7 +803,7 @@ st.caption("이 목록에 있는 것은 번호뿐입니다. 누구인지 알 수
   <p>정확도만 비교했을 때는 세 모델이 비슷해 보였습니다. 하지만 찾아낸 환자와 놓친 환자를 구분하면 <b>모델이 잘한 일과 하지 못한 일</b>이 드러납니다.</p>
   <p>오분류 목록의 번호는 데이터의 기록을 구분하는 데 사용합니다. 실제 인물이 누구인지 찾는 활동이 아닙니다. 먼저 <b>놓친 환자와 헛짚은 사람이 각각 몇 명인지</b> 확인합니다.</p>
 
-  <h2>4. 전처리 후 다시 평가하기</h2>
+  <h2>5. 전처리 후 다시 평가하기</h2>
 
   <p>학습 데이터에는 뇌졸중을 겪지 않은 기록이 훨씬 많습니다. 이번에는 드문 범주를 더 잘 찾아내도록 <b>그 범주를 틀렸을 때의 손해를 더 크게</b> 두고 학습합니다. 데이터를 늘리거나 버리는 대신, 학습할 때 적용하는 무게를 바꾸는 방법입니다.</p>
   <p>무게를 바꾸기 전과 후를 <b>같은 채점용 데이터로 평가</b>해 어떤 오류가 줄고 어떤 오류가 늘었는지 비교합니다.</p>
@@ -768,7 +819,7 @@ st.caption("이 목록에 있는 것은 번호뿐입니다. 누구인지 알 수
 셋째는 '분류 모델' 페이지와 똑같이 입력으로 사용할 항목을 고르는 자리야.
 처음에는 age, avg_glucose_level, hypertension, heart_disease 네 가지가 골라져 있게 해 줘.
 무게를 맞추기 전과 맞춘 뒤의 결과는 스위치와 상관없이 늘 한 화면에 나란히 보여 줘.
-두 모델 각각에 대해 네 칸과 네 지표를 전·후로 나란히 놓은 표를 만들어 줘.
+두 모델마다 네 칸과 네 지표를 전·후로 나란히 놓은 표를 만들어 줘.
 표 맨 아래에 찾아낸 환자 수, 놓친 환자 수, 헛짚은 사람 수가
 몇 명에서 몇 명으로 바뀌었는지 한 줄로 적어 줘.
 고른 항목 가운데 둘을 골라 가로세로 축으로 삼는 산점도를 그리고, 점 색으로
@@ -892,9 +943,9 @@ for 모델이름 in ("확률로 답하는 모델", "질문으로 답하는 모�
         TP, FN, FP, TN = 네칸(예측[상태][모델이름])
         정확도, 정밀도, 재현율, F1 = 지표(TP, FN, FP, TN)
         칸[상태] = [f"{TP}명", f"{FP}명", f"{FN}명", f"{TN:,}명",
-                    소수(정확도), 소수(정밀도), 소수(재현율), 소수(F1)]
+                    소수(정확도), 소수(재현율), 소수(정밀도), 소수(F1)]
     비교표 = pd.DataFrame(칸, index=["TP (찾아낸 환자)", "FP (헛짚은 사람)", "FN (놓친 환자)", "TN",
-                                     "정확도", "정밀도", "재현율", "F1"])
+                                     "정확도", "재현율", "정밀도", "F1"])
     비교표.index.name = ""
     st.table(비교표)
     전 = 네칸(예측[전이름][모델이름])
@@ -947,8 +998,8 @@ for 상태 in (전이름, 후이름):
     "실제": pd.Series(실제).map({1: "뇌졸중 있음", 0: "뇌졸중 없음"}).to_numpy(),
 })
 for 이름, 색 in (("뇌졸중 없음", "#94a3b8"), ("뇌졸중 있음", "#7f1d1d")):
-    한무리 = 점표[점표["실제"] == 이름]
-    그림2D.add_trace(go.Scatter(x=한무리["가로"], y=한무리["세로"], mode="markers", name=이름,
+    한그룹 = 점표[점표["실제"] == 이름]
+    그림2D.add_trace(go.Scatter(x=한그룹["가로"], y=한그룹["세로"], mode="markers", name=이름,
                                 marker=dict(size=6, color=색, opacity=0.5,
                                             line=dict(width=0.5, color="white"))))
 그림2D.update_layout(title=f"가로축 {우리말(가로)} · 세로축 {우리말(세로)} · 전후 경계선",
@@ -1012,8 +1063,8 @@ if len(입력열) &gt;= 3:
             "실제": pd.Series(실제).map({1: "뇌졸중 있음", 0: "뇌졸중 없음"}).to_numpy(),
         })
         for 이름, 색 in (("뇌졸중 없음", "#94a3b8"), ("뇌졸중 있음", "#7f1d1d")):
-            한무리 = 점표3[점표3["실제"] == 이름]
-            그림3D.add_trace(go.Scatter3d(x=한무리["축1"], y=한무리["축2"], z=한무리["축3"],
+            한그룹 = 점표3[점표3["실제"] == 이름]
+            그림3D.add_trace(go.Scatter3d(x=한그룹["축1"], y=한그룹["축2"], z=한그룹["축3"],
                                           mode="markers", name=이름,
                                           marker=dict(size=3, color=색, opacity=0.6)))
         그림3D.update_layout(height=620, scene=dict(xaxis_title=우리말(가1), yaxis_title=우리말(가2),
@@ -1041,19 +1092,17 @@ st.caption("나이가 적은 순서로 앞 스무 줄까지만 보여 줍니다.
 
   <h3>화면 읽기 — 전처리 전후 결과 비교하기</h3>
   <p>앱의 「고치기 전과 고친 뒤」 표에서 확률로 답하는 모델의 결과를 찾아 아래 표에 옮겨 적습니다. 전후 결과는 스위치 상태와 관계없이 나란히 표시됩니다.</p>
+  <div class="mxgrid"><div class="mxwrap"><div class="cap">고치기 전</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div><div class="mxwrap"><div class="cap">고친 뒤</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div></div>
   <table class="daymap">
     <thead><tr><th>확률로 답하는 모델</th><th>고치기 전</th><th>고친 뒤</th></tr></thead>
     <tbody>
       <tr><td>정확도</td><td></td><td></td></tr>
-      <tr><td>정밀도</td><td></td><td></td></tr>
       <tr><td>재현율</td><td></td><td></td></tr>
+      <tr><td>정밀도</td><td></td><td></td></tr>
       <tr><td>F1</td><td></td><td></td></tr>
-      <tr><td>찾아낸 환자(TP)</td><td></td><td></td></tr>
-      <tr><td>놓친 환자(FN)</td><td></td><td></td></tr>
-      <tr><td>헛짚은 사람(FP)</td><td></td><td></td></tr>
     </tbody>
   </table>
-  <p>기본 설정의 결과에서는 <b>정확도는 낮아지고 찾아낸 환자는 늘어납니다.</b> 다른 지표와 오류 유형별 인원도 함께 비교합니다. 정확도가 낮아졌다는 이유만으로 모델이 나빠졌다고 판단할 수 있을까요? 어느 결과를 선택할지는 5절에서 판단합니다.</p>
+  <p>기본 설정의 결과에서는 <b>정확도는 낮아지고 찾아낸 환자는 늘어납니다.</b> 다른 지표와 오류 유형별 인원도 함께 비교합니다. 정확도가 낮아졌다는 이유만으로 모델이 나빠졌다고 판단할 수 있을까요? 어느 결과를 선택할지는 6절에서 판단합니다.</p>
 
   <p>평가 결과의 변화가 그래프에는 어떻게 나타날까요? 버튼으로 학습 전후를 바꾸면서 <b>분류 경계의 위치와 뇌졸중으로 예측하는 영역</b>을 비교합니다.</p>
 
@@ -1106,24 +1155,34 @@ st.caption("나이가 적은 순서로 앞 스무 줄까지만 보여 줍니다.
     <p class="t">앱에서 해당 기록을 제외해 결과를 비교합니다. <b>값이 비어 있다는 사실도 데이터의 특성</b>입니다. 삭제 여부는 정확도의 변화뿐 아니라 어떤 기록이 빠지는지도 확인한 뒤 판단해야 합니다.</p>
   </div>
 
-  <h2>5. 모델 소개 카드 만들기</h2>
+  <h2>6. 모델 소개 카드 만들기</h2>
 
-  <p>어떤 오류를 더 줄여야 할까요? 같은 평가 결과라도 역할에 따라 중요하게 보는 지표가 달라질 수 있습니다. <b>다음 두 역할의 입장</b>에서 모델을 선택하고 그 근거를 설명합니다.</p>
+  <p>이제 이 모델을 어디에 쓸 수 있는지 판단해 봅시다. 검진센터는 상담 안내를 전원에게 보낼 수 없습니다. 안내 한 통에 <b>2,000원</b>이 들고, 이번 달 상담 정원은 <b>500명</b>입니다. 이 두 값은 수업을 위해 정한 값입니다.</p>
   <table class="daymap">
-    <thead><tr><th>역할</th><th>무엇이 두려운가</th><th>고를 지표</th><th>고를 설정</th></tr></thead>
+    <thead><tr><th>채점용 1,533명 · 확률로 답하는 모델</th><th>무게 끔</th><th>무게 켬</th><th>전원에게 발송</th></tr></thead>
     <tbody>
-      <tr><td><b>응급실 의사</b></td><td>환자를 놓치면 치료 시간이 지나갑니다. 허혈성 뇌졸중에서 발병 후 3.5시간 안에 병원에 도착한 환자는 26.2%뿐이었습니다.</td><td>재현율</td><td>스위치 켬</td></tr>
-      <tr><td><b>검진센터 예산 담당</b></td><td>헛짚은 사람 모두에게 상담 안내를 보내면 비용이 나갑니다. 그분들은 위험하지 않은데 검사를 더 받게 됩니다.</td><td>정밀도</td><td>스위치 끔</td></tr>
+      <tr><td>안내를 보낸 사람</td><td>0명</td><td>465명</td><td>1,533명</td></tr>
+      <tr><td>비용</td><td>0원</td><td>93만 원</td><td>307만 원</td></tr>
+      <tr><td>상담 정원 500명 안에 드는가</td><td>예</td><td>예</td><td>아니요</td></tr>
+      <tr><td>안내가 닿은 대상자</td><td>0명</td><td><b>67명</b></td><td>82명</td></tr>
+      <tr><td>대상자 한 명당 비용</td><td>—</td><td>약 1만 4천 원</td><td>약 3만 7천 원</td></tr>
     </tbody>
   </table>
+  <p>무게를 끄면 한 사람도 안내를 받지 못합니다. 전원에게 보내면 대상자 82명 모두에게 닿지만 정원을 세 배 넘깁니다. <b>무게를 켠 모델만 정원 안에서 대상자의 82%에게 닿습니다.</b></p>
+
   <div class="callout ask">
-    <div class="h">❓ 역할에 따라 모델 선택의 근거 비교하기</div>
+    <div class="h">❓ 이 모델은 무엇을 해 준 것입니까</div>
     <ul>
-      <li>무게를 조정한 모델은 환자를 더 찾아냈지만, 헛짚은 사람도 늘었습니다. 환자 한 명을 찾아내기 위해 몇 명에게 안내를 보내야 했나요? 3절과 4절의 표에서 필요한 값을 찾아 계산합니다.</li>
-      <li>두 역할의 의견이 다를 때는 누가 최종 결정을 내려야 할까요? 그 결정에 어떤 근거가 필요한지도 설명합니다.</li>
+      <li>무작위로 465명을 골랐다면 대상자가 몇 명쯤 들어왔을까요? 채점용 1,533명 가운데 대상자가 82명이라는 사실로 계산합니다.</li>
+      <li>같은 93만 원으로 대상자 몇 명에게 더 닿았습니까?</li>
+      <li>이 모델은 누가 뇌졸중을 겪었는지 판정하지 못합니다. 그렇다면 무엇을 해 준 것입니까?</li>
     </ul>
   </div>
-  <p>이 활동에는 하나의 정답을 정해 두지 않습니다. 지표는 오류의 규모를 보여 주지만, <b>놓침과 헛짚음의 대가를 어떻게 판단할지</b>까지 대신 정해 주지는 않기 때문입니다.</p>
+
+  <div class="callout warn">
+    <div class="h">⚠️ 그래도 이 모델을 검진센터에서 사용할 수는 없습니다</div>
+    <p>우리가 사용한 데이터는 누구를 모은 명단인지 알 수 없습니다. 검진을 받은 시점과 뇌졸중을 겪은 시점도 나뉘어 있지 않습니다. 오늘 배운 것은 이 모델 자체가 아니라, <b>모델을 어디에 사용할 수 있는지 판단하는 방법</b>입니다.</p>
+  </div>
 
   <details class="glossary"><summary>더 알아보기 — 실제 사례 · 애플워치의 불규칙 맥박 알림</summary><div class="gin">
     <p>애플과 스탠퍼드 대학이 2019년 참가자 419,297명을 대상으로 애플워치의 불규칙 맥박 알림이 심방세동을 찾아내는지 확인했습니다. 알림을 받은 사람은 2,161명으로 전체의 0.52%였습니다. 이 가운데 심전도 패치를 돌려보내 분석이 가능했던 450명 중 실제로 심방세동이 확인된 비율은 34%였습니다. 결과는 뉴잉글랜드 의학 저널에 실렸습니다.</p>
@@ -1165,8 +1224,8 @@ st.write("앞 페이지에서 본 값과 내가 내린 판단을 여기에 적�
 서식, 한장 = st.tabs(["① 채워 넣기", "② 한 장으로 보기"])
 
 빈칸 = {
-    "무슨 데이터입니까": "어디서 가져왔고, 몇 명이고, 맞히려는 것은 무엇입니까. 출처에 대해 알아 둘 것이 있습니까.",
-    "무엇을 보고 맞힙니까": "입력으로 사용한 것 넷을 적고, 사용하지 않기로 한 것을 하나 골라 까닭을 적습니다.",
+    "무슨 데이터입니까": "어디서 가져왔고, 몇 명이고, 맞히려는 것은 무엇입니까. 출처에서 알아 둘 것이 있습니까.",
+    "무엇을 보고 맞힙니까": "입력으로 사용한 것 넷을 적고, 사용하지 않기로 한 것을 하나 골라 이유를 적습니다.",
     "무엇을 고쳤습니까": "전처리 페이지에서 무엇을 바꾸었는지 한 줄로 적습니다.",
     "이 모델을 검진센터가 사용해도 됩니까": "된다면 어떤 조건에서, 안 된다면 왜 그런지 적습니다.",
     "이 모델이 못 하는 것 한 가지": "오늘 만든 모델이 답할 수 없는 것을 하나 적습니다.",
@@ -1174,8 +1233,8 @@ st.write("앞 페이지에서 본 값과 내가 내린 판단을 여기에 적�
 
 with 서식:
     답 = {}
-    for 물음, 안내 in 빈칸.items():
-        답[물음] = st.text_area(물음, placeholder=안내, height=90, key=물음)
+    for 질문, 안내 in 빈칸.items():
+        답[질문] = st.text_area(질문, placeholder=안내, height=90, key=질문)
 
     st.markdown("**점수** · 채점표 페이지와 전처리 페이지에서 본 값을 옮겨 적습니다.")
     점수표 = pd.DataFrame({
@@ -1188,9 +1247,9 @@ with 서식:
 
 with 한장:
     st.markdown("### 내가 만든 모델 소개")
-    for 물음 in 빈칸:
-        적은것 = st.session_state.get(물음, "").strip()
-        st.markdown(f"**{물음}**")
+    for 질문 in 빈칸:
+        적은것 = st.session_state.get(질문, "").strip()
+        st.markdown(f"**{질문}**")
         st.markdown(적은것 if 적은것 else "_아직 적지 않았습니다._")
     st.markdown("**점수**")
     st.table(채운점수.set_index("항목"))
@@ -1211,7 +1270,7 @@ st.info("**이 흐름은 다른 데이터에도 그대로 됩니다** · 오늘�
       <li><b>학습 과정에서 무엇을 바꾸었나요?</b> 전처리 페이지에서 바꾼 내용을 한 줄로 정리합니다.</li>
       <li><b>이 모델을 검진센터에서 사용할 수 있을까요?</b> 사용할 수 있다고 판단했다면 필요한 조건을, 사용하기 어렵다고 판단했다면 그 이유를 적습니다.</li>
       <li><b>이 모델이 못 하는 것 한 가지.</b> 예를 들면 이렇게 적을 수 있습니다. 「무게를 맞춘 뒤에도 놓친 환자는 모두 고혈압도 심장병도 없는 사람이었습니다. 그 가운데 열네 살이 있었습니다.」</li>
-      <li><b>평가 결과.</b> 4절 표에서 전처리 전후의 값을 옮겨 적습니다. 앱의 모델 소개 페이지에도 같은 내용을 입력합니다.</li>
+      <li><b>평가 결과.</b> 5절 표에서 전처리 전후의 값을 옮겨 적습니다. 앱의 모델 소개 페이지에도 같은 내용을 입력합니다.</li>
     </ul>
   </div>
 
@@ -1221,12 +1280,12 @@ st.info("**이 흐름은 다른 데이터에도 그대로 됩니다** · 오늘�
     <p>팀 프로젝트용 데이터를 고를 때는 세 가지만 먼저 봅니다. <b>① 답이 두 범주인가 ② 드문 쪽의 비율은 얼마인가 ③ 출처가 분명한가.</b></p>
   </div>
 
-  <h2>6. 정리 — 평가 지표에서 판단까지</h2>
-  <p>정확도만으로는 모델의 성능을 충분히 설명하기 어렵다는 점을 확인했습니다. 혼동행렬에서 정밀도·재현율·F1을 계산하면서 <b>각 지표가 무엇을 기준으로 모델을 평가하는지</b> 비교했습니다.</p>
+  <h2>7. 정리 — 평가 지표에서 판단까지</h2>
+  <p>정확도만으로는 모델의 성능을 충분히 설명하기 어렵다는 점을 확인했습니다. 혼동행렬에서 재현율·정밀도·F1을 계산하면서 <b>각 지표가 무엇을 기준으로 모델을 평가하는지</b> 비교했습니다.</p>
   <p>학습할 때의 무게를 바꾼 뒤에는 <b>정확도는 낮아졌지만 찾아낸 환자는 늘어났습니다.</b> 어느 모델을 선택할지는 지표 하나로 정하지 않습니다. 줄이려는 오류와 그 오류가 미치는 영향을 근거로 판단합니다.</p>
   <p>지금까지는 파일을 불러와 분석했습니다. 다음 시간에는 여러 사람이 함께 쓰는 서비스가 데이터를 어떻게 저장하는지 살펴봅니다. 다음 주제는 <b>데이터베이스</b>입니다.</p>
 
-  <h2>7. 확인 문제</h2>
+  <h2>8. 확인 문제</h2>
   <div class="quiz">
     <div class="qq"><span class="qn">문제 1</span> 채점용 1,533명 가운데 실제 뇌졸중은 82명입니다. 어떤 모델이 뇌졸중이라고 답한 사람은 465명이고, 그 가운데 실제 환자는 67명이었습니다. 이 모델의 <b>재현율</b>을 구할 때 분모는 얼마입니까?</div>
     <div class="qitem">
@@ -1238,13 +1297,13 @@ st.info("**이 흐름은 다른 데이터에도 그대로 됩니다** · 오늘�
     <div class="qq"><span class="qn">문제 2</span> 어떤 모델의 정밀도가 1.00, 재현율이 0.25였습니다. 이 모델의 F1은 얼마입니까?</div>
     <div class="qitem">
       <div class="qopts"><button class="opt">0.63</button><button class="opt" data-ok="1">0.40</button><button class="opt">0.50</button><button class="opt">1.00</button></div>
-      <div class="fb">2 × 1.00 × 0.25 ÷ (1.00 + 0.25) = 0.50 ÷ 1.25 = <b>0.40</b>입니다. 두 값의 보통 평균은 0.63이지만 F1은 그보다 낮습니다. F1은 두 값 가운데 낮은 쪽에 더 끌려가기 때문입니다. 활동지 기본 문제의 모델 B가 이 값입니다.</div>
+      <div class="fb">2 × 1.00 × 0.25 ÷ (1.00 + 0.25) = 0.50 ÷ 1.25 = <b>0.40</b>입니다. 두 값의 보통 평균은 0.63이지만 F1은 그보다 낮습니다. F1이 낮은 쪽에 더 크게 영향을 받기 때문입니다. 활동지 기본 문제의 모델 B가 이 값입니다.</div>
     </div>
   </div>
   <div class="callout ask">
     <div class="h">✍️ 문제 3 · 두 줄로 적습니다</div>
     <ul>
-      <li>스위치를 켜자 정확도는 내려갔고 찾아낸 환자는 늘었습니다. 검진센터는 어느 쪽을 골라야 합니까. <b>고른 지표 이름 하나와 까닭</b>을 적습니다. 까닭에는 줄이려는 오류가 무엇인지, 그 대가를 누가 치르는지를 함께 적습니다.</li>
+      <li>스위치를 켜자 정확도는 내려갔고 찾아낸 환자는 늘었습니다. 검진센터는 어느 쪽을 골라야 합니까. <b>고른 지표 이름 하나와 이유</b>을 적습니다. 이유에는 줄이려는 오류가 무엇인지, 그 대가를 누가 치르는지를 함께 적습니다.</li>
     </ul>
   </div>
 
@@ -1252,8 +1311,8 @@ st.info("**이 흐름은 다른 데이터에도 그대로 됩니다** · 오늘�
   <ul class="checklist">
     <li>혼동행렬 네 칸을 우리말(찾아낸 환자 · 놓친 환자 · 헛짚은 사람 · 나머지)로 설명할 수 있다.</li>
     <li>활동지의 기본 문제를 ①부터 ⑤까지 순서대로 계산했다.</li>
-    <li>정밀도의 분모는 예측이 기준이고 재현율의 분모는 실제가 기준임을 계산으로 설명할 수 있다.</li>
-    <li>정확도가 같은 두 규칙을 F1이 구별하는 까닭을 말할 수 있다.</li>
+    <li>재현율의 분모는 실제가 기준이고 정밀도의 분모는 예측이 기준임을 계산으로 설명할 수 있다.</li>
+    <li>정확도가 같은 두 규칙을 F1이 구별하는 이유를 말할 수 있다.</li>
     <li>무게를 조정하기 전후의 평가 결과를 비교하고, 어떤 오류가 줄고 어떤 오류가 늘었는지 설명할 수 있다.</li>
     <li>모델의 평가 결과와 활용 조건, 한계를 모델 소개 카드에 정리했다.</li>
   </ul>
@@ -1263,9 +1322,9 @@ st.info("**이 흐름은 다른 데이터에도 그대로 됩니다** · 오늘�
     <tr><th>용어</th><th>뜻</th></tr>
     <tr><td class="term">혼동행렬(오분류표)</td><td>실제 클래스와 예측 결과를 행렬(네 칸)로 나타낸 표(교과서 139쪽)</td></tr>
     <tr><td class="term">정확도</td><td>전체 가운데 맞힌 비율. 레이블이 치우치면 홀로는 부적절</td></tr>
-    <tr><td class="term">정밀도</td><td>양성이라 예측한 것 가운데 실제 양성의 비율 (TP÷(TP+FP))</td></tr>
     <tr><td class="term">재현율</td><td>실제 양성 가운데 찾아낸 비율 (TP÷(TP+FN))</td></tr>
-    <tr><td class="term">F1</td><td>정밀도와 재현율을 한 값으로 모아 보는 값. 두 값 가운데 낮은 쪽에 더 끌려간다. 식은 교과서 139쪽에 있다</td></tr>
+    <tr><td class="term">정밀도</td><td>양성이라 예측한 것 가운데 실제 양성의 비율 (TP÷(TP+FP))</td></tr>
+    <tr><td class="term">F1</td><td>정밀도와 재현율을 한 값으로 모아 보는 값. 둘 중 낮은 쪽에 더 크게 영향을 받는다. 식은 교과서 139쪽에 있다</td></tr>
     <tr><td class="term">기준 모델</td><td>입력을 보지 않고 훈련용에서 가장 많은 범주로만 예측하는 모델. 성능을 비교할 기준으로 삼는다</td></tr>
     <tr><td class="term">무게 맞추기</td><td>드문 쪽을 틀리는 것을 더 크게 계산해 학습하는 방법. 데이터를 늘리거나 버리지 않는다</td></tr>
   </table>
