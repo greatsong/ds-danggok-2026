@@ -12,11 +12,9 @@ st.write("정확도 하나로는 알 수 없던 것을 네 칸으로 세어 봅�
 데이터주소 = "https://raw.githubusercontent.com/greatsong/modudata/main/data/stroke.csv"
 입력열 = ["age", "avg_glucose_level", "hypertension", "heart_disease"]
 
-
 @st.cache_data
 def 데이터_읽기():
     return pd.read_csv(데이터주소, encoding="utf-8").sort_values("id").reset_index(drop=True)
-
 
 df = 데이터_읽기()
 채점용 = pd.Series(df.index % 10 < 3, index=df.index)   # '분류 모델' 페이지와 같은 방법으로 나눈다
@@ -37,7 +35,6 @@ y = df["stroke"]
 
 st.info(f"채점용은 {len(실제):,}명이고 그중 실제 뇌졸중은 {int(실제.sum()):,}명입니다.")
 
-
 def 네칸(예측값):
     """행은 실제, 열은 예측. 네 칸의 사람 수를 센다."""
     TP = int(((실제 == 1) & (예측값 == 1)).sum())        # 뇌졸중을 뇌졸중이라 맞힌 사람 (찾아낸 환자)
@@ -45,7 +42,6 @@ def 네칸(예측값):
     FP = int(((실제 == 0) & (예측값 == 1)).sum())        # 아닌데 뇌졸중이라 헛짚은 사람
     TN = int(((실제 == 0) & (예측값 == 0)).sum())        # 아닌 사람을 아니라고 맞힌 사람
     return TP, FN, FP, TN
-
 
 def 혼동행렬표(TP, FN, FP, TN):
     표 = pd.DataFrame(
@@ -57,7 +53,6 @@ def 혼동행렬표(TP, FN, FP, TN):
     표.index.name = "행 = 실제 · 열 = 예측"
     return 표
 
-
 def 지표(TP, FN, FP, TN):
     """네 칸에서 네 지표를 구한다. 분모가 0이면 None을 돌려준다."""
     정확도 = (TP + TN) / (TP + FN + FP + TN)
@@ -67,18 +62,14 @@ def 지표(TP, FN, FP, TN):
     F1 = 2 * TP / F1_분모 if F1_분모 > 0 else None   # 정밀도를 구할 수 없어도 값이 나온다
     return 정확도, 정밀도, 재현율, F1
 
-
 정식이름 = {"확률로 답하는 모델": "로지스틱 회귀", "질문으로 답하는 모델": "의사결정트리"}
-
 
 def 병기(이름):
     """교재에서 쓰는 이름 뒤에 교과서의 정식 이름을 괄호로 붙인다."""
     return f"{이름}({정식이름[이름]})" if 이름 in 정식이름 else 이름
 
-
 def 소수(값):
     return "계산할 수 없음" if 값 is None else f"{값:.4f}"
-
 
 네칸값 = {이름: 네칸(예측값) for 이름, 예측값 in 예측.items()}
 
@@ -113,11 +104,9 @@ TP, FN, FP, TN = 네칸값[고른모델]
 보일열 = {"id": "번호", "age": "나이", "avg_glucose_level": "평균 혈당",
           "고혈압": "고혈압", "심장병": "심장병"}
 
-
 def 목록(뽑을자리):
     골라낸 = 채점명단[뽑을자리].sort_values("age", ascending=False)
     return 골라낸[list(보일열)].rename(columns=보일열)
-
 
 놓친환자 = 목록((실제 == 1) & (예측값 == 0))
 헛짚은사람 = 목록((실제 == 0) & (예측값 == 1))

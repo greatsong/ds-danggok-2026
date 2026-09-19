@@ -108,7 +108,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <section class="slide cover">
   <div class="kicker">데이터 과학 · Ⅲ. 데이터 모델링과 평가 · 12차시</div>
   <h1>분류 평가<br><span style="color:var(--accent)">무엇을 근거로 고르는가</span></h1>
-  <p class="sub">혼동행렬 네 칸 · 재현율과 정밀도 · 무게 조정 전후 · 안내 대상 선정</p>
+  <p class="sub">혼동행렬 네 칸 · 재현율과 정밀도 · 가중치 조정 전후 · 안내 대상 선정</p>
 </section>
 
 <section class="slide">
@@ -401,22 +401,22 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 
 <section class="slide">
   <div class="kicker">12-17</div>
-  <h2>드문 쪽의 무게를 같게 맞춥니다</h2>
+  <h2>드문 쪽의 가중치를 같게 맞춥니다</h2>
 <div class="prompt">스위치를 켜면, 뇌졸중을 겪은 사람이 아주 드무니
-두 모델 모두 양쪽의 무게를 같게 맞춰 학습해 줘.
-끈 상태와 켠 상태의 결과를 한 화면에 나란히 보여 줘.</div><p class="small">바꾸는 것은 무게 하나 · 데이터·입력·분할은 그대로</p>
+두 모델 모두 양쪽의 가중치를 같게 맞춰 학습해 줘.
+끈 상태와 켠 상태의 결과를 한 화면에 나란히 보여 줘.</div><p class="small">바꾸는 것은 가중치 하나 · 데이터·입력·분할은 그대로</p>
 </section>
 
 <section class="slide">
   <div class="kicker ask">12-18 · 질문하기</div>
-  <p class="q">무게를 맞춘 뒤<br>무엇이 줄고 무엇이 늘었을까요?</p>
+  <p class="q">가중치를 맞춘 뒤<br>무엇이 줄고 무엇이 늘었을까요?</p>
 
 </section>
 
 <section class="slide hasP">
   <div class="kicker">12-18</div>
   <h2>정확도는 내려가고 찾아낸 환자는 늘었습니다</h2>
-<div class="mxs"><div class="mxbox"><div class="cap">무게 끔</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">무게 켬</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">67</span><span class="k">TP</span></td><td class="miss"><span class="n">15</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">398</span><span class="k">FP</span></td><td class="hit"><span class="n">1,053</span><span class="k">TN</span></td></tr></table></div></div><p class="lead" style="margin-top:1.6vh;font-size:clamp(16px,1.9vw,27px)">정확도 0.9465 → 0.7306 · 재현율 0.0000 → <b>0.8171</b> · 정밀도 구할 수 없음 → 0.1441</p>
+<div class="mxs"><div class="mxbox"><div class="cap">가중치 끔</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">가중치 켬</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">67</span><span class="k">TP</span></td><td class="miss"><span class="n">15</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">398</span><span class="k">FP</span></td><td class="hit"><span class="n">1,053</span><span class="k">TN</span></td></tr></table></div></div><p class="lead" style="margin-top:1.6vh;font-size:clamp(16px,1.9vw,27px)">정확도 0.9465 → 0.7306 · 재현율 0.0000 → <b>0.8171</b> · 정밀도 구할 수 없음 → 0.1441</p>
   <div class="principle"><span class="lab">원리</span>놓침을 줄이면 <b>헛짚음이 늘어나는 경우가 많습니다</b>.</div>
 </section>
 
@@ -441,8 +441,8 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 
 <section class="slide">
   <div class="kicker">12-20</div>
-  <h2>무게를 켠 모델만 정원 안에 들어옵니다</h2>
-<table class="mini" style="font-size:clamp(13px,1.5vw,21px)"><thead><tr><th>채점용 1,533명</th><th>무게 끔</th><th>무게 켬</th><th>전원 발송</th></tr></thead><tbody>
+  <h2>가중치를 켠 모델만 정원 안에 들어옵니다</h2>
+<table class="mini" style="font-size:clamp(13px,1.5vw,21px)"><thead><tr><th>채점용 1,533명</th><th>가중치 끔</th><th>가중치 켬</th><th>전원 발송</th></tr></thead><tbody>
     <tr><td>안내를 보낸 사람</td><td>0명</td><td>465명</td><td>1,533명</td></tr>
     <tr><td>비용</td><td>0원</td><td>93만 원</td><td>307만 원</td></tr>
     <tr><td>정원 500명 안</td><td>예</td><td><em>예</em></td><td>아니요</td></tr>

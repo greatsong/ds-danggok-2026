@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12차시 실험실 · 분류 평가 — 데이터 과학 당곡고 · 개정 검토본</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧭</text></svg>">
+<link rel="stylesheet" href="assets/review.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 12차시</span>
+  <h1>12차시 실험실 · <span class="a">지우면 정확도가 오르는 이유</span></h1>
+  <div class="under"></div>
+
+  <p class="lead">12차시 교재에서는 가중치를 맞추어 찾아낸 환자를 늘렸습니다. 이 실험실에서는 두 가지를 더 확인합니다. 빈 값이 있는 기록을 지웠을 때 정확도가 어떻게 달라지는지, 그리고 축이 셋이 되면 0.5가 어떤 모양이 되는지 봅니다.</p>
+  <p class="mini"><a href="lesson12.html">← 12차시 교재로</a></p>
+
+  <h2>1. 빈 값이 있는 기록을 지우면</h2>
+  <div class="callout theory">
+    <div class="h">🔎 입력 점검 ② — 빈 값이 있는 기록을 삭제했을 때의 변화</div>
+    <p><code>bmi</code>가 비어 있는 201명을 모두 지우면 뇌졸중 환자도 40명 사라집니다. 그 결과 모두 ‘아님’이라고 답하는 기준 모델의 정확도는 <b>0.9465 → 0.9613</b>으로 오릅니다. 정확도만 보면 좋아졌지만, 실제로는 환자 40명을 데이터에서 빼 버린 결과입니다.</p>
+    <p class="t">앱에서 해당 기록을 제외해 결과를 비교합니다. <b>값이 비어 있다는 사실도 데이터의 특성</b>입니다. 삭제 여부는 정확도의 변화뿐 아니라 어떤 기록이 빠지는지도 확인한 뒤 판단해야 합니다.</p>
+  </div>
+  <p>앱의 <b>전처리</b> 화면에서 「bmi가 비어 있는 사람을 어떻게 할까요」를 <b>지운다</b>로 바꾸어 결과를 비교합니다. 지워진 인원과 그 안의 환자 수가 화면에 한 줄로 표시됩니다.</p>
+
+  <h2>2. 축이 셋이 되면 0.5는 평면이 된다</h2>
+  <p>두 축으로는 평면을 선 하나가 나누었습니다. 축이 셋이 되면 나누는 것은 선이 아니라 평면입니다.</p>
+  <p class="mini">두 축으로는 평면을 선 하나가 나누었습니다. 축이 셋이 되면 나누는 것은 선이 아니라 평면입니다. 마우스로 끌어 돌려 봅니다.</p>
+    <figure class="interactive" data-fig="strokePlane3d">
+      <div class="widget" data-w="strokePlane3d">
+        <div class="wctl">
+          <button class="wbtn on" type="button" data-act="before" data-group="t" aria-pressed="true">가중치 맞추기 전</button>
+          <button class="wbtn" type="button" data-act="after" data-group="t" aria-pressed="false">가중치 맞춘 뒤</button>
+          <button class="wbtn" type="button" data-act="full">전체 화면</button>
+        </div>
+        <div class="plot" style="width:100%;min-height:460px"></div>
+        <p class="mini" data-t="out"></p>
+      </div>
+      <figcaption><b>무엇을 묻는 그림인가:</b> 축이 셋이면 0.5는 선이 아니라 평면이다. 나이·평균 혈당에 체질량지수를 더한 세 축입니다. 체질량지수가 비어 있는 201명은 앱과 같이 훈련용의 중앙값으로 채웠으므로 <b>대상은 5,110명 그대로입니다.</b> 앱에서 입력에 체질량지수를 더한 경우와 같은 그림입니다.</figcaption>
+    </figure>
+
+  <h2>✅ 오늘의 체크</h2>
+  <ul class="checklist">
+    <li>빈 값이 있는 기록을 지웠을 때 기준 모델의 정확도가 왜 오르는지 설명할 수 있다.</li>
+    <li>정확도가 올랐다는 것만으로 데이터를 더 잘 다루었다고 말할 수 없는 이유를 안다.</li>
+    <li>축이 셋일 때 0.5가 선이 아니라 평면이 된다는 것을 그림으로 확인했다.</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="lesson12.html"><div class="dir">← 이전</div><div class="tt">12차시 · 분류 평가</div></a>
+    <a class="next" href="lesson13.html"><div class="dir">다음 →</div><div class="tt">13차시 · 데이터베이스와 SQL</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+<script src="assets/stroke_data.js?v=2"></script>
+<script src="assets/stroke_widgets.js?v=3"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="assets/answer.js?v=3"></script>
+</body>
+</html>
