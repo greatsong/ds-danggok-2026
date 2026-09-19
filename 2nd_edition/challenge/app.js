@@ -5,6 +5,7 @@
   var 주소 = 설정.SUPABASE_URL, 키 = 설정.SUPABASE_KEY;
   var 정원 = 500, 기본기록 = 67, 대상자 = 82;
   var 고른반 = 'all', 지난최고 = {}, 첫판 = true;
+  var 교사용 = (window.CHALLENGE_MODE === 'teacher');   // 교사용에서만 설정과 확인 결과를 보여 준다
   var $ = function (id) { return document.getElementById(id); };
 
   // ── 올라온 기록이 실제로 나올 수 있는 값인지 정답표와 대조한다 ──────────
@@ -40,6 +41,10 @@
   function 지표(r, 이름) {
     return (r && r[이름] != null) ? Number(r[이름]).toFixed(4) : '—';
   }
+  function 모델글(r) {
+    return r.model || '';
+  }
+
   function 설정글(r) {
     return r.inputs + ' · 가중치 ' + (r.weighted ? '켬' : '끔') +
            ' · 질문 ' + r.depth + '번 · 기준값 ' + Number(r.threshold).toFixed(2) +
@@ -54,7 +59,7 @@
                                         시도: 0, 의심: 0, 최고: null, 마지막: r.created_at });
       it.시도 += 1;
       if (r.created_at > it.마지막) it.마지막 = r.created_at;
-      if (r.확인 === false) { it.의심 += 1; return; }
+      if (r.확인 === false) { it.의심 += 1; return; }   // 맞지 않는 기록은 최고로 치지 않는다
       if (r.within_quota && (!it.최고 || r.found > it.최고.found)) it.최고 = r;
     });
     return Object.values(표).sort(function (a, b) {
@@ -92,7 +97,8 @@
         '<div class="big">' + b.found + '<span>명</span></div>' +
         '<div class="set">정확도 ' + 지표(b,'accuracy') + ' · 재현율 ' + 지표(b,'recall') +
           ' · 정밀도 ' + 지표(b,'precision') + ' · F1 ' + 지표(b,'f1') + '</div>' +
-        '<div class="set">안내 ' + b.sent.toLocaleString() + '명 · ' + 글자(설정글(b)) + '</div></div>';
+        '<div class="set">안내 ' + b.sent.toLocaleString() + '명 · ' +
+          글자(교사용 ? 설정글(b) : 모델글(b)) + '</div></div>';
     }).join('');
   }
 
@@ -137,16 +143,16 @@
       return '<tr class="' + (이김 ? 'beat ' : '') + (새로움[it.열쇠] ? 'fresh' : '') + '">' +
         '<td class="rank' + (메달 ? ' m' : '') + '">' + (b ? (메달 || it.순위) : '—') + '</td>' +
         '<td class="nick">' + 글자(it.팀명) + (이김 ? '<span class="badge2">기본 이김</span>' : '') +
-          (it.의심 ? '<span class="badge3">확인 필요 ' + it.의심 + '건</span>' : '') +
+          (교사용 && it.의심 ? '<span class="badge3">확인 필요 ' + it.의심 + '건</span>' : '') +
           '<div class="set2">' + 글자(it.반) + '</div></td>' +
         '<td><div class="bar"><i style="width:' + 폭 + '%"></i><b>' +
-          (b ? b.found + '명 · ' + 폭 + '%' : '정원 초과') + '</b></div></td>' +
+          (b ? b.found + '명 · ' + 폭 + '%' : (it.의심 ? '확인 필요' : '정원 초과')) + '</b></div></td>' +
         '<td class="num">' + (b ? b.sent.toLocaleString() + '명' : '—') + '</td>' +
         '<td class="num hide">' + 지표(b, 'accuracy') + '</td>' +
         '<td class="num">' + 지표(b, 'recall') + '</td>' +
         '<td class="num hide">' + 지표(b, 'precision') + '</td>' +
         '<td class="num">' + 지표(b, 'f1') + '</td>' +
-        '<td class="hide set2">' + (b ? 글자(설정글(b)) : '—') + '</td>' +
+        '<td class="hide set2">' + (b ? 글자(교사용 ? 설정글(b) : 모델글(b)) : '—') + '</td>' +
         '<td class="num">' + it.시도 + '</td>' +
         '<td class="num hide">' + 시각(it.마지막) + '</td></tr>';
     }).join('') || '<tr><td colspan="11" class="quiet">아직 올라온 기록이 없습니다. 실습실에서 첫 기록을 올려 보세요.</td></tr>';
@@ -164,7 +170,7 @@
     Plotly.react('plot', [
       점(대상.filter(function (r) { return r.확인 !== false && !r.within_quota; }), '정원 초과', '#9a8b6a', 0.35, 8),
       점(대상.filter(function (r) { return r.확인 !== false && r.within_quota; }), '정원 안', '#e8930c', 0.85, 11),
-      점(대상.filter(function (r) { return r.확인 === false; }), '확인 필요', '#e45756', 0.8, 11)
+      점(교사용 ? 대상.filter(function (r) { return r.확인 === false; }) : [], '확인 필요', '#e45756', 0.8, 11)
     ], {
       paper_bgcolor: 'rgba(0,0,0,0)', plot_bgcolor: 'rgba(0,0,0,0)',
       font: { family: 'Apple SD Gothic Neo, sans-serif', color: '#6b5836', size: 12 },
@@ -186,9 +192,12 @@
     시상대그리기(목록);
     $('s인원').textContent = 목록.length + '팀';
     $('s시도').textContent = 대상.length + '번';
-    var 의심 = 대상.filter(function (r) { return r.확인 === false; }).length;
-    $('s의심').textContent = 의심 + '건';
-    $('s의심').style.color = 의심 ? 'var(--red)' : '';
+    var 의심칸 = $('s의심');
+    if (의심칸) {
+      var 의심 = 대상.filter(function (r) { return r.확인 === false; }).length;
+      의심칸.textContent = 의심 + '건';
+      의심칸.style.color = 의심 ? 'var(--red)' : '';
+    }
     $('s넘김').textContent = 목록.filter(function (x) { return x.최고 && x.최고.found > 기본기록; }).length + '팀';
     $('s최고').textContent = (목록[0] && 목록[0].최고) ? 목록[0].최고.found + '명' : '—';
     반대항그리기(전체);

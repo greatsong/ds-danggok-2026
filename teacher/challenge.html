@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>성능 높이기 챌린지 순위판 · 12차시 · 데이터 과학 당곡고</title>
+<title>성능 높이기 챌린지 · 교사용 순위판 · 12차시 · 데이터 과학 당곡고</title>
 <link rel="stylesheet" href="../assets/style.css?v=tb16">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
 <style>
@@ -82,20 +82,21 @@
 </head>
 <body>
 <div class="topbar"><div class="inner">
-  <a class="brand" href="../index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
   <span class="spacer"></span>
-  <a class="home" href="../lesson12.html">← 12차시</a>
-  <span class="badge">학생용</span>
+  <a class="home" href="index.html">← 교사용 목차</a>
+  <span class="badge">교사용</span>
 </div></div>
 
 <div class="wrap">
 <main>
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 12차시</span>
-  <h1>성능 높이기 <span class="a">챌린지 순위판</span></h1>
+  <h1>성능 높이기 <span class="a">챌린지 · 교사용</span></h1>
   <div class="under"></div>
   <p class="lead">안내 인원이 상담 정원 <b>500명 이하</b>인 채로 대상자 82명 가운데 가장 많이 찾아낸 기록입니다.
   수업 기본 설정은 <b>67명</b>입니다.</p>
-  <p class="mini"><a href="../app/stroke/" target="_blank" rel="noopener">🩺 실습실에서 기록 올리기 →</a></p>
+  <p class="mini"><a href="../challenge/" target="_blank" rel="noopener">👀 학생이 보는 순위판 →</a> · <a href="../app/stroke/" target="_blank" rel="noopener">🩺 실습실</a></p>
+  <div class="callout warn"><div class="h">⚠️ 이 화면은 학생과 공유하지 않습니다</div><p>팀마다 고른 설정이 그대로 보입니다. 학생이 보는 순위판에는 모델 이름만 나옵니다. <b>정원 500명 안에서 가능한 최댓값은 71명입니다.</b> 그보다 크거나 설정과 결과가 맞지 않는 기록은 「확인 필요」로 표시하고 순위에서 뺍니다.</p></div>
 
   <div class="ctl">
     <div class="seg" id="반">
@@ -113,6 +114,7 @@
     <div><div class="t">올린 기록</div><div class="v" id="s시도">—</div></div>
     <div><div class="t">기본 67명을 넘긴 팀</div><div class="v" id="s넘김">—</div></div>
     <div><div class="t">지금 최고</div><div class="v" id="s최고">—</div></div>
+    <div><div class="t">확인 필요</div><div class="v" id="s의심">—</div></div>
   </div>
 
   <h2>반 대항</h2>
@@ -124,7 +126,7 @@
     <th class="num">안내</th>
     <th class="num hide">정확도</th><th class="num">재현율</th>
     <th class="num hide">정밀도</th><th class="num">F1</th>
-    <th class="hide">모델</th><th class="num">시도</th><th class="num hide">마지막</th>
+    <th class="hide">설정</th><th class="num">시도</th><th class="num hide">마지막</th>
   </tr></thead><tbody id="순위"></tbody></table>
 
   <h2>시간에 따른 기록</h2>
@@ -136,8 +138,9 @@
 
 <footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
-<script src="key.js?v=1"></script>
+<script src="../challenge/key.js?v=1"></script>
 <script src="../gallery/config.js"></script>
-<script src="app.js?v=10"></script>
+<script>window.CHALLENGE_MODE = "teacher";</script>
+<script src="../challenge/app.js?v=10"></script>
 </body>
 </html>
