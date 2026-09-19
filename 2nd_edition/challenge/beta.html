@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>챌린지 베타 순위판 · 12차시 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
+<style>
+  .wrap { --maxw: 1100px; } main { max-width: 1100px; }
+  .ctl { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin:.4rem 0 1.2rem; }
+  .ctl .seg { display:flex; border:1px solid var(--border); border-radius:999px; overflow:hidden; background:var(--card); }
+  .ctl .seg button { border:0; background:transparent; padding:.45rem 1rem; font-size:.95rem;
+    color:var(--text-soft); cursor:pointer; font-family:var(--font); }
+  .ctl .seg button.on { background:var(--accent); color:#fff; font-weight:700; }
+  .ctl .live { margin-left:auto; font-size:.85rem; color:var(--muted); display:flex; align-items:center; gap:.4rem; }
+  .dot { width:.5rem; height:.5rem; border-radius:50%; background:var(--green); } .dot.off { background:var(--muted); }
+  .podium { display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem; margin:.2rem 0 1.4rem; }
+  .pod { border:1px solid var(--border-soft); border-radius:var(--radius); background:var(--bg);
+    padding:1rem .9rem; text-align:center; min-width:0; }
+  .pod .medal { font-size:1.9rem; line-height:1; }
+  .pod .who { font-weight:800; font-size:1.05rem; margin:.35rem 0 .1rem; overflow-wrap:anywhere; }
+  .pod .cls { font-size:.78rem; color:var(--muted); }
+  .pod .big { font-size:2.3rem; font-weight:800; color:var(--accent); line-height:1.1; margin:.3rem 0 0; }
+  .pod .big span { font-size:.95rem; font-weight:600; color:var(--text-soft); }
+  .pod .set { font-size:.75rem; color:var(--text-soft); margin-top:.45rem; overflow-wrap:anywhere; }
+  .pod.first { background:linear-gradient(180deg,#fff3cf,#fff9ea); border-color:var(--gold); box-shadow:var(--shadow-lg); }
+  .pod.empty { opacity:.45; }
+  .kpi { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:.8rem; margin:0 0 1.4rem; }
+  .kpi > div { border:1px solid var(--border-soft); border-radius:var(--radius-sm); padding:.7rem .85rem; background:var(--bg); }
+  .kpi .t { font-size:.82rem; color:var(--text-soft); } .kpi .v { font-size:1.55rem; font-weight:800; }
+  .board { width:100%; border-collapse:separate; border-spacing:0 .4rem; }
+  .board th { font-size:.8rem; color:var(--text-soft); text-align:left; padding:0 .6rem .2rem; font-weight:700; }
+  .board td { background:var(--bg); border-top:1px solid var(--border-soft); border-bottom:1px solid var(--border-soft);
+    padding:.55rem .6rem; font-size:.93rem; vertical-align:middle; }
+  .board td:first-child { border-left:1px solid var(--border-soft); border-radius:var(--radius-sm) 0 0 var(--radius-sm); }
+  .board td:last-child { border-right:1px solid var(--border-soft); border-radius:0 var(--radius-sm) var(--radius-sm) 0; }
+  .board tr.up td { background:var(--green-soft); border-color:#cfe3c4; }
+  .board tr.down td { background:var(--red-soft); border-color:#f5cfcf; }
+  .rank { font-weight:800; color:var(--muted); width:2.6rem; text-align:center; }
+  .nick { font-weight:700; overflow-wrap:anywhere; line-height:1.45; }
+  .num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .set2 { font-size:.76rem; color:var(--text-soft); overflow-wrap:anywhere; }
+  .move { font-weight:800; font-size:.86rem; }
+  .move.u { color:var(--green); } .move.d { color:var(--red); } .move.s { color:var(--muted); }
+  #plot { width:100%; height:360px; }
+  .quiet { color:var(--text-soft); font-size:.9rem; }
+  @media (max-width:720px){ .podium, .kpi { grid-template-columns:1fr; } .board .hide { display:none; } }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson12.html">← 12차시</a>
+  <span class="badge">베타</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 12차시 · 베타</span>
+  <h1>챌린지 <span class="a">순위판</span> <span id="딱지"></span></h1>
+  <div class="under"></div>
+  <p class="lead">안내 인원이 상담 정원 <b>200명 이하</b>인 채로 대상자를 가장 많이 찾아낸 기록입니다.</p>
+  <div class="callout tip" id="설명"></div>
+  <p class="mini"><a href="../app/stroke-beta/" target="_blank" rel="noopener">🏁 챌린지 실습실 열기 →</a></p>
+
+  <div class="ctl">
+    <div class="seg" id="반">
+      <button data-v="all" class="on">전체</button>
+      <button data-v="월수금반">월수금반</button>
+      <button data-v="화수목반">화수목반</button>
+    </div>
+    <div class="live"><span class="dot" id="불"></span><span id="상태">읽는 중…</span></div>
+  </div>
+
+  <div class="podium" id="시상대"></div>
+
+  <div class="kpi">
+    <div><div class="t">참가한 팀</div><div class="v" id="s인원">—</div></div>
+    <div><div class="t">올린 기록</div><div class="v" id="s시도">—</div></div>
+    <div><div class="t">지금 최고</div><div class="v" id="s최고">—</div></div>
+    <div><div class="t">정원을 넘긴 제출</div><div class="v" id="s초과">—</div></div>
+  </div>
+
+  <h2>순위</h2>
+  <table class="board"><thead><tr>
+    <th class="rank">#</th><th>팀명</th><th class="num">찾아낸 대상자</th><th class="num">안내</th>
+    <th class="num hide">재현율</th><th class="num hide">F1</th>
+    <th class="hide">설정</th><th class="num">제출</th><th class="num hide" id="이동칸"></th>
+  </tr></thead><tbody id="순위"></tbody></table>
+
+  <h2>제출할수록 좋아졌는가</h2>
+  <div id="plot"></div>
+  <p class="mini">점 하나가 제출 하나입니다. 정원을 넘긴 제출은 옅게 표시하고 순위에서 뺍니다.</p>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재 · 베타</footer>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="../gallery/config.js"></script>
+<script src="beta.js?v=1"></script>
+</body>
+</html>

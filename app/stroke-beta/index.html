@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>뇌졸중 예측 챌린지 · 베타</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@stlite/browser@1.4.0/build/stlite.css" />
+  <style>
+    #loading { font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; padding: 56px 24px; text-align: center; color: #3a2e1a; }
+    #loading h2 { margin: 0 0 10px; font-size: 22px; }
+    #loading p { margin: 4px 0; color: #6b5d45; font-size: 15px; }
+  </style>
+</head>
+<body>
+  <div id="root">
+    <div id="loading">
+      <h2>🏁 뇌졸중 예측 챌린지 · 베타</h2>
+      <p>브라우저 안에서 파이썬을 준비하고 있습니다.</p>
+      <p>처음 열 때 30초에서 1분쯤 걸립니다.</p>
+    </div>
+  </div>
+  <script type="module">
+    import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser@1.4.0/build/stlite.js";
+    mount(
+      {
+        requirements: ["pandas", "numpy", "scikit-learn"],
+        entrypoint: "main.py",
+        streamlitConfig: { "theme.base": "light" },
+        files: {
+          "main.py": { url: "./main.py" },
+        },
+      },
+      document.getElementById("root")
+    );
+  </script>
+</body>
+</html>
