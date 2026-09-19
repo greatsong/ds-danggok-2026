@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import streamlit as st
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
-from sklearn.tree import DecisionTreeClassifier, export_text
+from sklearn.tree import DecisionTreeClassifier
 
 st.set_page_config(page_title="분류 모델", page_icon="🤖", layout="wide")
 st.title("🤖 분류 모델")
@@ -23,6 +23,14 @@ st.write("뇌졸중을 겪었는지 아닌지를 맞히는 모델 두 개를 만
 def 데이터_읽기():
     """번호 순으로 정렬해 둔다. 나누는 자리가 늘 같아야 점수를 비교할 수 있다."""
     return pd.read_csv(데이터주소, encoding="utf-8").sort_values("id").reset_index(drop=True)
+
+
+정식이름 = {"확률로 답하는 모델": "로지스틱 회귀", "질문으로 답하는 모델": "의사결정트리"}
+
+
+def 병기(이름):
+    """교재에서 쓰는 이름 뒤에 교과서의 정식 이름을 괄호로 붙인다."""
+    return f"{이름}({정식이름[이름]})" if 이름 in 정식이름 else 이름
 
 
 def 우리말(열):
@@ -68,7 +76,7 @@ st.subheader("채점용 사람들에서의 정확도")
         "한쪽으로만 답하는 모델": pd.Series(많은쪽, index=y[채점용].index).to_numpy()}
 칸들 = st.columns(3)
 for 칸, (이름, 예측값) in zip(칸들, 예측.items()):
-    칸.metric(이름, f"{(예측값 == 실제).mean():.4f}")
+    칸.metric(병기(이름), f"{(예측값 == 실제).mean():.4f}")
 st.caption("소수 넷째 자리까지 적었습니다. 맨 오른쪽은 입력을 하나도 보지 않고 훈련용에서 사람이 많은 쪽으로만 "
            "답하는 모델입니다. 세 값을 교재의 표에 적어 두세요.")
 
@@ -78,9 +86,9 @@ st.subheader("고른 속성 가운데 둘을 축으로 놓고 본다")
 세로후보 = [열 for 열 in 입력열 if 열 != 가로]
 세로 = 축칸[1].selectbox("세로축", 세로후보, index=0, format_func=우리말)
 
-두축 = [가로, 세로]
-그림크기맞추기, 그림확률모델, 그림질문모델 = 학습(두축)   # 그림은 두 축만으로 다시 학습한 모델로 그린다
 채점입력 = X[채점용]
+# 두 축이 아닌 속성은 채점용의 중앙값에 세워 둔다. 위에서 채점한 그 모델을 그대로 그린다
+고정값 = {열: float(채점입력[열].median()) for 열 in 입력열 if 열 not in (가로, 세로)}
 
 
 def 눈금(열):
@@ -95,9 +103,9 @@ def 두줄로(값들):   # 한 줄로 늘어선 값을 세로줄마다 잘라 �
 
 
 가로눈금, 세로눈금 = 눈금(가로), 눈금(세로)
-격자 = pd.DataFrame([{가로: 가, 세로: 세} for 세 in 세로눈금 for 가 in 가로눈금])[두축]
-확률격자 = 그림확률모델.predict_proba(그림크기맞추기.transform(격자))[:, 1].tolist()
-마디번호 = 그림질문모델.apply(격자).tolist()          # 각 자리가 트리의 어느 마디에 떨어지는지
+격자 = pd.DataFrame([dict(고정값, **{가로: 가, 세로: 세}) for 세 in 세로눈금 for 가 in 가로눈금])[입력열]
+확률격자 = 확률모델.predict_proba(크기맞추기.transform(격자))[:, 1].tolist()
+마디번호 = 질문모델.apply(격자).tolist()              # 각 자리가 나무의 어느 마디에 떨어지는지
 자리 = {마디: 번호 for 번호, 마디 in enumerate(sorted(set(마디번호)))}
 마디수 = len(자리)
 색단계 = [[(번호 + 끝) / 마디수, 칸색[번호 % len(칸색)]] for 번호 in range(마디수) for 끝 in (0, 1)]
@@ -121,9 +129,56 @@ st.plotly_chart(그림, width="stretch")
 if not (min(확률격자) <= 0.5 <= max(확률격자)):
     st.info(f"이 그림 안에서 확률이 가장 높은 자리도 {max(확률격자):.2f}입니다. "
             f"이 그림에서는 0.5 경계선이 보이지 않습니다.")
+고정설명 = " · ".join(f"{우리말(열)} {값:g}" for 열, 값 in 고정값.items())
 st.caption("점은 채점용 사람들이고 색은 실제 뇌졸중 여부입니다. 파란 선은 확률로 답하는 모델이 0.5로 가르는 자리, "
-           "옅은 색으로 나뉜 바탕은 질문으로 답하는 모델이 두 축을 나눈 칸입니다. 고른 두 축만으로 다시 학습한 그림입니다.")
+           "옅은 색으로 나뉜 바탕은 질문으로 답하는 모델이 두 축을 나눈 칸입니다. 위에서 채점한 그 모델을 그렸습니다."
+           + (f" 두 축이 아닌 속성은 채점용의 중앙값({고정설명})으로 고정해 계산했습니다." if 고정값 else ""))
 
 st.subheader("질문으로 답하는 모델은 어떤 순서로 물었는가")
-st.text(export_text(질문모델, feature_names=[입력이름[열] for 열 in 입력열]))
-st.caption("맨 위가 첫 질문입니다. class가 1이면 뇌졸중, 0이면 아님이라고 답한 자리입니다.")
+
+
+def 가지그림(모델, 열들):
+    """학습한 나무를 가지가 갈라지는 그림으로 그린다.
+
+    마디마다 그 자리에 온 훈련용 사람 수와 그중 실제 뇌졸중인 사람 수를 함께 적는다.
+    더 묻지 않고 답을 내는 마디는 답에 따라 색을 달리한다.
+    """
+    나무 = 모델.tree_
+    훈련 = X.loc[~채점용, 열들]
+    지난자리 = 모델.decision_path(훈련).toarray()      # 사람마다 지나간 마디에 1이 선다
+    온사람 = 지난자리.sum(axis=0)
+    뇌졸중 = 지난자리[y[~채점용].to_numpy() == 1].sum(axis=0)
+
+    줄 = ['digraph {', 'graph [ranksep=0.45 nodesep=0.28];',
+          'node [shape=box style="filled,rounded" fontname="sans-serif" fontsize=13 '
+          'color="#cbd5e1" penwidth=1.2 margin="0.18,0.10"];',
+          'edge [fontname="sans-serif" fontsize=12 color="#94a3b8" fontcolor="#64748b"];']
+    for 마디 in range(나무.node_count):
+        인원 = int(온사람[마디])
+        환자 = int(뇌졸중[마디])
+        아래줄 = f"{인원:,}명\\n뇌졸중 {환자:,}명 · {환자 / 인원 * 100:.1f}%"
+        if 나무.children_left[마디] == -1:              # 더 묻지 않고 답을 내는 마디
+            답 = int(나무.value[마디][0].argmax())
+            윗줄 = "답: 뇌졸중" if 답 else "답: 아님"
+            칸색, 글자색 = ("#fecaca", "#7f1d1d") if 답 else ("#e2e8f0", "#334155")
+        else:
+            윗줄 = f"{입력이름[열들[나무.feature[마디]]]} ≤ {나무.threshold[마디]:.1f} ?"
+            칸색, 글자색 = "#ffffff", "#1e293b"
+        줄.append(f'{마디} [label="{윗줄}\n{아래줄}" fillcolor="{칸색}" fontcolor="{글자색}"];')
+        for 자식, 딱지 in ((나무.children_left[마디], "예"), (나무.children_right[마디], "아니요")):
+            if 자식 != -1:
+                줄.append(f'{마디} -> {자식} [label=" {딱지} "];')
+    return "\n".join(줄) + "\n}"
+
+
+st.graphviz_chart(가지그림(질문모델, 입력열))
+
+마지막마디 = [마디 for 마디 in range(질문모델.tree_.node_count)
+              if 질문모델.tree_.children_left[마디] == -1]
+아님마디 = sum(1 for 마디 in 마지막마디 if int(질문모델.tree_.value[마디][0].argmax()) == 0)
+물은속성 = sorted({입력이름[입력열[열]] for 열 in 질문모델.tree_.feature if 열 >= 0})
+st.caption(f"맨 위가 첫 질문입니다. 예라고 답하면 왼쪽, 아니요라고 답하면 오른쪽으로 내려갑니다. "
+           f"색이 칠해진 칸이 더 묻지 않고 답을 내는 자리이고, 모두 {len(마지막마디)}칸입니다. "
+           f"그중 {아님마디}칸이 아님이라고 답합니다.")
+st.caption(f"고른 속성은 {len(입력열)}가지였지만 이 나무가 실제로 물은 것은 "
+           f"{' · '.join(물은속성)} {len(물은속성)}가지입니다.")
