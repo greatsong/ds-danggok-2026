@@ -150,26 +150,16 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
     <p>안내를 전원에게 보낼 수는 없습니다. <b>예산과 상담 가능 인원이 한정</b>되어 있으니까요.</p>
     <p class="sign">— DG메디컬 건강검진센터장</p>
   </div>
-  <p class="small">DG메디컬은 이 수업에서만 사용하는 가상의 검진센터입니다.</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">11-4</div>
-  <h2>실제와 가상을 구분합니다</h2>
-<div class="split">
-    <div class="card" style="flex:1 1 18em"><div class="t">실제 데이터</div><div class="d" style="font-size:clamp(14px,1.6vw,22px);color:var(--text);margin-top:.8vh">건강 기록 5,110명 · 뇌졸중 249명 · 캐글 공개 데이터</div></div>
-    <div class="card" style="flex:1 1 18em"><div class="t">가상 상황</div><div class="d" style="font-size:clamp(14px,1.6vw,22px);color:var(--text);margin-top:.8vh">DG메디컬 검진센터와 상담 안내 · 수업을 위해 만든 설정</div></div>
-  </div>
-</section>
-
-<section class="slide">
-  <div class="kicker ask">11-5 · 질문하기</div>
+  <div class="kicker ask">11-4 · 질문하기</div>
   <p class="q">게시자는 무엇을 적어 두었고,<br>무엇을 적지 않았을까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-5</div>
+  <div class="kicker">11-4</div>
   <h2>출처는 적혀 있지 않습니다</h2>
 <table class="mini" style="font-size:clamp(13px,1.5vw,21px)"><thead><tr><th>적혀 있는 것</th><th>적혀 있지 않은 것</th></tr></thead><tbody>
     <tr><td>게시자 fedesoriano · 2021-01-26 공개</td><td rowspan="3"><em>원자료를 어디에서 모았는지</em><br>(Confidential Source)</td></tr>
@@ -180,7 +170,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker">11-6</div>
+  <div class="kicker">11-5</div>
   <h2>실습 ① — 데이터 소개 화면</h2>
 <div class="prompt">"뇌졸중 예측 실습실" 스트림릿 앱을 main.py 파일 하나로 만들어 줘.
 데이터: .../modudata/main/data/stroke.csv
@@ -190,13 +180,13 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-7 · 질문하기</div>
+  <div class="kicker ask">11-6 · 질문하기</div>
   <p class="q">age는 알겠는데,<br>hypertension이 1이라는 것은 무슨 뜻일까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-7</div>
+  <div class="kicker">11-6</div>
   <h2>고혈압이 있으면 1, 없으면 0</h2>
 <table class="mini"><thead><tr><th>열</th><th>뜻</th><th>값</th></tr></thead><tbody>
     <tr><td>age</td><td>나이</td><td>0.08 ~ 82.0</td></tr>
@@ -208,13 +198,13 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-8 · 질문하기</div>
+  <div class="kicker ask">11-7 · 질문하기</div>
   <p class="q">빈칸은 하나도 없는데,<br>모르는 정보가 있습니다.</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-8</div>
+  <div class="kicker">11-7</div>
   <h2>알 수 없음이 값으로 적혀 있습니다</h2>
 <div class="split">
     <div class="card"><div class="t">흡연 상태 Unknown</div><div class="v">1,544명</div><div class="d">전체의 30.2%</div></div>
@@ -224,13 +214,13 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-9 · 질문하기</div>
+  <div class="kicker ask">11-8 · 질문하기</div>
   <p class="q">id와 age, stroke를<br>모두 입력으로 사용해도 될까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-9</div>
+  <div class="kicker">11-8</div>
   <h2>셋의 역할이 다릅니다</h2>
 <table class="mini"><thead><tr><th>열</th><th>역할</th></tr></thead><tbody>
     <tr><td>id</td><td>기록을 구분하는 번호</td></tr>
@@ -241,7 +231,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker">11-10</div>
+  <div class="kicker">11-9</div>
   <h2>실습 ② — 탐색 화면</h2>
 <div class="prompt">pages 폴더에 '탐색' 페이지를 추가해 줘. 파일 이름은 1_탐색.py.
 나이와 평균 혈당의 분포를 히스토그램 두 개로 나란히 보여 줘.
@@ -250,13 +240,13 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-11 · 질문하기</div>
+  <div class="kicker ask">11-10 · 질문하기</div>
   <p class="q">나이 그래프에서 두 그룹의 가운데는<br>얼마나 떨어져 있을까요?</p>
 
 </section>
 
 <section class="slide">
-  <div class="kicker">11-11</div>
+  <div class="kicker">11-10</div>
   <h2>25.7세 차이</h2>
 <table class="mini"><thead><tr><th>비교</th><th>뇌졸중 있음</th><th>뇌졸중 없음</th></tr></thead><tbody>
     <tr><td>평균 나이</td><td><em>67.7세</em></td><td>42.0세</td></tr>
@@ -268,26 +258,26 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-12 · 질문하기</div>
+  <div class="kicker ask">11-11 · 질문하기</div>
   <p class="q">두 그룹에 차이가 있으면<br>개인도 모두 맞힐 수 있을까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-12</div>
+  <div class="kicker">11-11</div>
   <h2>집단의 차이와 개인의 예측은 다릅니다</h2>
 <p class="lead">집단의 평균이 다르다는 것과 한 사람의 답을 맞힌다는 것은 다릅니다.</p>
   <div class="principle"><span class="lab">원리</span>관찰한 차이는 <b>입력 후보를 고르는 근거</b>일 뿐입니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-13 · 질문하기</div>
+  <div class="kicker ask">11-12 · 질문하기</div>
   <p class="q">체질량지수가 비어 있는 201명을<br>지워도 될까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-13</div>
+  <div class="kicker">11-12</div>
   <h2>그 201명이 특별합니다</h2>
 <div class="split">
     <div class="card"><div class="t">빈 값 201명 중 뇌졸중</div><div class="v" style="color:var(--red)">19.9%</div><div class="d">40명</div></div>
@@ -297,13 +287,13 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-14 · 질문하기</div>
+  <div class="kicker ask">11-13 · 질문하기</div>
   <p class="q">확률로 답하는 모델은<br>어떻게 예측할까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-14</div>
+  <div class="kicker">11-13</div>
   <h2>네 입력을 하나로 모아 확률로 바꿉니다</h2>
 <p class="lead">각 입력값에 <b>중요도를 반영해 하나의 점수</b>로 만든 뒤, 0과 1 사이의 확률로 바꿉니다.</p>
   <div class="fxrow" style="margin-top:2.2vh;gap:4vw">
@@ -315,13 +305,13 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-15 · 질문하기</div>
+  <div class="kicker ask">11-14 · 질문하기</div>
   <p class="q">질문으로 답하는 모델은<br>어떻게 예측할까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-15</div>
+  <div class="kicker">11-14</div>
   <h2>질문을 차례로 던져 나눕니다</h2>
 <p class="lead">‘나이가 몇 살을 넘는가’, ‘혈당이 얼마를 넘는가’와 같은 질문을 순차적으로 던져 대상을 분류해 나갑니다. 마지막에 남은 그룹의 <b>다수 범주</b>가 해당 사람의 예측 결과가 됩니다.</p>
   <p class="lead">질문과 기준값은 사람이 의학 지식으로 직접 정하는 것이 아니라, <b>훈련 데이터에서 학습</b>됩니다.</p>
@@ -330,7 +320,7 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker">11-16</div>
+  <div class="kicker">11-15</div>
   <h2>두 모델은 무엇이 같고 무엇이 다릅니까</h2>
 <table class="mini"><thead><tr><th></th><th>확률로 답하는 모델</th><th>질문으로 답하는 모델</th></tr></thead><tbody>
     <tr><td>읽는 데이터</td><td colspan="2" style="text-align:center">같습니다</td></tr>
@@ -343,26 +333,26 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-17 · 질문하기</div>
+  <div class="kicker ask">11-16 · 질문하기</div>
   <p class="q">어느 쪽이 더 나을까요?<br>지금 고를 수 있을까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-17</div>
+  <div class="kicker">11-16</div>
   <h2>이름만으로 정하지 않습니다</h2>
 <p class="lead">같은 데이터와 같은 조건에서 학습해 <b>점수로 비교</b>합니다. 입력을 보지 않고 많은 쪽으로만 답하는 <b>기준 모델</b>도 함께 둡니다.</p>
   <div class="principle"><span class="lab">원리</span>공정한 비교는 <b>조건을 같게 두는 데서</b> 시작합니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-18 · 질문하기</div>
+  <div class="kicker ask">11-17 · 질문하기</div>
   <p class="q">왜 일부 기록을<br>학습에서 빼 둘까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-18</div>
+  <div class="kicker">11-17</div>
   <h2>채점할 문제를 남겨 둡니다</h2>
 <div class="split">
     <div class="card"><div class="t">훈련용</div><div class="v">3,577명</div><div class="d">뇌졸중 167명</div></div>
@@ -373,7 +363,7 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker">11-19</div>
+  <div class="kicker">11-18</div>
   <h2>실습 ③ — 분류 모델 화면</h2>
 <div class="prompt">pages 폴더에 '분류 모델' 페이지를 추가해 줘. 파일 이름은 2_분류_모델.py.
 입력은 age, avg_glucose_level, hypertension, heart_disease 네 가지만 사용해 줘.
@@ -383,13 +373,13 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-20 · 질문하기</div>
+  <div class="kicker ask">11-19 · 질문하기</div>
   <p class="q">우리 트리는 실제로<br>어떤 질문을 던졌을까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">11-20</div>
+  <div class="kicker">11-19</div>
   <h2>앱 화면에 질문의 순서가 적혀 있습니다</h2>
 <div class="split">
     <div class="card" style="flex:1 1 17em"><div class="t">첫 번째 질문</div><div class="d" style="font-size:clamp(15px,1.8vw,25px);color:var(--text);margin-top:.8vh">나이가 <b>67.5세</b>를 넘는가</div></div>
@@ -401,13 +391,13 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-21 · 질문하기</div>
+  <div class="kicker ask">11-20 · 질문하기</div>
   <p class="q">세 모델의 정확도는 얼마일까요?</p>
 
 </section>
 
 <section class="slide">
-  <div class="kicker">11-21</div>
+  <div class="kicker">11-20</div>
   <h2>세 값을 적습니다</h2>
 <table class="mini"><thead><tr><th>모델</th><th>답하는 방식</th><th>정확도</th></tr></thead><tbody>
     <tr><td>확률로 답하는 모델</td><td>0과 1 사이의 확률</td><td><em>0.9465</em></td></tr>
@@ -417,13 +407,13 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 </section>
 
 <section class="slide">
-  <div class="kicker ask">11-22 · 질문하기</div>
+  <div class="kicker ask">11-21 · 질문하기</div>
   <p class="q">입력을 하나도 보지 않은 모델의 점수가<br>왜 이렇게 높을까요?</p>
 
 </section>
 
 <section class="slide">
-  <div class="kicker">11-22</div>
+  <div class="kicker">11-21</div>
   <h2>오늘은 답하지 않습니다</h2>
 <p class="lead">다음 시간에 이 점수가 <b>정말 잘 맞힌 것인지</b> 확인합니다.</p><p class="small">세 값을 활동지에 적어 두고 다음 시간에 꺼냅니다</p>
 </section>
