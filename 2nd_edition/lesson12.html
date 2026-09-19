@@ -1259,7 +1259,7 @@ st.caption("훈련용은 학습에 사용한 사람들이고 채점용은 사용
       <div class="plot" style="width:100%;min-height:440px"></div>
       <p class="mini" data-t="out"></p>
     </div>
-    <figcaption><b>무엇을 묻는 그림인가:</b> 무게를 맞추면 경계선이 어디로 움직이는가. 이 그림은 나이와 평균 혈당 두 항목만으로 다시 학습한 것이므로 앱의 숫자와 다릅니다. 두 항목만 쓰면 맞추기 전 확률이 0.34를 넘지 않아 0.5 경계선이 그림 밖에 있고, 무게를 맞추자 경계선이 환자 쪽으로 들어옵니다. <b>위의 표에는 적지 않습니다.</b></figcaption>
+    <figcaption><b>무엇을 묻는 그림인가:</b> 무게를 맞추면 경계선이 어디로 움직이는가. <b>앱과 같은 네 입력으로 학습한 그림입니다.</b> 두 축이 아닌 고혈압·심장병은 앱과 같이 채점용의 중앙값(둘 다 0)에 세워 두고 계산했습니다. 맞추기 전에는 그림 안에서 확률이 0.28을 넘지 않아 0.5 경계선이 그림 밖에 있고, 무게를 맞추자 경계선이 환자 쪽으로 들어옵니다.</figcaption>
   </figure>
 
   <details class="sample">
@@ -1275,7 +1275,7 @@ st.caption("훈련용은 학습에 사용한 사람들이고 채점용은 사용
         <div class="plot" style="width:100%;min-height:460px"></div>
         <p class="mini" data-t="out"></p>
       </div>
-      <figcaption><b>무엇을 묻는 그림인가:</b> 축이 셋이면 0.5는 선이 아니라 평면이다. 나이·평균 혈당에 체질량지수를 더한 세 축입니다. <b>체질량지수가 비어 있는 201명은 빠지므로 대상이 4,909명이고,</b> 두 축 그림과 숫자가 다릅니다.</figcaption>
+      <figcaption><b>무엇을 묻는 그림인가:</b> 축이 셋이면 0.5는 선이 아니라 평면이다. 나이·평균 혈당에 체질량지수를 더한 세 축입니다. 체질량지수가 비어 있는 201명은 앱과 같이 훈련용의 중앙값으로 채웠으므로 <b>대상은 5,110명 그대로입니다.</b> 앱에서 입력에 체질량지수를 더한 경우와 같은 그림입니다.</figcaption>
     </figure>
   </details>
 
@@ -1500,8 +1500,8 @@ st.info("**이 흐름은 다른 데이터에도 그대로 됩니다** · 오늘�
 <script src="assets/check.js"></script>
 <script src="assets/quiz.js"></script>
 <script src="assets/widgets10.js?v=6"></script>
-<script src="assets/stroke_data.js?v=1"></script>
-<script src="assets/stroke_widgets.js?v=2"></script>
+<script src="assets/stroke_data.js?v=2"></script>
+<script src="assets/stroke_widgets.js?v=3"></script>
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="assets/answer.js?v=3"></script>
 <script src="assets/lesson08-board.js"></script>

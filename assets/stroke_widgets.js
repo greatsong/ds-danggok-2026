@@ -1,5 +1,9 @@
 // 11·12차시(분류 · 뇌졸중) 경계 위젯 — 교재 lesson11.html과 lesson12.html이 함께 사용한다.
 // 각 위젯: <div class="widget" data-w="이름"> 조각 + function initW_이름(root, D). D = window.STROKE_DATA.
+
+function 격자최대(것) {   // 그림 안에서 가장 높은 확률. 앱 화면과 같은 값이다
+  return (것.pmax_grid === undefined || 것.pmax_grid === null) ? 것.pmax : 것.pmax_grid;
+}
 // 데이터는 assets/stroke_data.js(scripts/lesson11_12_stroke_widgets.py가 다시 쓴다)에서 온다.
 // plotly는 이 파일 뒤에서 불린다. 준비되지 않으면 안내 문장만 표시한다.
 (function () {
@@ -173,7 +177,7 @@
                       line: { color: 남색, width: 3 }, hoverinfo: 'skip' });
         } else {
           글상자.push({ x: 0.02, y: 0.97, xref: 'paper', yref: 'paper', xanchor: 'left',
-                        text: '확률이 ' + 앞.pmax.toFixed(2) + '을 넘는 사람이 없어<br>0.5 경계선이 그림 밖에 있습니다',
+                        text: '이 그림 안에서 확률이 가장 높은 자리도 ' + 격자최대(앞).toFixed(2) + '입니다<br>0.5 경계선이 그림 밖에 있습니다',
                         showarrow: false, align: 'left', bgcolor: 'rgba(255,255,255,0.88)',
                         bordercolor: 금색, borderwidth: 1.2, borderpad: 6,
                         font: { size: 12.5, color: 금색 } });
@@ -245,7 +249,7 @@
                     line: { color: 남색, width: 3 }, hoverinfo: 'skip' });
       } else {
         글상자.push({ x: 0.02, y: 0.97, xref: 'paper', yref: 'paper', xanchor: 'left',
-                      text: '확률이 ' + 것.pmax.toFixed(2) + '을 넘는 사람이 없어<br>0.5 경계선이 그림 밖에 있습니다',
+                      text: '이 그림 안에서 확률이 가장 높은 자리도 ' + 격자최대(것).toFixed(2) + '입니다<br>0.5 경계선이 그림 밖에 있습니다',
                       showarrow: false, align: 'left', bgcolor: 'rgba(255,255,255,0.88)',
                       bordercolor: 금색, borderwidth: 1.2, borderpad: 6,
                       font: { size: 12.5, color: 금색 } });
