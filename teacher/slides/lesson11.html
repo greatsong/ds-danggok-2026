@@ -399,13 +399,10 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
 
 <section class="slide hasP">
   <div class="kicker">11-21</div>
-  <h2>앱 화면에 질문의 순서가 적혀 있습니다</h2>
-<div class="split">
-    <div class="card" style="flex:1 1 17em"><div class="t">첫 번째 질문</div><div class="d" style="font-size:clamp(15px,1.8vw,25px);color:var(--text);margin-top:.8vh">나이가 <b>67.5세</b>를 넘는가</div></div>
-    <div class="card" style="flex:1 1 17em"><div class="t">그다음 질문</div><div class="d" style="font-size:clamp(15px,1.8vw,25px);color:var(--text);margin-top:.8vh">평균 혈당이 <b>126.84</b>를 넘는가</div></div>
-  </div>
-  <p class="lead">이 트리에서는 뇌졸중으로 답하는 잎 노드가 하나뿐입니다.</p>
-  <p class="small">입력과 설정이 달라지면 질문의 순서와 개수도 달라집니다</p>
+  <h2>앱 화면에 질문이 가지 그림으로 그려집니다</h2>
+<img src="../../img/lesson11_app_tree.png" alt="가지가 갈라지는 그림으로 나타낸 의사결정트리. 마디마다 질문과 인원, 뇌졸중 인원이 적혀 있고 답을 내는 여덟 칸 가운데 한 칸만 뇌졸중이라고 답한다" style="margin-top:.6vh;width:100%;max-height:52vh;object-fit:contain">
+  <p class="lead" style="margin-top:.8vh">답을 내는 여덟 칸 가운데 <b>일곱 칸이 아님</b>이라고 답합니다.</p>
+  <p class="small">첫 질문은 나이 67.5세 · 고른 속성은 넷이지만 실제로 물은 것은 나이와 평균 혈당 둘뿐입니다</p>
   <div class="principle"><span class="lab">원리</span><b>규칙이 눈에 보인다</b>는 점이 이 모델의 장점입니다.</div>
 </section>
 
@@ -419,8 +416,8 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
   <div class="kicker">11-22</div>
   <h2>세 값을 적습니다</h2>
 <table class="mini"><thead><tr><th>모델</th><th>답하는 방식</th><th>정확도</th></tr></thead><tbody>
-    <tr><td>확률로 답하는 모델</td><td>0과 1 사이의 확률</td><td><em>0.9465</em></td></tr>
-    <tr><td>질문으로 답하는 모델</td><td>질문의 순서</td><td>0.9439</td></tr>
+    <tr><td>확률로 답하는 모델<br><span style="font-size:.8em;color:var(--muted)">로지스틱 회귀</span></td><td>0과 1 사이의 확률</td><td><em>0.9465</em></td></tr>
+    <tr><td>질문으로 답하는 모델<br><span style="font-size:.8em;color:var(--muted)">의사결정트리</span></td><td>질문의 순서</td><td>0.9439</td></tr>
     <tr><td>한쪽으로만 답하는 모델</td><td>입력을 보지 않음</td><td><em>0.9465</em></td></tr>
   </tbody></table>
 </section>
