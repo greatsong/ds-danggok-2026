@@ -85,6 +85,13 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 .mxbox td.hit{background:var(--green-soft);} .mxbox td.hit .k{color:var(--green);}
 .mxbox td.miss{background:var(--red-soft);} .mxbox td.miss .k{color:var(--red);}
 
+
+/* 쪽지 — 상황 설정 화면 */
+.memo{margin-top:2vh;background:#fff;border:1px solid var(--border);border-left:9px solid var(--gold);
+  border-radius:0 16px 16px 0;padding:2.6vh 2.4vw;max-width:70vw;box-shadow:0 2px 10px rgba(180,140,20,.12);}
+.memo p{font-size:clamp(17px,2.1vw,30px);line-height:1.58;margin:0 0 .9vh;}
+.memo p:last-of-type{margin-bottom:0;}
+.memo .sign{margin-top:2vh;text-align:right;font-size:clamp(16px,1.8vw,25px);font-weight:800;color:var(--accent);}
 /* 공식 — 분수로 크게 */
 .fxrow{display:flex;gap:3vw;flex-wrap:wrap;align-items:center;margin-top:2.6vh;}
 .fx{display:inline-flex;align-items:center;gap:.5em;font-size:clamp(26px,3.4vw,50px);font-weight:800;color:var(--text);}
@@ -135,13 +142,15 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 
 <section class="slide">
   <div class="kicker">11-3</div>
-  <h2>우리는 DG메디컬 건강검진센터의 데이터 과학 인턴입니다</h2>
-<ul class="facts">
-    <li>검진센터는 뇌졸중을 겪은 적이 있는 분께 <b>재발을 막는 상담</b>을 안내</li>
-    <li>그런데 올해 새로 들어온 검진 결과에는 <b>병력란이 비어 있음</b></li>
-    <li>병력이 적힌 5,110명분으로 모델을 만들어 <b>안내 대상</b>을 고르려 함</li>
-  </ul>
-  <p class="lead">안내 한 통에는 비용이 들고 상담 인원도 정해져 있어 전원에게 보낼 수는 없습니다.</p>
+  <h2>첫 출근, 센터장의 쪽지</h2>
+<div class="memo">
+    <p>검진 결과지를 열어 보니, 올해 <b>병력란이 비어 있군요.</b></p>
+    <p>지난해 문진표를 작성한 <b>5,110명</b>에게는 뇌졸중 여부가 기록되어 있습니다.</p>
+    <p>이 5,110명 데이터로 예측 모델을 만들어, <b>올해 기록에서 상담 안내가 필요한 사람</b>을 골라 주세요.</p>
+    <p>안내를 전원에게 보낼 수는 없습니다. <b>예산과 상담 가능 인원이 한정</b>되어 있으니까요.</p>
+    <p class="sign">— DG메디컬 건강검진센터장</p>
+  </div>
+  <p class="small">DG메디컬은 이 수업에서만 사용하는 가상의 검진센터입니다.</p>
 </section>
 
 <section class="slide">
