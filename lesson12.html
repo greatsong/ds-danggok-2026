@@ -1245,7 +1245,54 @@ st.caption("기본 설정에서 달라진 것: "
            + (" · ".join(달라진것) if 달라진것 else "없습니다. 조절 자리를 움직여 보세요."))
 st.caption("훈련용은 학습에 사용한 사람들이고 테스트용은 사용하지 않은 사람들입니다. "
            "질문 횟수를 늘리면 두 점수가 어떻게 벌어지는지 보세요. "
-           "훈련용에서만 잘 맞히는 모델은 처음 보는 사람에게는 쓸 수 없습니다.")</pre></div></details>
+           "훈련용에서만 잘 맞히는 모델은 처음 보는 사람에게는 쓸 수 없습니다.")
+
+
+st.divider()
+st.subheader("📤 기록 올리기")
+st.caption("이름과 학번은 받지 않습니다. 별명과 반만 적습니다. "
+           "올린 기록은 반 순위판에 바로 나타납니다.")
+저장주소 = "https://upkakhnpvepqhsbwdyjb.supabase.co/rest/v1/challenge_log"
+공개키 = "sb_publishable_16HKdOESG_9U5OVNGZMeYQ_of--7oV1"
+순위판주소 = "https://greatsong.github.io/ds-danggok-2026/challenge/"
+
+칸1, 칸2, 칸3 = st.columns([1, 2, 2])
+내반 = 칸1.selectbox("반", ["B", "E"])
+내별명 = 칸2.text_input("별명", max_chars=12, placeholder="열두 글자까지")
+보낼까 = 칸3.button("이 기록 올리기", width="stretch")
+
+if 보낼까:
+    if not 내별명.strip():
+        st.warning("별명을 적어 주세요.")
+    else:
+        보낼것 = {
+            "class_id": 내반, "nickname": 내별명.strip(),
+            "model": 좋은모델, "inputs": " · ".join(우리말(열) for 열 in 입력열),
+            "missing": 결측처리, "weighted": bool(내가중치),
+            "depth": int(내깊이), "threshold": float(내기준),
+            "sent": int(값["안내 인원"]), "found": int(값["찾아낸 환자"]),
+            "recall": None if 값["재현율"] is None else round(float(값["재현율"]), 4),
+            "precision": None if 값["정밀도"] is None else round(float(값["정밀도"]), 4),
+            "f1": None if 값["F1"] is None else round(float(값["F1"]), 4),
+            "within_quota": bool(값["안내 인원"] &lt;= 정원),
+        }
+        try:
+            import json
+
+            import js                                  # 브라우저에서 실행할 때만 있다
+            js.fetch(저장주소, js.JSON.parse(json.dumps({
+                "method": "POST",
+                "headers": {"apikey": 공개키, "Authorization": "Bearer " + 공개키,
+                            "Content-Type": "application/json", "Prefer": "return=minimal"},
+                "body": json.dumps(보낼것, ensure_ascii=False),
+            })))
+            st.success(f"올렸습니다. 찾아낸 환자 {보낼것['found']}명 · 안내 {보낼것['sent']:,}명")
+        except ModuleNotFoundError:
+            st.info("이 화면에서는 기록을 올릴 수 없습니다. 브라우저용 실습실 주소에서 올려 주세요.")
+        except Exception as 오류:
+            st.error(f"올리지 못했습니다. 잠시 뒤 다시 눌러 주세요. ({type(오류).__name__})")
+
+st.markdown(f"[📊 우리 반 순위판 열기]({순위판주소})")</pre></div></details>
     </li>
   </ol>
 
@@ -1291,6 +1338,13 @@ st.caption("훈련용은 학습에 사용한 사람들이고 테스트용은 사
   <p>놓친 환자들의 기록을 비교하면 모델이 <b>어떤 특성을 가진 사람을 잘 구분하지 못했는지</b> 살펴볼 수 있습니다.</p>
 
   <p class="mini">🧪 빈 값이 있는 기록을 지웠을 때의 변화와 축 셋으로 보는 0.5 평면은 <a href="lesson12-lab.html">12차시 실험실</a>에 있습니다.</p>
+
+  <div class="callout tip">
+    <div class="h">🏆 성능 높이기 챌린지</div>
+    <p>성능 높이기 페이지 맨 아래에 챌린지 자리가 있습니다. 목표는 <b>안내 인원이 상담 정원 500명 이하인 채로 찾아낸 환자를 가장 많이</b> 만드는 것입니다. 바꿀 수 있는 것은 <b>입력 속성 · 빈 값 처리 · 가중치 · 질문 횟수 · 기준값</b> 다섯입니다.</p>
+    <p class="t">정원 안에 든 기록은 <b>최고 기록</b>으로 남습니다. 별명과 반을 적고 <b>기록 올리기</b>를 누르면 순위판에 바로 올라갑니다. 이름과 학번은 받지 않습니다.</p>
+    <p class="labgo"><a href="challenge/" target="_blank" rel="noopener">🏆 우리 반 순위판 열기 →</a></p>
+  </div>
 
   <div class="callout tip">
     <div class="h">🧪 파라미터를 바꾸어 보기</div>

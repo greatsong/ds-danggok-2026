@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>성능 높이기 챌린지 순위판 · 12차시 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="../assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏆</text></svg>">
+<style>
+  .board { width:100%; border-collapse:collapse; margin:.8rem 0 1.2rem; }
+  .board th, .board td { border:1px solid var(--border); padding:.5rem .6rem; font-size:.95rem; }
+  .board th { background:var(--card); color:var(--text-soft); font-weight:700; }
+  .board td.num { text-align:right; font-variant-numeric:tabular-nums; }
+  .board tr.top td { background:var(--green-soft); font-weight:700; }
+  .ctl { display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin:.6rem 0 1rem; }
+  .ctl select, .ctl button { padding:.4rem .7rem; font-size:.95rem; border:1px solid var(--border);
+    border-radius:8px; background:var(--card); color:var(--text); }
+  .stat { display:flex; gap:1.4rem; flex-wrap:wrap; margin:.4rem 0 1rem; }
+  .stat div b { display:block; font-size:1.5rem; color:var(--accent); }
+  #plot { width:100%; height:380px; }
+  .quiet { color:var(--text-soft); font-size:.9rem; }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="../index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../lesson12.html">← 12차시</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 12차시</span>
+  <h1>성능 높이기 <span class="a">챌린지 순위판</span></h1>
+  <div class="under"></div>
+  <p class="lead">안내 인원이 상담 정원 <b>500명 이하</b>인 채로 찾아낸 환자를 가장 많이 만든 기록입니다.
+  정원을 넘긴 기록은 순위에 들어가지 않습니다.</p>
+  <p class="mini"><a href="../app/stroke/" target="_blank" rel="noopener">🩺 실습실에서 기록 올리기 →</a></p>
+
+  <div class="ctl">
+    <label>반
+      <select id="반"><option value="all">전체</option><option value="B">B반</option><option value="E">E반</option></select>
+    </label>
+    <button id="새로">지금 새로 읽기</button>
+    <span class="quiet" id="상태">읽는 중…</span>
+  </div>
+
+  <div class="stat">
+    <div>참가한 별명<b id="s인원">—</b></div>
+    <div>올린 기록<b id="s시도">—</b></div>
+    <div>지금 1등<b id="s최고">—</b></div>
+  </div>
+
+  <h2>순위</h2>
+  <table class="board"><thead><tr>
+    <th>순위</th><th>별명</th><th>반</th><th>찾아낸 환자</th><th>안내 인원</th>
+    <th>재현율</th><th>설정</th><th>시도</th><th>마지막 기록</th>
+  </tr></thead><tbody id="순위"></tbody></table>
+
+  <h2>시간에 따른 기록</h2>
+  <div id="plot"></div>
+  <p class="mini">점 하나가 올린 기록 하나입니다. 가로축은 올린 시각, 세로축은 찾아낸 환자 수입니다.
+  정원을 넘긴 기록은 옅게 표시합니다.</p>
+
+  <div class="callout tip">
+    <div class="h">🎯 넘어야 할 선</div>
+    <p>수업 기본 설정(나이·평균 혈당·고혈압·심장병 · 가중치 켬)은 <b>67명</b>입니다. 68명을 넘기면 기본을 이긴 것입니다.</p>
+  </div>
+</main>
+</div>
+
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<script src="../gallery/config.js"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
