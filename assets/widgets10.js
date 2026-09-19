@@ -63,7 +63,7 @@ function initW_matrix(root, D) {
   var groups = {};
   qa('.mx-m').forEach(function (g) { groups[g.getAttribute('data-m')] = g; });
 
-  var cur = 'A', metric = 'prec', shown = false;
+  var cur = 'A', metric = 'rec', shown = false;
   // 값 확인을 누르기 전에는 네 칸도 합계도 분모도 가린다. 손으로 먼저 푸는 것이 먼저다
   var 가림 = function (v) { return shown ? v : '?'; };
   var denToken = 0, barToken = 0;
@@ -164,7 +164,7 @@ function initW_matrix(root, D) {
 
     if (metric === 'prec') capLine.textContent = '분자 TP ' + c.tp + ' · 분모 예측 ' + c.pos + ' ' + (c.tp + c.fp);
     else if (metric === 'rec') capLine.textContent = '분자 TP ' + c.tp + ' · 분모 실제 ' + c.pos + ' ' + (c.tp + c.fn);
-    else if (metric === 'f1') capLine.textContent = '정밀도와 재현율에서 나오는 값 · 낮은 쪽에 더 끌린다';
+    else if (metric === 'f1') capLine.textContent = '정밀도와 재현율에서 나오는 값 · 낮은 쪽에 더 크게 영향받는다';
     else capLine.textContent = '분자 TP+TN ' + (c.tp + c.tn) + ' · 분모 전체 ' + total;
 
     caseBtns.forEach(function (b) { var on = b.getAttribute('data-case') === cur; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
