@@ -62,7 +62,11 @@
       if (r.확인 === false) { it.의심 += 1; return; }   // 맞지 않는 기록은 최고로 치지 않는다
       if (r.within_quota && (!it.최고 || r.found > it.최고.found)) it.최고 = r;
     });
-    return Object.values(표).sort(function (a, b) {
+    var 목록 = Object.values(표);
+    if (!교사용) {                                      // 학생 화면에서는 맞지 않는 기록만 낸 팀을 아예 뺀다
+      목록 = 목록.filter(function (it) { return it.최고 || it.의심 === 0; });
+    }
+    return 목록.sort(function (a, b) {
       var A = a.최고 ? a.최고.found : -1, B = b.최고 ? b.최고.found : -1;
       return B - A || a.마지막.localeCompare(b.마지막);
     });
