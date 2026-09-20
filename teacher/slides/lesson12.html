@@ -30,6 +30,7 @@ h2{font-size:clamp(28px,3.9vw,58px);font-weight:800;line-height:1.35;letter-spac
 .facts li{list-style:none;font-size:clamp(21px,2.5vw,36px);margin:1.7vh 0;padding-left:1.1em;text-indent:-1.1em;}
 .facts li::before{content:"·  ";color:var(--accent);font-weight:800;}
 .facts b,.lead b{color:var(--accent);font-weight:800;}
+.facts.tight li{font-size:clamp(16px,1.9vw,27px);margin:1.1vh 0;}
 .small{margin-top:1.8vh;font-size:clamp(15px,1.6vw,23px);color:var(--muted);}
 /* 원리 한 줄 — 모든 여는 화면의 같은 자리 */
 .principle{position:absolute;left:6vw;right:6vw;bottom:9.5vh;border-left:6px solid var(--gold);
@@ -126,26 +127,19 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <section class="slide hasP">
   <div class="kicker">도입</div>
   <h2>①은 판을 보지 않고도 일곱 번 맞습니다</h2>
-<p class="lead">①은 열 명 <b>전원</b>에게 판단을 내렸습니다. 마피아가 세 명이니 나머지 일곱 명은 정말 시민입니다. 발언을 듣지 않고 아무도 지목하지 않아도 <b>열 번 가운데 일곱 번</b>이 맞습니다. 마피아가 두 명인 판이면 여덟 번, 한 명인 판이면 아홉 번입니다.</p>
-<table class="mini" style="font-size:clamp(16px,1.9vw,27px)"><thead><tr><th></th><th>지목</th><th>적중</th><th>잡아낸 마피아</th></tr></thead><tbody>
-    <tr><td>① “다 시민이야”</td><td>0명</td><td>—</td><td><em>0명</em> / 3명</td></tr>
-    <tr><td>② “쟤 마피아 같아”</td><td>6명</td><td>2명</td><td>2명 / 3명</td></tr>
-    <tr><td>③ 딱 한 번</td><td>1명</td><td>1명</td><td>1명 / 3명</td></tr>
+<table class="mini" style="font-size:clamp(16px,1.9vw,27px)"><thead><tr><th></th><th>지목한 사람 중 적중</th><th>잡아낸 마피아</th><th>맞힌 비율</th></tr></thead><tbody>
+    <tr><td>① “다 시민이야”</td><td>—</td><td><em>0 / 3</em></td><td><em>7 / 10</em></td></tr>
+    <tr><td>② “쟤 마피아 같아”</td><td>2 / 6</td><td>2 / 3</td><td>구할 수 없음</td></tr>
+    <tr><td>③ 딱 한 번</td><td>1 / 1</td><td>1 / 3</td><td>구할 수 없음</td></tr>
   </tbody></table>
-  <p class="lead">②와 ③은 전원을 판정하지 않았으므로 <b>맞힌 비율을 구할 수 없습니다.</b> ②는 마피아를 둘 잡았지만 네 명을 억울하게 몰았고, ③은 한 번도 틀리지 않았지만 둘을 놓쳤습니다.</p>
+  <p class="lead">①은 열 명 <b>전원</b>에게 판단을 내렸습니다. 마피아가 셋이니 나머지 일곱은 정말 시민이라, 판을 보지 않아도 <b>7/10</b>이 맞습니다. 그러나 잡아낸 마피아는 <b>0명</b>입니다. ②와 ③은 전원을 판정하지 않아 맞힌 비율 자체를 구할 수 없습니다.</p>
   <div class="principle"><span class="lab">원리</span>맞힌 비율이 높다고 해서 <b>찾아야 할 것을 찾은 것은 아닙니다</b>.</div>
 </section>
 
 <section class="slide">
   <div class="kicker ask">12-1 · 질문하기</div>
   <p class="q">두 모델의 정확도가 나왔습니다.<br>A는 80%, B는 85%입니다.<br>지금 하나를 고른다면?</p>
-<table class="mini"><thead><tr><th>모델 A</th><th>모델 B</th></tr></thead><tbody><tr><td>80%</td><td>85%</td></tr></tbody></table>
-</section>
-
-<section class="slide">
-  <div class="kicker">12-1</div>
-  <h2>고른 사람도, 보류한 사람도 이유를 적습니다</h2>
-<ul class="facts"><li>지금 고를 수 있다면 <b>무엇을 근거로</b> 골랐습니까</li><li>고를 수 없다면 <b>무엇을 더 알아야</b> 합니까</li></ul><p class="small">활동지 12-1 · 수업이 끝날 때 이 선택으로 다시 돌아옵니다</p>
+<table class="mini"><thead><tr><th>모델 A</th><th>모델 B</th></tr></thead><tbody><tr><td>80%</td><td>85%</td></tr></tbody></table><p class="small">활동지 12-1에 지금 고른 것과 그 이유를 적습니다. 수업이 끝날 때 이 선택으로 돌아옵니다</p>
 </section>
 
 <section class="slide">
@@ -522,7 +516,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <section class="slide hasP">
   <div class="kicker">12-25</div>
   <h2>모델 소개 카드에 적을 일곱 가지</h2>
-<ul class="facts">
+<ul class="facts tight">
     <li>어떤 데이터를 사용했는가 — 출처와 인원, 맞히려는 답</li>
     <li>무엇을 보고 맞히는가 — 입력 넷과 제외한 항목 하나</li>
     <li><b>어떤 오류를 먼저 줄이려 했는가</b> — 우선한 지표와 그 이유</li>
