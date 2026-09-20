@@ -380,7 +380,7 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
     <div class="card"><div class="t">훈련용</div><div class="v">3,577명</div><div class="d">뇌졸중 167명</div></div>
     <div class="card"><div class="t">테스트용</div><div class="v">1,533명</div><div class="d">뇌졸중 82명</div></div>
   </div>
-  <p class="lead">번호 순으로 정렬해 열 명 중 앞 세 명을 테스트용으로 남깁니다. 크기를 맞추는 기준도 훈련용에서만 구합니다.</p>
+  <p class="lead">번호 순으로 정렬한 뒤 열 명씩 묶어, 각 묶음의 앞 세 명을 테스트용으로 남깁니다. 크기를 맞추는 기준도 훈련용에서만 구합니다.</p>
   <div class="principle"><span class="lab">원리</span><b>배운 문제로 채점하면</b> 실력을 알 수 없습니다.</div>
 </section>
 
@@ -389,8 +389,8 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
   <h2>실습 ③ — 분류 모델 화면</h2>
 <div class="prompt">pages 폴더에 '분류 모델' 페이지를 추가해 줘. 파일 이름은 2_분류_모델.py.
 입력은 age, avg_glucose_level, hypertension, heart_disease 네 가지만 사용해 줘.
-번호 순으로 정렬해 열 명 중 앞 세 명을 테스트용으로 고정하고, 나머지로만 학습해 줘.
-확률로 답하는 모델과 질문의 순서로 답하는 모델을 각각 만들어 줘.
+번호 순으로 정렬한 뒤 열 명씩 묶어, 각 묶음의 앞 세 명(1,533명)을 테스트용으로 고정하고 나머지로만 학습해 줘.
+로지스틱 회귀 모델과 의사결정트리 모델을 각각 만들어 줘.
 입력을 하나도 보지 않고 훈련용에서 많은 쪽으로만 답하는 모델의 정확도도 카드로 보여 줘.</div><p class="small">전문은 교재 4절</p>
 </section>
 

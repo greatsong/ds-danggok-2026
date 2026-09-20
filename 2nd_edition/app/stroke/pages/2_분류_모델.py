@@ -44,7 +44,7 @@ if len(입력열) < 2:
     st.warning("속성을 두 개 이상 골라 주세요. 하나만으로는 그림의 두 축을 만들 수 없습니다.")
     st.stop()
 
-테스트용 = pd.Series(df.index % 10 < 3, index=df.index)   # 열 명 중 앞 세 명이 테스트용
+테스트용 = pd.Series(df.index % 10 < 3, index=df.index)   # 열 명씩 묶어 각 묶음의 앞 세 명이 테스트용
 X = df[입력열].copy()
 y = df["stroke"]                                        # 1이면 뇌졸중, 0이면 아님. 뇌졸중이 양성이다
 if "bmi" in 입력열 and X["bmi"].isna().any():
