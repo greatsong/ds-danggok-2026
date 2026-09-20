@@ -848,7 +848,7 @@ st.caption("이 목록에 있는 것은 번호뿐입니다. 누구인지 알 수
 <div class="callout ask">
     <div class="h">❓ 표를 채운 뒤 답할 질문</div>
     <ul>
-      <li>확률로 답하는 모델이 <b>찾아낸 환자(TP)</b>는 몇 명인가요?</li>
+      <li>로지스틱 회귀(확률로 답하는 모델)가 <b>찾아낸 환자(TP)</b>는 몇 명인가요?</li>
       <li>기준 모델과 학습한 두 모델의 정확도는 얼마나 다른가요? 앱에서 <b>정밀도가 숫자로 표시되지 않은 모델</b>을 찾고, 그 이유를 설명합니다. 그 모델의 F1은 0으로 표시됩니다.</li>
     </ul>
   </div>
@@ -1367,7 +1367,7 @@ st.markdown(f"[📊 우리 반 순위판 열기]({순위판주소})")</pre></div
   </ol>
 
   <h3>화면 읽기 — 가중치 전후 결과 비교하기</h3>
-  <p>앱의 「고치기 전과 고친 뒤」 표에서 확률로 답하는 모델의 결과를 찾아 아래 표에 옮겨 적습니다. 전후 결과는 스위치 상태와 관계없이 나란히 표시됩니다.</p>
+  <p>앱의 「고치기 전과 고친 뒤」 표에서 로지스틱 회귀(확률로 답하는 모델)의 결과를 찾아 아래 표에 옮겨 적습니다. 전후 결과는 스위치 상태와 관계없이 나란히 표시됩니다.</p>
   <div class="mxgrid"><div class="mxwrap"><div class="cap">고치기 전</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div><div class="mxwrap"><div class="cap">고친 뒤</div><table class="mx"><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rh">실제 뇌졸중</th><td class="hit"><span class="k">TP</span></td><td class="miss"><span class="k">FN</span></td></tr><tr><th class="rh">실제 아님</th><td class="miss"><span class="k">FP</span></td><td class="hit"><span class="k">TN</span></td></tr></table></div></div>
   <table class="daymap">
     <thead><tr><th>로지스틱 회귀<br><span class="mini">확률로 답하는 모델</span></th><th>고치기 전</th><th>고친 뒤</th></tr></thead>
@@ -1426,7 +1426,7 @@ st.markdown(f"[📊 우리 반 순위판 열기]({순위판주소})")</pre></div
 
   <p>이제 이 모델을 어디에 쓸 수 있는지 판단해 봅시다. 검진센터는 상담 안내를 전원에게 보낼 수 없습니다. 안내 한 통에 <b>2,000원</b>이 들고, 이번 달 상담 정원은 <b>500명</b>입니다. 이 두 값은 수업을 위해 정한 값입니다.</p>
   <table class="daymap">
-    <thead><tr><th>테스트 데이터 1,533명 · 확률로 답하는 모델</th><th>가중치 끔</th><th>가중치 켬</th><th>전원에게 발송</th></tr></thead>
+    <thead><tr><th>테스트 데이터 1,533명 · 로지스틱 회귀<br><span class="mini">확률로 답하는 모델</span></th><th>가중치 끔</th><th>가중치 켬</th><th>전원에게 발송</th></tr></thead>
     <tbody>
       <tr><td>안내를 보낸 사람</td><td>0명</td><td>465명</td><td>1,533명</td></tr>
       <tr><td>비용</td><td>0원</td><td>93만 원</td><td>307만 원</td></tr>

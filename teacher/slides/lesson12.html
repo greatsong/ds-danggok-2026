@@ -114,15 +114,23 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 
 <section class="slide">
   <div class="kicker ask">도입 · 질문하기</div>
-  <p class="q">열 명이 하는 마피아 게임에 마피아는 세 명입니다.<br>게임 내내 “다 시민이야”라고만 말한 친구가 있습니다.<br>이 친구의 말은 열 번 가운데 몇 번 맞았을까요?</p>
+  <p class="q">열 명이 하는 마피아 게임, 마피아는 세 명입니다.<br>누가 제일 잘한 걸까요?</p>
+<ul class="facts" style="margin-top:2.4vh">
+    <li><b>①</b> 게임 내내 “다 시민이야”라고만 하는 친구</li>
+    <li><b>②</b> “쟤 마피아 같아”를 계속 하는 친구 — 여섯 명을 지목해 둘을 맞혔습니다</li>
+    <li><b>③</b> 조용히 있다가 딱 한 번 지목 — 그 한 명이 진짜 마피아였습니다</li>
+  </ul>
 </section>
 
 <section class="slide hasP">
   <div class="kicker">도입</div>
-  <h2>일곱 번입니다</h2>
-<div class="fxrow"><div class="fx"><span class="lhs">정확도</span><span class="eq">=</span><span class="frac"><span class="num">7</span><span class="den">10</span></span><span class="eq">=</span><span class="val">0.70</span></div></div>
-  <p class="lead">마피아가 세 명이니 나머지 <b>일곱 명은 정말 시민</b>입니다. 판을 보지 않고, 발언을 듣지 않고, 아무도 지목하지 않아도 일곱 번 맞힙니다. 마피아가 두 명인 판이면 80%, 한 명인 판이면 90%가 됩니다.</p>
-  <p class="lead">그런데 이 친구가 잡아낸 마피아는 <b>한 명도 없습니다.</b></p>
+  <h2>정확도로 재면 이렇습니다</h2>
+<table class="mini"><thead><tr><th></th><th>지목</th><th>맞힘</th><th>정확도</th></tr></thead><tbody>
+    <tr><td>① “다 시민이야”</td><td>0명</td><td>0명</td><td><em>0.70</em></td></tr>
+    <tr><td>② “쟤 마피아 같아”</td><td>6명</td><td>2명</td><td>0.50</td></tr>
+    <tr><td>③ 딱 한 번</td><td>1명</td><td>1명</td><td><em>0.80</em></td></tr>
+  </tbody></table>
+  <p class="lead">아무도 지목하지 않은 <b>①이, 마피아를 둘이나 잡은 ②를 이깁니다.</b> ①이 잡아낸 마피아는 한 명도 없습니다. 마피아가 두 명인 판이면 ①은 80%, 한 명인 판이면 90%를 받습니다.</p>
   <div class="principle"><span class="lab">원리</span>맞힌 비율이 높다고 해서 <b>찾아야 할 것을 찾은 것은 아닙니다</b>.</div>
 </section>
 
@@ -204,25 +212,25 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
     <tr><td>실제: 뇌졸중</td><td><em>TP</em> 찾아낸 환자</td><td><em>FN</em> 놓친 환자</td></tr>
     <tr><td>실제: 아님</td><td><em>FP</em> 헛짚은 사람</td><td><em>TN</em> 아님을 맞힘</td></tr>
   </tbody></table>
-  <p class="lead">앞 글자는 예측이 맞았는지를, 뒤 글자는 무엇이라고 예측했는지를 나타냅니다.</p><p class="small">교과서 139·140쪽</p>
+  <p class="small">교과서 139·140쪽</p>
   <div class="principle"><span class="lab">원리</span>앞 글자는 <b>맞았는가</b>, 뒤 글자는 <b>무엇이라 예측했는가</b>를 나타냅니다.</div>
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-7</div>
+  <div class="kicker">12-8</div>
   <h2>네 지표의 공식</h2>
 <div class="fxrow"><div class="fx"><span class="lhs">정확도</span><span class="eq">=</span><span class="frac"><span class="num">TP + TN</span><span class="den">TP + FP + FN + TN</span></span></div><div class="fx"><span class="lhs">F1</span><span class="eq">=</span><span class="frac"><span class="num">2TP</span><span class="den">2TP + FP + FN</span></span></div></div><p class="lead">F1은 정밀도와 재현율을 함께 보는 값입니다. 정밀도를 구할 수 없을 때도 <b>인원으로는 계산</b>할 수 있습니다.</p>
   <div class="principle"><span class="lab">원리</span>F1은 정밀도와 재현율 중 <b>낮은 쪽에 더 크게 영향을 받는</b> 평균입니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-8 · 질문하기</div>
+  <div class="kicker ask">12-9 · 질문하기</div>
   <p class="q">모델 B와 규칙 C는<br>직접 계산해 볼까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-8</div>
+  <div class="kicker">12-9</div>
   <h2>정확도가 같아도 나머지는 다릅니다</h2>
 <table class="mini" style="font-size:clamp(14px,1.6vw,23px)"><thead><tr><th></th><th>정확도</th><th>재현율</th><th>정밀도</th><th>F1</th></tr></thead><tbody>
     <tr><td>모델 A</td><td>0.80</td><td><em>0.75</em></td><td>0.50</td><td><em>0.60</em></td></tr>
@@ -234,7 +242,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker">12-9</div>
+  <div class="kicker">12-10</div>
   <h2>손계산과 화면을 대조합니다</h2>
 <div class="diagram" style="--wh:56vh;padding:1.2vh .6vw">
 <div class="widget" data-w="matrix">
@@ -313,13 +321,13 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-10 · 질문하기</div>
+  <div class="kicker ask">12-11 · 질문하기</div>
   <p class="q">체육대회에서 도움이 필요한 사람을<br>놓치지 않으려면 무엇부터 세야 할까요?</p>
 <p class="lead">오래 뛴 뒤 더위에 지치거나 다쳐서 도움이 필요한 사람이 생깁니다. 한 팀이 운동장을 돌며 보건 선생님께 알립니다.</p>
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-10</div>
+  <div class="kicker">12-11</div>
   <h2>실제로 도움이 필요했던 사람부터 — 재현율</h2>
 <table class="mini"><thead><tr><th>실제 4명 중</th><th>규칙 A</th><th>규칙 B</th></tr></thead><tbody>
     <tr><td>찾아낸 사람</td><td>3명</td><td>1명</td></tr>
@@ -331,13 +339,13 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-11 · 질문하기</div>
+  <div class="kicker ask">12-12 · 질문하기</div>
   <p class="q">새치기하지 않았는데 지목되었습니다.<br>이번에는 무엇부터 세야 할까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-11</div>
+  <div class="kicker">12-12</div>
   <h2>고른 사례부터 — 정밀도</h2>
 <table class="mini" style="margin-top:1.6vh;font-size:clamp(16px,1.9vw,27px)"><thead><tr><th>실제 4건 중</th><th>규칙 A</th><th>규칙 B</th></tr></thead><tbody>
     <tr><td>새치기라고 고른 건수</td><td>6건</td><td>1건</td></tr>
@@ -350,20 +358,20 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-12 · 질문하기</div>
+  <div class="kicker ask">12-13 · 질문하기</div>
   <p class="q">아무도 지목하지 않으면<br>어떻게 될까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-12</div>
+  <div class="kicker">12-13</div>
   <h2>잘못 지목은 0, 찾아낸 새치기도 0</h2>
 <p class="lead">2절에서 본 <b>규칙 C</b>가 바로 그런 규칙입니다.</p>
   <div class="principle"><span class="lab">원리</span>비율 하나만 보면, <b>아무 일도 하지 않는 규칙</b>이 가장 좋아 보입니다.</div>
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-13</div>
+  <div class="kicker">12-14</div>
   <h2>지표를 고르는 세 걸음</h2>
 <div class="split">
     <div class="card" style="flex:1 1 13em"><div class="t">하나</div><div class="d" style="font-size:clamp(15px,1.7vw,23px);color:var(--text);margin-top:.8vh">무엇을 줄일지 정합니다</div></div>
@@ -374,7 +382,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker">12-14</div>
+  <div class="kicker">12-15</div>
   <h2>오늘은 만들지 않고 엽니다</h2>
 <div class="memo" style="max-width:70vw">
     <div class="t">뇌졸중 예측 실습실</div>
@@ -386,38 +394,38 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-15 · 질문하기</div>
+  <div class="kicker ask">12-16 · 질문하기</div>
   <p class="q">내 앱의 네 칸은 몇일까요?</p>
 
 </section>
 
 <section class="slide">
-  <div class="kicker">12-15</div>
+  <div class="kicker">12-16</div>
   <h2>찾아낸 환자 0명</h2>
-<div class="mxs"><div class="mxbox"><div class="cap">확률로 답하는 모델 · 테스트 데이터 1,533명</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div></div><p class="lead">실제 환자 82명 가운데 <b>한 명도 찾아내지 못했습니다.</b> 확률이 가장 높은 사람도 0.4298이라 <b>0.5를 넘는 사람이 없습니다.</b></p>
+<div class="mxs"><div class="mxbox"><div class="cap">로지스틱 회귀<br><span style="font-size:.78em;color:var(--muted)">확률로 답하는 모델</span> · 테스트 데이터 1,533명</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div></div><p class="lead">실제 환자 82명 가운데 <b>한 명도 찾아내지 못했습니다.</b> 확률이 가장 높은 사람도 0.4298이라 <b>0.5를 넘는 사람이 없습니다.</b></p>
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-16 · 질문하기</div>
+  <div class="kicker ask">12-17 · 질문하기</div>
   <p class="q">정확도는 세 모델을 구별했을까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-16</div>
+  <div class="kicker">12-17</div>
   <h2>구별하지 못했습니다</h2>
-<div class="mxs"><div class="mxbox"><div class="cap">확률로 답하는 모델</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">질문으로 답하는 모델</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">1</span><span class="k">TP</span></td><td class="miss"><span class="n">81</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">5</span><span class="k">FP</span></td><td class="hit"><span class="n">1,446</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">한쪽으로만 답하는 모델</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div></div><p class="lead" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">정확도 0.9465 · 0.9439 · 0.9465 &nbsp;|&nbsp; 재현율 <b>0.0000</b> · 0.0122 · 0.0000</p>
+<div class="mxs"><div class="mxbox"><div class="cap">로지스틱 회귀<br><span style="font-size:.78em;color:var(--muted)">확률로 답하는 모델</span></div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">의사결정트리<br><span style="font-size:.78em;color:var(--muted)">질문으로 답하는 모델</span></div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">1</span><span class="k">TP</span></td><td class="miss"><span class="n">81</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">5</span><span class="k">FP</span></td><td class="hit"><span class="n">1,446</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">한쪽으로만 답하는 모델</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div></div><p class="lead" style="margin-top:2vh;font-size:clamp(15px,1.8vw,25px)">정확도 0.9465 · 0.9439 · 0.9465 &nbsp;|&nbsp; 재현율 <b>0.0000</b> · 0.0122 · 0.0000</p>
   <div class="principle"><span class="lab">원리</span><b>기준 모델과 비교</b>해야 점수의 의미를 제대로 알 수 있습니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-17 · 질문하기</div>
+  <div class="kicker ask">12-18 · 질문하기</div>
   <p class="q">무엇을 바꾸면<br>환자를 찾을 수 있을까요?</p>
 
 </section>
 
 <section class="slide">
-  <div class="kicker">12-17</div>
+  <div class="kicker">12-18</div>
   <h2>드문 쪽의 가중치를 같게 맞춥니다</h2>
 <p class="lead">성능 높이기 화면 맨 위의 스위치를 켭니다.</p>
   <p class="lead" style="margin-top:1vh">뇌졸중을 겪은 사람이 아주 드무니, 드문 쪽을 틀리는 것을
@@ -426,39 +434,39 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-18 · 질문하기</div>
+  <div class="kicker ask">12-19 · 질문하기</div>
   <p class="q">가중치를 맞춘 뒤<br>무엇이 줄고 무엇이 늘었을까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-18</div>
+  <div class="kicker">12-19</div>
   <h2>정확도는 내려가고 찾아낸 환자는 늘었습니다</h2>
 <div class="mxs"><div class="mxbox"><div class="cap">가중치 끔</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">0</span><span class="k">TP</span></td><td class="miss"><span class="n">82</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">0</span><span class="k">FP</span></td><td class="hit"><span class="n">1,451</span><span class="k">TN</span></td></tr></table></div><div class="mxbox"><div class="cap">가중치 켬</div><table><tr><th></th><th>예측 뇌졸중</th><th>예측 아님</th></tr><tr><th class="rowh">실제 뇌졸중</th><td class="hit"><span class="n">67</span><span class="k">TP</span></td><td class="miss"><span class="n">15</span><span class="k">FN</span></td></tr><tr><th class="rowh">실제 아님</th><td class="miss"><span class="n">398</span><span class="k">FP</span></td><td class="hit"><span class="n">1,053</span><span class="k">TN</span></td></tr></table></div></div><p class="lead" style="margin-top:1.6vh;font-size:clamp(16px,1.9vw,27px)">정확도 0.9465 → 0.7306 · 재현율 0.0000 → <b>0.8171</b> · 정밀도 구할 수 없음 → 0.1441</p>
   <div class="principle"><span class="lab">원리</span>놓침을 줄이면 <b>헛짚음이 늘어나는 경우가 많습니다</b>.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-19 · 질문하기</div>
+  <div class="kicker ask">12-20 · 질문하기</div>
   <p class="q">그래도 놓친 열다섯 명은<br>어떤 사람일까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-19</div>
+  <div class="kicker">12-20</div>
   <h2>전원 고혈압도 심장병도 없습니다</h2>
 <ul class="facts"><li>열다섯 명 <b>전원</b>이 고혈압도 심장병도 없음</li><li>가장 어린 사람 <b>열네 살</b></li><li>헛짚은 398명은 나이 중앙값 68세</li></ul>
   <div class="principle"><span class="lab">원리</span>모델은 <b>입력으로 주어진 항목만</b> 보고 판정합니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-20 · 질문하기</div>
+  <div class="kicker ask">12-21 · 질문하기</div>
   <p class="q">검진센터는 몇 명에게<br>안내를 보낼 수 있을까요?</p>
 <p class="lead">안내 한 통에 <b>2,000원</b>, 이번 달 상담 정원은 <b>500명</b>입니다. 두 값은 수업을 위해 정한 값입니다.</p>
 </section>
 
 <section class="slide">
-  <div class="kicker">12-20</div>
+  <div class="kicker">12-21</div>
   <h2>가중치를 켠 모델만 정원 안에 들어옵니다</h2>
 <table class="mini" style="font-size:clamp(13px,1.5vw,21px)"><thead><tr><th>테스트 데이터 1,533명</th><th>가중치 끔</th><th>가중치 켬</th><th>전원 발송</th></tr></thead><tbody>
     <tr><td>안내를 보낸 사람</td><td>0명</td><td>465명</td><td>1,533명</td></tr>
@@ -469,13 +477,13 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-21 · 질문하기</div>
+  <div class="kicker ask">12-22 · 질문하기</div>
   <p class="q">무작위로 465명을 골랐다면<br>대상자가 몇 명 들어왔을까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-21</div>
+  <div class="kicker">12-22</div>
   <h2>약 25명 — 모델은 67명</h2>
 <div class="split">
     <div class="card"><div class="t">모델이 고른 465명</div><div class="v" style="color:var(--accent)">67명</div><div class="d">대상자의 82%</div></div>
@@ -485,32 +493,32 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-22 · 질문하기</div>
+  <div class="kicker ask">12-23 · 질문하기</div>
   <p class="q">그러면 이 모델을<br>검진센터에서 사용해도 될까요?</p>
 
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-22</div>
+  <div class="kicker">12-23</div>
   <h2>사용할 수 없습니다</h2>
 <ul class="facts"><li>누구를 모은 명단인지 <b>알 수 없음</b></li><li>검진을 받은 시점과 뇌졸중을 겪은 시점이 <b>나뉘어 있지 않음</b></li><li>빈 값 201명을 지우면 기준 모델 정확도가 0.9465에서 <b>0.9613</b>으로 상승</li></ul>
   <div class="principle"><span class="lab">원리</span>사용할 수 있는지는 <b>점수가 아니라 조건</b>이 결정합니다.</div>
 </section>
 
 <section class="slide">
-  <div class="kicker ask">12-23 · 질문하기</div>
+  <div class="kicker ask">12-24 · 질문하기</div>
   <p class="q">처음에 고른 A와 B를<br>그대로 고르겠습니까?</p>
 
 </section>
 
 <section class="slide">
-  <div class="kicker">12-23</div>
+  <div class="kicker">12-24</div>
   <h2>처음에 적어 둔 이유와 지금의 근거를 나란히 놓습니다</h2>
 <p class="lead">바꾸어도 좋고 유지해도 좋습니다. <b>근거를 적으면 됩니다.</b></p><p class="small">활동지 12-1로 돌아가기</p>
 </section>
 
 <section class="slide hasP">
-  <div class="kicker">12-24</div>
+  <div class="kicker">12-25</div>
   <h2>모델 소개 카드에 적을 일곱 가지</h2>
 <ul class="facts">
     <li>어떤 데이터를 사용했는가 — 출처와 인원, 맞히려는 답</li>
