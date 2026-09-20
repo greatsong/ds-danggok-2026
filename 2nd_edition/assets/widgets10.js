@@ -26,15 +26,18 @@ function initW_matrix(root, D) {
   var FORM = {
     acc: function (c) {
       var den = c.tp + c.fp + c.fn + c.tn;
-      return { ok: den > 0, v: den > 0 ? (c.tp + c.tn) / den : 0, sub: '= ' + (c.tp + c.tn) + ' ÷ ' + den };
+      if (den === 0) return { ok: false, v: 0, sub: '전체가 0명이므로 계산할 수 없음' };
+      return { ok: true, v: (c.tp + c.tn) / den, sub: '= ' + (c.tp + c.tn) + ' ÷ ' + den };
     },
     prec: function (c) {
       var den = c.tp + c.fp;
-      return { ok: den > 0, v: den > 0 ? c.tp / den : 0, sub: '= ' + c.tp + ' ÷ ' + den };
+      if (den === 0) return { ok: false, v: 0, sub: '양성이라 답한 사람이 없어 계산할 수 없음' };
+      return { ok: true, v: c.tp / den, sub: '= ' + c.tp + ' ÷ ' + den };
     },
     rec: function (c) {
       var den = c.tp + c.fn;
-      return { ok: den > 0, v: den > 0 ? c.tp / den : 0, sub: '= ' + c.tp + ' ÷ ' + den };
+      if (den === 0) return { ok: false, v: 0, sub: '실제 양성이 없어 계산할 수 없음' };
+      return { ok: true, v: c.tp / den, sub: '= ' + c.tp + ' ÷ ' + den };
     },
     f1: function (c) {
       // F1은 정밀도와 재현율로만 구한다. 둘 중 하나라도 구할 수 없으면 F1도 구할 수 없다.
