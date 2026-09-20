@@ -68,10 +68,10 @@ with 오른쪽:
     st.plotly_chart(px.bar(비율표("heart_disease", "심장병"), x="구분", y="뇌졸중 비율(%)",
                            title="심장병 여부별 뇌졸중 비율", text="뇌졸중 비율(%)"), width="stretch")
 
-st.subheader("4. bmi가 비어 있는 사람들은 누구인가")
+st.subheader("4. 체질량지수가 비어 있는 사람들은 누구인가")
 빈사람 = df[df["bmi"].isna()]
 빈값표 = pd.DataFrame({
-    "구분": ["bmi가 비어 있는 사람", "전체"],
+    "구분": ["체질량지수가 비어 있는 사람", "전체"],
     "사람 수": [len(빈사람), len(df)],
     "그중 뇌졸중": [int(빈사람["stroke"].sum()), int(df["stroke"].sum())],
     "뇌졸중 비율(%)": [round(빈사람["stroke"].mean() * 100, 2), round(df["stroke"].mean() * 100, 2)],
