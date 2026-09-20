@@ -114,7 +114,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 
 <section class="slide">
   <div class="kicker ask">11-1 · 질문하기</div>
-  <p class="q">7차시에는 이 영화의 관객 수를 예측해 보았습니다.<br>오늘은 이분이 뇌졸중을 겪었는지 여부를 맞혀 볼까요?<br>두 질문은 무엇이 다를까요?</p>
+  <p class="q">7차시에는 영화의 관객 수를 예측했습니다.<br>오늘은 한 사람이 뇌졸중을 겪었는지 맞혀 봅니다.<br>두 질문은 무엇이 다를까요?</p>
 
 </section>
 
@@ -123,8 +123,9 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
   <h2>답의 모양이 다릅니다</h2>
 <table class="mini"><thead><tr><th></th><th>7차시 회귀</th><th>11차시 분류</th></tr></thead><tbody>
     <tr><td>맞힐 답</td><td>숫자 (관객 수)</td><td>둘 중 하나 (겪음 · 겪지 않음)</td></tr>
-    <tr><td>모델이 내놓는 것</td><td>숫자 하나</td><td><em>0과 1 사이의 확률</em></td></tr>
-    <tr><td>나머지</td><td colspan="2">데이터 불러오기 · 훈련용과 테스트용 나누기 · 점수 카드는 모두 같습니다</td></tr>
+    <tr><td>모델이 내놓는 것</td><td>숫자 하나</td><td><em>범주 하나</em></td></tr>
+    <tr><td>점수</td><td>예측이 실제와 얼마나 떨어졌는가</td><td>몇 명을 맞혔는가</td></tr>
+    <tr><td>나머지</td><td colspan="2">데이터 불러오기 · 훈련용과 테스트용 나누기는 모두 같습니다</td></tr>
   </tbody></table>
   <p class="lead">답이 숫자인 문제를 <b>회귀</b>, 정해진 몇 가지 범주 중 하나인 문제를 <b>분류</b>라고 합니다.</p>
   <div class="principle"><span class="lab">원리</span>문제의 종류는 소재가 아니라 <b>답의 형태</b>로 결정됩니다.</div>
@@ -161,7 +162,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
     <li>누구나 올릴 수 있어 <b>출처 표기의 수준이 제각각</b>입니다</li>
     <li>고를 때 먼저 볼 세 가지 — <b>게시자 · 라이선스 · 원자료 출처</b></li>
   </ul>
-  <p class="lead">출처를 알 수 없는 데이터를 왜 사용할까요? 분류를 배우기에 알맞고 교육 목적의 사용이 허용되어 있기 때문입니다.</p>
+  <p class="lead">출처를 알 수 없는 데이터를 왜 사용할까요? 분류를 배우기에 알맞고 교육 목적의 사용이 허용되어 있기 때문입니다. 다만 여기서 얻은 결과를 <b>실제 의학적 판단에 사용해서는 안 됩니다</b>.</p>
   <div class="principle"><span class="lab">원리</span>출처를 모른다는 것은 <b>누구에게서, 언제, 어떤 기준으로 모았는지 모른다</b>는 뜻입니다.</div>
 </section>
 
@@ -274,7 +275,7 @@ bmi가 비어 있는 사람들만 따로 세어, 그 사람들의 뇌졸중 비�
     <tr><td>고혈압 비율</td><td>26.5%</td><td>8.9%</td></tr>
     <tr><td>심장병 비율</td><td>18.9%</td><td>4.7%</td></tr>
   </tbody></table>
-  <p class="lead">그런데 두 그룹가 <b>겹치는 구간도 넓습니다</b>.</p>
+  <p class="lead">그런데 두 그룹이 <b>겹치는 구간도 넓습니다</b>.</p>
 </section>
 
 <section class="slide">
