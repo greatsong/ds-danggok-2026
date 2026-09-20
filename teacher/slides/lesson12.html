@@ -114,8 +114,9 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 
 <section class="slide">
   <div class="kicker ask">도입 · 질문하기</div>
-  <p class="q">열 명이 하는 마피아 게임, 마피아는 세 명입니다.<br>누가 제일 잘한 걸까요?</p>
-<ul class="facts" style="margin-top:2.4vh">
+  <p class="q">누가 더 마피아를 잘한다고 할 수 있을까요?</p>
+  <p class="lead">열 명이 하는 판, 마피아는 세 명입니다.</p>
+<ul class="facts">
     <li><b>①</b> 게임 내내 “다 시민이야”라고만 하는 친구</li>
     <li><b>②</b> “쟤 마피아 같아”를 계속 하는 친구 — 여섯 명을 지목해 둘을 맞혔습니다</li>
     <li><b>③</b> 조용히 있다가 딱 한 번 지목 — 그 한 명이 진짜 마피아였습니다</li>
@@ -124,13 +125,14 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 
 <section class="slide hasP">
   <div class="kicker">도입</div>
-  <h2>정확도로 재면 이렇습니다</h2>
-<table class="mini"><thead><tr><th></th><th>지목</th><th>맞힘</th><th>정확도</th></tr></thead><tbody>
-    <tr><td>① “다 시민이야”</td><td>0명</td><td>0명</td><td><em>0.70</em></td></tr>
-    <tr><td>② “쟤 마피아 같아”</td><td>6명</td><td>2명</td><td>0.50</td></tr>
-    <tr><td>③ 딱 한 번</td><td>1명</td><td>1명</td><td><em>0.80</em></td></tr>
+  <h2>①은 판을 보지 않고도 일곱 번 맞습니다</h2>
+<p class="lead">①은 열 명 <b>전원</b>에게 판단을 내렸습니다. 마피아가 세 명이니 나머지 일곱 명은 정말 시민입니다. 발언을 듣지 않고 아무도 지목하지 않아도 <b>열 번 가운데 일곱 번</b>이 맞습니다. 마피아가 두 명인 판이면 여덟 번, 한 명인 판이면 아홉 번입니다.</p>
+<table class="mini" style="font-size:clamp(16px,1.9vw,27px)"><thead><tr><th></th><th>지목</th><th>적중</th><th>잡아낸 마피아</th></tr></thead><tbody>
+    <tr><td>① “다 시민이야”</td><td>0명</td><td>—</td><td><em>0명</em> / 3명</td></tr>
+    <tr><td>② “쟤 마피아 같아”</td><td>6명</td><td>2명</td><td>2명 / 3명</td></tr>
+    <tr><td>③ 딱 한 번</td><td>1명</td><td>1명</td><td>1명 / 3명</td></tr>
   </tbody></table>
-  <p class="lead">아무도 지목하지 않은 <b>①이, 마피아를 둘이나 잡은 ②를 이깁니다.</b> ①이 잡아낸 마피아는 한 명도 없습니다. 마피아가 두 명인 판이면 ①은 80%, 한 명인 판이면 90%를 받습니다.</p>
+  <p class="lead">②와 ③은 전원을 판정하지 않았으므로 <b>맞힌 비율을 구할 수 없습니다.</b> ②는 마피아를 둘 잡았지만 네 명을 억울하게 몰았고, ③은 한 번도 틀리지 않았지만 둘을 놓쳤습니다.</p>
   <div class="principle"><span class="lab">원리</span>맞힌 비율이 높다고 해서 <b>찾아야 할 것을 찾은 것은 아닙니다</b>.</div>
 </section>
 
