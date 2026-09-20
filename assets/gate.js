@@ -47,8 +47,12 @@
   var path = location.pathname;
   var released = (typeof window.RELEASED_LESSON === 'number') ? window.RELEASED_LESSON : 1;
   var m = path.match(/lesson(\d{2})(?:-deep|-lab|-setup)?\.html$/);
+  // 2026-09-21 교사 결정 — 잠금을 모두 해제한다. 교사용 문서도 주소로 열린다.
+  // 다시 잠그려면 아래를 false로 되돌린다. 판정 규칙은 그대로 남겨 두었다.
+  var 전면공개 = true;
+
   var locked = false;
-  if (!teacher) {
+  if (!teacher && !전면공개) {
     if (path.indexOf('/teacher/') !== -1) locked = true;
     else if (/(glossary|concepts|study-guide|eval-workbook)\.html$/.test(path)) locked = released < 16; // 시험 대비 시점(공통 15차시를 마친 뒤)에 공개
     else if (/extra-movie(?:-deep|-lab)?\.html$/.test(path)) locked = released < 4;          // 영화 심화 — 도감(4차시) 공개와 함께
