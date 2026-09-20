@@ -150,7 +150,7 @@ function initW_matrix(root, D) {
         sub.textContent = '= ?';
         val.textContent = '?'; val.setAttribute('font-size', '20'); val.setAttribute('fill', '#b07a00');
       } else if (!f.ok) {
-        sub.textContent = '분모가 0이므로 계산할 수 없음';
+        sub.textContent = f.sub || '분모가 0이므로 계산할 수 없음';
         val.textContent = ''; val.setAttribute('font-size', '20'); val.setAttribute('fill', '#9a8b6a');
       } else {
         sub.textContent = f.sub;
