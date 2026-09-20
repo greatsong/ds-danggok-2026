@@ -58,8 +58,9 @@ def 지표(TP, FN, FP, TN):
     정확도 = (TP + TN) / (TP + FN + FP + TN)
     정밀도 = TP / (TP + FP) if (TP + FP) > 0 else None   # 분모는 뇌졸중이라 예측한 사람 수
     재현율 = TP / (TP + FN) if (TP + FN) > 0 else None   # 분모는 실제 뇌졸중인 사람 수
-    F1_분모 = 2 * TP + FP + FN
-    F1 = 2 * TP / F1_분모 if F1_분모 > 0 else None   # 정밀도를 구할 수 없어도 값이 나온다
+    # F1은 정밀도와 재현율로만 구한다. 둘 중 하나라도 없거나 합이 0이면 구할 수 없다
+    F1 = (2 * 정밀도 * 재현율 / (정밀도 + 재현율)
+          if 정밀도 is not None and 재현율 is not None and (정밀도 + 재현율) > 0 else None)
     return 정확도, 정밀도, 재현율, F1
 
 정식이름 = {"확률로 답하는 모델": "로지스틱 회귀", "질문으로 답하는 모델": "의사결정트리"}

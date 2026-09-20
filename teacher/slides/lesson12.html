@@ -245,9 +245,9 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <table class="mini" style="font-size:clamp(14px,1.6vw,23px)"><thead><tr><th></th><th>정확도</th><th>재현율</th><th>정밀도</th><th>F1</th></tr></thead><tbody>
     <tr><td>모델 A</td><td>0.80</td><td><em>0.75</em></td><td>0.50</td><td><em>0.60</em></td></tr>
     <tr><td>모델 B</td><td><em>0.85</em></td><td>0.25</td><td><em>1.00</em></td><td>0.40</td></tr>
-    <tr><td>규칙 C</td><td>0.80</td><td>0.00</td><td>구할 수 없음</td><td>0.00</td></tr>
+    <tr><td>규칙 C</td><td>0.80</td><td>0.00</td><td>구할 수 없음</td><td>구할 수 없음</td></tr>
   </tbody></table>
-  <p class="lead">규칙 C는 아무도 뇌졸중이라 답하지 않아 정밀도를 구할 수 없습니다. F1은 인원 식으로 0이 나옵니다.</p>
+  <p class="lead">규칙 C는 아무도 뇌졸중이라 답하지 않아 정밀도를 구할 수 없고, 따라서 F1도 구할 수 없습니다.</p>
   <div class="principle"><span class="lab">원리</span>정확도가 같아도 나머지 세 지표는 서로 다를 수 있습니다.</div>
 </section>
 
@@ -548,7 +548,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <div class="split">
     <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">네 칸</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">실제와 예측을 교차한 TP·FP·FN·TN</div></div>
     <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">분모</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">재현율 실제 양성 · 정밀도 예측 양성</div></div>
-    <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">차이</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">정확도가 같아도 F1은 0.60과 0.00</div></div>
+    <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">차이</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">정확도가 같아도 F1은 0.60과 구할 수 없음</div></div>
     <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">전후</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">찾아낸 환자 0 → 67 · 헛짚은 사람 0 → 398</div></div>
     <div class="card" style="flex:1 1 15em;min-width:0;padding:1.6vh 1.2vw"><div class="t">쓰임</div><div class="d" style="font-size:clamp(13px,1.5vw,20px);color:var(--text);margin-top:.5vh">판정이 아니라 안내 순서 정하기</div></div>
   </div>
@@ -570,7 +570,7 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
   <span id="pageno"></span>
 </div>
 
-<script src="../../assets/widgets10.js?v=7"></script>
+<script src="../../assets/widgets10.js?v=8"></script>
 <script>
   const slides = [...document.querySelectorAll('.slide')];
   const dots = document.getElementById('dots');
