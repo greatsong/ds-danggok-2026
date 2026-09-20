@@ -64,8 +64,8 @@ function initW_matrix(root, D) {
   qa('.mx-m').forEach(function (g) { groups[g.getAttribute('data-m')] = g; });
 
   var cur = 'A', metric = 'rec', shown = false;
-  // 값 확인을 누르기 전에는 네 칸도 합계도 분모도 가린다. 손으로 먼저 푸는 것이 먼저다
-  var 가림 = function (v) { return shown ? v : '?'; };
+  // 네 칸과 합계는 문제에서 주어지는 값이므로 늘 보여 준다.
+  // 손으로 구하는 것은 네 지표이므로, 「값 확인」 전까지 가리는 것도 네 지표뿐이다.
   var denToken = 0, barToken = 0;
 
   var ease = function (t) { return 1 - Math.pow(1 - t, 3); };
@@ -118,14 +118,14 @@ function initW_matrix(root, D) {
     heads[1].textContent = '예측: ' + c.neg + ' (N)';
     rows[0].textContent = '실제: ' + c.pos;
     rows[1].textContent = '실제: ' + c.neg;
-    rowSum[0].textContent = '합계 ' + 가림(c.tp + c.fn);
-    rowSum[1].textContent = '합계 ' + 가림(c.fp + c.tn);
-    colSum[0].textContent = '합계 ' + 가림(c.tp + c.fp);
-    colSum[1].textContent = '합계 ' + 가림(c.fn + c.tn);
-    cells.tp.textContent = 가림(c.tp);
-    cells.fn.textContent = 가림(c.fn);
-    cells.fp.textContent = 가림(c.fp);
-    cells.tn.textContent = 가림(c.tn);
+    rowSum[0].textContent = '합계 ' + (c.tp + c.fn);
+    rowSum[1].textContent = '합계 ' + (c.fp + c.tn);
+    colSum[0].textContent = '합계 ' + (c.tp + c.fp);
+    colSum[1].textContent = '합계 ' + (c.fn + c.tn);
+    cells.tp.textContent = c.tp;
+    cells.fn.textContent = c.fn;
+    cells.fp.textContent = c.fp;
+    cells.tn.textContent = c.tn;
 
     numTn.setAttribute('opacity', metric === 'acc' ? '1' : '0');
     // F1은 네 칸의 한 구역이 분모가 아니므로 테두리를 감춘다
@@ -178,7 +178,7 @@ function initW_matrix(root, D) {
     b.addEventListener('click', function () {
       var k = b.getAttribute('data-case');
       if (k === cur) return;
-      cur = k; shown = false;    // 사례를 바꾸면 손계산이 먼저이므로 값은 다시 가린다
+      cur = k; shown = false;    // 사례를 바꾸면 네 칸은 바로 보여 주고, 네 지표는 다시 가린다
       draw(true);
     });
   });
