@@ -215,9 +215,9 @@ table.mini em{color:var(--accent);font-style:normal;font-weight:800;}
 <section class="slide hasP">
   <div class="kicker">12-8</div>
   <h2>네 지표의 공식</h2>
-<div class="fxrow"><div class="fx" style="font-size:clamp(18px,2.2vw,32px)"><span class="lhs">정확도</span><span class="eq">=</span><span class="frac"><span class="num">TP + TN</span><span class="den">TP + FP + FN + TN</span></span></div></div>
-<div class="fxrow" style="margin-top:1.2vh"><div class="fx" style="font-size:clamp(18px,2.2vw,32px)"><span class="lhs">F1</span><span class="eq">=</span><span class="frac"><span class="num">2 × 정밀도 × 재현율</span><span class="den">정밀도 + 재현율</span></span></div><div class="fx" style="font-size:clamp(18px,2.2vw,32px)"><span class="lhs">F1</span><span class="eq">=</span><span class="frac"><span class="num">2TP</span><span class="den">2TP + FP + FN</span></span></div></div>
-  <p class="lead" style="margin-top:1.6vh">F1은 <b>식이 두 가지이고 값은 같습니다.</b> 아무도 뇌졸중이라 답하지 않으면 정밀도를 구할 수 없어 왼쪽 식은 쓸 수 없습니다. 오른쪽 식은 네 칸의 인원만 쓰므로 그대로 값이 나옵니다.</p>
+<div class="fxrow"><div class="fx"><span class="lhs">정확도</span><span class="eq">=</span><span class="frac"><span class="num">TP + TN</span><span class="den">TP + FP + FN + TN</span></span></div></div>
+<div class="fxrow" style="margin-top:1.6vh"><div class="fx"><span class="lhs">F1</span><span class="eq">=</span><span class="frac"><span class="num">2 × 정밀도 × 재현율</span><span class="den">정밀도 + 재현율</span></span></div></div>
+  <p class="lead" style="margin-top:1.8vh">F1은 정밀도와 재현율을 한 값으로 묶어 봅니다. 정밀도를 구할 수 없으면 <b>F1도 구할 수 없습니다.</b></p>
   <div class="principle"><span class="lab">원리</span>F1은 정밀도와 재현율 중 <b>낮은 쪽에 더 크게 영향을 받는</b> 평균입니다.</div>
 </section>
 
