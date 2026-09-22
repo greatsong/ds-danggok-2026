@@ -274,6 +274,28 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 .sqlx-rung-d{font-size:.88rem;line-height:1.65;margin:9px 0 4px;color:#2b2418}
 .sqlx-rung-r{font-size:.82rem;font-weight:700;color:#8a5a00;margin:0}
 .sqlx-new{border-bottom:2px solid #ffb454;padding-bottom:2px;background:rgba(255,180,84,.08);border-radius:4px}
+/* 동아리 지원 앱 모형 (.clubm) — 사다리 단계마다 작은 화면 하나 */
+.clubm{margin:2px 0 4px;font-size:.9rem}
+.clubm .appw-body{max-height:250px;gap:8px}
+.clubm .appw-log{min-height:120px;max-height:380px}
+.clubm .appw-ctl{padding:0}
+.clubm .appw-line .sqlx-new{background:rgba(255,180,84,.16)}
+.clubm select{border:1px solid #dfd4bb;border-radius:999px;padding:5px 12px;font-size:.85rem;font-family:var(--font);background:#fff;color:#2b2418}
+.clubt{width:100%;border-collapse:collapse;font-size:.82rem;background:#fff}
+.clubt th,.clubt td{padding:5px 8px;border-bottom:1px solid #f1ebdd;text-align:left;white-space:nowrap}
+.clubt th{background:#fcf8ef;color:#6b5836;font-weight:800;position:sticky;top:0}
+.clubt th button{font:inherit;color:#b45309;background:#fff5e2;border:1px solid #e3d6b8;border-radius:6px;padding:1px 8px;cursor:pointer}
+.clubt td.em{color:#b9ad94}
+.club-badge{display:inline-block;margin-left:6px;font-size:.7rem;font-weight:800;color:#fff;background:#15803d;border-radius:999px;padding:1px 8px}
+.club-chip{white-space:nowrap;font-size:.72rem;font-weight:800;color:#b45309;background:#fff5e2;border:1px solid #e3d6b8;border-radius:999px;padding:1px 8px}
+.club-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:7px}
+.club-card{border:1px solid #f0e7d4;border-radius:10px;padding:8px 6px;background:#fff;text-align:center}
+.club-card b{display:block;font-size:1.25rem;color:#a23c00}
+.club-card span{font-size:.74rem;color:#6b5836}
+.club-f{display:flex;gap:8px;align-items:center;font-size:.84rem}
+.club-f .l{width:74px;flex:none;color:#6b5836;font-weight:700}
+.club-f .v{border:1px solid #dfd4bb;border-radius:8px;padding:3px 10px;background:#fff;min-width:0}
+.club-msg{font-size:.8rem;color:#6b5836;margin:0}
 .newscards{display:grid;grid-template-columns:1fr;gap:10px;margin:6px 0 12px}
 .newscard{display:block;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:#fff;padding:12px 14px;text-decoration:none;color:inherit}
 .newscard:hover{border-color:#16181d}
@@ -448,8 +470,8 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
   <div class="under"></div>
 
   <div class="quote">
-    <div class="q">"버튼 하나를 누르면, 어딘가에서 한 줄의 문장이 실행된다."</div>
-    <span class="by">오늘은 그 문장을 읽습니다 — 인스타그램·카카오톡·게임이 데이터를 다루는 방식</span>
+    <div class="q">"버튼을 누르면 데이터베이스에서 SQL 문장이 실행된다."</div>
+    <span class="by">인스타그램·카카오톡·게임이 데이터를 다루는 방식을 SQL 문장으로 읽습니다.</span>
   </div>
 
   <p class="lead">피드를 불러오고, 메시지를 보내고, 게임 랭킹을 확인할 때 앱은 데이터를 다룹니다. 어떤 동작은 저장된 기록을 가져오고, 어떤 동작은 새 기록을 넣거나 기존 값을 바꿉니다. 오늘은 익숙한 앱의 동작을 <b>테이블의 행과 열을 다루는 일</b>로 바꾸어 살펴봅니다. 그리고 그 일을 표현하는 언어인 <b>SQL</b>을 읽어 봅니다.</p>
@@ -552,10 +574,10 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <div class="h">🧩 세 용어를 우리 실습에 연결하기</div>
     <p>세 용어는 단순히 크기로 구분하지 않습니다. <b>무엇에 초점을 두느냐</b>가 다릅니다.</p>
   <p><b>데이터셋</b>은 한 주제로 모은 데이터입니다. 10차시에서 사용한 급식 기록이 한 예이며, CSV는 그 데이터를 담는 파일 형식입니다.</p>
-    <p><b>데이터베이스</b>는 데이터를 함께 사용하도록 통합 관리하는 저장소입니다. 15차시에 사용할 Supabase 프로젝트에는 PostgreSQL 데이터베이스가 제공되며, 그 안에 여러 테이블을 만들 수 있습니다.</p>
+    <p><b>데이터베이스</b>는 데이터를 함께 사용하도록 통합 관리하는 저장소입니다. 15차시에 사용할 수파베이스(Supabase) 프로젝트에는 PostgreSQL 데이터베이스가 제공되며, 그 안에 여러 테이블을 만들 수 있습니다.</p>
     <p><b>테이블</b>은 데이터를 행과 열로 관리하는 구조입니다. 게시물 테이블에서는 게시물 한 건이 한 행이고, 메시지 테이블에서는 메시지 한 건이 한 행입니다. 같은 기록을 테이블에 저장했다가 CSV로 내려받더라도, 데이터셋이라는 성격이 달라지는 것은 아닙니다.</p>
   </div>
-  <p class="mini">그림에는 게시물과 댓글 테이블의 일부 열만 표시했습니다. 어떤 정보를 열로 둘지는 앱에서 무엇을 기록하고 활용할지에 따라 정합니다.</p>
+  <p class="mini">그림에는 게시물과 댓글 테이블의 일부 열만 표시했습니다. 실제 댓글 테이블에는 어느 게시물에 달린 댓글인지 나타내는 게시물 번호 열이 있어야 두 테이블을 연결할 수 있습니다. 어떤 정보를 열로 둘지는 앱에서 무엇을 기록하고 활용할지에 따라 정합니다.</p>
   <p>파일 사본을 주고받는 방식도 사용할 수 있습니다. 다만 여러 사람이 동시에 수정하거나 기록이 계속 쌓이면, 변경 사항을 합치고 충돌을 처리할 방법이 필요합니다. 데이터베이스는 이런 작업을 관리하는 기능을 제공합니다.</p>
   <table class="daymap">
     <thead><tr><th>필요한 작업</th><th>CSV 파일을 주고받는 방식</th><th>데이터베이스를 사용하는 방식</th></tr></thead>
@@ -572,7 +594,7 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
       <p>그림을 클릭하면 한 단계씩 진행됩니다. <b>A가 기록을 추가하는 동안 B도 같은 원본을 바탕으로 기록을 추가한 뒤, 두 사람이 차례로 저장하는 상황</b>입니다.</p>
   <p>파일을 통째로 덮어쓰는 경우와 새 기록을 각각 추가하는 경우에, A와 B의 메시지가 어떻게 남는지 비교합니다.</p>
 <svg class="csvdb-svg" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg" role="img" style="cursor:pointer" aria-label="두 사람이 동시에 쓸 때 CSV 파일과 데이터베이스 테이블에서 벌어지는 일을 클릭할 때마다 한 단계씩 보여 주는 그림">
-  <text class="csvdb-hint" x="400" y="26" text-anchor="middle" font-size="15" font-weight="800" fill="#e8930c">지금 보이는 것은 저장이 끝난 뒤의 결과입니다 — 👆 클릭하면 처음부터 한 단계씩</text>
+  <text class="csvdb-hint" x="400" y="26" text-anchor="middle" font-size="15" font-weight="800" fill="#e8930c">지금 보이는 것은 저장이 끝난 뒤의 결과입니다. 👆 클릭하면 처음부터 한 단계씩 진행됩니다.</text>
   <!-- 위 레인: CSV 파일 한 개 -->
   <rect x="10" y="44" width="780" height="196" rx="14" fill="#fffdf6" stroke="#f0e2bc" stroke-width="1.5"/>
   <text x="26" y="70" font-size="14" font-weight="800" fill="#e8930c">CSV 파일 한 개</text>
@@ -638,9 +660,9 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
       dbA = pick("csvdb-db-a"), dbB = pick("csvdb-db-b"), green = pick("csvdb-green");
   var all = [aSide, bSide, fileA, fileB, red, dbA, dbB, green];
   var HINTS = [
-    "① A가 파일에 메시지를 한 줄 적는다 — 👆 계속 클릭",
-    "② 그 사이 B도 같은 파일에 메시지를 적는다 — 👆 계속 클릭",
-    "③ A 저장 → B 저장 — 나중에 저장한 쪽이 파일을 통째로 덮는다 (클릭하면 처음부터)"
+    "① A가 원본의 사본에 메시지를 한 줄 적습니다. 👆 계속 클릭",
+    "② 그사이 B도 같은 원본의 사본에 메시지를 적습니다. 👆 계속 클릭",
+    "③ A가 저장한 뒤 B가 저장합니다. 나중에 저장한 사본이 파일 전체를 덮어씁니다. (클릭하면 처음부터)"
   ];
   var s = 0;
   function apply(state) {
@@ -669,10 +691,10 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
       <p style="text-align:center;font-size:0.85rem;color:var(--text-soft);margin:8px 0 4px">이 그림은 <b>파일 사본을 따로 수정한 뒤 같은 원본에 덮어쓰는 상황</b>을 단순화한 것입니다. CSV를 사용하면 언제나 기록이 사라진다는 뜻은 아닙니다. 어떤 방식으로 저장하고 충돌을 처리하는지가 중요합니다.</p>
     </div>
   </details>
-  <p>데이터를 생성하고, 읽고, 갱신하고, 삭제하는 네 동작을 <b>CRUD</b>라고 합니다. 다음 절에서는 이 동작을 SQL로 표현하고, 시뮬레이터에서 결과를 확인합니다.</p>
+  <p>데이터를 추가(Create)하고, 조회(Read)하고, 갱신(Update)하고, 삭제(Delete)하는 네 동작을 <b>CRUD</b>라고 합니다. 다음 절에서는 이 동작을 SQL로 표현하고, 시뮬레이터에서 결과를 확인합니다.</p>
 
-  <details class="glossary"><summary>더 알아보기 — 파일 형식의 한도로 집계에서 빠진 확진자 15,841명</summary><div class="gin">
-    <h3>파일 형식의 한도로 확진자 15,841명이 집계에서 빠진 사건 (영국, 2020)</h3>
+  <details class="glossary"><summary>더 알아보기 — 파일 형식의 한도로 집계에서 빠진 확진 사례 15,841건</summary><div class="gin">
+    <h3>파일 형식의 한도로 확진 사례 15,841건이 집계에서 빠진 사건 (영국, 2020)</h3>
     <p>2020년 10월 4일, 잉글랜드 공중보건국은 9월 25일부터 10월 2일까지의 일일 집계에서 확진 사례 15,841건이 누락되었다고 발표했습니다. 검사 결과를 중앙 시스템으로 옮기는 과정에서 일부 파일이 처리 한도를 넘긴 것이 문제였습니다. 원인은 이튿날 BBC 보도로 알려졌습니다.</p>
   <p>BBC 보도는 이 사건을 오래된 XLS 형식의 한계와 연결해 설명했습니다. 검사 기관이 CSV로 보낸 결과를 XLS 서식에 모으는 과정에서, 한 시트에 담을 수 있는 행 수를 넘긴 것입니다.</p>
     <table class="daymap">
@@ -690,41 +712,171 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 
   <h2>2. SQL 문장 읽기</h2>
   <p>SQL은 데이터베이스에 <b>어떤 데이터를 가져오고, 넣고, 바꾸고, 지울지</b> 표현하는 언어입니다.</p>
-  <p>이번에는 세 가지 앱 사례로 동작을 나누어 살펴봅니다. <b>피드에서는 조회</b>, <b>메신저에서는 추가·갱신·삭제</b>, <b>게임 전적에서는 집계</b>를 읽습니다.</p>
+  <p>이번에는 DG창체부의 동아리 지원 시스템을 통해 SQL 문법을 먼저 익힙니다. 그다음 피드, 메신저, 게임 전적 앱에서 동일한 동작을 살펴봅니다. <b>피드에서는 조회</b>를, <b>메신저에서는 추가·갱신·삭제</b>를, <b>게임 전적에서는 집계</b>를 다룹니다.</p>
 
 
   <h3>SQL 문장의 기본 구조 읽기</h3>
-  <p>처음부터 긴 조회문을 한 번에 읽으면 이해하기 어렵습니다. 가장 짧은 문장에서 시작해 단계마다 절을 하나씩 덧붙입니다. 예시는 뒤의 피드 위젯과 같은 게시물 테이블 <code>posts</code>를 사용하며, 이 테이블에는 게시물 8개가 들어 있습니다. 각 단계에서 새로 추가된 부분은 밑줄로 표시했습니다.</p>
+  <p>처음부터 긴 조회문을 한 번에 읽으면 이해하기 어렵습니다. 가장 짧은 문장부터 시작하여 단계별로 절을 하나씩 덧붙입니다. 예시는 DG창체부가 만든 동아리 지원 웹앱입니다. 창체부는 이 앱으로 지원서를 한꺼번에 접수합니다. 각 동아리는 지원자를 평가하며, 자기 동아리의 최종 합격자를 실시간으로 확인합니다.</p>
+  <p>학생 30명이 방송부, 과학부, 수리정보영재반, 댄스부, 미술부 다섯 동아리 가운데 한 곳에 지원하였습니다. 평가가 끝나 지원서마다 자기소개서 점수와 면접 점수가 입력되어 있습니다. 이 기록은 <code>지원</code> 테이블에 지원자 한 명이 한 행으로 저장되어 있습니다. 합격자 명단은 따로 저장하지 않고 조회할 때마다 계산하므로, 점수가 바뀌면 명단도 곧바로 바뀝니다.</p>
+  <details class="glossary" open>
+    <summary>동아리 지원 테이블 지원 (30행)</summary>
+    <div class="gin">
+    <p>학번이 기본 키입니다. 자소서 점수와 면접 점수는 각각 50점 만점이며, 제출시각은 지원서를 낸 날짜와 시각입니다. 지원 기간은 10월 1일부터 10월 5일까지입니다.</p>
+    <div style="max-height:340px;overflow:auto;border:1px solid #f0e7d4;border-radius:10px">
+    <table class="daymap" style="margin:0">
+      <thead><tr><th>학번</th><th>이름</th><th>지원동아리</th><th>자소서</th><th>면접</th><th>제출시각</th></tr></thead>
+      <tbody>
+        <tr><td>10102</td><td>김하늘</td><td>미술부</td><td>35</td><td>35</td><td>2026-10-03 16:15</td></tr>
+        <tr><td>10104</td><td>이바다</td><td>과학부</td><td>40</td><td>34</td><td>2026-10-01 18:40</td></tr>
+        <tr><td>10107</td><td>박솔</td><td>방송부</td><td>27</td><td>49</td><td>2026-10-04 20:20</td></tr>
+        <tr><td>10108</td><td>최이슬</td><td>과학부</td><td>36</td><td>40</td><td>2026-10-01 14:05</td></tr>
+        <tr><td>10109</td><td>정가람</td><td>댄스부</td><td>46</td><td>24</td><td>2026-10-01 11:20</td></tr>
+        <tr><td>10111</td><td>윤나래</td><td>댄스부</td><td>30</td><td>29</td><td>2026-10-01 08:45</td></tr>
+        <tr><td>10112</td><td>강누리</td><td>미술부</td><td>37</td><td>36</td><td>2026-10-05 12:40</td></tr>
+        <tr><td>10113</td><td>조한결</td><td>과학부</td><td>29</td><td>33</td><td>2026-10-03 12:05</td></tr>
+        <tr><td>10114</td><td>임다온</td><td>수리정보영재반</td><td>24</td><td>28</td><td>2026-10-01 10:15</td></tr>
+        <tr><td>10116</td><td>한별</td><td>방송부</td><td>42</td><td>50</td><td>2026-10-05 12:10</td></tr>
+        <tr><td>10118</td><td>오세린</td><td>미술부</td><td>23</td><td>47</td><td>2026-10-02 11:45</td></tr>
+        <tr><td>10122</td><td>서도윤</td><td>방송부</td><td>43</td><td>44</td><td>2026-10-03 12:55</td></tr>
+        <tr><td>10124</td><td>신유찬</td><td>방송부</td><td>39</td><td>23</td><td>2026-10-03 08:40</td></tr>
+        <tr><td>10125</td><td>권아린</td><td>수리정보영재반</td><td>41</td><td>25</td><td>2026-10-05 19:10</td></tr>
+        <tr><td>10126</td><td>황지후</td><td>방송부</td><td>21</td><td>39</td><td>2026-10-05 18:15</td></tr>
+        <tr><td>10129</td><td>안서우</td><td>과학부</td><td>49</td><td>32</td><td>2026-10-03 15:30</td></tr>
+        <tr><td>10132</td><td>송민재</td><td>수리정보영재반</td><td>32</td><td>37</td><td>2026-10-02 14:40</td></tr>
+        <tr><td>10133</td><td>류하은</td><td>댄스부</td><td>48</td><td>30</td><td>2026-10-05 20:25</td></tr>
+        <tr><td>20103</td><td>전시우</td><td>과학부</td><td>22</td><td>42</td><td>2026-10-04 17:00</td></tr>
+        <tr><td>20104</td><td>홍예린</td><td>방송부</td><td>31</td><td>21</td><td>2026-10-02 18:30</td></tr>
+        <tr><td>20106</td><td>문태오</td><td>과학부</td><td>38</td><td>27</td><td>2026-10-04 20:25</td></tr>
+        <tr><td>20107</td><td>배수아</td><td>미술부</td><td>34</td><td>43</td><td>2026-10-01 12:05</td></tr>
+        <tr><td>20109</td><td>백준서</td><td>과학부</td><td>33</td><td>31</td><td>2026-10-02 11:00</td></tr>
+        <tr><td>20114</td><td>허윤슬</td><td>방송부</td><td>44</td><td>38</td><td>2026-10-02 11:20</td></tr>
+        <tr><td>20116</td><td>남궁현</td><td>수리정보영재반</td><td>26</td><td>26</td><td>2026-10-04 15:10</td></tr>
+        <tr><td>20120</td><td>노은채</td><td>수리정보영재반</td><td>45</td><td>48</td><td>2026-10-05 14:00</td></tr>
+        <tr><td>20123</td><td>구도하</td><td>댄스부</td><td>28</td><td>45</td><td>2026-10-01 12:55</td></tr>
+        <tr><td>20126</td><td>심채원</td><td>댄스부</td><td>25</td><td>22</td><td>2026-10-03 16:30</td></tr>
+        <tr><td>20128</td><td>원지안</td><td>수리정보영재반</td><td>50</td><td>46</td><td>2026-10-04 10:35</td></tr>
+        <tr><td>20131</td><td>석하람</td><td>방송부</td><td>47</td><td>41</td><td>2026-10-02 09:10</td></tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+  </details>
+  <p>단계마다 앱 화면의 버튼이나 목록을 누르면, 그 뒤에서 실행되는 SQL 문과 각 부분의 의미가 오른쪽에 표시됩니다. 새로 추가된 부분은 밑줄로 표시하였습니다.</p>
   <div class="sqlx sqlx-ladder">
     <div class="sqlx-rung">
       <div class="sqlx-rung-h"><span class="no">1단계</span><code>SELECT 열 FROM 테이블</code><span class="sub">테이블에서 열 고르기</span></div>
-      <div class="sqlx-line"><span class="sqlx-new"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span></span>;</div>
-      <p class="sqlx-rung-d">테이블에서 적은 열만 골라 보여 줍니다. <code>posts</code>에서 작성자와 해시태그 두 열만 표시되고, 행은 8개 모두 나옵니다. 모든 열을 보려면 열 이름 대신 <code>*</code>를 적어 <code>SELECT * FROM posts;</code>로 씁니다.</p>
-      <p class="sqlx-rung-r">결과: 열이 줄어듭니다.</p>
+      <div class="appw clubm" data-club="s1">
+        <div class="appw-grid">
+          <div class="appw-pane">
+            <p class="appw-cap"><span class="dot"></span>앱 화면</p>
+            <div class="appw-screen">
+              <div class="appw-bar">DG창체부 · 전체 지원 명단<span class="sp">30명</span></div>
+              <div class="appw-body">
+                <div class="appw-ctl"><button class="appw-btn" data-q="a">학번·이름 보기</button><button class="appw-btn" data-q="b">이름·면접 보기</button><button class="appw-btn" data-q="c">모든 열 보기</button></div>
+                <div class="club-out"></div>
+              </div>
+            </div>
+          </div>
+          <div class="appw-pane">
+            <p class="appw-cap sqlcap"><span class="dot"></span>실행된 SQL과 의미</p>
+            <div class="appw-log"><div class="appw-empty">버튼을 누르면 이 화면 뒤에서 실행되는 SQL 문이 표시됩니다.</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="sqlx-rung-d">테이블에서 필요한 열만 골라 보여 줍니다. <code>SELECT 학번, 이름 FROM 지원;</code>은 학번과 이름 두 열을 30행 모두 가져옵니다. 모든 열을 보려면 열 이름 대신 <code>*</code>를 적어 <code>SELECT * FROM 지원;</code>으로 작성합니다. 2단계부터는 열을 <code>SELECT 이름, 면접 FROM 지원;</code>으로 고정하고 절만 덧붙입니다.</p>
+      <p class="sqlx-rung-r">결과: 열이 줄어듭니다(6개 → 2개).</p>
     </div>
     <div class="sqlx-rung">
       <div class="sqlx-rung-h"><span class="no">2단계</span><code>+ WHERE 조건</code><span class="sub">조건에 맞는 행 고르기</span></div>
-      <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-new"><span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span></span>;</div>
-      <p class="sqlx-rung-d"><code>WHERE</code>는 조건에 맞는 행만 남깁니다. 작성자가 <code>'석리송'</code>인 행 3개만 표시됩니다. 비교에는 <code>=</code>(같다), <code>&gt;=</code>(크거나 같다), <code>&lt;</code>(작다) 등을 사용합니다. 문자 값은 작은따옴표 안에 적고, 숫자는 따옴표 없이 그대로 적습니다. 예를 들어 <code>WHERE 좋아요 &gt;= 200</code>은 좋아요가 200 이상인 행을 고릅니다. 날짜와 시각 값도 <code>'2026-10-01 08:30'</code>처럼 작은따옴표 안에 적습니다.</p>
-      <p class="sqlx-rung-r">결과: 행이 줄어듭니다(8개 → 3개).</p>
+      <div class="appw clubm" data-club="s2">
+        <div class="appw-grid">
+          <div class="appw-pane">
+            <p class="appw-cap"><span class="dot"></span>앱 화면</p>
+            <div class="appw-screen">
+              <div class="appw-bar">동아리 담당 · 지원자 명단<span class="sp">권한별 화면</span></div>
+              <div class="appw-body">
+                <div class="appw-ctl"><select aria-label="동아리 선택"><option value="">동아리 선택</option><option value="방송부">방송부</option><option value="과학부">과학부</option><option value="수리정보영재반">수리정보영재반</option><option value="댄스부">댄스부</option><option value="미술부">미술부</option></select></div>
+                <div class="club-out"></div>
+              </div>
+            </div>
+          </div>
+          <div class="appw-pane">
+            <p class="appw-cap sqlcap"><span class="dot"></span>실행된 SQL과 의미</p>
+            <div class="appw-log"><div class="appw-empty">목록에서 동아리를 고르면 이 화면 뒤에서 실행되는 SQL 문이 표시됩니다.</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="sqlx-rung-d"><code>WHERE</code>는 조건에 맞는 행만 남깁니다. 지원동아리가 <code>'방송부'</code>인 행 8개만 표시됩니다. 동아리 담당자 화면은 이 조건으로 자기 동아리 지원자만 보여 주므로, 다른 동아리의 지원서는 볼 수 없습니다. 비교에는 <code>=</code>(같다), <code>&gt;=</code>(크거나 같다), <code>&lt;</code>(작다) 등을 사용합니다. 문자 값은 작은따옴표 안에 적고, 숫자는 따옴표 없이 그대로 적습니다. 예를 들어 <code>WHERE 면접 &gt;= 45</code>는 면접 점수가 45점 이상인 6명을 고릅니다. 날짜와 시각 값도 작은따옴표 안에 적습니다. <code>WHERE 제출시각 &gt;= '2026-10-05 18:00'</code>은 지원 마지막 날 오후 6시 이후에 제출한 3명을 고릅니다.</p>
+      <p class="sqlx-rung-r">결과: 행이 줄어듭니다(30개 → 8개).</p>
     </div>
     <div class="sqlx-rung">
       <div class="sqlx-rung-h"><span class="no">3단계</span><code>+ ORDER BY 열 DESC</code><span class="sub">순서 정하기</span></div>
-      <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span> <span class="sqlx-new"><span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok t">올린시각</span> <span class="sqlx-tok k">DESC</span></span>;</div>
-      <p class="sqlx-rung-d"><code>ORDER BY</code>는 행의 순서를 정합니다. <code>ASC</code>는 오름차순, <code>DESC</code>는 내림차순이며, 방향을 적지 않으면 오름차순으로 정렬합니다. 올린시각처럼 날짜나 시각이 담긴 열을 <code>DESC</code>로 정렬하면 최근 게시물이 먼저 옵니다.</p>
-      <p class="sqlx-rung-r">결과: 행 수는 3개 그대로이고 순서만 바뀝니다.</p>
+      <div class="appw clubm" data-club="s3">
+        <div class="appw-grid">
+          <div class="appw-pane">
+            <p class="appw-cap"><span class="dot"></span>앱 화면</p>
+            <div class="appw-screen">
+              <div class="appw-bar">방송부 담당 · 지원자 명단<span class="sp">8명</span></div>
+              <div class="appw-body">
+                
+                <div class="club-out"></div>
+              </div>
+            </div>
+          </div>
+          <div class="appw-pane">
+            <p class="appw-cap sqlcap"><span class="dot"></span>실행된 SQL과 의미</p>
+            <div class="appw-log"><div class="appw-empty">열 머리의 [면접 ▼]를 누르면 이 화면 뒤에서 실행되는 SQL 문이 표시됩니다.</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="sqlx-rung-d"><code>ORDER BY</code>는 행의 순서를 정합니다. <code>ASC</code>는 오름차순, <code>DESC</code>는 내림차순이며, 방향을 적지 않으면 오름차순으로 정렬합니다. 면접 열을 <code>DESC</code>로 정렬하면 면접 점수가 높은 지원자가 먼저 옵니다. 제출시각처럼 날짜나 시각이 담긴 열을 <code>DESC</code>로 정렬하면 최근에 제출한 지원서가 먼저 옵니다.</p>
+      <p class="sqlx-rung-r">결과: 행 수는 8개 그대로이며 순서만 바뀝니다. 한별(50), 박솔(49), 서도윤(44) 순으로 시작합니다.</p>
     </div>
     <div class="sqlx-rung">
       <div class="sqlx-rung-h"><span class="no">4단계</span><code>+ LIMIT 개수</code><span class="sub">가져올 행 수 제한하기</span></div>
-      <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span> <span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok t">올린시각</span> <span class="sqlx-tok k">DESC</span> <span class="sqlx-new"><span class="sqlx-tok k">LIMIT</span> <span class="sqlx-tok v">2</span></span>;</div>
-      <p class="sqlx-rung-d"><code>LIMIT</code>은 가져올 행 수를 제한합니다. 정렬된 3개 행 중 앞의 2개만 가져오므로, 석리송이 가장 최근에 올린 게시물 2개가 표시됩니다.</p>
-      <p class="sqlx-rung-r">결과: 행이 줄어듭니다(3개 → 2개).</p>
+      <div class="appw clubm" data-club="s4">
+        <div class="appw-grid">
+          <div class="appw-pane">
+            <p class="appw-cap"><span class="dot"></span>앱 화면</p>
+            <div class="appw-screen">
+              <div class="appw-bar">방송부 담당 · 최종 합격자<span class="sp"><span class="club-chip">정원 3명</span></span></div>
+              <div class="appw-body">
+                <div class="appw-ctl"><button class="appw-btn pri">합격자 확인</button></div>
+                <div class="club-out"></div>
+              </div>
+            </div>
+          </div>
+          <div class="appw-pane">
+            <p class="appw-cap sqlcap"><span class="dot"></span>실행된 SQL과 의미</p>
+            <div class="appw-log"><div class="appw-empty">버튼을 누르면 이 화면 뒤에서 실행되는 SQL 문이 표시됩니다.</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="sqlx-rung-d"><code>LIMIT</code>은 가져올 행 수를 제한합니다. 방송부의 정원은 3명입니다. 면접 점수 순으로 정렬된 8개 행 가운데 앞의 3개만 가져오므로, 표시된 3명이 합격자가 됩니다. 합격자 명단은 저장된 것이 아니라 이 문장을 실행할 때마다 계산되므로, 점수가 바뀌면 합격자도 곧바로 바뀝니다.</p>
+      <p class="sqlx-rung-r">결과: 행이 줄어듭니다(8개 → 3개). 한별 50, 박솔 49, 서도윤 44가 표시됩니다.</p>
     </div>
     <div class="sqlx-rung">
       <div class="sqlx-rung-h"><span class="no">5단계</span><code>GROUP BY 열 + COUNT(*)</code><span class="sub">같은 값끼리 묶어 집계하기</span></div>
-      <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자</span>, <span class="sqlx-new"><span class="sqlx-tok k">COUNT(*)</span></span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-new"><span class="sqlx-tok k">GROUP BY</span> <span class="sqlx-tok t">작성자</span></span> <span class="sqlx-new"><span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok k">COUNT(*)</span> <span class="sqlx-tok k">DESC</span></span>;</div>
-      <p class="sqlx-rung-d"><code>GROUP BY</code>는 같은 값을 가진 행끼리 묶고, <code>COUNT(*)</code>는 각 묶음의 행 수를 셉니다. 이 문장은 작성자별로 게시물 수를 집계하고, <code>ORDER BY COUNT(*) DESC</code>로 게시물이 많은 작성자부터 보여 줍니다. 자세한 내용은 뒤의 ③에서 다룹니다.</p>
-      <p class="sqlx-rung-r">결과: 게시물 한 건이 아니라 작성자 한 명이 한 행이 됩니다. 석리송 3, 먹부림 2, 수정반 2, 렌고쿠 1로 4개 행이 표시됩니다.</p>
+      <div class="appw clubm" data-club="s5">
+        <div class="appw-grid">
+          <div class="appw-pane">
+            <p class="appw-cap"><span class="dot"></span>앱 화면</p>
+            <div class="appw-screen">
+              <div class="appw-bar">DG창체부 · 동아리별 지원 현황<span class="sp">대시보드</span></div>
+              <div class="appw-body">
+                <div class="appw-ctl"><button class="appw-btn pri">현황 새로고침</button></div>
+                <div class="club-out"></div>
+              </div>
+            </div>
+          </div>
+          <div class="appw-pane">
+            <p class="appw-cap sqlcap"><span class="dot"></span>실행된 SQL과 의미</p>
+            <div class="appw-log"><div class="appw-empty">버튼을 누르면 이 화면 뒤에서 실행되는 SQL 문이 표시됩니다.</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="sqlx-rung-d"><code>GROUP BY</code>는 같은 값을 가진 행끼리 묶고, <code>COUNT(*)</code>는 각 묶음의 행 수를 셉니다. 이 문장은 동아리별 지원자 수를 집계하며, <code>ORDER BY COUNT(*) DESC</code>로 지원자가 많은 동아리부터 보여 줍니다. 자세한 내용은 뒤의 ③에서 다룹니다.</p>
+      <p class="sqlx-rung-r">결과: 지원자 한 명이 아니라 동아리 하나가 한 행이 됩니다. 방송부 8, 과학부 7, 수리정보영재반 6, 댄스부 5, 미술부 4로 5개 행이 표시됩니다.</p>
     </div>
     <p class="sqlx-order"><b>이번 수업에서 사용하는 조회문의 작성 순서</b>
       <span class="ch">SELECT</span><span class="ar">→</span><span class="ch">FROM</span><span class="ar">→</span><span class="ch">WHERE</span><span class="ar">→</span><span class="ch">GROUP BY</span><span class="ar">→</span><span class="ch">ORDER BY</span><span class="ar">→</span><span class="ch">LIMIT</span>
@@ -732,35 +884,223 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
   </div>
   <p>필요하지 않은 절은 생략할 수 있습니다. 조건이 없으면 <code>WHERE</code>를, 정렬하지 않으면 <code>ORDER BY</code>를 적지 않습니다. 절을 적을 때는 위의 순서를 지킵니다.</p>
   <p>다만 <b>작성 순서와 결과를 이해하는 순서는 다릅니다.</b> 문장은 <code>SELECT</code>로 시작하지만, 결과를 따라갈 때는 “어느 테이블에서 → 어떤 행을 골라 → 어떤 값을 보여 주는가”로 읽으면 이해하기 쉽습니다. 뒤의 시뮬레이터도 이 흐름을 보여 줍니다.</p>
-  <p>조회가 아니라 데이터를 바꾸는 문장은 첫 부분부터 다릅니다.</p>
+  <p>조회가 아니라 데이터를 바꾸는 문장은 첫 부분부터 다릅니다. 동아리 지원 테이블도 지원서가 새로 들어오거나, 점수를 고치거나, 지원을 취소하면 내용이 바뀝니다.</p>
   <div class="sqlx">
     <div class="sqlx-steps">
       <div class="sqlx-step"><span class="n">INSERT INTO</span><span class="d">어느 테이블의 어느 열에 <b>새 행을 넣을까</b> — <code>INSERT INTO 테이블 (열, 열) VALUES (값, 값);</code></span></div>
       <div class="sqlx-step"><span class="n">UPDATE</span><span class="d">어느 행의 어느 값을 <b>바꿀까</b> — <code>UPDATE 테이블 SET 열 = 값 WHERE 조건;</code></span></div>
       <div class="sqlx-step"><span class="n">DELETE FROM</span><span class="d">어느 행을 <b>지울까</b> — <code>DELETE FROM 테이블 WHERE 조건;</code></span></div>
     </div>
-    <p class="sqlx-order" style="margin-top:10px"><code>VALUES</code> 뒤 괄호 안의 값은 앞에 적은 열의 순서대로 적습니다. 열 목록을 생략하고 <code>INSERT INTO 테이블 VALUES (값, 값, …);</code>처럼 적을 수도 있습니다. 이때는 테이블에 정의된 모든 열의 순서대로 값을 적어야 합니다.</p>
+    <p class="sqlx-order" style="margin-top:10px"><code>VALUES</code> 뒤 괄호 안의 값은 앞에 적은 열의 순서대로 적습니다. 열 목록을 생략하고 <code>INSERT INTO 테이블 VALUES (값, 값, …);</code>처럼 적을 수도 있습니다. 이때는 테이블에 정의된 모든 열의 순서대로 값을 적어야 합니다. 예를 들어 서다온의 지원서를 점수까지 한 번에 넣으면 다음과 같습니다. <code>INSERT INTO 지원 VALUES (20133, '서다온', '미술부', 40, 44, '2026-10-05 21:30');</code></p>
     <p class="sqlx-order" style="margin-top:10px">특히 <code>UPDATE</code>와 <code>DELETE</code>에서는 <b>대상 조건을 먼저 확인</b>합니다. 일부 행만 바꾸거나 지우려던 문장에서 <code>WHERE</code>가 빠지면, 의도보다 훨씬 넓은 범위가 대상이 될 수 있습니다.</p>
   </div>
+  <p>창체부 시스템에서는 학생이 지원서를 제출하면 <code>INSERT</code>, 동아리가 점수를 입력하면 <code>UPDATE</code>, 학생이 지원을 취소하면 <code>DELETE</code>가 실행됩니다. 아래 세 화면을 순서대로 눌러 봅니다.</p>
+  <div class="sqlx-ladder" style="display:grid;gap:10px">
+      <div class="appw clubm" data-club="c1">
+        <div class="appw-grid">
+          <div class="appw-pane">
+            <p class="appw-cap"><span class="dot"></span>앱 화면</p>
+            <div class="appw-screen">
+              <div class="appw-bar">학생 화면 · 지원서 제출<span class="sp">INSERT</span></div>
+              <div class="appw-body">
+                <div class="club-f"><span class="l">학번</span><span class="v">20133</span></div>
+                <div class="club-f"><span class="l">이름</span><span class="v">서다온</span></div>
+                <div class="club-f"><span class="l">지원동아리</span><select disabled aria-label="지원동아리"><option>미술부</option></select></div>
+                <div class="appw-ctl"><button class="appw-btn pri">제출</button></div>
+                <div class="club-out"></div>
+              </div>
+            </div>
+          </div>
+          <div class="appw-pane">
+            <p class="appw-cap sqlcap"><span class="dot"></span>실행된 SQL과 의미</p>
+            <div class="appw-log"><div class="appw-empty">버튼을 누르면 이 화면 뒤에서 실행되는 SQL 문이 표시됩니다.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="appw clubm" data-club="c2">
+        <div class="appw-grid">
+          <div class="appw-pane">
+            <p class="appw-cap"><span class="dot"></span>앱 화면</p>
+            <div class="appw-screen">
+              <div class="appw-bar">미술부 담당 · 점수 입력<span class="sp">UPDATE</span></div>
+              <div class="appw-body">
+                <div class="club-f"><span class="l">지원자</span><span class="v">서다온 (20133)</span></div>
+                <div class="club-f"><span class="l">자소서</span><span class="v">40</span><span class="l" style="width:auto">면접</span><span class="v">44</span></div>
+                <div class="appw-ctl"><button class="appw-btn pri" disabled>저장</button></div>
+                <div class="club-out"></div>
+              </div>
+            </div>
+          </div>
+          <div class="appw-pane">
+            <p class="appw-cap sqlcap"><span class="dot"></span>실행된 SQL과 의미</p>
+            <div class="appw-log"><div class="appw-empty">먼저 위의 지원서를 제출해야 서다온의 행이 생깁니다.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="appw clubm" data-club="c3">
+        <div class="appw-grid">
+          <div class="appw-pane">
+            <p class="appw-cap"><span class="dot"></span>앱 화면</p>
+            <div class="appw-screen">
+              <div class="appw-bar">학생 화면 · 내 지원 내역<span class="sp">DELETE</span></div>
+              <div class="appw-body">
+                <div class="club-f"><span class="l">지원자</span><span class="v">남궁현 (20116)</span></div>
+                <div class="club-f"><span class="l">지원동아리</span><span class="v">수리정보영재반</span></div>
+                <div class="appw-ctl"><button class="appw-btn">지원 취소</button></div>
+                <div class="club-out"></div>
+              </div>
+            </div>
+          </div>
+          <div class="appw-pane">
+            <p class="appw-cap sqlcap"><span class="dot"></span>실행된 SQL과 의미</p>
+            <div class="appw-log"><div class="appw-empty">버튼을 누르면 이 화면 뒤에서 실행되는 SQL 문이 표시됩니다.</div></div>
+          </div>
+        </div>
+      </div>
+  </div>
+<script>
+/* 동아리 지원 앱 모형 — 누르면 그 뒤의 SQL과 절별 의미를 보여 준다(club.db와 같은 30행) */
+(function () {
+  var COLS = ["학번", "이름", "지원동아리", "자소서", "면접", "제출시각"];
+  var BASE = [[10102, "김하늘", "미술부", 35, 35, "2026-10-03 16:15"], [10104, "이바다", "과학부", 40, 34, "2026-10-01 18:40"], [10107, "박솔", "방송부", 27, 49, "2026-10-04 20:20"], [10108, "최이슬", "과학부", 36, 40, "2026-10-01 14:05"], [10109, "정가람", "댄스부", 46, 24, "2026-10-01 11:20"], [10111, "윤나래", "댄스부", 30, 29, "2026-10-01 08:45"], [10112, "강누리", "미술부", 37, 36, "2026-10-05 12:40"], [10113, "조한결", "과학부", 29, 33, "2026-10-03 12:05"], [10114, "임다온", "수리정보영재반", 24, 28, "2026-10-01 10:15"], [10116, "한별", "방송부", 42, 50, "2026-10-05 12:10"], [10118, "오세린", "미술부", 23, 47, "2026-10-02 11:45"], [10122, "서도윤", "방송부", 43, 44, "2026-10-03 12:55"], [10124, "신유찬", "방송부", 39, 23, "2026-10-03 08:40"], [10125, "권아린", "수리정보영재반", 41, 25, "2026-10-05 19:10"], [10126, "황지후", "방송부", 21, 39, "2026-10-05 18:15"], [10129, "안서우", "과학부", 49, 32, "2026-10-03 15:30"], [10132, "송민재", "수리정보영재반", 32, 37, "2026-10-02 14:40"], [10133, "류하은", "댄스부", 48, 30, "2026-10-05 20:25"], [20103, "전시우", "과학부", 22, 42, "2026-10-04 17:00"], [20104, "홍예린", "방송부", 31, 21, "2026-10-02 18:30"], [20106, "문태오", "과학부", 38, 27, "2026-10-04 20:25"], [20107, "배수아", "미술부", 34, 43, "2026-10-01 12:05"], [20109, "백준서", "과학부", 33, 31, "2026-10-02 11:00"], [20114, "허윤슬", "방송부", 44, 38, "2026-10-02 11:20"], [20116, "남궁현", "수리정보영재반", 26, 26, "2026-10-04 15:10"], [20120, "노은채", "수리정보영재반", 45, 48, "2026-10-05 14:00"], [20123, "구도하", "댄스부", 28, 45, "2026-10-01 12:55"], [20126, "심채원", "댄스부", 25, 22, "2026-10-03 16:30"], [20128, "원지안", "수리정보영재반", 50, 46, "2026-10-04 10:35"], [20131, "석하람", "방송부", 47, 41, "2026-10-02 09:10"]];
+  var db = BASE.map(function (r) { return r.slice(); });
+  function esc(x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+  function hl(t) {
+    return esc(t)
+      .replace(/\b(SELECT|FROM|WHERE|GROUP BY|ORDER BY|DESC|ASC|LIMIT|UPDATE|SET|INSERT INTO|VALUES|DELETE FROM|COUNT)\b/g, '<span class="kw">$1</span>')
+      .replace(/'([^']*)'/g, "<span class=\"st\">'$1'</span>");
+  }
+  var FIX = {
+    "(학번, 이름, 지원동아리, 제출시각)": "적지 않은 자소서, 면접 열은 비어 있으며, 동아리가 평가를 마친 뒤 UPDATE로 채웁니다.",
+    "SELECT 지원동아리, COUNT(*)": "지원동아리 열과, 묶음마다 행이 몇 개인지 센 값을 가져옵니다.",
+    "GROUP BY 지원동아리": "지원동아리가 같은 행끼리 한 행으로 묶습니다. 동아리가 다섯 곳이므로 결과도 다섯 행입니다."
+  };
+  /* parts: 짝수 번째는 그대로, 홀수 번째는 새로 붙은 부분(밑줄) */
+  function show(box, parts, note) {
+    var log = box.querySelector(".appw-log"), sql = parts.join("");
+    var why = (window.sqlWhy ? window.sqlWhy(sql) : []).map(function (x) {
+      return "<em><code>" + esc(x[0]) + "</code>" + (FIX[x[0]] || x[1]) + "</em>";
+    }).join("");
+    log.innerHTML = '<div class="appw-line on">' + parts.map(function (p, i) {
+        return i % 2 ? '<span class="sqlx-new">' + hl(p) + "</span>" : hl(p);
+      }).join("")
+      + (note ? '<span class="nm">' + esc(note) + "</span>" : "")
+      + (why ? '<span class="appw-why">' + why + "</span>" : "") + "</div>";
+  }
+  function table(box, cols, rs, head, badge) {
+    var h = "<table class=\"clubt\"><thead><tr>" + cols.map(function (c) { return "<th>" + (head && head[c] ? head[c] : esc(c)) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    rs.forEach(function (r, i) {
+      h += "<tr>" + cols.map(function (c, j) {
+        var v = r[COLS.indexOf(c)];
+        return v === null ? '<td class="em">비어 있음</td>' : "<td>" + esc(v) + (j === 0 && badge && i < badge ? '<span class="club-badge">합격</span>' : "") + "</td>";
+      }).join("") + "</tr>";
+    });
+    box.querySelector(".club-out").innerHTML = h + "</tbody></table>";
+  }
+  function of(club) { return BASE.filter(function (r) { return r[2] === club; }); }
+  function byInterview(rs, desc) { return rs.slice().sort(function (a, b) { return desc ? b[4] - a[4] : a[4] - b[4]; }); }
+  function q(k) { return document.querySelector('.clubm[data-club="' + k + '"]'); }
+
+  /* 1단계 */
+  var b1 = q("s1"), S1 = { a: ["학번", "이름"], b: ["이름", "면접"], c: COLS };
+  b1.querySelectorAll("button").forEach(function (bt) {
+    bt.addEventListener("click", function () {
+      var cols = S1[bt.getAttribute("data-q")];
+      show(b1, ["", "SELECT " + (cols === COLS ? "*" : cols.join(", ")) + " FROM 지원", ";"], "30행을 모두 가져옵니다.");
+      table(b1, cols, BASE);
+    });
+  });
+  /* 2단계 */
+  var b2 = q("s2"), sel = b2.querySelector("select");
+  sel.addEventListener("change", function () {
+    if (!sel.value) return;
+    var rs = of(sel.value);
+    show(b2, ["SELECT 이름, 면접 FROM 지원 ", "WHERE 지원동아리 = '" + sel.value + "'", ";"],
+      sel.value + " 담당자는 " + sel.value + " 지원자만 볼 수 있습니다. " + rs.length + "행");
+    table(b2, ["이름", "면접"], rs);
+  });
+  /* 3단계 */
+  var b3 = q("s3"), desc3 = null;
+  function draw3() {
+    var lab = desc3 === false ? "면접 ▲" : "면접 ▼";
+    table(b3, ["이름", "면접"], desc3 === null ? of("방송부") : byInterview(of("방송부"), desc3), { "면접": "<button type=\"button\">" + lab + "</button>" });
+    b3.querySelector("th button").addEventListener("click", function () {
+      desc3 = desc3 === null ? true : !desc3;
+      show(b3, ["SELECT 이름, 면접 FROM 지원 WHERE 지원동아리 = '방송부' ", "ORDER BY 면접 " + (desc3 ? "DESC" : "ASC"), ";"], "8행 그대로, 순서만 바뀝니다.");
+      draw3();
+    });
+  }
+  draw3();
+  /* 4단계 */
+  var b4 = q("s4");
+  table(b4, ["이름", "면접"], byInterview(of("방송부"), true));
+  b4.querySelector("button").addEventListener("click", function () {
+    show(b4, ["SELECT 이름, 면접 FROM 지원 WHERE 지원동아리 = '방송부' ORDER BY 면접 DESC ", "LIMIT 3", ";"], "합격자 명단은 저장하지 않고 이 문장으로 매번 계산합니다.");
+    table(b4, ["이름", "면접"], byInterview(of("방송부"), true).slice(0, 3), null, 3);
+  });
+  /* 5단계 */
+  var b5 = q("s5");
+  b5.querySelector("button").addEventListener("click", function () {
+    var cnt = {};
+    BASE.forEach(function (r) { cnt[r[2]] = (cnt[r[2]] || 0) + 1; });
+    var ks = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; });
+    show(b5, ["SELECT 지원동아리, ", "COUNT(*)", " FROM 지원 ", "GROUP BY 지원동아리", " ", "ORDER BY COUNT(*) DESC", ";"], "5행");
+    b5.querySelector(".club-out").innerHTML = '<div class="club-cards">' + ks.map(function (k) {
+      return '<div class="club-card"><b>' + cnt[k] + "</b><span>" + esc(k) + "</span></div>";
+    }).join("") + "</div>";
+  });
+
+  /* 데이터 변경 — 세 화면이 테이블 하나를 함께 바꾼다 */
+  var c1 = q("c1"), c2 = q("c2"), c3 = q("c3"), btn2 = c2.querySelector("button");
+  function art() { return byInterview(db.filter(function (r) { return r[2] === "미술부" && r[4] !== null; }), true)
+      .concat(db.filter(function (r) { return r[2] === "미술부" && r[4] === null; })); }
+  function drawArt() { table(c2, ["이름", "자소서", "면접"], art(), { "면접": "면접 ▼" }); }
+  drawArt();
+  c1.querySelector("button").addEventListener("click", function () {
+    var n = db.length;
+    db.push([20133, "서다온", "미술부", null, null, "2026-10-05 21:30"]);
+    this.disabled = true; this.textContent = "제출 완료";
+    show(c1, ["INSERT INTO 지원 (학번, 이름, 지원동아리, 제출시각) VALUES (20133, '서다온', '미술부', '2026-10-05 21:30');"],
+      "서다온의 행이 생겼습니다. 자소서와 면접은 아직 비어 있습니다. 지원 테이블 " + n + "행 → " + db.length + "행");
+    btn2.disabled = false;
+    c2.querySelector(".appw-empty").textContent = "버튼을 누르면 이 화면 뒤에서 실행되는 SQL 문이 표시됩니다.";
+    drawArt();
+  });
+  btn2.addEventListener("click", function () {
+    db.forEach(function (r) { if (r[0] === 20133) { r[3] = 40; r[4] = 44; } });
+    this.disabled = true; this.textContent = "저장 완료";
+    show(c2, ["UPDATE 지원 SET 자소서 = 40, 면접 = 44 WHERE 학번 = 20133;"],
+      "미술부 면접 순서가 곧바로 바뀝니다. 서다온이 44점으로 2위가 되었습니다.");
+    drawArt();
+  });
+  c3.querySelector("button").addEventListener("click", function () {
+    var n = db.length;
+    db = db.filter(function (r) { return r[0] !== 20116; });
+    this.disabled = true; this.textContent = "취소 완료";
+    show(c3, ["DELETE FROM 지원 WHERE 학번 = 20116;"], "남궁현의 행이 지원 테이블에서 사라졌습니다. 지원 테이블 " + n + "행 → " + db.length + "행");
+    c3.querySelector(".club-out").innerHTML = '<p class="club-msg">지원 내역이 없습니다.</p>';
+  });
+})();
+</script>
   <h3>파이썬 대신 SQL을 사용하는 이유</h3>
-  <p>앞 차시에서는 CSV 파일을 파이썬으로 읽어 분석했습니다. 작성자가 석리송인 게시물을 최근 순으로 고르는 작업을 파이썬과 SQL로 각각 작성하여 비교해 보겠습니다.</p>
+  <p>앞 차시에서는 CSV 파일을 파이썬으로 읽어 분석하였습니다. 방송부 지원자를 골라 면접 점수가 높은 순으로 정렬하는 작업을 파이썬과 SQL로 각각 작성하여 비교합니다.</p>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
     <div class="codewrap code"><span class="label">파이썬 · 찾는 절차를 직접 작성</span><pre>result = []
-for post in posts:
-    if post["작성자"] == "석리송":
-        result.append(post)
-result.sort(key=lambda p: p["올린시각"], reverse=True)</pre></div>
-    <div class="codewrap code"><span class="label">SQL · 원하는 결과만 작성</span><pre>SELECT *
-FROM posts
-WHERE 작성자 = '석리송'
-ORDER BY 올린시각 DESC;</pre></div>
+for row in rows:
+    if row["지원동아리"] == "방송부":
+        result.append(row)
+result.sort(key=lambda r: r["면접"], reverse=True)</pre></div>
+    <div class="codewrap code"><span class="label">SQL · 원하는 결과만 작성</span><pre>SELECT 이름
+FROM 지원
+WHERE 지원동아리 = '방송부'
+ORDER BY 면접 DESC;</pre></div>
   </div>
   <p>파이썬은 반복, 조건 확인, 정렬 같은 절차를 직접 작성합니다. 반면 SQL은 원하는 결과만 기술하면 되며, 그 결과를 찾는 방법은 데이터베이스가 결정합니다.</p>
   <table class="daymap">
     <thead><tr><th>SQL을 사용하는 이유</th><th>설명</th></tr></thead>
     <tbody>
-      <tr><td>필요한 행만 받아 온다</td><td>게시물이 수억 개에 달하더라도 데이터베이스 서버는 조건에 맞는 행만 골라 전송합니다. 파이썬으로 처리하려면 먼저 전체 데이터를 가져와야 합니다. 데이터베이스는 색인(인덱스)을 활용하여 전체를 훑지 않고도 빠르게 검색합니다.</td></tr>
-      <tr><td>여러 사람이 동시에 읽고 쓴다</td><td>1절에서 살펴보았듯이 파일 사본을 덮어쓰면 변경 사항이 사라질 수 있습니다. 데이터베이스는 수많은 사용자의 요청을 순차적으로 처리하여 기록이 소실되지 않도록 하며, 권한 관리와 기본 키 중복 방지 역할도 수행합니다.</td></tr>
+      <tr><td>필요한 행만 받아 온다</td><td>게시물이 수억 개에 달하더라도 데이터베이스 서버는 조건에 맞는 행만 골라 전송합니다. 파이썬으로 처리하려면 먼저 전체 데이터를 가져와야 합니다. 검색에 사용하는 열에 색인(인덱스)을 만들어 두면, 데이터베이스는 전체를 훑지 않고도 조건에 맞는 행을 빠르게 찾습니다.</td></tr>
+      <tr><td>여러 사람이 동시에 읽고 쓴다</td><td>1절에서 살펴보았듯이 파일 사본을 덮어쓰면 변경 사항이 사라질 수 있습니다. 데이터베이스는 여러 사용자의 요청이 동시에 들어와도 서로의 변경을 덮어쓰지 않도록 처리 순서를 조정하며, 권한 관리와 기본 키 중복 방지 기능도 제공합니다.</td></tr>
       <tr><td>어느 프로그램에서나 사용한다</td><td>앱이 자바로, 웹이 자바스크립트로 만들어졌더라도 데이터베이스에는 SQL로 요청합니다. 파이썬 코드 안에서 SQL 문장을 전송하여 사용하는 경우도 많습니다. 우리 갤러리가 활용하는 수파베이스 역시 SQL 데이터베이스(PostgreSQL)입니다.</td></tr>
     </tbody>
   </table>
@@ -776,7 +1116,7 @@ ORDER BY 올린시각 DESC;</pre></div>
 <script>
 /* 위젯 공통 — 실행된 SQL을 낱말별로 풀어 설명한다 */
 (function () {
-  var TBL = { posts: "게시물 테이블", messages: "메시지 테이블", matches: "전적 테이블" };
+  var TBL = { posts: "게시물 테이블", messages: "메시지 테이블", matches: "전적 테이블", "지원": "동아리 지원 테이블" };
   function tbl(n) { return (TBL[n] || n) + "(" + n + ")"; }
   function esc(x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
   function cond(c) {
@@ -785,12 +1125,12 @@ ORDER BY 올린시각 DESC;</pre></div>
     if (like) return "‘" + like[1] + "’ 안에 ‘" + like[2] + "’가 들어 있는 행만 남깁니다. %는 앞뒤로 무엇이 오든 상관없다는 뜻입니다.";
     if (/\bAND\b/i.test(c)) {
       var ps = c.split(/\s+AND\s+/i);
-      return "두 조건을 <b>모두</b> 만족하는 행만 남깁니다 — " + ps.join(", ") + ". 하나라도 어긋나면 대상이 아닙니다.";
+      return "두 조건(" + ps.join(", ") + ")을 <b>모두</b> 만족하는 행만 남깁니다. 하나라도 어긋나면 대상이 아닙니다.";
     }
     var inm = c.match(/^(\S+)\s+IN\s*\((.+)\)$/i);
     if (inm) return inm[2].indexOf(",") < 0
       ? "‘" + inm[1] + "’가 " + inm[2].trim() + "인 행만 남깁니다."
-      : "‘" + inm[1] + "’가 " + inm[2] + " 가운데 하나인 행만 남깁니다. 여러 행을 한 번에 고칠 때 씁니다.";
+      : "‘" + inm[1] + "’가 " + inm[2] + " 가운데 하나인 행만 남깁니다. 여러 행을 한 번에 고칠 때 사용합니다.";
     return "‘" + c + "’인 행만 남깁니다.";
   }
   function selCols(c) {
@@ -811,7 +1151,7 @@ ORDER BY 올린시각 DESC;</pre></div>
     var q = sql.replace(/\s+/g, " ").trim().replace(/;$/, ""), r = [];
     var m;
     if ((m = q.match(/^INSERT INTO\s+(\S+)\s*\((.+?)\)\s*VALUES\s*\((.+)\)$/i))) {
-      r.push(["INSERT INTO " + m[1], tbl(m[1]) + "에 <b>새 행을 하나 넣습니다.</b> 있던 행은 그대로 있고 줄이 하나 늘어납니다."]);
+      r.push(["INSERT INTO " + m[1], tbl(m[1]) + "에 <b>새 행을 하나 넣습니다.</b> 있던 행은 그대로 있고 행이 하나 늘어납니다."]);
       r.push(["(" + m[2] + ")", "값을 채울 열의 이름입니다. 적지 않은 열에는 기본값이 들어갑니다."]);
       r.push(["VALUES (" + m[3] + ")", "열 순서 그대로 들어갈 값입니다."]);
       return r;
@@ -835,13 +1175,13 @@ ORDER BY 올린시각 DESC;</pre></div>
       var rest = m[3] || "", g;
       if ((g = rest.match(/WHERE\s+(.+?)(?=\s+GROUP BY|\s+ORDER BY|\s+LIMIT|$)/i))) r.push(["WHERE " + g[1], cond(g[1])]);
       if ((g = rest.match(/GROUP BY\s+(.+?)(?=\s+ORDER BY|\s+LIMIT|$)/i)))
-        r.push(["GROUP BY " + g[1], "‘" + g[1] + "’가 같은 행끼리 <b>한 줄로 묶습니다.</b> 종류가 네 가지면 결과도 네 줄이 됩니다."]);
+        r.push(["GROUP BY " + g[1], "‘" + g[1] + "’가 같은 행끼리 <b>한 행으로 묶습니다.</b> 종류가 네 가지면 결과도 네 행이 됩니다."]);
       if ((g = rest.match(/ORDER BY\s+(.+?)(?=\s+LIMIT|$)/i))) {
         var desc = /DESC/i.test(g[1]), key = g[1].replace(/\s*(DESC|ASC)\s*/ig, "").trim();
-        r.push(["ORDER BY " + g[1], "‘" + key + "’ 기준으로 " + (desc ? "<b>큰 것부터</b>" : "<b>작은 것부터</b>") + " 줄을 세웁니다."]);
+        r.push(["ORDER BY " + g[1], "‘" + key + "’ 기준으로 " + (desc ? "<b>큰 것부터</b>" : "<b>작은 것부터</b>") + " 정렬합니다."]);
       }
-      if ((g = rest.match(/LIMIT\s+(\d+)/i))) r.push(["LIMIT " + g[1], "줄을 세운 뒤 <b>앞에서 " + g[1] + "줄만</b> 가져옵니다."]);
-      if ((g = rest.match(/OFFSET\s+(\d+)/i))) r.push(["OFFSET " + g[1], "<b>앞의 " + g[1] + "줄은 건너뜁니다.</b> 피드를 더 내릴 때 이 숫자가 커집니다."]);
+      if ((g = rest.match(/LIMIT\s+(\d+)/i))) r.push(["LIMIT " + g[1], "정렬한 뒤 <b>앞에서 " + g[1] + "행만</b> 가져옵니다."]);
+      if ((g = rest.match(/OFFSET\s+(\d+)/i))) r.push(["OFFSET " + g[1], "<b>앞의 " + g[1] + "행은 건너뜁니다.</b> 피드를 더 내릴 때 이 숫자가 커집니다."]);
       return r;
     }
     return r;
@@ -867,10 +1207,12 @@ ORDER BY 올린시각 DESC;</pre></div>
 })();
 </script>
 
+  <p>동아리 지원 테이블로 익힌 문법은 앱에서도 그대로 사용됩니다. 이어서 피드, 메신저, 게임 전적 세 앱에서 같은 문법이 어떻게 사용되는지 살펴봅니다.</p>
+
   <h3>① 게시물 조회하기 — 인스타그램형 피드와 SELECT</h3>
   <p>피드에서 최근 게시물을 불러오는 동작을 SQL로 표현해 봅니다. 게시물 테이블에서 필요한 열을 고르고, 최근 순으로 정렬한 뒤, 일부 행만 가져오는 방식입니다.</p>
   <p>아래 <code>posts</code>는 게시물 한 건을 한 행으로 저장하는 <b>연습용 테이블</b>입니다. 실제 인스타그램의 테이블 구조나 조회 방식을 나타내지는 않습니다.</p>
-  <div class="codewrap code"><span class="label">SQL · 읽기</span><pre>-- 피드를 연다: 최근 게시물 20개의 작성자와 올린 시각을 가져온다
+  <div class="codewrap code"><span class="label">SQL · 읽기</span><pre>-- 피드를 연다: 최근 게시물 20개의 작성자, 해시태그, 올린 시각을 가져온다
 SELECT 작성자, 해시태그, 올린시각
 FROM posts
 ORDER BY 올린시각 DESC
@@ -890,7 +1232,7 @@ SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
     </tbody>
   </table>
   <p>첫 문장은 최근 게시물 20개까지의 <b>작성자·해시태그·올린 시각</b>을 가져옵니다. 두 번째 문장은 해시태그 열에 <code>#고양이</code>라는 문자열이 포함된 게시물을 찾습니다.</p>
-  <p><code>LIKE</code>에서 <code>%</code>는 문자가 없거나 여러 글자가 올 수 있는 자리를 나타냅니다. 따라서 <code>'%#고양이%'</code>는 앞뒤에 다른 내용이 있더라도 그 문자열이 포함된 값을 찾습니다. 정확한 태그 단위를 구분하는 검색과는 다를 수 있습니다.</p>
+  <p><code>LIKE</code>에서 <code>%</code>는 글자 수가 0개 이상인 아무 문자열을 뜻합니다. 따라서 <code>'%#고양이%'</code>는 앞뒤에 다른 내용이 있더라도 <code>#고양이</code>가 포함된 값을 찾습니다. 다만 <code>#고양이용품</code>처럼 같은 문자열을 포함한 다른 태그도 함께 찾습니다.</p>
   <p>피드 위젯의 <b>더 보기</b>는 게시물을 두 개씩 추가로 보여 줍니다. 가져올 수는 <code>LIMIT 2</code>로 두고, 이미 본 게시물 수만큼 <code>OFFSET</code>을 늘립니다. 예를 들어 <code>LIMIT 2 OFFSET 4</code>는 앞의 네 행을 건너뛴 뒤 최대 두 행을 가져옵니다.</p>
 
   <figure class="interactive" data-fig="igfeed">
@@ -1018,7 +1360,7 @@ SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
   more.addEventListener("click", function () {
     var off = shown; shown = Math.min(shown + 2, POSTS.length);
     paint("SELECT * FROM posts\nORDER BY 올린시각 DESC\nLIMIT 2 OFFSET " + off + ";",
-      "앞의 " + off + "개는 건너뛰고(OFFSET) 다음 2개를 더 가져옵니다. 한 번에 전부 가져오지 않는 이유입니다.");
+      "앞의 " + off + "개는 건너뛰고(OFFSET) 다음 2개를 더 가져옵니다. 이렇게 필요한 만큼만 나누어 가져옵니다.");
     render();
   });
   q.addEventListener("keyup", function (ev) {
@@ -1045,14 +1387,14 @@ SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</pre></div>
 
 
   <h3>② 메시지 추가·갱신·삭제하기 — 카카오톡형 메신저</h3>
-  <p>메시지를 보내는 일과 읽음 표시를 바꾸는 일은 무엇이 다를까요?</p>
+  <p>메시지를 보내는 일과 읽음 표시를 바꾸는 일은 데이터베이스에서 서로 다른 동작입니다.</p>
   <p>이 예시에서는 메시지를 보내면 <b>새 행이 추가</b>됩니다. 읽음 표시를 바꾸면 <b>기존 행의 값이 갱신</b>되고, 메시지를 지우면 <b>해당 행이 삭제</b>됩니다.</p>
   <p class="mini"><code>messages</code>는 이 차이를 살펴보기 위한 연습용 테이블입니다. 실제 메신저의 전송·저장·삭제 방식을 그대로 재현한 것은 아닙니다.</p>
   <div class="codewrap code"><span class="label">SQL · 추가 · 갱신 · 삭제</span><pre>-- 추가(INSERT): 메시지를 보내면 테이블에 새 행이 하나 생긴다
 INSERT INTO messages (방id, 보낸사람, 내용, 읽음)
 VALUES (12, '석리송', '오늘 급식 뭐야?', false);
 
--- 갱신(UPDATE): 상대가 읽으면 그 행의 '읽음'이 true가 된다 — 숫자 1이 사라지는 순간
+-- 갱신(UPDATE): 상대가 읽으면 그 행의 '읽음'이 true가 되고, 숫자 1이 사라진다
 UPDATE messages SET 읽음 = true WHERE id = 305;
 
 -- 삭제(DELETE): 내가 보낸 메시지를 지운다
@@ -1072,7 +1414,7 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</pre></div>
     <div class="appw-grid">
       <div class="appw-pane">
         <p>마지막 문장의 <code>AND</code>는 <b>두 조건을 모두 만족해야 한다</b>는 뜻입니다. 메시지 번호가 305번이어도 보낸 사람이 <code>'석리송'</code>이 아니라면 이 문장의 삭제 대상이 아닙니다.</p>
-  <p><b>메신저 위젯에서 확인할 것</b> — 메시지를 보내고, ‘상대가 읽었다’를 누른 뒤, 자신이 보낸 메시지를 삭제해 봅니다. 각각의 동작에서 SQL의 첫 부분과 대상 조건을 확인합니다.</p>
+  <p><b>메신저 위젯에서 확인할 것</b> — 메시지를 보내고, ‘상대가 읽었다’를 누른 뒤, 자신이 보낸 메시지를 삭제해 봅니다. 각각의 동작에서 SQL의 첫 부분과 대상 조건을 확인합니다. 이 위젯에서 ‘나’는 석리송입니다.</p>
         <div class="kt">
           <div class="kt-top">
             <span class="bk">‹</span><span class="ttl">2학년 3반 단톡방</span><span class="n">27</span>
@@ -1112,9 +1454,9 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</pre></div>
   var SEED = [
     { id: 301, u: "수정반", av: "🐶", me: false, t: "다들 오늘 방과후 하냐", time: "오후 4:12", un: 0 },
     { id: 302, u: "렌고쿠", av: "🔥", me: false, t: "난 학원 감 ㅠ", time: "오후 4:13", un: 0 },
-    { id: 303, u: "나", av: "🙂", me: true, t: "오늘 급식 뭐야?", time: "오후 4:15", un: 0 },
-    { id: 304, u: "석리송", av: "🐱", me: false, t: "제육볶음! 줄 엄청 길 것 같아", time: "오후 4:16", un: 0 },
-    { id: 305, u: "수정반", av: "🐶", me: false, t: "제육 나오는 날은 일찍 내려가야 함", time: "오후 4:17", un: 0 }
+    { id: 303, u: "수정반", av: "🐶", me: false, t: "오늘 급식 뭐야?", time: "오후 4:15", un: 0 },
+    { id: 304, u: "민아", av: "🌙", me: false, t: "제육볶음! 줄 엄청 길 것 같아", time: "오후 4:16", un: 0 },
+    { id: 305, u: "나", av: "🙂", me: true, t: "제육 나오는 날은 일찍 내려가야 함", time: "오후 4:17", un: 0 }
   ];
   var msgs, nextId;
   function esc(x) { return String(x).replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
@@ -1143,7 +1485,7 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</pre></div>
     var now = new Date(), h = now.getHours(), mi = ("0" + now.getMinutes()).slice(-2);
     var ap = h < 12 ? "오전" : "오후"; h = h % 12 || 12;
     msgs.push({ id: nextId, u: "나", av: "🙂", me: true, t: v, time: ap + " " + h + ":" + mi, un: 1 });
-    paint("INSERT INTO messages (방id, 보낸사람, 내용, 읽음)\nVALUES (3, '나', '" + v.replace(/'/g, "''") + "', false);",
+    paint("INSERT INTO messages (방id, 보낸사람, 내용, 읽음)\nVALUES (3, '석리송', '" + v.replace(/'/g, "''") + "', false);",
       "테이블에 새 행이 하나 생깁니다. 읽음이 false라서 말풍선 옆에 노란 1이 붙습니다.");
     nextId += 1; q.value = ""; render();
   });
@@ -1162,7 +1504,7 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</pre></div>
     var id = +b.dataset.id, m = msgs.filter(function (x) { return x.id === id; })[0];
     if (!m.me) {
       paint("DELETE FROM messages\nWHERE id = " + id + " AND 보낸사람 = '석리송';",
-        "조건 두 개를 모두 만족하는 행이 없어 지워지지 않았습니다. " + m.u + "이(가) 보낸 메시지이기 때문입니다. 이것이 WHERE로 대상을 좁히는 이유입니다.");
+        "조건 두 개를 모두 만족하는 행이 없어 지워지지 않았습니다. " + m.u + "이(가) 보낸 메시지이기 때문입니다. WHERE로 대상을 좁히면 다른 사람의 메시지는 삭제 대상에서 빠집니다.");
       b.animate([{ transform: "translateX(0)" }, { transform: "translateX(-5px)" }, { transform: "translateX(5px)" }, { transform: "translateX(0)" }], { duration: 260 });
       return;
     }
@@ -1181,11 +1523,11 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</pre></div>
 })();
 </script>
 
-  <p>이어서 SQL 시뮬레이터의 쓰기 탭에서 <b>‘WHERE 없이 DELETE’</b>를 실행합니다. 남은 댓글 수를 활동지에 기록한 뒤, 다음 설명을 읽습니다.</p>
+  <p>뒤의 SQL 시뮬레이터 쓰기 탭에는 <b>‘WHERE 없이 DELETE’</b> 버튼이 있습니다. 이 버튼을 실행하고 남은 댓글 수를 활동지에 기록한 뒤, 다음 설명을 읽습니다.</p>
 
   <div class="callout warn">
     <div class="h">⚠️ UPDATE·DELETE의 대상과 권한 확인하기</div>
-    <p>이 문장에는 대상을 제한하는 <code>WHERE</code>가 없습니다. 테이블 전체를 삭제할 권한이 있고 다른 제한이 없다면, <code>messages</code>의 모든 행이 삭제됩니다. 특정 대화방이나 내가 보낸 메시지만 대상으로 삼는 문장이 아닙니다.</p>
+    <p>이 버튼이 실행하는 <code>DELETE FROM comments;</code>에는 대상을 제한하는 <code>WHERE</code>가 없습니다. 테이블 전체를 삭제할 권한이 있고 다른 제한이 없다면, <code>comments</code>의 모든 행이 삭제됩니다. 특정 게시물의 댓글이나 내가 작성한 댓글만 대상으로 삼는 문장이 아닙니다.</p>
   <p>안전하게 데이터를 다루려면 <b>대상 조건과 접근 권한을 함께 확인</b>해야 합니다. <code>WHERE</code>는 “어떤 행을 처리할 것인가”를 표현합니다. 접근 권한은 “이 사용자가 어떤 작업을 할 수 있는가”를 제한합니다. 실제 서비스에서는 로그인한 사용자와 서버·데이터베이스의 권한 설정을 연결해야 합니다.</p>
   <p>따라서 <code>WHERE</code>가 있다는 이유만으로 안전하다고 판단하지 않습니다. <b>조건이 의도한 대상을 가리키는지, 그 작업을 수행할 권한이 적절한지</b> 확인합니다.</p>
   </div>
@@ -1194,7 +1536,7 @@ DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</pre></div>
   <p>게임 전적 화면에는 판수, 승률, 캐릭터별 평균 점수처럼 기록을 요약한 값이 표시됩니다. 이번에는 이런 값을 <b>전적 테이블의 행을 집계해 구하는 방식</b>으로 살펴봅니다.</p>
   <p><code>matches</code>에서는 대전 기록 한 판이 한 행입니다. 판수는 해당하는 행의 개수이고, 승률은 대상으로 삼은 경기 중 이긴 경기의 비율입니다. 따라서 숫자를 읽을 때는 <b>누구의 경기인지, 어느 기간의 기록인지, 어떤 경기를 포함했는지</b> 함께 확인해야 합니다.</p>
   <p>아래 첫 문장은 테이블에 있는 기록 중 <code>'석리송'</code>이 이긴 판을 셉니다. 시즌 조건은 포함되어 있지 않습니다. 두 번째 문장은 캐릭터별로 기록을 묶고, 각 묶음의 판수와 평균 점수를 계산합니다. 그 결과를 평균 점수가 높은 순으로 정렬해 세 행까지 가져옵니다.</p>
-  <div class="codewrap code"><span class="label">SQL · 세기와 묶기</span><pre>-- 내가 이번 시즌에 몇 판 이겼나
+  <div class="codewrap code"><span class="label">SQL · 세기와 묶기</span><pre>-- 석리송이 이긴 판은 모두 몇 판인가
 SELECT COUNT(*) FROM matches WHERE 플레이어 = '석리송' AND 결과 = '승';
 
 -- 캐릭터별로 묶어 판수와 평균 점수를 구하고, 평균이 높은 캐릭터부터 세 줄만
@@ -1303,20 +1645,20 @@ LIMIT 3;</pre></div>
       list.appendChild(el);
     });
     paint("SELECT " + g + ", " + FN[f].sql + " AS " + FN[f].as + "\nFROM matches\nGROUP BY " + g + "\nORDER BY " + FN[f].as + " DESC;",
-      note || ("20판이 " + g + " " + res.length + "종류로 묶여 " + res.length + "줄이 되었습니다."));
+      note || ("20판이 " + g + " " + res.length + "종류로 묶여 " + res.length + "행이 되었습니다."));
   }
   root.querySelectorAll(".gm-tab").forEach(function (b) {
     b.addEventListener("click", function () {
       root.querySelectorAll(".gm-tab").forEach(function (x) { x.classList.remove("on"); });
       b.classList.add("on"); g = b.dataset.g;
-      render("묶는 열을 " + g + "로 바꿨습니다. 같은 20판인데 결과가 " + agg().length + "줄로 묶입니다.");
+      render("묶는 열을 " + g + "로 바꿨습니다. 같은 20판인데 결과는 " + agg().length + "행이 됩니다.");
     });
   });
   root.querySelectorAll(".gm-f").forEach(function (b) {
     b.addEventListener("click", function () {
       f = b.dataset.f;
       render(f === "COUNT" ? "COUNT(*)는 묶음마다 행이 몇 개인지 셉니다."
-        : f === "AVG" ? "AVG(점수)는 묶음 안 점수의 평균입니다. 묶지 않았다면 스무 개 값을 한 칸에 넣을 수 없습니다."
+        : f === "AVG" ? "AVG(점수)는 묶음 안 점수의 평균입니다. 묶지 않으면 스무 판 전체의 평균 하나만 나오고, 캐릭터 열에는 넣을 값을 정할 수 없습니다."
         : "MAX(점수)는 묶음 안에서 가장 큰 값 하나만 남깁니다.");
     });
   });
@@ -1377,7 +1719,7 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
         </div>
 
         <div class="sim-pane" data-pane="read">
-          <p>먼저 게시물 테이블 <code>posts</code> 또는 게임 전적 테이블 <code>matches</code>를 고릅니다. 게시물 테이블에는 가상 반려동물 계정 다섯 개의 게시물 12개가 들어 있습니다. 게임 전적 테이블에는 활동지와 같은 20행이 들어 있습니다.</p>
+          <p>먼저 게시물 테이블 <code>posts</code> 또는 게임 전적 테이블 <code>matches</code>를 고릅니다. 시뮬레이터의 <code>posts</code>는 앞의 피드 위젯과 다른 연습 데이터로, 가상 반려동물 계정 다섯 개의 게시물 12개가 들어 있습니다. 게임 전적 테이블에는 활동지와 같은 20행이 들어 있습니다.</p>
   <p>예시 버튼을 누르거나 문장을 직접 고쳐 실행합니다. 실행 결과에서는 <b>대상 테이블 → 조건에 맞는 행 → 묶음과 집계 → 결과 열 → 정렬과 행 수 제한</b>을 확인합니다. 필요한 단계만 나타납니다.</p>
   <p>테이블 이름이나 열 이름을 잘못 쓰면 오류 안내가 표시됩니다. 묶음 안에서 값이 여러 개인 열을 집계 방법 없이 가져오려는 예제도 실행해 봅니다. 오류를 만났을 때는 문장 전체를 지우기보다, <b>어느 부분이 어떤 이유로 잘못되었는지</b> 읽습니다.</p>
           <div class="sim-row">
@@ -1494,7 +1836,7 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
     var COLS = cur.cols, NUM = cur.num;
     var s = sql.replace(/;\s*$/, "").replace(/\s+/g, " ").trim();
     var m = s.match(/^SELECT\s+(.+?)\s+FROM\s+(\S+)(?:\s+WHERE\s+(.+?))?(?:\s+GROUP BY\s+(\S+))?(?:\s+ORDER BY\s+(\S+)(?:\s+(ASC|DESC))?)?(?:\s+LIMIT\s+(\d+))?$/i);
-    if (!m) throw "문장의 뼈대를 읽지 못했습니다. SELECT … FROM " + cur.name + " [WHERE …] [GROUP BY …] [ORDER BY …] [LIMIT …] 순서를 지켰는지, 낱말 사이에 빈칸이 있는지 확인합니다.";
+    if (!m) throw "문장의 구조를 읽지 못했습니다. SELECT … FROM " + cur.name + " [WHERE …] [GROUP BY …] [ORDER BY …] [LIMIT …] 순서를 지켰는지, 명령어와 이름 사이에 빈칸이 있는지 확인합니다.";
     var p = { select: [], from: m[2], where: [], group: m[4] || null, order: m[5] || null, dir: (m[6] || "ASC").toUpperCase(), limit: m[7] ? +m[7] : null };
     if (p.from.toLowerCase() !== cur.name) throw '"' + p.from + '" 테이블은 없습니다. 지금 고른 테이블의 이름은 ' + cur.name + ' 입니다.';
     m[1].split(",").forEach(function (part) {
@@ -1514,8 +1856,8 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
     });
     if (p.group && COLS.indexOf(p.group) < 0) throw 'GROUP BY의 "' + p.group + '" 열은 없습니다.';
     var hasAgg = p.select.some(function (x) { return x.fn; });
-    if (p.group) p.select.forEach(function (x) { if (!x.fn && x.col !== p.group) throw '"' + x.col + '" 열은 GROUP BY에 없고 집계 함수로 감싸지도 않았습니다. ' + p.group + '(으)로 묶으면 한 묶음 안에 ' + x.col + ' 값이 여러 개라 한 칸에 넣을 수 없습니다. COUNT(*)나 AVG(…)처럼 집계 함수로 감싸거나 SELECT에서 빼세요.'; });
-    if (!p.group && hasAgg && p.select.some(function (x) { return !x.fn; })) throw "집계 함수와 보통 열을 함께 쓰려면 GROUP BY로 묶어야 합니다.";
+    if (p.group) p.select.forEach(function (x) { if (!x.fn && x.col !== p.group) throw '"' + x.col + '" 열은 GROUP BY에 없고 집계 함수로 감싸지도 않았습니다. ' + p.group + '(으)로 묶으면 한 묶음 안에 ' + x.col + ' 값이 여러 개라 한 칸에 넣을 수 없습니다. COUNT(*)나 AVG(…)처럼 집계 함수로 감싸거나 SELECT에서 뺍니다.'; });
+    if (!p.group && hasAgg && p.select.some(function (x) { return !x.fn; })) throw "집계 함수와 일반 열을 함께 사용하려면 GROUP BY로 묶어야 합니다.";
     if (p.order) { var names = p.select.map(function (x) { return x.alias; }); if (names.indexOf(p.order) < 0 && COLS.indexOf(p.order) < 0) throw 'ORDER BY의 "' + p.order + '"은(는) 결과 열 이름이나 테이블의 열 이름이어야 합니다.'; }
     return p;
   }
@@ -1565,7 +1907,7 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
       var gi = COLS.indexOf(p.group), groups = {}, order = [];
       kept.forEach(function (r) { var k = r[gi]; if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
       var colors = kept.map(function (r) { return PALETTE[order.indexOf(r[gi]) % PALETTE.length]; });
-      html += card(n++, "같은 값끼리 묶는다", "GROUP BY " + p.group, "<p class='sim-p'>" + p.group + " 값이 같은 행끼리 " + order.length + "개 묶음이 됩니다(색 띠). 이제부터 한 묶음이 결과의 한 행입니다. 묶음 안에 값이 여러 개인 열은 그대로 쓸 수 없고 집계 함수로 감싸야 합니다.</p>" + tbl(COLS, kept, { color: colors }));
+      html += card(n++, "같은 값끼리 묶는다", "GROUP BY " + p.group, "<p class='sim-p'>" + p.group + " 값이 같은 행끼리 " + order.length + "개 묶음이 됩니다(색 띠). 이제부터 한 묶음이 결과의 한 행입니다. 묶음 안에 값이 여러 개인 열은 그대로 사용할 수 없고 집계 함수로 감싸야 합니다.</p>" + tbl(COLS, kept, { color: colors }));
       result = order.map(function (k) { return p.select.map(function (x) { return x.fn ? agg(x.fn, x.col, groups[k]) : k; }); });
     } else if (p.select.some(function (x) { return x.fn; })) {
       result = [p.select.map(function (x) { return agg(x.fn, x.col, kept); })];
@@ -1579,9 +1921,9 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
       var oi = headers.indexOf(p.order), ci = COLS.indexOf(p.order);
       if (oi >= 0) result.sort(function (a, b) { var x = a[oi], y = b[oi]; var c = (typeof x === "number" && typeof y === "number") ? x - y : String(x).localeCompare(String(y), "ko"); return p.dir === "DESC" ? -c : c; });
       else if (!p.group && ci >= 0) { var idx = kept.map(function (r, i) { return i; }); idx.sort(function (i, j) { var x = kept[i][ci], y = kept[j][ci]; var c = NUM[COLS[ci]] ? (+x) - (+y) : String(x).localeCompare(String(y), "ko"); return p.dir === "DESC" ? -c : c; }); result = idx.map(function (i) { return result[i]; }); }
-      html += card(n++, "정렬한다", "ORDER BY " + p.order + " " + p.dir, "<p class='sim-p'>" + p.order + " 기준 " + (p.dir === "DESC" ? "내림차순(큰 것부터, 시각이면 최신부터)" : "오름차순(작은 것부터)") + "으로 줄을 세웁니다.</p>");
+      html += card(n++, "정렬한다", "ORDER BY " + p.order + " " + p.dir, "<p class='sim-p'>" + p.order + " 기준 " + (p.dir === "DESC" ? "내림차순(큰 것부터, 시각이면 최신부터)" : "오름차순(작은 것부터)") + "으로 정렬합니다.</p>");
     }
-    if (p.limit !== null) { var before = result.length; result = result.slice(0, p.limit); html += card(n++, "앞에서 몇 행만 자른다", "LIMIT " + p.limit, "<p class='sim-p'>" + before + "행 가운데 앞의 " + result.length + "행만 남깁니다." + (p.order ? " 피드가 '최신 몇 개'만 불러오는 것이 이 두 낱말의 조합입니다." : " ORDER BY가 없으면 어떤 행이 앞에 오는지 보장되지 않습니다.") + "</p>"); }
+    if (p.limit !== null) { var before = result.length; result = result.slice(0, p.limit); html += card(n++, "앞에서 몇 행만 자른다", "LIMIT " + p.limit, "<p class='sim-p'>" + before + "행 가운데 앞의 " + result.length + "행만 남깁니다." + (p.order ? " 피드가 최신 게시물 몇 개만 불러올 때 ORDER BY와 LIMIT을 함께 사용합니다." : " ORDER BY가 없으면 어떤 행이 앞에 오는지 보장되지 않습니다.") + "</p>"); }
     var feed = "";
     if (cur.name === "posts" && !p.select.some(function (x) { return x.fn; }) && result.length) {
       var hi = function (c) { return headers.indexOf(c); };
@@ -1617,7 +1959,7 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
     var n = W.querySelector(".w-name").value.trim(), m = W.querySelector(".w-msg").value.trim();
     if (!n || !m) { say("-- 실행하지 않음", "계정 이름과 댓글 내용이 모두 있어야 저장합니다(빈 값 저장 금지 = 데이터 무결성).", true); return; }
     var id = nextId++; gb.push([id, n, m, 0, now()]); drawW(id, "ins");
-    say("INSERT INTO comments (작성자, 댓글)\nVALUES ('" + n + "', '" + m + "');", "댓글 테이블에 새 행 하나를 넣습니다. id(" + id + ")·좋아요(0)·작성시각은 직접 넣지 않아도 자동으로 채워집니다. 행이 " + gb.length + "개가 되었습니다. 화면에서는 댓글 하나가 새로 뜹니다.");
+    say("INSERT INTO comments (작성자, 댓글)\nVALUES ('" + n + "', '" + m + "');", "댓글 테이블에 새 행 하나를 넣습니다. id(" + id + ")·좋아요(0)·작성시각은 직접 넣지 않아도 자동으로 채워집니다. 행이 " + gb.length + "개가 되었습니다. 화면에는 댓글 하나가 새로 표시됩니다.");
     W.querySelector(".w-name").value = ""; W.querySelector(".w-msg").value = "";
   });
   W.querySelector(".w-update").addEventListener("click", function () {
@@ -1631,7 +1973,7 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
     var id = +W.querySelector(".w-lid").value; if (!id) { say("-- 실행하지 않음", "좋아요를 누를 댓글 번호(id)를 적습니다.", true); return; }
     var r = find(id), sql = "UPDATE comments SET 좋아요 = 좋아요 + 1 WHERE id = " + id + ";";
     if (!r) { drawW(); say(sql, "id가 " + id + "인 행이 없어 바뀐 행이 0개입니다.", true); return; }
-    r[3] += 1; drawW(id, "like"); say(sql, "좋아요 버튼 한 번 = UPDATE 한 문장. id가 " + id + "인 행의 좋아요 값을 지금 값에 1을 더한 값으로 바꿉니다(" + (r[3] - 1) + " → " + r[3] + "). 게시물의 ❤ 숫자가 올라가는 원리입니다.");
+    r[3] += 1; drawW(id, "like"); say(sql, "id가 " + id + "인 행의 좋아요 값을 지금 값에 1을 더한 값으로 바꿉니다(" + (r[3] - 1) + " → " + r[3] + "). 댓글의 ❤ 숫자는 이렇게 올라갑니다.");
   });
   W.querySelector(".w-delete").addEventListener("click", function () {
     var id = +W.querySelector(".w-did").value; if (!id) { say("-- 실행하지 않음", "지울 댓글 번호(id)를 적습니다.", true); return; }
@@ -1656,15 +1998,15 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
     <thead><tr><th>순서</th><th>활동</th><th>확인할 점</th></tr></thead>
     <tbody>
       <tr><td><b>① 테이블 읽기</b></td><td><code>matches</code>의 다섯 열인 id·플레이어·캐릭터·결과·점수를 확인한다.</td><td>한 행이 한 판이다. 시뮬레이터에서 <code>matches</code>를 고르면 같은 20행을 볼 수 있다.</td></tr>
-      <tr><td><b>② 기본 문제 풀기</b></td><td>SQL의 빈칸을 채우고, 조건에 맞는 행에 표시해 결과 행 수를 센다.</td><td>화면을 보기 전에 먼저 채웁니다. 빈칸에 들어갈 것은 DESC · LIKE · LIMIT · INSERT INTO · WHERE · GROUP BY처럼 이미 읽은 낱말이고, 한 칸은 값(승·패)을 직접 적습니다.</td></tr>
-      <tr><td><b>③ 시뮬레이터로 검산하기</b></td><td>활동지 끝의 <b>화면과 대조하기</b> 표에 화면의 값을 옮겨 적고 손으로 쓴 답과 맞춰 봅니다</td><td>값이 다르면 어느 낱말에서 어긋났는지 되짚습니다. 대부분 정렬 방향이나 묶는 열에서 어긋납니다.</td></tr>
-      <tr><td><b>④ 연습 문제 풀기</b></td><td>대결 기록 테이블의 열 이름을 보기에서 골라 넣고 기본 키에 체크합니다. 내 폰에서 오늘 한 동작 하나가 어느 낱말에 해당하는지도 표시합니다</td><td>아래 ⑤절을 읽은 뒤에 풉니다. 어떤 열을 둘지는 사람이 정해서 말해 주어야 하는 부분입니다.</td></tr>
+      <tr><td><b>② 기본 문제 풀기</b></td><td>SQL의 빈칸을 채우고, 조건에 맞는 행에 표시해 결과 행 수를 센다.</td><td>화면을 보기 전에 먼저 채운다. 빈칸에는 DESC · LIKE · LIMIT · INSERT INTO · WHERE · GROUP BY처럼 앞에서 읽은 명령어가 들어가고, 한 칸에는 값(승·패)을 직접 적는다.</td></tr>
+      <tr><td><b>③ 시뮬레이터로 검산하기</b></td><td>활동지 끝의 <b>화면과 대조하기</b> 표에 화면의 값을 옮겨 적고 손으로 구한 답과 비교한다.</td><td>값이 다르면 어느 명령어에서 어긋났는지 되짚는다. 정렬 방향과 묶는 열을 먼저 확인한다.</td></tr>
+      <tr><td><b>④ 연습 문제 풀기</b></td><td>대결 기록 테이블의 열 이름을 보기에서 골라 넣고 기본 키에 표시한다. 오늘 휴대폰에서 한 동작 하나가 어느 SQL 명령어에 해당하는지도 표시한다.</td><td>아래 ⑤절을 읽은 뒤에 푼다. 어떤 열을 둘지는 AI가 아니라 설계하는 사람이 정해야 한다.</td></tr>
     </tbody>
   </table>
 
   <h3 id="vote-db-setup">⑤ 테이블 설계하기 — 설계표와 CREATE TABLE</h3>
   <p>테이블을 사용하려면 먼저 <b>무엇을 한 행으로 기록하고, 어떤 정보를 열로 둘지</b> 정해야 합니다.</p>
-  <p>교과서 31쪽에서는 속성명·설명·데이터형·조건으로 설계표를 작성합니다. SQL은 이 설계를 데이터베이스에 표현하는 방법입니다.</p>
+  <p>교과서 31쪽에서는 속성명·설명·데이터형·조건으로 설계표를 작성합니다. 속성은 테이블의 열을 가리키며, 속성명은 곧 열 이름입니다. SQL은 이 설계를 데이터베이스에 표현하는 방법입니다.</p>
   <p>아래는 15차시에 사용할 대결 기록 테이블의 설계표입니다. 급식 반찬 여덟 가지를 두 개씩 비교해 학급의 선택을 모읍니다. <b>두 반찬의 대결 한 번을 한 행으로 기록</b>합니다.</p>
   <p>AI에게 설계안을 제안받을 수는 있습니다. 다만 무엇을 기록할지, 어떤 값은 허용하지 않을지, 나중에 무엇을 분석할지는 직접 정하고 검토해야 합니다.</p>
   <table class="daymap">
@@ -1678,7 +2020,7 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
       <tr><td><b>created_at</b></td><td>저장 시각</td><td>날짜·시각</td><td>현재 시각을 기본값으로 사용합니다.</td></tr>
     </tbody>
   </table>
-  <p class="mini">이 설계를 실제 SQL로 옮겨 테이블을 만드는 활동은 <b>15차시</b>에 진행합니다. 준비 담당자가 실행할 <code>CREATE TABLE</code> 문장은 준비 안내에 따로 정리되어 있습니다.</p>
+  <p class="mini">이 설계를 실제 SQL로 옮겨 테이블을 만드는 활동은 <b>15차시</b>에 진행합니다. 선생님이 미리 실행할 <code>CREATE TABLE</code> 문장은 <a href="lesson13-setup.html">15차시 준비 안내</a>에 따로 정리되어 있습니다.</p>
   <details class="glossary">
     <summary>더 알아보기 — 설계표와 SQL 연결하기</summary>
     <div class="gin">
@@ -1775,7 +2117,7 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
     build();
   }
   function build() {
-    var tn = (nameEl.value || "내표").trim();
+    var tn = (nameEl.value || "내테이블").trim();
     var lines = [], reads = [], fkLines = [];
     var pkCount = rows.filter(function (r) { return r.pk; }).length;
     rows.forEach(function (r) {
@@ -1799,7 +2141,7 @@ SELECT assignment, COUNT(*) FROM apps GROUP BY assignment;</pre></div>
     readEl.innerHTML = head + reads.map(function (t) { return "<li>" + t + "</li>"; }).join("");
   }
   function load(key) {
-    if (!key) { rows = [{ n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" }, { n: "", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" }]; nameEl.value = "내표"; }
+    if (!key) { rows = [{ n: "id", t: "integer", pk: 1, nn: 1, uq: 0, ai: 1, df: 0, ref: "" }, { n: "", t: "text", pk: 0, nn: 0, uq: 0, ai: 0, df: 0, ref: "" }]; nameEl.value = "내테이블"; }
     else { var p = PRESETS[key]; nameEl.value = p.name; rows = p.rows.map(function (r) { return Object.assign({}, r); }); }
     render();
   }
@@ -1868,13 +2210,13 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     </details>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 2</span> 다음 중 실습에서 <b>테이블</b>에 해당하는 것은 무엇인가요?</div>
+    <div class="qq"><span class="qn">문제 2</span> 다음 중 실습에서 <b>테이블</b>에 해당하는 것은 무엇입니까?</div>
     <div class="qitem">
       <div class="qs">우리 실습에서 테이블에 해당하는 것은?</div>
       <div class="qopts qopts-col">
-        <button class="opt">급식 CSV 파일</button>
-        <button class="opt">게임 회사가 운영하는 데이터베이스 서버</button>
-        <button class="opt" data-ok="1">전적 기록 테이블 matches</button>
+        <button class="opt">① 급식 CSV 파일</button>
+        <button class="opt">② 게임 회사가 운영하는 데이터베이스 서버</button>
+        <button class="opt" data-ok="1">③ 전적 기록 테이블 matches</button>
       </div>
       <div class="fb"><code>matches</code>는 전적 한 판을 한 행으로 저장하는 테이블입니다. 급식 CSV는 데이터셋을 담은 파일의 한 형태입니다. 관계형 데이터베이스에서는 여러 테이블을 저장하고 관리할 수 있습니다.</div>
     </div>
@@ -1884,12 +2226,12 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
   </div>
   <p class="mini" style="margin:18px 0 6px"><b>SQL 문장 고르기.</b> 화면에서 벌어지는 일을 읽고 알맞은 문장을 고릅니다. 답을 누르면 해설이 나옵니다.</p>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 3</span> 메신저 예시에서 석리송이 보낸 메시지 <code>id = 305</code>를 상대가 읽었습니다. <b>메시지는 그대로 있고 노란 숫자 1만 사라졌다면</b>, 어떤 문장이 이 동작에 대응하나요?</div>
+    <div class="qq"><span class="qn">문제 3</span> 메신저 예시에서 석리송이 보낸 메시지 <code>id = 305</code>를 상대가 읽었습니다. <b>메시지는 그대로 있고 노란 숫자 1만 사라졌다면</b>, 어떤 문장이 이 동작에 대응합니까?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt"><code>DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</code></button>
-        <button class="opt" data-ok="1"><code>UPDATE messages SET 읽음 = true WHERE id = 305;</code></button>
-        <button class="opt"><code>INSERT INTO messages (읽음) VALUES (true);</code></button>
+        <button class="opt">① <code>DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</code></button>
+        <button class="opt" data-ok="1">② <code>UPDATE messages SET 읽음 = true WHERE id = 305;</code></button>
+        <button class="opt">③ <code>INSERT INTO messages (읽음) VALUES (true);</code></button>
       </div>
       <div class="fb">기존 메시지의 <b>읽음 값만 바꾸므로 UPDATE</b>입니다. <code>DELETE</code>는 행을 삭제하고, <code>INSERT</code>는 새 행을 추가하는 동작입니다.</div>
     </div>
@@ -1898,20 +2240,20 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     <div class="qq"><span class="qn">문제 4</span> 게임 전적 화면에 <b>캐릭터별 평균 점수</b>를 표시하려고 합니다. 알맞은 문장을 고릅니다.</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt"><code>SELECT 캐릭터, 점수 FROM matches ORDER BY 점수 DESC LIMIT 3;</code></button>
-        <button class="opt"><code>SELECT AVG(점수) FROM matches WHERE 캐릭터;</code></button>
-        <button class="opt" data-ok="1"><code>SELECT 캐릭터, AVG(점수) FROM matches GROUP BY 캐릭터;</code></button>
+        <button class="opt">① <code>SELECT 캐릭터, 점수 FROM matches ORDER BY 점수 DESC LIMIT 3;</code></button>
+        <button class="opt">② <code>SELECT AVG(점수) FROM matches WHERE 캐릭터;</code></button>
+        <button class="opt" data-ok="1">③ <code>SELECT 캐릭터, AVG(점수) FROM matches GROUP BY 캐릭터;</code></button>
       </div>
       <div class="fb"><b>GROUP BY 캐릭터</b>로 기록을 묶고, <code>AVG(점수)</code>로 각 묶음의 평균을 구합니다. ①은 개별 경기 기록을 점수가 높은 순으로 세 행까지 가져옵니다. 캐릭터별 평균을 구하지는 않습니다. ②의 <code>WHERE 캐릭터</code>는 이 예제의 문자열 열 이름만 적은 것으로, 필요한 조건을 제대로 표현하지 못했습니다.</div>
     </div>
   </div>
   <div class="quiz">
-    <div class="qq"><span class="qn">문제 5</span> AI에게 “내가 보낸 메시지를 지워 줘”라고 요청했습니다. 다음 중 <b>요청보다 넓은 범위의 데이터를 지울 수 있어 실행 전에 반드시 고쳐야 할 문장</b>은 무엇인가요?</div>
+    <div class="qq"><span class="qn">문제 5</span> AI에게 “내가 보낸 메시지를 지워 줘”라고 요청했습니다. 다음 중 <b>요청보다 넓은 범위의 데이터를 지울 수 있어 실행 전에 반드시 고쳐야 할 문장</b>은 무엇입니까?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt"><code>DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</code></button>
-        <button class="opt" data-ok="1"><code>DELETE FROM messages;</code></button>
-        <button class="opt"><code>SELECT * FROM messages WHERE 보낸사람 = '석리송';</code></button>
+        <button class="opt">① <code>DELETE FROM messages WHERE id = 305 AND 보낸사람 = '석리송';</code></button>
+        <button class="opt" data-ok="1">② <code>DELETE FROM messages;</code></button>
+        <button class="opt">③ <code>SELECT * FROM messages WHERE 보낸사람 = '석리송';</code></button>
       </div>
       <div class="fb"><b>대상을 제한하는 조건이 없어, 권한과 다른 제한이 허용하는 범위에서 테이블 전체가 삭제 대상이 됩니다.</b> ①은 메시지 번호와 보낸 사람이라는 두 조건을 모두 만족하는 행을 삭제합니다. ③은 조회문이므로 데이터를 지우지 않습니다. 다만 삭제 요청을 수행한 문장도 아닙니다.</div>
     </div>
@@ -1923,9 +2265,9 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     <div class="qq"><span class="qn">더 풀기 1</span> 해시태그 열에 <code>#고양이 #박스</code>처럼 여러 태그가 함께 저장되어 있습니다. <b><code>#고양이</code>라는 문자열이 포함된 게시물</b>을 찾는 문장을 고릅니다. 어느 문장이 맞습니까?</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt"><code>SELECT * FROM posts WHERE 해시태그 = '#고양이';</code></button>
-        <button class="opt" data-ok="1"><code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></button>
-        <button class="opt"><code>SELECT * FROM posts GROUP BY 해시태그 ORDER BY 올린시각 DESC;</code></button>
+        <button class="opt">① <code>SELECT * FROM posts WHERE 해시태그 = '#고양이';</code></button>
+        <button class="opt" data-ok="1">② <code>SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</code></button>
+        <button class="opt">③ <code>SELECT * FROM posts GROUP BY 해시태그 ORDER BY 올린시각 DESC;</code></button>
       </div>
       <div class="fb"><b>=</b>는 열의 값 전체가 <code>'#고양이'</code>와 같은 행을 찾습니다. 따라서 <code>'#고양이 #박스'</code>는 ①의 조건에 맞지 않습니다. <b>LIKE '%#고양이%'</b>는 앞뒤에 다른 내용이 있어도 해당 문자열이 포함되면 찾습니다. 다만 <code>#고양이용품</code>처럼 같은 문자열을 포함한 값도 찾을 수 있으므로, 정확한 태그 하나를 구분하는 검색과는 차이가 있습니다.</div>
     </div>
@@ -1934,9 +2276,9 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     <div class="qq"><span class="qn">더 풀기 2</span> <b>가장 최근 게시물 다섯 개까지</b> 가져오는 문장을 고릅니다.</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt" data-ok="1"><code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 5;</code></button>
-        <button class="opt"><code>SELECT * FROM posts LIMIT 5 ORDER BY 올린시각 DESC;</code></button>
-        <button class="opt"><code>SELECT * FROM posts WHERE 올린시각 = 5;</code></button>
+        <button class="opt" data-ok="1">① <code>SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 5;</code></button>
+        <button class="opt">② <code>SELECT * FROM posts LIMIT 5 ORDER BY 올린시각 DESC;</code></button>
+        <button class="opt">③ <code>SELECT * FROM posts WHERE 올린시각 = 5;</code></button>
       </div>
       <div class="fb">올린 시각을 내림차순으로 정렬한 결과에서 앞의 다섯 행까지 가져옵니다. <b>이번 문장 구조에서는 ORDER BY 뒤에 LIMIT을 작성합니다.</b> ②는 작성 순서가 맞지 않습니다. ③의 조건은 “최근 다섯 개”라는 뜻을 표현하지 못합니다.</div>
     </div>
@@ -1945,9 +2287,9 @@ JOIN 제품 ON 장바구니.제품id = 제품.id;</pre></div>
     <div class="qq"><span class="qn">더 풀기 3</span> 어떤 계정의 프로필에 <b>‘게시물 27’</b>이라고 표시되어 있습니다. 작성자가 <code>'석리송'</code>인 게시물의 수를 구하는 문장을 고릅니다.</div>
     <div class="qitem">
       <div class="qopts qopts-col">
-        <button class="opt"><code>SELECT 작성자, 올린시각 FROM posts WHERE 작성자 = '석리송';</code></button>
-        <button class="opt"><code>SELECT MAX(id) FROM posts WHERE 작성자 = '석리송';</code></button>
-        <button class="opt" data-ok="1"><code>SELECT COUNT(*) FROM posts WHERE 작성자 = '석리송';</code></button>
+        <button class="opt">① <code>SELECT 작성자, 올린시각 FROM posts WHERE 작성자 = '석리송';</code></button>
+        <button class="opt">② <code>SELECT MAX(id) FROM posts WHERE 작성자 = '석리송';</code></button>
+        <button class="opt" data-ok="1">③ <code>SELECT COUNT(*) FROM posts WHERE 작성자 = '석리송';</code></button>
       </div>
       <div class="fb"><b>COUNT(*)는 조건에 맞는 행의 개수를 셉니다.</b> ①은 게시물별 작성자와 올린 시각을 조회합니다. ②는 게시물 번호 중 가장 큰 값을 구합니다. 게시물 번호에는 다른 계정의 기록이나 삭제된 기록의 영향이 있을 수 있으므로, 가장 큰 번호를 게시물 수로 볼 수는 없습니다.</div>
     </div>
