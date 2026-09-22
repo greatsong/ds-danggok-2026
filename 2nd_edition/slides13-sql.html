@@ -26,6 +26,7 @@ ul.pts.sm{font-size:clamp(15px,1.2vw,21px)}
 .slide-no{position:absolute;right:130px;bottom:3vh;font-size:14px;color:#88837a}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:3vw;align-items:start}
 .grid-2.wide-left{grid-template-columns:1.25fr 1fr}
+.grid-2>*,.grid-3>*{min-width:0}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6vw}
 .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4vw}
 .card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:1.6vw 1.8vw}
@@ -621,6 +622,36 @@ table.plain.sm{font-size:clamp(12px,1vw,18px)}
         <div class="cap">오류: ORDER BY가 WHERE보다 앞</div>
         <pre class="sql sm err"><span class="ln">SELECT 이름, 점수</span><span class="ln">FROM 학급</span><span class="ln">ORDER BY 점수 DESC</span><span class="ln">WHERE 점수 &gt;= 80;</span></pre>
       </div>
+    </div>
+  </div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 20-1. 파이썬과 SQL -->
+<section class="slide">
+  <div class="eyebrow">SELECT 정리 · 파이썬과 비교</div>
+  <h2>파이썬 대신 SQL을 사용하는 이유</h2>
+  <div class="grid-2 wide-left">
+    <div>
+      <div class="cap">파이썬: 찾는 절차를 직접 작성</div>
+      <pre class="sql sm">result = []
+for row in rows:
+    if row["동아리"] == "방송부":
+        result.append(row)
+result.sort(key=lambda r: r["점수"], reverse=True)
+names = [r["이름"] for r in result]</pre>
+      <div class="cap">SQL: 원하는 결과만 작성</div>
+      <pre class="sql sm"><span class="ln">SELECT 이름 FROM 학급</span><span class="ln">WHERE 동아리 = '방송부'</span><span class="ln">ORDER BY 점수 DESC;</span></pre>
+      <div class="cap">두 코드의 결과: 김하늘, 박솔</div>
+    </div>
+    <div>
+      <ul class="pts sm">
+        <li><b>원하는 결과만 적기</b>: 찾는 방법은 데이터베이스가 결정</li>
+        <li><b>필요한 행만 받아 오기</b>: 수억 개 가운데 조건에 맞는 행만 전송, 색인(인덱스)으로 빠르게 검색</li>
+        <li><b>동시에 읽고 쓰기</b>: 수많은 사용자의 요청을 기록 손실 없이 처리</li>
+        <li><b>공통 언어</b>: 자바·자바스크립트·파이썬 어디서나 SQL로 요청</li>
+      </ul>
+      <div class="app"><b>역할 분담</b> SQL = 저장하고 꺼내기 · 파이썬 = 분석·시각화·모델</div>
     </div>
   </div>
   <div class="slide-no"></div>

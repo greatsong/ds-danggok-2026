@@ -742,6 +742,29 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
     <p class="sqlx-order" style="margin-top:10px"><code>VALUES</code> 뒤 괄호 안의 값은 앞에 적은 열의 순서대로 적습니다. 열 목록을 생략하고 <code>INSERT INTO 테이블 VALUES (값, 값, …);</code>처럼 적을 수도 있습니다. 이때는 테이블에 정의된 모든 열의 순서대로 값을 적어야 합니다.</p>
     <p class="sqlx-order" style="margin-top:10px">특히 <code>UPDATE</code>와 <code>DELETE</code>에서는 <b>대상 조건을 먼저 확인</b>합니다. 일부 행만 바꾸거나 지우려던 문장에서 <code>WHERE</code>가 빠지면, 의도보다 훨씬 넓은 범위가 대상이 될 수 있습니다.</p>
   </div>
+  <h3>파이썬 대신 SQL을 사용하는 이유</h3>
+  <p>앞 차시에서는 CSV 파일을 파이썬으로 읽어 분석했습니다. 작성자가 석리송인 게시물을 최근 순으로 고르는 작업을 파이썬과 SQL로 각각 작성하여 비교해 보겠습니다.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+    <div class="codewrap code"><span class="label">파이썬 · 찾는 절차를 직접 작성</span><pre>result = []
+for post in posts:
+    if post["작성자"] == "석리송":
+        result.append(post)
+result.sort(key=lambda p: p["올린시각"], reverse=True)</pre></div>
+    <div class="codewrap code"><span class="label">SQL · 원하는 결과만 작성</span><pre>SELECT *
+FROM posts
+WHERE 작성자 = '석리송'
+ORDER BY 올린시각 DESC;</pre></div>
+  </div>
+  <p>파이썬은 반복, 조건 확인, 정렬 같은 절차를 직접 작성합니다. 반면 SQL은 원하는 결과만 기술하면 되며, 그 결과를 찾는 방법은 데이터베이스가 결정합니다.</p>
+  <table class="daymap">
+    <thead><tr><th>SQL을 사용하는 이유</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td>필요한 행만 받아 온다</td><td>게시물이 수억 개에 달하더라도 데이터베이스 서버는 조건에 맞는 행만 골라 전송합니다. 파이썬으로 처리하려면 먼저 전체 데이터를 가져와야 합니다. 데이터베이스는 색인(인덱스)을 활용하여 전체를 훑지 않고도 빠르게 검색합니다.</td></tr>
+      <tr><td>여러 사람이 동시에 읽고 쓴다</td><td>1절에서 살펴보았듯이 파일 사본을 덮어쓰면 변경 사항이 사라질 수 있습니다. 데이터베이스는 수많은 사용자의 요청을 순차적으로 처리하여 기록이 소실되지 않도록 하며, 권한 관리와 기본 키 중복 방지 역할도 수행합니다.</td></tr>
+      <tr><td>어느 프로그램에서나 사용한다</td><td>앱이 자바로, 웹이 자바스크립트로 만들어졌더라도 데이터베이스에는 SQL로 요청합니다. 파이썬 코드 안에서 SQL 문장을 전송하여 사용하는 경우도 많습니다. 우리 갤러리가 활용하는 수파베이스 역시 SQL 데이터베이스(PostgreSQL)입니다.</td></tr>
+    </tbody>
+  </table>
+  <p>두 언어는 역할이 다릅니다. SQL은 데이터를 저장하고 필요한 만큼 꺼내는 일을, 파이썬은 꺼낸 데이터로 그래프를 그리고 모델을 만드는 일을 담당합니다.</p>
   <p class="mini">세 앱 위젯에서는 화면을 조작하면 그 동작에 대응하는 SQL과 해설이 나타납니다. 명령어를 외우기보다 <b>대상과 조건이 어떻게 달라지는지</b> 읽습니다.</p>
   <div class="newscards">
     <a class="newscard" href="slides13-sql.html" target="_blank" rel="noopener">
