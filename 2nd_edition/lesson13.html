@@ -264,6 +264,21 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 .sqlx-order .ch{background:#fff;border:1px solid #e3d6b8;border-radius:999px;padding:3px 11px;
   font-family:var(--mono,ui-monospace,monospace);font-weight:700;color:#b45309;font-size:.78rem}
 .sqlx-order .ar{color:#b9ad94}
+/* SQL 사다리 — 단계마다 절 하나씩 */
+.sqlx-ladder{display:grid;gap:12px}
+.sqlx-rung{border:1px solid #f0e7d4;border-radius:12px;background:#fff;padding:11px 12px}
+.sqlx-rung-h{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;margin-bottom:8px}
+.sqlx-rung-h .no{font-size:.74rem;font-weight:800;color:#fff;background:#b45309;border-radius:999px;padding:2px 9px}
+.sqlx-rung-h code{font-weight:800;color:#a23c00;background:#fff5e2}
+.sqlx-rung-h .sub{font-size:.84rem;color:#6b5836}
+.sqlx-rung-d{font-size:.88rem;line-height:1.65;margin:9px 0 4px;color:#2b2418}
+.sqlx-rung-r{font-size:.82rem;font-weight:700;color:#8a5a00;margin:0}
+.sqlx-new{border-bottom:2px solid #ffb454;padding-bottom:2px;background:rgba(255,180,84,.08);border-radius:4px}
+.newscards{display:grid;grid-template-columns:1fr;gap:10px;margin:6px 0 12px}
+.newscard{display:block;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:#fff;padding:12px 14px;text-decoration:none;color:inherit}
+.newscard:hover{border-color:#16181d}
+.newscard .hl{font-size:1.02rem;font-weight:800;line-height:1.35;margin-bottom:6px}
+.newscard .go{font-size:.84rem;font-weight:700;color:#1a56db}
 /* 위젯 로그의 낱말별 해설 */
 .appw-why{display:block;margin-top:7px;padding-top:7px;border-top:1px dashed #39425a;
   font-family:var(--font);font-size:.72rem;line-height:1.65;color:#b9c6da}
@@ -679,21 +694,43 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
 
 
   <h3>SQL 문장의 기본 구조 읽기</h3>
-  <p>먼저 조회문 하나를 읽어 봅니다. SQL에서는 각 부분의 역할과 작성 위치가 정해져 있습니다. 문장 전체를 한꺼번에 해석하기보다, <b>대상 테이블·열·조건·정렬·행 수</b>를 나누어 확인합니다.</p>
-  <div class="sqlx">
-    <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span> <span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok t">올린시각</span> <span class="sqlx-tok k">DESC</span> <span class="sqlx-tok k">LIMIT</span> <span class="sqlx-tok v">5</span>;</div>
-    <div class="sqlx-steps">
-      <div class="sqlx-step"><span class="n">SELECT</span><span class="d"><b>어떤 열을 가져올까?</b> 작성자와 해시태그 두 열을 가져옵니다. <code>*</code>를 쓰면 모든 열을 가져옵니다.</span></div>
-      <div class="sqlx-step"><span class="n">FROM</span><span class="d"><b>어느 테이블에서 가져올까?</b> 게시물 테이블인 <code>posts</code>를 대상으로 합니다.</span></div>
-      <div class="sqlx-step"><span class="n">WHERE</span><span class="d"><b>어떤 행을 고를까?</b> 작성자가 <code>'석리송'</code>인 행을 고릅니다. 이 부분이 없으면 테이블의 모든 행이 대상입니다.</span></div>
-      <div class="sqlx-step"><span class="n">ORDER BY</span><span class="d"><b>어떤 순서로 정렬할까?</b> 올린 시각을 기준으로 정렬합니다. <code>DESC</code>는 내림차순이므로 최근 게시물이 먼저 옵니다. <code>ASC</code>는 오름차순입니다.</span></div>
-      <div class="sqlx-step"><span class="n">LIMIT</span><span class="d"><b>최대 몇 행을 가져올까?</b> 정렬된 결과에서 앞의 다섯 행까지 가져옵니다.</span></div>
+  <p>처음부터 긴 조회문을 한 번에 읽으면 이해하기 어렵습니다. 가장 짧은 문장에서 시작해 단계마다 절을 하나씩 덧붙입니다. 예시는 뒤의 피드 위젯과 같은 게시물 테이블 <code>posts</code>를 사용하며, 이 테이블에는 게시물 8개가 들어 있습니다. 각 단계에서 새로 추가된 부분은 밑줄로 표시했습니다.</p>
+  <div class="sqlx sqlx-ladder">
+    <div class="sqlx-rung">
+      <div class="sqlx-rung-h"><span class="no">1단계</span><code>SELECT 열 FROM 테이블</code><span class="sub">테이블에서 열 고르기</span></div>
+      <div class="sqlx-line"><span class="sqlx-new"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span></span>;</div>
+      <p class="sqlx-rung-d">테이블에서 적은 열만 골라 보여 줍니다. <code>posts</code>에서 작성자와 해시태그 두 열만 표시되고, 행은 8개 모두 나옵니다. 모든 열을 보려면 열 이름 대신 <code>*</code>를 적어 <code>SELECT * FROM posts;</code>로 씁니다.</p>
+      <p class="sqlx-rung-r">결과: 열이 줄어듭니다.</p>
+    </div>
+    <div class="sqlx-rung">
+      <div class="sqlx-rung-h"><span class="no">2단계</span><code>+ WHERE 조건</code><span class="sub">조건에 맞는 행 고르기</span></div>
+      <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-new"><span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span></span>;</div>
+      <p class="sqlx-rung-d"><code>WHERE</code>는 조건에 맞는 행만 남깁니다. 작성자가 <code>'석리송'</code>인 행 3개만 표시됩니다. 비교에는 <code>=</code>(같다), <code>&gt;=</code>(크거나 같다), <code>&lt;</code>(작다) 등을 사용합니다. 문자 값은 작은따옴표 안에 적고, 숫자는 따옴표 없이 그대로 적습니다. 예를 들어 <code>WHERE 좋아요 &gt;= 200</code>은 좋아요가 200 이상인 행을 고릅니다. 날짜와 시각 값도 <code>'2026-10-01 08:30'</code>처럼 작은따옴표 안에 적습니다.</p>
+      <p class="sqlx-rung-r">결과: 행이 줄어듭니다(8개 → 3개).</p>
+    </div>
+    <div class="sqlx-rung">
+      <div class="sqlx-rung-h"><span class="no">3단계</span><code>+ ORDER BY 열 DESC</code><span class="sub">순서 정하기</span></div>
+      <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span> <span class="sqlx-new"><span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok t">올린시각</span> <span class="sqlx-tok k">DESC</span></span>;</div>
+      <p class="sqlx-rung-d"><code>ORDER BY</code>는 행의 순서를 정합니다. <code>ASC</code>는 오름차순, <code>DESC</code>는 내림차순이며, 방향을 적지 않으면 오름차순으로 정렬합니다. 올린시각처럼 날짜나 시각이 담긴 열을 <code>DESC</code>로 정렬하면 최근 게시물이 먼저 옵니다.</p>
+      <p class="sqlx-rung-r">결과: 행 수는 3개 그대로이고 순서만 바뀝니다.</p>
+    </div>
+    <div class="sqlx-rung">
+      <div class="sqlx-rung-h"><span class="no">4단계</span><code>+ LIMIT 개수</code><span class="sub">가져올 행 수 제한하기</span></div>
+      <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자, 해시태그</span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-tok k">WHERE</span> <span class="sqlx-tok t">작성자</span> <span class="sqlx-tok k">=</span> <span class="sqlx-tok v">'석리송'</span> <span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok t">올린시각</span> <span class="sqlx-tok k">DESC</span> <span class="sqlx-new"><span class="sqlx-tok k">LIMIT</span> <span class="sqlx-tok v">2</span></span>;</div>
+      <p class="sqlx-rung-d"><code>LIMIT</code>은 가져올 행 수를 제한합니다. 정렬된 3개 행 중 앞의 2개만 가져오므로, 석리송이 가장 최근에 올린 게시물 2개가 표시됩니다.</p>
+      <p class="sqlx-rung-r">결과: 행이 줄어듭니다(3개 → 2개).</p>
+    </div>
+    <div class="sqlx-rung">
+      <div class="sqlx-rung-h"><span class="no">5단계</span><code>GROUP BY 열 + COUNT(*)</code><span class="sub">같은 값끼리 묶어 집계하기</span></div>
+      <div class="sqlx-line"><span class="sqlx-tok k">SELECT</span> <span class="sqlx-tok t">작성자</span>, <span class="sqlx-new"><span class="sqlx-tok k">COUNT(*)</span></span> <span class="sqlx-tok k">FROM</span> <span class="sqlx-tok t">posts</span> <span class="sqlx-new"><span class="sqlx-tok k">GROUP BY</span> <span class="sqlx-tok t">작성자</span></span> <span class="sqlx-new"><span class="sqlx-tok k">ORDER BY</span> <span class="sqlx-tok k">COUNT(*)</span> <span class="sqlx-tok k">DESC</span></span>;</div>
+      <p class="sqlx-rung-d"><code>GROUP BY</code>는 같은 값을 가진 행끼리 묶고, <code>COUNT(*)</code>는 각 묶음의 행 수를 셉니다. 이 문장은 작성자별로 게시물 수를 집계하고, <code>ORDER BY COUNT(*) DESC</code>로 게시물이 많은 작성자부터 보여 줍니다. 자세한 내용은 뒤의 ③에서 다룹니다.</p>
+      <p class="sqlx-rung-r">결과: 게시물 한 건이 아니라 작성자 한 명이 한 행이 됩니다. 석리송 3, 먹부림 2, 수정반 2, 렌고쿠 1로 4개 행이 표시됩니다.</p>
     </div>
     <p class="sqlx-order"><b>이번 수업에서 사용하는 조회문의 작성 순서</b>
       <span class="ch">SELECT</span><span class="ar">→</span><span class="ch">FROM</span><span class="ar">→</span><span class="ch">WHERE</span><span class="ar">→</span><span class="ch">GROUP BY</span><span class="ar">→</span><span class="ch">ORDER BY</span><span class="ar">→</span><span class="ch">LIMIT</span>
     </p>
   </div>
-  <p>필요하지 않은 부분은 생략할 수 있습니다. 조건을 지정하지 않으면 <code>WHERE</code>를, 정렬하지 않으면 <code>ORDER BY</code>를 쓰지 않습니다. 모든 열을 조회하는 간단한 문장은 <code>SELECT * FROM posts;</code>입니다.</p>
+  <p>필요하지 않은 절은 생략할 수 있습니다. 조건이 없으면 <code>WHERE</code>를, 정렬하지 않으면 <code>ORDER BY</code>를 적지 않습니다. 절을 적을 때는 위의 순서를 지킵니다.</p>
   <p>다만 <b>작성 순서와 결과를 이해하는 순서는 다릅니다.</b> 문장은 <code>SELECT</code>로 시작하지만, 결과를 따라갈 때는 “어느 테이블에서 → 어떤 행을 골라 → 어떤 값을 보여 주는가”로 읽으면 이해하기 쉽습니다. 뒤의 시뮬레이터도 이 흐름을 보여 줍니다.</p>
   <p>조회가 아니라 데이터를 바꾸는 문장은 첫 부분부터 다릅니다.</p>
   <div class="sqlx">
@@ -702,9 +739,16 @@ main .daymap{display:block;max-width:100%;overflow-x:auto}
       <div class="sqlx-step"><span class="n">UPDATE</span><span class="d">어느 행의 어느 값을 <b>바꿀까</b> — <code>UPDATE 테이블 SET 열 = 값 WHERE 조건;</code></span></div>
       <div class="sqlx-step"><span class="n">DELETE FROM</span><span class="d">어느 행을 <b>지울까</b> — <code>DELETE FROM 테이블 WHERE 조건;</code></span></div>
     </div>
+    <p class="sqlx-order" style="margin-top:10px"><code>VALUES</code> 뒤 괄호 안의 값은 앞에 적은 열의 순서대로 적습니다. 열 목록을 생략하고 <code>INSERT INTO 테이블 VALUES (값, 값, …);</code>처럼 적을 수도 있습니다. 이때는 테이블에 정의된 모든 열의 순서대로 값을 적어야 합니다.</p>
     <p class="sqlx-order" style="margin-top:10px">특히 <code>UPDATE</code>와 <code>DELETE</code>에서는 <b>대상 조건을 먼저 확인</b>합니다. 일부 행만 바꾸거나 지우려던 문장에서 <code>WHERE</code>가 빠지면, 의도보다 훨씬 넓은 범위가 대상이 될 수 있습니다.</p>
   </div>
   <p class="mini">세 앱 위젯에서는 화면을 조작하면 그 동작에 대응하는 SQL과 해설이 나타납니다. 명령어를 외우기보다 <b>대상과 조건이 어떻게 달라지는지</b> 읽습니다.</p>
+  <div class="newscards">
+    <a class="newscard" href="slides13-sql.html" target="_blank" rel="noopener">
+      <div class="hl">데이터베이스와 SQL 기본 문법</div>
+      <div class="go">슬라이드 열기 ↗</div>
+    </a>
+  </div>
 
 <script>
 /* 위젯 공통 — 실행된 SQL을 낱말별로 풀어 설명한다 */
