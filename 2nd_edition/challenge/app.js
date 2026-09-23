@@ -171,7 +171,8 @@
     $('순위').innerHTML = 목록.map(function (it) {
       var b = it.최고;
       var 이김 = b && 고른목표 === '정원' && b.found > 기본기록;
-      var 폭 = b ? Math.round(b.found / 대상자 * 100) : 0;
+      var 머리 = b && window.CHALLENGE_KEY && window.CHALLENGE_KEY.head[b.missing === '지운다' ? '1' : '0'];
+      var 폭 = b ? Math.round(b.found / (머리 ? 머리.pos : 대상자) * 100) : 0;   // 빈 값을 지우면 대상자가 57명이다
       var 메달 = it.순위 ? ['🥇', '🥈', '🥉'][it.순위 - 1] : null;
       return '<tr class="' + (이김 ? 'beat ' : '') + (새로움[it.열쇠] ? 'fresh' : '') + '">' +
         '<td class="rank' + (메달 ? ' m' : '') + '">' + (b ? (메달 || it.순위) : '—') + '</td>' +
