@@ -89,58 +89,21 @@ table.plain.sm{font-size:clamp(12px,1vw,18px)}
 .progress{position:fixed;z-index:40;top:0;left:0;height:5px;background:var(--red);transition:width .25s ease}
 .grid-2.wide-right{grid-template-columns:1fr 1.3fr}
 table.res.sm{font-size:clamp(12px,1vw,18px)}
-.res-wrap.scroll{position:relative;max-height:50vh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:white}
-.res-wrap.scroll.short{max-height:38vh}
-.res-wrap.scroll table{border:none;border-radius:0;overflow:visible;width:100%}
-.mock .res-wrap.scroll.short{max-height:46vh}
-.res-wrap.scroll thead th{position:sticky;top:0;z-index:1}
 table.plain tr.more td{color:var(--muted);text-align:center;font-weight:700}
 table.res tr.gap td{border-top:3px dashed var(--red)}
 table.res td.blank{color:#b0aaa0;font-style:italic}
-.ladder small{font-size:.8em}
+table.res th,table.res td{padding:.3em .8em}
 ul.sys{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7vh}
 ul.sys li{display:flex;justify-content:space-between;align-items:center;gap:.6em;background:white;border:1px solid var(--line);border-radius:12px;padding:.45em .7em;font-size:clamp(14px,1.2vw,21px)}
 ul.sys code{background:var(--code);color:#7fb4ff;font-weight:800;white-space:nowrap}
-.mockwrap{align-items:start}
-.mock{background:white;border:1px solid #cfd6e2;border-radius:18px;overflow:hidden;box-shadow:0 6px 18px rgba(30,40,60,.08)}
-.mock-bar{display:flex;justify-content:space-between;align-items:center;gap:.6em;background:#2f3a4a;color:white;padding:.5em 1em;font-weight:800;font-size:clamp(13px,1vw,17px)}
-.mock-bar .who{background:rgba(255,255,255,.16);border-radius:99px;padding:.1em .7em;font-weight:700;white-space:nowrap}
-.mock-body{padding:1em 1.1em}
-.mock-tools{display:flex;flex-wrap:wrap;gap:.5em;align-items:center;margin-bottom:1em;font-size:clamp(14px,1.1vw,19px)}
-.mt{font-weight:900;margin-right:.3em}
-.mnote{color:var(--muted);font-size:.92em}
-.mbtn{border:1px solid #bccbe6;background:#eef3fb;color:var(--blue);border-radius:10px;padding:.4em .8em;font:inherit;font-weight:800;cursor:pointer}
-.mbtn[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:white}
-.mbtn.primary{background:var(--blue);border-color:var(--blue);color:white}
-.mbtn.primary[aria-pressed="true"]{box-shadow:0 0 0 3px #bccbe6}
-.mbtn.danger{background:white;border-color:var(--red);color:var(--red)}
-.mbtn.danger[aria-pressed="true"]{background:var(--red);color:white}
-.msel{font:inherit;font-weight:700;padding:.3em .5em;border:1px solid #bccbe6;border-radius:10px;background:white;margin-left:.3em}
-.mform{display:flex;flex-wrap:wrap;gap:.5em .8em;align-items:flex-end}
-.mform .mt{flex-basis:100%}
-.mform label{display:flex;flex-direction:column;gap:.2em;font-size:.85em;font-weight:700;color:var(--muted)}
-.mform input,.fsel{font:inherit;font-size:1.1em;color:var(--ink);width:6.5em;padding:.3em .5em;border:1px solid var(--line);border-radius:8px;background:#fafaf7;min-width:0}
-.fsel{display:inline-block;width:auto;white-space:nowrap}
-.quota{background:var(--yellow-soft);border:1px solid #e6cf8d;border-radius:99px;padding:.15em .7em;font-weight:800}
-.msearch{border:1px solid var(--line);border-radius:99px;padding:.3em .9em;background:#fafaf7}
-.badge{display:inline-block;margin-left:.45em;padding:.05em .45em;border-radius:6px;background:var(--green);color:white;font-size:.72em;font-weight:800;vertical-align:middle}
-.thbtn{font:inherit;font-weight:800;border:none;background:none;padding:0;cursor:pointer;color:var(--blue);text-decoration:underline;text-underline-offset:3px}
-.mock-empty{color:var(--muted);font-size:clamp(14px,1.1vw,19px);border:2px dashed var(--line);border-radius:12px;padding:1.2em;margin:0}
-.mcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(7.5em,1fr));gap:.6em;font-size:clamp(13px,1.05vw,18px)}
-.mcard{border:1px solid var(--line);border-radius:12px;padding:.6em .5em;text-align:center;background:#fbfaf6}
-.mcard span{display:block;font-weight:800}
-.mcard b{display:block;font-size:1.7em;color:var(--blue);line-height:1.25}
-.mcard small{color:var(--muted)}
-.sqlpanel .hint{border:2px dashed var(--line);border-radius:16px;padding:1.2em;color:var(--muted);font-size:clamp(15px,1.2vw,21px)}
-.sqlpanel .meaning{margin-top:.2em}
-.fade{animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.fade{animation:none}}
+.chips{display:flex;flex-wrap:wrap;gap:.5em}
+.chips span{background:white;border:1px solid var(--line);border-radius:99px;padding:.25em .8em;font-weight:800;font-size:clamp(14px,1.15vw,20px)}
+.res-wrap+.cap,.res-wrap+pre.sql{margin-top:2vh}
+.app{margin-top:1.6vh}
 @media(max-width:900px){
   body{overflow:hidden}
   .slide{padding:4vh 16px 90px;overflow-y:auto}
   .grid-2,.grid-2.wide-left,.grid-2.wide-right,.grid-3,.cheat{grid-template-columns:1fr}
-  .res-wrap.scroll,.res-wrap.scroll.short{max-height:60vh}
   .cheat div[style]{grid-column:auto !important}
   ul.sys li{flex-wrap:wrap}
   .grid-4{grid-template-columns:1fr 1fr}
@@ -164,102 +127,27 @@ ul.sys code{background:var(--code);color:#7fb4ff;font-weight:800;white-space:now
     <div class="card"><div class="mini-label">1</div><h3>데이터베이스</h3><p class="muted">데이터셋 · 테이블 · 기본 키</p></div>
     <div class="card"><div class="mini-label">2</div><h3>SQL 조회</h3><p class="muted">SELECT에 절을 하나씩 붙이기</p></div>
     <div class="card"><div class="mini-label">3</div><h3>SQL 데이터 변경</h3><p class="muted">INSERT · UPDATE · DELETE</p></div>
-    <div class="card"><div class="mini-label">4</div><h3>직접 작성하기</h3><p class="muted">연습 5문제</p></div>
+    <div class="card"><div class="mini-label">4</div><h3>정리</h3><p class="muted">절을 적는 순서 · 한눈에 보기</p></div>
   </div>
   <div class="footer">← → · 스페이스 · 화면 클릭으로 넘김</div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 2. 데이터셋 -->
-<section class="slide">
-  <div class="eyebrow">1 · 데이터베이스 · 데이터셋</div>
-  <h2>데이터셋과 CSV</h2>
-  <div class="grid-2">
-    <ul class="pts">
-      <li><b>데이터셋</b>: 한 주제에 관련된 데이터의 집합</li>
-      <li>예: 동아리 지원자 30명의 학번·이름·지원동아리·점수</li>
-      <li><b>CSV</b>: 데이터셋을 담는 파일 형식의 한 가지</li>
-      <li>첫 줄 = 열 이름, 그다음 한 줄 = 지원서 한 장의 데이터, 값은 쉼표(,)로 구분</li>
-    </ul>
-    <div>
-      <div class="cap">지원.csv · 30행 중 앞 5행</div>
-      <pre class="sql mono" style="color:#f3f1ea">학번,이름,지원동아리,자소서,면접,제출시각
-10102,김하늘,미술부,35,35,2026-10-03 16:15
-10104,이바다,과학부,40,34,2026-10-01 18:40
-10107,박솔,방송부,27,49,2026-10-04 20:20
-10108,최이슬,과학부,36,40,2026-10-01 14:05
-10109,정가람,댄스부,46,24,2026-10-01 11:20
-…</pre>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 3. 데이터베이스 -->
+<!-- 2. 데이터베이스 -->
 <section class="slide">
   <div class="eyebrow">1 · 데이터베이스</div>
-  <h2>데이터베이스</h2>
-  <div class="callout" style="margin:0 0 2.4vh"><b>데이터베이스</b>: 여러 사람이 공유할 수 있도록 <b>통합 관리</b>하는 데이터의 집합</div>
-  <div class="grid-2">
-    <div class="card red">
-      <div class="mini-label">파일 사본을 따로 고칠 때</div>
-      <ul class="pts sm">
-        <li>두 사람이 같은 파일의 사본을 각자 가져감</li>
-        <li>각자 다른 부분을 고친 뒤 원래 자리에 저장</li>
-        <li>나중에 저장한 파일이 앞의 파일을 덮어씀</li>
-        <li>결과: <b>먼저 고친 변경 일부를 잃음</b></li>
-      </ul>
-    </div>
-    <div class="card green">
-      <div class="mini-label">데이터베이스의 기능</div>
-      <ul class="pts sm">
-        <li><b>동시 사용</b>: 여러 사람이 한꺼번에 고쳐도 변경을 잃지 않음</li>
-        <li><b>조건 검색</b>: 조건에 맞는 데이터만 찾기</li>
-        <li><b>권한 관리</b>: 사람마다 읽기·수정 권한을 따로 부여</li>
-      </ul>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 4. 테이블 -->
-<section class="slide">
-  <div class="eyebrow">1 · 데이터베이스 · 테이블</div>
-  <h2>테이블: 행과 열</h2>
-  <div class="grid-2 wide-right">
-    <div>
-      <ul class="pts">
-        <li><b>테이블</b>: 데이터베이스에서 데이터를 행과 열로 저장하는 단위</li>
-        <li><b>행</b>(가로 한 줄) = 데이터 하나 (지원서 한 장)</li>
-        <li><b>열</b>(세로 한 줄) = 속성 (학번·이름·지원동아리·자소서·면접·제출시각)</li>
-        <li>오른쪽 테이블: 이름 <b>지원</b>, 30행 × 6열</li>
-        <li>자소서·면접: 각 50점 만점</li>
-      </ul>
-    </div>
-    <div>
-      <div class="cap">지원 테이블 · 노란 줄 = 행 하나</div>
-      <div class="res-wrap"><table class="plain sm">
-        <thead><tr><th>학번</th><th>이름</th><th>지원동아리</th><th>자소서</th><th>면접</th><th>제출시각</th></tr></thead>
-        <tbody><tr><td>10102</td><td>김하늘</td><td>미술부</td><td>35</td><td>35</td><td>2026-10-03 16:15</td></tr><tr class="hit"><td>10104</td><td>이바다</td><td>과학부</td><td>40</td><td>34</td><td>2026-10-01 18:40</td></tr><tr><td>10107</td><td>박솔</td><td>방송부</td><td>27</td><td>49</td><td>2026-10-04 20:20</td></tr><tr><td>10108</td><td>최이슬</td><td>과학부</td><td>36</td><td>40</td><td>2026-10-01 14:05</td></tr><tr><td>10109</td><td>정가람</td><td>댄스부</td><td>46</td><td>24</td><td>2026-10-01 11:20</td></tr><tr><td>10111</td><td>윤나래</td><td>댄스부</td><td>30</td><td>29</td><td>2026-10-01 08:45</td></tr><tr class="more"><td colspan="6">… 24행 더 (모두 30행)</td></tr></tbody>
-      </table></div>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 5. 기본 키 -->
-<section class="slide">
-  <div class="eyebrow">1 · 데이터베이스 · 기본 키</div>
-  <h2>기본 키</h2>
-  <div class="grid-2">
-    <ul class="pts">
-      <li><b>기본 키</b>: 테이블의 각 행을 <b>유일하게 식별</b>하는 열</li>
-      <li>이름은 겹칠 수 있음 (동명이인)</li>
-      <li>그래서 학번·회원 번호·id 같은 <b>번호</b>를 기본 키로 사용</li>
-      <li>기본 키 값은 행마다 서로 달라야 하고 비워 둘 수 없음</li>
+  <h2>데이터셋 · 데이터베이스 · 테이블</h2>
+  <div class="grid-2 wide-left">
+    <ul class="pts sm">
+      <li><b>데이터셋</b>: 한 주제에 관련된 데이터의 집합 (예: CSV 파일)</li>
+      <li><b>데이터베이스</b>: 여러 사람이 공유할 수 있도록 <b>통합 관리</b>하는 데이터의 집합</li>
+      <li>데이터베이스의 기능: <b>동시 사용</b>(여러 사람이 한꺼번에 고쳐도 변경을 잃지 않음) · <b>조건 검색</b> · <b>권한 관리</b></li>
+      <li><b>테이블</b>: 데이터베이스에서 데이터를 행과 열로 저장하는 단위</li>
+      <li><b>행</b>(가로 한 줄) = 데이터 하나 · <b>열</b>(세로 한 줄) = 속성</li>
+      <li><b>기본 키</b>: 각 행을 <b>유일하게 식별</b>하는 열 · 값이 행마다 달라야 하고 비워 둘 수 없음</li>
     </ul>
     <div>
-      <div class="cap">같은 이름의 지원자가 들어와도 학번으로 구분</div>
+      <div class="cap">이름이 같아도 학번(기본 키)으로 구분</div>
       <div class="res-wrap"><table class="plain">
         <thead><tr><th class="pk">학번 <span class="tag">기본 키</span></th><th>이름</th><th>지원동아리</th></tr></thead>
         <tbody>
@@ -268,60 +156,13 @@ ul.sys code{background:var(--code);color:#7fb4ff;font-weight:800;white-space:now
           <tr class="hit"><td class="pk">20134</td><td>김하늘</td><td>방송부</td></tr>
         </tbody>
       </table></div>
+      <p class="muted" style="margin-top:1vh;font-size:clamp(13px,1vw,17px)">20134 김하늘은 동명이인 설명용 예시 행</p>
     </div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 6. 테이블의 연결 -->
-<section class="slide">
-  <div class="eyebrow">1 · 데이터베이스 · 테이블의 연결</div>
-  <h2>테이블의 연결</h2>
-  <div class="grid-2">
-    <div>
-      <div class="cap">게시물 테이블</div>
-      <div class="res-wrap"><table class="plain sm">
-        <thead><tr><th class="pk">게시물 번호</th><th>작성자</th><th>내용</th></tr></thead>
-        <tbody>
-          <tr><td class="pk">1</td><td>김하늘</td><td>체육대회 사진</td></tr>
-          <tr><td class="pk">2</td><td>이바다</td><td>과학실 실험 후기</td></tr>
-        </tbody>
-      </table></div>
-      <div class="cap" style="margin-top:1.6vh">댓글 테이블 · 게시물 번호로 게시물 테이블과 연결</div>
-      <div class="res-wrap"><table class="plain sm">
-        <thead><tr><th class="pk">댓글 번호</th><th>게시물 번호</th><th>댓글</th></tr></thead>
-        <tbody>
-          <tr><td class="pk">101</td><td>1</td><td>사진 잘 나왔다</td></tr>
-          <tr><td class="pk">102</td><td>1</td><td>원본 파일 보내 줘</td></tr>
-          <tr><td class="pk">103</td><td>2</td><td>다음 실험도 기대</td></tr>
-        </tbody>
-      </table></div>
-    </div>
-    <ul class="pts">
-      <li>두 테이블이 <b>공통 속성</b>(게시물 번호)을 가짐</li>
-      <li>댓글의 게시물 번호 → 어느 게시물의 댓글인지 확인</li>
-      <li>게시물 1번의 댓글: 101, 102</li>
-      <li>게시물 내용을 댓글마다 반복해 저장할 필요 없음</li>
-    </ul>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 7. 네 가지 일 -->
-<section class="slide">
-  <div class="eyebrow">1 · 데이터베이스 · 데이터를 다루는 일</div>
-  <h2>데이터를 다루는 네 가지 일</h2>
-  <div class="grid-4">
-    <div class="card"><div class="mini-label">추가</div><div class="big accent-red mono">INSERT</div><p class="muted" style="margin-top:.6em">새 행 넣기</p></div>
-    <div class="card"><div class="mini-label">읽기(조회)</div><div class="big accent-blue mono">SELECT</div><p class="muted" style="margin-top:.6em">행 가져오기</p></div>
-    <div class="card"><div class="mini-label">갱신</div><div class="big accent-green mono">UPDATE</div><p class="muted" style="margin-top:.6em">있는 값 바꾸기</p></div>
-    <div class="card"><div class="mini-label">삭제</div><div class="big mono">DELETE</div><p class="muted" style="margin-top:.6em">행 지우기</p></div>
-  </div>
-  <div class="callout"><b>SQL</b>: 데이터베이스에 이 네 가지 일을 요청하는 언어</div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 8. 창체부 시스템 -->
+<!-- 3. 창체부 시스템 -->
 <section class="slide">
   <div class="eyebrow">1 · 데이터베이스 · 예시 시스템</div>
   <h2>DG창체부 동아리 지원 시스템</h2>
@@ -351,223 +192,188 @@ ul.sys code{background:var(--code);color:#7fb4ff;font-weight:800;white-space:now
       </ul>
     </div>
   </div>
-  <div class="callout">지원서는 모두 <b>지원 테이블</b> 한곳에 저장 · 합격자 명단은 따로 저장하지 않고 볼 때마다 SQL로 계산 → 점수가 바뀌면 바로 반영(실시간)</div>
+  <div class="callout">합격자 명단은 저장하지 않고 볼 때마다 SQL로 계산 → 점수가 바뀌면 바로 반영(실시간)</div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 9. 다른 앱 -->
+<!-- 4. 지원 테이블 -->
 <section class="slide">
-  <div class="eyebrow">1 · 데이터베이스 · 앱과 SQL</div>
-  <h2>다른 앱의 기능과 SQL 문장</h2>
-  <div class="res-wrap"><table class="plain sm">
-    <thead><tr><th>앱에서 하는 일</th><th>SQL 예시</th><th>동작</th></tr></thead>
-    <tbody>
-      <tr><td>피드 불러오기</td><td class="mono">SELECT * FROM posts ORDER BY 올린시각 DESC LIMIT 20;</td><td>조회</td></tr>
-      <tr><td>해시태그 검색</td><td class="mono">SELECT * FROM posts WHERE 해시태그 LIKE '%#고양이%';</td><td>조회</td></tr>
-      <tr><td>좋아요 누르기</td><td class="mono">UPDATE posts SET 좋아요 = 좋아요 + 1 WHERE id = 4;</td><td>갱신</td></tr>
-      <tr><td>메시지 보내기</td><td class="mono">INSERT INTO messages (방id, 보낸사람, 내용) VALUES (12, '석리송', '오늘 급식 뭐야?');</td><td>추가</td></tr>
-      <tr><td>보낸 메시지 삭제</td><td class="mono">DELETE FROM messages WHERE id = 305;</td><td>삭제</td></tr>
-      <tr><td>캐릭터별 판수 보기</td><td class="mono">SELECT 캐릭터, COUNT(*) FROM matches GROUP BY 캐릭터;</td><td>조회(집계)</td></tr>
-    </tbody>
-  </table></div>
-  <div class="footer">가상 예시 · 실제 서비스에서 버튼 하나가 SQL 한 문장에 꼭 대응하지는 않음</div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 10. 사다리 개요 -->
-<section class="slide">
-  <div class="eyebrow">2 · SQL 조회</div>
-  <h2>SELECT에 절을 하나씩 붙이기</h2>
-  <div class="grid-2">
-    <ol class="ladder">
-      <li><span class="n">1</span><span><code>SELECT 열 FROM 테이블</code> 열 고르기 <small class="muted">· 전체 명단</small></span></li>
-      <li><span class="n">2</span><span>+ <code>WHERE</code> 행 고르기 <small class="muted">· 자기 동아리만</small></span></li>
-      <li><span class="n">3</span><span>+ <code>ORDER BY</code> 정렬하기 <small class="muted">· 면접 순</small></span></li>
-      <li><span class="n">4</span><span>+ <code>LIMIT</code> 개수 제한하기 <small class="muted">· 합격자 3명</small></span></li>
-      <li><span class="n">5</span><span><code>GROUP BY</code> + <code>COUNT(*)</code> 묶어서 집계하기 <small class="muted">· 지원 현황</small></span></li>
-      <li><span class="n">6</span><span>+ <code>WHERE … LIKE</code> 글자 패턴으로 행 고르기 <small class="muted">· 이름 검색</small></span></li>
-      <li><span class="n">7</span><span>절을 적는 순서 지키기</span></li>
-    </ol>
+  <div class="eyebrow">1 · 데이터베이스 · 예시 테이블</div>
+  <h2>지원 테이블</h2>
+  <div class="grid-2 wide-right">
     <div>
-      <div class="cap">예시 테이블: 지원 · 30행 (평가를 마친 상태) · 기간 2026-10-01~10-05</div>
-      <div class="res-wrap scroll"><table class="plain sm">
+      <ul class="pts sm">
+        <li><b>학번</b>: 기본 키</li>
+        <li><b>이름</b> · <b>지원동아리</b></li>
+        <li><b>자소서</b> · <b>면접</b>: 각 50점 만점</li>
+        <li><b>제출시각</b>: 지원 기간 2026-10-01~10-05</li>
+        <li>지원서 한 장 = 행 하나 · 모두 30행 (평가를 마친 상태)</li>
+      </ul>
+      <div class="cap" style="margin-top:2vh">동아리별 지원자 수</div>
+      <div class="chips"><span>방송부 8명</span><span>과학부 7명</span><span>수리정보영재반 6명</span><span>댄스부 5명</span><span>미술부 4명</span></div>
+    </div>
+    <div>
+      <div class="cap">지원 테이블 · 30행 중 앞 5행</div>
+      <div class="res-wrap"><table class="plain sm">
         <thead><tr><th>학번</th><th>이름</th><th>지원동아리</th><th>자소서</th><th>면접</th><th>제출시각</th></tr></thead>
-        <tbody><tr><td>10102</td><td>김하늘</td><td>미술부</td><td>35</td><td>35</td><td>2026-10-03 16:15</td></tr><tr><td>10104</td><td>이바다</td><td>과학부</td><td>40</td><td>34</td><td>2026-10-01 18:40</td></tr><tr><td>10107</td><td>박솔</td><td>방송부</td><td>27</td><td>49</td><td>2026-10-04 20:20</td></tr><tr><td>10108</td><td>최이슬</td><td>과학부</td><td>36</td><td>40</td><td>2026-10-01 14:05</td></tr><tr><td>10109</td><td>정가람</td><td>댄스부</td><td>46</td><td>24</td><td>2026-10-01 11:20</td></tr><tr><td>10111</td><td>윤나래</td><td>댄스부</td><td>30</td><td>29</td><td>2026-10-01 08:45</td></tr><tr><td>10112</td><td>강누리</td><td>미술부</td><td>37</td><td>36</td><td>2026-10-05 12:40</td></tr><tr><td>10113</td><td>조한결</td><td>과학부</td><td>29</td><td>33</td><td>2026-10-03 12:05</td></tr><tr><td>10114</td><td>임다온</td><td>수리정보영재반</td><td>24</td><td>28</td><td>2026-10-01 10:15</td></tr><tr><td>10116</td><td>한별</td><td>방송부</td><td>42</td><td>50</td><td>2026-10-05 12:10</td></tr><tr><td>10118</td><td>오세린</td><td>미술부</td><td>23</td><td>47</td><td>2026-10-02 11:45</td></tr><tr><td>10122</td><td>서도윤</td><td>방송부</td><td>43</td><td>44</td><td>2026-10-03 12:55</td></tr><tr><td>10124</td><td>신유찬</td><td>방송부</td><td>39</td><td>23</td><td>2026-10-03 08:40</td></tr><tr><td>10125</td><td>권아린</td><td>수리정보영재반</td><td>41</td><td>25</td><td>2026-10-05 19:10</td></tr><tr><td>10126</td><td>황지후</td><td>방송부</td><td>21</td><td>39</td><td>2026-10-05 18:15</td></tr><tr><td>10129</td><td>안서우</td><td>과학부</td><td>49</td><td>32</td><td>2026-10-03 15:30</td></tr><tr><td>10132</td><td>송민재</td><td>수리정보영재반</td><td>32</td><td>37</td><td>2026-10-02 14:40</td></tr><tr><td>10133</td><td>류하은</td><td>댄스부</td><td>48</td><td>30</td><td>2026-10-05 20:25</td></tr><tr><td>20103</td><td>전시우</td><td>과학부</td><td>22</td><td>42</td><td>2026-10-04 17:00</td></tr><tr><td>20104</td><td>홍예린</td><td>방송부</td><td>31</td><td>21</td><td>2026-10-02 18:30</td></tr><tr><td>20106</td><td>문태오</td><td>과학부</td><td>38</td><td>27</td><td>2026-10-04 20:25</td></tr><tr><td>20107</td><td>배수아</td><td>미술부</td><td>34</td><td>43</td><td>2026-10-01 12:05</td></tr><tr><td>20109</td><td>백준서</td><td>과학부</td><td>33</td><td>31</td><td>2026-10-02 11:00</td></tr><tr><td>20114</td><td>허윤슬</td><td>방송부</td><td>44</td><td>38</td><td>2026-10-02 11:20</td></tr><tr><td>20116</td><td>남궁현</td><td>수리정보영재반</td><td>26</td><td>26</td><td>2026-10-04 15:10</td></tr><tr><td>20120</td><td>노은채</td><td>수리정보영재반</td><td>45</td><td>48</td><td>2026-10-05 14:00</td></tr><tr><td>20123</td><td>구도하</td><td>댄스부</td><td>28</td><td>45</td><td>2026-10-01 12:55</td></tr><tr><td>20126</td><td>심채원</td><td>댄스부</td><td>25</td><td>22</td><td>2026-10-03 16:30</td></tr><tr><td>20128</td><td>원지안</td><td>수리정보영재반</td><td>50</td><td>46</td><td>2026-10-04 10:35</td></tr><tr><td>20131</td><td>석하람</td><td>방송부</td><td>47</td><td>41</td><td>2026-10-02 09:10</td></tr></tbody>
+        <tbody><tr><td>10102</td><td>김하늘</td><td>미술부</td><td>35</td><td>35</td><td>2026-10-03 16:15</td></tr><tr><td>10104</td><td>이바다</td><td>과학부</td><td>40</td><td>34</td><td>2026-10-01 18:40</td></tr><tr><td>10107</td><td>박솔</td><td>방송부</td><td>27</td><td>49</td><td>2026-10-04 20:20</td></tr><tr><td>10108</td><td>최이슬</td><td>과학부</td><td>36</td><td>40</td><td>2026-10-01 14:05</td></tr><tr><td>10109</td><td>정가람</td><td>댄스부</td><td>46</td><td>24</td><td>2026-10-01 11:20</td></tr><tr class="more"><td colspan="6">… 모두 30행</td></tr></tbody>
       </table></div>
     </div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 11. 1단계 -->
+<!-- 5. SELECT -->
 <section class="slide">
-  <div class="eyebrow">SELECT 1단계 · 열 고르기 · 창체부 화면</div>
+  <div class="eyebrow">SELECT 1단계 · 열 고르기</div>
   <h2><span class="mono">SELECT 열 FROM 테이블</span></h2>
-  <div class="mockwrap grid-2" data-mock="s1">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">창체부 화면</span></div>
-      <div class="mock-body"><div class="mock-tools"><b class="mt">전체 지원 명단</b><button class="mbtn" data-act="hn" aria-pressed="false">학번·이름 보기</button><button class="mbtn" data-act="nm" aria-pressed="false">이름·면접 보기</button><button class="mbtn" data-act="all" aria-pressed="false">모든 열 보기</button></div><div class="mock-out"></div></div>
+  <div class="grid-2 wide-right">
+    <div>
+      <div class="cap">①</div><pre class="sql sm" data-key="s1"><span class="ln">SELECT 학번, 이름</span><span class="ln">FROM 지원;</span></pre><div class="cap">②</div><pre class="sql sm" data-key="s2"><span class="ln">SELECT 이름, 면접</span><span class="ln">FROM 지원;</span></pre><div class="cap">③</div><pre class="sql sm" data-key="s3"><span class="ln">SELECT *</span><span class="ln">FROM 지원;</span></pre>
+      <ul class="pts sm">
+        <li>SELECT 뒤: <b>보여 줄 열</b> (여러 개면 쉼표로 구분) · <code>*</code> = 모든 열</li>
+        <li>FROM 뒤: <b>테이블</b> · 문장 끝: 세미콜론(;)</li>
+        <li>① 뜻: 지원 테이블의 학번, 이름 열 조회</li>
+        <li>열을 골라도 행은 그대로 30행</li>
+      </ul>
+      <div class="app"><b>시스템에서는</b> 창체부의 전체 지원 명단</div>
     </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div>
-    </div>
+    <div><div class="cap">① 결과 · 30행 중 앞 3행</div><div class="res-wrap"><table class="res" data-key="s1" data-total="30" ><thead><tr><th>학번</th><th>이름</th></tr></thead><tbody><tr><td>10102</td><td>김하늘</td></tr><tr><td>10104</td><td>이바다</td></tr><tr><td>10107</td><td>박솔</td></tr></tbody></table></div><div class="cap">② 결과 · 30행 중 앞 3행</div><div class="res-wrap"><table class="res" data-key="s2" data-total="30" ><thead><tr><th>이름</th><th>면접</th></tr></thead><tbody><tr><td>김하늘</td><td>35</td></tr><tr><td>이바다</td><td>34</td></tr><tr><td>박솔</td><td>49</td></tr></tbody></table></div><div class="cap">③ 결과 · 30행 중 앞 3행</div><div class="res-wrap"><table class="res sm" data-key="s3" data-total="30" ><thead><tr><th>학번</th><th>이름</th><th>지원동아리</th><th>자소서</th><th>면접</th><th>제출시각</th></tr></thead><tbody><tr><td>10102</td><td>김하늘</td><td>미술부</td><td>35</td><td>35</td><td>2026-10-03 16:15</td></tr><tr><td>10104</td><td>이바다</td><td>과학부</td><td>40</td><td>34</td><td>2026-10-01 18:40</td></tr><tr><td>10107</td><td>박솔</td><td>방송부</td><td>27</td><td>49</td><td>2026-10-04 20:20</td></tr></tbody></table></div></div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 12. 2단계 WHERE -->
+<!-- 6. WHERE -->
 <section class="slide">
-  <div class="eyebrow">SELECT 2단계 · + WHERE · 동아리 담당 화면</div>
+  <div class="eyebrow">SELECT 2단계 · + WHERE</div>
   <h2>WHERE: 조건에 맞는 행만</h2>
-  <div class="mockwrap grid-2" data-mock="where">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">동아리 담당 화면</span></div>
-      <div class="mock-body"><div class="mock-tools"><label class="mt">내 동아리 <select class="msel" data-sel aria-label="동아리 선택"><option value="" selected disabled>선택 ▼</option><option value="c0">방송부</option><option value="c1">과학부</option><option value="c2">수리정보영재반</option><option value="c3">댄스부</option><option value="c4">미술부</option></select></label></div><div class="mock-out"></div></div>
-    </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div><div class="op" style="margin-top:1.4vh">
+  <div class="grid-2 wide-left">
+    <div>
+      <pre class="sql sm" data-key="w"><span class="ln">SELECT 이름, 면접</span><span class="ln">FROM 지원</span><span class="ln add">WHERE 지원동아리 = '방송부';</span></pre>
+      <ul class="pts sm">
+        <li>문자·날짜는 작은따옴표 <code>'방송부'</code> <code>'2026-10-05 18:00'</code> (큰따옴표는 열 이름으로 처리될 수 있음)</li>
+        <li>숫자는 그대로 <code>면접 &gt;= 45</code></li>
+      </ul>
+      <div class="op" style="margin-top:1vh">
         <code>=</code><span>같다</span><code>&lt;&gt;</code><span>다르다</span>
         <code>&gt;</code><span>초과(보다 큼)</span><code>&gt;=</code><span>이상</span>
         <code>&lt;</code><span>미만(보다 작음)</span><code>&lt;=</code><span>이하</span>
       </div>
+      <div class="app"><b>시스템에서는</b> 동아리 담당이 자기 동아리 지원자만 조회 (권한 관리)</div>
     </div>
+    <div><div class="cap">결과 · 8행</div><div class="res-wrap"><table class="res" data-key="w" data-total="8" ><thead><tr><th>이름</th><th>면접</th></tr></thead><tbody><tr><td>박솔</td><td>49</td></tr><tr><td>한별</td><td>50</td></tr><tr><td>서도윤</td><td>44</td></tr><tr><td>신유찬</td><td>23</td></tr><tr><td>황지후</td><td>39</td></tr><tr><td>홍예린</td><td>21</td></tr><tr><td>허윤슬</td><td>38</td></tr><tr><td>석하람</td><td>41</td></tr></tbody></table></div></div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 13. 값 적는 법 -->
+<!-- 7. ORDER BY -->
 <section class="slide">
-  <div class="eyebrow">SELECT 2단계 · 값 적는 법 · 창체부 화면</div>
-  <h2>문자·날짜는 따옴표, 숫자는 그대로</h2>
-  <div class="mockwrap grid-2" data-mock="quote">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">창체부 화면</span></div>
-      <div class="mock-body"><div class="mock-tools"><b class="mt">조건 검색</b><button class="mbtn" data-act="n45" aria-pressed="false">면접 45점 이상</button><button class="mbtn" data-act="late" aria-pressed="false">마감일 18시 이후 제출</button></div><div class="mock-out"></div></div>
-    </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 14. 3단계 ORDER BY -->
-<section class="slide">
-  <div class="eyebrow">SELECT 3단계 · + ORDER BY · 동아리 담당 화면</div>
+  <div class="eyebrow">SELECT 3단계 · + ORDER BY</div>
   <h2>ORDER BY: 정렬하기</h2>
-  <div class="mockwrap grid-2" data-mock="order">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">동아리 담당 화면 · 방송부</span></div>
-      <div class="mock-body"><div class="mock-tools"><b class="mt">방송부 지원자</b><span class="mnote">면접 머리를 누르면 정렬</span></div><div class="mock-out"></div></div>
+  <div class="grid-2 wide-left">
+    <div>
+      <pre class="sql sm" data-key="o"><span class="ln">SELECT 이름, 면접</span><span class="ln">FROM 지원</span><span class="ln">WHERE 지원동아리 = '방송부'</span><span class="ln add">ORDER BY 면접 DESC;</span></pre>
+      <ul class="pts sm">
+        <li><b>DESC</b> 내림차순: 큰 값부터 · <b>ASC</b> 오름차순: 작은 값부터</li>
+        <li>ASC·DESC를 생략하면 <b>ASC</b></li>
+        <li>날짜·시각 열을 DESC로 정렬하면 가장 최근 것부터</li>
+      </ul>
+      <div class="app"><b>시스템에서는</b> 동아리 담당 화면의 면접 점수 순 보기</div>
     </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div>
-    </div>
+    <div><div class="cap">결과 · 8행</div><div class="res-wrap"><table class="res" data-key="o" data-total="8" ><thead><tr><th>이름</th><th>면접</th></tr></thead><tbody><tr><td>한별</td><td>50</td></tr><tr><td>박솔</td><td>49</td></tr><tr><td>서도윤</td><td>44</td></tr><tr><td>석하람</td><td>41</td></tr><tr><td>황지후</td><td>39</td></tr><tr><td>허윤슬</td><td>38</td></tr><tr><td>신유찬</td><td>23</td></tr><tr><td>홍예린</td><td>21</td></tr></tbody></table></div></div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 15. 4단계 LIMIT -->
+<!-- 8. LIMIT -->
 <section class="slide">
-  <div class="eyebrow">SELECT 4단계 · + LIMIT · 동아리 담당 화면</div>
+  <div class="eyebrow">SELECT 4단계 · + LIMIT</div>
   <h2>LIMIT n: 앞에서 n행만</h2>
-  <div class="mockwrap grid-2" data-mock="limit">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">동아리 담당 화면 · 방송부</span></div>
-      <div class="mock-body"><div class="mock-tools"><b class="mt">최종 합격자</b><span class="quota">정원 3명</span><button class="mbtn primary" data-act="pass" aria-pressed="false">합격자 확인</button><button class="mbtn" data-act="all" aria-pressed="false">전체 지원자</button></div><div class="mock-out"></div></div>
+  <div class="grid-2 wide-left">
+    <div>
+      <pre class="sql sm" data-key="l"><span class="ln">SELECT 이름, 면접</span><span class="ln">FROM 지원</span><span class="ln">WHERE 지원동아리 = '방송부'</span><span class="ln">ORDER BY 면접 DESC</span><span class="ln add">LIMIT 3;</span></pre>
+      <ul class="pts sm">
+        <li>정렬한 결과에서 위의 3행만</li>
+        <li>ORDER BY와 함께: <b>상위 n개</b></li>
+        <li>합격자 명단은 저장하지 않고 볼 때마다 이 SQL로 계산 → 실시간</li>
+      </ul>
+      <div class="app"><b>시스템에서는</b> 방송부 정원 3명 = 면접 상위 3명 합격</div>
     </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div>
-    </div>
+    <div><div class="cap">결과 · 3행 = 방송부 합격자</div><div class="res-wrap"><table class="res" data-key="l" data-total="3" ><thead><tr><th>이름</th><th>면접</th></tr></thead><tbody><tr><td>한별</td><td>50</td></tr><tr><td>박솔</td><td>49</td></tr><tr><td>서도윤</td><td>44</td></tr></tbody></table></div></div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 16. 5단계 GROUP BY -->
+<!-- 9. GROUP BY -->
 <section class="slide">
-  <div class="eyebrow">SELECT 5단계 · GROUP BY · COUNT · AVG · 창체부 화면</div>
+  <div class="eyebrow">SELECT 5단계 · GROUP BY · COUNT · AVG</div>
   <h2>GROUP BY: 같은 값끼리 묶기</h2>
-  <div class="mockwrap grid-2" data-mock="group">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">창체부 화면</span></div>
-      <div class="mock-body"><div class="mock-tools"><b class="mt">지원 현황</b><button class="mbtn" data-act="cnt" aria-pressed="false">동아리별 지원자 수</button><button class="mbtn" data-act="avg" aria-pressed="false">동아리별 면접 평균</button></div><div class="mock-out"></div></div>
+  <div class="grid-2">
+    <div>
+      <pre class="sql sm" data-key="g1"><span class="ln add">SELECT 지원동아리, COUNT(*)</span><span class="ln">FROM 지원</span><span class="ln add">GROUP BY 지원동아리</span><span class="ln">ORDER BY COUNT(*) DESC;</span></pre><div class="cap">결과 · 5행</div><div class="res-wrap"><table class="res sm" data-key="g1" data-total="5" ><thead><tr><th>지원동아리</th><th>COUNT(*)</th></tr></thead><tbody><tr><td>방송부</td><td>8</td></tr><tr><td>과학부</td><td>7</td></tr><tr><td>수리정보영재반</td><td>6</td></tr><tr><td>댄스부</td><td>5</td></tr><tr><td>미술부</td><td>4</td></tr></tbody></table></div>
+      <ul class="pts sm" style="margin-top:1vh">
+        <li><code>GROUP BY 지원동아리</code>: 값이 같은 행끼리 묶음</li>
+        <li><code>COUNT(*)</code>: 묶음마다 행 수 · 묶음 하나당 한 행</li>
+      </ul>
     </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div>
+    <div>
+      <pre class="sql sm" data-key="g2"><span class="ln add">SELECT 지원동아리, AVG(면접)</span><span class="ln">FROM 지원</span><span class="ln">GROUP BY 지원동아리</span><span class="ln">ORDER BY AVG(면접) DESC;</span></pre><div class="cap">결과 · 5행</div><div class="res-wrap"><table class="res sm" data-key="g2" data-total="5" ><thead><tr><th>지원동아리</th><th>AVG(면접)</th></tr></thead><tbody><tr><td>미술부</td><td>40.25</td></tr><tr><td>방송부</td><td>38.13</td></tr><tr><td>수리정보영재반</td><td>35.00</td></tr><tr><td>과학부</td><td>34.14</td></tr><tr><td>댄스부</td><td>30.00</td></tr></tbody></table></div>
+      <ul class="pts sm" style="margin-top:1vh">
+        <li><code>AVG(열)</code>: 묶음마다 평균 (소수 셋째 자리에서 반올림해 표시)</li>
+        <li><code>COUNT(*) AS 인원</code>: 결과 열 이름을 인원으로 바꿈 (없으면 COUNT(*) 그대로 표시)</li>
+      </ul>
     </div>
   </div>
+  <div class="app"><b>시스템에서는</b> 창체부의 동아리별 지원 현황</div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 17. 계산 열 · AS -->
+<!-- 10. LIKE -->
 <section class="slide">
-  <div class="eyebrow">SELECT 5단계 · 계산 열 · AS · 창체부 화면</div>
-  <h2>계산 열과 별칭(AS)</h2>
-  <div class="mockwrap grid-2" data-mock="as">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">창체부 화면</span></div>
-      <div class="mock-body"><div class="mock-tools"><b class="mt">총점 순위</b><button class="mbtn" data-act="top" aria-pressed="false">총점 상위 3명</button></div><div class="mock-out"></div></div>
-    </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 18. 6단계 LIKE -->
-<section class="slide">
-  <div class="eyebrow">SELECT 6단계 · WHERE … LIKE · 창체부 화면</div>
+  <div class="eyebrow">SELECT 6단계 · + WHERE … LIKE</div>
   <h2>LIKE: 글자 패턴으로 행 고르기</h2>
-  <div class="mockwrap grid-2" data-mock="like">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">창체부 화면</span></div>
-      <div class="mock-body"><div class="mock-tools"><span class="msearch">이름 검색: <b>윤</b></span><button class="mbtn" data-act="pre" aria-pressed="false">윤으로 시작</button><button class="mbtn" data-act="suf" aria-pressed="false">윤으로 끝남</button><button class="mbtn" data-act="mid" aria-pressed="false">윤 포함</button></div><div class="mock-out"></div></div>
+  <div class="grid-2">
+    <div>
+      <pre class="sql sm" data-key="k1"><span class="ln">SELECT 이름</span><span class="ln">FROM 지원</span><span class="ln add">WHERE 이름 LIKE '%윤%';</span></pre><div class="cap">결과 · 3행</div><div class="res-wrap"><table class="res" data-key="k1" data-total="3" ><thead><tr><th>이름</th></tr></thead><tbody><tr><td>윤나래</td></tr><tr><td>서도윤</td></tr><tr><td>허윤슬</td></tr></tbody></table></div>
+      <pre class="sql sm" data-key="k2"><span class="ln">SELECT 이름</span><span class="ln">FROM 지원</span><span class="ln add">WHERE 이름 LIKE '윤%';</span></pre><div class="cap">결과 · 1행</div><div class="res-wrap"><table class="res" data-key="k2" data-total="1" ><thead><tr><th>이름</th></tr></thead><tbody><tr><td>윤나래</td></tr></tbody></table></div>
     </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div>
+    <div>
+      <ul class="pts sm">
+        <li>LIKE는 WHERE 안의 조건</li>
+        <li><code>%</code> = 0개 이상의 아무 글자</li>
+        <li><code>'윤%'</code>: 윤으로 시작</li>
+        <li><code>'%윤'</code>: 윤으로 끝남</li>
+        <li><code>'%윤%'</code>: 윤을 포함 (맨 앞·가운데·맨 끝 모두 해당)</li>
+      </ul>
+      <div class="app"><b>시스템에서는</b> 창체부의 이름 검색</div>
     </div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 19. 절의 순서 -->
+<!-- 11. 절을 적는 순서 -->
 <section class="slide">
   <div class="eyebrow">SELECT 7단계 · 절을 적는 순서</div>
   <h2>절을 적는 순서는 고정</h2>
   <div class="flow"><span class="k">SELECT</span><span class="ar">→</span><span class="k">FROM</span><span class="ar">→</span><span class="k">WHERE</span><span class="ar">→</span><span class="k">GROUP BY</span><span class="ar">→</span><span class="k">ORDER BY</span><span class="ar">→</span><span class="k">LIMIT</span></div>
   <div class="grid-2">
-    <div class="ex" data-check>
+    <div>
       <div class="cap">여섯 절을 모두 사용한 문장: 면접 40점 이상이 가장 많은 동아리</div>
-      <pre class="sql sm"><span class="ln">SELECT 지원동아리, COUNT(*) AS 인원</span><span class="ln">FROM 지원</span><span class="ln">WHERE 면접 &gt;= 40</span><span class="ln">GROUP BY 지원동아리</span><span class="ln">ORDER BY COUNT(*) DESC</span><span class="ln">LIMIT 1;</span></pre>
-      <div class="res-wrap"><table class="res">
-        <thead><tr><th>지원동아리</th><th>인원</th></tr></thead>
-        <tbody><tr><td>방송부</td><td>4</td></tr></tbody>
-      </table></div>
+      <pre class="sql sm" data-key="e9"><span class="ln">SELECT 지원동아리, COUNT(*) AS 인원</span><span class="ln">FROM 지원</span><span class="ln">WHERE 면접 &gt;= 40</span><span class="ln">GROUP BY 지원동아리</span><span class="ln">ORDER BY COUNT(*) DESC</span><span class="ln">LIMIT 1;</span></pre><div class="cap">결과 · 1행</div><div class="res-wrap"><table class="res" data-key="e9" data-total="1" ><thead><tr><th>지원동아리</th><th>인원</th></tr></thead><tbody><tr><td>방송부</td><td>4</td></tr></tbody></table></div>
     </div>
     <div>
       <ul class="pts sm">
         <li>필요 없는 절은 생략 (SELECT·FROM은 항상)</li>
         <li>순서가 바뀌면 오류</li>
       </ul>
-      <div class="ex" data-check data-error style="margin-top:1.2vh">
-        <div class="cap">오류: ORDER BY가 WHERE보다 앞</div>
-        <pre class="sql sm err"><span class="ln">SELECT 이름, 면접</span><span class="ln">FROM 지원</span><span class="ln">ORDER BY 면접 DESC</span><span class="ln">WHERE 면접 &gt;= 40;</span></pre>
-      </div>
+      <div class="cap" style="margin-top:1.2vh">오류: ORDER BY가 WHERE보다 앞</div>
+      <pre class="sql sm err" data-error><span class="ln">SELECT 이름, 면접</span><span class="ln">FROM 지원</span><span class="ln">ORDER BY 면접 DESC</span><span class="ln">WHERE 면접 &gt;= 40;</span></pre>
     </div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 20. 파이썬과 SQL -->
+<!-- 12. 파이썬과 SQL -->
 <section class="slide">
   <div class="eyebrow">SELECT 정리 · 파이썬과 비교</div>
   <h2>파이썬 대신 SQL을 사용하는 이유</h2>
@@ -581,7 +387,7 @@ for row in rows:
 result.sort(key=lambda r: r["면접"], reverse=True)
 names = [r["이름"] for r in result]</pre>
       <div class="cap">SQL: 원하는 결과만 작성</div>
-      <pre class="sql sm" data-py-sql><span class="ln">SELECT 이름 FROM 지원</span><span class="ln">WHERE 지원동아리 = '방송부'</span><span class="ln">ORDER BY 면접 DESC;</span></pre>
+      <pre class="sql sm" data-key="py"><span class="ln">SELECT 이름 FROM 지원</span><span class="ln">WHERE 지원동아리 = '방송부'</span><span class="ln">ORDER BY 면접 DESC;</span></pre>
       <div class="cap">두 코드의 결과: 한별, 박솔, 서도윤, 석하람, 황지후, 허윤슬, 신유찬, 홍예린</div>
     </div>
     <div>
@@ -597,237 +403,95 @@ names = [r["이름"] for r in result]</pre>
   <div class="slide-no"></div>
 </section>
 
-<!-- 21. INSERT -->
+<!-- 13. INSERT -->
 <section class="slide">
-  <div class="eyebrow">3 · SQL 데이터 변경 · INSERT · 학생 화면</div>
+  <div class="eyebrow">3 · SQL 데이터 변경 · INSERT</div>
   <h2>INSERT: 행 추가</h2>
-  <div class="mockwrap grid-2" data-mock="ins">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">학생 화면</span></div>
-      <div class="mock-body"><div class="mock-tools"><div class="mform"><b class="mt">동아리 지원서</b><label>학번<input value="20133" readonly></label><label>이름<input value="서다온" readonly></label><label>지원동아리<span class="fsel">미술부 ▼</span></label><button class="mbtn primary" data-act="submit" aria-pressed="false">제출</button></div></div><div class="mock-out"></div></div>
-    </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div><div class="cap" style="margin-top:1.6vh">값만 적는 꼴: 모든 열을 열 순서대로</div><pre class="sql sm"><span class="ln">INSERT INTO 지원</span><span class="ln">VALUES (20133, '서다온', '미술부',</span><span class="ln">        40, 44, '2026-10-05 21:30');</span></pre>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 22. UPDATE -->
-<section class="slide">
-  <div class="eyebrow">3 · SQL 데이터 변경 · UPDATE · 동아리 담당 화면</div>
-  <h2>UPDATE: 값 바꾸기</h2>
-  <div class="mockwrap grid-2" data-mock="upd">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">동아리 담당 화면 · 미술부</span></div>
-      <div class="mock-body"><div class="mock-tools"><div class="mform"><b class="mt">점수 입력</b><label>지원자<span class="fsel">20133 서다온 ▼</span></label><label>자소서<input value="40" readonly></label><label>면접<input value="44" readonly></label><button class="mbtn primary" data-act="save" aria-pressed="false">저장</button></div></div><div class="mock-out"></div></div>
-    </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div><div class="cap" style="margin-top:1.6vh">현황 화면을 열 때마다 실행되는 SQL</div><pre class="sql sm"><span class="ln">SELECT 이름, 자소서, 면접</span><span class="ln">FROM 지원</span><span class="ln">WHERE 지원동아리 = '미술부'</span><span class="ln">ORDER BY 면접 DESC;</span></pre>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 23. DELETE -->
-<section class="slide">
-  <div class="eyebrow">3 · SQL 데이터 변경 · DELETE · 학생 화면</div>
-  <h2>DELETE: 행 삭제</h2>
-  <div class="mockwrap grid-2" data-mock="del">
-    <div class="mock">
-      <div class="mock-bar"><span>DG창체부 · 동아리 지원</span><span class="who">학생 화면</span></div>
-      <div class="mock-body"><div class="mock-tools"><div class="mform"><b class="mt">내 지원</b><span class="mnote">20116 남궁현 · 수리정보영재반 · 제출 2026-10-04 15:10</span><button class="mbtn danger" data-act="cancel" aria-pressed="false">지원 취소</button></div></div><div class="mock-out"></div></div>
-    </div>
-    <div class="sqlpanel">
-      <div class="hint">버튼을 누르면 실행되는 SQL이 표시됩니다.</div>
-      <div class="pbody" hidden><div class="cap">실행되는 SQL</div><pre class="sql sm"></pre><div class="cap">의미</div><ul class="pts sm meaning"></ul></div>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 24. WHERE 누락 -->
-<section class="slide">
-  <div class="eyebrow">3 · SQL 데이터 변경 · 주의</div>
-  <h2>WHERE를 빠뜨리면 모든 행</h2>
   <div class="grid-2">
-    <div class="ex" data-check data-after="SELECT 학번, 이름, 면접 FROM 지원;">
-      <pre class="sql sm err"><span class="ln">UPDATE 지원</span><span class="ln">SET 면접 = 42;</span></pre>
-      <div class="cap">실행 후 지원 (학번·이름·면접 열): 30행 모두 면접 42점</div>
-      <div class="res-wrap scroll short"><table class="res" data-for="after">
-        <thead><tr><th>학번</th><th>이름</th><th>면접</th></tr></thead>
-        <tbody><tr><td>10102</td><td>김하늘</td><td class="chg">42</td></tr><tr><td>10104</td><td>이바다</td><td class="chg">42</td></tr><tr><td>10107</td><td>박솔</td><td class="chg">42</td></tr><tr><td>10108</td><td>최이슬</td><td class="chg">42</td></tr><tr><td>10109</td><td>정가람</td><td class="chg">42</td></tr><tr><td>10111</td><td>윤나래</td><td class="chg">42</td></tr><tr><td>10112</td><td>강누리</td><td class="chg">42</td></tr><tr><td>10113</td><td>조한결</td><td class="chg">42</td></tr><tr><td>10114</td><td>임다온</td><td class="chg">42</td></tr><tr><td>10116</td><td>한별</td><td class="chg">42</td></tr><tr><td>10118</td><td>오세린</td><td class="chg">42</td></tr><tr><td>10122</td><td>서도윤</td><td class="chg">42</td></tr><tr><td>10124</td><td>신유찬</td><td class="chg">42</td></tr><tr><td>10125</td><td>권아린</td><td class="chg">42</td></tr><tr><td>10126</td><td>황지후</td><td class="chg">42</td></tr><tr><td>10129</td><td>안서우</td><td class="chg">42</td></tr><tr><td>10132</td><td>송민재</td><td class="chg">42</td></tr><tr><td>10133</td><td>류하은</td><td class="chg">42</td></tr><tr><td>20103</td><td>전시우</td><td class="chg">42</td></tr><tr><td>20104</td><td>홍예린</td><td class="chg">42</td></tr><tr><td>20106</td><td>문태오</td><td class="chg">42</td></tr><tr><td>20107</td><td>배수아</td><td class="chg">42</td></tr><tr><td>20109</td><td>백준서</td><td class="chg">42</td></tr><tr><td>20114</td><td>허윤슬</td><td class="chg">42</td></tr><tr><td>20116</td><td>남궁현</td><td class="chg">42</td></tr><tr><td>20120</td><td>노은채</td><td class="chg">42</td></tr><tr><td>20123</td><td>구도하</td><td class="chg">42</td></tr><tr><td>20126</td><td>심채원</td><td class="chg">42</td></tr><tr><td>20128</td><td>원지안</td><td class="chg">42</td></tr><tr><td>20131</td><td>석하람</td><td class="chg">42</td></tr></tbody>
-      </table></div>
+    <div>
+      <div class="cap">열 이름을 적는 꼴: 점수 없이 지원서 제출</div>
+      <pre class="sql sm" data-key="i1"><span class="ln">INSERT INTO 지원 (학번, 이름, 지원동아리, 제출시각)</span><span class="ln">VALUES (20133, '서다온', '미술부', '2026-10-05 21:30');</span></pre><div class="cap">실행 후 학번 20133의 행</div><div class="res-wrap"><table class="res sm" data-key="i1" data-total="1" data-after="SELECT * FROM 지원 WHERE 학번 = 20133;"><thead><tr><th>학번</th><th>이름</th><th>지원동아리</th><th>자소서</th><th>면접</th><th>제출시각</th></tr></thead><tbody><tr class="hit"><td>20133</td><td>서다온</td><td>미술부</td><td class="blank">비어 있음</td><td class="blank">비어 있음</td><td>2026-10-05 21:30</td></tr></tbody></table></div>
+      <ul class="pts sm" style="margin-top:1vh">
+        <li>적은 열에만 값 · 적지 않은 열(자소서·면접)은 비어 있음 → 나중에 UPDATE로 채움</li>
+      </ul>
     </div>
     <div>
-      <div class="ex" data-check data-after="SELECT 학번, 이름, 면접 FROM 지원;">
-        <pre class="sql sm err"><span class="ln">DELETE FROM 지원;</span></pre>
-        <div class="res-wrap"><div class="cap">실행 후 지원: 0행 (모든 행 삭제)</div><table class="res" data-for="after">
-          <thead><tr><th>학번</th><th>이름</th><th>면접</th></tr></thead>
-          <tbody></tbody>
-        </table></div>
-      </div>
-      <ul class="pts sm" style="margin-top:1.6vh">
-        <li>한 행만 바꾸거나 지울 때: <b>기본 키</b>로 지정 <code>WHERE 학번 = 20133</code></li>
-        <li>이름으로 지정하면 동명이인까지 바뀌거나 지워질 수 있음</li>
+      <div class="cap">값만 적는 꼴: 모든 열을 열 순서대로</div>
+      <pre class="sql sm" data-key="i2"><span class="ln">INSERT INTO 지원</span><span class="ln">VALUES (20133, '서다온', '미술부',</span><span class="ln">        40, 44, '2026-10-05 21:30');</span></pre><div class="cap">실행 후 학번 20133의 행</div><div class="res-wrap"><table class="res sm" data-key="i2" data-total="1" data-after="SELECT * FROM 지원 WHERE 학번 = 20133;"><thead><tr><th>학번</th><th>이름</th><th>지원동아리</th><th>자소서</th><th>면접</th><th>제출시각</th></tr></thead><tbody><tr class="hit"><td>20133</td><td>서다온</td><td>미술부</td><td>40</td><td>44</td><td>2026-10-05 21:30</td></tr></tbody></table></div>
+      <ul class="pts sm" style="margin-top:1vh">
+        <li>문자·날짜는 작은따옴표, 숫자는 그대로</li>
+      </ul>
+    </div>
+  </div>
+  <div class="app"><b>시스템에서는</b> 학생 화면의 지원서 [제출] · 실행 후 지원 테이블 31행</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 14. UPDATE -->
+<section class="slide">
+  <div class="eyebrow">3 · SQL 데이터 변경 · UPDATE</div>
+  <h2>UPDATE: 값 바꾸기</h2>
+  <div class="grid-2 wide-left">
+    <div>
+      <pre class="sql sm" data-key="u"><span class="ln">UPDATE 지원</span><span class="ln">SET 자소서 = 40, 면접 = 44</span><span class="ln">WHERE 학번 = 20133;</span></pre>
+      <ul class="pts sm">
+        <li>SET 뒤: <b>바꿀 열 = 새 값</b> · 여러 열은 쉼표로 구분</li>
+        <li>WHERE 뒤: <b>바꿀 행</b>의 조건 (기본 키 학번으로 한 행만)</li>
+        <li>순서: UPDATE → SET → WHERE (SET이 WHERE보다 앞)</li>
+        <li>앞 장에서 제출한 20133 서다온의 빈 점수 채우기</li>
+      </ul>
+      <div class="app"><b>시스템에서는</b> 미술부 담당이 점수 입력 후 [저장] → 합격 현황이 바로 바뀜</div>
+    </div>
+    <div><div class="cap">실행 후 미술부 현황 (면접 순) · 5행</div><div class="res-wrap"><table class="res" data-key="u" data-total="5" data-pre="[&quot;INSERT INTO 지원 (학번, 이름, 지원동아리, 제출시각)\nVALUES (20133, &#x27;서다온&#x27;, &#x27;미술부&#x27;, &#x27;2026-10-05 21:30&#x27;);&quot;]" data-after="SELECT 이름, 자소서, 면접 FROM 지원 WHERE 지원동아리 = &#x27;미술부&#x27; ORDER BY 면접 DESC;"><thead><tr><th>이름</th><th>자소서</th><th>면접</th></tr></thead><tbody><tr><td>오세린</td><td>23</td><td>47</td></tr><tr class="hit"><td>서다온</td><td>40</td><td>44</td></tr><tr><td>배수아</td><td>34</td><td>43</td></tr><tr><td>강누리</td><td>37</td><td>36</td></tr><tr><td>김하늘</td><td>35</td><td>35</td></tr></tbody></table></div></div>
+  </div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 15. DELETE · WHERE 누락 -->
+<section class="slide">
+  <div class="eyebrow">3 · SQL 데이터 변경 · DELETE · 주의</div>
+  <h2>DELETE와 WHERE 누락 주의</h2>
+  <div class="grid-2">
+    <div>
+      <pre class="sql sm" data-key="d"><span class="ln">DELETE FROM 지원</span><span class="ln">WHERE 학번 = 20116;</span></pre><div class="cap">실행 후 수리정보영재반 지원자 (빨간 점선 = 지운 행의 자리) · 5행</div><div class="res-wrap"><table class="res" data-key="d" data-total="5" data-after="SELECT 학번, 이름 FROM 지원 WHERE 지원동아리 = &#x27;수리정보영재반&#x27;;"><thead><tr><th>학번</th><th>이름</th></tr></thead><tbody><tr><td>10114</td><td>임다온</td></tr><tr><td>10125</td><td>권아린</td></tr><tr><td>10132</td><td>송민재</td></tr><tr class="gap"><td>20120</td><td>노은채</td></tr><tr><td>20128</td><td>원지안</td></tr></tbody></table></div>
+      <ul class="pts sm" style="margin-top:1vh">
+        <li>행 전체를 지우므로 열 이름은 적지 않음</li>
+      </ul>
+      <div class="app"><b>시스템에서는</b> 학생 화면의 [지원 취소]</div>
+    </div>
+    <div>
+      <div class="cap">WHERE를 빠뜨린 문장</div>
+      <pre class="sql sm err"><span class="ln">UPDATE 지원 SET 면접 = 42;</span></pre>
+      <pre class="sql sm err"><span class="ln">DELETE FROM 지원;</span></pre>
+      <ul class="pts sm">
+        <li>WHERE를 빠뜨리면 <b>모든 행</b>이 바뀌거나 지워짐 (위: 30행 모두 면접 42점, 아래: 0행)</li>
         <li>WHERE가 없어도 오류 없이 실행됨 (경고 없음)</li>
+        <li>한 행만 바꾸거나 지울 때: <b>기본 키</b>로 지정 <code>WHERE 학번 = 20116</code></li>
+        <li>이름으로 지정하면 동명이인까지 바뀌거나 지워질 수 있음</li>
       </ul>
     </div>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 25. 한눈에 보기 -->
+<!-- 16. 한눈에 보기 -->
 <section class="slide">
   <div class="eyebrow">정리</div>
   <h2>SQL 문법 한눈에 보기</h2>
   <div class="cheat">
     <div><code>SELECT 열 FROM 테이블</code><span>열 고르기 (<code>*</code> = 모든 열)</span></div>
-    <div><code>WHERE 조건</code><span>행 고르기 · 문자·날짜는 '따옴표'</span></div>
+    <div><code>WHERE 조건</code><span>행 고르기 · 문자·날짜는 '작은따옴표'</span></div>
     <div><code>ORDER BY 열 ASC / DESC</code><span>정렬 · 생략하면 ASC</span></div>
     <div><code>LIMIT n</code><span>앞에서 n행만</span></div>
     <div><code>GROUP BY 열 · COUNT(*)</code><span>묶음마다 행 수 · AVG(열)은 평균</span></div>
-    <div><code>열1 + 열2 AS 이름</code><span>계산 열 · 결과 열에 별칭 붙이기</span></div>
+    <div><code>COUNT(*) AS 인원</code><span>결과 열 이름 바꾸기</span></div>
     <div><code>WHERE 열 LIKE '윤%'</code><span>글자 패턴으로 행 고르기 · % = 0개 이상의 아무 글자</span></div>
     <div><code>INSERT INTO 테이블 (열, …) VALUES (…)</code><span>행 추가 · 열을 생략하면 모든 열을 열 순서대로</span></div>
     <div><code>UPDATE 테이블 SET 열 = 값, … WHERE 조건</code><span>값 바꾸기 · SET이 WHERE보다 앞</span></div>
     <div><code>DELETE FROM 테이블 WHERE 조건</code><span>행 삭제</span></div>
     <div style="grid-column:1/-1"><code>SELECT → FROM → WHERE → GROUP BY → ORDER BY → LIMIT</code><span>절을 적는 순서</span></div>
   </div>
-  <div class="callout">UPDATE·DELETE에서 WHERE 생략 → <b>모든 행</b>이 대상</div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 26. 연습 1 -->
-<section class="slide">
-  <div class="eyebrow">4 · 직접 작성하기 1 / 5 · 조회</div>
-  <h2>과학부 지원자의 자소서 점수, 높은 순</h2>
-  <div class="grid-2">
-    <div class="ask">
-      <p>SQL 문장을 먼저 떠올린 뒤 정답을 확인합니다.</p>
-      <dl>
-        <dt>테이블</dt><dd>지원</dd>
-        <dt>가져올 열</dt><dd>이름, 자소서</dd>
-        <dt>조건</dt><dd>지원동아리가 과학부인 행</dd>
-        <dt>정렬 기준</dt><dd>자소서, 높은 것부터</dd>
-        <dt>행 수 제한</dt><dd>없음</dd>
-      </dl>
-      <button class="reveal">정답 보기</button>
-    </div>
-    <div class="answer ex" data-check>
-      <pre class="sql sm"><span class="ln">SELECT 이름, 자소서</span><span class="ln">FROM 지원</span><span class="ln">WHERE 지원동아리 = '과학부'</span><span class="ln">ORDER BY 자소서 DESC;</span></pre>
-      <div class="res-wrap"><table class="res">
-        <thead><tr><th>이름</th><th>자소서</th></tr></thead>
-        <tbody><tr><td>안서우</td><td>49</td></tr><tr><td>이바다</td><td>40</td></tr><tr><td>문태오</td><td>38</td></tr><tr><td>최이슬</td><td>36</td></tr><tr><td>백준서</td><td>33</td></tr><tr><td>조한결</td><td>29</td></tr><tr><td>전시우</td><td>22</td></tr></tbody>
-      </table></div>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 27. 연습 2 -->
-<section class="slide">
-  <div class="eyebrow">4 · 직접 작성하기 2 / 5 · 조회</div>
-  <h2>가장 먼저 제출한 지원서 2장</h2>
-  <div class="grid-2">
-    <div class="ask">
-      <dl style="margin-top:0">
-        <dt>테이블</dt><dd>지원 (열: 학번, 이름, 지원동아리, 자소서, 면접, 제출시각)</dd>
-        <dt>가져올 열</dt><dd>이름, 제출시각</dd>
-        <dt>조건</dt><dd>없음</dd>
-        <dt>정렬 기준</dt><dd>제출시각, 이른 것부터</dd>
-        <dt>행 수 제한</dt><dd>2행만</dd>
-      </dl>
-      <button class="reveal">정답 보기</button>
-    </div>
-    <div class="answer ex" data-check>
-      <pre class="sql sm"><span class="ln">SELECT 이름, 제출시각</span><span class="ln">FROM 지원</span><span class="ln">ORDER BY 제출시각 ASC</span><span class="ln">LIMIT 2;</span></pre>
-      <div class="res-wrap"><table class="res">
-        <thead><tr><th>이름</th><th>제출시각</th></tr></thead>
-        <tbody><tr><td>윤나래</td><td>2026-10-01 08:45</td></tr><tr><td>임다온</td><td>2026-10-01 10:15</td></tr></tbody>
-      </table></div>
-      <ul class="pts sm" style="margin-top:1vh"><li>이른 것부터 = 날짜 열 ASC (ASC는 생략 가능)</li></ul>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 28. 연습 3 -->
-<section class="slide">
-  <div class="eyebrow">4 · 직접 작성하기 3 / 5 · 집계</div>
-  <h2>동아리별 자소서 평균, 높은 순</h2>
-  <div class="grid-2">
-    <div class="ask">
-      <dl style="margin-top:0">
-        <dt>테이블</dt><dd>지원</dd>
-        <dt>가져올 열</dt><dd>지원동아리, 자소서 평균</dd>
-        <dt>묶는 기준</dt><dd>지원동아리</dd>
-        <dt>정렬 기준</dt><dd>자소서 평균, 높은 것부터</dd>
-        <dt>행 수 제한</dt><dd>없음</dd>
-      </dl>
-      <button class="reveal">정답 보기</button>
-    </div>
-    <div class="answer ex" data-check>
-      <pre class="sql sm"><span class="ln">SELECT 지원동아리, AVG(자소서)</span><span class="ln">FROM 지원</span><span class="ln">GROUP BY 지원동아리</span><span class="ln">ORDER BY AVG(자소서) DESC;</span></pre>
-      <div class="res-wrap"><table class="res">
-        <thead><tr><th>지원동아리</th><th>AVG(자소서)</th></tr></thead>
-        <tbody><tr><td>방송부</td><td>36.75</td></tr><tr><td>수리정보영재반</td><td>36.33</td></tr><tr><td>댄스부</td><td>35.40</td></tr><tr><td>과학부</td><td>35.29</td></tr><tr><td>미술부</td><td>32.25</td></tr></tbody>
-      </table></div>
-      <ul class="pts sm" style="margin-top:1vh"><li>평균은 소수 셋째 자리에서 반올림해 표시</li></ul>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 29. 연습 4 -->
-<section class="slide">
-  <div class="eyebrow">4 · 직접 작성하기 4 / 5 · 추가</div>
-  <h2>지원서 한 장 추가</h2>
-  <div class="grid-2">
-    <div class="ask">
-      <dl style="margin-top:0">
-        <dt>테이블</dt><dd>지원 (열 순서: 학번, 이름, 지원동아리, 자소서, 면접, 제출시각)</dd>
-        <dt>추가할 행</dt><dd>학번 10135, 이름 하윤서, 지원동아리 수리정보영재반, 자소서 39, 면접 41, 제출시각 2026-10-05 21:10</dd>
-        <dt>적는 꼴</dt><dd>모든 열을 열 순서대로 (열 이름 생략)</dd>
-      </dl>
-      <button class="reveal">정답 보기</button>
-    </div>
-    <div class="answer ex" data-check data-after="SELECT * FROM 지원 WHERE 학번 = 10135;">
-      <pre class="sql sm"><span class="ln">INSERT INTO 지원</span><span class="ln">VALUES (10135, '하윤서', '수리정보영재반',</span><span class="ln">        39, 41, '2026-10-05 21:10');</span></pre>
-      <div class="res-wrap"><div class="cap">추가된 행</div><table class="res sm" data-for="after">
-        <thead><tr><th>학번</th><th>이름</th><th>지원동아리</th><th>자소서</th><th>면접</th><th>제출시각</th></tr></thead>
-        <tbody><tr class="hit"><td>10135</td><td>하윤서</td><td>수리정보영재반</td><td>39</td><td>41</td><td>2026-10-05 21:10</td></tr></tbody>
-      </table></div>
-      <ul class="pts sm" style="margin-top:1vh"><li>문자(이름·지원동아리)와 날짜(제출시각)만 작은따옴표, 숫자(학번·자소서·면접)는 그대로</li></ul>
-    </div>
-  </div>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 30. 연습 5 -->
-<section class="slide">
-  <div class="eyebrow">4 · 직접 작성하기 5 / 5 · 갱신</div>
-  <h2>한 지원자의 지원동아리 바꾸기</h2>
-  <div class="grid-2">
-    <div class="ask">
-      <dl style="margin-top:0">
-        <dt>테이블</dt><dd>지원</dd>
-        <dt>바꿀 값</dt><dd>지원동아리를 수리정보영재반으로</dd>
-        <dt>대상 행</dt><dd>학번 10113 지원자 한 명만</dd>
-      </dl>
-      <button class="reveal">정답 보기</button>
-    </div>
-    <div class="answer ex" data-check data-after="SELECT * FROM 지원 WHERE 학번 = 10113;">
-      <pre class="sql sm"><span class="ln">UPDATE 지원</span><span class="ln">SET 지원동아리 = '수리정보영재반'</span><span class="ln">WHERE 학번 = 10113;</span></pre>
-      <div class="res-wrap"><div class="cap">실행 후 학번 10113의 행</div><table class="res sm" data-for="after">
-        <thead><tr><th>학번</th><th>이름</th><th>지원동아리</th><th>자소서</th><th>면접</th><th>제출시각</th></tr></thead>
-        <tbody><tr><td>10113</td><td>조한결</td><td class="chg">수리정보영재반</td><td>29</td><td>33</td><td>2026-10-03 12:05</td></tr></tbody>
-      </table></div>
-      <ul class="pts sm" style="margin-top:1vh"><li>WHERE를 빠뜨리면 30명 모두 수리정보영재반</li></ul>
-    </div>
-  </div>
+  <div class="callout">UPDATE·DELETE에서 WHERE 생략 → <b>모든 행</b>이 대상 (오류 없이 실행)</div>
   <div class="slide-no"></div>
 </section>
 
@@ -841,74 +505,21 @@ names = [r["이름"] for r in result]</pre>
   function hl(t){var out='',last=0,m;KW.lastIndex=0;while((m=KW.exec(t))){out+=esc(t.slice(last,m.index));var c=m[1]?'str':m[2]?'kw':m[3]?'fn':'num';out+='<span class="'+c+'">'+esc(m[0])+'</span>';last=KW.lastIndex}return out+esc(t.slice(last))}
   window.__hl=hl;
   document.querySelectorAll('pre.sql .ln').forEach(function(el){el.innerHTML=hl(el.textContent)});
-  // 결과 행 수 표시
-  document.querySelectorAll('table.res').forEach(function(t){
-    if(t.dataset.for==='after')return;
-    var n=t.tBodies[0].rows.length,c=document.createElement('div');c.className='cap';c.textContent='결과 · '+n+'행';
-    var p=t.parentNode;if(p.classList.contains('scroll'))p.parentNode.insertBefore(c,p);else p.insertBefore(c,t);
-  });
-  // 정답 보기
-  document.querySelectorAll('.reveal').forEach(function(b){
-    b.addEventListener('click',function(){var a=b.closest('.slide').querySelector('.answer');var on=a.classList.toggle('show');b.textContent=on?'정답 숨기기':'정답 보기'});
-  });
-
-  // 화면 모형: 버튼을 누르면 뒤에서 실행되는 SQL과 결과 (결과는 club.db 실행값)
-  var MOCKS={"s1":{"cap":"명단","empty":"보기 버튼을 누르면 명단이 표시됩니다.","acts":{"hn":{"sql":"SELECT 학번, 이름\nFROM 지원;","add":[],"meaning":["SELECT 뒤: <b>보여 줄 열<\/b> (여러 개면 쉼표로 구분)","FROM 뒤: <b>테이블<\/b>","뜻: 지원 테이블의 학번, 이름 열 조회","문장 끝: 세미콜론(;)"],"pre":[],"view":null,"res":{"head":["학번","이름"],"rows":[["10102","김하늘"],["10104","이바다"],["10107","박솔"],["10108","최이슬"],["10109","정가람"],["10111","윤나래"],["10112","강누리"],["10113","조한결"],["10114","임다온"],["10116","한별"],["10118","오세린"],["10122","서도윤"],["10124","신유찬"],["10125","권아린"],["10126","황지후"],["10129","안서우"],["10132","송민재"],["10133","류하은"],["20103","전시우"],["20104","홍예린"],["20106","문태오"],["20107","배수아"],["20109","백준서"],["20114","허윤슬"],["20116","남궁현"],["20120","노은채"],["20123","구도하"],["20126","심채원"],["20128","원지안"],["20131","석하람"]]}},"nm":{"sql":"SELECT 이름, 면접\nFROM 지원;","add":[0],"meaning":["SELECT 뒤의 열 목록만 바꾸면 다른 열","열을 골라도 행은 그대로 30행","다음 단계부터 이 문장 뒤에 절을 하나씩 붙임"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["김하늘","35"],["이바다","34"],["박솔","49"],["최이슬","40"],["정가람","24"],["윤나래","29"],["강누리","36"],["조한결","33"],["임다온","28"],["한별","50"],["오세린","47"],["서도윤","44"],["신유찬","23"],["권아린","25"],["황지후","39"],["안서우","32"],["송민재","37"],["류하은","30"],["전시우","42"],["홍예린","21"],["문태오","27"],["배수아","43"],["백준서","31"],["허윤슬","38"],["남궁현","26"],["노은채","48"],["구도하","45"],["심채원","22"],["원지안","46"],["석하람","41"]]}},"all":{"sql":"SELECT *\nFROM 지원;","add":[0],"meaning":["<code>*<\/code> = 모든 열","SELECT·FROM은 대소문자 구분 없음 (보통 대문자로 적음)"],"pre":[],"view":null,"res":{"head":["학번","이름","지원동아리","자소서","면접","제출시각"],"rows":[["10102","김하늘","미술부","35","35","2026-10-03 16:15"],["10104","이바다","과학부","40","34","2026-10-01 18:40"],["10107","박솔","방송부","27","49","2026-10-04 20:20"],["10108","최이슬","과학부","36","40","2026-10-01 14:05"],["10109","정가람","댄스부","46","24","2026-10-01 11:20"],["10111","윤나래","댄스부","30","29","2026-10-01 08:45"],["10112","강누리","미술부","37","36","2026-10-05 12:40"],["10113","조한결","과학부","29","33","2026-10-03 12:05"],["10114","임다온","수리정보영재반","24","28","2026-10-01 10:15"],["10116","한별","방송부","42","50","2026-10-05 12:10"],["10118","오세린","미술부","23","47","2026-10-02 11:45"],["10122","서도윤","방송부","43","44","2026-10-03 12:55"],["10124","신유찬","방송부","39","23","2026-10-03 08:40"],["10125","권아린","수리정보영재반","41","25","2026-10-05 19:10"],["10126","황지후","방송부","21","39","2026-10-05 18:15"],["10129","안서우","과학부","49","32","2026-10-03 15:30"],["10132","송민재","수리정보영재반","32","37","2026-10-02 14:40"],["10133","류하은","댄스부","48","30","2026-10-05 20:25"],["20103","전시우","과학부","22","42","2026-10-04 17:00"],["20104","홍예린","방송부","31","21","2026-10-02 18:30"],["20106","문태오","과학부","38","27","2026-10-04 20:25"],["20107","배수아","미술부","34","43","2026-10-01 12:05"],["20109","백준서","과학부","33","31","2026-10-02 11:00"],["20114","허윤슬","방송부","44","38","2026-10-02 11:20"],["20116","남궁현","수리정보영재반","26","26","2026-10-04 15:10"],["20120","노은채","수리정보영재반","45","48","2026-10-05 14:00"],["20123","구도하","댄스부","28","45","2026-10-01 12:55"],["20126","심채원","댄스부","25","22","2026-10-03 16:30"],["20128","원지안","수리정보영재반","50","46","2026-10-04 10:35"],["20131","석하람","방송부","47","41","2026-10-02 09:10"]]}}}},"where":{"cap":"지원자 명단","empty":"동아리를 고르면 지원자 명단이 표시됩니다.","acts":{"c0":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '방송부';","add":[2],"meaning":["WHERE 뒤: <b>행을 고르는 조건<\/b>","문자 값은 작은따옴표 <code>'방송부'<\/code>","결과: 방송부 지원자 8명만 · 나머지 22명은 빠짐","실제 앱에서는 로그인한 담당의 동아리로 고정 → 다른 동아리 행은 볼 수 없음 (권한 관리)"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["박솔","49"],["한별","50"],["서도윤","44"],["신유찬","23"],["황지후","39"],["홍예린","21"],["허윤슬","38"],["석하람","41"]]}},"c1":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '과학부';","add":[2],"meaning":["WHERE 뒤: <b>행을 고르는 조건<\/b>","문자 값은 작은따옴표 <code>'과학부'<\/code>","결과: 과학부 지원자 7명만 · 나머지 23명은 빠짐","실제 앱에서는 로그인한 담당의 동아리로 고정 → 다른 동아리 행은 볼 수 없음 (권한 관리)"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["이바다","34"],["최이슬","40"],["조한결","33"],["안서우","32"],["전시우","42"],["문태오","27"],["백준서","31"]]}},"c2":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '수리정보영재반';","add":[2],"meaning":["WHERE 뒤: <b>행을 고르는 조건<\/b>","문자 값은 작은따옴표 <code>'수리정보영재반'<\/code>","결과: 수리정보영재반 지원자 6명만 · 나머지 24명은 빠짐","실제 앱에서는 로그인한 담당의 동아리로 고정 → 다른 동아리 행은 볼 수 없음 (권한 관리)"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["임다온","28"],["권아린","25"],["송민재","37"],["남궁현","26"],["노은채","48"],["원지안","46"]]}},"c3":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '댄스부';","add":[2],"meaning":["WHERE 뒤: <b>행을 고르는 조건<\/b>","문자 값은 작은따옴표 <code>'댄스부'<\/code>","결과: 댄스부 지원자 5명만 · 나머지 25명은 빠짐","실제 앱에서는 로그인한 담당의 동아리로 고정 → 다른 동아리 행은 볼 수 없음 (권한 관리)"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["정가람","24"],["윤나래","29"],["류하은","30"],["구도하","45"],["심채원","22"]]}},"c4":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '미술부';","add":[2],"meaning":["WHERE 뒤: <b>행을 고르는 조건<\/b>","문자 값은 작은따옴표 <code>'미술부'<\/code>","결과: 미술부 지원자 4명만 · 나머지 26명은 빠짐","실제 앱에서는 로그인한 담당의 동아리로 고정 → 다른 동아리 행은 볼 수 없음 (권한 관리)"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["김하늘","35"],["강누리","36"],["오세린","47"],["배수아","43"]]}}}},"quote":{"cap":"검색 결과","empty":"조건 버튼을 누르면 결과가 표시됩니다.","acts":{"n45":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 면접 >= 45;","add":[2],"meaning":["숫자 값: 따옴표 없이 그대로 <code>면접 &gt;= 45<\/code>","<code>&gt;=<\/code>: 이상 (45점 포함)","결과: 6명"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["박솔","49"],["한별","50"],["오세린","47"],["노은채","48"],["구도하","45"],["원지안","46"]]}},"late":{"sql":"SELECT 이름, 제출시각\nFROM 지원\nWHERE 제출시각 >= '2026-10-05 18:00';","add":[2],"meaning":["날짜·시각 값: 작은따옴표 <code>'2026-10-05 18:00'<\/code>","날짜·시각도 크기 비교 가능: 늦은 시각일수록 큰 값","문자 값도 작은따옴표 <code>'방송부'<\/code> (큰따옴표는 열 이름으로 처리될 수 있음)"],"pre":[],"view":null,"res":{"head":["이름","제출시각"],"rows":[["권아린","2026-10-05 19:10"],["황지후","2026-10-05 18:15"],["류하은","2026-10-05 20:25"]]}}}},"order":{"cap":"방송부 지원자","init":{"pre":[],"view":"SELECT 이름, 면접 FROM 지원 WHERE 지원동아리 = '방송부';","res":{"head":["이름","면접"],"rows":[["박솔","49"],["한별","50"],["서도윤","44"],["신유찬","23"],["황지후","39"],["홍예린","21"],["허윤슬","38"],["석하람","41"]]}},"sort":{"col":1,"label":"면접","desc":"desc","asc":"asc"},"acts":{"desc":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '방송부'\nORDER BY 면접 DESC;","add":[3],"meaning":["<b>DESC<\/b> 내림차순: 큰 값부터","날짜·시각 열을 DESC로 정렬하면 가장 최근 것부터","면접 머리를 한 번 더 누르면 ASC"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["한별","50"],["박솔","49"],["서도윤","44"],["석하람","41"],["황지후","39"],["허윤슬","38"],["신유찬","23"],["홍예린","21"]]}},"asc":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '방송부'\nORDER BY 면접 ASC;","add":[3],"meaning":["<b>ASC<\/b> 오름차순: 작은 값부터","ASC·DESC를 생략하면 <b>ASC<\/b>"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["홍예린","21"],["신유찬","23"],["허윤슬","38"],["황지후","39"],["석하람","41"],["서도윤","44"],["박솔","49"],["한별","50"]]}}}},"limit":{"cap":"방송부","init":{"pre":[],"view":"SELECT 이름, 면접 FROM 지원 WHERE 지원동아리 = '방송부' ORDER BY 면접 DESC;","res":{"head":["이름","면접"],"rows":[["한별","50"],["박솔","49"],["서도윤","44"],["석하람","41"],["황지후","39"],["허윤슬","38"],["신유찬","23"],["홍예린","21"]]}},"badge":{"acts":["pass"],"text":"합격"},"acts":{"pass":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '방송부'\nORDER BY 면접 DESC\nLIMIT 3;","add":[4],"meaning":["LIMIT n: 앞에서 n행만","ORDER BY와 함께: <b>상위 n개<\/b> (정원 3명 → 면접 상위 3명)","합격자 명단은 따로 저장하지 않음 → 볼 때마다 이 SQL을 실행해 계산 (실시간)"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["한별","50"],["박솔","49"],["서도윤","44"]]}},"all":{"sql":"SELECT 이름, 면접\nFROM 지원\nWHERE 지원동아리 = '방송부'\nORDER BY 면접 DESC;","add":[],"meaning":["LIMIT가 없으면 방송부 지원자 8명 전체","순서만 면접 높은 순"],"pre":[],"view":null,"res":{"head":["이름","면접"],"rows":[["한별","50"],["박솔","49"],["서도윤","44"],["석하람","41"],["황지후","39"],["허윤슬","38"],["신유찬","23"],["홍예린","21"]]}}}},"group":{"cap":"동아리별 지원 현황","mode":"cards","unit":{"cnt":"명","avg":"점"},"empty":"현황 버튼을 누르면 카드가 표시됩니다.","acts":{"cnt":{"sql":"SELECT 지원동아리, COUNT(*)\nFROM 지원\nGROUP BY 지원동아리\nORDER BY COUNT(*) DESC;","add":[0,2],"meaning":["<code>GROUP BY 지원동아리<\/code>: 지원동아리 값이 같은 행끼리 묶음","<code>COUNT(*)<\/code>: 묶음마다 행 수","결과: 묶음 하나당 한 행 (동아리 5개 → 5행)","<code>ORDER BY COUNT(*) DESC<\/code>: 많은 쪽부터"],"pre":[],"view":null,"res":{"head":["지원동아리","COUNT(*)"],"rows":[["방송부","8"],["과학부","7"],["수리정보영재반","6"],["댄스부","5"],["미술부","4"]]}},"avg":{"sql":"SELECT 지원동아리, AVG(면접)\nFROM 지원\nGROUP BY 지원동아리\nORDER BY AVG(면접) DESC;","add":[0,3],"meaning":["<code>AVG(열)<\/code>: 묶음마다 평균","<code>ORDER BY AVG(면접) DESC<\/code>: 평균이 높은 쪽부터","화면의 평균은 소수 셋째 자리에서 반올림 (실제 결과: 38.125, 34.1428…)"],"pre":[],"view":null,"res":{"head":["지원동아리","AVG(면접)"],"rows":[["미술부","40.25"],["방송부","38.13"],["수리정보영재반","35.00"],["과학부","34.14"],["댄스부","30.00"]]}}}},"as":{"cap":"총점 순위","empty":"버튼을 누르면 순위가 표시됩니다.","acts":{"top":{"sql":"SELECT 이름, 자소서 + 면접 AS 총점\nFROM 지원\nORDER BY 총점 DESC\nLIMIT 3;","add":[0],"meaning":["<code>자소서 + 면접<\/code>: 행마다 두 열을 더한 값 (100점 만점)","<code>AS 총점<\/code>: 결과 열 이름을 총점으로 바꿈 (없으면 자소서 + 면접 그대로 표시)","별칭은 ORDER BY에서 다시 사용 가능"],"pre":[],"view":null,"res":{"head":["이름","총점"],"rows":[["원지안","96"],["노은채","93"],["한별","92"]]}}}},"like":{"cap":"검색 결과","empty":"검색 버튼을 누르면 결과가 표시됩니다.","acts":{"pre":{"sql":"SELECT 이름\nFROM 지원\nWHERE 이름 LIKE '윤%';","add":[2],"meaning":["<code>%<\/code> = 0개 이상의 아무 글자","<code>'윤%'<\/code>: 윤으로 시작"],"pre":[],"view":null,"res":{"head":["이름"],"rows":[["윤나래"]]}},"suf":{"sql":"SELECT 이름\nFROM 지원\nWHERE 이름 LIKE '%윤';","add":[2],"meaning":["<code>%<\/code> = 0개 이상의 아무 글자","<code>'%윤'<\/code>: 윤으로 끝남"],"pre":[],"view":null,"res":{"head":["이름"],"rows":[["서도윤"]]}},"mid":{"sql":"SELECT 이름\nFROM 지원\nWHERE 이름 LIKE '%윤%';","add":[2],"meaning":["<code>'%윤%'<\/code>: 윤을 포함 → 맨 앞·가운데·맨 끝 모두 해당","앱에서는 해시태그 검색 <code>LIKE '%#고양이%'<\/code>"],"pre":[],"view":null,"res":{"head":["이름"],"rows":[["윤나래"],["서도윤"],["허윤슬"]]}}}},"ins":{"cap":"지원 테이블 · 미술부 행","init":{"pre":[],"view":"SELECT 학번, 이름, 자소서, 면접, 제출시각 FROM 지원 WHERE 지원동아리 = '미술부';","res":{"head":["학번","이름","자소서","면접","제출시각"],"rows":[["10102","김하늘","35","35","2026-10-03 16:15"],["10112","강누리","37","36","2026-10-05 12:40"],["10118","오세린","23","47","2026-10-02 11:45"],["20107","배수아","34","43","2026-10-01 12:05"]]}},"acts":{"submit":{"sql":"INSERT INTO 지원 (학번, 이름, 지원동아리, 제출시각)\nVALUES (20133, '서다온', '미술부', '2026-10-05 21:30');","add":[],"meaning":["INSERT INTO 테이블 (열, …): 값을 넣을 열","VALUES (…): 앞의 열 순서에 맞춘 값 · 문자·날짜는 작은따옴표","적지 않은 열(자소서·면접)은 비어 있음 → 평가 후 UPDATE로 채움","실행 후 지원 테이블: 31행"],"pre":[],"view":"SELECT 학번, 이름, 자소서, 면접, 제출시각 FROM 지원 WHERE 지원동아리 = '미술부';","res":{"head":["학번","이름","자소서","면접","제출시각"],"rows":[["10102","김하늘","35","35","2026-10-03 16:15"],["10112","강누리","37","36","2026-10-05 12:40"],["10118","오세린","23","47","2026-10-02 11:45"],["20107","배수아","34","43","2026-10-01 12:05"],["20133","서다온",null,null,"2026-10-05 21:30"]],"hit":[4]}}}},"upd":{"cap":"미술부 지원 현황 · 면접 순","init":{"pre":["INSERT INTO 지원 (학번, 이름, 지원동아리, 제출시각)\nVALUES (20133, '서다온', '미술부', '2026-10-05 21:30');"],"view":"SELECT 이름, 자소서, 면접 FROM 지원 WHERE 지원동아리 = '미술부' ORDER BY 면접 DESC;","res":{"head":["이름","자소서","면접"],"rows":[["오세린","23","47"],["배수아","34","43"],["강누리","37","36"],["김하늘","35","35"],["서다온",null,null]],"hit":[4]}},"acts":{"save":{"sql":"UPDATE 지원\nSET 자소서 = 40, 면접 = 44\nWHERE 학번 = 20133;","add":[],"meaning":["SET 뒤: <b>바꿀 열 = 새 값<\/b> · 여러 열은 쉼표로 구분","WHERE 뒤: <b>바꿀 행<\/b>의 조건 (기본 키 학번으로 한 행만)","순서: UPDATE → SET → WHERE (SET이 WHERE보다 앞)","현황은 볼 때마다 계산 → 서다온이 바로 면접 2위로"],"pre":["INSERT INTO 지원 (학번, 이름, 지원동아리, 제출시각)\nVALUES (20133, '서다온', '미술부', '2026-10-05 21:30');"],"view":"SELECT 이름, 자소서, 면접 FROM 지원 WHERE 지원동아리 = '미술부' ORDER BY 면접 DESC;","res":{"head":["이름","자소서","면접"],"rows":[["오세린","23","47"],["서다온","40","44"],["배수아","34","43"],["강누리","37","36"],["김하늘","35","35"]],"hit":[1]}}}},"del":{"cap":"지원 테이블 · 수리정보영재반 행","init":{"pre":[],"view":"SELECT 학번, 이름, 자소서, 면접 FROM 지원 WHERE 지원동아리 = '수리정보영재반';","res":{"head":["학번","이름","자소서","면접"],"rows":[["10114","임다온","24","28"],["10125","권아린","41","25"],["10132","송민재","32","37"],["20116","남궁현","26","26"],["20120","노은채","45","48"],["20128","원지안","50","46"]],"hit":[3]}},"acts":{"cancel":{"sql":"DELETE FROM 지원\nWHERE 학번 = 20116;","add":[],"meaning":["DELETE FROM 뒤: 테이블","WHERE 뒤: <b>지울 행<\/b>의 조건 (기본 키 학번)","행 전체를 지우므로 열 이름은 적지 않음","실행 후: 수리정보영재반 6명 → 5명 · 지원 테이블 29행"],"pre":[],"view":"SELECT 학번, 이름, 자소서, 면접 FROM 지원 WHERE 지원동아리 = '수리정보영재반';","res":{"head":["학번","이름","자소서","면접"],"rows":[["10114","임다온","24","28"],["10125","권아린","41","25"],["10132","송민재","32","37"],["20120","노은채","45","48"],["20128","원지안","50","46"]],"gap":[3]}}}}};
-  function e(s){return esc(String(s)).replace(/"/g,'&quot;')}
-  function scrollHit(w){if(!w)return;var h=w.querySelector('tr.hit,tr.gap');w.scrollTop=0;if(h)w.scrollTop=Math.max(0,h.getBoundingClientRect().top-w.getBoundingClientRect().top-w.clientHeight/2)}
-  function fade(el){el.classList.remove('fade');void el.offsetWidth;el.classList.add('fade')}
-  function outHTML(cfg,cur,res){
-    if(!res)return '<p class="mock-empty">'+cfg.empty+'</p>';
-    var h='<div class="cap">'+cfg.cap+' · '+res.rows.length+'행</div>';
-    if(cfg.mode==='cards')return h+'<div class="mcards">'+res.rows.map(function(r){return '<div class="mcard"><span>'+e(r[0])+'</span><b>'+e(r[1])+'<small>'+cfg.unit[cur]+'</small></b><small>'+e(res.head[1])+'</small></div>'}).join('')+'</div>';
-    var badge=cfg.badge&&cfg.badge.acts.indexOf(cur)>=0;
-    h+='<div class="res-wrap scroll short"><table class="res"><thead><tr>'+res.head.map(function(c,i){
-      if(cfg.sort&&cfg.sort.col===i){var nx=cur===cfg.sort.desc?cfg.sort.asc:cfg.sort.desc,ar=cur===cfg.sort.desc?' ▼':cur===cfg.sort.asc?' ▲':' ↕';return '<th><button class="thbtn" data-act="'+nx+'">'+e(c)+ar+'</button></th>'}
-      return '<th>'+e(c)+'</th>'}).join('')+'</tr></thead><tbody>';
-    res.rows.forEach(function(r,i){
-      var cls=(res.hit&&res.hit.indexOf(i)>=0)?' class="hit"':(res.gap&&res.gap.indexOf(i)>=0)?' class="gap"':'';
-      h+='<tr'+cls+'>'+r.map(function(v,j){if(v===null)return '<td class="blank">비어 있음</td>';return '<td>'+e(v)+(badge&&j===0?'<span class="badge">'+cfg.badge.text+'</span>':'')+'</td>'}).join('')+'</tr>';
-    });
-    return h+'</tbody></table></div>';
-  }
-  function mockAct(wrap,key){
-    var cfg=MOCKS[wrap.dataset.mock],a=cfg.acts[key];if(!a)return;
-    wrap.dataset.cur=key;var sl=wrap.querySelector('[data-sel]');if(sl)sl.value=key;
-    var out=wrap.querySelector('.mock-out');out.innerHTML=outHTML(cfg,key,a.res);fade(out);scrollHit(out.querySelector('.scroll'));
-    wrap.querySelector('.hint').hidden=true;var pb=wrap.querySelector('.pbody');pb.hidden=false;
-    pb.querySelector('pre').innerHTML=a.sql.split('\n').map(function(l,i){return '<span class="ln'+(a.add.indexOf(i)>=0?' add':'')+'">'+hl(l)+'</span>'}).join('');
-    pb.querySelector('.meaning').innerHTML=a.meaning.map(function(x){return '<li>'+x+'</li>'}).join('');fade(pb);
-    wrap.querySelectorAll('.mock-tools [data-act]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.act===key))});
-  }
-  function mockReset(wrap){
-    var cfg=MOCKS[wrap.dataset.mock];delete wrap.dataset.cur;
-    wrap.querySelector('.mock-out').innerHTML=outHTML(cfg,'',cfg.init?cfg.init.res:null);
-    wrap.querySelector('.hint').hidden=false;wrap.querySelector('.pbody').hidden=true;
-    wrap.querySelectorAll('.mock-tools [data-act]').forEach(function(b){b.setAttribute('aria-pressed','false')});
-    var sel=wrap.querySelector('[data-sel]');if(sel)sel.selectedIndex=0;
-  }
-  window.__mocks=MOCKS;window.__mockAct=mockAct;
-  document.querySelectorAll('.mockwrap').forEach(function(w){
-    mockReset(w);
-    w.addEventListener('click',function(ev){var b=ev.target.closest('[data-act]');if(!b||!w.contains(b))return;mockAct(w,b.dataset.act);if(ev.detail>0&&document.activeElement&&document.activeElement.blur)document.activeElement.blur()});
-    var sel=w.querySelector('[data-sel]');if(sel)sel.addEventListener('change',function(){mockAct(w,sel.value)});
-  });
-
   // 덱 넘김
   var slides=[].slice.call(document.querySelectorAll('.slide')),progress=document.getElementById('progress'),index=0;
   slides.forEach(function(s,i){var n=s.querySelector('.slide-no');if(n)n.textContent=(i+1)+' / '+slides.length});
-  function show(n){index=Math.max(0,Math.min(slides.length-1,n));slides.forEach(function(s,i){s.classList.toggle('active',i===index)});slides[index].scrollTop=0;slides[index].querySelectorAll('.res-wrap.scroll').forEach(scrollHit);progress.style.width=((index+1)/slides.length*100)+'%';try{history.replaceState(null,'','#'+(index+1))}catch(e){}}
+  function show(n){index=Math.max(0,Math.min(slides.length-1,n));slides.forEach(function(s,i){s.classList.toggle('active',i===index)});slides[index].scrollTop=0;progress.style.width=((index+1)/slides.length*100)+'%';try{history.replaceState(null,'','#'+(index+1))}catch(e){}}
   document.getElementById('prev').addEventListener('click',function(){show(index-1)});
   document.getElementById('next').addEventListener('click',function(){show(index+1)});
   document.addEventListener('keydown',function(e){
-    if(e.target.closest&&e.target.closest('.widget,.mockwrap'))return;
+    if(e.target.closest&&e.target.closest('.widget'))return;
     if(e.target.tagName==='BUTTON'&&(e.key===' '||e.key==='Enter'))return;
     if(['ArrowRight','PageDown',' '].indexOf(e.key)>=0){e.preventDefault();show(index+1)}
     else if(['ArrowLeft','PageUp'].indexOf(e.key)>=0){e.preventDefault();show(index-1)}
     else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
   });
   document.querySelector('.deck').addEventListener('click',function(e){
-    if(e.target.closest('button,a,select,input,.widget,.mockwrap,.answer,.ask,pre,table'))return;
+    if(e.target.closest('button,a,.widget,.answer,.ask,pre,table'))return;
     if(String(window.getSelection&&window.getSelection())!=='')return;
     show(index+1);
   });
