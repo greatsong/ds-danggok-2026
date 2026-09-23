@@ -15,6 +15,7 @@
   .ctl .seg { display:flex; border:1px solid var(--border); border-radius:999px; overflow:hidden; background:var(--card); }
   .ctl .seg button { border:0; background:transparent; padding:.45rem 1rem; font-size:.95rem;
     color:var(--text-soft); cursor:pointer; font-family:var(--font); }
+  #목표 { flex-wrap:wrap; border-radius:14px; }   /* 좁은 화면에서는 목표 버튼이 두 줄로 내려간다 */
   .ctl .seg button.on { background:var(--accent); color:#fff; font-weight:700; }
   .ctl .live { margin-left:auto; font-size:.85rem; color:var(--muted); display:flex; align-items:center; gap:.4rem; }
   .dot { width:.5rem; height:.5rem; border-radius:50%; background:var(--green); }
@@ -93,10 +94,18 @@
   <span class="eyebrow">Ⅲ. 데이터 모델링과 평가 · 12차시</span>
   <h1>성능 높이기 <span class="a">챌린지 순위판</span></h1>
   <div class="under"></div>
-  <p class="lead">안내 인원이 상담 정원 <b>500명 이하</b>인 채로 대상자 82명 가운데 가장 많이 찾아낸 기록입니다.
-  찾아낸 환자가 같으면 <b>안내 인원이 적은 기록</b>이 앞 순위입니다. 수업 기본 설정은 <b>67명</b>입니다. 이 선을 넘으면 <b>베이스라인 통과</b>가 붙습니다.</p>
+  <p class="lead" id="설명">목표마다 순위를 따로 셉니다. 지표가 같으면 찾아낸 환자가 많은 쪽, 그다음은 안내 인원이 적은 쪽이 앞섭니다.</p>
   <p class="mini"><a href="../app/stroke/" target="_blank" rel="noopener">🩺 실습실에서 기록 올리기 →</a></p>
 
+  <div class="ctl">
+    <div class="seg" id="목표">
+      <button data-v="정확도">정확도</button>
+      <button data-v="재현율">재현율</button>
+      <button data-v="정밀도">정밀도</button>
+      <button data-v="F1">F1</button>
+      <button data-v="정원" class="on">정원 안 찾아낸 환자</button>
+    </div>
+  </div>
   <div class="ctl">
     <div class="seg" id="반">
       <button data-v="all" class="on">전체</button>
@@ -138,6 +147,6 @@
 <script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
 <script src="key.js?v=2"></script>
 <script src="../gallery/config.js"></script>
-<script src="app.js?v=14"></script>
+<script src="app.js?v=15"></script>
 </body>
 </html>

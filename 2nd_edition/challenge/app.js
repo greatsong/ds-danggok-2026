@@ -4,7 +4,9 @@
   var 설정 = window.APP_CONFIG || {};
   var 주소 = 설정.SUPABASE_URL, 키 = 설정.SUPABASE_KEY;
   var 정원 = 500, 기본기록 = 67, 대상자 = 82;
-  var 고른반 = 'all', 지난최고 = {}, 첫판 = true;
+  var 고른반 = 'all', 고른목표 = '정원', 지난최고 = {}, 첫판 = true;
+  var 목표이름 = { '정확도': '정확도', '재현율': '재현율', '정밀도': '정밀도', 'F1': 'F1',
+                  '정원': '정원 500명 안에서 찾아낸 환자' };
   var 교사용 = (window.CHALLENGE_MODE === 'teacher');   // 교사용에서만 설정과 확인 결과를 보여 준다
   var $ = function (id) { return document.getElementById(id); };
 
@@ -36,11 +38,34 @@
     return !!(옛것 && 옛것[0] === r.sent && 옛것[1] === r.found);
   }
 
-  function 앞서나(a, b) {                               // 찾아낸 환자가 많을수록, 같으면 안내 인원이 적을수록 앞선다
-    return a.found - b.found || b.sent - a.sent;
+  function 목표(r) { return r.goal || '정원'; }         // 목표 칸이 생기기 전의 기록은 정원 목표다
+
+  function 지표값(r, 이름) {                           // 올라온 값 대신 안내 인원·찾아낸 환자로 다시 계산한다
+    var K = window.CHALLENGE_KEY, 머리 = K && K.head[r.missing === '지운다' ? '1' : '0'];
+    if (!머리) return r[{ '정확도': 'accuracy', '재현율': 'recall', '정밀도': 'precision', 'F1': 'f1' }[이름]];
+    var TP = r.found, FP = r.sent - r.found, FN = 머리.pos - r.found, TN = 머리.n - 머리.pos - FP;
+    var 정밀도 = r.sent ? TP / r.sent : null, 재현율 = TP / 머리.pos;
+    if (이름 === '정확도') return (TP + TN) / 머리.n;
+    if (이름 === '재현율') return 재현율;
+    if (이름 === '정밀도') return 정밀도;
+    return (정밀도 && 정밀도 + 재현율 > 0) ? 2 * 정밀도 * 재현율 / (정밀도 + 재현율) : null;
+  }
+
+  function 점수(r) {                                    // 고른 목표의 점수. 정원 목표는 찾아낸 환자 수
+    return 고른목표 === '정원' ? r.found : 지표값(r, 고른목표);
+  }
+  function 점수글(r) {
+    var v = 점수(r);
+    return 고른목표 === '정원' ? v + '명' : (v == null ? '—' : Number(v).toFixed(4));
+  }
+
+  function 앞서나(a, b) {                               // 점수가 높을수록, 같으면 찾아낸 환자가 많을수록, 그다음 안내 인원이 적을수록 앞선다
+    var A = 점수(a), B = 점수(b);
+    A = A == null ? -1 : A; B = B == null ? -1 : B;
+    return (A - B) || (a.found - b.found) || (b.sent - a.sent);
   }
   function 같은점수(a, b) {
-    return a.found === b.found && a.sent === b.sent;
+    return 앞서나(a, b) === 0;
   }
 
   function 글자(s) {
@@ -51,8 +76,10 @@
   function 시각(t) {
     return new Date(t).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
   }
-  function 지표(r, 이름) {
-    return (r && r[이름] != null) ? Number(r[이름]).toFixed(4) : '—';
+  function 지표(r, 이름) {                             // 표에 적는 네 지표도 안내 인원·찾아낸 환자로 다시 계산한다
+    if (!r) return '—';
+    var v = 지표값(r, { accuracy: '정확도', recall: '재현율', precision: '정밀도', f1: 'F1' }[이름]);
+    return v != null ? Number(v).toFixed(4) : '—';
   }
   function 모델글(r) {
     return r.model || '';
@@ -73,7 +100,8 @@
       it.시도 += 1;
       if (r.created_at > it.마지막) it.마지막 = r.created_at;
       if (r.확인 === false) { it.의심 += 1; return; }   // 맞지 않는 기록은 최고로 치지 않는다
-      if (r.within_quota && (!it.최고 || 앞서나(r, it.최고) > 0)) it.최고 = r;
+      if (고른목표 === '정원' && !r.within_quota) return;   // 정원 목표는 정원 안에 든 기록만 센다
+      if (!it.최고 || 앞서나(r, it.최고) > 0) it.최고 = r;
     });
     var 목록 = Object.values(표);
     if (!교사용) {                                      // 학생 화면에서는 맞지 않는 기록만 낸 팀을 아예 뺀다
@@ -111,7 +139,8 @@
         '<div class="medal">' + 메달 + '</div>' +
         '<div class="who">' + 글자(it.팀명) + '</div>' +
         '<div class="cls">' + 글자(it.반) + ' · 시도 ' + it.시도 + '번</div>' +
-        '<div class="big">' + b.found + '<span>명</span></div>' +
+        '<div class="big">' + (고른목표 === '정원' ? b.found + '<span>명</span>' : 점수글(b)) + '</div>' +
+        (고른목표 === '정원' ? '' : '<div class="set">찾아낸 환자 ' + b.found + '명</div>') +
         '<div class="set">정확도 ' + 지표(b,'accuracy') + ' · 재현율 ' + 지표(b,'recall') +
           ' · 정밀도 ' + 지표(b,'precision') + ' · F1 ' + 지표(b,'f1') + '</div>' +
         '<div class="set">안내 ' + b.sent.toLocaleString() + '명 · ' +
@@ -123,28 +152,27 @@
     var 반들 = ['월수금반', '화수목반'];
     var 값 = 반들.map(function (반) {
       var 목록 = 사람별(전체.filter(function (r) { return r.class_id === 반; }));
-      var 최고 = 목록.length && 목록[0].최고 ? 목록[0].최고.found : 0;
-      var 안내 = 목록.length && 목록[0].최고 ? 목록[0].최고.sent : 0;
-      return { 반: 반, 최고: 최고, 안내: 안내, 인원: 목록.length,
+      var 첫 = 목록.length && 목록[0].최고 ? 목록[0].최고 : null;
+      return { 반: 반, 첫: 첫, 최고: 첫 ? 1 : 0, 인원: 목록.length,
                넘김: 목록.filter(function (x) { return x.최고 && x.최고.found > 기본기록; }).length };
     });
-    var 차이 = (값[0].최고 - 값[1].최고) || (값[1].안내 - 값[0].안내);
+    var 차이 = (값[0].첫 && 값[1].첫) ? 앞서나(값[0].첫, 값[1].첫) : (값[0].첫 ? 1 : (값[1].첫 ? -1 : 0));
     var 이긴쪽 = 차이 === 0 ? -1 : (차이 > 0 ? 0 : 1);
     $('반대항').innerHTML = 값.map(function (v, i) {
       return '<div class="side' + (i === 이긴쪽 && v.최고 > 0 ? ' win' : '') + '">' +
         '<div class="n">' + v.반 + '</div>' +
-        '<div class="b">' + (v.최고 || '—') + (v.최고 ? '명' : '') + '</div>' +
-        (v.최고 ? '<div class="s">안내 ' + v.안내.toLocaleString() + '명</div>' : '') +
-        '<div class="s">참가 ' + v.인원 + '명 · 기본을 넘긴 사람 ' + v.넘김 + '명</div></div>';
+        '<div class="b">' + (v.첫 ? 점수글(v.첫) : '—') + '</div>' +
+        (v.첫 ? '<div class="s">찾아낸 환자 ' + v.첫.found + '명 · 안내 ' + v.첫.sent.toLocaleString() + '명</div>' : '') +
+        '<div class="s">참가 ' + v.인원 + '팀' + (고른목표 === '정원' ? ' · 기본을 넘긴 팀 ' + v.넘김 + '팀' : '') + '</div></div>';
     }).join('');
   }
 
   function 순위그리기(목록) {
     var 새로움 = {};
     목록.forEach(function (it) {
-      var 점수 = it.최고 ? it.최고.found * 10000 - it.최고.sent : -1;   // 안내 인원을 줄여도 새 기록이다
-      if (!첫판 && 지난최고[it.열쇠] !== undefined && 점수 > 지난최고[it.열쇠]) 새로움[it.열쇠] = true;
-      지난최고[it.열쇠] = 점수;
+      var 지난 = 지난최고[it.열쇠];                        // 안내 인원만 줄여도 새 기록이다
+      if (!첫판 && it.최고 && 지난 && 앞서나(it.최고, 지난) > 0) 새로움[it.열쇠] = true;
+      지난최고[it.열쇠] = it.최고;
     });
     첫판 = false;
 
@@ -157,7 +185,7 @@
 
     $('순위').innerHTML = 목록.map(function (it) {
       var b = it.최고;
-      var 이김 = b && b.found > 기본기록;
+      var 이김 = b && 고른목표 === '정원' && b.found > 기본기록;
       var 폭 = b ? Math.round(b.found / 대상자 * 100) : 0;
       var 메달 = it.순위 ? ['🥇', '🥈', '🥉'][it.순위 - 1] : null;
       return '<tr class="' + (이김 ? 'beat ' : '') + (새로움[it.열쇠] ? 'fresh' : '') + '">' +
@@ -166,7 +194,8 @@
           (교사용 && it.의심 ? '<span class="badge3">확인 필요 ' + it.의심 + '건</span>' : '') +
           '<div class="set2">' + 글자(it.반) + '</div></td>' +
         '<td><div class="bar"><i style="width:' + 폭 + '%"></i><b>' +
-          (b ? b.found + '명 · ' + 폭 + '%' : (it.의심 ? '확인 필요' : '정원 초과')) + '</b></div></td>' +
+          (b ? (고른목표 === '정원' ? '' : 고른목표 + ' ' + 점수글(b) + ' · ') + b.found + '명 · ' + 폭 + '%'
+             : (it.의심 ? '확인 필요' : '정원 초과')) + '</b></div></td>' +
         '<td class="num">' + (b ? b.sent.toLocaleString() + '명' : '—') + '</td>' +
         '<td class="num hide">' + 지표(b, 'accuracy') + '</td>' +
         '<td class="num">' + 지표(b, 'recall') + '</td>' +
@@ -181,9 +210,9 @@
   function 이력그리기(대상) {
     function 점(줄, 이름, 색, 투명, 크기) {
       return { x: 줄.map(function (r) { return r.created_at; }),
-               y: 줄.map(function (r) { return r.found; }),
-               text: 줄.map(function (r) { return r.nickname + ' · 안내 ' + r.sent + '명'; }),
-               hovertemplate: '%{text}<br>찾아낸 환자 %{y}명<extra></extra>',
+               y: 줄.map(function (r) { return 점수(r); }),
+               text: 줄.map(function (r) { return r.nickname + ' · 찾아낸 환자 ' + r.found + '명 · 안내 ' + r.sent + '명'; }),
+               hovertemplate: '%{text}<br>' + (고른목표 === '정원' ? '찾아낸 환자 %{y}명' : 고른목표 + ' %{y:.4f}') + '<extra></extra>',
                mode: 'markers', type: 'scatter', name: 이름,
                marker: { size: 크기, color: 색, opacity: 투명, line: { width: 0 } } };
     }
@@ -196,10 +225,10 @@
       font: { family: 'Apple SD Gothic Neo, sans-serif', color: '#6b5836', size: 12 },
       margin: { l: 52, r: 16, t: 10, b: 44 },
       xaxis: { title: '올린 시각', gridcolor: '#f7edcf', tickformat: '%H:%M', hoverformat: '%H:%M' },
-      yaxis: { title: '찾아낸 환자(명)', rangemode: 'tozero', gridcolor: '#f7edcf' },
-      shapes: [{ type: 'line', xref: 'paper', x0: 0, x1: 1, y0: 기본기록, y1: 기본기록,
+      yaxis: { title: 고른목표 === '정원' ? '찾아낸 환자(명)' : 고른목표, rangemode: 'tozero', gridcolor: '#f7edcf' },
+      shapes: 고른목표 !== '정원' ? [] : [{ type: 'line', xref: 'paper', x0: 0, x1: 1, y0: 기본기록, y1: 기본기록,
                  line: { color: '#54a24b', width: 2, dash: 'dot' } }],
-      annotations: [{ xref: 'paper', x: 0.01, y: 기본기록, text: '수업 기본 ' + 기본기록 + '명',
+      annotations: 고른목표 !== '정원' ? [] : [{ xref: 'paper', x: 0.01, y: 기본기록, text: '수업 기본 ' + 기본기록 + '명',
                       showarrow: false, yshift: 13, font: { size: 11, color: '#54a24b' } }],
       legend: { orientation: 'h', y: 1.15, x: 0 }
     }, { displayModeBar: false, responsive: true });
@@ -207,7 +236,8 @@
 
   function 그리기(전체) {
     전체.forEach(function (r) { r.확인 = 확인(r); });
-    var 대상 = 고른반 === 'all' ? 전체 : 전체.filter(function (r) { return r.class_id === 고른반; });
+    var 이목표 = 전체.filter(function (r) { return 목표(r) === 고른목표; });
+    var 대상 = 고른반 === 'all' ? 이목표 : 이목표.filter(function (r) { return r.class_id === 고른반; });
     var 목록 = 사람별(대상);
     시상대그리기(목록);
     $('s인원').textContent = 목록.length + '팀';
@@ -218,9 +248,10 @@
       의심칸.textContent = 의심 + '건';
       의심칸.style.color = 의심 ? 'var(--red)' : '';
     }
-    $('s넘김').textContent = 목록.filter(function (x) { return x.최고 && x.최고.found > 기본기록; }).length + '팀';
-    $('s최고').textContent = (목록[0] && 목록[0].최고) ? 목록[0].최고.found + '명' : '—';
-    반대항그리기(전체);
+    $('s넘김').textContent = 고른목표 !== '정원' ? '—' :
+      목록.filter(function (x) { return x.최고 && x.최고.found > 기본기록; }).length + '팀';
+    $('s최고').textContent = (목록[0] && 목록[0].최고) ? 점수글(목록[0].최고) : '—';
+    반대항그리기(이목표);
     순위그리기(목록);
     이력그리기(대상);
   }
@@ -243,6 +274,11 @@
       });
   }
 
+  $('목표').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    [].forEach.call(this.querySelectorAll('button'), function (x) { x.classList.remove('on'); });
+    b.classList.add('on'); 고른목표 = b.dataset.v; 첫판 = true; 지난최고 = {}; 읽기();
+  });
   $('반').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
     [].forEach.call(this.querySelectorAll('button'), function (x) { x.classList.remove('on'); });
