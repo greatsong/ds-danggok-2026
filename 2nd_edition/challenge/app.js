@@ -18,18 +18,29 @@
     // 앱이 보내는 이름은 정식 이름(로지스틱 회귀·의사결정트리)이다. 옛 기록의 교재 이름도 함께 받는다
     var 이름 = r.model || '';
     var 모델 = (이름.indexOf('로지스틱') >= 0 || 이름.indexOf('확률') >= 0) ? 'L' : 'T';
-    var 값 = 모델 === 'L' ? Number(r.threshold).toFixed(2) : String(r.depth);
     return (r.missing === '지운다' ? '1' : '0') + (r.weighted ? '1' : '0') +
-           번호.join('') + 모델 + 값;
+           번호.join('') + 모델 + (모델 === 'T' ? String(r.depth) : '');
   }
 
   function 확인(r) {
     var K = window.CHALLENGE_KEY;
     if (!K) return null;                                 // 정답표가 없으면 판정하지 않는다
     var k = 열쇠(r);
-    var 정답 = k && K.key[k];
-    if (!정답) return false;
-    return 정답[0] === r.sent && 정답[1] === r.found;
+    var 줄 = k && K.key[k];
+    if (!줄) return false;
+    var 자리 = Math.round(Number(r.threshold) / 0.05) - 1;   // 기준값 0.05~0.95가 차례로 들어 있다
+    var 정답 = 줄[자리];
+    if (정답 && 정답[0] === r.sent && 정답[1] === r.found) return true;
+    // 트리에 기준값을 쓰기 전(2026-09-23 전)의 기록은 기준값과 상관없이 채점됐다
+    var 옛것 = k.slice(-1) !== 'L' && K.key[k.replace(/T(\d+)$/, 'P$1')];
+    return !!(옛것 && 옛것[0] === r.sent && 옛것[1] === r.found);
+  }
+
+  function 앞서나(a, b) {                               // 찾아낸 환자가 많을수록, 같으면 안내 인원이 적을수록 앞선다
+    return a.found - b.found || b.sent - a.sent;
+  }
+  function 같은점수(a, b) {
+    return a.found === b.found && a.sent === b.sent;
   }
 
   function 글자(s) {
@@ -62,25 +73,25 @@
       it.시도 += 1;
       if (r.created_at > it.마지막) it.마지막 = r.created_at;
       if (r.확인 === false) { it.의심 += 1; return; }   // 맞지 않는 기록은 최고로 치지 않는다
-      if (r.within_quota && (!it.최고 || r.found > it.최고.found)) it.최고 = r;
+      if (r.within_quota && (!it.최고 || 앞서나(r, it.최고) > 0)) it.최고 = r;
     });
     var 목록 = Object.values(표);
     if (!교사용) {                                      // 학생 화면에서는 맞지 않는 기록만 낸 팀을 아예 뺀다
       목록 = 목록.filter(function (it) { return it.최고 || it.의심 === 0; });
     }
     return 목록.sort(function (a, b) {
-      var A = a.최고 ? a.최고.found : -1, B = b.최고 ? b.최고.found : -1;
-      return B - A || a.마지막.localeCompare(b.마지막);
+      if (!a.최고 || !b.최고) return (b.최고 ? 1 : 0) - (a.최고 ? 1 : 0) || a.마지막.localeCompare(b.마지막);
+      return 앞서나(b.최고, a.최고) || a.마지막.localeCompare(b.마지막);
     });
   }
 
-  function 순위계산(목록, i) {                          // 동점이면 같은 순위
-    var 점수 = 목록[i].최고 ? 목록[i].최고.found : null;
-    if (점수 === null) return null;
+  function 순위계산(목록, i) {                          // 찾아낸 환자와 안내 인원이 모두 같으면 같은 순위
+    var 나 = 목록[i].최고;
+    if (!나) return null;
     var 앞 = 0;
     for (var k = 0; k < i; k++) {
-      var s2 = 목록[k].최고 ? 목록[k].최고.found : null;
-      if (s2 !== null && s2 > 점수) 앞 += 1;
+      var 남 = 목록[k].최고;
+      if (남 && 앞서나(남, 나) > 0) 앞 += 1;
     }
     return 앞 + 1;
   }
@@ -113,14 +124,17 @@
     var 값 = 반들.map(function (반) {
       var 목록 = 사람별(전체.filter(function (r) { return r.class_id === 반; }));
       var 최고 = 목록.length && 목록[0].최고 ? 목록[0].최고.found : 0;
-      return { 반: 반, 최고: 최고, 인원: 목록.length,
+      var 안내 = 목록.length && 목록[0].최고 ? 목록[0].최고.sent : 0;
+      return { 반: 반, 최고: 최고, 안내: 안내, 인원: 목록.length,
                넘김: 목록.filter(function (x) { return x.최고 && x.최고.found > 기본기록; }).length };
     });
-    var 이긴쪽 = 값[0].최고 === 값[1].최고 ? -1 : (값[0].최고 > 값[1].최고 ? 0 : 1);
+    var 차이 = (값[0].최고 - 값[1].최고) || (값[1].안내 - 값[0].안내);
+    var 이긴쪽 = 차이 === 0 ? -1 : (차이 > 0 ? 0 : 1);
     $('반대항').innerHTML = 값.map(function (v, i) {
       return '<div class="side' + (i === 이긴쪽 && v.최고 > 0 ? ' win' : '') + '">' +
         '<div class="n">' + v.반 + '</div>' +
         '<div class="b">' + (v.최고 || '—') + (v.최고 ? '명' : '') + '</div>' +
+        (v.최고 ? '<div class="s">안내 ' + v.안내.toLocaleString() + '명</div>' : '') +
         '<div class="s">참가 ' + v.인원 + '명 · 기본을 넘긴 사람 ' + v.넘김 + '명</div></div>';
     }).join('');
   }
@@ -128,17 +142,17 @@
   function 순위그리기(목록) {
     var 새로움 = {};
     목록.forEach(function (it) {
-      var 점수 = it.최고 ? it.최고.found : -1;
+      var 점수 = it.최고 ? it.최고.found * 10000 - it.최고.sent : -1;   // 안내 인원을 줄여도 새 기록이다
       if (!첫판 && 지난최고[it.열쇠] !== undefined && 점수 > 지난최고[it.열쇠]) 새로움[it.열쇠] = true;
       지난최고[it.열쇠] = 점수;
     });
     첫판 = false;
 
-    var 앞점수 = null, 앞순위 = 0;
-    목록.forEach(function (it, i) {                       // 동점이면 같은 순위, 다음은 건너뛴다
-      var 점수 = it.최고 ? it.최고.found : null;
-      it.순위 = (점수 === null) ? null : (점수 === 앞점수 ? 앞순위 : i + 1);
-      if (점수 !== null) { 앞점수 = 점수; 앞순위 = it.순위; }
+    var 앞기록 = null, 앞순위 = 0;
+    목록.forEach(function (it, i) {                       // 찾아낸 환자와 안내 인원이 모두 같으면 같은 순위
+      var b = it.최고;
+      it.순위 = !b ? null : (앞기록 && 같은점수(b, 앞기록) ? 앞순위 : i + 1);
+      if (b) { 앞기록 = b; 앞순위 = it.순위; }
     });
 
     $('순위').innerHTML = 목록.map(function (it) {

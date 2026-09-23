@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>페이지를 찾을 수 없습니다</title>
+<script>
+  // 브라우저 실습실(app/<이름>/)의 둘째 페이지 이후에서 새로고침하면 주소가 app/<이름>/<페이지>가 되어
+  // GitHub Pages가 이 파일을 보여 준다. 실습실 첫 화면으로 되돌린다. 적은 내용은 브라우저에 남아 있다.
+  (function () {
+    var m = location.pathname.match(/^(.*\/app\/[^\/]+\/)([^\/]+)\/?$/);
+    if (m) location.replace(m[1]);
+  })();
+</script>
+<style>
+  body { font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif; background: #fffdf7;
+         color: #3a2e1a; padding: 56px 24px; text-align: center; }
+  a { color: #b45309; }
+</style>
+</head>
+<body>
+  <h2>페이지를 찾을 수 없습니다</h2>
+  <p><a href="/ds-danggok-2026/">교재 첫 화면으로 가기</a></p>
+</body>
+</html>
