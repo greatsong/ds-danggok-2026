@@ -59,13 +59,10 @@
     return 고른목표 === '정원' ? v + '명' : (v == null ? '—' : Number(v).toFixed(4));
   }
 
-  function 앞서나(a, b) {                               // 점수가 높을수록, 같으면 찾아낸 환자가 많을수록, 그다음 안내 인원이 적을수록 앞선다
+  function 앞서나(a, b) {                               // 점수가 높을수록 앞선다. 같으면 먼저 올린 기록이 앞선다
     var A = 점수(a), B = 점수(b);
     A = A == null ? -1 : A; B = B == null ? -1 : B;
-    return (A - B) || (a.found - b.found) || (b.sent - a.sent);
-  }
-  function 같은점수(a, b) {
-    return 앞서나(a, b) === 0;
+    return (A - B) || b.created_at.localeCompare(a.created_at);
   }
 
   function 글자(s) {
@@ -101,7 +98,7 @@
       if (r.created_at > it.마지막) it.마지막 = r.created_at;
       if (r.확인 === false) { it.의심 += 1; return; }   // 맞지 않는 기록은 최고로 치지 않는다
       if (고른목표 === '정원' && !r.within_quota) return;   // 정원 목표는 정원 안에 든 기록만 센다
-      if (!it.최고 || 앞서나(r, it.최고) > 0) it.최고 = r;
+      if (!it.최고 || 점수(r) > 점수(it.최고)) it.최고 = r;   // 같은 점수면 먼저 낸 기록을 남긴다
     });
     var 목록 = Object.values(표);
     if (!교사용) {                                      // 학생 화면에서는 맞지 않는 기록만 낸 팀을 아예 뺀다
@@ -109,19 +106,12 @@
     }
     return 목록.sort(function (a, b) {
       if (!a.최고 || !b.최고) return (b.최고 ? 1 : 0) - (a.최고 ? 1 : 0) || a.마지막.localeCompare(b.마지막);
-      return 앞서나(b.최고, a.최고) || a.마지막.localeCompare(b.마지막);
+      return 앞서나(b.최고, a.최고);
     });
   }
 
-  function 순위계산(목록, i) {                          // 찾아낸 환자와 안내 인원이 모두 같으면 같은 순위
-    var 나 = 목록[i].최고;
-    if (!나) return null;
-    var 앞 = 0;
-    for (var k = 0; k < i; k++) {
-      var 남 = 목록[k].최고;
-      if (남 && 앞서나(남, 나) > 0) 앞 += 1;
-    }
-    return 앞 + 1;
+  function 순위계산(목록, i) {                          // 점수가 같으면 먼저 올린 팀이 앞서므로 같은 순위는 없다
+    return 목록[i].최고 ? i + 1 : null;
   }
 
   function 시상대그리기(목록) {
@@ -170,18 +160,13 @@
   function 순위그리기(목록) {
     var 새로움 = {};
     목록.forEach(function (it) {
-      var 지난 = 지난최고[it.열쇠];                        // 안내 인원만 줄여도 새 기록이다
-      if (!첫판 && it.최고 && 지난 && 앞서나(it.최고, 지난) > 0) 새로움[it.열쇠] = true;
+      var 지난 = 지난최고[it.열쇠];
+      if (!첫판 && it.최고 && 지난 && 점수(it.최고) > 점수(지난)) 새로움[it.열쇠] = true;
       지난최고[it.열쇠] = it.최고;
     });
     첫판 = false;
 
-    var 앞기록 = null, 앞순위 = 0;
-    목록.forEach(function (it, i) {                       // 찾아낸 환자와 안내 인원이 모두 같으면 같은 순위
-      var b = it.최고;
-      it.순위 = !b ? null : (앞기록 && 같은점수(b, 앞기록) ? 앞순위 : i + 1);
-      if (b) { 앞기록 = b; 앞순위 = it.순위; }
-    });
+    목록.forEach(function (it, i) { it.순위 = 순위계산(목록, i); });
 
     $('순위').innerHTML = 목록.map(function (it) {
       var b = it.최고;
