@@ -29,8 +29,13 @@ create table if not exists public.challenge_log (
   recall        numeric(6,4),
   precision     numeric(6,4),
   f1            numeric(6,4),
-  within_quota  boolean not null                          -- 안내 인원이 정원 500명 이하인가
+  within_quota  boolean not null,                         -- 안내 인원이 정원 500명 이하인가
+  goal          text not null default '정원'              -- 학생이 고른 목표(2026-09-23 추가)
+                check (goal in ('정확도', '재현율', '정밀도', 'F1', '정원'))
 );
+
+-- 표를 이미 만든 뒤라면 아래 한 줄만 실행한다
+--   alter table public.challenge_log add column if not exists goal text not null default '정원' check (goal in ('정확도', '재현율', '정밀도', 'F1', '정원'));
 
 create index if not exists challenge_log_class_idx   on public.challenge_log (class_id);
 create index if not exists challenge_log_created_idx on public.challenge_log (created_at);
