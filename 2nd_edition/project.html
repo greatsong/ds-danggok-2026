@@ -46,7 +46,7 @@
     <tbody>
       <tr><td><b>1주</b></td><td>팀을 정하고, 주제 카드의 질문을 데이터로 답할 수 있는 형태로 다듬고, 데이터를 확보합니다</td><td>데이터 찾기 도움</td><td>"왜 우리가 이 주제인가" 한 문단</td><td><b>데이터 승인</b>(3차시)</td></tr>
       <tr><td><b>2주</b></td><td>데이터의 구멍·이상값·표기 흔들림을 확인하고 전처리합니다</td><td>코드 전부</td><td>뺄 값과 남길 값의 기준</td><td>없음</td></tr>
-      <tr><td><b>3주</b></td><td>질문에 맞는 방법(회귀·분류·군집·연관) 하나를 골라 분석하고 기준선과 비교합니다</td><td>코드 전부</td><td>어느 방법을 쓸지, 기준선은 무엇인지</td><td><b>중간 점검</b>(9차시, 결과 1개와 지표 1개를 2분 안에 설명)</td></tr>
+      <tr><td><b>3주</b></td><td>질문에 맞는 방법(회귀·분류·군집·연관) 하나를 고르고, 그 안에서 모델 종류 몇 가지(예: 로지스틱·k-NN·결정 트리·랜덤 포레스트·XGBoost)를 같은 조건에서 비교해 하나를 택합니다. 기준선과도 비교합니다</td><td>코드 전부</td><td>어느 방법·어느 모델을 쓸지, 왜 그것인지, 기준선은 무엇인지</td><td><b>중간 점검</b>(9차시, 결과 1개와 지표 1개를 2분 안에 설명)</td></tr>
       <tr><td><b>4주</b></td><td>결과를 해석하고, 한계를 적고, README를 완성합니다</td><td><b>반론 역할</b>(4절)</td><td>해석은 팀이 씁니다</td><td>12차시에 저장소를 동결합니다</td></tr>
       <tr><td><b>5주</b></td><td>발표와 문답</td><td>발표 자료 도움</td><td>문답</td><td><b>발표</b> 6분 + 문답 3분</td></tr>
     </tbody>
@@ -75,7 +75,7 @@ code/main.py        실행 코드. 바꿀 때마다 커밋합니다
 log/01.md ~ 12.md   차시별 기록. 팀원 각자 섹션을 씁니다</pre></div>
 
   <h3>README 틀</h3>
-  <p>아래 틀을 README.md에 붙여 넣고 채웁니다. 팀원은 학번과 이름으로 씁니다. "왜 이 주제인가"와 "결과 해석"은 반드시 팀이 직접 씁니다.</p>
+  <p>아래 틀을 README.md에 붙여 넣고 채웁니다. 팀원은 학번과 이름으로 씁니다. "왜 이 주제인가", "결과 해석", "더 해 보고 싶은 것", "느끼고 배운 점"은 반드시 팀이 직접 씁니다. 발표 슬라이드도 이 순서를 따릅니다.</p>
   <div class="codewrap code"><div class="label">README.md</div><pre># (팀 이름) — (핵심 질문 한 줄)
 
 ## 팀원
@@ -108,6 +108,14 @@ log/01.md ~ 12.md   차시별 기록. 팀원 각자 섹션을 씁니다</pre></d
 ## 한계
 - 이 결과를 믿을 수 없는 이유(수치로):
 - 이 결과를 잘못 쓰면 생길 수 있는 일:
+
+## 더 해 보고 싶은 것 (교과 연계 · 진로)
+- 교과 연계:
+- 진로 분야:
+
+## 느끼고 배운 점 (AI 활용 · 데이터 분석)
+- 10101 홍길동:
+- 10102 김영희:
 
 ## 실행 방법
 code/main.py 실행. 필요한 라이브러리는 requirements.txt.
@@ -150,6 +158,19 @@ code/main.py 실행. 필요한 라이브러리는 requirements.txt.
   <p>세 가지 반론을 읽고, 받아들일 것은 해석에 반영하고 받아들이지 않을 것은 이유를 적습니다. 그 내용이 README의 "AI에게 반론을 받고 고친 점"과 "한계"에 들어갑니다.</p>
 
   <h2>5. 발표와 문답 — 질문은 미리 공개합니다</h2>
+  <p>발표 슬라이드는 다음 열 항목을 이 순서로 담습니다. 문장으로 길게 쓰지 말고 키워드 중심으로, 필요한 곳에 그래프를 넣습니다.</p>
+  <ol>
+    <li>우리 팀의 데이터셋</li>
+    <li>이 문제를 선택한 이유</li>
+    <li>어떤 과정으로 분석했는지</li>
+    <li>어떤 모델을 고려했는지(실제 모델 종류를 같은 조건에서 비교한 표)</li>
+    <li>왜 이 모델을 선택했는지(점수만이 아니라 이유)</li>
+    <li>우리가 쓴 평가지표(이름과 뜻, 우리 수치, 기준선 수치, 고른 이유)</li>
+    <li>모델링 과정에서 우리 팀이 결정한 것</li>
+    <li>최종 분석 결과에 대한 우리 팀의 해석</li>
+    <li>이후 추가로 연구한다면 더 해 보고 싶은 것(교과 연계, 진로 분야)</li>
+    <li>프로젝트를 하면서 AI를 활용하고 데이터를 분석하며 느끼고 배운 점</li>
+  </ol>
   <p>발표는 팀당 6분, 문답은 3분입니다. 문답은 <b>팀원 전원</b>이 한 문제씩 답합니다. 질문은 두 종류입니다.</p>
   <table class="daymap">
     <thead><tr><th>종류</th><th>누가</th><th>무엇을</th></tr></thead>
@@ -192,14 +213,16 @@ code/main.py 실행. 필요한 라이브러리는 requirements.txt.
     </tbody>
   </table>
 
-  <h2>7. 샘플 프로젝트 셋 — 완성본은 이렇게 생겼습니다</h2>
-  <p>선생님이 가상의 팀으로 만든 샘플 저장소 세 개입니다. README만 읽어도 프로젝트 전체를 알 수 있게 썼고, 차시별 기록과 발표 슬라이드, 앱까지 들어 있습니다. 수업에서 배운 방법 하나씩을 썼습니다.</p>
+  <h2>7. 샘플 프로젝트 다섯 — 완성본은 이렇게 생겼습니다</h2>
+  <p>선생님이 가상의 팀으로 만든 샘플 저장소 다섯 개입니다. 스포츠 둘, 산업 하나, 생명과학 하나를 골랐습니다. README만 읽어도 프로젝트 전체를 알 수 있게 썼고, 차시별 기록과 발표 슬라이드, 앱까지 들어 있습니다. 수업에서 배운 방법 하나씩을 썼고, 모델이 기준선을 넘지 못한 경우도 그대로 실었습니다.</p>
   <table class="daymap">
     <thead><tr><th>방법</th><th>질문</th><th>데이터</th><th>저장소 · 앱 · 슬라이드</th></tr></thead>
     <tbody>
       <tr><td><b>회귀</b></td><td>축구 선수의 몸값은 정말 종합 능력치로 설명되는가</td><td>FC25 선수 800명</td><td><a href="https://github.com/greatsong/ds-sample-1-regression" target="_blank" rel="noopener">저장소</a> · <a href="https://greatsong.github.io/ds-sample-1-regression/" target="_blank" rel="noopener">앱</a> · <a href="https://greatsong.github.io/ds-sample-1-regression/slides.html" target="_blank" rel="noopener">슬라이드</a></td></tr>
       <tr><td><b>분류</b></td><td>능력치 여섯 개만 보고 포지션을 맞힐 수 있는가</td><td>FC25 선수 800명</td><td><a href="https://github.com/greatsong/ds-sample-2-classification" target="_blank" rel="noopener">저장소</a> · <a href="https://greatsong.github.io/ds-sample-2-classification/" target="_blank" rel="noopener">앱</a> · <a href="https://greatsong.github.io/ds-sample-2-classification/slides.html" target="_blank" rel="noopener">슬라이드</a></td></tr>
       <tr><td><b>군집</b></td><td>KBO 타자는 정말 거포형·준족형·교타형으로 나뉘는가</td><td>2026 KBO 타자 364명(정규시즌 종료 기준)</td><td><a href="https://github.com/greatsong/ds-sample-3-clustering" target="_blank" rel="noopener">저장소</a> · <a href="https://greatsong.github.io/ds-sample-3-clustering/" target="_blank" rel="noopener">앱</a> · <a href="https://greatsong.github.io/ds-sample-3-clustering/slides.html" target="_blank" rel="noopener">슬라이드</a></td></tr>
+      <tr><td><b>분류(산업)</b></td><td>센서 590개의 측정값으로 불량 웨이퍼를 미리 가려낼 수 있는가</td><td>반도체 공정 센서(SECOM) 1,567장</td><td><a href="https://github.com/greatsong/ds-sample-4-semiconductor" target="_blank" rel="noopener">저장소</a> · <a href="https://greatsong.github.io/ds-sample-4-semiconductor/" target="_blank" rel="noopener">앱</a> · <a href="https://greatsong.github.io/ds-sample-4-semiconductor/slides.html" target="_blank" rel="noopener">슬라이드</a></td></tr>
+      <tr><td><b>회귀(생명과학)</b></td><td>혈액 생화학 수치와 체질량지수로 1년 뒤 당뇨 진행 정도를 예측할 수 있는가</td><td>당뇨 환자 442명 혈액 검사</td><td><a href="https://github.com/greatsong/ds-sample-5-biochem" target="_blank" rel="noopener">저장소</a> · <a href="https://greatsong.github.io/ds-sample-5-biochem/" target="_blank" rel="noopener">앱</a> · <a href="https://greatsong.github.io/ds-sample-5-biochem/slides.html" target="_blank" rel="noopener">슬라이드</a></td></tr>
     </tbody>
   </table>
   <p>샘플의 README 순서(팀원 · 질문 · 왜 이 주제인가 · 데이터 · 방법 · 결과 해석 · 한계)를 그대로 따르면 됩니다. 샘플과 같은 데이터·질문을 그대로 쓰는 것은 안 됩니다.</p>
