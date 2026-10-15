@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script src="../../assets/gate.js?v=open"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>데이터 과학 팀 프로젝트 안내</title>
+<style>
+*{box-sizing:border-box}
+:root{--bg:#f6f4ee;--paper:#fffdf8;--ink:#171717;--muted:#6d6a64;--line:#ded9ce;--red:#e54b3f;--red-soft:#f8d7d2;--blue:#315da8;--green:#2d7a57;--yellow-soft:#faedc9;--code:#1d1f24}
+body{margin:0;background:#111;color:var(--ink);font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",system-ui,-apple-system,sans-serif;overflow:hidden}
+.deck{position:relative;width:100vw;height:100vh}
+.slide{position:absolute;inset:0;display:none;padding:5.5vh 6vw 8vh;background:var(--bg);overflow:hidden}
+.slide.active{display:flex;flex-direction:column}
+.eyebrow{font-size:clamp(13px,1.15vw,20px);font-weight:800;letter-spacing:.06em;color:var(--red);margin-bottom:.9rem}
+h1{margin:0;max-width:1100px;font-size:clamp(44px,5.8vw,90px);line-height:1.08;letter-spacing:-.05em}
+h2{margin:0 0 2.4vh;font-size:clamp(30px,3.6vw,58px);line-height:1.15;letter-spacing:-.04em}
+h3{margin:0 0 .6rem;font-size:clamp(19px,1.7vw,28px)}
+p{margin:0;line-height:1.6;font-size:clamp(17px,1.45vw,25px)}
+ul.pts{margin:0;padding-left:1.1em;font-size:clamp(17px,1.45vw,25px);line-height:1.55}
+ul.pts li{margin:.35em 0}
+ul.pts.sm{font-size:clamp(15px,1.2vw,21px)}
+.muted{color:var(--muted)}
+.accent-red{color:var(--red)}.accent-blue{color:var(--blue)}.accent-green{color:var(--green)}
+.spacer{flex:1}
+.footer{position:absolute;left:6vw;bottom:3vh;font-size:14px;color:#88837a;max-width:70vw}
+.slide-no{position:absolute;right:130px;bottom:3vh;font-size:14px;color:#88837a}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:3vw;align-items:start}
+.grid-2.wide-left{grid-template-columns:1.25fr 1fr}
+.grid-2>*,.grid-3>*{min-width:0}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6vw}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4vw}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:1.6vw 1.8vw}
+.card.red{background:#fff7f5;border-color:#efbcb5}.card.blue{background:#f5f8fd;border-color:#bccbe6}.card.green{background:#f3faf6;border-color:#b8d9c8}
+.mini-label{display:inline-block;padding:.3em .65em;border-radius:99px;font-size:clamp(13px,.95vw,17px);font-weight:800;background:#ece8df;margin-bottom:.6rem}
+.callout{margin-top:2.4vh;padding:1em 1.3em;border-radius:18px;font-size:clamp(17px,1.45vw,25px);line-height:1.5;background:var(--yellow-soft);border:1px solid #e6cf8d}
+.app{margin-top:2vh;padding:.7em 1.1em;border-radius:14px;background:#eef3fb;border:1px solid #c9d6ee;font-size:clamp(15px,1.25vw,22px);line-height:1.5}
+.app b{color:var(--blue)}
+.big{font-size:clamp(22px,2.2vw,38px);font-weight:900;letter-spacing:-.02em}
+code,.mono{font-family:"D2Coding","JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+code{background:#ece8df;border-radius:6px;padding:.05em .35em;font-size:.92em}
+.res-wrap{max-width:100%;overflow-x:auto}
+table.res,table.plain{border-collapse:collapse;background:white;border-radius:12px;overflow:hidden;font-size:clamp(14px,1.25vw,22px);border:1px solid var(--line)}
+table.res th,table.res td,table.plain th,table.plain td{padding:.4em .8em;border-bottom:1px solid #eee9df;text-align:left;white-space:nowrap}
+table.res th,table.plain th{background:#ece8df;font-weight:800}
+table.res tr.hit td,table.plain tr.hit td{background:#fff1c9}
+table.res td.chg{background:#fff1c9;font-weight:800}
+table.plain.sm{font-size:clamp(12px,1vw,18px)}
+.pk{background:#fde6c2 !important}
+.cap{font-size:clamp(13px,1vw,17px);font-weight:800;color:var(--muted);margin:0 0 .4em}
+.tag{display:inline-block;padding:.12em .5em;border-radius:6px;background:var(--red);color:white;font-size:.72em;font-weight:800;vertical-align:middle;margin-left:.3em}
+.ladder{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.9vh}
+.ladder li{display:grid;grid-template-columns:2.2em 1fr;align-items:center;gap:.6em;background:white;border:1px solid var(--line);border-radius:14px;padding:.45em .8em;font-size:clamp(15px,1.3vw,23px)}
+.ladder li .n{width:1.8em;height:1.8em;border-radius:50%;background:var(--ink);color:white;display:grid;place-items:center;font-weight:900;font-size:.85em}
+.flow{display:flex;flex-wrap:wrap;gap:.6em;align-items:center;margin:1vh 0 2vh}
+.flow .k{padding:.45em .8em;border-radius:12px;background:var(--code);color:#7fb4ff;font-weight:900;font-family:"D2Coding",ui-monospace,Menlo,monospace;font-size:clamp(16px,1.6vw,28px)}
+.flow .ar{color:#aaa399;font-size:clamp(18px,1.6vw,28px)}
+.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:1vw;margin-top:1vh}
+.bin{border-radius:14px;padding:.6em .8em;border:2px solid;background:white;font-size:clamp(14px,1.2vw,21px)}
+.bin b{display:block;margin-bottom:.3em}
+.bin.a{border-color:#9ec3e8}.bin.b{border-color:#e8b59e}.bin.c{border-color:#b6d8a8}
+.op{display:grid;grid-template-columns:auto 1fr auto 1fr;gap:.35em 1em;font-size:clamp(15px,1.3vw,23px);align-items:center}
+.op code{font-weight:900;font-size:1em}
+.cheat{display:grid;grid-template-columns:1fr 1fr;gap:.7vh 2vw}
+.cheat div{display:grid;grid-template-columns:1.25fr 1fr;gap:.8em;align-items:center;background:white;border:1px solid var(--line);border-radius:12px;padding:.4em .8em;font-size:clamp(13px,1.1vw,19px)}
+.cheat code{background:none;padding:0;font-weight:800;color:var(--blue)}
+.ask{background:white;border:1px solid var(--line);border-radius:18px;padding:1.2vw 1.5vw}
+.ask dl{display:grid;grid-template-columns:auto 1fr;gap:.35em 1em;margin:.8em 0 0;font-size:clamp(15px,1.3vw,23px)}
+.ask dt{font-weight:900;color:var(--muted)}
+.ask dd{margin:0}
+.reveal{margin-top:1.6vh;border:none;background:var(--ink);color:white;border-radius:99px;padding:.6em 1.3em;font-size:clamp(15px,1.2vw,21px);font-weight:800;cursor:pointer}
+.answer{display:none;margin-top:1.4vh}
+.answer.show{display:block}
+.widget{background:white;border:1px solid var(--line);border-radius:22px;padding:1.4vw 1.6vw}
+.toggles{display:flex;flex-wrap:wrap;gap:.6em;margin-bottom:1.4vh}
+.tg{border:2px solid var(--line);background:#f4f1ea;color:var(--ink);border-radius:12px;padding:.45em .8em;font-family:"D2Coding",ui-monospace,Menlo,monospace;font-weight:800;font-size:clamp(14px,1.15vw,20px);cursor:pointer}
+.tg[aria-pressed="true"]{background:var(--ink);color:white;border-color:var(--ink)}
+.seg{display:inline-flex;align-items:center;gap:.3em;border:2px dashed var(--line);border-radius:14px;padding:.2em .35em}
+.seg span{font-family:"D2Coding",ui-monospace,Menlo,monospace;font-weight:800;font-size:clamp(14px,1.15vw,20px);padding:0 .3em}
+.seg .tg{padding:.35em .6em}
+.nav{position:fixed;z-index:30;right:24px;bottom:20px;display:flex;gap:8px}
+.nav button{border:none;background:rgba(20,20,20,.82);color:white;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:22px}
+.nav button:hover{background:black}
+.progress{position:fixed;z-index:40;top:0;left:0;height:5px;background:var(--red);transition:width .25s ease}
+.grid-2.wide-right{grid-template-columns:1fr 1.3fr}
+table.res.sm{font-size:clamp(12px,1vw,18px)}
+table.plain tr.more td{color:var(--muted);text-align:center;font-weight:700}
+table.res tr.gap td{border-top:3px dashed var(--red)}
+table.res td.blank{color:#b0aaa0;font-style:italic}
+table.res th,table.res td{padding:.3em .8em}
+ul.sys{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.7vh}
+ul.sys li{display:flex;justify-content:space-between;align-items:center;gap:.6em;background:white;border:1px solid var(--line);border-radius:12px;padding:.45em .7em;font-size:clamp(14px,1.2vw,21px)}
+ul.sys code{background:var(--code);color:#7fb4ff;font-weight:800;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:.5em}
+.chips span{background:white;border:1px solid var(--line);border-radius:99px;padding:.25em .8em;font-weight:800;font-size:clamp(14px,1.15vw,20px)}
+.app{margin-top:1.6vh}
+/* 팀 프로젝트 안내 추가 */
+ul.sys.files li{justify-content:flex-start;align-items:baseline}
+ul.sys.files li span{color:var(--muted)}
+ol.list{margin:0;padding-left:1.4em;font-size:clamp(14px,1.15vw,20px);line-height:1.5}
+ol.list li{margin:.15em 0}
+table.plain td.dot{color:var(--muted);text-align:center}
+table.plain.wrap td{white-space:normal}
+.app a{color:var(--blue);font-weight:800}
+table.plain a{color:var(--blue)}
+.poster{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto;gap:.5vw;background:white;border:2px solid var(--ink);border-radius:10px;padding:.6vw;aspect-ratio:594/841;max-height:52vh;margin:0 auto;font-size:clamp(11px,.9vw,16px);font-weight:800}
+.poster .band{grid-column:1/3;background:var(--ink);color:white;border-radius:6px;padding:.4em .6em;text-align:center}
+.poster .col{display:flex;flex-direction:column;gap:.4vw}
+.poster .col div{flex:1;border:1px solid var(--line);border-radius:6px;padding:.3em .5em;background:var(--bg)}
+.poster .col div.sum{background:var(--yellow-soft);border-color:#e6cf8d}
+.poster .col div.res{flex:2;background:#f5f8fd;border-color:#bccbe6;color:var(--blue)}
+.poster .foot{grid-column:1/3;text-align:right;color:var(--muted)}
+.grid-2.poster-wrap{grid-template-columns:1.2fr 1fr}
+.right-stack{display:flex;flex-direction:column;gap:1.6vh}
+.callout.red{background:#fff7f5;border-color:#efbcb5}
+@media(max-width:900px){
+  .grid-2.poster-wrap{grid-template-columns:1fr}
+  body{overflow:hidden}
+  .slide{padding:4vh 16px 90px;overflow-y:auto}
+  .grid-2,.grid-2.wide-left,.grid-2.wide-right,.grid-3,.cheat{grid-template-columns:1fr}
+  .cheat div[style]{grid-column:auto !important}
+  ul.sys li{flex-wrap:wrap}
+  .grid-4{grid-template-columns:1fr 1fr}
+  .bins{grid-template-columns:1fr}
+  .footer{position:static;margin-top:2vh;max-width:none}
+  .slide-no{position:static;margin-top:1vh}
+  .cheat div{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="deck">
+
+<!-- 1. 표지 -->
+<section class="slide active">
+  <div class="eyebrow">TEAM PROJECT · 5주 15차시</div>
+  <h1>데이터 과학<br><span class="accent-red">기말 팀 프로젝트</span></h1>
+  <div class="spacer"></div>
+  <div class="grid-4">
+    <div class="card"><div class="mini-label">1</div><h3>제출물 3개</h3><p class="muted">저장소 · 슬라이드 · 포스터</p></div>
+    <div class="card"><div class="mini-label">2</div><h3>평가 요소</h3><p class="muted">판단 4축 + AI 활용 기록</p></div>
+    <div class="card"><div class="mini-label">3</div><h3>중요한 포인트</h3><p class="muted">해석 · 출처 · 재현 · 공개</p></div>
+    <div class="card"><div class="mini-label">4</div><h3>일정과 확인 지점</h3><p class="muted">5주 · 확인 지점 세 번</p></div>
+  </div>
+  <div class="footer">← → · 스페이스 · 화면 클릭으로 넘김</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 2. 한 문장으로 -->
+<section class="slide">
+  <div class="eyebrow">한 문장으로</div>
+  <h2>질문 하나를 데이터로 답하고, 그 결과를 자기 말로 설명합니다</h2>
+  <ul class="pts">
+    <li>2~3인 팀 · 5주 15차시</li>
+    <li>수업에서 배운 방법 하나: 회귀 · 분류 · 군집 · 연관</li>
+    <li>AI는 자유롭게 활용, 기록은 빠짐없이</li>
+    <li>평가는 코드가 아니라 <b>판단</b>: 질문 설정 · 데이터 감식 · 결과 해석 · 한계 인식</li>
+  </ul>
+  <div class="callout">AI가 대신 쓸 수 없는 두 가지: <b>왜 이 주제인가</b>, <b>결과를 어떻게 해석하는가</b></div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 3. 제출물 -->
+<section class="slide">
+  <div class="eyebrow">제출물</div>
+  <h2>제출물 3개: 저장소 · 슬라이드 · 포스터</h2>
+  <div class="grid-3">
+    <div class="card red"><div class="mini-label">기록·증빙</div><h3>깃허브 저장소</h3>
+      <ul class="pts sm"><li>README · data/ · code/main.py · log/01~12</li><li>평가의 원천</li><li>12차시 동결</li></ul></div>
+    <div class="card blue"><div class="mini-label">제출물 · 16장</div><h3>발표 슬라이드</h3>
+      <ul class="pts sm"><li>1부 프로젝트 12장</li><li>2부 모델 소개 4장</li><li>발표는 포스터로, 모델 소개는 슬라이드로</li></ul></div>
+    <div class="card green"><div class="mini-label">최종 발표 · A1 세로</div><h3>포스터</h3>
+      <ul class="pts sm"><li>2단 연구 포스터 1장</li><li>포스터 앞에서 팀원 전원 문답</li></ul></div>
+  </div>
+  <div class="callout">슬라이드·포스터는 README를 옮긴 것. README가 완성되면 나머지는 짧습니다.</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 4. 깃허브 저장소 -->
+<section class="slide">
+  <div class="eyebrow">깃허브 저장소</div>
+  <h2>저장소: README가 프로젝트 전체를 담습니다</h2>
+  <div class="grid-2 wide-left">
+    <ul class="sys files">
+      <li><code>README.md</code><span>질문 · 왜 이 주제 · 데이터 · 방법(10단계) · 모델 소개 · 결과 해석(찾아낸 것 3개) · 한계 · 더 해 보고 싶은 것 · 느끼고 배운 점 · AI 활용 명시 · 참고문헌</span></li>
+      <li><code>data/</code><span>데이터 파일 또는 출처.md</span></li>
+      <li><code>code/main.py</code><span>실행 코드, 바꿀 때마다 본인 커밋</span></li>
+      <li><code>code/check.py</code><span>README 수치를 다시 계산</span></li>
+      <li><code>log/01~12.md</code><span>차시 기록</span></li>
+      <li><code>requirements.txt</code><span>버전 고정</span></li>
+    </ul>
+    <div class="card">
+      <ul class="pts sm">
+        <li>공개 저장소</li>
+        <li>저장소 이름 = 팀 이름</li>
+        <li>팀원 전원 협력자</li>
+        <li>README 틀은 안내 페이지 복사 버튼</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 5. 기록 규칙 -->
+<section class="slide">
+  <div class="eyebrow">기록(log) 규칙</div>
+  <h2>log: 차시마다 각자 네 줄</h2>
+  <ol class="ladder">
+    <li><span class="n">1</span><span>오늘 결정한 것</span></li>
+    <li><span class="n">2</span><span>AI에게 보낸 프롬프트(원문)</span></li>
+    <li><span class="n">3</span><span>AI가 준 것 중 고치거나 버린 것과 이유</span></li>
+    <li><span class="n">4</span><span>느낀 점</span></li>
+  </ol>
+  <ul class="pts sm" style="margin-top:1.6vh">
+    <li>1차시는 느낀 점 한 줄만 · 2~12차시 네 줄 · 12차시에 개인 해석문 3~5줄 추가</li>
+    <li>13~15차시 기록 없음 · 커밋은 본인 계정</li>
+    <li>12차시 이후 커밋은 평가에 넣지 않음</li>
+  </ul>
+  <div class="callout red">③ 고치거나 버린 것 줄이 비어 있으면 그 차시는 받아 적기로 봅니다.</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 6. 발표 슬라이드 -->
+<section class="slide">
+  <div class="eyebrow">발표 슬라이드 16장</div>
+  <h2>슬라이드: 1부 12장 + 2부 4장</h2>
+  <div class="grid-2">
+    <div class="card"><h3>1부 · 프로젝트 12장</h3>
+      <ol class="list">
+        <li>제목</li><li>우리 팀의 데이터셋</li><li>이 문제를 선택한 이유</li><li>어떤 과정으로 분석했는지</li>
+        <li>어떤 모델을 고려했는지</li><li>왜 이 모델을 선택했는지</li><li>우리가 사용한 평가지표</li><li>우리 팀이 결정한 것</li>
+        <li>결과에 대한 우리 팀의 해석</li><li>더 해 보고 싶은 것(교과·진로)</li><li>느끼고 배운 점</li><li>감사합니다</li>
+      </ol></div>
+    <div class="right-stack">
+      <div class="card blue"><h3>2부 · 모델 소개 4장</h3>
+        <ol class="list"><li>선택 모델</li><li>비교 모델 1</li><li>비교 모델 2</li><li>세 모델 비교 요약</li></ol></div>
+      <ul class="pts sm">
+        <li>한 장에 줄 3~5개, 키워드</li>
+        <li>"고려한 모델"은 실제 모델 종류(로지스틱 · k-NN · 결정 트리 · 랜덤 포레스트 · XGBoost 등)를 같은 조건에서 비교한 표</li>
+        <li>점수가 가장 높은 모델을 고르지 않아도 되지만 이유를 말해야 함</li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 7. 모델 소개 수행평가 -->
+<section class="slide">
+  <div class="eyebrow">연계 수행평가</div>
+  <h2>모델 소개: 알고리즘을 이해했는지 봅니다</h2>
+  <ul class="pts sm">
+    <li>팀이 선택한 모델 + 비교 모델 2개</li>
+    <li>모델마다 원리 한 줄 · 장점 · 단점 · 이런 상황에 좋다 · 우리 데이터 결과</li>
+    <li>제출은 슬라이드 2부 4장 + README "모델 소개" 표(3행×6열)</li>
+    <li>발표 3분(팀 프로젝트 발표와 별도) · 배점은 추후 공지</li>
+  </ul>
+  <div class="res-wrap" style="margin-top:2vh">
+    <table class="plain">
+      <tr><th>모델</th><th>원리 한 줄</th><th>장점</th><th>단점</th><th>이런 상황에 좋다</th><th>우리 데이터 결과</th></tr>
+      <tr><td>선택 모델</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td></tr>
+      <tr><td>비교 모델 1</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td></tr>
+      <tr><td>비교 모델 2</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td></tr>
+    </table>
+  </div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 8. 포스터 -->
+<section class="slide">
+  <div class="eyebrow">포스터</div>
+  <h2>포스터: A1 세로, 2단 연구 포스터</h2>
+  <div class="grid-2 poster-wrap">
+    <ul class="pts sm">
+      <li>요약 상자 4줄: 연구 질문 · 데이터와 방법 · 핵심 결과 · 결론</li>
+      <li>1 서론(문장형 한 문단)</li>
+      <li>2 데이터(그림 1)</li>
+      <li>3 방법(파이프라인 6칸 + 후보 모델 비교 표)</li>
+      <li>4 결과(그림 2·3 + 큰 숫자 3개)</li>
+      <li>5 논의(우리 팀이 찾아낸 것 3개)</li>
+      <li>6 결론과 한계 · 참고문헌 · 생성형 AI 활용 · QR</li>
+    </ul>
+    <div class="right-stack">
+      <div class="poster" aria-label="2단 포스터 배치 안내">
+        <div class="band">제목 · 팀 · 학교</div>
+        <div class="col"><div class="sum">요약</div><div>1 서론</div><div>2 데이터</div><div>3 방법</div></div>
+        <div class="col"><div class="res">4 결과</div><div>5 논의</div><div>6 결론</div><div>참고문헌</div></div>
+        <div class="foot">QR ▣</div>
+      </div>
+      <div class="card">
+        <ul class="pts sm">
+          <li>문체는 개조식(~함, ~됨). ~합니다 금지</li>
+          <li>그림마다 번호와 한 문장 캡션</li>
+          <li>모델 소개 표 · 교과 연계 · 느낀 점은 포스터에 넣지 않음(README · 슬라이드에 있음)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 9. 평가 요소 -->
+<section class="slide">
+  <div class="eyebrow">평가 요소</div>
+  <h2>평가: 판단 4축 + AI 활용 기록, 20점</h2>
+  <div class="res-wrap">
+    <table class="plain wrap">
+      <tr><th>항목</th><th>단위</th><th>어디서 보나</th><th>상 수준 한 줄</th></tr>
+      <tr><td><b>주제·질문</b></td><td>팀</td><td>README 질문 · 왜 이 주제인가</td><td>데이터로 답할 수 있는 질문, 팀의 이유</td></tr>
+      <tr><td><b>AI 활용 기록</b></td><td>개인</td><td>log 본인 섹션 · 본인 커밋</td><td>2~12차시 기록, 고치거나 버린 사례 2회 이상</td></tr>
+      <tr><td><b>결과 해석(팀)</b></td><td>팀</td><td>README 결과 해석</td><td>기준선과 비교, 찾아낸 것 3개를 수치 근거로</td></tr>
+      <tr><td><b>결과 해석(문답)</b></td><td>개인</td><td>포스터 앞 문답</td><td>지표의 뜻 · 기준선 · 결과의 의미를 자기 말로</td></tr>
+      <tr><td><b>한계 인식</b></td><td>팀</td><td>README 한계</td><td>한계를 수치로, 오용 가능성까지</td></tr>
+    </table>
+  </div>
+  <ul class="pts sm" style="margin-top:1.6vh">
+    <li>팀 10점 + 개인 10점</li>
+    <li>세부 배점과 모델 소개 배점은 추후 공지</li>
+  </ul>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 10. 문답 -->
+<section class="slide">
+  <div class="eyebrow">문답</div>
+  <h2>문답: 포스터 앞에서 팀원 전원</h2>
+  <div class="grid-2">
+    <ul class="pts sm">
+      <li>팀원 각자 한 문제</li>
+      <li>지표 질문은 전원 필수(우리 팀이 쓴 평가지표의 뜻과 수치)</li>
+      <li>팀당 한 명은 log를 읽고 만든 질문</li>
+      <li>답하지 못하면 다른 팀원에게 한 번 더</li>
+      <li>팀 점수는 유지, 본인 문답 점수만 최하점</li>
+    </ul>
+    <div class="card"><h3>공개 질문 5개(미리 준비)</h3>
+      <ol class="list">
+        <li>이 그래프는 무엇을 뜻하나</li>
+        <li>기준선보다 얼마나 나아졌나</li>
+        <li>이 결과를 믿을 수 없는 이유 하나</li>
+        <li>새로 알게 된 것</li>
+        <li>주제를 왜 이것으로 정했나</li>
+      </ol></div>
+  </div>
+  <div class="callout">"R²가 0.7입니다"로 끝나는 답 ✗ · "능력치가 같아도 나이가 어리면 몸값이 두 배였습니다"로 이어지는 답 ○</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 11. 중요한 포인트 1 -->
+<section class="slide">
+  <div class="eyebrow">중요한 포인트 ①</div>
+  <h2>해석은 팀이 씁니다</h2>
+  <ul class="pts">
+    <li>"왜 이 주제인가"와 "결과 해석"은 팀이 직접(AI가 쓴 해석은 문답에서 바로 드러남)</li>
+    <li>결과 해석에는 우리 팀이 찾아낸 것 3개: 헤드라인 → 근거 수치·사례 → 뜻 → 처음 생각과 달랐던 점</li>
+    <li>지표를 다시 말하는 것은 발견이 아님</li>
+    <li>한계는 수치로("잘 된다"만 있으면 최하)</li>
+    <li>모든 수치는 check.py로 다시 계산 가능</li>
+  </ul>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 12. 중요한 포인트 2 -->
+<section class="slide">
+  <div class="eyebrow">중요한 포인트 ②</div>
+  <h2>출처 · AI · 재현</h2>
+  <ul class="pts sm">
+    <li>데이터 출처는 1차 출처(기관 · 데이터 이름 · 연도 · 주소 · 접근일 · 이용 조건), 깃허브·캐글 사본이면 원출처 함께</li>
+    <li>생성형 AI 활용 명시: 모델 이름과 버전, 사용한 곳, 사용하지 않은 곳, 검증 방법</li>
+    <li>참고문헌: 데이터 · 소프트웨어 · AI 모델 · 교과서</li>
+    <li>requirements.txt 버전 고정, 난수 고정</li>
+    <li>교차검증을 하지 않았으면 한계에 적기</li>
+  </ul>
+  <div class="callout red"><b>안 되는 것</b>: 샘플과 같은 데이터·같은 질문 · 개인 단위 식별 정보(이름 · 연락처 · 주소 · 학번)가 든 데이터 · 프롬프트 공유 링크(원문을 붙여 넣음)</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 13. 이름 공개와 닉네임 -->
+<section class="slide">
+  <div class="eyebrow">이름 공개와 닉네임</div>
+  <h2>공개 저장소, 이름은 동의하고 씁니다</h2>
+  <ul class="pts">
+    <li>저장소는 공개(public) · README에 학번·이름(공개 동의)</li>
+    <li>동의하지 않으면 README · log · 커밋에 닉네임</li>
+    <li>닉네임은 2주차 과제의 설문에 학번과 함께 등록</li>
+    <li>등록한 닉네임과 다르게 쓰면 본인 기록으로 인정되지 않음</li>
+    <li>저장소 주소도 같은 설문으로 제출(팀 대표 한 명)</li>
+  </ul>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 14. 일정 -->
+<section class="slide">
+  <div class="eyebrow">일정과 확인 지점</div>
+  <h2>5주: 확인 지점 세 번</h2>
+  <ol class="ladder">
+    <li><span class="n">1</span><span>1주 · 팀 · 주제 · 데이터 찾기 → <b class="accent-red">3차시 데이터 승인</b>(못 찾은 팀은 선생님이 지정)</span></li>
+    <li><span class="n">2</span><span>2주 · 저장소 개설 · README · 데이터 살펴보기 · 전처리</span></li>
+    <li><span class="n">3</span><span>3주 · 방법 하나 · 모델 후보 비교 · 기준선 → <b class="accent-red">9차시 중간 점검</b>(결과 1개와 지표 1개를 2분 안에)</span></li>
+    <li><span class="n">4</span><span>4주 · 해석 · 한계 · 완성 → <b class="accent-red">12차시 저장소 동결</b></span></li>
+    <li><span class="n">5</span><span>5주 · 포스터 발표 · 문답</span></li>
+  </ol>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 15. 샘플과 안내 페이지 -->
+<section class="slide">
+  <div class="eyebrow">샘플과 안내 페이지</div>
+  <h2>샘플 5개를 보고 시작합니다</h2>
+  <div class="res-wrap">
+    <table class="plain sm">
+      <tr><th>번호</th><th>방법</th><th>질문</th><th>주소</th></tr>
+      <tr><td>1</td><td>회귀</td><td>축구 선수의 몸값은 정말 종합 능력치로 설명되는가</td><td><a href="https://github.com/greatsong/ds-sample-1-regression" target="_blank" rel="noopener">github.com/greatsong/ds-sample-1-regression</a></td></tr>
+      <tr><td>2</td><td>분류</td><td>능력치 여섯 개만 보고 포지션을 맞힐 수 있는가</td><td><a href="https://github.com/greatsong/ds-sample-2-classification" target="_blank" rel="noopener">github.com/greatsong/ds-sample-2-classification</a></td></tr>
+      <tr><td>3</td><td>군집</td><td>KBO 타자는 정말 거포형·준족형·교타형으로 나뉘는가</td><td><a href="https://github.com/greatsong/ds-sample-3-clustering" target="_blank" rel="noopener">github.com/greatsong/ds-sample-3-clustering</a></td></tr>
+      <tr><td>4</td><td>분류(산업)</td><td>센서 590개로 불량 웨이퍼를 미리 가려낼 수 있는가</td><td><a href="https://github.com/greatsong/ds-sample-4-semiconductor" target="_blank" rel="noopener">github.com/greatsong/ds-sample-4-semiconductor</a></td></tr>
+      <tr><td>5</td><td>회귀(생명과학)</td><td>혈액 생화학 수치로 1년 뒤 당뇨 진행 정도를 예측할 수 있는가</td><td><a href="https://github.com/greatsong/ds-sample-5-biochem" target="_blank" rel="noopener">github.com/greatsong/ds-sample-5-biochem</a></td></tr>
+    </table>
+  </div>
+  <div class="app">안내 페이지 <a href="https://greatsong.github.io/ds-danggok-2026/project.html" target="_blank" rel="noopener"><b>greatsong.github.io/ds-danggok-2026/project.html</b></a> · README 틀 · log 틀 복사 버튼, 데이터 사이트 7곳</div>
+  <div class="slide-no"></div>
+</section>
+
+</div>
+<div class="nav"><button id="prev" aria-label="이전 슬라이드">‹</button><button id="next" aria-label="다음 슬라이드">›</button></div>
+<script>
+(function(){
+  // 덱 넘김
+  var slides=[].slice.call(document.querySelectorAll('.slide')),progress=document.getElementById('progress'),index=0;
+  slides.forEach(function(s,i){var n=s.querySelector('.slide-no');if(n)n.textContent=(i+1)+' / '+slides.length});
+  function show(n){index=Math.max(0,Math.min(slides.length-1,n));slides.forEach(function(s,i){s.classList.toggle('active',i===index)});slides[index].scrollTop=0;progress.style.width=((index+1)/slides.length*100)+'%';try{history.replaceState(null,'','#'+(index+1))}catch(e){}}
+  document.getElementById('prev').addEventListener('click',function(){show(index-1)});
+  document.getElementById('next').addEventListener('click',function(){show(index+1)});
+  document.addEventListener('keydown',function(e){
+    if(e.target.closest&&e.target.closest('.widget'))return;
+    if(e.target.tagName==='BUTTON'&&(e.key===' '||e.key==='Enter'))return;
+    if(['ArrowRight','PageDown',' '].indexOf(e.key)>=0){e.preventDefault();show(index+1)}
+    else if(['ArrowLeft','PageUp'].indexOf(e.key)>=0){e.preventDefault();show(index-1)}
+    else if(e.key==='Home')show(0);else if(e.key==='End')show(slides.length-1);
+  });
+  document.querySelector('.deck').addEventListener('click',function(e){
+    if(e.target.closest('button,a,.widget,.answer,.ask,pre,table'))return;
+    if(String(window.getSelection&&window.getSelection())!=='')return;
+    show(index+1);
+  });
+  var h=parseInt((location.hash||'').slice(1),10);show(h>0?h-1:0);
+  window.addEventListener('hashchange',function(){var k=parseInt((location.hash||'').slice(1),10);if(k>0&&k-1!==index)show(k-1)});
+})();
+</script>
+</body>
+</html>
