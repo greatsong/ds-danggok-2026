@@ -113,6 +113,12 @@ table.plain a{color:var(--blue)}
 .grid-2.poster-wrap{grid-template-columns:1.2fr 1fr}
 .right-stack{display:flex;flex-direction:column;gap:1.6vh}
 .callout.red{background:#fff7f5;border-color:#efbcb5}
+.ex{background:white;border:1px solid var(--line);border-left:8px solid var(--red);border-radius:12px;padding:1em 1.3em;font-size:clamp(14px,1.15vw,20px);line-height:1.6;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+.ex.md{font-family:"D2Coding","JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
+.ex+.ex,.res-wrap+.ex{margin-top:1.6vh}
+.ex.sm{font-size:clamp(12px,1.0vw,17px);line-height:1.5;padding:.8em 1em}
+.src-img{width:100%;height:auto;border:1px solid var(--line);border-radius:10px;display:block}
+.cap2{font-size:clamp(12px,.95vw,16px);color:var(--muted);margin:.4em 0 0;line-height:1.4}
 @media(max-width:900px){
   .grid-2.poster-wrap{grid-template-columns:1fr}
   body{overflow:hidden}
@@ -139,9 +145,9 @@ table.plain a{color:var(--blue)}
   <div class="spacer"></div>
   <div class="grid-4">
     <div class="card"><div class="mini-label">1</div><h3>제출물 3개</h3><p class="muted">저장소 · 슬라이드 · 포스터</p></div>
-    <div class="card"><div class="mini-label">2</div><h3>평가 요소</h3><p class="muted">판단 4축 + AI 활용 기록</p></div>
-    <div class="card"><div class="mini-label">3</div><h3>중요한 포인트</h3><p class="muted">해석 · 출처 · 재현 · 공개</p></div>
-    <div class="card"><div class="mini-label">4</div><h3>일정과 확인 지점</h3><p class="muted">5주 · 확인 지점 세 번</p></div>
+    <div class="card"><div class="mini-label">2</div><h3>이렇게 씁니다: 스포츠·생명과학 두 사례</h3><p class="muted">샘플 1 몸값연구소 실제 산출물</p></div>
+    <div class="card"><div class="mini-label">3</div><h3>평가와 문답</h3><p class="muted">판단 4축 + AI 활용 기록</p></div>
+    <div class="card"><div class="mini-label">4</div><h3>일정</h3><p class="muted">5주 · 확인 지점 세 번</p></div>
   </div>
   <div class="footer">← → · 스페이스 · 화면 클릭으로 넘김</div>
   <div class="slide-no"></div>
@@ -173,7 +179,7 @@ table.plain a{color:var(--blue)}
     <div class="card green"><div class="mini-label">최종 발표 · A1 세로</div><h3>포스터</h3>
       <ul class="pts sm"><li>2단 연구 포스터 1장</li><li>포스터 앞에서 팀원 전원 문답</li></ul></div>
   </div>
-  <div class="callout">슬라이드·포스터는 README를 옮긴 것. README가 완성되면 나머지는 짧습니다.</div>
+  <div class="callout">슬라이드·포스터는 README를 옮긴 것. README가 완성되면 나머지는 짧습니다.<br>예시는 샘플 1(축구 몸값, 스포츠)과 샘플 5(당뇨 진행, 생명과학) 두 가지를 나란히 보여 줍니다.</div>
   <div class="slide-no"></div>
 </section>
 
@@ -188,7 +194,7 @@ table.plain a{color:var(--blue)}
       <li><code>code/main.py</code><span>실행 코드, 바꿀 때마다 본인 커밋</span></li>
       <li><code>code/check.py</code><span>README 수치를 다시 계산</span></li>
       <li><code>log/01~12.md</code><span>차시 기록</span></li>
-      <li><code>requirements.txt</code><span>버전 고정</span></li>
+      <li><code>requirements.txt</code><span>필요한 라이브러리 목록</span></li>
     </ul>
     <div class="card">
       <ul class="pts sm">
@@ -202,7 +208,59 @@ table.plain a{color:var(--blue)}
   <div class="slide-no"></div>
 </section>
 
-<!-- 5. 기록 규칙 -->
+<!-- 5. 예시: README 첫 화면 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소 · 샘플 5 검진표연구소</div>
+  <h2>README는 이렇게 시작합니다</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div></div>
+  <div class="grid-2">
+    <div><div class="mini-label">샘플 1 · 몸값연구소 · 스포츠</div><div class="ex sm md"># 몸값연구소: 축구 선수의 몸값은 정말 종합 능력치로 설명되는가
+## 팀원
+- 10101 홍길동 / 10102 김영희 / 10103 이철수
+## 질문
+"축구 선수의 몸값(value_eur)은 정말 종합 능력치(overall)로 설명되는가"
+## 왜 이 주제인가 (팀이 씁니다)
+세 명 모두 축구 게임을 즐겨 합니다. 선수를 영입하다 보면 종합 능력치가 비슷한데도 몸값이 몇 배씩 차이 나는 경우가 자주 있었습니다. …
+- 10102 김영희: 나는 처음에 "몸값은 능력치로 다 정해진다"고 생각했다. 내 생각이 맞는지 데이터로 확인하고 싶었다.
+## 데이터
+- 출처: EA SPORTS FC 25 선수 능력치(EA Sports, 2024-25 시즌). 공개 페이지(sofifa.com)를 정리한 GitHub mzafram2001/ea-fc(MIT), 2026-10-15 접근
+- 기간·행 수·열 수: 800행 · 14열
+- 개인 단위 정보 없음 확인: 예</div></div>
+    <div><div class="mini-label">샘플 5 · 검진표연구소 · 생명과학</div><div class="ex sm md"># 검진표연구소: 혈액 생화학 수치와 체질량지수로 1년 뒤 당뇨 진행 정도를 예측할 수 있는가
+## 팀원
+- 10101 홍길동 / 10102 김영희 / 10103 이철수
+## 질문
+"건강검진의 혈액 생화학 수치(콜레스테롤·중성지방·혈당)와 체질량지수로 1년 뒤 당뇨 진행 정도를 예측할 수 있는가"
+## 왜 이 주제인가 (팀이 씁니다)
+생명과학 시간에 혈당·인슐린·지질 대사를 배웠습니다. 건강검진표에 적힌 콜레스테롤·중성지방·혈당 숫자가 실제로 병의 진행을 얼마나 알려 주는지 데이터로 확인하고 싶었습니다. …
+- 10102 김영희: 나는 부모님 건강검진표를 같이 본 적이 있는데 숫자가 너무 많았다. 그 많은 숫자가 다 필요한지, 몇 개만 봐도 되는지 알고 싶었다.
+## 데이터
+- 출처: Efron, B., Hastie, T., Johnstone, I., &amp; Tibshirani, R. (2004). Least Angle Regression. The Annals of Statistics, 32(2), 407–499. 데이터: https://www4.stat.ncsu.edu/~boos/var.select/diabetes.html (2026-10-15 접근)
+- 기간·행 수·열 수: 당뇨 환자 442명의 기준 시점 측정값과 1년 뒤 진행 정도 · 442행 · 11열 · 결측값 0개
+- 개인 단위 정보 없음 확인: 예</div></div>
+  </div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 6. 예시: 데이터 1차 출처 캡처 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 데이터 1차 출처 캡처</div>
+  <h2>데이터는 이런 곳에서 받습니다</h2>
+  <div class="grid-2">
+    <div><div class="mini-label">샘플 3 · KBO 타자 · 스포츠</div>
+      <img class="src-img" src="img/src-kbo.png" alt="KBO 공식 홈페이지 타자 기록 화면" style="max-height:60vh;object-fit:cover;object-position:top">
+      <p class="cap2">KBO 공식 홈페이지 기록실 › 선수 기록 › 타자 (koreabaseball.com). 2026 시즌 타자 364명을 직접 수집</p></div>
+    <div><div class="mini-label">샘플 5 · 당뇨 진행 · 생명과학</div>
+      <img class="src-img" src="img/src-arxiv.png" alt="arXiv 논문 Least Angle Regression 화면" style="max-height:21vh;object-fit:cover;object-position:top">
+      <p class="cap2">논문: Efron, Hastie, Johnstone, Tibshirani (2004) Least Angle Regression, Annals of Statistics 32(2) · arXiv math/0406456</p>
+      <img class="src-img" src="img/src-sklearn.png" alt="scikit-learn 공식 문서 Diabetes dataset 화면" style="max-height:21vh;object-fit:cover;object-position:top;margin-top:1vh">
+      <p class="cap2">scikit-learn 공식 문서 Diabetes dataset: 442명·열 10개 설명과 원출처 주소(NCSU 통계학과)</p></div>
+  </div>
+  <div class="callout">출처는 기관·저작자, 데이터 이름, 연도, 주소, 접근일, 이용 조건까지. 사본(깃허브·캐글)을 썼으면 원출처를 함께. 선생님이 모아 둔 수업용 사본은 출처가 아닙니다.</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 7. 기록 규칙 -->
 <section class="slide">
   <div class="eyebrow">기록(log) 규칙</div>
   <h2>log: 차시마다 각자 네 줄</h2>
@@ -221,7 +279,46 @@ table.plain a{color:var(--blue)}
   <div class="slide-no"></div>
 </section>
 
-<!-- 6. 발표 슬라이드 -->
+<!-- 8. 예시: log 한 사람 분 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소 · 샘플 5 검진표연구소</div>
+  <h2>log/02.md는 이렇게 씁니다</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div></div>
+  <div class="grid-2">
+    <div><div class="mini-label">샘플 1 · 몸값연구소 · 스포츠</div><div class="ex sm">## 10103 이철수
+- 오늘 결정한 것: modudata의 eafc25_players.csv를 내려받아 열 14개의 뜻을 정리했다.
+- AI에게 보낸 프롬프트(원문): FC25 선수 데이터의 열 이름이 name, long_name, positions, club, overall, pace, shooting, passing, dribbling, defending, physic, value_eur, age, height_cm이야. 각 열이 무슨 뜻인지 한 줄씩 설명해 줘.
+- AI가 준 것 중 고치거나 버린 것과 그 이유: AI가 value_eur를 "주급(유로)"이라고 설명했는데 틀렸다. modudata 설명을 확인하니 몸값(유로)이었다. 열의 뜻은 AI 말만 믿지 않고 원래 설명과 대조하기로 했다.
+- 느낀 점: AI가 그럴듯하게 틀릴 수 있다는 걸 첫 주부터 겪었다.</div></div>
+    <div><div class="mini-label">샘플 5 · 검진표연구소 · 생명과학</div><div class="ex sm">## 10101 홍길동
+- 오늘 결정한 것: 질문을 "건강검진의 혈액 생화학 수치(콜레스테롤·중성지방·혈당)와 체질량지수로 1년 뒤 당뇨 진행 정도를 예측할 수 있는가"로 정했다.
+- AI에게 보낸 프롬프트(원문): 당뇨 환자의 혈액 검사 수치와 병이 얼마나 진행했는지가 함께 들어 있는 공개 데이터를 찾아 줘. 이름 같은 개인 정보가 없고, 원래 출처와 열 설명을 확인할 수 있는 것이면 좋겠어.
+- AI가 준 것 중 고치거나 버린 것과 그 이유: AI가 데이터 공유 사이트에 올라온 당뇨 데이터 몇 개를 추천했는데, 그중 두 개는 올린 사람이 어디서 가져왔는지 적혀 있지 않아서 버렸다. 논문 원출처와 설명 페이지가 있는 Efron 등(2004)의 당뇨 데이터 442명을 후보로 정했다.
+- 느낀 점: 데이터는 많이 나오는데 출처까지 확인되는 건 생각보다 적었다.</div></div>
+  </div>
+  <div class="callout red">셋째 줄이 핵심입니다. AI가 준 것을 그대로 받아 적은 기록은 점수가 되지 않습니다.</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 9. 예시: 12차시 개인 해석문 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소 · 샘플 5 검진표연구소</div>
+  <h2>12차시에는 각자 해석문을 덧붙입니다</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div></div>
+  <div class="grid-2">
+    <div><div class="mini-label">샘플 1 · 몸값연구소 · 스포츠</div><div class="ex sm">## 10102 김영희
+- 개인 해석문: 팀 결론을 보완한다. 젊을수록 비싸다는 경향은 맞지만, 23살 이하 시험 데이터 36명의 평균 오차는 656만 유로로 24살 이상(200만 유로)의 세 배가 넘는다. 모델은 젊은 최상위 선수를 실제보다 높게 예측한다. 로그를 씌운 직선 모델이라 능력치와 젊음이 겹치면 예측이 너무 빠르게 커지는 것으로 보인다. 그래서 "젊을수록 비싸다, 하지만 그 정도는 모델이 과장한다"까지 말해야 정확하다.</div></div>
+    <div><div class="mini-label">샘플 5 · 검진표연구소 · 생명과학</div><div class="ex sm">## 10102 김영희
+- 개인 해석문: 팀 결론을 보완한다. 실제 점수가 250 이상인 시험 데이터 환자 10명은 모두 낮게 예측되었고 평균 72.4점 낮았다. 반대로 100 미만 환자 34명은 평균 29.4점 높게 예측되었다. 모델이 진행 점수를 가운데 쪽으로 끌어당기는 것이다. 그래서 "어느 정도 예측할 수 있다"에 "진행이 많이 된 환자일수록 모델이 낮게 본다"를 꼭 붙여 말해야 한다.</div></div>
+  </div>
+  <ul class="pts sm" style="margin-top:1.6vh">
+    <li>팀 결론에 동의 · 보완 · 반대 중 하나를 밝히고 수치로 근거</li>
+    <li>문답에서 이 해석문을 묻습니다</li>
+  </ul>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 10. 발표 슬라이드 -->
 <section class="slide">
   <div class="eyebrow">발표 슬라이드 16장</div>
   <h2>슬라이드: 1부 12장 + 2부 4장</h2>
@@ -245,7 +342,7 @@ table.plain a{color:var(--blue)}
   <div class="slide-no"></div>
 </section>
 
-<!-- 7. 모델 소개 수행평가 -->
+<!-- 11. 모델 소개 수행평가 -->
 <section class="slide">
   <div class="eyebrow">연계 수행평가</div>
   <h2>모델 소개: 알고리즘을 이해했는지 봅니다</h2>
@@ -255,18 +352,106 @@ table.plain a{color:var(--blue)}
     <li>제출은 슬라이드 2부 4장 + README "모델 소개" 표(3행×6열)</li>
     <li>발표 3분(팀 프로젝트 발표와 별도) · 배점은 추후 공지</li>
   </ul>
-  <div class="res-wrap" style="margin-top:2vh">
-    <table class="plain">
-      <tr><th>모델</th><th>원리 한 줄</th><th>장점</th><th>단점</th><th>이런 상황에 좋다</th><th>우리 데이터 결과</th></tr>
-      <tr><td>선택 모델</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td></tr>
-      <tr><td>비교 모델 1</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td></tr>
-      <tr><td>비교 모델 2</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td><td class="dot">…</td></tr>
+  <div class="callout">다음 장에 실제 표</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 12. 예시: 모델 소개 표(샘플 1) -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소</div>
+  <h2>모델 소개 표는 이렇게 채웁니다</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div> <span class="mini-label">샘플 1 · 몸값연구소 · 스포츠</span></div>
+  <div class="res-wrap">
+    <table class="plain sm wrap">
+      <tr><th>모델</th><th>원리</th><th>장점</th><th>단점</th><th>적합한 상황</th><th>우리 데이터 결과</th></tr>
+      <tr><td><b>선형 회귀(선택)</b></td><td>입력과 예측값의 관계를 직선(입력이 둘이면 평면)으로 나타내고, 오차가 가장 작아지는 계수를 찾음</td><td>계수로 영향의 크기를 읽을 수 있음 · 계산이 빠르고 단순함</td><td>곡선 관계를 잘 따라가지 못함 · 이상값에 크게 흔들림</td><td>관계가 직선에 가깝고, 결과의 이유를 설명해야 할 때</td><td>MAE 303만 유로 · R² 0.94(로그 척도)</td></tr>
+      <tr><td><b>XGBoost 회귀(비교 1)</b></td><td>작은 결정 트리를 차례로 더함. 새 트리는 앞 트리들이 남긴 오차를 줄이도록 학습</td><td>표 형태 데이터에서 정확도가 높음 · 곡선 관계와 변수 사이의 조합을 스스로 반영</td><td>트리가 많아 예측의 이유를 설명하기 어려움 · 설정값이 많고 과적합에 주의해야 함</td><td>설명보다 예측 정확도가 중요할 때</td><td>MAE 263만 유로 · R² 0.96(로그 척도)</td></tr>
+      <tr><td><b>k-NN 회귀(k=5, 비교 2)</b></td><td>입력이 가장 가까운 데이터 5개를 찾아 그 값의 평균으로 예측</td><td>원리가 단순함 · 따로 학습하는 과정이 없음</td><td>열의 단위(척도)에 따라 거리가 달라짐 · 왜 그 값이 나왔는지 규칙으로 설명하지 못함</td><td>변수가 적고 비슷한 사례가 충분히 많을 때</td><td>MAE 263만 유로 · R² 0.96(로그 척도)</td></tr>
     </table>
+  </div>
+  <div class="ex">결론: 우리 데이터에서는 XGBoost와 k-NN이 MAE 263만 유로로 선형 회귀(303만 유로)보다 정확했습니다. 그래도 우리 질문은 "몸값이 능력치로 설명되는가"이므로 계수로 답을 말해 주는 선형 회귀를 선택했고, 몸값을 정확히 맞히는 것이 목적이라면 XGBoost를 고르겠습니다.</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 13. 예시: 모델 소개 표(샘플 5) -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 5 검진표연구소</div>
+  <h2>같은 표를 생명과학 데이터에 적용하면</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div> <span class="mini-label">샘플 5 · 검진표연구소 · 생명과학</span></div>
+  <div class="res-wrap">
+    <table class="plain sm wrap">
+      <tr><th>모델</th><th>원리</th><th>장점</th><th>단점</th><th>적합한 상황</th><th>우리 데이터 결과</th></tr>
+      <tr><td><b>선형 회귀(선택)</b></td><td>입력과 예측값의 관계를 직선(입력이 둘이면 평면)으로 나타내고, 오차가 가장 작아지는 계수를 찾음</td><td>계수로 영향의 크기를 읽을 수 있음 · 계산이 빠르고 단순함</td><td>곡선 관계를 잘 따라가지 못함 · 이상값에 크게 흔들림</td><td>관계가 직선에 가깝고, 결과의 이유를 설명해야 할 때</td><td>시험 MAE 44.0점 · R² 0.452 · 계수 bmi 7.9, ltg 51.3</td></tr>
+      <tr><td><b>랜덤 포레스트 회귀(300그루, 비교 1)</b></td><td>데이터를 조금씩 다르게 뽑아 결정 트리 여러 개를 만들고, 그 예측을 평균함</td><td>곡선 관계와 변수 사이의 조합을 반영함 · 트리 하나보다 예측이 안정적임</td><td>트리가 많아 예측의 이유를 해석하기 어려움 · 훈련 데이터 점수가 실제보다 좋게 나와 시험 데이터로 따로 확인해야 함</td><td>관계가 복잡하고, 해석보다 안정적인 예측이 중요할 때</td><td>시험 MAE 43.9점 · R² 0.420 · 훈련 MAE 19.3점</td></tr>
+      <tr><td><b>XGBoost 회귀(기본값, 비교 2)</b></td><td>작은 결정 트리를 차례로 보탬. 새 트리는 앞 트리들이 남긴 오차를 줄이도록 학습</td><td>표 형태 데이터에서 정확도가 높은 편임 · 곡선 관계와 변수 사이의 조합을 스스로 반영함</td><td>데이터가 작으면 훈련 데이터를 외우기 쉬움(과적합) · 설정값에 따라 결과가 크게 달라짐</td><td>데이터가 많고, 설정값을 조정하며 예측 정확도를 높여야 할 때</td><td>시험 MAE 50.7점 · R² 0.196 · 훈련 MAE 4.4점</td></tr>
+    </table>
+  </div>
+  <div class="ex">결론: 우리 데이터에서 랜덤 포레스트는 선형 회귀와 MAE 차이가 0.07점뿐이었고, XGBoost는 훈련 MAE 4.4점과 시험 MAE 50.7점의 차이가 커서 353명의 훈련 데이터를 외운 것에 가까웠습니다. 성능이 거의 같다면 어떤 수치가 진행을 알려 주는지 계수로 답할 수 있는 선형 회귀가 우리 질문에 맞다고 판단했습니다.</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 14. 예시: 모델 소개 슬라이드 한 장 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소</div>
+  <h2>슬라이드 2부 한 장은 이렇게 생겼습니다</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div></div>
+  <div class="grid-2 wide-left">
+    <div class="card blue"><h3>우리가 선택한 모델: 선형 회귀</h3>
+      <ul class="pts sm">
+        <li>원리: 오차가 가장 작아지는 직선을 찾음 (우리는 로그 몸값에 적용)</li>
+        <li>장점: 계수로 영향 해석 (능력치 1점 1.20배) · 계산이 빠르고 단순</li>
+        <li>단점: 곡선 관계에 약함 · 이상값에 흔들림</li>
+        <li>이런 상황에 좋음: 관계가 직선에 가깝고 이유를 설명해야 할 때</li>
+        <li>우리 데이터: MAE 303만 유로 · R² 0.94(로그 척도)</li>
+      </ul></div>
+  <ul class="pts sm" style="margin-top:1.6vh">
+    <li>한 장에 줄 5개, 키워드</li>
+    <li>같은 틀로 비교 모델 2장 + 비교 요약 표 1장</li>
+    <li>샘플 5도 선형 회귀를 선택했지만 비교 모델은 랜덤 포레스트·XGBoost</li>
+  </ul>
   </div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 8. 포스터 -->
+<!-- 15. 예시: 인사이트 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소 · 샘플 5 검진표연구소</div>
+  <h2>결과 해석에는 "찾아낸 것"을 씁니다</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div></div>
+  <div class="grid-2">
+    <div><div class="mini-label">샘플 1 · 몸값연구소 · 스포츠</div><div class="ex sm">1. 몸값은 지금의 실력값이 아니라 남은 선수 생활까지 합친 값이었다.
+- 근거: 같은 능력치 85라도 모델은 22살을 8,351만 유로, 32살을 3,393만 유로로 예측해 2.5배 차이가 납니다. 실제 데이터에서도 능력치 85인 23살 이하 4명의 몸값 중앙값은 7,625만 유로로, 30살 이상 5명(2,650만 유로)의 2.9배입니다.
+- 뜻: 이 데이터에서는 몸값이 "지금 얼마나 잘하는가"와 함께 "앞으로 몇 년을 더 뛸 수 있는가"를 담고 있는 것으로 보입니다.
+- 상식과 다른 점: 처음에는 몸값이 능력치로 다 정해진다고 생각했습니다. 같은 능력치에서도 나이에 따라 몸값이 세 배 가까이 달랐습니다.</div></div>
+    <div><div class="mini-label">샘플 5 · 검진표연구소 · 생명과학</div><div class="ex sm">1. 이 데이터에서는 지금의 혈당보다 체질량지수와 중성지방이 1년 뒤 진행을 더 잘 알려 주었습니다.
+- 근거: 진행 점수와의 상관계수는 혈당 0.38, 체질량지수 0.59, 중성지방 0.57입니다. 각 수치의 상위 25% 환자와 하위 25% 환자의 평균 진행 점수 차이도 혈당 83.9점, 체질량지수 106.7점, 중성지방 115.5점이었습니다.
+- 뜻: 혈당도 진행과 함께 가지만, 이 데이터에서 혈당이 알려 주는 정보는 체질량지수와 중성지방에 대부분 들어 있었습니다. 원인을 밝힌 것이 아니라, 1년 뒤를 예측하는 데 도움이 되는 정보가 어느 수치에 있었는지를 확인한 것입니다.
+- 상식과 다른 점: 처음에는 당뇨이니 혈당이 가장 중요할 것이라고 생각했습니다. 이 데이터에서는 몸무게와 지방 쪽 수치가 혈당보다 진행과 더 강하게 함께 움직였습니다.</div></div>
+  </div>
+  <ul class="pts sm" style="margin-top:1.6vh">
+    <li>헤드라인 → 근거 수치와 사례 → 뜻 → 상식과 다른 점 · 지표를 다시 말하는 것("R²가 0.94입니다")은 발견이 아님</li>
+  </ul>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 16. 예시: 한계 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소 · 샘플 5 검진표연구소</div>
+  <h2>한계는 수치로 씁니다</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div></div>
+  <div class="grid-2">
+    <div><div class="mini-label">샘플 1 · 몸값연구소 · 스포츠</div><div class="ex sm">- 이 800명은 원본 18,507명 가운데 종합 능력치 상위 선수(77~91)이고 골키퍼는 0명입니다. 능력치 77 미만 선수나 골키퍼에게는 이 모델을 적용할 수 없습니다.
+- 종합 능력치 90 이상은 8명(시험 데이터에는 2명)뿐입니다. 능력치 86 이상 시험 데이터 10명의 평균 오차는 1,277만 유로로, 85 이하 149명(238만 유로)의 다섯 배가 넘습니다. 최상위 선수의 예측은 믿기 어렵습니다.
+- 이 결과를 잘못 쓰면 생길 수 있는 일: 이 모델은 게임 회사가 매긴 몸값을 따라 한 것입니다. 이 모델로 실제 이적료를 정하거나 "나이 많은 선수는 가치가 낮다"고 단정하면 안 됩니다.</div></div>
+    <div><div class="mini-label">샘플 5 · 검진표연구소 · 생명과학</div><div class="ex sm">- R² 0.453은 진행 점수 차이의 절반 이상(약 55%)을 이 측정값들로 설명하지 못한다는 뜻입니다.
+- 실제 점수가 250 이상인 시험 데이터 환자 10명은 모두 낮게 예측되었습니다(평균 72.4점 낮음). 그중 가장 높은 예측값도 250.8이었습니다.
+- 이 결과를 잘못 쓰면 생길 수 있는 일: 이 모델로 개인의 병 진행을 예측하거나 치료 결정을 내리면 안 됩니다. 진행이 많이 될 환자를 낮게 예측하는 경향이 있어서, 이 예측을 믿고 관리를 늦추면 위험할 수 있습니다.</div></div>
+  </div>
+  <div class="callout red">'잘 된다'만 있는 한계는 최하 수준입니다.</div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 17. 포스터 -->
 <section class="slide">
   <div class="eyebrow">포스터</div>
   <h2>포스터: A1 세로, 2단 연구 포스터</h2>
@@ -299,7 +484,38 @@ table.plain a{color:var(--blue)}
   <div class="slide-no"></div>
 </section>
 
-<!-- 9. 평가 요소 -->
+<!-- 18. 예시: 포스터 실물 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소 · 샘플 5 검진표연구소</div>
+  <h2>포스터는 이렇게 생겼습니다</h2>
+  <div class="grid-2" style="justify-items:center">
+    <div style="text-align:center"><img src="img/project-poster-sample1.png" alt="샘플 1 몸값연구소 포스터" style="max-height:58vh;width:auto;max-width:100%;border:1px solid var(--line);border-radius:12px"><p class="cap2">샘플 1 몸값연구소(스포츠)</p></div>
+    <div style="text-align:center"><img src="img/project-poster-sample5.png" alt="샘플 5 검진표연구소 포스터" style="max-height:58vh;width:auto;max-width:100%;border:1px solid var(--line);border-radius:12px"><p class="cap2">샘플 5 검진표연구소(생명과학)</p></div>
+  </div>
+  <ul class="pts sm" style="margin-top:1vh"><li>같은 2단 틀(요약 · 서론 · 데이터 · 방법 / 결과 · 논의 · 결론 · 참고문헌 · QR), 분야만 다름</li></ul>
+  <p class="muted" style="font-size:clamp(12px,.9vw,15px);margin-top:.6vh">원본 https://greatsong.github.io/ds-sample-1-regression/poster.pdf · https://greatsong.github.io/ds-sample-5-biochem/poster.pdf</p>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 19. 예시: 생성형 AI 활용 명시 -->
+<section class="slide">
+  <div class="eyebrow">예시 · 샘플 1 몸값연구소 · 샘플 5 검진표연구소</div>
+  <h2>AI를 어디에 썼는지 밝힙니다</h2>
+  <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div></div>
+  <div class="grid-2">
+    <div><div class="mini-label">샘플 1 · 몸값연구소 · 스포츠</div><div class="ex sm">- 사용한 AI 모델: Claude Fable 5.1(Anthropic). 이 샘플은 선생님이 이 모델로 만들었습니다. 실제 팀은 사용한 모델 이름과 버전(예: ChatGPT GPT-5, Gemini 2.5, Claude 등)을 그대로 적습니다.
+- 사용한 곳: 앱 코드(code/main.py) 작성, 분석 결과에 대한 반론 요청, README 문구 다듬기
+- 사용하지 않은 곳: 주제를 고른 이유, 결과 해석, 결론. 팀원이 직접 썼습니다.
+- 검증 방법: README의 모든 수치는 code/check.py로 다시 계산해 확인했습니다.</div></div>
+    <div><div class="mini-label">샘플 5 · 검진표연구소 · 생명과학</div><div class="ex sm">- 사용한 AI 모델: Claude Fable 5.1(Anthropic). 이 샘플은 선생님이 이 모델로 만들었습니다. 실제 팀은 사용한 모델 이름과 버전(예: ChatGPT GPT-5, Gemini 2.5, Claude 등)을 그대로 적습니다.
+- 사용한 곳: 분석 코드와 앱 코드 작성, 우리 해석에 대한 반론 요청, 문구 다듬기
+- 사용하지 않은 곳: 주제 선정 이유, 결과 해석, 결론. 이 부분은 팀이 직접 썼습니다.
+- 검증 방법: 모든 수치는 code/check.py로 다시 계산해 확인했습니다. AI의 제안을 받아들이지 않은 기록은 log/에 있습니다.</div></div>
+  </div>
+  <div class="slide-no"></div>
+</section>
+
+<!-- 20. 평가 요소 -->
 <section class="slide">
   <div class="eyebrow">평가 요소</div>
   <h2>평가: 판단 4축 + AI 활용 기록, 20점</h2>
@@ -320,7 +536,7 @@ table.plain a{color:var(--blue)}
   <div class="slide-no"></div>
 </section>
 
-<!-- 10. 문답 -->
+<!-- 21. 문답 -->
 <section class="slide">
   <div class="eyebrow">문답</div>
   <h2>문답: 포스터 앞에서 팀원 전원</h2>
@@ -345,21 +561,7 @@ table.plain a{color:var(--blue)}
   <div class="slide-no"></div>
 </section>
 
-<!-- 11. 중요한 포인트 1 -->
-<section class="slide">
-  <div class="eyebrow">중요한 포인트 ①</div>
-  <h2>해석은 팀이 씁니다</h2>
-  <ul class="pts">
-    <li>"왜 이 주제인가"와 "결과 해석"은 팀이 직접(AI가 쓴 해석은 문답에서 바로 드러남)</li>
-    <li>결과 해석에는 우리 팀이 찾아낸 것 3개: 헤드라인 → 근거 수치·사례 → 뜻 → 처음 생각과 달랐던 점</li>
-    <li>지표를 다시 말하는 것은 발견이 아님</li>
-    <li>한계는 수치로("잘 된다"만 있으면 최하)</li>
-    <li>모든 수치는 check.py로 다시 계산 가능</li>
-  </ul>
-  <div class="slide-no"></div>
-</section>
-
-<!-- 12. 중요한 포인트 2 -->
+<!-- 22. 출처 · AI · 재현 -->
 <section class="slide">
   <div class="eyebrow">중요한 포인트 ②</div>
   <h2>출처 · AI · 재현</h2>
@@ -367,14 +569,14 @@ table.plain a{color:var(--blue)}
     <li>데이터 출처는 1차 출처(기관 · 데이터 이름 · 연도 · 주소 · 접근일 · 이용 조건), 깃허브·캐글 사본이면 원출처 함께</li>
     <li>생성형 AI 활용 명시: 모델 이름과 버전, 사용한 곳, 사용하지 않은 곳, 검증 방법</li>
     <li>참고문헌: 데이터 · 소프트웨어 · AI 모델 · 교과서</li>
-    <li>requirements.txt 버전 고정, 난수 고정</li>
+    <li>requirements.txt에는 라이브러리 이름만(버전은 적지 않음), 난수 고정</li>
     <li>교차검증을 하지 않았으면 한계에 적기</li>
   </ul>
   <div class="callout red"><b>안 되는 것</b>: 샘플과 같은 데이터·같은 질문 · 개인 단위 식별 정보(이름 · 연락처 · 주소 · 학번)가 든 데이터 · 프롬프트 공유 링크(원문을 붙여 넣음)</div>
   <div class="slide-no"></div>
 </section>
 
-<!-- 13. 이름 공개와 닉네임 -->
+<!-- 23. 이름 공개와 닉네임 -->
 <section class="slide">
   <div class="eyebrow">이름 공개와 닉네임</div>
   <h2>공개 저장소, 이름은 동의하고 씁니다</h2>
@@ -388,7 +590,7 @@ table.plain a{color:var(--blue)}
   <div class="slide-no"></div>
 </section>
 
-<!-- 14. 일정 -->
+<!-- 24. 일정 -->
 <section class="slide">
   <div class="eyebrow">일정과 확인 지점</div>
   <h2>5주: 확인 지점 세 번</h2>
@@ -402,7 +604,7 @@ table.plain a{color:var(--blue)}
   <div class="slide-no"></div>
 </section>
 
-<!-- 15. 샘플과 안내 페이지 -->
+<!-- 25. 샘플과 안내 페이지 -->
 <section class="slide">
   <div class="eyebrow">샘플과 안내 페이지</div>
   <h2>샘플 5개를 보고 시작합니다</h2>
