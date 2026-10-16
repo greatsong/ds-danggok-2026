@@ -174,12 +174,12 @@ table.plain a{color:var(--blue)}
   <div class="grid-3">
     <div class="card red"><div class="mini-label">기록·증빙</div><h3>깃허브 저장소</h3>
       <ul class="pts sm"><li>README · data/ · code/main.py · log/01~12</li><li>평가의 원천</li><li>12차시 동결</li></ul></div>
-    <div class="card blue"><div class="mini-label">제출물 · 16장</div><h3>발표 슬라이드</h3>
-      <ul class="pts sm"><li>1부 프로젝트 12장</li><li>2부 모델 소개 4장</li><li>발표는 포스터로, 모델 소개는 슬라이드로</li></ul></div>
+    <div class="card blue"><div class="mini-label">연계 수행평가 · 4장</div><h3>모델 소개 슬라이드</h3>
+      <ul class="pts sm"><li>선택 모델 · 비교 모델 2 · 비교 요약</li><li>3분 발표</li><li>프로젝트 발표용 슬라이드는 없음(포스터로 발표)</li></ul></div>
     <div class="card green"><div class="mini-label">최종 발표 · A1 세로</div><h3>포스터</h3>
       <ul class="pts sm"><li>2단 연구 포스터 1장</li><li>포스터 앞에서 팀원 전원 문답</li></ul></div>
   </div>
-  <div class="callout">슬라이드·포스터는 README를 옮긴 것. README가 완성되면 나머지는 짧습니다.<br>예시는 샘플 1(축구 몸값, 스포츠)과 샘플 5(당뇨 진행, 생명과학) 두 가지를 나란히 보여 줍니다.</div>
+  <div class="callout">포스터는 README를 옮긴 것. README가 완성되면 나머지는 짧습니다.<br>예시는 샘플 1(축구 몸값, 스포츠)과 샘플 5(당뇨 진행, 생명과학) 두 가지를 나란히 보여 줍니다.</div>
   <div class="slide-no"></div>
 </section>
 
@@ -320,21 +320,17 @@ table.plain a{color:var(--blue)}
 
 <!-- 10. 발표 슬라이드 -->
 <section class="slide">
-  <div class="eyebrow">발표 슬라이드 16장</div>
-  <h2>슬라이드: 1부 12장 + 2부 4장</h2>
+  <div class="eyebrow">모델 소개 슬라이드 4장</div>
+  <h2>슬라이드는 모델 소개 4장뿐입니다</h2>
   <div class="grid-2">
-    <div class="card"><h3>1부 · 프로젝트 12장</h3>
-      <ol class="list">
-        <li>제목</li><li>우리 팀의 데이터셋</li><li>이 문제를 선택한 이유</li><li>어떤 과정으로 분석했는지</li>
-        <li>어떤 모델을 고려했는지</li><li>왜 이 모델을 선택했는지</li><li>우리가 사용한 평가지표</li><li>우리 팀이 결정한 것</li>
-        <li>결과에 대한 우리 팀의 해석</li><li>더 해 보고 싶은 것(교과·진로)</li><li>느끼고 배운 점</li><li>감사합니다</li>
-      </ol></div>
+    <div class="card blue"><h3>모델 소개 4장</h3>
+      <ol class="list"><li>우리가 선택한 모델</li><li>비교 모델 1</li><li>비교 모델 2</li><li>세 모델 비교 요약</li></ol>
+      <ul class="pts sm"><li>장마다 원리 · 장점 · 단점 · 이런 상황에 좋다 · 우리 데이터 결과</li><li>한 장에 줄 3~5개, 키워드</li></ul></div>
     <div class="right-stack">
-      <div class="card blue"><h3>2부 · 모델 소개 4장</h3>
-        <ol class="list"><li>선택 모델</li><li>비교 모델 1</li><li>비교 모델 2</li><li>세 모델 비교 요약</li></ol></div>
+      <div class="card"><h3>프로젝트 발표용 슬라이드는 만들지 않습니다</h3>
+        <ul class="pts sm"><li>데이터셋 · 선택 이유 · 분석 과정 · 고려한 모델 · 평가지표 · 결정한 것 · 해석 · 더 해 보고 싶은 것 · 느끼고 배운 점은 README와 포스터에</li><li>발표는 포스터 앞 문답으로</li></ul></div>
       <ul class="pts sm">
-        <li>한 장에 줄 3~5개, 키워드</li>
-        <li>"고려한 모델"은 실제 모델 종류(로지스틱 · k-NN · 결정 트리 · 랜덤 포레스트 · XGBoost 등)를 같은 조건에서 비교한 표</li>
+        <li>비교 모델은 실제 모델 종류(로지스틱 · k-NN · 결정 트리 · 랜덤 포레스트 · XGBoost 등)에서 고르고 같은 조건에서 비교</li>
         <li>점수가 가장 높은 모델을 고르지 않아도 되지만 이유를 말해야 함</li>
       </ul>
     </div>
@@ -349,7 +345,7 @@ table.plain a{color:var(--blue)}
   <ul class="pts sm">
     <li>팀이 선택한 모델 + 비교 모델 2개</li>
     <li>모델마다 원리 한 줄 · 장점 · 단점 · 이런 상황에 좋다 · 우리 데이터 결과</li>
-    <li>제출은 슬라이드 2부 4장 + README "모델 소개" 표(3행×6열)</li>
+    <li>제출은 슬라이드 4장 + README "모델 소개" 표(3행×6열)</li>
     <li>발표 3분(팀 프로젝트 발표와 별도) · 배점은 추후 공지</li>
   </ul>
   <div class="callout">다음 장에 실제 표</div>
@@ -393,7 +389,7 @@ table.plain a{color:var(--blue)}
 <!-- 14. 예시: 모델 소개 슬라이드 한 장 -->
 <section class="slide">
   <div class="eyebrow">예시 · 샘플 1 몸값연구소</div>
-  <h2>슬라이드 2부 한 장은 이렇게 생겼습니다</h2>
+  <h2>모델 소개 슬라이드 한 장은 이렇게 생겼습니다</h2>
   <div><div class="mini-label">실제 저장소에서 그대로 가져옴</div></div>
   <div class="grid-2 wide-left">
     <div class="card blue"><h3>우리가 선택한 모델: 선형 회귀</h3>
@@ -476,7 +472,7 @@ table.plain a{color:var(--blue)}
         <ul class="pts sm">
           <li>문체는 개조식(~함, ~됨). ~합니다 금지</li>
           <li>그림마다 번호와 한 문장 캡션</li>
-          <li>모델 소개 표 · 교과 연계 · 느낀 점은 포스터에 넣지 않음(README · 슬라이드에 있음)</li>
+          <li>모델 소개 표 · 교과 연계 · 느낀 점은 포스터에 넣지 않음(README에 있음)</li>
         </ul>
       </div>
     </div>
