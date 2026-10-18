@@ -1357,7 +1357,7 @@
   function sttTestCard() {
     var card = h('div', { class: 'card' });
     card.appendChild(h('b', null, '전사 테스트'));
-    card.appendChild(h('p', { class: 'small muted' }, '30초~1분 정도 두 마이크로 대화를 녹음한 뒤, 고른 엔진으로 같은 녹음을 받아 적어 비교합니다. 결과는 시트의 ‘전사 테스트’ 탭에도 남습니다.'));
+    card.appendChild(h('p', { class: 'small muted' }, '30초~1분 정도 두 마이크로 대화를 녹음한 뒤, 고른 엔진으로 같은 녹음을 받아 적어 비교합니다. 결과는 시트의 ‘전사 테스트’ 탭에도 남습니다. 맥의 로컬 Whisper 결과는 맥에서 python3 scripts/oral_local_transcribe.py --tests 를 실행하면 같은 탭에 더해집니다.'));
     var engines = [
       ['gemini:gemini-3.8-flash', 'Gemini 3.8 Flash(최신 · 기본)', true], ['gemini:gemini-3.5-transcribe', 'Gemini 3.5 Transcribe(전사 전용 · 화자 구분)', true],
       ['gemini:gemini-2.5-flash', 'Gemini 2.5 Flash', false],
