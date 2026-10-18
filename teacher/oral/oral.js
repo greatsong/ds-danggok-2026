@@ -471,7 +471,10 @@
   }
 
   function syncAll() {
-    if (S.syncing || !S.cfg) return Promise.resolve();
+    if (!S.cfg) return Promise.resolve();
+    // 올리는 중에 새 기록이 생기면 끝난 뒤 한 번 더 돈다(다음 정기 올리기까지 1분을 기다리지 않게)
+    if (S.syncing) { S.syncAgain = true; return Promise.resolve(); }
+    S.syncAgain = false;
     S.syncing = true; renderSync();
     var chain = Promise.resolve();
     // 1) 팀
@@ -515,7 +518,10 @@
       S.syncing = false;
       if (S.pendingTeams.every(function (t) { return !t._pending; })) { S.pendingTeams = []; lsSet('oral.pendingTeams', []); }
       return loadBoot(true);
-    }).catch(function () { S.syncing = false; }).then(function () { S.syncing = false; renderSync(); if (S.ui.tab !== 'eval' || $('#sheet').hidden) render(); });
+    }).catch(function () { S.syncing = false; }).then(function () {
+      S.syncing = false; renderSync(); if (S.ui.tab !== 'eval' || $('#sheet').hidden) render();
+      if (S.syncAgain) return syncAll();
+    });
   }
   window.addEventListener('online', function () { S.online = true; renderSync(); syncAll(); });
   window.addEventListener('offline', function () { S.online = false; renderSync(); });
@@ -730,7 +736,14 @@
           if (isName(toks[j]) && !used[j]) { nm = toks[j]; used[j] = true; }
           used[i] = true; people.push({ sid: toks[i], name: nm || toks[i] });
         });
-        toks.forEach(function (t, i) { if (used[i]) return; var c = normCls(t); if (c) cls = c; else labelParts.push(t); });
+        var clsTok = '';
+        toks.forEach(function (t, i) { if (used[i]) return; var c = normCls(t); if (c) { cls = c; clsTok = t; } else labelParts.push(t); });
+        // 팀 이름은 원래 줄에서 학번·이름·반만 빼고 남은 글자로 만든다(괄호 같은 기호를 살린다)
+        var rest = raw;
+        people.forEach(function (p) { rest = rest.replace(p.sid, ' '); if (p.name !== p.sid) rest = rest.replace(p.name, ' '); });
+        if (clsTok) rest = rest.replace(clsTok, ' ');
+        rest = rest.replace(/\(\s*\)|（\s*）/g, ' ').replace(/[\t,;|\/·:：]+/g, ' ').replace(/\s+/g, ' ').trim();
+        if (labelParts.length) labelParts = rest ? [rest] : labelParts;
       } else {
         // 학번이 없는 줄: "1팀: 김도윤, 박서연" · "몸값연구소" · "김도윤 박서연"
         var rest = toks.filter(function (t) { var c = normCls(t); if (c) { cls = c; return false; } return true; });
@@ -863,6 +876,19 @@
         if (d.final) box.appendChild(h('button', { type: 'button', class: 'btn block', style: 'margin-top:8px', onclick: function () {
           closeM(); openSession(team.id, cp.id, true);
         } }, '이 회차를 새 기록으로 다시 평가'));
+        if (d.final) box.appendChild(h('button', { type: 'button', class: 'btn block danger', style: 'margin-top:8px', onclick: function () {
+          if (!confirm(team.name + ' 팀의 이 회차 기록을 지울까요? 시트의 점수와 드라이브의 녹음도 함께 지워집니다.')) return;
+          closeM();
+          var done = function () {
+            return idb.del('drafts', d.id).then(function () { return idb.del('audio', d.id); }).then(function () {
+              S.drafts = S.drafts.filter(function (x) { return x.id !== d.id; });
+              if (S.boot) { S.boot.sessions = (S.boot.sessions || []).filter(function (x) { return x.id !== d.id; }); S.boot.scores = (S.boot.scores || []).filter(function (x) { return x.sid !== d.id; }); lsSet('oral.boot', S.boot); }
+              Rec.onTick = null; sheet.hidden = true; sheet.innerHTML = ''; document.body.style.overflow = ''; render(); toast('기록을 지웠습니다');
+            });
+          };
+          if (S.cfg && d.sync.session === 'done') api('deleteSession', { id: d.id }).then(done).catch(function (e) { toast('삭제 실패: ' + e.message); });
+          else done();
+        } }, '이 기록 삭제'));
         box.appendChild(h('button', { type: 'button', class: 'btn block', style: 'margin-top:8px', onclick: closeM }, '닫기'));
       });
     }
