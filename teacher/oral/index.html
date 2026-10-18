@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fffaf3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="구술 평가">
+<meta name="robots" content="noindex, nofollow">
+<title>구술 평가 · 데이터 과학 당곡고</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="oral.css?v=4">
+<script src="../../assets/gate.js"></script>
+</head>
+<body>
+<header class="top" id="top">
+  <div class="top-row">
+    <div class="brand">구술 평가</div>
+    <div class="seg" id="clsSeg" role="tablist" aria-label="반"></div>
+    <button class="sync-pill" id="syncPill" type="button" aria-label="업로드 상태"></button>
+  </div>
+  <div class="cp-row" id="cpRow" role="tablist" aria-label="회차"></div>
+</header>
+
+<main id="view" class="view"></main>
+
+<nav class="tabs" id="tabs" aria-label="화면">
+  <button type="button" data-tab="eval" class="on" aria-label="평가"><span class="ic">🎙️</span><span>평가</span></button>
+  <button type="button" data-tab="board" aria-label="현황"><span class="ic">📊</span><span>현황</span></button>
+  <button type="button" data-tab="queue" aria-label="기록"><span class="ic">☁️</span><span>기록</span></button>
+  <button type="button" data-tab="settings" aria-label="설정"><span class="ic">⚙️</span><span>설정</span></button>
+</nav>
+
+<div class="sheet" id="sheet" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="seed.js?v=2"></script>
+<script src="oral.js?v=7"></script>
+</body>
+</html>

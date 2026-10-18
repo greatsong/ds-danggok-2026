@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>구술 평가 체크리스트 · 데이터 과학 당곡고</title>
+<link rel="stylesheet" href="assets/style.css?v=tb16">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
+<link rel="stylesheet" href="assets/review.css">
+<style>
+  .oral-cp { margin-top: 34px; padding-top: 6px; border-top: 2px solid var(--line, #e5e7eb); }
+  .oral-cp h2 { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .oral-cp h2 .when { font-size: .8rem; font-weight: 700; color: var(--text-soft, #64748b); background: var(--green-soft, #ecfdf5); padding: 2px 10px; border-radius: 999px; }
+  .oral-cp .meta { color: var(--text-soft, #64748b); font-size: .92rem; margin: 4px 0 10px; }
+  .oral-cp .opener { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px; padding: 12px 14px; font-weight: 600; line-height: 1.6; }
+  .oral-cp .opener .lab { display: inline-block; font-size: .78rem; font-weight: 800; color: #c2410c; margin-right: 8px; }
+  .oral-cp details.fq { margin: 10px 0 4px; }
+  .oral-cp details.fq summary { cursor: pointer; font-weight: 700; color: var(--accent, #2563eb); }
+  .oral-cp details.fq ul { margin: 8px 0 0; }
+  .me { display: inline-block; font-size: .72rem; font-weight: 800; color: #fff; background: #7c3aed; border-radius: 6px; padding: 0 6px; margin-right: 2px; vertical-align: 1px; }
+  .rubric td { vertical-align: top; font-size: .9rem; }
+  .rubric td small { color: var(--text-soft, #64748b); }
+  .rubric th:nth-child(2) { color: #047857; } .rubric th:nth-child(3) { color: #b45309; } .rubric th:nth-child(4) { color: #b91c1c; }
+  .unit { display: inline-block; font-size: .7rem; font-weight: 800; padding: 0 6px; border-radius: 6px; background: #e0f2fe; color: #0369a1; }
+  .unit.indiv { background: #ede9fe; color: #6d28d9; }
+  .table-wrap { overflow-x: auto; }
+  .print-link { display: inline-block; margin-top: 6px; font-weight: 700; }
+  @media print { .topbar, .pager, .foot, details.fq summary { display: none; } details.fq[open] ul, details.fq ul { display: block; } }
+</style>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🧭</span> 데이터 과학 <span class="a">당곡고</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="project.html">← 팀 프로젝트 안내</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">팀 프로젝트 · 구술 평가</span>
+  <h1>구술 평가 — <span class="a">회차별 체크리스트와 루브릭</span></h1>
+  <div class="under"></div>
+
+  <p class="lead">팀 프로젝트는 진행 중 5회, 마지막에 1회, 총 6회에 걸쳐 선생님과 대화하며 평가합니다. 매 회차 질문과 채점 기준을 미리 공개하니, 체크리스트의 모든 항목을 준비해 오면 질문에 답할 수 있습니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 세 가지만 기억하면 됩니다</div>
+    <ul>
+      <li><b>과정 구술(①~⑤)은 팀 전체가 함께 설명합니다.</b> 선생님이 팀원 한 명씩 꼬리질문을 하며, 점수는 팀 점수로 부여됩니다.</li>
+      <li><b>최종 포스터 문답에서는 개인별로 평가하는 항목이 있습니다.</b> 지표 설명, 모델 설명과 선정 이유, 후보 모델 설명이 이에 해당합니다.</li>
+      <li><b>질문과 루브릭은 아래에 모두 공개합니다.</b> 팀원 모두가 체크리스트의 모든 항목에 답할 수 있어야 합니다.</li>
+    </ul>
+  </div>
+
+  <h2>회차 한눈에</h2>
+  <div class="table-wrap"><table class="daymap">
+    <thead><tr><th>회차</th><th>차시</th><th>무엇을 보는가</th><th>방식</th><th>점수</th></tr></thead>
+    <tbody>
+      <tr><td><b>①</b></td><td>3차시</td><td>주제 선정·데이터 수집</td><td>팀 대화 + 꼬리질문(팀당 약 3분)</td><td>팀</td></tr>
+      <tr><td><b>②</b></td><td>6차시</td><td>데이터 살펴보기·전처리</td><td>팀 대화 + 꼬리질문</td><td>팀</td></tr>
+      <tr><td><b>③</b></td><td>8차시</td><td>모델 후보·기준선</td><td>팀 대화 + 꼬리질문</td><td>팀</td></tr>
+      <tr><td><b>④</b></td><td>10차시</td><td>평가지표·결과</td><td>팀 대화 + 꼬리질문</td><td>팀</td></tr>
+      <tr><td><b>⑤</b></td><td>12차시</td><td>해석·한계</td><td>팀 대화 + 꼬리질문</td><td>팀</td></tr>
+      <tr><td><b>최종</b></td><td>13~15차시</td><td>포스터 문답</td><td>팀 설명 + 팀원별 개인 질문(팀당 약 8분)</td><td>팀 + 개인</td></tr>
+    </tbody>
+  </table></div>
+  <p>차시 일정은 학급 진도에 따라 다소 조정될 수 있습니다. 구술 평가 시간에는 팀이 차례로 선생님 자리로 오고, 나머지 팀은 자리에서 작업을 계속합니다.</p>
+
+  <h2>이렇게 진행합니다</h2>
+  <ol>
+    <li>선생님이 팀을 부르면 팀원 모두 선생님 자리로 옵니다.</li>
+    <li>무선 마이크는 두 개입니다. 하나는 선생님이 사용하고, 다른 하나는 말하는 학생이 들고 팀원끼리 돌려 가며 사용합니다.</li>
+    <li>선생님이 <b>시작 질문</b>을 읽으면 팀이 함께 2분 안에 설명합니다.</li>
+    <li>선생님이 팀원을 한 명씩 지목해 <b>꼬리질문</b>을 합니다. 회차마다 지목되는 사람이 다를 수 있으니, 팀원 모두 준비해 두기 바랍니다.</li>
+    <li>최종 포스터 문답에서는 팀 설명 후 팀원마다 지표·모델·후보 모델 관련 질문을 받습니다. 지목된 사람이 답하지 못하면 다른 팀원에게 같은 질문을 한 번 더 합니다. 이때 처음 지목된 사람의 해당 항목은 ‘하’로 평가되며, 팀 점수는 그대로 유지됩니다.</li>
+  </ol>
+
+  <div class="callout warn">
+    <div class="h">🎙️ 구술 평가는 녹음합니다</div>
+    <p>녹음은 평가 근거를 확인하고 이의 신청에 응답하는 데에만 사용하며, 선생님만 들을 수 있습니다. 학기 성적이 확정되고 이의 신청 기간이 끝나면 삭제합니다. 녹음을 글로 옮길 때 외부 AI 서비스를 사용하게 되면 미리 안내합니다. 녹음을 원하지 않으면 평가 전에 선생님께 말씀해 주세요. 이 경우 선생님은 메모로만 기록하며, 이로 인한 불이익은 없습니다.</p>
+  </div>
+
+  <div class="callout tip">
+    <div class="h">🖨️ 인쇄용 한 장</div>
+    <p>회차별 체크리스트를 한 장으로 모은 PDF입니다. 팀 자리에 두고 회차 전에 함께 확인해 주세요. <a class="print-link" href="assets/oral-checklist.pdf" target="_blank" rel="noopener">체크리스트 PDF 열기</a></p>
+  </div>
+
+  <p>아래 체크리스트의 항목을 누르면 초록색으로 표시되고, 이 기기에 기억됩니다. <span class="me">나</span> 표시는 한 사람씩 평가하는 항목입니다.</p>
+
+<!-- 회차 시작 -->
+  <section class="oral-cp" id="c1">
+  <h2>① 주제 선정·데이터 수집 <span class="when">3차시</span></h2>
+  <p class="meta"><b>보는 판단</b> 질문 설정·데이터 감식 · <b>방식</b> 팀 대화 + 개별 꼬리질문 · <b>팀당</b> 약 3분</p>
+  <div class="opener"><span class="lab">시작 질문</span>우리 팀의 질문, 이 주제를 고른 이유, 데이터를 찾은 과정을 2분 안에 설명해 주세요.</div>
+  <h3>준비 체크리스트</h3>
+  <ul class="checklist">
+    <li>우리 팀 질문을 "~는 정말 ~인가" 한 문장으로 말할 수 있다.</li>
+    <li>질문에 답하는 데 필요한 열 이름을 말할 수 있다.</li>
+    <li>이 주제를 고른 이유를 팀원마다 자기 경험으로 말할 수 있다.</li>
+    <li>데이터의 1차 출처(기관·데이터 이름·연도·주소)와 이용 조건을 확인했다.</li>
+    <li>다른 데이터 후보와 그것을 고르지 않은 이유를 말할 수 있다.</li>
+    <li>개인 단위 식별 정보(이름·연락처·주소·학번)가 없는지 확인했다.</li>
+    <li>질문·왜 이 주제인가·데이터 출처를 팀이 함께 정리해 두었다(4차시에 저장소 README로 옮긴다).</li>
+  </ul>
+  <details class="fq"><summary>선생님이 덧붙일 수 있는 질문</summary><ul>
+    <li>이 질문에 답하려면 데이터의 어느 열이 필요합니까?</li>
+    <li>이 데이터는 누가, 언제, 무엇을 위해 만들었습니까? 사용해도 되는 데이터입니까?</li>
+    <li>처음 찾은 데이터 후보는 무엇이었고, 왜 바꾸거나 남겼습니까?</li>
+    <li>AI가 추천한 주제나 데이터 가운데 버린 것은 무엇이고, 이유는 무엇입니까?</li>
+    <li>결과가 어떻게 나오면 우리 팀의 처음 생각이 틀린 것입니까?</li>
+  </ul></details>
+  <h3>루브릭</h3>
+  <div class="table-wrap"><table class="daymap rubric">
+    <thead><tr><th>항목</th><th>상</th><th>중</th><th>하</th></tr></thead><tbody>
+      <tr><td><b>질문의 범위</b> <span class="unit">팀</span><br><small>질문 설정</small></td><td>데이터의 열로 답할 수 있는 질문이고, 어떤 열과 어떤 관계를 볼지 말함</td><td>질문은 있으나 범위가 넓거나 사용할 열이 정해지지 않음</td><td>데이터로 답할 수 없는 질문이거나 질문을 말하지 못함</td></tr>
+      <tr><td><b>주제를 고른 이유</b> <span class="unit">팀</span><br><small>질문 설정</small></td><td>팀의 경험·관심에서 나온 구체적인 이유와 결과가 궁금한 까닭을 말함</td><td>이유가 일반적임("재미있어서", "데이터가 많아서")</td><td>이유를 말하지 못하거나 AI가 정한 주제를 그대로 가져옴</td></tr>
+      <tr><td><b>데이터 수집 과정</b> <span class="unit">팀</span><br><small>데이터 감식</small></td><td>1차 출처(기관·데이터 이름·연도·주소)와 이용 조건, 찾은 경로, 다른 후보와 비교한 결과, 개인 단위 정보가 없음을 말함</td><td>출처는 말하나 이용 조건·후보 비교·개인 정보 확인 가운데 일부가 빠짐</td><td>출처를 모르거나 개인 단위 정보가 든 데이터를 사용함</td></tr>
+    </tbody></table></div>
+  </section>
+  <section class="oral-cp" id="c2">
+  <h2>② 데이터 살펴보기·전처리 <span class="when">6차시</span></h2>
+  <p class="meta"><b>보는 판단</b> 데이터 감식 · <b>방식</b> 팀 대화 + 개별 꼬리질문 · <b>팀당</b> 약 3분</p>
+  <div class="opener"><span class="lab">시작 질문</span>데이터를 처음 열었을 때 무엇을 발견했고, 무엇을 빼고 무엇을 남겼는지 설명해 주세요.</div>
+  <h3>준비 체크리스트</h3>
+  <ul class="checklist">
+    <li>데이터의 행·열 수와 결측 개수를 말할 수 있다.</li>
+    <li>이상치나 표기가 제각각인 값을 찾아 예를 들 수 있다.</li>
+    <li>무엇을 빼고 무엇을 남겼는지, 그 기준을 말할 수 있다.</li>
+    <li>결측과 이상치를 어떻게 다르게 처리했는지 말할 수 있다.</li>
+    <li>전처리 전후의 행 수(또는 평균)를 비교했다.</li>
+    <li>전처리 코드를 본인 계정으로 커밋하고 log에 결정한 것을 적었다.</li>
+  </ul>
+  <details class="fq"><summary>선생님이 덧붙일 수 있는 질문</summary><ul>
+    <li>이 값을 뺀 기준은 무엇입니까? 빼지 않았다면 결과가 어떻게 달라졌겠습니까?</li>
+    <li>결측과 이상치는 각각 어떻게 처리했습니까?</li>
+    <li>전처리 전후로 행 수가 얼마나 달라졌습니까?</li>
+    <li>빼서 사라진 데이터는 어떤 대상입니까? 결과가 한쪽으로 치우칠 수 있습니까?</li>
+    <li>AI가 제안한 전처리 가운데 따르지 않은 것은 무엇입니까?</li>
+  </ul></details>
+  <h3>루브릭</h3>
+  <div class="table-wrap"><table class="daymap rubric">
+    <thead><tr><th>항목</th><th>상</th><th>중</th><th>하</th></tr></thead><tbody>
+      <tr><td><b>데이터 상태 파악</b> <span class="unit">팀</span><br><small>데이터 감식</small></td><td>행·열 수, 결측·이상치·분포의 치우침을 수치로 말함</td><td>문제가 있다는 것은 알지만 수치로 말하지 못함</td><td>데이터를 살펴보지 않았거나 상태를 모름</td></tr>
+      <tr><td><b>전처리 결정과 기준</b> <span class="unit">팀</span><br><small>데이터 감식</small></td><td>무엇을 빼고 남겼는지와 그 기준을 말하고, 결측과 이상치를 구분해 처리함</td><td>무엇을 뺐는지는 말하나 기준이 "이상해서" 수준임</td><td>무엇을 했는지 모르거나 AI가 처리한 그대로임</td></tr>
+      <tr><td><b>전처리의 영향</b> <span class="unit">팀</span><br><small>데이터 감식</small></td><td>전처리 전후의 행 수·평균 등을 비교하고, 결과에 미칠 영향(치우침)을 말함</td><td>전후 차이를 하나만 말하거나 영향을 짐작으로만 말함</td><td>전처리가 결과에 미칠 영향을 생각하지 않음</td></tr>
+    </tbody></table></div>
+  </section>
+  <section class="oral-cp" id="c3">
+  <h2>③ 모델 후보·기준선 <span class="when">8차시</span></h2>
+  <p class="meta"><b>보는 판단</b> 질문 설정·결과 해석 · <b>방식</b> 팀 대화 + 개별 꼬리질문 · <b>팀당</b> 약 3분</p>
+  <div class="opener"><span class="lab">시작 질문</span>질문에 맞는 방법을 무엇으로 골랐는지, 어떤 모델 후보를 비교했는지, 기준선은 무엇인지 설명해 주세요.</div>
+  <h3>준비 체크리스트</h3>
+  <ul class="checklist">
+    <li>우리 질문에 회귀·분류·군집·연관 가운데 무엇이 맞는지와 그 이유를 말할 수 있다.</li>
+    <li>실제 모델 종류 3개 이상을 같은 조건(같은 분할·변수·난수 고정)에서 비교했다.</li>
+    <li>기준선 모델이 무엇을 예측하는지 말할 수 있다.</li>
+    <li>후보 모델마다 기준선보다 얼마나 나은지 수치로 말할 수 있다.</li>
+    <li>앞서는 모델의 원리를 한두 문장으로 설명할 수 있다.</li>
+    <li>비교 코드를 커밋하고 log에 고르거나 버린 모델과 이유를 적었다.</li>
+  </ul>
+  <details class="fq"><summary>선생님이 덧붙일 수 있는 질문</summary><ul>
+    <li>기준선 모델은 무엇을 예측합니까?</li>
+    <li>후보 모델을 같은 조건에서 비교했다는 근거는 무엇입니까?</li>
+    <li>지금 앞서는 모델은 어떤 원리로 예측합니까? 한두 문장으로 설명해 주세요.</li>
+    <li>점수가 가장 높은 모델이 아닌 다른 모델을 고른다면 그 이유는 무엇입니까?</li>
+    <li>난수를 바꾸면 모델 순위가 바뀝니까?</li>
+  </ul></details>
+  <h3>루브릭</h3>
+  <div class="table-wrap"><table class="daymap rubric">
+    <thead><tr><th>항목</th><th>상</th><th>중</th><th>하</th></tr></thead><tbody>
+      <tr><td><b>방법 선택</b> <span class="unit">팀</span><br><small>질문 설정</small></td><td>질문의 형태(수치 예측·범주 맞히기·묶기·함께 나타남)에서 방법을 고른 이유를 말함</td><td>방법 이름은 말하나 질문과의 연결이 약함</td><td>왜 그 방법인지 말하지 못함</td></tr>
+      <tr><td><b>후보 모델 비교</b> <span class="unit">팀</span><br><small>결과 해석</small></td><td>실제 모델 종류 3개 이상을 같은 조건(같은 분할·변수·난수)에서 비교하고 차이를 말함</td><td>후보가 2개 이하이거나 비교 조건이 서로 다름</td><td>모델을 하나만 실행함</td></tr>
+      <tr><td><b>기준선</b> <span class="unit">팀</span><br><small>결과 해석</small></td><td>기준선이 무엇이고 왜 필요한지, 후보 모델이 기준선보다 얼마나 나은지를 말함</td><td>기준선을 계산했으나 그 의미를 설명하지 못함</td><td>기준선이 없음</td></tr>
+    </tbody></table></div>
+  </section>
+  <section class="oral-cp" id="c4">
+  <h2>④ 평가지표·결과 <span class="when">10차시</span></h2>
+  <p class="meta"><b>보는 판단</b> 결과 해석 · <b>방식</b> 팀 대화 + 개별 꼬리질문 · <b>팀당</b> 약 3분</p>
+  <div class="opener"><span class="lab">시작 질문</span>우리 모델의 결과를 평가지표와 기준선으로 설명하고, 그래프 하나를 골라 무엇을 뜻하는지 말해 주세요.</div>
+  <h3>준비 체크리스트</h3>
+  <ul class="checklist">
+    <li>우리 팀 지표의 뜻을 우리 데이터의 예로 설명할 수 있다.</li>
+    <li>우리 모델의 지표 값과 기준선 값을 함께 말할 수 있다.</li>
+    <li>그 지표를 고른 이유를 우리 질문과 연결해 말할 수 있다.</li>
+    <li>결과 그래프 하나를 골라 무엇을 뜻하는지 한 문장으로 말할 수 있다.</li>
+    <li>모델이 틀린 사례(또는 오차가 큰 구간)를 하나 찾아보았다.</li>
+    <li>README 결과 절에 지표와 기준선 비교 표를 적었다.</li>
+  </ul>
+  <details class="fq"><summary>선생님이 덧붙일 수 있는 질문</summary><ul>
+    <li>우리 지표 값은 우리 데이터에서 무슨 뜻입니까?</li>
+    <li>기준선보다 얼마나 나아졌습니까? 그 차이는 큰 편입니까?</li>
+    <li>이 질문에서 왜 그 지표를 중요하게 봅니까?</li>
+    <li>다른 지표로 보면 결론이 달라집니까?</li>
+    <li>모델이 틀린 사례를 하나 보여 줄 수 있습니까?</li>
+  </ul></details>
+  <h3>루브릭</h3>
+  <div class="table-wrap"><table class="daymap rubric">
+    <thead><tr><th>항목</th><th>상</th><th>중</th><th>하</th></tr></thead><tbody>
+      <tr><td><b>지표의 뜻</b> <span class="unit">팀</span><br><small>결과 해석</small></td><td>우리 팀이 사용한 지표의 뜻을 자기 말로, 우리 데이터의 예를 들어 설명함</td><td>정의는 말하나 우리 데이터에 대입하지 못함</td><td>지표의 뜻을 말하지 못함</td></tr>
+      <tr><td><b>결과 수치 읽기</b> <span class="unit">팀</span><br><small>결과 해석</small></td><td>결과 수치를 기준선과 비교해 얼마나 나아졌는지 말하고, 틀린 사례나 그래프로 뒷받침함</td><td>수치를 읽지만 기준선 비교나 근거가 없음</td><td>수치만 나열함</td></tr>
+      <tr><td><b>지표를 고른 이유</b> <span class="unit">팀</span><br><small>결과 해석</small></td><td>이 질문에서 그 지표가 왜 중요한지 말함(예: 놓치면 안 되는 사례가 있어 재현율을 봄)</td><td>"수업에서 배워서", "기본이라서" 수준임</td><td>이유를 말하지 못함</td></tr>
+    </tbody></table></div>
+  </section>
+  <section class="oral-cp" id="c5">
+  <h2>⑤ 해석·한계 <span class="when">12차시</span></h2>
+  <p class="meta"><b>보는 판단</b> 결과 해석·한계 인식 · <b>방식</b> 팀 대화 + 개별 꼬리질문 · <b>팀당</b> 약 3분</p>
+  <div class="opener"><span class="lab">시작 질문</span>우리 팀이 데이터에서 찾아낸 것 하나와, 이 결과를 믿기 어려운 이유 하나를 설명해 주세요.</div>
+  <h3>준비 체크리스트</h3>
+  <ul class="checklist">
+    <li>우리 팀이 찾아낸 것 3개를 근거 수치와 함께 말할 수 있다.</li>
+    <li>그 가운데 처음 생각과 달랐던 것을 말할 수 있다.</li>
+    <li>결과를 믿기 어려운 이유를 수치로 하나 이상 말할 수 있다.</li>
+    <li>이 결과가 잘못 쓰일 수 있는 상황을 말할 수 있다.</li>
+    <li>log/12.md에 개인 해석문(동의·보완·반대) 3~5줄을 썼다.</li>
+    <li>README의 결과 해석·한계 절을 팀이 직접 썼다.</li>
+  </ul>
+  <details class="fq"><summary>선생님이 덧붙일 수 있는 질문</summary><ul>
+    <li>그 발견의 근거 수치나 사례는 무엇입니까?</li>
+    <li>처음 생각과 달랐던 점은 무엇입니까?</li>
+    <li>이 결과를 누가 잘못 사용하면 어떤 문제가 생깁니까?</li>
+    <li>우연히 나온 결과일 가능성은 없습니까? 어떻게 확인하겠습니까?</li>
+    <li>팀 결론에 동의합니까? 본인이 다르게 본 점은 무엇입니까?</li>
+  </ul></details>
+  <h3>루브릭</h3>
+  <div class="table-wrap"><table class="daymap rubric">
+    <thead><tr><th>항목</th><th>상</th><th>중</th><th>하</th></tr></thead><tbody>
+      <tr><td><b>찾아낸 것</b> <span class="unit">팀</span><br><small>결과 해석</small></td><td>데이터에서 새로 찾아낸 것을 근거 수치·구체 사례와 함께 말하고, 처음 생각과 다른 점을 짚음</td><td>찾아낸 것은 있으나 근거가 약하거나 지표를 다시 말하는 수준임</td><td>지표 숫자만 말함</td></tr>
+      <tr><td><b>한계 인식</b> <span class="unit">팀</span><br><small>한계 인식</small></td><td>결과를 믿기 어려운 이유를 수치로 지목하고, 결과를 어디까지 사용할 수 있는지와 잘못 쓰일 가능성을 말함</td><td>한계를 한 가지 말하나 수치 근거가 없음</td><td>"잘 된다"만 말함</td></tr>
+      <tr><td><b>팀원 각자의 해석</b> <span class="unit">팀</span><br><small>결과 해석</small></td><td>팀원마다 팀 결론에 대한 동의·보완·반대 의견을 자기 말로 말함</td><td>일부 팀원만 자기 의견을 말함</td><td>팀 결론을 되풀이함</td></tr>
+    </tbody></table></div>
+  </section>
+  <section class="oral-cp" id="final">
+  <h2>최종 · 포스터 문답 <span class="when">13~15차시</span></h2>
+  <p class="meta"><b>보는 판단</b> 질문 설정·데이터 감식·결과 해석·한계 인식 · <b>방식</b> 팀 설명 + 팀원별 개인 질문 · <b>팀당</b> 약 8분</p>
+  <div class="opener"><span class="lab">시작 질문</span>포스터를 보며 질문부터 결론까지 2분 안에 설명해 주세요.</div>
+  <h3>준비 체크리스트</h3>
+  <ul class="checklist">
+    <li>포스터를 보며 질문부터 결론까지 2분 안에 설명할 수 있다.</li>
+    <li><span class="me">나</span> 우리 팀 평가지표의 뜻·우리 수치·기준선 수치를 설명할 수 있다.</li>
+    <li><span class="me">나</span> 선택한 모델의 원리와 고른 이유를 점수가 아닌 근거로도 말할 수 있다.</li>
+    <li><span class="me">나</span> 비교한 후보 모델 하나의 원리와 장단점을 선택 모델과 비교해 말할 수 있다.</li>
+    <li><span class="me">나</span> 내가 log에 적은 결정을 설명할 수 있다.</li>
+    <li>포스터에 저장소 QR과 참고문헌을 넣었다.</li>
+  </ul>
+  <details class="fq"><summary>선생님이 덧붙일 수 있는 질문</summary><ul>
+    <li>(팀원 모두) 우리 팀이 사용한 평가지표의 뜻과 우리 수치, 기준선 수치를 설명해 주세요.</li>
+    <li>(팀원 모두) 선택한 모델은 어떤 원리로 예측합니까? 왜 이 모델을 골랐습니까?</li>
+    <li>(팀원 모두) 비교한 후보 모델 하나는 어떤 원리이고, 선택한 모델과 무엇이 다릅니까?</li>
+    <li>(팀당 1명) 선생님이 log를 읽고 만든 질문</li>
+    <li>이 결과를 믿기 어려운 이유를 하나 말해 주세요.</li>
+  </ul></details>
+  <h3>루브릭</h3>
+  <div class="table-wrap"><table class="daymap rubric">
+    <thead><tr><th>항목</th><th>상</th><th>중</th><th>하</th></tr></thead><tbody>
+      <tr><td><b>포스터 설명</b> <span class="unit">팀</span><br><small>질문 설정</small></td><td>질문·데이터·방법·결과·결론을 한 흐름으로 설명하고 그림을 근거로 사용함</td><td>항목은 모두 있으나 서로의 연결이 약함</td><td>포스터를 읽기만 하거나 빠진 항목이 많음</td></tr>
+      <tr><td><b>해석과 한계</b> <span class="unit">팀</span><br><small>한계 인식</small></td><td>찾아낸 것과 한계를 수치 근거로 설명하고, 질문에 대한 결론을 분명히 말함</td><td>해석과 한계 가운데 하나가 약함</td><td>지표 숫자만 말함</td></tr>
+      <tr><td><b>지표 설명</b> <span class="unit indiv">개인</span><br><small>결과 해석</small></td><td>우리 팀 지표의 뜻·우리 수치·기준선 수치를 자기 말로 연결해 설명함</td><td>뜻은 말하나 수치나 기준선과의 연결이 약함</td><td>답하지 못함(다른 팀원에게 다시 묻고, 본인은 최하)</td></tr>
+      <tr><td><b>모델 설명과 선정 이유</b> <span class="unit indiv">개인</span><br><small>결과 해석</small></td><td>선택 모델의 원리를 설명하고, 점수 외의 판단(해석하기 쉬운 정도·데이터 특성 등)까지 들어 고른 이유를 말함</td><td>원리와 선정 이유 가운데 하나만 말함</td><td>답하지 못함</td></tr>
+      <tr><td><b>후보 모델 설명</b> <span class="unit indiv">개인</span><br><small>결과 해석</small></td><td>비교한 후보 모델의 원리와 장단점을 선택 모델과 비교해 설명함</td><td>후보 모델의 이름과 점수만 말함</td><td>후보 모델을 설명하지 못함</td></tr>
+    </tbody></table></div>
+  </section>
+<!-- 회차 끝 -->
+
+  <h2>점수는 어떻게 반영하나</h2>
+  <p>회차마다 루브릭에 따라 상·중·하로 평가합니다. 과정 구술(①~⑤)은 팀 점수이며, 최종 포스터 문답은 팀 항목과 개인 항목을 함께 평가합니다. 구술 점수를 팀 프로젝트 20점에 반영하는 방식은 추후 공지합니다.</p>
+
+  <div class="pager">
+    <a class="prev" href="project.html"><div class="dir">← 이전</div><div class="tt">팀 프로젝트 안내</div></a>
+    <a class="next" href="index.html"><div class="dir">다음 →</div><div class="tt">목차</div></a>
+  </div>
+</main>
+</div>
+<footer class="foot">당곡고등학교 · 데이터 과학 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+<script src="assets/check.js"></script>
+</body>
+</html>
