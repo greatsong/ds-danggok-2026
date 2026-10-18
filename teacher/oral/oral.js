@@ -1361,7 +1361,8 @@
     var engines = [
       ['gemini:gemini-3.8-flash', 'Gemini 3.8 Flash(최신 · 기본)', true], ['gemini:gemini-3.5-transcribe', 'Gemini 3.5 Transcribe(전사 전용 · 화자 구분)', true],
       ['gemini:gemini-2.5-flash', 'Gemini 2.5 Flash', false],
-      ['openai:gpt-4o-transcribe', 'OpenAI gpt-4o-transcribe', false], ['openai:gpt-4o-transcribe-diarize', 'OpenAI 화자 구분(diarize)', false]];
+      ['openai:gpt-4o-transcribe', 'OpenAI gpt-4o-transcribe', false], ['openai:gpt-4o-transcribe-diarize', 'OpenAI 화자 구분(diarize)', false],
+      ['local', '로컬 Whisper(맥에서 나중에 실행, 외부 전송 없음)', false]];
     var boxes = engines.map(function (e) {
       var cb = h('input', { type: 'checkbox', value: e[0], checked: e[2] });
       card.appendChild(h('label', { class: 'row small', style: 'margin-top:4px' }, cb, h('span', null, e[1])));
@@ -1400,6 +1401,11 @@
       }).then(function (r) {
         out.innerHTML = '';
         r.results.forEach(function (x) {
+          if (x.pending) {
+            out.appendChild(h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, '로컬 Whisper(맥)'), h('span', { class: 'badge mid' }, '맥에서 실행 대기')),
+              h('pre', null, '녹음을 드라이브 테스트 폴더에 올렸습니다. 맥의 터미널에서\npython3 scripts/oral_local_transcribe.py --tests\n를 실행하면 결과가 시트의 ‘전사 테스트’ 탭에 더해집니다.')));
+            return;
+          }
           out.appendChild(h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, x.engine + ' · ' + x.model), h('span', { class: 'badge' }, x.sec + '초')),
             h('pre', null, x.error ? '오류: ' + x.error : x.text)));
         });

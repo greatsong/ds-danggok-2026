@@ -1,7 +1,7 @@
 // 구술 평가 앱 오프라인 껍데기. 교실 와이파이가 끊겨도 앱이 열리게 한다.
 // 같은 출처 파일은 네트워크 먼저(새 버전 반영), 실패하면 캐시. 시트 요청(script.google.com)은 건드리지 않는다.
-var CACHE = 'oral-shell-v11';
-var SHELL = ['./', 'index.html', 'oral.css?v=4', 'oral.js?v=11', 'seed.js?v=2', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png', '../../assets/gate.js'];
+var CACHE = 'oral-shell-v12';
+var SHELL = ['./', 'index.html', 'oral.css?v=4', 'oral.js?v=12', 'seed.js?v=2', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png', '../../assets/gate.js'];
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(SHELL); }).then(function () { return self.skipWaiting(); }));
 });
