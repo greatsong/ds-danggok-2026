@@ -14,13 +14,13 @@
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="oral.css?v=4">
+<link rel="stylesheet" href="oral.css?v=7">
 <script src="../../assets/gate.js"></script>
 </head>
 <body>
 <header class="top" id="top">
   <div class="top-row">
-    <div class="brand">구술 평가</div>
+    <div class="brand"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></span><span class="t">구술 평가</span></div>
     <div class="seg" id="clsSeg" role="tablist" aria-label="반"></div>
     <button class="sync-pill" id="syncPill" type="button" aria-label="업로드 상태"></button>
   </div>
@@ -30,16 +30,16 @@
 <main id="view" class="view"></main>
 
 <nav class="tabs" id="tabs" aria-label="화면">
-  <button type="button" data-tab="eval" class="on" aria-label="평가"><span class="ic">🎙️</span><span>평가</span></button>
-  <button type="button" data-tab="board" aria-label="현황"><span class="ic">📊</span><span>현황</span></button>
-  <button type="button" data-tab="queue" aria-label="기록"><span class="ic">☁️</span><span>기록</span></button>
-  <button type="button" data-tab="settings" aria-label="설정"><span class="ic">⚙️</span><span>설정</span></button>
+  <button type="button" data-tab="eval" class="on" aria-label="평가"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></span><span>평가</span></button>
+  <button type="button" data-tab="board" aria-label="현황"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg></span><span>현황</span></button>
+  <button type="button" data-tab="queue" aria-label="기록"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.5-9 6 6 0 0 1 11.6 1.5A3.75 3.75 0 0 1 17.5 18"/><path d="M12 12v8"/><path d="m9 15 3-3 3 3"/></svg></span><span>기록</span></button>
+  <button type="button" data-tab="settings" aria-label="설정"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></span><span>설정</span></button>
 </nav>
 
 <div class="sheet" id="sheet" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="seed.js?v=3"></script>
-<script src="oral.js?v=16"></script>
+<script src="oral.js?v=17"></script>
 </body>
 </html>

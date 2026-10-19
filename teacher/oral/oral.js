@@ -553,7 +553,7 @@
         onclick: function () { S.ui.cp = c.id; saveUi(); render(); } }, short, h('span', { class: 'l' }, c.id === 'final' ? c.title : c.title.split('·')[0])));
     });
     document.documentElement.style.setProperty('--cp', cpColor(curCp()));
-    var title = settings().app_title; if (title) { $('.brand').textContent = title; document.title = title; }
+    var title = settings().app_title; if (title) { $('.brand .t').textContent = title; document.title = title; }
     var on = row.querySelector('.on'); if (on && on.scrollIntoView) on.scrollIntoView({ inline: 'center', block: 'nearest' });
     $('#cpRow').hidden = S.ui.tab === 'settings' || S.ui.tab === 'queue';
     document.querySelectorAll('#tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === S.ui.tab); });
@@ -598,27 +598,37 @@
     var teams = teamsOf(cls);
     var done = teams.filter(function (t) { return latestSession(t.id, cp.id); });
     var nextTeam = teams.filter(function (t) { return !latestSession(t.id, cp.id); })[0];
+    var teamItems = cp.items.filter(function (it) { return it.unit !== 'individual'; }).length;
+    var perMax = teamItems * levelsFor(settings().scale)[0].v;
+    var avg = done.length ? done.reduce(function (a, t) { return a + (latestSession(t.id, cp.id).total || 0); }, 0) / done.length : 0;
+    var pct = teams.length ? Math.round(done.length / teams.length * 100) : 0;
     var head = h('div', { class: 'card cp-head' },
-      h('div', { class: 'row' }, h('div', { class: 't grow' }, (cp.id === 'final' ? '최종 ' : cp.no + ' ') + cp.title),
-        h('span', { class: 'badge' }, cp.lesson)),
-      h('div', { class: 'tiny' }, (cp.axes || '') + ' · ' + (cp.format || '') + ' · 팀당 약 ' + cp.minutes + '분'),
-      h('div', { class: 'progress', style: 'margin-top:10px' },
-        h('div', { class: 'bar' }, h('i', { style: 'width:' + (teams.length ? Math.round(done.length / teams.length * 100) : 0) + '%' })),
-        h('span', { class: 'small muted' }, done.length + ' / ' + teams.length + '팀')),
-      h('div', { class: 'opener' }, '💬 ' + cp.opener));
+      h('div', { class: 'row', style: 'align-items:center;gap:12px' },
+        h('div', { class: 'cp-no' }, cp.id === 'final' ? '최종' : cp.no),
+        h('div', { class: 'grow' }, h('div', { class: 't' }, cp.title), h('div', { class: 'tiny' }, cp.lesson + ' · ' + (cp.format || '') + ' · 팀당 약 ' + cp.minutes + '분'))),
+      h('div', { class: 'stats' },
+        h('div', null, h('b', null, String(done.length)), h('span', null, ' / ' + teams.length + '팀 완료')),
+        perMax && done.length ? h('div', null, h('span', null, '팀 점수 평균 '), h('b', null, avg.toFixed(1)), h('span', null, ' / ' + perMax)) : null),
+      h('div', { class: 'progress' }, h('div', { class: 'bar' }, h('i', { style: 'width:' + pct + '%' }))),
+      h('div', { class: 'opener' }, h('span', { class: 'lab' }, '시작 질문'), cp.opener));
     v.appendChild(head);
 
     var list = h('div', { class: 'teams' });
     if (!teams.length) {
-      list.appendChild(h('div', { class: 'card empty' }, h('div', { class: 'big' }, '🧑‍🤝‍🧑'),
+      list.appendChild(h('div', { class: 'card empty' }, h('div', { class: 'big', html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/></svg>' }),
         h('div', { style: 'font-weight:900;margin-top:4px' }, cls + ' 팀을 등록해 주세요'),
         h('div', { class: 'small', style: 'margin:6px 0 14px' }, '배정한 팀 명단을 한 번에 붙여 넣거나, 한 팀씩 입력합니다.'),
         h('div', { class: 'row', style: 'justify-content:center;flex-wrap:wrap' },
-          h('button', { type: 'button', class: 'btn sun', onclick: function () { pasteTeams(); } }, '📋 명단 붙여 넣기'),
+          h('button', { type: 'button', class: 'btn sun', onclick: function () { pasteTeams(); } }, '명단 붙여 넣기'),
           h('button', { type: 'button', class: 'btn', onclick: function () { editTeam(null); } }, '+ 한 팀씩 입력'))));
     }
-    teams.forEach(function (t) {
+    teams.forEach(function (t, idx) {
       var s = latestSession(t.id, cp.id);
+      var dots = h('div', { class: 'dots', 'aria-hidden': 'true' }, checkpoints().map(function (c) {
+        var cs = latestSession(t.id, c.id);
+        var cls2 = cs ? (cs.max ? ratioClass(cs.total / cs.max) : 'hi') : '';
+        return h('i', { class: cls2 + (c.id === cp.id ? ' cur' : ''), title: (c.id === 'final' ? '최종' : c.no) + (cs && cs.max ? ' ' + cs.total + '/' + cs.max : '') });
+      }));
       var members = parseMembers(t.members).map(function (m) { return m.name; }).join(' · ');
       var st;
       if (s) {
@@ -631,13 +641,13 @@
       }
       list.appendChild(h('button', { type: 'button', class: 'team' + (s ? ' done' : '') + (nextTeam && nextTeam.id === t.id ? ' next' : ''),
         onclick: function () { openSession(t.id, cp.id); } },
-        h('div', { class: 'av', style: 'background:' + teamColor(t) }, teamInitial(t)),
-        h('div', { class: 'grow' }, h('div', { class: 'nm' }, t.name), h('div', { class: 'mb' }, members || '팀원 미등록')), st));
+        h('div', { class: 'num' + (s ? ' ok' : (nextTeam && nextTeam.id === t.id ? ' nx' : '')) }, s ? '✓' : String(idx + 1)),
+        h('div', { class: 'grow' }, h('div', { class: 'nm' }, t.name), h('div', { class: 'mb' }, members || '팀원 미등록'), dots), st));
     });
     v.appendChild(list);
     if (teams.length) v.appendChild(h('div', { class: 'row wrap', style: 'margin-top:14px' },
       h('button', { type: 'button', class: 'btn grow', onclick: function () { editTeam(null); } }, '+ 팀 추가'),
-      h('button', { type: 'button', class: 'btn', onclick: function () { pasteTeams(); } }, '📋 붙여 넣기'),
+      h('button', { type: 'button', class: 'btn', onclick: function () { pasteTeams(); } }, '붙여 넣기'),
       h('button', { type: 'button', class: 'btn', 'aria-label': '새로 고침', onclick: function () { loadBoot(false); } }, '↻')));
   }
 
@@ -795,7 +805,7 @@
       var parsed = [];
       var codes = classCodes();
       var codeText = Object.keys(codes).map(function (k) { return k + '→' + codes[k]; }).join(', ');
-      box.appendChild(h('h3', null, '📋 팀 명단 붙여 넣기'));
+      box.appendChild(h('h3', null, '팀 명단 붙여 넣기'));
       box.appendChild(h('p', { class: 'small muted', style: 'margin:0 0 8px' }, '스프레드시트에서 복사한 표나 아래 같은 목록을 그대로 붙여 넣습니다. '
         + (codeText ? '반은 학번 앞자리로 나눕니다(' + codeText + '). ' : '') + '반을 알 수 없으면 지금 고른 ' + curCls() + '으로 넣습니다.'));
       box.appendChild(h('div', { class: 'example' }, '1팀: 20203 김도윤, 20211 박서연, 20219 이준호\n2팀 20207 오태양 20214 윤하린\n\n또는 표(반·팀·학번·이름)를 복사해 붙여 넣기'));
@@ -923,7 +933,7 @@
     var attend = h('div', { class: 'card' });
     function renderAttend() {
       attend.innerHTML = '';
-      attend.appendChild(h('div', { class: 'row' }, h('div', { class: 'sec-t grow' }, h('span', { class: 'e' }, '👥'), '참석'), h('span', { class: 'tiny' }, '누르면 결석으로 바뀝니다')));
+      attend.appendChild(h('div', { class: 'row' }, h('div', { class: 'sec-t grow' }, h('span', { class: 'step' }, '1'), '참석'), h('span', { class: 'tiny' }, '누르면 결석으로 바뀝니다')));
       var chips = h('div', { class: 'chips', style: 'margin-top:8px' });
       d.members.forEach(function (m) {
         var on = d.present.indexOf(m.key) !== -1;
@@ -942,10 +952,14 @@
     var clock = h('div', { class: 'clock' }, mmss(d.durationSec || 0));
     var meter = h('div', { class: 'meter' }, h('i'));
     var recBtn = h('button', { type: 'button', class: 'rec-btn' }, '녹음');
+    // 목표 시간 대비 경과를 보여 주는 링
+    var ring = h('div', { class: 'ring', html: '<svg viewBox="0 0 100 100" aria-hidden="true"><circle class="trk" cx="50" cy="50" r="46"/><circle class="val" cx="50" cy="50" r="46" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg>' });
+    var ringVal = ring.querySelector('.val');
     var recHint = h('div', { class: 'tiny' }, '');
     var recActions = h('div', { class: 'rec-actions' });
     var warn = h('div', { class: 'warnbox', id: 'recWarn', hidden: true }, '화면이 꺼지거나 다른 앱으로 넘어간 동안 녹음이 멈췄을 수 있습니다. 녹음 중에는 화면을 켜 두세요.');
-    recCard.appendChild(h('div', { class: 'rec' }, recBtn, h('div', { class: 'grow' }, clock, h('div', { class: 'tiny' }, '목표 ' + cp.minutes + '분'), meter, recHint)));
+    recCard.appendChild(h('div', { class: 'row', style: 'margin-bottom:10px' }, h('div', { class: 'sec-t grow' }, h('span', { class: 'step' }, '2'), '녹음'), h('span', { class: 'tiny' }, '목표 ' + cp.minutes + '분')));
+    recCard.appendChild(h('div', { class: 'rec' }, h('div', { class: 'rec-wrap' }, ring, recBtn), h('div', { class: 'grow' }, clock, meter, recHint)));
     recCard.appendChild(recActions); recCard.appendChild(warn);
     inner.appendChild(recCard);
 
@@ -1001,7 +1015,10 @@
       if (Rec.id !== d.id || Rec.state === 'idle') { meter.firstChild.style.width = '0%'; return; }
       var sec = Rec.elapsed();
       clock.textContent = mmss(sec);
-      clock.className = 'clock' + (sec > cp.minutes * 60 + 60 ? ' over' : sec > cp.minutes * 60 ? ' warn' : '');
+      var stage = sec > cp.minutes * 60 + 60 ? ' over' : sec > cp.minutes * 60 ? ' warn' : '';
+      clock.className = 'clock' + stage;
+      ring.className = 'ring on' + stage;
+      ringVal.style.strokeDashoffset = String(100 - Math.min(100, sec / (cp.minutes * 60) * 100));
       meter.firstChild.style.width = Math.round(Rec.level() * 100) + '%';
     };
     if (Rec.state !== 'idle' && Rec.id === d.id) Rec.loop();
@@ -1009,7 +1026,8 @@
 
     // 지목·질문
     var qCard = h('div', { class: 'card q-card' });
-    qCard.appendChild(h('div', { class: 'sec-t' }, h('span', { class: 'e' }, '💬'), '시작 질문'));
+    qCard.appendChild(h('div', { class: 'sec-t' }, h('span', { class: 'step' }, '3'), '질문'));
+    qCard.appendChild(h('div', { class: 'label', style: 'margin-top:10px' }, '시작 질문'));
     qCard.appendChild(h('div', { class: 'opener-big' }, cp.opener));
     var pickWrap = h('div', { style: 'margin-top:12px' });
     var fq = h('div', { class: 'fq' });
@@ -1067,7 +1085,7 @@
     }
     function renderRubric() {
       rubCard.innerHTML = '';
-      rubCard.appendChild(h('div', { class: 'row' }, h('div', { class: 'sec-t grow' }, h('span', { class: 'e' }, '✅'), '루브릭'),
+      rubCard.appendChild(h('div', { class: 'row' }, h('div', { class: 'sec-t grow' }, h('span', { class: 'step' }, '4'), '루브릭'),
         h('span', { class: 'tiny' }, levels.length === 3 ? '상·중·하' : '5단계'),
         h('button', { type: 'button', class: 'btn ghost', style: 'min-height:34px;padding:4px 8px', onclick: function () { showAll = !showAll; renderRubric(); } }, showAll ? '기준 접기' : '기준 보기')));
       var teamSum = 0, teamMax = 0;
@@ -1106,7 +1124,7 @@
     var memo = h('textarea', { placeholder: '총평. 키보드의 마이크 버튼을 누르면 말로 받아 적을 수 있습니다.' });
     memo.value = d.memo || '';
     memo.addEventListener('input', function () { d.memo = memo.value; touch(); });
-    memoCard.appendChild(h('div', { class: 'sec-t' }, h('span', { class: 'e' }, '📝'), '메모'));
+    memoCard.appendChild(h('div', { class: 'sec-t' }, h('span', { class: 'step' }, '5'), '메모'));
     memoCard.appendChild(h('div', { style: 'margin-top:8px' }, memo));
     var notesWrap = h('div');
     memoCard.appendChild(notesWrap);
@@ -1154,6 +1172,11 @@
   function renderBoard(v) {
     var cls = curCls(); var teams = teamsOf(cls); var cps = checkpoints();
     v.appendChild(h('div', { class: 'h2' }, cls + ' 회차별 팀 점수'));
+    v.appendChild(h('div', { class: 'board-sum' }, cps.map(function (c) {
+      var n = teams.filter(function (t) { return latestSession(t.id, c.id); }).length;
+      return h('div', { class: 'bs' + (n && n === teams.length ? ' full' : '') },
+        h('span', { class: 'k' }, c.id === 'final' ? '최종' : c.no), h('b', null, String(n)), h('span', { class: 'of' }, '/' + teams.length));
+    })));
     var table = h('table');
     table.appendChild(h('thead', null, h('tr', null, h('th', null, '팀'), cps.map(function (c) { return h('th', null, c.id === 'final' ? '최종' : c.no); }))));
     var tb = h('tbody');
