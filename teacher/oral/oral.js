@@ -100,6 +100,8 @@
     prefs: lsGet('oral.prefs', { noise: true }),
     drafts: [],                              // 기기의 기록
     pendingTeams: lsGet('oral.pendingTeams', []),
+    pendingPhrases: lsGet('oral.pendingPhrases', []),   // 앱에서 더한 문구(시트에 올리기 전)
+    phrasePaints: [],
     syncing: false, online: navigator.onLine
   };
   function saveUi() { lsSet('oral.ui', S.ui); }
@@ -439,7 +441,7 @@
 
   // ── 올리기 ───────────────────────────────────────────────────────────
   function pendingCount() {
-    var n = S.pendingTeams.filter(function (t) { return t._pending; }).length;
+    var n = S.pendingTeams.filter(function (t) { return t._pending; }).length + S.pendingPhrases.length;
     S.drafts.forEach(function (d) {
       if (!d.final) return;
       if (d.sync.session === 'pending' || d.sync.session === 'error') n++;
@@ -490,6 +492,16 @@
     S.syncAgain = false;
     S.syncing = true; renderSync();
     var chain = Promise.resolve();
+    // 0) 앱에서 더한 메모 문구
+    S.pendingPhrases.slice().forEach(function (x) {
+      chain = chain.then(function () {
+        return api('addPhrase', { kind: x.kind, text: x.text }).then(function (r) {
+          S.pendingPhrases = S.pendingPhrases.filter(function (y) { return !(y.kind === x.kind && y.text === x.text); });
+          lsSet('oral.pendingPhrases', S.pendingPhrases);
+          if (r.memoPhrases && S.boot) { S.boot.memoPhrases = r.memoPhrases; lsSet('oral.boot', S.boot); }
+        }).catch(function (e) { console.warn('문구 올리기 실패', x.text, e); });
+      });
+    });
     // 1) 팀
     S.pendingTeams.filter(function (t) { return t._pending; }).forEach(function (t) {
       chain = chain.then(function () {
@@ -848,11 +860,25 @@
   // ── 메모 문구: 누르면 메모에 한 줄로 넣고, 다시 누르면 뺀다 ──────────────
   function phrases(kind) {
     var mp = boot().memoPhrases || (window.ORAL_SEED || {}).memo_phrases || {};
-    return (mp[kind] || []).filter(Boolean);
+    var list = (mp[kind] || []).filter(Boolean).slice();
+    S.pendingPhrases.forEach(function (x) { if (x.kind === kind && list.indexOf(x.text) === -1) list.push(x.text); });
+    return list;
+  }
+  // 새 문구: 바로 모든 팀 기록의 버튼에 보이고, 시트 '메모 문구' 탭에 올라간다
+  function addPhrase(kind, text) {
+    text = String(text || '').replace(/\s+/g, ' ').trim();
+    if (!text) return false;
+    if (phrases(kind).indexOf(text) === -1) {
+      S.pendingPhrases.push({ kind: kind, text: text });
+      lsSet('oral.pendingPhrases', S.pendingPhrases);
+    }
+    S.phrasePaints.forEach(function (f) { f(); });
+    syncAll();
+    return true;
   }
   function phraseRow(kind, ta, foldable) {
     var row = h('div', { class: 'phr' });
-    var open = !foldable;
+    var open = !foldable, editing = false;
     function paint() {
       row.innerHTML = '';
       phrases(kind).forEach(function (p) {
@@ -867,8 +893,30 @@
           paint();
         } }, (on ? '✓ ' : '+ ') + p));
       });
-      if (foldable) row.appendChild(h('button', { type: 'button', class: 'fold', onclick: function () { open = !open; paint(); } }, open ? '접기' : '+ 문구 고르기'));
+      if (open) row.appendChild(h('button', { type: 'button', class: 'add', onclick: function () { editing = true; paint(); } }, '+ 새 문구'));
+      if (foldable) row.appendChild(h('button', { type: 'button', class: 'fold', onclick: function () { open = !open; editing = false; paint(); } }, open ? '접기' : '+ 문구 고르기'));
+      if (open && editing) {
+        var inp = h('input', { type: 'text', placeholder: kind === 'team' ? '예: 데이터 출처를 꼼꼼히 확인한 팀임' : '예: 질문의 범위를 스스로 좁힌 학생임', maxlength: '120' });
+        var save = function () {
+          var t = inp.value.replace(/\s+/g, ' ').trim(); if (!t) { inp.focus(); return; }
+          editing = false;
+          addPhrase(kind, t);
+          // 추가한 문구를 지금 메모에도 넣는다
+          if (!ta.value.split('\n').some(function (l) { return l.trim() === t; })) {
+            ta.value = (ta.value.trim() ? ta.value.replace(/\s+$/, '') + '\n' : '') + t;
+            ta.dispatchEvent(new Event('input'));
+          }
+          paint();
+          toast('문구를 추가했습니다. 다른 팀 기록에서도 쓸 수 있습니다');
+        };
+        inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); save(); } });
+        row.appendChild(h('div', { class: 'add-box' }, inp,
+          h('button', { type: 'button', class: 'btn primary', onclick: save }, '추가'),
+          h('button', { type: 'button', class: 'btn', onclick: function () { editing = false; paint(); } }, '취소')));
+        setTimeout(function () { inp.focus(); }, 30);
+      }
     }
+    S.phrasePaints.push(paint);
     ta.addEventListener('input', function () { if (document.activeElement === ta) paint(); });
     paint();
     return row;
@@ -894,6 +942,7 @@
   function renderSession(d, team, cp) {
     var sheet = $('#sheet'); sheet.innerHTML = ''; sheet.hidden = false; document.body.style.overflow = 'hidden';
     sheet.style.setProperty('--cp', cpColor(cp));
+    S.phrasePaints = [];
     var dirty = false;
     var levels = levelsFor(d.scale);
     var picked = null;

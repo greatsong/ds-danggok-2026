@@ -202,6 +202,10 @@ a { color: var(--accent); }
 .phr { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 0 8px; }
 .phr button { border: 1.5px solid var(--line-2); background: #fff; border-radius: 12px; padding: 6px 10px; font-size: 13px; font-weight: 700; color: var(--ink-2); text-align: left; line-height: 1.35; min-height: 34px; }
 .phr button.on { background: var(--hi-soft); border-color: var(--hi); color: #0b7a55; }
+.phr button.add { border-style: dashed; color: #0b7a55; border-color: color-mix(in srgb, var(--hi) 45%, var(--line-2)); }
+.phr .add-box { display: flex; gap: 6px; width: 100%; margin-top: 2px; }
+.phr .add-box input { flex: 1; min-width: 0; padding: 8px 10px; font-size: 15px; }
+.phr .add-box .btn { min-height: 40px; padding: 6px 12px; }
 .phr button.fold { border-style: dashed; color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, var(--line-2)); }
 
 /* 입력 */
