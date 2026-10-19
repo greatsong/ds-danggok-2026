@@ -729,7 +729,8 @@
       return l;
     }
     String(text || '').split(/\r?\n/).forEach(function (line) {
-      var raw = line.trim(); if (!raw) return;
+      // 반 이름 뒤 괄호(예: "E반(201, 월수금)")는 반 이름만 남긴다
+      var raw = line.trim().replace(/([A-Za-z]\s*반)\s*[(（][^)）]*[)）]/g, '$1'); if (!raw) return;
       var cells = raw.split(/\t|,|;|\||\/|·|:|：/).map(function (c) { return c.trim(); }).filter(Boolean);
       var toks = [];
       cells.forEach(function (c) { c.split(/[\s()（）\[\]]+/).filter(Boolean).forEach(function (t) { toks.push(t); }); });
