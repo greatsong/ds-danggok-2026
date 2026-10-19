@@ -198,6 +198,12 @@ a { color: var(--accent); }
 .elems li { position: relative; padding-left: 14px; font-size: 13px; color: var(--ink-2); line-height: 1.45; }
 .elems li::before { content: ""; position: absolute; left: 2px; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--cp); opacity: .7; }
 
+/* 메모 문구: 모두 한눈에 보이게 줄바꿈 배치 */
+.phr { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 0 8px; }
+.phr button { border: 1.5px solid var(--line-2); background: #fff; border-radius: 12px; padding: 6px 10px; font-size: 13px; font-weight: 700; color: var(--ink-2); text-align: left; line-height: 1.35; min-height: 34px; }
+.phr button.on { background: var(--hi-soft); border-color: var(--hi); color: #0b7a55; }
+.phr button.fold { border-style: dashed; color: var(--accent); border-color: color-mix(in srgb, var(--accent) 45%, var(--line-2)); }
+
 /* 입력 */
 textarea, input[type=text], input[type=url], input[type=password], select {
   width: 100%; border: 1.5px solid var(--line-2); background: #fff; border-radius: 14px; padding: 11px 13px; font-size: 16px; }

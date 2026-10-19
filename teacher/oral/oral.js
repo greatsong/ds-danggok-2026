@@ -112,7 +112,7 @@
     return { settings: { app_title: c.app_title || '구술 평가', course_name: c.course_name || '', scale: seed.scale_default || 3,
       classes: c.classes || ['1반', '2반'], class_codes: codes, stt_engine: 'none', auto_transcribe: true, keys: {} },
       checkpoints: seed.checkpoints, teams: [], sessions: [], scores: [], sheetUrl: '', offline: true,
-      elementRule: seed.element_rule || '', methods: c.methods || {} };
+      elementRule: seed.element_rule || '', methods: c.methods || {}, memoPhrases: seed.memo_phrases || { team: [], student: [] } };
   }
   function boot() { return S.boot || defaultBoot(); }
   function settings() { return boot().settings || {}; }
@@ -845,6 +845,35 @@
     });
   }
 
+  // ── 메모 문구: 누르면 메모에 한 줄로 넣고, 다시 누르면 뺀다 ──────────────
+  function phrases(kind) {
+    var mp = boot().memoPhrases || (window.ORAL_SEED || {}).memo_phrases || {};
+    return (mp[kind] || []).filter(Boolean);
+  }
+  function phraseRow(kind, ta, foldable) {
+    var row = h('div', { class: 'phr' });
+    var open = !foldable;
+    function paint() {
+      row.innerHTML = '';
+      phrases(kind).forEach(function (p) {
+        var on = ta.value.split('\n').some(function (l) { return l.trim() === p; });
+        if (!open && !on) return;
+        row.appendChild(h('button', { type: 'button', class: on ? 'on' : '', onclick: function () {
+          var lines = ta.value.split('\n');
+          if (on) lines = lines.filter(function (l) { return l.trim() !== p; });
+          else { lines = lines.filter(function (l, i) { return l.trim() || i < lines.length - 1; }); lines.push(p); }
+          ta.value = lines.join('\n').replace(/^\n+/, '');
+          ta.dispatchEvent(new Event('input'));
+          paint();
+        } }, (on ? '✓ ' : '+ ') + p));
+      });
+      if (foldable) row.appendChild(h('button', { type: 'button', class: 'fold', onclick: function () { open = !open; paint(); } }, open ? '접기' : '+ 문구 고르기'));
+    }
+    ta.addEventListener('input', function () { if (document.activeElement === ta) paint(); });
+    paint();
+    return row;
+  }
+
   // ── 평가 화면 ────────────────────────────────────────────────────────
   function openSession(teamId, cpId, forceNew) {
     var team = teamById(teamId); var cp = cpById(cpId);
@@ -1156,7 +1185,7 @@
     memo.value = d.memo || '';
     memo.addEventListener('input', function () { d.memo = memo.value; touch(); });
     memoCard.appendChild(h('div', { class: 'sec-t' }, h('span', { class: 'step' }, '5'), '메모'));
-    memoCard.appendChild(h('div', { style: 'margin-top:8px' }, memo));
+    memoCard.appendChild(h('div', { class: 'note' }, h('div', { class: 'who' }, '팀 총평'), phrases('team').length ? phraseRow('team', memo) : null, memo));
     var notesWrap = h('div');
     memoCard.appendChild(notesWrap);
     inner.appendChild(memoCard);
@@ -1166,7 +1195,7 @@
         var ta = h('textarea', { placeholder: '(선택) ' + m.name + ' 메모' });
         ta.value = (d.notes || {})[m.key] || '';
         ta.addEventListener('input', function () { d.notes = d.notes || {}; d.notes[m.key] = ta.value; touch(); });
-        notesWrap.appendChild(h('div', { class: 'note' }, h('div', { class: 'who' }, m.name), ta));
+        notesWrap.appendChild(h('div', { class: 'note' }, h('div', { class: 'who' }, m.name), phrases('student').length ? phraseRow('student', ta, true) : null, ta));
         if (focusKey === m.key && !isIOS()) setTimeout(function () { ta.focus(); }, 30);
       });
     }
