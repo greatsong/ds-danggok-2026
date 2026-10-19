@@ -111,7 +111,8 @@
     var codes = c.class_codes ? Object.keys(c.class_codes).map(function (k) { return k + '=' + c.class_codes[k]; }).join(',') : '';
     return { settings: { app_title: c.app_title || '구술 평가', course_name: c.course_name || '', scale: seed.scale_default || 3,
       classes: c.classes || ['1반', '2반'], class_codes: codes, stt_engine: 'none', auto_transcribe: true, keys: {} },
-      checkpoints: seed.checkpoints, teams: [], sessions: [], scores: [], sheetUrl: '', offline: true };
+      checkpoints: seed.checkpoints, teams: [], sessions: [], scores: [], sheetUrl: '', offline: true,
+      elementRule: seed.element_rule || '', methods: c.methods || {} };
   }
   function boot() { return S.boot || defaultBoot(); }
   function settings() { return boot().settings || {}; }
@@ -642,7 +643,7 @@
       list.appendChild(h('button', { type: 'button', class: 'team' + (s ? ' done' : '') + (nextTeam && nextTeam.id === t.id ? ' next' : ''),
         onclick: function () { openSession(t.id, cp.id); } },
         h('div', { class: 'num' + (s ? ' ok' : (nextTeam && nextTeam.id === t.id ? ' nx' : '')) }, s ? '✓' : String(idx + 1)),
-        h('div', { class: 'grow' }, h('div', { class: 'nm' }, t.name), h('div', { class: 'mb' }, members || '팀원 미등록'), dots), st));
+        h('div', { class: 'grow' }, h('div', { class: 'nm' }, t.name, t.method ? h('span', { class: 'mth' }, t.method) : null), h('div', { class: 'mb' }, members || '팀원 미등록'), dots), st));
     });
     v.appendChild(list);
     if (teams.length) v.appendChild(h('div', { class: 'row wrap', style: 'margin-top:14px' },
@@ -947,6 +948,25 @@
     }
     renderAttend(); inner.appendChild(attend);
 
+    // 방법 선택(팀에 저장, 다음 회차에도 이어짐)
+    var methodCard = h('div', { class: 'method-row' });
+    function renderMethod() {
+      methodCard.innerHTML = '';
+      var cur = (teamById(team.id) || team).method || '';
+      var names = Object.keys(boot().methods || {});
+      if (!names.length) names = ['회귀', '분류', '군집'];
+      var seg = h('div', { class: 'seg mseg' });
+      names.forEach(function (m) {
+        seg.appendChild(h('button', { type: 'button', class: cur === m ? 'on' : '', onclick: function () {
+          var nt = Object.assign({}, teamById(team.id) || team, { method: cur === m ? '' : m });
+          team.method = nt.method; upsertPendingTeam(nt); renderMethod(); renderHint();
+        } }, m));
+      });
+      methodCard.appendChild(h('span', { class: 'lab' }, '방법'));
+      methodCard.appendChild(seg);
+    }
+    renderMethod(); attend.appendChild(methodCard);
+
     // 녹음
     var recCard = h('div', { class: 'card rec-card' });
     var clock = h('div', { class: 'clock' }, mmss(d.durationSec || 0));
@@ -1029,6 +1049,14 @@
     qCard.appendChild(h('div', { class: 'sec-t' }, h('span', { class: 'step' }, '3'), '질문'));
     qCard.appendChild(h('div', { class: 'label', style: 'margin-top:10px' }, '시작 질문'));
     qCard.appendChild(h('div', { class: 'opener-big' }, cp.opener));
+    var hint = h('div', { class: 'mhint' });
+    function renderHint() {
+      var m = (teamById(team.id) || team).method; var info = m && (boot().methods || {})[m];
+      hint.innerHTML = '';
+      hint.hidden = !info || !/c3|c4|final/.test(cp.id);
+      if (info) hint.appendChild(h('span', null, h('b', null, m), ' · 수업 지표 ' + info.metrics + ' · 베이스라인 ' + info.baseline));
+    }
+    renderHint(); qCard.appendChild(hint);
     var pickWrap = h('div', { style: 'margin-top:12px' });
     var fq = h('div', { class: 'fq' });
     var tl = h('div', { class: 'timeline' });
@@ -1089,9 +1117,12 @@
         h('span', { class: 'tiny' }, levels.length === 3 ? '상·중·하' : '5단계'),
         h('button', { type: 'button', class: 'btn ghost', style: 'min-height:34px;padding:4px 8px', onclick: function () { showAll = !showAll; renderRubric(); } }, showAll ? '기준 접기' : '기준 보기')));
       var teamSum = 0, teamMax = 0;
+      var rule = boot().elementRule;
+      if (rule) rubCard.appendChild(h('div', { class: 'rule' }, rule));
       cp.items.forEach(function (it) {
         var box = h('div', { class: 'item' });
         box.appendChild(h('div', { class: 'it' }, h('b', null, it.title), h('span', { class: 'badge' + (it.unit === 'individual' ? ' accent' : '') }, it.unit === 'individual' ? '개인' : '팀'), h('span', { class: 'tiny' }, it.axis)));
+        if (it.elements && it.elements.length) box.appendChild(h('ul', { class: 'elems' }, it.elements.map(function (e) { return h('li', null, e); })));
         if (it.unit === 'individual') {
           var cur = d.scores[it.id] || {};
           d.members.filter(function (m) { return d.present.indexOf(m.key) !== -1; }).forEach(function (m) {
@@ -1121,7 +1152,7 @@
 
     // 메모
     var memoCard = h('div', { class: 'card' });
-    var memo = h('textarea', { placeholder: '총평. 키보드의 마이크 버튼을 누르면 말로 받아 적을 수 있습니다.' });
+    var memo = h('textarea', { placeholder: '(선택) 총평. 대화는 녹음과 전사로 남습니다.' });
     memo.value = d.memo || '';
     memo.addEventListener('input', function () { d.memo = memo.value; touch(); });
     memoCard.appendChild(h('div', { class: 'sec-t' }, h('span', { class: 'step' }, '5'), '메모'));
@@ -1132,7 +1163,7 @@
     function renderNotes(focusKey) {
       notesWrap.innerHTML = '';
       d.members.filter(function (m) { return d.present.indexOf(m.key) !== -1; }).forEach(function (m) {
-        var ta = h('textarea', { placeholder: m.name + '의 응답 메모(꼬리질문)' });
+        var ta = h('textarea', { placeholder: '(선택) ' + m.name + ' 메모' });
         ta.value = (d.notes || {})[m.key] || '';
         ta.addEventListener('input', function () { d.notes = d.notes || {}; d.notes[m.key] = ta.value; touch(); });
         notesWrap.appendChild(h('div', { class: 'note' }, h('div', { class: 'who' }, m.name), ta));

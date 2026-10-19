@@ -185,6 +185,19 @@ a { color: var(--accent); }
 .indiv-row .levels button { min-height: 44px; font-size: 16px; }
 .sum { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding: 10px 12px; border-radius: 14px; background: var(--accent-soft); color: #3b3bc4; font-weight: 900; }
 
+/* 방법·평가 요소 */
+.method-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line-2); }
+.method-row .lab { font-size: 13px; font-weight: 900; color: var(--ink-2); }
+.mseg { margin-left: 0; }
+.mseg button { min-width: 58px; }
+.team .mth { display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 800; color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 6px; vertical-align: 2px; }
+.mhint { margin-top: 10px; font-size: 13px; color: var(--ink-2); background: var(--accent-soft); border-radius: 10px; padding: 8px 10px; }
+.mhint b { color: var(--accent); }
+.rule { margin-top: 8px; font-size: 12px; color: var(--ink-3); }
+.elems { margin: -2px 0 10px; padding: 0; list-style: none; display: grid; gap: 3px; }
+.elems li { position: relative; padding-left: 14px; font-size: 13px; color: var(--ink-2); line-height: 1.45; }
+.elems li::before { content: ""; position: absolute; left: 2px; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--cp); opacity: .7; }
+
 /* 입력 */
 textarea, input[type=text], input[type=url], input[type=password], select {
   width: 100%; border: 1.5px solid var(--line-2); background: #fff; border-radius: 14px; padding: 11px 13px; font-size: 16px; }
