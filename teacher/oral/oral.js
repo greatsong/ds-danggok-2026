@@ -469,7 +469,7 @@
     cp.items.forEach(function (it) {
       var v = d.scores[it.id];
       if (it.unit === 'individual') {
-        Object.keys(v || {}).forEach(function (k) { if (v[k]) rows.push({ target: k, name: nameOf[k] || k, item: it.id, title: it.title, unit: 'individual', v: v[k] }); });
+        Object.keys(v || {}).forEach(function (k) { if (v[k] && d.present.indexOf(k) !== -1) rows.push({ target: k, name: nameOf[k] || k, item: it.id, title: it.title, unit: 'individual', v: v[k] }); });
       } else {
         max += top;
         if (v) { total += v; rows.push({ target: '팀', name: '', item: it.id, title: it.title, unit: 'team', v: v }); }
@@ -588,6 +588,11 @@
   });
 
   function render() {
+    // 설정에서 하던 전사 테스트 녹음은 다른 탭으로 가면 끝내 둔다(평가 녹음과 겹치지 않게)
+    if (S.ui.tab !== 'settings' && Rec.id === 'TEST' && Rec.state !== 'idle') {
+      Rec.onTick = null;
+      Rec.stop().then(function () { Rec.release(); return idb.get('audio', 'TEST'); }).then(function (a) { TT.audio = a || null; });
+    }
     renderHeader();
     var v = $('#view'); v.innerHTML = '';
     if (!S.cfg && S.ui.tab !== 'settings') v.appendChild(connectCard());
@@ -958,10 +963,18 @@
     function doClose() {
       Rec.onTick = null;
       if (dirty && d.final) {
-        if (!confirm('바꾼 내용을 저장하지 않고 나갈까요?')) return;
+        if (!confirm('바꾼 내용을 저장하지 않고 나갈까요?')) return false;
       }
       if (!d.final && (dirty || d.audio.has)) saveDraft(d);
       sheet.hidden = true; sheet.innerHTML = ''; document.body.style.overflow = ''; render();
+      Rec.release();
+      return true;
+    }
+    // 메뉴에서 화면을 떠나는 일은 녹음을 끝낸 뒤에 한다(녹음이 화면 없이 계속되지 않게)
+    function afterRec(fn) {
+      if (Rec.state === 'idle') { fn(); return; }
+      if (!confirm('녹음 중입니다. 녹음을 끝낼까요?')) return;
+      stopRec().then(fn);
     }
 
     // 머리
@@ -975,22 +988,29 @@
       modal(function (box, closeM) {
         box.appendChild(h('h3', null, team.name));
         if (team.repo) box.appendChild(h('a', { class: 'btn block', href: team.repo, target: '_blank', rel: 'noopener', style: 'display:block;text-align:center;text-decoration:none' }, '저장소 열기'));
-        box.appendChild(h('button', { type: 'button', class: 'btn block', style: 'margin-top:8px', onclick: function () { closeM(); sheet.hidden = true; document.body.style.overflow = ''; editTeam(team); } }, '팀 정보 수정'));
+        box.appendChild(h('button', { type: 'button', class: 'btn block', style: 'margin-top:8px', onclick: function () { closeM(); afterRec(function () { if (doClose()) editTeam(team); }); } }, '팀 정보 수정'));
         if (d.final) box.appendChild(h('button', { type: 'button', class: 'btn block', style: 'margin-top:8px', onclick: function () {
-          closeM(); openSession(team.id, cp.id, true);
+          closeM(); afterRec(function () { openSession(team.id, cp.id, true); });
         } }, '이 회차를 새 기록으로 다시 평가'));
         if (d.final) box.appendChild(h('button', { type: 'button', class: 'btn block danger', style: 'margin-top:8px', onclick: function () {
           if (!confirm(team.name + ' 팀의 이 회차 기록을 지울까요? 시트의 점수와 드라이브의 녹음도 함께 지워집니다.')) return;
           closeM();
+          var go = function () {
+          // 화면은 바로 닫고, 시트에서 지우는 동안 안내를 띄운다(서버 삭제는 몇 초 걸린다)
+          Rec.onTick = null; sheet.hidden = true; sheet.innerHTML = ''; document.body.style.overflow = ''; Rec.release();
           var done = function () {
             return idb.del('drafts', d.id).then(function () { return idb.del('audio', d.id); }).then(function () {
               S.drafts = S.drafts.filter(function (x) { return x.id !== d.id; });
               if (S.boot) { S.boot.sessions = (S.boot.sessions || []).filter(function (x) { return x.id !== d.id; }); S.boot.scores = (S.boot.scores || []).filter(function (x) { return x.sid !== d.id; }); lsSet('oral.boot', S.boot); }
-              Rec.onTick = null; sheet.hidden = true; sheet.innerHTML = ''; document.body.style.overflow = ''; render(); toast('기록을 지웠습니다');
+              render(); toast(team.name + ' 기록을 지웠습니다');
             });
           };
-          if (S.cfg && d.sync.session === 'done') api('deleteSession', { id: d.id }).then(done).catch(function (e) { toast('삭제 실패: ' + e.message); });
-          else done();
+          if (S.cfg && d.sync.session === 'done') {
+            toast('지우는 중…');
+            api('deleteSession', { id: d.id }).then(done).catch(function (e) { render(); toast('삭제 실패: ' + e.message); });
+          } else done();
+          };
+          if (Rec.state !== 'idle') Rec.stop().then(go); else go();
         } }, '이 기록 삭제'));
         box.appendChild(h('button', { type: 'button', class: 'btn block', style: 'margin-top:8px', onclick: closeM }, '닫기'));
       });
@@ -1023,6 +1043,7 @@
       });
       if (!d.members.length) chips.appendChild(h('span', { class: 'small muted' }, '팀원이 등록되지 않았습니다(⋯ → 팀 정보 수정).'));
       attend.appendChild(chips);
+      if (typeof methodCard !== 'undefined' && methodCard) attend.appendChild(methodCard);
     }
     renderAttend(); inner.appendChild(attend);
 
@@ -1266,6 +1287,7 @@
         saveDraft(d).then(function () {
           dirty = false; Rec.onTick = null;
           sheet.hidden = true; sheet.innerHTML = ''; document.body.style.overflow = '';
+          Rec.release();
           render(); syncAll();
           var next = teamsOf(curCls()).filter(function (t) { return t.id !== team.id && !latestSession(t.id, cp.id); })[0];
           toast(team.name + ' 저장', next ? { label: '다음: ' + next.name, fn: function () { openSession(next.id, cp.id); } } : null);
@@ -1501,6 +1523,8 @@
     return card;
   }
 
+  // 전사 테스트 상태는 화면 밖에 둔다. 동기화 뒤 설정 화면이 다시 그려져도 고른 엔진·녹음·결과가 그대로 남는다
+  var TT = { picked: null, audio: null, results: null, error: '', running: false, view: null };
   function sttTestCard() {
     var card = h('div', { class: 'card' });
     card.appendChild(h('b', null, '전사 테스트'));
@@ -1511,7 +1535,8 @@
       ['openai:gpt-4o-transcribe', 'OpenAI gpt-4o-transcribe', false], ['openai:gpt-4o-transcribe-diarize', 'OpenAI 화자 구분(diarize)', false],
       ['local', '로컬 Whisper(맥에서 나중에 실행, 외부 전송 없음)', false]];
     var boxes = engines.map(function (e) {
-      var cb = h('input', { type: 'checkbox', value: e[0], checked: e[2] });
+      var cb = h('input', { type: 'checkbox', value: e[0], checked: TT.picked ? TT.picked.indexOf(e[0]) !== -1 : e[2] });
+      cb.addEventListener('change', function () { TT.picked = boxes.filter(function (b) { return b.checked; }).map(function (b) { return b.value; }); });
       card.appendChild(h('label', { class: 'row small', style: 'margin-top:4px' }, cb, h('span', null, e[1])));
       return cb;
     });
@@ -1520,44 +1545,63 @@
     var recBtn = h('button', { type: 'button', class: 'btn' }, '녹음 시작');
     var runBtn = h('button', { type: 'button', class: 'btn primary', disabled: true }, '비교 실행');
     var out = h('div', { class: 'cmp', style: 'margin-top:10px' });
-    var testId = 'TEST'; var testAudio = null;
+    var testId = 'TEST';
     card.appendChild(h('div', { class: 'row', style: 'margin-top:10px' }, clock, h('div', { class: 'grow' }, meter)));
     card.appendChild(h('div', { class: 'row', style: 'margin-top:10px' }, recBtn, runBtn));
     card.appendChild(out);
+    var view = { recBtn: recBtn, runBtn: runBtn, out: out, clock: clock };
+    TT.view = view;
+    function tick() {
+      if (TT.view !== view) return;
+      clock.textContent = mmss(Rec.elapsed()); meter.firstChild.style.width = Math.round(Rec.level() * 100) + '%';
+      if (Rec.elapsed() > 120) recBtn.click();
+    }
+    function paint() {
+      var v = TT.view; if (!v) return;
+      var recording = Rec.state !== 'idle' && Rec.id === testId;
+      v.recBtn.textContent = recording ? '녹음 끝내기' : (TT.audio ? '다시 녹음' : '녹음 시작');
+      v.runBtn.disabled = recording || !TT.audio || TT.running;
+      if (!recording && TT.audio) v.clock.textContent = mmss(TT.audio.duration || 0);
+      v.out.innerHTML = '';
+      if (TT.running) { v.out.appendChild(h('div', { class: 'small muted' }, '받아 적는 중… 엔진 하나에 10~40초')); return; }
+      if (TT.error) { v.out.appendChild(h('div', { class: 'small', style: 'color:var(--lo)' }, '실패: ' + TT.error)); return; }
+      (TT.results || []).forEach(function (x) {
+        if (x.pending) {
+          v.out.appendChild(h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, '로컬 Whisper(맥)'), h('span', { class: 'badge mid' }, '맥에서 실행 대기')),
+            h('pre', null, '녹음을 드라이브 테스트 폴더에 올렸습니다. 맥의 터미널에서\npython3 scripts/oral_local_transcribe.py --tests\n를 실행하면 결과가 시트의 ‘전사 테스트’ 탭에 더해집니다.')));
+          return;
+        }
+        v.out.appendChild(h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, x.engine + ' · ' + x.model), h('span', { class: 'badge' }, x.sec + '초')),
+          h('pre', null, x.error ? '오류: ' + x.error : x.text)));
+      });
+    }
+    // 녹음 중에 다시 그려졌으면 시계를 새 화면에 다시 붙인다
+    if (Rec.state !== 'idle' && Rec.id === testId) Rec.onTick = tick;
+    paint();
     recBtn.addEventListener('click', function () {
       if (Rec.state === 'idle') {
         Rec.start(testId).then(function () {
-          recBtn.textContent = '녹음 끝내기'; runBtn.disabled = true;
-          Rec.onTick = function () { clock.textContent = mmss(Rec.elapsed()); meter.firstChild.style.width = Math.round(Rec.level() * 100) + '%'; if (Rec.elapsed() > 120) recBtn.click(); };
+          TT.results = null; TT.error = ''; Rec.onTick = tick; paint();
           Rec.loop();
         }).catch(function (e) { toast('녹음 실패: ' + e.message); });
       } else if (Rec.id === testId) {
-        Rec.stop().then(function (info) {
-          Rec.onTick = null; recBtn.textContent = '다시 녹음';
-          return idb.get('audio', testId).then(function (a) { testAudio = a; runBtn.disabled = !a; if (info) clock.textContent = mmss(info.duration); });
+        Rec.stop().then(function () {
+          Rec.onTick = null; Rec.release();
+          return idb.get('audio', testId).then(function (a) { TT.audio = a || null; paint(); });
         });
       } else toast('평가 녹음이 진행 중입니다');
     });
     runBtn.addEventListener('click', function () {
-      if (!testAudio) return;
+      if (!TT.audio || TT.running) return;
       var picked = boxes.filter(function (b) { return b.checked; }).map(function (b) { return b.value; });
       if (!picked.length) { toast('엔진을 하나 이상 고르세요'); return; }
-      runBtn.disabled = true; out.innerHTML = ''; out.appendChild(h('div', { class: 'small muted' }, '받아 적는 중… 엔진 하나에 10~40초'));
-      blobToB64(testAudio.buf, testAudio.mime).then(function (b64) {
-        return api('sttTest', { b64: b64, mime: testAudio.mime, engines: picked, durationSec: Math.round(testAudio.duration || 0) }, { timeout: 330000 });
-      }).then(function (r) {
-        out.innerHTML = '';
-        r.results.forEach(function (x) {
-          if (x.pending) {
-            out.appendChild(h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, '로컬 Whisper(맥)'), h('span', { class: 'badge mid' }, '맥에서 실행 대기')),
-              h('pre', null, '녹음을 드라이브 테스트 폴더에 올렸습니다. 맥의 터미널에서\npython3 scripts/oral_local_transcribe.py --tests\n를 실행하면 결과가 시트의 ‘전사 테스트’ 탭에 더해집니다.')));
-            return;
-          }
-          out.appendChild(h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, x.engine + ' · ' + x.model), h('span', { class: 'badge' }, x.sec + '초')),
-            h('pre', null, x.error ? '오류: ' + x.error : x.text)));
-        });
-        runBtn.disabled = false;
-      }).catch(function (e) { out.innerHTML = ''; out.appendChild(h('div', { class: 'small', style: 'color:var(--lo)' }, '실패: ' + e.message)); runBtn.disabled = false; });
+      var a = TT.audio;
+      TT.running = true; TT.results = null; TT.error = ''; paint();
+      blobToB64(a.buf, a.mime).then(function (b64) {
+        return api('sttTest', { b64: b64, mime: a.mime, engines: picked, durationSec: Math.round(a.duration || 0) }, { timeout: 330000 });
+      }).then(function (r) { TT.results = r.results || []; })
+        .catch(function (e) { TT.error = e.message; })
+        .then(function () { TT.running = false; paint(); });
     });
     return card;
   }
