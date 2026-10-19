@@ -797,6 +797,7 @@
       box.appendChild(h('p', { class: 'small muted', style: 'margin:0 0 8px' }, '스프레드시트에서 복사한 표나 아래 같은 목록을 그대로 붙여 넣습니다. '
         + (codeText ? '반은 학번 앞자리로 나눕니다(' + codeText + '). ' : '') + '반을 알 수 없으면 지금 고른 ' + curCls() + '으로 넣습니다.'));
       box.appendChild(h('div', { class: 'example' }, '1팀: 20203 김도윤, 20211 박서연, 20219 이준호\n2팀 20207 오태양 20214 윤하린\n\n또는 표(반·팀·학번·이름)를 복사해 붙여 넣기'));
+      box.appendChild(h('p', { class: 'tiny', style: 'margin:6px 2px 0' }, '반 칸이 없으면 모두 지금 고른 ' + curCls() + '으로 들어갑니다.'));
       box.appendChild(h('div', { style: 'margin-top:10px' }, ta));
       box.appendChild(prev);
       function update() {
