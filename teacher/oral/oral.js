@@ -195,6 +195,17 @@
   }
 
   // ── 연결 ─────────────────────────────────────────────────────────────
+  // "#connect=…"가 붙은 연결 링크 문자열에서 웹 앱 주소·토큰을 꺼낸다
+  function parseConnect(text) {
+    var m = String(text || '').match(/connect=([A-Za-z0-9_\-]+)/);
+    if (!m) return null;
+    try {
+      var b64 = m[1].replace(/-/g, '+').replace(/_/g, '/');
+      while (b64.length % 4) b64 += '=';
+      var obj = JSON.parse(decodeURIComponent(escape(atob(b64))));
+      return obj.u && obj.t ? { url: obj.u, token: obj.t } : null;
+    } catch (e) { return null; }
+  }
   function readConnectHash() {
     var m = location.hash.match(/connect=([A-Za-z0-9_\-]+)/);
     if (!m) return false;
@@ -575,7 +586,7 @@
   function connectCard() {
     return h('div', { class: 'card' },
       h('b', null, '시트에 아직 연결되지 않았습니다'),
-      h('p', { class: 'small muted' }, '선생님 맥의 _private/oral/연결_QR.png를 아이폰 카메라로 비추면 바로 연결됩니다. 직접 넣으려면 설정 화면에서 웹 앱 주소와 토큰을 입력하세요. 연결 전에도 평가와 녹음은 기기에 저장됩니다.'),
+      h('p', { class: 'small muted' }, '연결 링크로 열면 바로 연결됩니다. 홈 화면에 추가한 앱이라면 설정에서 연결 링크를 붙여 넣으세요. 연결 전에도 평가와 녹음은 기기에 저장됩니다.'),
       h('button', { type: 'button', class: 'btn', onclick: function () { S.ui.tab = 'settings'; saveUi(); render(); } }, '설정 열기'));
   }
 
@@ -1248,16 +1259,17 @@
       } }, '연결 끊기'));
       conn.appendChild(r);
     } else {
-      var url = h('input', { type: 'url', placeholder: 'https://script.google.com/macros/s/…/exec' });
-      var tok = h('input', { type: 'password', placeholder: '연결 토큰' });
-      conn.appendChild(h('label', { class: 'f' }, '웹 앱 주소')); conn.appendChild(url);
+      var url = h('input', { type: 'url', placeholder: '연결 링크 전체를 붙여 넣기' });
+      var tok = h('input', { type: 'password', placeholder: '연결 토큰(웹 앱 주소를 따로 넣을 때만)' });
+      conn.appendChild(h('label', { class: 'f' }, '연결 링크 또는 웹 앱 주소')); conn.appendChild(url);
       conn.appendChild(h('label', { class: 'f' }, '토큰')); conn.appendChild(tok);
       conn.appendChild(h('button', { type: 'button', class: 'btn primary', style: 'margin-top:12px', onclick: function () {
-        if (!url.value.trim() || !tok.value.trim()) return;
-        S.cfg = { url: url.value.trim(), token: tok.value.trim() }; lsSet('oral.cfg', S.cfg);
+        var c = parseConnect(url.value);
+        if (!c && (!url.value.trim() || !tok.value.trim())) { toast('연결 링크를 통째로 붙여 넣거나 주소와 토큰을 모두 넣으세요'); return; }
+        S.cfg = c || { url: url.value.trim(), token: tok.value.trim() }; lsSet('oral.cfg', S.cfg);
         api('ping').then(function () { toast('연결했습니다'); loadBoot(true); syncAll(); }).catch(function (e) { toast('연결 실패: ' + e.message); });
       } }, '연결'));
-      conn.appendChild(h('p', { class: 'tiny' }, '연결 QR을 카메라로 비추면 이 칸을 채우지 않아도 됩니다.'));
+      conn.appendChild(h('p', { class: 'tiny' }, '홈 화면에 추가한 앱은 사파리와 저장 공간이 달라 여기서 한 번 더 연결합니다. 연결 링크(…#connect=…)를 길게 눌러 복사해 위 칸에 붙여 넣고 연결을 누르세요.'));
     }
     v.appendChild(conn);
 
