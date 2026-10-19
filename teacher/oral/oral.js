@@ -127,9 +127,10 @@
     S.pendingTeams.forEach(function (t) { if (t._deleted) delete map[t.id]; else map[t.id] = t; });
     return Object.keys(map).map(function (k) { return map[k]; });
   }
+  // 등록 순서(팀ID 순: 설문 제출 순으로 TE01·TE02 …, 앱에서 만든 팀은 만든 시각 순)로 보여 준다
   function teamsOf(cls) {
     return allTeams().filter(function (t) { return t.cls === cls; }).sort(function (a, b) {
-      return String(a.name).localeCompare(String(b.name), 'ko', { numeric: true });
+      return String(a.id).localeCompare(String(b.id), 'en', { numeric: true });
     });
   }
   function teamById(id) { return allTeams().filter(function (t) { return t.id === id; })[0]; }
