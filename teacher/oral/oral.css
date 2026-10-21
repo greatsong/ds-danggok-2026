@@ -159,6 +159,11 @@ a { color: var(--accent); }
 .fq button::before { content: ""; flex: 0 0 auto; width: 16px; height: 16px; margin-top: 3px; border-radius: 50%; border: 2px solid var(--line-2); }
 .fq button.used { border-color: var(--accent); background: var(--accent-soft); color: #3b3bc4; }
 .fq button.used::before { content: "✓"; border-color: var(--accent); background: var(--accent); color: #fff; font-size: 11px; font-weight: 900; line-height: 12px; text-align: center; }
+.lq-row { display: flex; gap: 6px; align-items: stretch; }
+.lq-row > button:first-child { flex: 1 1 auto; }
+.fq .lq-hide { flex: 0 0 auto; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: var(--ink-2); padding: 0 12px; }
+.fq .lq-hide::before { display: none; }
+.lq-basis { display: block; margin-top: 4px; font-size: 12.5px; font-weight: 400; color: var(--ink-3); }
 .timeline { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
 .timeline span { font-size: 12px; background: #f6ecdf; border-radius: 8px; padding: 3px 9px; color: var(--ink-2); font-weight: 600; }
 .label { font-size: 12px; font-weight: 900; color: var(--ink-3); letter-spacing: .02em; margin-top: 14px; }

@@ -136,6 +136,17 @@
       return String(a.id).localeCompare(String(b.id), 'en', { numeric: true });
     });
   }
+  // 맥의 저장소 확인 루틴이 팀 log에서 만든 질문 후보(선생님만 봄). 회차가 비어 있으면 어느 회차에서나 보인다
+  function logQuestions(teamId, cpId) {
+    return (boot().questions || []).filter(function (q) { return q.teamId === teamId && (!q.cp || q.cp === cpId) && q.status !== '숨김'; });
+  }
+  function setQuestionStatus(q, status) {
+    var b = boot();
+    q.status = status;
+    if (status === '숨김') b.questions = (b.questions || []).filter(function (x) { return x.id !== q.id; });
+    S.boot = b; lsSet('oral.boot', b);
+    api('setQuestionStatus', { id: q.id, status: status }).catch(function (e) { toast('질문 후보 상태를 저장하지 못했습니다. ' + e.message); });
+  }
   function teamById(id) { return allTeams().filter(function (t) { return t.id === id; })[0]; }
 
   // "20203 김도윤 / 20211 박서연" → [{key, sid, name}]
@@ -729,7 +740,8 @@
         st = h('div', { class: 'st' }, h('div', { class: 'score' }, s.max ? (s.total + '/' + s.max) : '완료'),
           h('span', { class: 'badge ' + (local ? 'mid' : ratioClass(ratio)) }, local ? '올리기 대기' : '저장됨'), extra);
       } else {
-        st = h('div', { class: 'st' }, h('span', { class: 'badge' }, '미평가'));
+        var nq = logQuestions(t.id, cp.id).filter(function (x) { return x.status === '후보'; }).length;
+        st = h('div', { class: 'st' }, h('span', { class: 'badge' }, '미평가'), nq ? h('span', { class: 'badge mid' }, '질문 후보 ' + nq) : null);
       }
       list.appendChild(h('button', { type: 'button', class: 'team' + (s ? ' done' : '') + (nextTeam && nextTeam.id === t.id ? ' next' : ''),
         onclick: function () { openSession(t.id, cp.id); } },
@@ -1235,8 +1247,10 @@
     var tl = h('div', { class: 'timeline' });
     qCard.appendChild(h('div', { class: 'label' }, '지목 · 누르면 녹음 시각이 표시됩니다'));
     qCard.appendChild(pickWrap);
+    var lq = h('div', { class: 'fq lq' });
+    var lqLabel = h('div', { class: 'label' }, 'log에서 나온 질문 후보');
     qCard.appendChild(h('div', { class: 'label' }, '꼬리질문'));
-    qCard.appendChild(fq); qCard.appendChild(tl);
+    qCard.appendChild(fq); qCard.appendChild(lqLabel); qCard.appendChild(lq); qCard.appendChild(tl);
     inner.appendChild(qCard);
     function mark(kind, key, label) {
       var t = Rec.id === d.id && Rec.state !== 'idle' ? Math.round(Rec.elapsed()) : null;
@@ -1264,13 +1278,32 @@
         } }, q));
       });
     }
+    function renderLq() {
+      lq.innerHTML = '';
+      var list = logQuestions(team.id, cp.id);
+      lqLabel.hidden = lq.hidden = !list.length;
+      list.forEach(function (q) {
+        var used = q.status === '사용' || d.markers.some(function (x) { return x.kind === 'question' && x.label.indexOf(q.text) === 0; });
+        var ask = h('button', { type: 'button', class: used ? 'used' : '', onclick: function () {
+          var who = picked ? (d.members.filter(function (m) { return m.key === picked; })[0] || {}).name : '';
+          mark('question', picked || '', q.text + (who ? ' → ' + who : ''));
+          if (q.status !== '사용') setQuestionStatus(q, '사용');
+          renderLq();
+        } }, h('span', null, q.text, q.basis ? h('span', { class: 'lq-basis' }, q.basis) : null));
+        var hide = h('button', { type: 'button', class: 'lq-hide', 'aria-label': '이 질문 후보 숨기기', onclick: function () {
+          if (!confirm('이 질문 후보를 숨길까요?')) return;
+          setQuestionStatus(q, '숨김'); renderLq();
+        } }, '숨기기');
+        lq.appendChild(h('div', { class: 'lq-row' }, ask, hide));
+      });
+    }
     function renderTimeline() {
       tl.innerHTML = '';
       d.markers.slice(-12).forEach(function (x) {
         tl.appendChild(h('span', null, (x.t !== null && x.t !== undefined ? mmss(x.t) + ' ' : '') + (x.kind === 'student' ? '지목 ' : '') + (x.label.length > 24 ? x.label.slice(0, 24) + '…' : x.label)));
       });
     }
-    renderPick(); renderFq(); renderTimeline();
+    renderPick(); renderFq(); renderLq(); renderTimeline();
 
     // 루브릭
     var rubCard = h('div', { class: 'card' });
