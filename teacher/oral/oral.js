@@ -719,7 +719,8 @@
         var ratio = s.max ? s.total / s.max : 0;
         var local = s._src === 'local' && (s.sync.session !== 'done' || s.sync.audio === 'pending' || s.sync.audio === 'error');
         var sttS = String(s.sttStatus || ''), fbS = String(s.feedbackStatus || '');
-        var extra = fbS.indexOf('완료') === 0 ? h('span', { class: 'badge hi' }, '피드백')
+        var extra = s.issueUrl ? h('span', { class: 'badge hi' }, '이슈')
+          : fbS.indexOf('완료') === 0 ? h('span', { class: 'badge hi' }, '피드백')
           : (sttS.indexOf('실패') === 0 || fbS.indexOf('실패') === 0) ? h('span', { class: 'badge lo' }, '처리 실패')
           : (busyStatus(sttS) || busyStatus(fbS) || (s.sync && s.sync.stt === 'server')) ? h('span', { class: 'badge mid' }, '전사·피드백 중') : null;
         st = h('div', { class: 'st' }, h('div', { class: 'score' }, s.max ? (s.total + '/' + s.max) : '완료'),
@@ -1429,35 +1430,72 @@
       tr.appendChild(again);
       box.appendChild(tr);
 
-      // 팀에게 줄 피드백(초안): 전사가 끝나면 서버가 만든다. 선생님이 읽고 고쳐서 전한다
+      // 팀에게 줄 피드백(초안): 전사가 끝나면 서버가 만든다. 선생님이 읽고 고친 뒤 팀 저장소 이슈로 올린다
       var fb = h('div', { class: 'card' });
       var fbState = h('span', { class: 'tiny' }, '');
-      var fbBody = h('div', { class: 'transcript', style: 'margin-top:8px' }, '');
+      var fbNote = h('div', { class: 'small muted', style: 'margin-top:8px' }, '');
+      var fbEdit = h('textarea', { style: 'margin-top:8px;min-height:230px', 'aria-label': '팀 피드백 문안' });
       var fbCopy = h('button', { type: 'button', class: 'btn' }, '복사');
       var fbAgain = h('button', { type: 'button', class: 'btn' }, '다시 만들기');
-      var fbText = '';
+      var fbIssue = h('button', { type: 'button', class: 'btn primary' }, '이슈로 올리기');
+      var fbLink = h('a', { target: '_blank', rel: 'noopener', class: 'small', style: 'display:none;margin-top:8px' }, '');
+      var fbDirty = false;
       function paintFb(status, text) {
         if (status !== undefined) s.feedbackStatus = status;
         if (text !== undefined) s.feedback = text;
-        fbText = s.feedback || '';
-        fbState.textContent = statusWord(s.feedbackStatus);
         var st2 = String(s.feedbackStatus || '');
-        fbBody.textContent = fbText || (busyStatus(st2) ? '전사가 끝나면 1분 안팎으로 만들어집니다.' : st2.indexOf('실패') === 0 ? st2 : '아직 피드백이 없습니다. ‘다시 만들기’로 만듭니다.');
-        fbCopy.disabled = !fbText;
+        fbState.textContent = statusWord(st2);
+        var has = !!s.feedback;
+        if (!fbDirty) fbEdit.value = s.feedback || '';
+        fbEdit.style.display = has ? '' : 'none';
+        fbNote.style.display = has ? 'none' : '';
+        fbNote.textContent = busyStatus(st2) ? '전사가 끝나면 1분 안팎으로 만들어집니다.' : st2.indexOf('실패') === 0 ? st2 : '아직 피드백이 없습니다. ‘다시 만들기’로 만듭니다.';
+        fbCopy.disabled = !has; fbIssue.disabled = !has;
+        fbIssue.textContent = s.issueUrl ? '이슈 고치기' : '이슈로 올리기';
+        if (s.issueUrl) { fbLink.href = s.issueUrl; fbLink.textContent = '깃허브 이슈 #' + (s.issueUrl.match(/(\d+)$/) || [])[1] + ' 열기'; fbLink.style.display = 'inline-block'; }
+        else fbLink.style.display = 'none';
       }
+      // 고친 문안은 칸을 벗어날 때 시트에 저장한다(학생부 자료로 남는 것은 고친 문안)
+      function saveEdit() {
+        var v = fbEdit.value.trim();
+        if (!fbDirty || !v || v === String(s.feedback || '').trim()) { fbDirty = false; return Promise.resolve(); }
+        return api('saveFeedback', { id: s.id, text: v }).then(function (r) {
+          fbDirty = false; paintFb(r.feedbackStatus, r.feedback);
+          mergeSession(s.id, { feedbackStatus: r.feedbackStatus, feedback: r.feedback }); toast('고친 문안을 저장했습니다');
+        }).catch(function (e) { toast('저장 실패: ' + e.message); });
+      }
+      fbEdit.addEventListener('input', function () { fbDirty = true; });
+      fbEdit.addEventListener('blur', saveEdit);
       fbCopy.addEventListener('click', function () {
-        (navigator.clipboard ? navigator.clipboard.writeText(fbText) : Promise.reject()).then(function () { toast('복사했습니다'); }).catch(function () { toast('복사하지 못했습니다'); });
+        (navigator.clipboard ? navigator.clipboard.writeText(fbEdit.value) : Promise.reject()).then(function () { toast('복사했습니다'); }).catch(function () { toast('복사하지 못했습니다'); });
       });
       fbAgain.addEventListener('click', function () {
-        fbAgain.disabled = true; fbBody.textContent = '만드는 중…';
+        if ((fbDirty || String(s.feedbackStatus).indexOf('선생님 수정') !== -1) && !confirm('고친 문안 대신 새 초안을 만들까요?')) return;
+        fbAgain.disabled = true; fbDirty = false; fbEdit.style.display = 'none'; fbNote.style.display = ''; fbNote.textContent = '만드는 중…';
         api('requestFeedback', { id: s.id }, { timeout: 120000 }).then(function (r) {
           paintFb(r.feedbackStatus, r.feedback); mergeSession(s.id, { feedbackStatus: r.feedbackStatus, feedback: r.feedback });
           if (r.skipped) toast(r.status === 'no-transcript' ? '전사가 없어 만들 수 없습니다' : '이미 만드는 중입니다');
-        }).catch(function (e) { fbBody.textContent = '실패: ' + e.message; }).then(function () { fbAgain.disabled = false; });
+        }).catch(function (e) { fbNote.textContent = '실패: ' + e.message; }).then(function () { fbAgain.disabled = false; });
+      });
+      fbIssue.addEventListener('click', function () {
+        var text = fbEdit.value.trim(); if (!text) return;
+        fbIssue.disabled = true;
+        api('postIssue', { id: s.id, text: text, dryRun: true }).then(function (d) {
+          var msg = (d.existing ? '이미 올린 이슈를 이 문안으로 고칩니다.\n' : '') + d.repo + ' 저장소에 이슈로 올릴까요?\n\n제목: ' + d.title + '\n(보완할 점은 체크 목록으로 올라갑니다. 공개 저장소라 누구나 볼 수 있습니다.)';
+          if (!confirm(msg)) return;
+          return api('postIssue', { id: s.id, text: text }).then(function (r) {
+            fbDirty = false; s.issueUrl = r.url;
+            if (text !== String(s.feedback || '').trim()) { s.feedback = text; s.feedbackStatus = '완료 (선생님 수정)'; }
+            mergeSession(s.id, { issueUrl: r.url, feedback: s.feedback, feedbackStatus: s.feedbackStatus }); paintFb();
+            toast(r.updated ? '이슈를 고쳤습니다' : '이슈를 올렸습니다', { label: '열기', fn: function () { window.open(r.url, '_blank'); } });
+          });
+        }).catch(function (e) { alert('이슈를 올리지 못했습니다.\n' + e.message); }).then(function () { fbIssue.disabled = !fbEdit.value.trim(); });
       });
       fb.appendChild(h('div', { class: 'row' }, h('b', { class: 'grow' }, '팀 피드백(초안)'), fbState));
-      fb.appendChild(fbBody);
-      fb.appendChild(h('div', { class: 'row', style: 'margin-top:8px' }, fbCopy, fbAgain));
+      fb.appendChild(fbNote);
+      fb.appendChild(fbEdit);
+      fb.appendChild(h('div', { class: 'row wrap', style: 'margin-top:8px' }, fbCopy, fbAgain, h('span', { class: 'grow' }), fbIssue));
+      fb.appendChild(fbLink);
       box.appendChild(fb);
       paintFb();
       if (S.cfg) api('getSession', { id: s.id }).then(function (r) {
@@ -1583,6 +1621,23 @@
     var fbEng = (st.feedback_engine || 'solar') === 'solar' ? 'Solar ' + (st.solar_model || 'solar-pro4') + (st.keys && st.keys.upstage ? '' : ' (키 없음 → Gemini)') : 'Gemini ' + (st.gemini_model || '');
     stt.appendChild(h('p', { class: 'tiny' }, '피드백 문안 ' + fbEng + ' · 서버 자동 처리 ' + (st.server_queue ? '켜짐(앱을 닫아도 진행)' : '꺼짐(시트 메뉴 ‘구술 평가 → 자동 처리 켜기’)')));
     v.appendChild(stt);
+
+    // 깃허브 이슈: 피드백을 팀 저장소 이슈로 올릴 때 쓰는 토큰(시트 서버에만 저장, 앱에는 남지 않음)
+    var ghCard = h('div', { class: 'card' });
+    ghCard.appendChild(h('b', null, '깃허브 이슈'));
+    ghCard.appendChild(h('p', { class: 'small muted' }, '기록 화면의 ‘이슈로 올리기’는 팀 피드백을 팀 저장소의 이슈로 올립니다. 보완할 점은 체크 목록으로 올라가고, 점수와 전사는 올리지 않습니다.'));
+    ghCard.appendChild(h('p', { class: 'tiny' }, '토큰 ' + (st.keys && st.keys.github ? '있음' : '없음') + ' · 깃허브 Settings → Developer settings → Personal access tokens → Tokens (classic)에서 public_repo만 골라 만듭니다.'));
+    var tokIn = h('input', { type: 'password', autocomplete: 'off', placeholder: 'ghp_로 시작하는 토큰' });
+    var tokBtn = h('button', { type: 'button', class: 'btn' }, st.keys && st.keys.github ? '바꾸기' : '저장');
+    tokBtn.addEventListener('click', function () {
+      var val = tokIn.value.trim(); if (!val) return;
+      if (!S.cfg) { toast('먼저 시트에 연결합니다'); return; }
+      tokBtn.disabled = true;
+      api('installSecrets', { secrets: { GITHUB_TOKEN: val }, replace: true }).then(function () { tokIn.value = ''; toast('토큰을 시트 서버에 저장했습니다'); return loadBoot(true); })
+        .catch(function (e) { toast('저장 실패: ' + e.message); }).then(function () { tokBtn.disabled = false; });
+    });
+    ghCard.appendChild(h('div', { class: 'row', style: 'margin-top:8px' }, h('div', { class: 'grow' }, tokIn), tokBtn));
+    v.appendChild(ghCard);
 
     // 마이크 점검
     v.appendChild(micCheckCard());
