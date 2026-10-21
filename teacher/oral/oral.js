@@ -140,12 +140,15 @@
   function logQuestions(teamId, cpId) {
     return (boot().questions || []).filter(function (q) { return q.teamId === teamId && (!q.cp || q.cp === cpId) && q.status !== '숨김'; });
   }
+  // 서버에 저장된 뒤에만 화면 상태를 바꾼다(실패하면 그대로 두어 다시 누를 수 있게)
   function setQuestionStatus(q, status) {
-    var b = boot();
-    q.status = status;
-    if (status === '숨김') b.questions = (b.questions || []).filter(function (x) { return x.id !== q.id; });
-    S.boot = b; lsSet('oral.boot', b);
-    api('setQuestionStatus', { id: q.id, status: status }).catch(function (e) { toast('질문 후보 상태를 저장하지 못했습니다. ' + e.message); });
+    return api('setQuestionStatus', { id: q.id, status: status }).then(function () {
+      var b = boot();
+      (b.questions || []).forEach(function (x) { if (x.id === q.id) x.status = status; });
+      if (status === '숨김') b.questions = (b.questions || []).filter(function (x) { return x.id !== q.id; });
+      q.status = status;
+      S.boot = b; lsSet('oral.boot', b);
+    }).catch(function (e) { toast('질문 후보 상태를 저장하지 못했습니다. ' + e.message); });
   }
   function teamById(id) { return allTeams().filter(function (t) { return t.id === id; })[0]; }
 
@@ -1287,12 +1290,12 @@
         var ask = h('button', { type: 'button', class: used ? 'used' : '', onclick: function () {
           var who = picked ? (d.members.filter(function (m) { return m.key === picked; })[0] || {}).name : '';
           mark('question', picked || '', q.text + (who ? ' → ' + who : ''));
-          if (q.status !== '사용') setQuestionStatus(q, '사용');
           renderLq();
+          if (q.status !== '사용') setQuestionStatus(q, '사용').then(renderLq);
         } }, h('span', null, q.text, q.basis ? h('span', { class: 'lq-basis' }, q.basis) : null));
         var hide = h('button', { type: 'button', class: 'lq-hide', 'aria-label': '이 질문 후보 숨기기', onclick: function () {
           if (!confirm('이 질문 후보를 숨길까요?')) return;
-          setQuestionStatus(q, '숨김'); renderLq();
+          setQuestionStatus(q, '숨김').then(renderLq);
         } }, '숨기기');
         lq.appendChild(h('div', { class: 'lq-row' }, ask, hide));
       });
