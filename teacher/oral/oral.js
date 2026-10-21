@@ -1481,7 +1481,7 @@
         var text = fbEdit.value.trim(); if (!text) return;
         fbIssue.disabled = true;
         api('postIssue', { id: s.id, text: text, dryRun: true }).then(function (d) {
-          var msg = (d.existing ? '이미 올린 이슈를 이 문안으로 고칩니다.\n' : '') + d.repo + ' 저장소에 이슈로 올릴까요?\n\n제목: ' + d.title + '\n(보완할 점은 체크 목록으로 올라갑니다. 공개 저장소라 누구나 볼 수 있습니다.)';
+          var msg = (d.existing ? '이미 올린 이슈를 이 문안으로 고칩니다.\n' : '') + d.repo + ' 저장소에 이슈로 올릴까요?\n\n제목: ' + d.title + '\n(가이드는 체크 목록으로 올라갑니다. 공개 저장소라 누구나 볼 수 있습니다.)';
           if (!confirm(msg)) return;
           return api('postIssue', { id: s.id, text: text }).then(function (r) {
             fbDirty = false; s.issueUrl = r.url;
@@ -1491,7 +1491,7 @@
           });
         }).catch(function (e) { alert('이슈를 올리지 못했습니다.\n' + e.message); }).then(function () { fbIssue.disabled = !fbEdit.value.trim(); });
       });
-      fb.appendChild(h('div', { class: 'row' }, h('b', { class: 'grow' }, '팀 피드백(초안)'), fbState));
+      fb.appendChild(h('div', { class: 'row' }, h('b', { class: 'grow' }, '강점·가이드(초안)'), fbState));
       fb.appendChild(fbNote);
       fb.appendChild(fbEdit);
       fb.appendChild(h('div', { class: 'row wrap', style: 'margin-top:8px' }, fbCopy, fbAgain, h('span', { class: 'grow' }), fbIssue));
@@ -1625,7 +1625,7 @@
     // 깃허브 이슈: 피드백을 팀 저장소 이슈로 올릴 때 쓰는 토큰(시트 서버에만 저장, 앱에는 남지 않음)
     var ghCard = h('div', { class: 'card' });
     ghCard.appendChild(h('b', null, '깃허브 이슈'));
-    ghCard.appendChild(h('p', { class: 'small muted' }, '기록 화면의 ‘이슈로 올리기’는 팀 피드백을 팀 저장소의 이슈로 올립니다. 보완할 점은 체크 목록으로 올라가고, 점수와 전사는 올리지 않습니다.'));
+    ghCard.appendChild(h('p', { class: 'small muted' }, '기록 화면의 ‘이슈로 올리기’는 팀 피드백을 팀 저장소의 이슈로 올립니다. 강점과 다음 단계 가이드가 올라가고(가이드는 체크 목록), 점수와 전사는 올리지 않습니다.'));
     ghCard.appendChild(h('p', { class: 'tiny' }, '토큰 ' + (st.keys && st.keys.github ? '있음' : '없음') + ' · 깃허브 Settings → Developer settings → Personal access tokens → Tokens (classic)에서 public_repo만 골라 만듭니다.'));
     var tokIn = h('input', { type: 'password', autocomplete: 'off', placeholder: 'ghp_로 시작하는 토큰' });
     var tokBtn = h('button', { type: 'button', class: 'btn' }, st.keys && st.keys.github ? '바꾸기' : '저장');
