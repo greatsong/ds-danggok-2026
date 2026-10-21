@@ -112,7 +112,7 @@
     var c = seed.course || {};
     var codes = c.class_codes ? Object.keys(c.class_codes).map(function (k) { return k + '=' + c.class_codes[k]; }).join(',') : '';
     return { settings: { app_title: c.app_title || '구술 평가', course_name: c.course_name || '', scale: seed.scale_default || 3,
-      classes: c.classes || ['1반', '2반'], class_codes: codes, stt_engine: 'none', auto_transcribe: true, keys: {} },
+      classes: c.classes || ['1반', '2반'], class_codes: codes, stt_engine: 'none', auto_transcribe: true, auto_feedback: true, keys: {} },
       checkpoints: seed.checkpoints, teams: [], sessions: [], scores: [], sheetUrl: '', offline: true,
       elementRule: seed.element_rule || '', methods: c.methods || {}, memoPhrases: seed.memo_phrases || { team: [], student: [] } };
   }
@@ -244,10 +244,12 @@
     if (!S.cfg) return Promise.resolve();
     return api('bootstrap', {}, { timeout: 45000 }).then(function (d) {
       delete d.ok;
-      S.boot = d; lsSet('oral.boot', d);
+      var ready = applyBoot(d);
       if (!S.ui.cp || !cpById(S.ui.cp)) { S.ui.cp = (d.checkpoints[0] || {}).id; saveUi(); }
       render();
-      if (!quiet) toast('시트에서 새로 불러왔습니다');
+      if (ready.length) notifyReady(ready);
+      else if (!quiet) toast('시트에서 새로 불러왔습니다');
+      schedulePoll();
     }).catch(function (e) { if (!quiet) toast('불러오기 실패: ' + e.message); renderSync(); });
   }
 
@@ -528,11 +530,13 @@
           }).then(function (r) {
             d.sync.audio = 'done'; d.audio.remote = true; d.audio.url = r.url; d.error = '';
             var eng = settings().stt_engine;
-            if (eng && eng !== 'none' && eng !== 'local' && settings().auto_transcribe !== false) d.sync.stt = 'pending';
+            if (r.queued) d.sync.stt = 'server';
+            else if (eng && eng !== 'none' && eng !== 'local' && settings().auto_transcribe !== false) d.sync.stt = 'pending';
             return saveDraft(d);
           });
         }).catch(function (e) { d.sync.audio = 'error'; d.error = e.message; return saveDraft(d).then(function () { throw e; }); });
       }).then(function () {
+        if (d.sync.stt === 'server') { kickProcess(d); return; }
         if (d.sync.stt !== 'pending') return;
         return api('transcribe', { id: d.id }, { timeout: 330000 }).then(function (r) {
           d.sync.stt = r.skipped ? 'none' : 'done'; if (r.text) d.transcript = r.text; return saveDraft(d);
@@ -548,6 +552,68 @@
       if (S.syncAgain) return syncAll();
     });
   }
+  // ── 서버 처리(전사 → 피드백) ─────────────────────────────────────────
+  // 녹음을 올린 기록은 서버에 'process'를 한 번 보내고 기다리지 않는다. 요청이 끊겨도
+  // 서버의 1분 트리거가 '대기' 기록을 끝까지 처리한다. 앱은 시트를 다시 읽어 결과를 보여 준다.
+  var kicked = {};
+  function kickProcess(d) {
+    if (kicked[d.id]) return;
+    kicked[d.id] = true;
+    api('process', { id: d.id }, { timeout: 330000 }).then(function (r) {
+      if (r.text) { d.transcript = r.text; d.sync.stt = 'done'; saveDraft(d); }
+      mergeSession(d.id, { sttStatus: r.sttStatus, feedbackStatus: r.feedbackStatus, feedback: r.feedback });
+    }).catch(function (e) { console.warn('서버 처리 요청 실패(트리거가 다시 처리)', d.id, e); })
+      .then(function () { schedulePoll(3000); });
+  }
+  function busyStatus(v) { v = String(v || ''); return v === '대기' || v.indexOf('처리 중') === 0 || /^오류 \d/.test(v); }
+  function serverBusy() {
+    return (boot().sessions || []).some(function (s) { return busyStatus(s.sttStatus) || busyStatus(s.feedbackStatus); })
+      || S.drafts.some(function (d) { return d.final && d.sync.stt === 'server'; });
+  }
+  // 시트에서 전사가 끝난 기록은 기기 기록의 전사 단계도 완료로 맞춘다
+  function syncSttFromBoot() {
+    var map = {}; (boot().sessions || []).forEach(function (s) { map[s.id] = s; });
+    S.drafts.forEach(function (d) {
+      var s = map[d.id];
+      if (d.final && d.sync.stt === 'server' && s && String(s.sttStatus).indexOf('완료') === 0) { d.sync.stt = 'done'; saveDraft(d); }
+    });
+  }
+  function mergeSession(id, patch) {
+    var b = boot(); var hit = false;
+    (b.sessions || []).forEach(function (s) { if (s.id === id) { Object.keys(patch).forEach(function (k) { if (patch[k] !== undefined) s[k] = patch[k]; }); hit = true; } });
+    if (hit) { S.boot = b; lsSet('oral.boot', b); }
+    return hit;
+  }
+  var pollTimer = null;
+  function schedulePoll(ms) {
+    clearTimeout(pollTimer);
+    if (!S.cfg || !serverBusy()) return;
+    pollTimer = setTimeout(pollBoot, ms || 20000);
+  }
+  // 새로 읽은 시트 내용을 반영하고, 그사이 피드백이 완성된 기록을 돌려준다
+  function applyBoot(d) {
+    var before = {}; ((S.boot && S.boot.sessions) || []).forEach(function (s) { before[s.id] = String(s.feedbackStatus || ''); });
+    S.boot = d; lsSet('oral.boot', d);
+    syncSttFromBoot();
+    return (d.sessions || []).filter(function (s) {
+      return before[s.id] !== undefined && before[s.id].indexOf('완료') !== 0 && String(s.feedbackStatus || '').indexOf('완료') === 0;
+    });
+  }
+  function notifyReady(ready) {
+    var s = ready[ready.length - 1]; var team = teamById(s.teamId); var cp = cpById(s.cp);
+    toast((ready.length > 1 ? ready.length + '팀' : s.teamName) + ' 피드백이 준비됐습니다', team && cp ? { label: '보기', fn: function () { showDetail(s, team, cp); } } : null);
+  }
+  function pollBoot() {
+    if (S.syncing || document.hidden) { schedulePoll(); return; }
+    api('bootstrap', {}, { timeout: 45000 }).then(function (d) {
+      delete d.ok;
+      var ready = applyBoot(d);
+      if (S.ui.tab !== 'settings') render();
+      if (ready.length) notifyReady(ready);
+    }).catch(function () {}).then(function () { schedulePoll(); });
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) schedulePoll(1500); });
+
   window.addEventListener('online', function () { S.online = true; renderSync(); syncAll(); });
   window.addEventListener('offline', function () { S.online = false; renderSync(); });
   setInterval(function () { if (pendingCount() && navigator.onLine) syncAll(); }, 60000);
@@ -652,8 +718,12 @@
       if (s) {
         var ratio = s.max ? s.total / s.max : 0;
         var local = s._src === 'local' && (s.sync.session !== 'done' || s.sync.audio === 'pending' || s.sync.audio === 'error');
+        var sttS = String(s.sttStatus || ''), fbS = String(s.feedbackStatus || '');
+        var extra = fbS.indexOf('완료') === 0 ? h('span', { class: 'badge hi' }, '피드백')
+          : (sttS.indexOf('실패') === 0 || fbS.indexOf('실패') === 0) ? h('span', { class: 'badge lo' }, '처리 실패')
+          : (busyStatus(sttS) || busyStatus(fbS) || (s.sync && s.sync.stt === 'server')) ? h('span', { class: 'badge mid' }, '전사·피드백 중') : null;
         st = h('div', { class: 'st' }, h('div', { class: 'score' }, s.max ? (s.total + '/' + s.max) : '완료'),
-          h('span', { class: 'badge ' + (local ? 'mid' : ratioClass(ratio)) }, local ? '올리기 대기' : '저장됨'));
+          h('span', { class: 'badge ' + (local ? 'mid' : ratioClass(ratio)) }, local ? '올리기 대기' : '저장됨'), extra);
       } else {
         st = h('div', { class: 'st' }, h('span', { class: 'badge' }, '미평가'));
       }
@@ -1107,7 +1177,7 @@
     function startRec() {
       if (d.audio.has && !confirm('지금 녹음을 지우고 다시 녹음할까요?')) return;
       Rec.start(d.id).then(function () {
-        if (!d.startedAt) d.startedAt = new Date().toISOString();
+        d.startedAt = new Date().toISOString();   // 다시 녹음하면 평가 시각도 새 녹음 기준으로
         d.audio = { has: false }; d.markers = []; touch(); paintRec(); renderTimeline();
       }).catch(function (e) { toast('녹음 시작 실패: ' + e.message); });
     }
@@ -1343,27 +1413,79 @@
       if (Object.keys(notes).length) box.appendChild(h('div', { class: 'card' }, h('b', null, '학생 메모'), Object.keys(notes).map(function (k) { return h('div', { class: 'small', style: 'margin-top:4px' }, h('b', null, k + ' '), notes[k]); })));
       if (s.markers && s.markers.length) box.appendChild(h('div', { class: 'card' }, h('b', null, '표시'), h('div', { class: 'timeline' }, s.markers.map(function (x) { return h('span', null, (x.t !== null && x.t !== undefined ? mmss(x.t) + ' ' : '') + x.label); }))));
       var tr = h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, '녹음·전사'), s.audioUrl || (s.audio && s.audio.url) ? h('a', { href: s.audioUrl || s.audio.url, target: '_blank', rel: 'noopener' }, '녹음 열기') : h('span', { class: 'tiny' }, '녹음 없음')));
+      var trState = h('div', { class: 'tiny' }, statusWord(s.sttStatus));
+      tr.appendChild(trState);
       var trBody = h('div', { class: 'transcript', style: 'margin-top:8px' }, s.transcript || '불러오는 중…');
       tr.appendChild(trBody);
       var again = h('button', { type: 'button', class: 'btn', style: 'margin-top:8px' }, '전사 요청');
       again.addEventListener('click', function () {
+        if ((s.transcript || trBody.textContent.length > 40) && !confirm('다시 받아 적고 피드백도 새로 만들까요?')) return;
         again.disabled = true; trBody.textContent = '받아 적는 중… (1분 안팎)';
-        api('transcribe', { id: s.id }, { timeout: 330000 }).then(function (r) { trBody.textContent = r.skipped ? '전사 엔진이 꺼져 있습니다(설정).' : r.text; again.disabled = false; })
-          .catch(function (e) { trBody.textContent = '실패: ' + e.message; again.disabled = false; });
+        api('transcribe', { id: s.id, force: true }, { timeout: 330000 }).then(function (r) {
+          trBody.textContent = r.skipped ? (r.status === 'busy' ? '이미 처리 중입니다. 잠시 뒤 다시 엽니다.' : '전사 엔진이 꺼져 있습니다(설정).') : r.text;
+          trState.textContent = statusWord(r.sttStatus); paintFb(r.feedbackStatus, r.feedback); again.disabled = false;
+        }).catch(function (e) { trBody.textContent = '실패: ' + e.message; again.disabled = false; });
       });
       tr.appendChild(again);
       box.appendChild(tr);
-      if (S.cfg) api('getSession', { id: s.id }).then(function (r) { trBody.textContent = r.session.transcript || '아직 전사가 없습니다.'; }).catch(function () { trBody.textContent = s.transcript || '시트에서 불러오지 못했습니다.'; });
+
+      // 팀에게 줄 피드백(초안): 전사가 끝나면 서버가 만든다. 선생님이 읽고 고쳐서 전한다
+      var fb = h('div', { class: 'card' });
+      var fbState = h('span', { class: 'tiny' }, '');
+      var fbBody = h('div', { class: 'transcript', style: 'margin-top:8px' }, '');
+      var fbCopy = h('button', { type: 'button', class: 'btn' }, '복사');
+      var fbAgain = h('button', { type: 'button', class: 'btn' }, '다시 만들기');
+      var fbText = '';
+      function paintFb(status, text) {
+        if (status !== undefined) s.feedbackStatus = status;
+        if (text !== undefined) s.feedback = text;
+        fbText = s.feedback || '';
+        fbState.textContent = statusWord(s.feedbackStatus);
+        var st2 = String(s.feedbackStatus || '');
+        fbBody.textContent = fbText || (busyStatus(st2) ? '전사가 끝나면 1분 안팎으로 만들어집니다.' : st2.indexOf('실패') === 0 ? st2 : '아직 피드백이 없습니다. ‘다시 만들기’로 만듭니다.');
+        fbCopy.disabled = !fbText;
+      }
+      fbCopy.addEventListener('click', function () {
+        (navigator.clipboard ? navigator.clipboard.writeText(fbText) : Promise.reject()).then(function () { toast('복사했습니다'); }).catch(function () { toast('복사하지 못했습니다'); });
+      });
+      fbAgain.addEventListener('click', function () {
+        fbAgain.disabled = true; fbBody.textContent = '만드는 중…';
+        api('requestFeedback', { id: s.id }, { timeout: 120000 }).then(function (r) {
+          paintFb(r.feedbackStatus, r.feedback); mergeSession(s.id, { feedbackStatus: r.feedbackStatus, feedback: r.feedback });
+          if (r.skipped) toast(r.status === 'no-transcript' ? '전사가 없어 만들 수 없습니다' : '이미 만드는 중입니다');
+        }).catch(function (e) { fbBody.textContent = '실패: ' + e.message; }).then(function () { fbAgain.disabled = false; });
+      });
+      fb.appendChild(h('div', { class: 'row' }, h('b', { class: 'grow' }, '팀 피드백(초안)'), fbState));
+      fb.appendChild(fbBody);
+      fb.appendChild(h('div', { class: 'row', style: 'margin-top:8px' }, fbCopy, fbAgain));
+      box.appendChild(fb);
+      paintFb();
+      if (S.cfg) api('getSession', { id: s.id }).then(function (r) {
+        trBody.textContent = r.session.transcript || '아직 전사가 없습니다.'; trState.textContent = statusWord(r.session.sttStatus);
+        paintFb(r.session.feedbackStatus, r.session.feedback);
+      }).catch(function () { trBody.textContent = s.transcript || '시트에서 불러오지 못했습니다.'; });
       box.appendChild(h('div', { class: 'row', style: 'margin-top:12px' }, h('span', { class: 'grow' }),
         h('button', { type: 'button', class: 'btn', onclick: function () { close(); S.ui.cp = cp.id; S.ui.tab = 'eval'; saveUi(); render(); openSession(team.id, cp.id); } }, '수정'),
         h('button', { type: 'button', class: 'btn primary', onclick: close }, '닫기')));
     });
   }
 
+  // 시트의 전사·피드백 상태를 짧은 말로
+  function statusWord(v) {
+    v = String(v || '');
+    if (!v) return '';
+    if (v.indexOf('처리 중') === 0) return '만드는 중';
+    if (v.indexOf('완료') === 0) return v.replace(/^완료\s*\(?/, '완료 ').replace(/\)$/, '').trim();
+    var m = v.match(/^오류 (\d+): ?(.*)$/);
+    if (m) return '오류 ' + m[1] + '회 · 1분 뒤 다시 시도 · ' + m[2].slice(0, 80);
+    if (v.indexOf('실패') === 0) return v.slice(0, 120);
+    return v;
+  }
+
   // ── 기록(올리기 상태) ─────────────────────────────────────────────────
   function stepBadge(label, st) {
-    var map = { done: 'hi', pending: 'mid', error: 'lo', none: '' };
-    var word = { done: '완료', pending: '대기', error: '실패', none: '없음' }[st] || st;
+    var map = { done: 'hi', pending: 'mid', server: 'mid', error: 'lo', none: '' };
+    var word = { done: '완료', pending: '대기', server: '서버 처리 중', error: '실패', none: '없음' }[st] || st;
     return h('span', { class: 'badge ' + (map[st] || '') }, label + ' ' + word);
   }
   function renderQueue(v) {
@@ -1456,6 +1578,10 @@
     var auto = h('label', { class: 'row', style: 'margin-top:10px' }, h('input', { type: 'checkbox', checked: st.auto_transcribe !== false, onchange: function (e) { updateSetting({ auto_transcribe: e.target.checked ? 'TRUE' : 'FALSE' }); } }), h('span', { class: 'small' }, '녹음을 올리면 바로 전사'));
     stt.appendChild(auto);
     stt.appendChild(h('p', { class: 'tiny' }, 'Gemini 모델 ' + (st.gemini_model || '-') + ' · OpenAI 모델 ' + (st.openai_model || '-') + ' (시트 ‘설정’ 탭에서 바꿉니다)'));
+    var afb = h('label', { class: 'row', style: 'margin-top:10px' }, h('input', { type: 'checkbox', checked: st.auto_feedback !== false, onchange: function (e) { updateSetting({ auto_feedback: e.target.checked ? 'TRUE' : 'FALSE' }); } }), h('span', { class: 'small' }, '전사가 끝나면 팀 피드백(초안) 만들기'));
+    stt.appendChild(afb);
+    var fbEng = (st.feedback_engine || 'solar') === 'solar' ? 'Solar ' + (st.solar_model || 'solar-pro4') + (st.keys && st.keys.upstage ? '' : ' (키 없음 → Gemini)') : 'Gemini ' + (st.gemini_model || '');
+    stt.appendChild(h('p', { class: 'tiny' }, '피드백 문안 ' + fbEng + ' · 서버 자동 처리 ' + (st.server_queue ? '켜짐(앱을 닫아도 진행)' : '꺼짐(시트 메뉴 ‘구술 평가 → 자동 처리 켜기’)')));
     v.appendChild(stt);
 
     // 마이크 점검
@@ -1484,6 +1610,7 @@
   function updateSetting(obj) {
     var b = boot(); b.settings = Object.assign({}, b.settings, obj);
     if (obj.auto_transcribe !== undefined) b.settings.auto_transcribe = obj.auto_transcribe === 'TRUE';
+    if (obj.auto_feedback !== undefined) b.settings.auto_feedback = obj.auto_feedback === 'TRUE';
     if (obj.scale) b.settings.scale = Number(obj.scale);
     S.boot = b; lsSet('oral.boot', b); render();
     if (!S.cfg) { toast('연결 뒤에 시트에 반영됩니다'); return; }
