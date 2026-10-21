@@ -719,7 +719,10 @@
         var ratio = s.max ? s.total / s.max : 0;
         var local = s._src === 'local' && (s.sync.session !== 'done' || s.sync.audio === 'pending' || s.sync.audio === 'error');
         var sttS = String(s.sttStatus || ''), fbS = String(s.feedbackStatus || '');
-        var extra = s.issueUrl ? h('span', { class: 'badge hi' }, '이슈')
+        var hasDraft = (boot().drafts || []).some(function (x) { return x.teamId === t.id && x.status === '초안'; });
+        var extra = s.issueUrl === '올리기 대기' ? h('span', { class: 'badge mid' }, '올리기 대기')
+          : hasDraft ? h('span', { class: 'badge mid' }, '댓글 초안')
+          : s.issueUrl ? h('span', { class: 'badge hi' }, '이슈')
           : fbS.indexOf('완료') === 0 ? h('span', { class: 'badge hi' }, '피드백')
           : (sttS.indexOf('실패') === 0 || fbS.indexOf('실패') === 0) ? h('span', { class: 'badge lo' }, '처리 실패')
           : (busyStatus(sttS) || busyStatus(fbS) || (s.sync && s.sync.stt === 'server')) ? h('span', { class: 'badge mid' }, '전사·피드백 중') : null;
@@ -1452,7 +1455,8 @@
         fbNote.textContent = busyStatus(st2) ? '전사가 끝나면 1분 안팎으로 만들어집니다.' : st2.indexOf('실패') === 0 ? st2 : '아직 피드백이 없습니다. ‘다시 만들기’로 만듭니다.';
         fbCopy.disabled = !has; fbIssue.disabled = !has;
         fbIssue.textContent = s.issueUrl ? '이슈 고치기' : '이슈로 올리기';
-        if (s.issueUrl) { fbLink.href = s.issueUrl; fbLink.textContent = '깃허브 이슈 #' + (s.issueUrl.match(/(\d+)$/) || [])[1] + ' 열기'; fbLink.style.display = 'inline-block'; }
+        if (s.issueUrl === '올리기 대기') { fbIssue.textContent = '다시 맡기기'; fbLink.style.display = 'none'; fbState.textContent = statusWord(st2) + ' · 올리기 대기(맥이 15분 안에 올림)'; }
+        else if (s.issueUrl) { fbLink.href = s.issueUrl; fbLink.textContent = '깃허브 이슈 #' + (s.issueUrl.match(/(\d+)$/) || [])[1] + ' 열기'; fbLink.style.display = 'inline-block'; }
         else fbLink.style.display = 'none';
       }
       // 고친 문안은 칸을 벗어날 때 시트에 저장한다(학생부 자료로 남는 것은 고친 문안)
@@ -1481,10 +1485,16 @@
         var text = fbEdit.value.trim(); if (!text) return;
         fbIssue.disabled = true;
         api('postIssue', { id: s.id, text: text, dryRun: true }).then(function (d) {
-          var msg = (d.existing ? '이미 올린 이슈를 이 문안으로 고칩니다.\n' : '') + d.repo + ' 저장소에 이슈로 올릴까요?\n\n제목: ' + d.title + '\n(가이드는 체크 목록으로 올라갑니다. 공개 저장소라 누구나 볼 수 있습니다.)';
+          var msg = (d.existing === '올리기 대기' ? '이미 올리기 대기 중입니다. 이 문안으로 다시 맡깁니다.\n' : d.existing ? '이미 올린 이슈를 이 문안으로 고칩니다.\n' : '') + d.repo + ' 저장소에 이슈로 올릴까요?\n\n제목: ' + d.title + '\n(가이드는 체크 목록으로 올라갑니다. 공개 저장소라 누구나 볼 수 있습니다.)';
           if (!confirm(msg)) return;
-          return api('postIssue', { id: s.id, text: text }).then(function (r) {
-            fbDirty = false; s.issueUrl = r.url;
+          return api('postIssue', { id: s.id, text: text, queue: true }).then(function (r) {
+            fbDirty = false; s.issueUrl = r.queued ? '올리기 대기' : r.url;
+            if (r.queued) {
+              if (text !== String(s.feedback || '').trim()) { s.feedback = text; s.feedbackStatus = '완료 (선생님 수정)'; }
+              mergeSession(s.id, { issueUrl: '올리기 대기', feedback: s.feedback, feedbackStatus: s.feedbackStatus }); paintFb();
+              toast('올리기 대기에 넣었습니다. 맥이 15분 안에 올립니다');
+              return;
+            }
             if (text !== String(s.feedback || '').trim()) { s.feedback = text; s.feedbackStatus = '완료 (선생님 수정)'; }
             mergeSession(s.id, { issueUrl: r.url, feedback: s.feedback, feedbackStatus: s.feedbackStatus }); paintFb();
             toast(r.updated ? '이슈를 고쳤습니다' : '이슈를 올렸습니다', { label: '열기', fn: function () { window.open(r.url, '_blank'); } });
@@ -1526,7 +1536,70 @@
     var word = { done: '완료', pending: '대기', server: '서버 처리 중', error: '실패', none: '없음' }[st] || st;
     return h('span', { class: 'badge ' + (map[st] || '') }, label + ' ' + word);
   }
+  // 깃허브 초안: 맥의 저장소 확인 루틴이 만든 댓글 초안. 읽고 고친 뒤 '올리기'(토큰이 없으면 맥이 15분 안에 올림)
+  function draftCard() {
+    var card = h('div', { class: 'card' });
+    var cls = curCls();
+    var req = boot().repoCheckRequest;
+    var reqBtn = h('button', { type: 'button', class: 'btn' }, '저장소 확인 요청');
+    reqBtn.addEventListener('click', function () {
+      if (!S.cfg) { toast('먼저 시트에 연결합니다'); return; }
+      reqBtn.disabled = true;
+      api('requestRepoCheck', { cls: cls }).then(function (r) {
+        var b = boot(); b.repoCheckRequest = r.requested; S.boot = b; lsSet('oral.boot', b); render();
+        toast(cls + ' 저장소 확인을 요청했습니다. 맥이 15분 안에 확인합니다');
+      }).catch(function (e) { toast('요청 실패: ' + e.message); reqBtn.disabled = false; });
+    });
+    card.appendChild(h('div', { class: 'row' }, h('b', { class: 'grow' }, '깃허브 초안 · ' + cls), reqBtn));
+    card.appendChild(h('p', { class: 'tiny' }, req ? '확인 요청 대기 중(' + (req.at || '') + (req.cls ? ', ' + req.cls : '') + '). 맥이 15분 안에 가져갑니다.'
+      : '수업 있는 날 18시에 맥이 바뀐 저장소를 확인해 초안을 만듭니다. 올리기 전까지는 학생에게 보이지 않습니다.'));
+    var list = (boot().drafts || []).filter(function (d) { return d.cls === cls || !d.cls; });
+    if (!list.length) { card.appendChild(h('p', { class: 'small muted' }, '초안이 없습니다.')); return card; }
+    list.sort(function (a, b) { return String(b.createdAt).localeCompare(String(a.createdAt)); });
+    list.forEach(function (d) {
+      var box = h('div', { class: 'q-item', style: 'display:block' });
+      var badge = d.status === '올림' ? 'hi' : d.status === '올리기 대기' ? 'mid' : '';
+      box.appendChild(h('div', { class: 'row' }, h('b', { class: 'grow' }, d.teamName + ' · ' + (d.target ? '댓글' : '새 이슈')),
+        h('span', { class: 'badge ' + badge }, d.status === '올리기 대기' ? '올리기 대기' : d.status)));
+      box.appendChild(h('div', { class: 'tiny' }, (d.createdAt || '') + (d.basis ? ' · ' + d.basis : '')));
+      var ta = h('textarea', { style: 'margin-top:6px;min-height:160px', 'aria-label': d.teamName + ' 댓글 초안' });
+      ta.value = d.text; ta.disabled = d.status !== '초안';
+      var dirty = false;
+      ta.addEventListener('input', function () { dirty = true; });
+      ta.addEventListener('blur', function () {
+        if (!dirty || !ta.value.trim()) return;
+        api('updateDraft', { id: d.id, text: ta.value.trim() }).then(function () { dirty = false; d.text = ta.value.trim(); toast('고친 초안을 저장했습니다'); })
+          .catch(function (e) { toast('저장 실패: ' + e.message); });
+      });
+      box.appendChild(ta);
+      var row = h('div', { class: 'row', style: 'margin-top:6px' });
+      if (d.status === '초안') {
+        var post = h('button', { type: 'button', class: 'btn primary' }, '올리기');
+        var drop = h('button', { type: 'button', class: 'btn ghost' }, '버리기');
+        post.addEventListener('click', function () {
+          if (!confirm(d.teamName + ' 저장소에 ' + (d.target ? '댓글로' : '새 이슈로') + ' 올릴까요?\n(공개 저장소라 누구나 볼 수 있습니다.)')) return;
+          post.disabled = true;
+          api('postDraft', { id: d.id, text: ta.value.trim() }).then(function (r) {
+            d.status = r.queued ? '올리기 대기' : '올림'; d.url = r.url || ''; render();
+            toast(r.queued ? '올리기 대기에 넣었습니다. 맥이 15분 안에 올립니다' : '올렸습니다', r.url ? { label: '열기', fn: function () { window.open(r.url, '_blank'); } } : null);
+          }).catch(function (e) { alert('올리지 못했습니다.\n' + e.message); post.disabled = false; });
+        });
+        drop.addEventListener('click', function () {
+          if (!confirm('이 초안을 버릴까요?')) return;
+          api('discardDraft', { id: d.id }).then(function () { var b = boot(); b.drafts = b.drafts.filter(function (x) { return x.id !== d.id; }); S.boot = b; lsSet('oral.boot', b); render(); });
+        });
+        row.appendChild(drop); row.appendChild(h('span', { class: 'grow' })); row.appendChild(post);
+      } else if (d.url) {
+        row.appendChild(h('a', { href: d.url, target: '_blank', rel: 'noopener', class: 'small' }, '깃허브에서 열기'));
+      }
+      box.appendChild(row);
+      card.appendChild(box);
+    });
+    return card;
+  }
+
   function renderQueue(v) {
+    v.appendChild(draftCard());
     v.appendChild(h('div', { class: 'row' }, h('div', { class: 'h2 grow' }, '이 기기의 기록'),
       h('button', { type: 'button', class: 'btn', onclick: function () { syncAll(); } }, '지금 올리기')));
     var list = S.drafts.slice().sort(function (a, b) { return String(b.updatedAt).localeCompare(String(a.updatedAt)); });
