@@ -1452,7 +1452,9 @@
       var notes = s.notes || {};
       if (Object.keys(notes).length) box.appendChild(h('div', { class: 'card' }, h('b', null, '학생 메모'), Object.keys(notes).map(function (k) { return h('div', { class: 'small', style: 'margin-top:4px' }, h('b', null, k + ' '), notes[k]); })));
       if (s.markers && s.markers.length) box.appendChild(h('div', { class: 'card' }, h('b', null, '표시'), h('div', { class: 'timeline' }, s.markers.map(function (x) { return h('span', null, (x.t !== null && x.t !== undefined ? mmss(x.t) + ' ' : '') + x.label); }))));
-      var tr = h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, '녹음·전사'), s.audioUrl || (s.audio && s.audio.url) ? h('a', { href: s.audioUrl || s.audio.url, target: '_blank', rel: 'noopener' }, '녹음 열기') : h('span', { class: 'tiny' }, '녹음 없음')));
+      var aurl = s.audioUrl || (s.audio && s.audio.url) || '';
+      var tr = h('div', { class: 'card' }, h('div', { class: 'row' }, h('b', { class: 'grow' }, '녹음·전사'), /^https?:/.test(aurl) ? h('a', { href: aurl, target: '_blank', rel: 'noopener' }, '녹음 열기')
+        : h('span', { class: 'tiny' }, /^삭제됨/.test(aurl) ? '녹음 ' + aurl + ' · 받아 적은 글만 남음' : '녹음 없음')));
       var trState = h('div', { class: 'tiny' }, statusWord(s.sttStatus));
       tr.appendChild(trState);
       var trBody = h('div', { class: 'transcript', style: 'margin-top:8px' }, s.transcript || '불러오는 중…');
@@ -1466,7 +1468,7 @@
           trState.textContent = statusWord(r.sttStatus); paintFb(r.feedbackStatus, r.feedback); again.disabled = false;
         }).catch(function (e) { trBody.textContent = '실패: ' + e.message; again.disabled = false; });
       });
-      tr.appendChild(again);
+      if (!/^삭제됨/.test(aurl)) tr.appendChild(again);   // 녹음을 지운 기록은 다시 받아 적을 수 없다
       box.appendChild(tr);
 
       // 팀에게 줄 피드백(초안): 전사가 끝나면 서버가 만든다. 선생님이 읽고 고친 뒤 팀 저장소 이슈로 올린다
@@ -1699,6 +1701,28 @@
     }
     v.appendChild(conn);
 
+    // 녹음 보관: 성적 확정·이의 신청 기간이 끝나면 녹음을 한꺼번에 지운다(받아 적은 글은 남는다)
+    var nAudio = (boot().sessions || []).filter(function (s) { return s.audioId && /^https?:/.test(s.audioUrl || ''); }).length;
+    var keepCard = h('div', { class: 'card' });
+    keepCard.appendChild(h('b', null, '녹음 보관'));
+    keepCard.appendChild(h('p', { class: 'small muted' }, '기준: ' + (st.retention || '학기 성적 확정·이의 신청 기간 종료 후 삭제') + '. 지금 드라이브에 녹음 ' + nAudio + '개'
+      + (st.audio_purged_at ? ' · 마지막 일괄 삭제 ' + st.audio_purged_at.slice(0, 16) : '') + '.'));
+    keepCard.appendChild(h('p', { class: 'tiny' }, '지우면 녹음 파일은 드라이브 휴지통으로 가고(30일 뒤 영구 삭제) 기록에는 받아 적은 글만 남습니다. 받아 적기가 끝나지 않은 녹음은 남깁니다. 이 기기에 남은 올라간 기록의 녹음 사본도 함께 지웁니다.'));
+    keepCard.appendChild(h('button', { type: 'button', class: 'btn danger', style: 'margin-top:8px', disabled: !S.cfg, onclick: function () {
+      var t = prompt('녹음을 모두 지웁니다(받아 적은 글은 남습니다). 계속하려면 "삭제"라고 입력하세요.');
+      if (t === null) return;
+      if (t.trim() !== '삭제') { toast('입력이 달라 취소했습니다'); return; }
+      api('purgeAudio', { confirm: '삭제' }, { timeout: 300000 }).then(function (r) {
+        var up = S.drafts.filter(function (d) { return d.final && d.sync.session === 'done' && d.sync.audio === 'done'; });
+        return Promise.all(up.map(function (d) { return idb.del('drafts', d.id).then(function () { return idb.del('audio', d.id); }); })).then(function () {
+          S.drafts = S.drafts.filter(function (d) { return up.indexOf(d) === -1; });
+          toast('녹음 ' + r.trashed + '개를 지웠습니다' + (r.others ? ' · 기록에 없는 녹음 ' + r.others + '개' : '') + (r.kept ? ' · 받아 적기 전이라 남긴 녹음 ' + r.kept + '개' : '')
+            + ((r.failed || []).length ? ' · 지우지 못한 것 ' + r.failed.length + '개(다시 누르세요)' : '') + (r.remaining ? ' · 일부만 지웠습니다. 다시 누르면 이어서 지웁니다' : ''));
+          loadBoot(true);
+        });
+      }).catch(function (e) { toast('녹음을 지우지 못했습니다: ' + e.message); });
+    } }, '녹음 모두 지우기'));
+
     // 척도
     var scale = h('div', { class: 'card' });
     scale.appendChild(h('b', null, '점수 척도'));
@@ -1711,6 +1735,7 @@
     });
     scale.appendChild(seg);
     v.appendChild(scale);
+    v.appendChild(keepCard);
 
     // 전사
     var stt = h('div', { class: 'card' });
