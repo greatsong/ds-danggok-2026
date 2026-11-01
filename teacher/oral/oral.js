@@ -626,7 +626,21 @@
       if (ready.length) notifyReady(ready);
     }).catch(function () {}).then(function () { schedulePoll(); });
   }
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) schedulePoll(1500); });
+  // 홈 화면 앱은 다시 열어도 처음부터 실행되지 않으므로, 앞으로 돌아오면 시트 내용(회차·루브릭 포함)을 새로 받는다
+  var lastResumeLoad = Date.now();
+  function refreshOnResume() {
+    if (!S.cfg || S.syncing || Rec.state !== 'idle' || Date.now() - lastResumeLoad < 30000) return;
+    lastResumeLoad = Date.now();
+    api('bootstrap', {}, { timeout: 45000 }).then(function (d) {
+      delete d.ok;
+      var ready = applyBoot(d);
+      if (!S.ui.cp || !cpById(S.ui.cp)) { S.ui.cp = (d.checkpoints[0] || {}).id; saveUi(); }
+      if (S.ui.tab !== 'settings' && (S.ui.tab !== 'eval' || $('#sheet').hidden)) render();
+      if (ready.length) notifyReady(ready);
+    }).catch(function () {});
+  }
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) { schedulePoll(1500); refreshOnResume(); } });
+  window.addEventListener('pageshow', function (e) { if (e.persisted) refreshOnResume(); });
 
   window.addEventListener('online', function () { S.online = true; renderSync(); syncAll(); });
   window.addEventListener('offline', function () { S.online = false; renderSync(); });
