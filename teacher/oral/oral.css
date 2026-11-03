@@ -285,3 +285,18 @@ details.more[open] > summary::after { content: " ▴"; }
 .modal h3 { margin: 4px 0 8px; font-size: 19px; font-weight: 900; }
 @media (min-width: 700px) { .modal-back { align-items: center; } .modal { border-radius: 24px; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* 학생 1명씩 보는 회차: 팀마다 팀원 버튼, 평가 요소 체크 */
+.solo-team { padding: 12px 14px; }
+.solo-team .nm { font-weight: 900; margin-bottom: 8px; }
+.solo-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.solo-st { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line, #e5e0d8); background: #fff; text-align: left; font: inherit; cursor: pointer; }
+.solo-st.done { background: #f3faf5; }
+.solo-st.next { border-color: var(--cp); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cp) 18%, transparent); }
+.elems.check li { padding: 6px 8px 6px 32px; border-radius: 8px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.elems.check li::before { left: 8px; top: 8px; width: 16px; height: 16px; border-radius: 4px; background: #fff; border: 1.6px solid var(--cp); opacity: 1; }
+.elems.check li.on { background: color-mix(in srgb, var(--cp) 10%, #fff); color: var(--ink, #23201c); }
+.elems.check li.on::before { background: var(--cp); }
+.elems.check li.on::after { content: ""; position: absolute; left: 13px; top: 10px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.elems-n { margin: -4px 0 8px; }
+.solo-team .mth { margin-left: 6px; }
